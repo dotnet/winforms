@@ -355,7 +355,9 @@ public partial class ComboBox : ListControl
             cp.Style |= (int)WINDOW_STYLE.WS_VSCROLL | PInvoke.CBS_HASSTRINGS | PInvoke.CBS_AUTOHSCROLL;
             cp.ExStyle |= (int)WINDOW_EX_STYLE.WS_EX_CLIENTEDGE;
 
-            if (!_integralHeight)
+            if (!_integralHeight
+                || (UsesModernComboAdapter
+                    && DropDownStyle == ComboBoxStyle.Simple))
             {
                 cp.Style |= PInvoke.CBS_NOINTEGRALHEIGHT;
             }
@@ -2408,6 +2410,12 @@ public partial class ComboBox : ListControl
         bool hasComboBoxInfo = PInvoke.GetComboBoxInfo(
             HWND,
             ref comboBoxInfo);
+
+        if (hasComboBoxInfo)
+        {
+            ConfigureModernSimpleListSurface(comboBoxInfo.hwndList);
+        }
+
         if (Application.IsDarkModeEnabled)
         {
             // Style the ComboBox Open-Button:
@@ -3725,14 +3733,11 @@ public partial class ComboBox : ListControl
     {
         switch (m.MsgInternal)
         {
-            // Modern VisualStyles: expand the client area to the full window so the drop-down
-            // button, which the themed ComboBox otherwise reserves as non-client (outside
-            // ClientRectangle), becomes part of the client and is covered by our rounded field.
-            // Simple combos have no drop-down button (their client already spans the full width
-            // and hosts a permanent list), so they must never be expanded.
+            // Modern VisualStyles: expand the client area to the full window so themed non-client
+            // reservations (for example the ComboBox-hosted scroll strip in Simple mode) are folded
+            // into client painting and can be normalized by modern layout.
             case PInvokeCore.WM_NCCALCSIZE:
                 if (UsesModernComboAdapter
-                    && DropDownStyle != ComboBoxStyle.Simple
                     && m.WParamInternal != 0u)
                 {
                     RECT* ncRects = (RECT*)(nint)m.LParamInternal;
@@ -3745,15 +3750,12 @@ public partial class ComboBox : ListControl
                 base.WndProc(ref m);
                 break;
 
-            // Modern VisualStyles: comctl32 still reports the drop-down button region as a
-            // non-client hit (HTVSCROLL) even though WM_NCCALCSIZE folded it into our client
-            // area, so a button click would arrive as WM_NCLBUTTONDOWN and never reach the
-            // WM_LBUTTONDOWN hit-test below. Force HTCLIENT across the expanded client so the
-            // button click is delivered as a normal client message we can act on.
+            // Modern VisualStyles: after WM_NCCALCSIZE expands the client area, comctl32 can still
+            // report the folded strip as non-client (HTVSCROLL). Force HTCLIENT across the expanded
+            // client so interaction remains consistent with the modern layout.
             case PInvokeCore.WM_NCHITTEST:
                 base.WndProc(ref m);
                 if (UsesModernComboAdapter
-                    && DropDownStyle != ComboBoxStyle.Simple
                     && m.ResultInternal != PInvoke.HTCLIENT)
                 {
                     Point hitPoint = PointToClient(PARAM.ToPoint(m.LParamInternal));

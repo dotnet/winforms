@@ -1214,6 +1214,136 @@ public class ComboBoxTests
     }
 
     [WinFormsFact]
+    public void ComboBox_ModernSimple_EditFillsAvailableFieldWidth()
+    {
+        using SystemVisualSettingsTestScope settingsScope = new(
+            clientAreaAnimationEnabled: false,
+            highContrastEnabled: false);
+        using VisualStylesComboBox control = new()
+        {
+            DropDownStyle = ComboBoxStyle.Simple,
+            FlatStyle = FlatStyle.Standard,
+            Padding = Padding.Empty,
+            Size = new Size(180, 120),
+            VisualStylesMode = VisualStylesMode.Net11
+        };
+        control.CreateControl();
+
+        Rectangle editBounds = control.GetEditBounds();
+        Padding chromeInsets = control.ModernChromeInsets;
+        int expectedLeft = chromeInsets.Left;
+        int expectedRight = control.ClientRectangle.Right - chromeInsets.Right;
+
+        Assert.InRange(editBounds.Left, expectedLeft - 1, expectedLeft + 1);
+        Assert.InRange(editBounds.Right, expectedRight - 1, expectedRight + 1);
+    }
+
+    [WinFormsFact]
+    public void ComboBox_ModernSimple_ListFillsAvailableFieldWidth()
+    {
+        using SystemVisualSettingsTestScope settingsScope = new(
+            clientAreaAnimationEnabled: false,
+            highContrastEnabled: false);
+        using VisualStylesComboBox control = new()
+        {
+            DropDownStyle = ComboBoxStyle.Simple,
+            FlatStyle = FlatStyle.Standard,
+            Padding = Padding.Empty,
+            Size = new Size(180, 120),
+            VisualStylesMode = VisualStylesMode.Net11
+        };
+        control.Items.AddRange(["one", "two", "three", "four", "five", "six", "seven", "eight"]);
+        control.CreateControl();
+
+        Rectangle listBounds = control.GetListBounds();
+        Padding chromeInsets = control.ModernChromeInsets;
+        int expectedLeft = chromeInsets.Left;
+        int expectedRight = control.ClientRectangle.Right - chromeInsets.Right;
+
+        Assert.True(listBounds.Left <= expectedLeft);
+        Assert.True(listBounds.Right >= expectedRight - 1);
+    }
+
+    [WinFormsFact]
+    public void ComboBox_ModernSimple_EditAndList_DoNotOverlapAndFitFont()
+    {
+        using SystemVisualSettingsTestScope settingsScope = new(
+            clientAreaAnimationEnabled: false,
+            highContrastEnabled: false);
+        using Font font = new(Control.DefaultFont.FontFamily, 14f);
+        using VisualStylesComboBox control = new()
+        {
+            DropDownStyle = ComboBoxStyle.Simple,
+            FlatStyle = FlatStyle.Standard,
+            Font = font,
+            Padding = Padding.Empty,
+            Size = new Size(220, 140),
+            VisualStylesMode = VisualStylesMode.Net11
+        };
+        control.Items.AddRange(["one", "two", "three", "four", "five", "six", "seven", "eight"]);
+        control.CreateControl();
+
+        Rectangle editBounds = control.GetEditBounds();
+        Rectangle listBounds = control.GetListBounds();
+
+        Assert.True(editBounds.Height >= control.FontHeight);
+        Assert.True(listBounds.Top > editBounds.Bottom);
+    }
+
+    [WinFormsFact]
+    public void ComboBox_ModernSimple_ListIsBorderlessAndFillsRoundedField()
+    {
+        using SystemVisualSettingsTestScope settingsScope = new(
+            clientAreaAnimationEnabled: false,
+            highContrastEnabled: false);
+        using VisualStylesComboBox control = new()
+        {
+            DropDownStyle = ComboBoxStyle.Simple,
+            FlatStyle = FlatStyle.Standard,
+            Padding = Padding.Empty,
+            Size = new Size(220, 140),
+            VisualStylesMode = VisualStylesMode.Net11
+        };
+        control.Items.AddRange(["one", "two", "three", "four", "five", "six", "seven", "eight"]);
+        control.CreateControl();
+
+        Rectangle listBounds = control.GetListBounds();
+
+        Assert.False(control.ListHasBorderStyle());
+        Assert.False(control.ListHasClientEdgeExStyle());
+        Assert.True(listBounds.Left <= control.ModernChromeInsets.Left);
+        Assert.True(listBounds.Right >= control.ClientRectangle.Right - control.ModernChromeInsets.Right - 1);
+    }
+
+    [WinFormsFact]
+    public void ComboBox_ModernSimple_DrawsAccentDividerBetweenEditAndList()
+    {
+        using SystemVisualSettingsTestScope settingsScope = new(
+            clientAreaAnimationEnabled: false,
+            highContrastEnabled: false);
+        using VisualStylesComboBox control = new()
+        {
+            DropDownStyle = ComboBoxStyle.Simple,
+            FlatStyle = FlatStyle.Standard,
+            Padding = Padding.Empty,
+            Size = new Size(220, 140),
+            VisualStylesMode = VisualStylesMode.Net11
+        };
+        control.Items.AddRange(["one", "two", "three", "four", "five", "six", "seven", "eight"]);
+        control.CreateControl();
+        using Bitmap bitmap = new(control.Width, control.Height);
+
+        control.DrawToBitmap(bitmap, new Rectangle(Point.Empty, control.Size));
+
+        Rectangle listBounds = control.GetListBounds();
+        int dividerY = Math.Max(0, listBounds.Top - 1);
+        int sampleX = Math.Clamp(control.Width / 2, 0, control.Width - 1);
+        Color pixel = bitmap.GetPixel(sampleX, dividerY);
+
+        Assert.True(ColorsAreClose(pixel, Application.SystemVisualSettings.AccentColor, channelTolerance: 3));
+    }
+
+    [WinFormsFact]
     public void ComboBox_ModernSimple_RepeatedMetricChangeDoesNotAccumulatePadding()
     {
         SystemVisualSettings previous =
@@ -1316,6 +1446,34 @@ public class ComboBoxTests
         Assert.Equal(0, createParams.Y);
         Assert.Same(createParams, control.CreateParams);
         Assert.False(control.IsHandleCreated);
+    }
+
+    [WinFormsFact]
+    public void ComboBox_CreateParams_Net11Simple_ContainsVScroll()
+    {
+        using SubComboBox control = new()
+        {
+            VisualStylesMode = VisualStylesMode.Net11,
+            DropDownStyle = ComboBoxStyle.Simple
+        };
+
+        CreateParams createParams = control.CreateParams;
+
+        Assert.NotEqual(0, createParams.Style & (int)WINDOW_STYLE.WS_VSCROLL);
+    }
+
+    [WinFormsFact]
+    public void ComboBox_CreateParams_Net11Simple_ContainsNoIntegralHeight()
+    {
+        using SubComboBox control = new()
+        {
+            VisualStylesMode = VisualStylesMode.Net11,
+            DropDownStyle = ComboBoxStyle.Simple
+        };
+
+        CreateParams createParams = control.CreateParams;
+
+        Assert.NotEqual(0, createParams.Style & PInvoke.CBS_NOINTEGRALHEIGHT);
     }
 
     [WinFormsTheory]
@@ -4044,6 +4202,26 @@ public class ComboBoxTests
                 comboBoxInfo.rcButton.top,
                 comboBoxInfo.rcButton.Width,
                 comboBoxInfo.rcButton.Height);
+        }
+
+        public bool ListHasBorderStyle()
+        {
+            COMBOBOXINFO comboBoxInfo = GetComboBoxInfo();
+            WINDOW_STYLE listStyle = (WINDOW_STYLE)PInvokeCore.GetWindowLong(
+                comboBoxInfo.hwndList,
+                WINDOW_LONG_PTR_INDEX.GWL_STYLE);
+
+            return (listStyle & WINDOW_STYLE.WS_BORDER) != 0;
+        }
+
+        public bool ListHasClientEdgeExStyle()
+        {
+            COMBOBOXINFO comboBoxInfo = GetComboBoxInfo();
+            WINDOW_EX_STYLE listExStyle = (WINDOW_EX_STYLE)PInvokeCore.GetWindowLong(
+                comboBoxInfo.hwndList,
+                WINDOW_LONG_PTR_INDEX.GWL_EXSTYLE);
+
+            return (listExStyle & WINDOW_EX_STYLE.WS_EX_CLIENTEDGE) != 0;
         }
 
         private unsafe COMBOBOXINFO GetComboBoxInfo()
