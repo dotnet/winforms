@@ -1,4 +1,4 @@
-// Licensed to the .NET Foundation under one or more agreements.
+﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
 using System.Drawing;
@@ -123,6 +123,15 @@ internal sealed class AnimatedRadioGlyphRenderer : AnimatedControlRenderer
         borderColor = ApplyInteractionShade(borderColor, focus);
         backColor = ApplyInteractionShade(backColor, focus);
 
+        // Blend the outer circle toward the accent as checked progress advances so the checked
+        // surface follows the current personalization color, matching modern checkbox behavior.
+        float checkedProgress = Math.Clamp(
+            Math.Max(_dotScaleCurrent, _dotScaleTarget),
+            0f,
+            1f);
+        Color activeBackColor = LerpColor(backColor, onColor, checkedProgress);
+        Color activeBorderColor = LerpColor(borderColor, onColor, checkedProgress);
+
         float normalOuterScale = 1f / HoverGrowth;
         float outerScale = Lerp(normalOuterScale, 1f, enabled ? _hoverCurrent : 0f);
         RectangleF outerBounds = ScaleFromCenter(bounds, outerScale);
@@ -133,7 +142,7 @@ internal sealed class AnimatedRadioGlyphRenderer : AnimatedControlRenderer
         {
             graphics.SmoothingMode = SmoothingMode.AntiAlias;
 
-            using (var brush = backColor.GetCachedSolidBrushScope())
+            using (var brush = activeBackColor.GetCachedSolidBrushScope())
             {
                 graphics.FillEllipse(brush, outerBounds);
             }
@@ -142,7 +151,7 @@ internal sealed class AnimatedRadioGlyphRenderer : AnimatedControlRenderer
                 1,
                 Control.LogicalToDeviceUnits(flatStyle == FlatStyle.Popup ? 2 : 1));
 
-            using (var pen = new Pen(borderColor, borderThickness))
+            using (var pen = new Pen(activeBorderColor, borderThickness))
             {
                 graphics.DrawEllipse(pen, outerBounds);
             }
@@ -156,22 +165,11 @@ internal sealed class AnimatedRadioGlyphRenderer : AnimatedControlRenderer
                     dotDiameter,
                     dotDiameter);
 
-                Color dotOutlineColor = highContrast
+                Color dotColor = highContrast
                     ? SystemColors.HighlightText
-                    : PopupButtonColorMath.GetReadableForeColor(onColor, backColor);
-                int outlineThickness = Math.Max(1, Control.LogicalToDeviceUnits(1));
-                using var outlineBrush = dotOutlineColor.GetCachedSolidBrushScope();
-                graphics.FillEllipse(outlineBrush, dotRectangle);
-
-                RectangleF accentRectangle = RectangleF.Inflate(
-                    dotRectangle,
-                    -outlineThickness,
-                    -outlineThickness);
-                if (accentRectangle.Width > 0 && accentRectangle.Height > 0)
-                {
-                    using var dotBrush = onColor.GetCachedSolidBrushScope();
-                    graphics.FillEllipse(dotBrush, accentRectangle);
-                }
+                    : PopupButtonColorMath.GetReadableForeColor(onColor);
+                using var dotBrush = dotColor.GetCachedSolidBrushScope();
+                graphics.FillEllipse(dotBrush, dotRectangle);
             }
         }
         finally
@@ -225,6 +223,20 @@ internal sealed class AnimatedRadioGlyphRenderer : AnimatedControlRenderer
 
     private static float Lerp(float from, float to, float progress)
         => from + ((to - from) * Math.Clamp(progress, 0f, 1f));
+
+    private static Color LerpColor(Color from, Color to, float progress)
+    {
+        progress = Math.Clamp(progress, 0f, 1f);
+
+        return Color.FromArgb(
+            LerpChannel(from.A, to.A, progress),
+            LerpChannel(from.R, to.R, progress),
+            LerpChannel(from.G, to.G, progress),
+            LerpChannel(from.B, to.B, progress));
+
+        static int LerpChannel(int from, int to, float progress)
+            => from + (int)((to - from) * progress);
+    }
 
     private static RectangleF ScaleFromCenter(Rectangle bounds, float scale)
     {

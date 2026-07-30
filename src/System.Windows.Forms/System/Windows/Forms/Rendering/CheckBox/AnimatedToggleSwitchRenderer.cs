@@ -218,7 +218,7 @@ internal sealed class AnimatedToggleSwitchRenderer : AnimatedControlRenderer
         Color circleColor = Control.Enabled
             ? highContrast
                 ? highContrastForeground
-                : PopupButtonColorMath.GetReadableForeColor(offColor, onColor)
+                : PopupButtonColorMath.GetReadableForeColor(backgroundColor)
             : SystemColors.GrayText;
         circleColor = ApplyInteractionShade(circleColor, focus);
         borderColor = ApplyInteractionShade(borderColor, focus);

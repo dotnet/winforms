@@ -625,7 +625,43 @@ public class CheckBoxTests : AbstractButtonBaseTests
     }
 
     [WinFormsFact]
-    public void CheckBox_ModernGlyph_BrightAccentUsesReadableCheckmark()
+    public void CheckBox_ModernGlyph_TransparentBackColor_CheckedUsesWindowsAccent()
+    {
+        if (SystemInformation.HighContrast)
+        {
+            return;
+        }
+
+        using Panel parent = new() { BackColor = Color.White };
+        using CheckBox box = new()
+        {
+            BackColor = Color.Transparent,
+            CheckState = CheckState.Checked,
+            Size = new Size(40, 24),
+            VisualStylesMode = VisualStylesMode.Net11
+        };
+        parent.Controls.Add(box);
+
+        using Bitmap bitmap = new(box.Width, box.Height);
+        using Graphics graphics = Graphics.FromImage(bitmap);
+        PaintEventArgs e = new(graphics, box.ClientRectangle);
+
+        box.CreateStandardAdapter().PaintUp(e, box.CheckState);
+
+        Assert.True(CountPixels(bitmap, Application.SystemVisualSettings.AccentColor) > 0);
+    }
+
+    [WinFormsTheory]
+    [InlineData(0xFF, 0xB9, 0x00, 0, 0, 0)]
+    [InlineData(0x00, 0x66, 0xCC, 255, 255, 255)]
+    [InlineData(0x4D, 0x4D, 0x4D, 255, 255, 255)]
+    public void CheckBox_ModernGlyph_AccentUsesReadableCheckmark(
+        int accentR,
+        int accentG,
+        int accentB,
+        int expectedR,
+        int expectedG,
+        int expectedB)
     {
         if (SystemInformation.HighContrast)
         {
@@ -637,7 +673,7 @@ public class CheckBoxTests : AbstractButtonBaseTests
         renderer.NotifyCheckStateChanged(CheckState.Checked);
         using Bitmap bitmap = new(24, 24);
         using Graphics graphics = Graphics.FromImage(bitmap);
-        Color brightAccent = Color.FromArgb(0xFF, 0xB9, 0x00);
+        Color accent = Color.FromArgb(accentR, accentG, accentB);
 
         renderer.DrawGlyph(
             graphics,
@@ -646,10 +682,10 @@ public class CheckBoxTests : AbstractButtonBaseTests
             enabled: true,
             hovered: false,
             focused: false,
-            customOnColor: brightAccent,
+            customOnColor: accent,
             customBorderColor: null);
 
-        Assert.True(CountPixels(bitmap, Color.Black) > 0);
+        Assert.True(CountPixels(bitmap, Color.FromArgb(expectedR, expectedG, expectedB)) > 0);
     }
 
     [WinFormsFact]
@@ -829,6 +865,35 @@ public class CheckBoxTests : AbstractButtonBaseTests
         renderer.RenderControl(graphics);
 
         Assert.True(CountPixels(bitmap, Application.SystemVisualSettings.AccentColor) > 0);
+    }
+
+    [WinFormsFact]
+    public void CheckBox_ToggleSwitch_DarkAccentUsesReadableThumbColor()
+    {
+        if (SystemInformation.HighContrast)
+        {
+            return;
+        }
+
+        using SystemVisualSettingsTestScope settingsScope =
+            new(clientAreaAnimationEnabled: true, accentColor: Color.FromArgb(0x4D, 0x4D, 0x4D));
+        using CheckBox box = new()
+        {
+            Appearance = Appearance.ToggleSwitch,
+            BackColor = Color.Black,
+            Checked = true,
+            Size = new Size(60, 24),
+            VisualStylesMode = VisualStylesMode.Net11
+        };
+        Rendering.CheckBox.AnimatedToggleSwitchRenderer renderer =
+            box.TestAccessor.Dynamic.ToggleSwitchRenderer;
+        renderer.SynchronizeState();
+        using Bitmap bitmap = new(box.Width, box.Height);
+        using Graphics graphics = Graphics.FromImage(bitmap);
+
+        renderer.RenderControl(graphics);
+
+        Assert.True(CountPixels(bitmap, Color.White) > 0);
     }
 
     [WinFormsFact]
