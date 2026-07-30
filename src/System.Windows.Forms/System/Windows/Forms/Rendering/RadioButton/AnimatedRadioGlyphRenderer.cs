@@ -123,10 +123,10 @@ internal sealed class AnimatedRadioGlyphRenderer : AnimatedControlRenderer
         borderColor = ApplyInteractionShade(borderColor, focus);
         backColor = ApplyInteractionShade(backColor, focus);
 
-        // Blend the outer circle toward the accent as checked progress advances so the checked
-        // surface follows the current personalization color, matching modern checkbox behavior.
+        // Blend the outer circle toward the accent based on animated checked progress
+        // (_dotScaleCurrent), so check and uncheck transitions stay smooth and symmetric.
         float checkedProgress = Math.Clamp(
-            Math.Max(_dotScaleCurrent, _dotScaleTarget),
+            _dotScaleCurrent,
             0f,
             1f);
         Color activeBackColor = LerpColor(backColor, onColor, checkedProgress);
