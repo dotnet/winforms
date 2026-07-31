@@ -111,10 +111,13 @@ public static partial class ControlPaint
                     ARGB dark = SystemColors.ControlDark;
                     ARGB darkDark = SystemColors.ControlDarkDark;
 
+                    static byte Interpolate(byte darkChannel, byte darkDarkChannel, float percentDarker) =>
+                        unchecked((byte)(darkChannel - (int)((darkChannel - darkDarkChannel) * percentDarker)));
+
                     return Color.FromArgb(
-                        (byte)(dark.R - (byte)((dark.R - darkDark.R) * percDarker)),
-                        (byte)(dark.G - (byte)((dark.G - darkDark.G) * percDarker)),
-                        (byte)(dark.B - (byte)((dark.B - darkDark.B) * percDarker)));
+                        Interpolate(dark.R, darkDark.R, percDarker),
+                        Interpolate(dark.G, darkDark.G, percDarker),
+                        Interpolate(dark.B, darkDark.B, percDarker));
                 }
             }
         }
