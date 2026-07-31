@@ -183,7 +183,8 @@ public partial class ComboBox
                     ScaleHelper.ScaleToDpi(
                         ModernControlVisualStyles.BorderThickness,
                         DeviceDpiInternal));
-                int simpleBottomShrink = ScaleHelper.ScaleToDpi(2, DeviceDpiInternal);
+                const int bottomCropLogicalPixels = 2;
+                int simpleBottomShrink = ScaleHelper.ScaleToDpi(bottomCropLogicalPixels, DeviceDpiInternal);
                 int simpleListBottom = ClientRectangle.Bottom - simpleBottomShrink - dividerThickness;
                 int simpleEditTop = topInset + ScaleHelper.ScaleToDpi(1, DeviceDpiInternal);
                 int selectionFieldHeight = Math.Max(
@@ -196,7 +197,7 @@ public partial class ComboBox
                     1,
                     FontHeight + ScaleHelper.ScaleToDpi(2, DeviceDpiInternal));
                 int preferredSimpleEditHeight = Math.Max(selectionFieldHeight, minimumReadableHeight)
-                    + ScaleHelper.ScaleToDpi(1, DeviceDpiInternal);
+                    + ScaleHelper.ScaleToDpi(2, DeviceDpiInternal);
                 int maxSimpleEditHeight = Math.Max(
                     1,
                     simpleListBottom - dividerThickness - simpleEditTop);
