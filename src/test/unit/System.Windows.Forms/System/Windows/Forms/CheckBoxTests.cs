@@ -992,6 +992,25 @@ public class CheckBoxTests : AbstractButtonBaseTests
         Assert.False(box.GetStyle(ControlStyles.UserPaint));
     }
 
+    [WinFormsFact]
+    public void CheckBox_ToggleSwitch_FlatStyleSystem_DrawToBitmap_DoesNotThrow()
+    {
+        using CheckBox box = new()
+        {
+            Appearance = Appearance.ToggleSwitch,
+            FlatStyle = FlatStyle.System,
+            VisualStylesMode = VisualStylesMode.Net11,
+            Text = "Toggle",
+            Size = new Size(120, 30)
+        };
+        using Bitmap bitmap = new(box.Width, box.Height);
+
+        Exception exception = Record.Exception(
+            () => box.DrawToBitmap(bitmap, new Rectangle(Point.Empty, box.Size)));
+
+        Assert.Null(exception);
+    }
+
     private static int CountPixels(Bitmap bitmap, Color color)
     {
         int argb = color.ToArgb();

@@ -219,6 +219,16 @@ internal sealed class AnimatedToggleSwitchRenderer : AnimatedControlRenderer
 
     private TextFormatFlags GetTextFormatFlags() => Control switch
     {
+        Forms.CheckBox { FlatStyle: FlatStyle.System } checkBox => ControlPaint.CreateTextFormatFlags(
+            checkBox,
+            checkBox.TextAlign,
+            checkBox.ShowToolTip,
+            checkBox.UseMnemonic),
+        Forms.RadioButton { FlatStyle: FlatStyle.System } radioButton => ControlPaint.CreateTextFormatFlags(
+            radioButton,
+            radioButton.TextAlign,
+            radioButton.ShowToolTip,
+            radioButton.UseMnemonic),
         Forms.CheckBox checkBox => checkBox.CreateTextFormatFlags(),
         Forms.RadioButton radioButton => radioButton.CreateTextFormatFlags(),
         _ => TextFormatFlags.WordBreak | TextFormatFlags.TextBoxControl
