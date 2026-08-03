@@ -182,11 +182,7 @@ public partial class ComboBox
 
             if (DropDownStyle == ComboBoxStyle.Simple)
             {
-                int dividerThickness = Math.Max(
-                    1,
-                    ScaleHelper.ScaleToDpi(
-                        ModernControlVisualStyles.BorderThickness,
-                        DeviceDpiInternal));
+                int dividerThickness = GetModernSimpleDividerThickness();
                 int simpleBottomShrink = ScaleHelper.ScaleToDpi(
                     ModernSimpleBottomCropLogicalPixels,
                     DeviceDpiInternal);
@@ -644,6 +640,13 @@ public partial class ComboBox
             _modernSimpleListClipRegionApplyCount++;
         }
     }
+
+    private int GetModernSimpleDividerThickness()
+        => Math.Max(
+            1,
+            ScaleHelper.ScaleToDpi(
+                ModernControlVisualStyles.BorderThickness,
+                DeviceDpiInternal));
 
     private Rectangle GetChildBounds(HWND child)
     {

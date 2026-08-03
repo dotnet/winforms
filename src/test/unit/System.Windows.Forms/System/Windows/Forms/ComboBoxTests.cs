@@ -1374,9 +1374,10 @@ public class ComboBoxTests
         control.DrawToBitmap(bitmap, new Rectangle(Point.Empty, control.Size));
 
         Rectangle listBounds = control.GetListBounds();
+        int dividerThickness = control.ModernSimpleDividerThickness;
         int sampleX = Math.Clamp(control.Width / 2, 0, control.Width - 1);
-        int startY = Math.Max(0, listBounds.Top - 4);
-        int endY = Math.Max(0, listBounds.Top - 1);
+        int startY = Math.Max(0, listBounds.Top - dividerThickness);
+        int endY = Math.Min(control.Height - 1, listBounds.Top + 1);
         bool foundDivider = false;
 
         for (int y = startY; y <= endY; y++)
@@ -4390,6 +4391,10 @@ public class ComboBoxTests
         public int ModernSimpleListClipRegionApplyCount
             => (int)this.TestAccessor.Dynamic
                 .GetModernSimpleListClipRegionApplyCount();
+
+        public int ModernSimpleDividerThickness
+            => (int)this.TestAccessor.Dynamic
+                .GetModernSimpleDividerThickness();
 
         public int NativeSelectionHeight
             => (int)this.TestAccessor.Dynamic
