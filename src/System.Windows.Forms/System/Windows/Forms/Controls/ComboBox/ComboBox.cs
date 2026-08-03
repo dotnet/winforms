@@ -71,6 +71,7 @@ public partial class ComboBox : ListControl
     private short _prefHeightCache = -1;
     private short _maxDropDownItems = 8;
     private bool _integralHeight = true;
+    private bool _integralHeightExplicitlySet;
     private bool _mousePressed;
     private bool _mouseEvents;
     private bool _mouseInEdit;
@@ -357,7 +358,8 @@ public partial class ComboBox : ListControl
 
             if (!_integralHeight
                 || (UsesModernComboAdapter
-                    && DropDownStyle == ComboBoxStyle.Simple))
+                    && DropDownStyle == ComboBoxStyle.Simple
+                    && !_integralHeightExplicitlySet))
             {
                 cp.Style |= PInvoke.CBS_NOINTEGRALHEIGHT;
             }
@@ -493,7 +495,7 @@ public partial class ComboBox : ListControl
 
                 // The dropDownHeight is not reflected unless the
                 // ComboBox integralHeight == false..
-                IntegralHeight = false;
+                SetIntegralHeightCore(value: false, userSet: false);
             }
         }
     }
@@ -602,13 +604,20 @@ public partial class ComboBox : ListControl
     public bool IntegralHeight
     {
         get => _integralHeight;
-        set
+        set => SetIntegralHeightCore(value, userSet: true);
+    }
+
+    private void SetIntegralHeightCore(bool value, bool userSet)
+    {
+        if (userSet)
         {
-            if (_integralHeight != value)
-            {
-                _integralHeight = value;
-                RecreateHandle();
-            }
+            _integralHeightExplicitlySet = true;
+        }
+
+        if (_integralHeight != value)
+        {
+            _integralHeight = value;
+            RecreateHandle();
         }
     }
 
@@ -2474,6 +2483,9 @@ public partial class ComboBox : ListControl
         _nativeComboHandleInitialized = false;
         _normalizingNativeComboBaseline = false;
         _modernComboLayoutWriteCount = 0;
+        _modernSimpleListClipRegionHandle = HWND.Null;
+        _modernSimpleListClipRegionSize = Size.Empty;
+        _modernSimpleListClipRegionApplyCount = 0;
         _dropDownHandle = HWND.Null;
         if (Disposing)
         {
@@ -3751,11 +3763,14 @@ public partial class ComboBox : ListControl
                 break;
 
             // Modern VisualStyles: after WM_NCCALCSIZE expands the client area, comctl32 can still
-            // report the folded strip as non-client (HTVSCROLL). Force HTCLIENT across the expanded
-            // client so interaction remains consistent with the modern layout.
+            // report the folded strip as non-client (HTVSCROLL). For editable/drop-down-list combos,
+            // force HTCLIENT across the expanded client so interaction remains consistent with modern
+            // layout. Keep native hit-testing for Simple to avoid interfering with the hosted list's
+            // always-visible scrollbar interactions.
             case PInvokeCore.WM_NCHITTEST:
                 base.WndProc(ref m);
                 if (UsesModernComboAdapter
+                    && DropDownStyle != ComboBoxStyle.Simple
                     && m.ResultInternal != PInvoke.HTCLIENT)
                 {
                     Point hitPoint = PointToClient(PARAM.ToPoint(m.LParamInternal));

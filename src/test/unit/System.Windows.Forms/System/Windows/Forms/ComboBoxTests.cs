@@ -1324,6 +1324,36 @@ public class ComboBoxTests
     }
 
     [WinFormsFact]
+    public void ComboBox_ModernSimple_ApplyModernLayout_ReappliesBorderlessListSurface()
+    {
+        using SystemVisualSettingsTestScope settingsScope = new(
+            clientAreaAnimationEnabled: false,
+            highContrastEnabled: false);
+        using VisualStylesComboBox control = new()
+        {
+            DropDownStyle = ComboBoxStyle.Simple,
+            FlatStyle = FlatStyle.Standard,
+            Padding = Padding.Empty,
+            Size = new Size(220, 140),
+            VisualStylesMode = VisualStylesMode.Net11
+        };
+        control.Items.AddRange(["one", "two", "three", "four", "five", "six", "seven", "eight"]);
+        control.CreateControl();
+
+        Assert.False(control.ListHasBorderStyle());
+        Assert.False(control.ListHasClientEdgeExStyle());
+
+        control.ReapplyListBorderAndClientEdgeStyles();
+        Assert.True(control.ListHasBorderStyle());
+        Assert.True(control.ListHasClientEdgeExStyle());
+
+        control.ApplyModernComboLayout();
+
+        Assert.False(control.ListHasBorderStyle());
+        Assert.False(control.ListHasClientEdgeExStyle());
+    }
+
+    [WinFormsFact]
     public void ComboBox_ModernSimple_DrawsAccentDividerBetweenEditAndList()
     {
         using SystemVisualSettingsTestScope settingsScope = new(
@@ -1415,6 +1445,41 @@ public class ComboBoxTests
         }
     }
 
+    [WinFormsFact]
+    public void ComboBox_ModernSimple_ApplyModernLayout_DoesNotReapplyUnchangedClipRegion()
+    {
+        using SystemVisualSettingsTestScope settingsScope = new(
+            clientAreaAnimationEnabled: false,
+            highContrastEnabled: false);
+        using VisualStylesComboBox control = new()
+        {
+            DropDownStyle = ComboBoxStyle.Simple,
+            FlatStyle = FlatStyle.Standard,
+            Padding = Padding.Empty,
+            Size = new Size(220, 140),
+            VisualStylesMode = VisualStylesMode.Net11
+        };
+        control.Items.AddRange(["one", "two", "three", "four", "five", "six", "seven", "eight"]);
+        control.CreateControl();
+
+        int initialApplyCount = control.ModernSimpleListClipRegionApplyCount;
+
+        control.ApplyModernComboLayout();
+        int stableApplyCount = control.ModernSimpleListClipRegionApplyCount;
+
+        Assert.Equal(initialApplyCount, stableApplyCount);
+
+        control.Height += 20;
+
+        Assert.True(control.ModernSimpleListClipRegionApplyCount > stableApplyCount);
+
+        int resizedApplyCount = control.ModernSimpleListClipRegionApplyCount;
+
+        control.ApplyModernComboLayout();
+
+        Assert.Equal(resizedApplyCount, control.ModernSimpleListClipRegionApplyCount);
+    }
+
     [Theory]
     [InlineData(10, 0, 21999, false)]
     [InlineData(10, 0, 22000, true)]
@@ -1493,6 +1558,21 @@ public class ComboBoxTests
         CreateParams createParams = control.CreateParams;
 
         Assert.NotEqual(0, createParams.Style & PInvoke.CBS_NOINTEGRALHEIGHT);
+    }
+
+    [WinFormsFact]
+    public void ComboBox_CreateParams_Net11SimpleWithExplicitIntegralHeight_DoesNotForceNoIntegralHeight()
+    {
+        using SubComboBox control = new()
+        {
+            VisualStylesMode = VisualStylesMode.Net11,
+            DropDownStyle = ComboBoxStyle.Simple,
+            IntegralHeight = true
+        };
+
+        CreateParams createParams = control.CreateParams;
+
+        Assert.Equal(0, createParams.Style & PInvoke.CBS_NOINTEGRALHEIGHT);
     }
 
     [WinFormsTheory]
@@ -4243,6 +4323,41 @@ public class ComboBoxTests
             return (listExStyle & WINDOW_EX_STYLE.WS_EX_CLIENTEDGE) != 0;
         }
 
+        public void ReapplyListBorderAndClientEdgeStyles()
+        {
+            COMBOBOXINFO comboBoxInfo = GetComboBoxInfo();
+            HWND listHandle = comboBoxInfo.hwndList;
+
+            WINDOW_STYLE style = (WINDOW_STYLE)PInvokeCore.GetWindowLong(
+                listHandle,
+                WINDOW_LONG_PTR_INDEX.GWL_STYLE);
+            WINDOW_EX_STYLE exStyle = (WINDOW_EX_STYLE)PInvokeCore.GetWindowLong(
+                listHandle,
+                WINDOW_LONG_PTR_INDEX.GWL_EXSTYLE);
+
+            PInvokeCore.SetWindowLong(
+                listHandle,
+                WINDOW_LONG_PTR_INDEX.GWL_STYLE,
+                (nint)(style | WINDOW_STYLE.WS_BORDER));
+            PInvokeCore.SetWindowLong(
+                listHandle,
+                WINDOW_LONG_PTR_INDEX.GWL_EXSTYLE,
+                (nint)(exStyle | WINDOW_EX_STYLE.WS_EX_CLIENTEDGE));
+
+            PInvoke.SetWindowPos(
+                listHandle,
+                HWND.Null,
+                0,
+                0,
+                0,
+                0,
+                SET_WINDOW_POS_FLAGS.SWP_NOMOVE
+                    | SET_WINDOW_POS_FLAGS.SWP_NOSIZE
+                    | SET_WINDOW_POS_FLAGS.SWP_NOZORDER
+                    | SET_WINDOW_POS_FLAGS.SWP_NOACTIVATE
+                    | SET_WINDOW_POS_FLAGS.SWP_FRAMECHANGED);
+        }
+
         private unsafe COMBOBOXINFO GetComboBoxInfo()
         {
             COMBOBOXINFO comboBoxInfo = default;
@@ -4271,6 +4386,10 @@ public class ComboBoxTests
         public int ModernComboLayoutWriteCount
             => (int)this.TestAccessor.Dynamic
                 .GetModernComboLayoutWriteCount();
+
+        public int ModernSimpleListClipRegionApplyCount
+            => (int)this.TestAccessor.Dynamic
+                .GetModernSimpleListClipRegionApplyCount();
 
         public int NativeSelectionHeight
             => (int)this.TestAccessor.Dynamic

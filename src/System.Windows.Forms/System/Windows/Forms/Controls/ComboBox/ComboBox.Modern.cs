@@ -14,6 +14,10 @@ public partial class ComboBox
     private bool _nativeComboHandleInitialized;
     private bool _normalizingNativeComboBaseline;
     private int _modernComboLayoutWriteCount;
+    private HWND _modernSimpleListClipRegionHandle;
+    private Size _modernSimpleListClipRegionSize;
+    private int _modernSimpleListClipRegionApplyCount;
+    private const int ModernSimpleBottomCropLogicalPixels = 2;
 
     internal bool UsesModernComboAdapter
         => EffectiveVisualStylesMode >= VisualStylesMode.Net11
@@ -183,8 +187,9 @@ public partial class ComboBox
                     ScaleHelper.ScaleToDpi(
                         ModernControlVisualStyles.BorderThickness,
                         DeviceDpiInternal));
-                const int bottomCropLogicalPixels = 2;
-                int simpleBottomShrink = ScaleHelper.ScaleToDpi(bottomCropLogicalPixels, DeviceDpiInternal);
+                int simpleBottomShrink = ScaleHelper.ScaleToDpi(
+                    ModernSimpleBottomCropLogicalPixels,
+                    DeviceDpiInternal);
                 int simpleListBottom = ClientRectangle.Bottom - simpleBottomShrink - dividerThickness;
                 int simpleEditTop = topInset + ScaleHelper.ScaleToDpi(1, DeviceDpiInternal);
                 int selectionFieldHeight = Math.Max(
@@ -468,6 +473,8 @@ public partial class ComboBox
                 return;
             }
 
+            ConfigureModernSimpleListSurface(comboBoxInfo.hwndList);
+
             if (!target.EditBounds.IsEmpty)
             {
                 ApplyEditMargins(
@@ -608,13 +615,23 @@ public partial class ComboBox
             return;
         }
 
-        int bottomShrink = ScaleHelper.ScaleToDpi(2, DeviceDpiInternal);
+        int bottomShrink = ScaleHelper.ScaleToDpi(
+            ModernSimpleBottomCropLogicalPixels,
+            DeviceDpiInternal);
         int visibleHeight = Math.Max(1, targetBounds.Height - bottomShrink);
+        Size targetRegionSize = new(targetBounds.Width, visibleHeight);
+
+        if (listHandle == _modernSimpleListClipRegionHandle
+            && targetRegionSize == _modernSimpleListClipRegionSize)
+        {
+            return;
+        }
+
         using RegionScope region = new(
             0,
             0,
-            targetBounds.Width,
-            visibleHeight);
+            targetRegionSize.Width,
+            targetRegionSize.Height);
 
         if (PInvoke.SetWindowRgn(
             listHandle,
@@ -622,6 +639,9 @@ public partial class ComboBox
             fRedraw: true) != 0)
         {
             region.RelinquishOwnership();
+            _modernSimpleListClipRegionHandle = listHandle;
+            _modernSimpleListClipRegionSize = targetRegionSize;
+            _modernSimpleListClipRegionApplyCount++;
         }
     }
 
@@ -666,6 +686,9 @@ public partial class ComboBox
 
     private int GetModernComboLayoutWriteCount()
         => _modernComboLayoutWriteCount;
+
+    private int GetModernSimpleListClipRegionApplyCount()
+        => _modernSimpleListClipRegionApplyCount;
 
     private Padding GetModernFieldPadding()
     {
