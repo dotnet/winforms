@@ -820,6 +820,33 @@ public class CheckBoxTests : AbstractButtonBaseTests
         Assert.True(overlap.IsEmpty);
     }
 
+    [WinFormsFact]
+    public void CheckBox_ToggleSwitch_NarrowWidth_TextBoundsCanCollapseWithoutThrowing()
+    {
+        using CheckBox box = new()
+        {
+            Appearance = Appearance.ToggleSwitch,
+            AutoSize = false,
+            Text = "Narrow control text",
+            Size = new Size(8, 30),
+            VisualStylesMode = VisualStylesMode.Net11
+        };
+        using Bitmap bitmap = new(box.Width, box.Height);
+
+        Exception exception = Record.Exception(
+            () => box.DrawToBitmap(bitmap, new Rectangle(Point.Empty, box.Size)));
+
+        Assert.Null(exception);
+
+        Rendering.CheckBox.ToggleSwitchMetrics metrics = Rendering.CheckBox.ToggleSwitchMetrics.Create(box);
+        Rectangle textBounds = Rendering.CheckBox.AnimatedToggleSwitchRenderer.GetTextBounds(
+            box,
+            box.RtlTranslatedCheckAlign,
+            metrics);
+
+        Assert.InRange(textBounds.Width, 0, 1);
+    }
+
     [WinFormsTheory]
     [InlineData(96)]
     [InlineData(120)]
