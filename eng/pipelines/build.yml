@@ -50,7 +50,7 @@ jobs:
       filePath: $(Build.SourcesDirectory)/eng/common/SetupNugetSources.ps1
       arguments: -ConfigFile $(Build.SourcesDirectory)/NuGet.config -Password $Env:Token
     env:
-      Token: $(dn-bot-dnceng-artifact-feeds-rw)
+      Token: $(System.AccessToken)
 
   - task: MicroBuildSigningPlugin@2
     displayName: Install MicroBuild plugin for Signing
