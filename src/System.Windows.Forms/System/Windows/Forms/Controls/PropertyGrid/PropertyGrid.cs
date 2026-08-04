@@ -3887,13 +3887,6 @@ public partial class PropertyGrid : ContainerControl, IComPropertyBrowser, IProp
             }
         }
 
-        // A ToolStripItem's size is computed once, at creation, and never revisited on its own; set
-        // ImageScalingSize (drives ToolStripItem.PreferredImageSize) before CreatePushButton runs below.
-        if (!LargeButtons)
-        {
-            _toolStrip.ImageScalingSize = _normalButtonImages.ImageSize;
-        }
-
         // Setup our event handlers.
         EventHandler tabButtonHandler = OnViewTabButtonClick;
         EventHandler sortButtonHandler = OnViewSortButtonClick;
@@ -4028,7 +4021,7 @@ public partial class PropertyGrid : ContainerControl, IComPropertyBrowser, IProp
         _toolStrip.ImageList = LargeButtons ? _largeButtonImages : _normalButtonImages;
 
         // Covers LargeButtons only (_largeButtonImages isn't ready earlier); a no-op otherwise.
-        _toolStrip.ImageScalingSize = LargeButtons ? _largeButtonImages!.ImageSize : _normalButtonImages!.ImageSize;
+        _toolStrip.ImageScalingSize = _toolStrip.ImageList!.ImageSize;
 
         using (SuspendLayoutScope scope = new(_toolStrip))
         {
