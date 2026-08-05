@@ -288,6 +288,64 @@ public class ComboBoxTests
     }
 
     [WinFormsFact]
+    public void ComboBox_ModernVisualStyles_FlatStyleTransitionToSystem_RecreatesHandle()
+    {
+        using SystemVisualSettingsTestScope settingsScope = new(
+            clientAreaAnimationEnabled: false,
+            highContrastEnabled: false);
+        using Panel parent = new();
+        using VisualStylesComboBox control = new()
+        {
+            FlatStyle = FlatStyle.Standard,
+            VisualStylesMode = VisualStylesMode.Net11
+        };
+        parent.Controls.Add(control);
+        parent.CreateControl();
+        control.CreateControl();
+
+        int handleCreatedCallCount = 0;
+        int handleDestroyedCallCount = 0;
+        control.HandleCreated += (sender, e) => handleCreatedCallCount++;
+        control.HandleDestroyed += (sender, e) => handleDestroyedCallCount++;
+
+        control.FlatStyle = FlatStyle.System;
+
+        Assert.True(control.IsHandleCreated);
+        Assert.Equal(1, handleDestroyedCallCount);
+        Assert.Equal(1, handleCreatedCallCount);
+        Assert.IsType<FlatComboAdapter>(control.CreateAdapter());
+    }
+
+    [WinFormsFact]
+    public void ComboBox_ModernVisualStyles_SystemModeBoundaryChangeWithHandle_RecreatesHandle()
+    {
+        using SystemVisualSettingsTestScope settingsScope = new(
+            clientAreaAnimationEnabled: false,
+            highContrastEnabled: false);
+        using Panel parent = new();
+        using VisualStylesComboBox control = new()
+        {
+            FlatStyle = FlatStyle.System,
+            VisualStylesMode = VisualStylesMode.Classic
+        };
+        parent.Controls.Add(control);
+        parent.CreateControl();
+        control.CreateControl();
+
+        int handleCreatedCallCount = 0;
+        int handleDestroyedCallCount = 0;
+        control.HandleCreated += (sender, e) => handleCreatedCallCount++;
+        control.HandleDestroyed += (sender, e) => handleDestroyedCallCount++;
+
+        control.VisualStylesMode = VisualStylesMode.Net11;
+
+        Assert.True(control.IsHandleCreated);
+        Assert.Equal(1, handleDestroyedCallCount);
+        Assert.Equal(1, handleCreatedCallCount);
+        Assert.IsType<FlatComboAdapter>(control.CreateAdapter());
+    }
+
+    [WinFormsFact]
     public void ComboBox_ModernVisualStyles_ModeChangeRemeasuresAutoSizeRow()
     {
         SystemVisualSettings previous =
