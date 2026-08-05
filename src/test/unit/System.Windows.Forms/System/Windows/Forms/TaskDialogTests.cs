@@ -68,7 +68,7 @@ public class TaskDialogTests
         SetPrivateField(page, "_boundCustomButtons", Array.Empty<TaskDialogButton>());
         SetPrivateField(page, "_boundStandardButtonsByID", new Dictionary<int, TaskDialogButton>());
 
-        TaskDialogButton? button = page.GetBoundButtonByID(buttonID: 100);
+        TaskDialogButton button = page.GetBoundButtonByID(buttonID: 100);
 
         Assert.Null(button);
     }
@@ -79,14 +79,14 @@ public class TaskDialogTests
         TaskDialogPage page = new();
         PrepareBoundLikeState(page);
 
-        TaskDialogRadioButton? radioButton = page.GetBoundRadioButtonByID(buttonID: 1);
+        TaskDialogRadioButton radioButton = page.GetBoundRadioButtonByID(buttonID: 1);
 
         Assert.Null(radioButton);
     }
 
     private static void PrepareBoundLikeState(TaskDialogPage page)
     {
-        ConstructorInfo? constructor = typeof(TaskDialog).GetConstructor(
+        ConstructorInfo constructor = typeof(TaskDialog).GetConstructor(
             BindingFlags.Instance | BindingFlags.NonPublic,
             binder: null,
             Type.EmptyTypes,
@@ -99,7 +99,7 @@ public class TaskDialogTests
 
     private static void SetPrivateField(object instance, string fieldName, object value)
     {
-        FieldInfo? field = instance.GetType().GetField(
+        FieldInfo field = instance.GetType().GetField(
             fieldName,
             BindingFlags.Instance | BindingFlags.NonPublic);
         Assert.NotNull(field);
