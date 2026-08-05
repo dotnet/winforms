@@ -65,8 +65,9 @@ public class TaskDialogTests
     {
         TaskDialogPage page = new();
         PrepareBoundLikeState(page);
-        SetPrivateField(page, "_boundCustomButtons", Array.Empty<TaskDialogButton>());
-        SetPrivateField(page, "_boundStandardButtonsByID", new Dictionary<int, TaskDialogButton>());
+        dynamic access = page.TestAccessor.Dynamic;
+        access._boundCustomButtons = Array.Empty<TaskDialogButton>();
+        access._boundStandardButtonsByID = new Dictionary<int, TaskDialogButton>();
 
         TaskDialogButton button = page.GetBoundButtonByID(buttonID: 100);
 
