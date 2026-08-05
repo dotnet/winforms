@@ -1,20 +1,17 @@
 ---
 name: netfx-breaking-change-guidance
 description: >-
-  Instructions for finding, validating, and documenting WinForms behavior
-  changes from .NET Framework. Covers release-note labels, linked issues and
-  PRs, before/after behavior, affected applications, migration guidance,
-  compatibility switches, workaround risk, and test evidence.
+  Guidance for tasks involving WinForms compatibility differences from .NET
+  Framework, breaking-change release notes, migration guidance, or issues
+  labeled releasenotes-breaking-change-NetFx. Covers linked issues and PRs,
+  before/after behavior, affected applications, compatibility switches,
+  workaround risk, and test evidence.
 metadata:
   author: dotnet-winforms
   version: "1.0"
 ---
 
 # WinForms .NET Framework Breaking-Change Guidance
-
-Use this skill when a task asks for WinForms compatibility differences from
-.NET Framework, breaking-change release notes, migration guidance, or updates
-to issues labeled `releasenotes-breaking-change-NetFx`.
 
 > **Golden rule:** Do not call a change breaking solely because behavior differs.
 > Verify the .NET Framework behavior, the intended new behavior, customer impact,
