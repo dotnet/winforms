@@ -1,4 +1,4 @@
-// Licensed to the .NET Foundation under one or more agreements.
+﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
 using System.Collections;
@@ -530,12 +530,12 @@ public partial class ComboBox : ListControl
                 return;
             }
 
-            bool usedModernMetrics = UsesModernComboAdapter;
+            bool previousUsesModernMetrics = UsesModernComboAdapter;
             _flatStyle = value;
             ResetComboAdapter();
 
-            bool usesModernMetrics = UsesModernComboAdapter;
-            bool modernMetricsChanged = usedModernMetrics != usesModernMetrics;
+            bool currentUsesModernMetrics = UsesModernComboAdapter;
+            bool modernMetricsChanged = previousUsesModernMetrics != currentUsesModernMetrics;
 
             if (modernMetricsChanged)
             {
