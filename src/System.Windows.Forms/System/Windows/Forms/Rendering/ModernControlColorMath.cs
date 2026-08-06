@@ -27,6 +27,8 @@ internal static class ModernControlColorMath
     private static readonly Color s_darkModeDisabledForeground = Color.FromArgb(0x88, 0x88, 0x88);
     private static readonly Color s_lightModeDisabledForeground = Color.FromArgb(0xA0, 0xA0, 0xA0);
 
+    internal static Color TextControlBorderColor => SystemColors.ControlDarkDark;
+
     /// <summary>
     ///  Gets the surface color for a disabled modern control, honoring the current color mode
     ///  and high contrast settings.

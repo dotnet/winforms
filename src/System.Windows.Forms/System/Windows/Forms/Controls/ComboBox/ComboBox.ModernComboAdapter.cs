@@ -418,7 +418,7 @@ public partial class ComboBox
 
             return useAccent
                 ? Application.SystemVisualSettings.AccentColor
-                : comboBox.ForeColor;
+                : ModernControlColorMath.TextControlBorderColor;
         }
 
         private static int GetBorderThickness(ComboBox comboBox)
