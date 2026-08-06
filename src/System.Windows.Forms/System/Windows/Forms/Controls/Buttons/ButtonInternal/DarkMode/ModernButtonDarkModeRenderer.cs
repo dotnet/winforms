@@ -32,9 +32,6 @@ internal sealed class ModernButtonDarkModeRenderer : ButtonDarkModeRendererBase
     private static readonly Color s_darkNormal = Color.FromArgb(0x2D, 0x2D, 0x2D);
     private static readonly Color s_darkNormalHover = Color.FromArgb(0x32, 0x32, 0x32);
     private static readonly Color s_darkNormalPressed = Color.FromArgb(0x2A, 0x2A, 0x2A);
-    private static readonly Color s_darkDisabled = Color.FromArgb(0x25, 0x25, 0x25);
-
-    private static readonly Color s_darkDisabledText = Color.FromArgb(0x88, 0x88, 0x88);
 
     private static readonly Color s_darkGap = Color.FromArgb(0x0A, 0x0A, 0x0A);
     private static readonly Color s_darkFocusRing = Color.White;
@@ -43,10 +40,7 @@ internal sealed class ModernButtonDarkModeRenderer : ButtonDarkModeRendererBase
     private static readonly Color s_lightNormal = Color.FromArgb(0xFB, 0xFB, 0xFB);
     private static readonly Color s_lightNormalHover = Color.FromArgb(0xF9, 0xF9, 0xF9);
     private static readonly Color s_lightNormalPressed = Color.FromArgb(0xF5, 0xF5, 0xF5);
-    private static readonly Color s_lightDisabled = Color.FromArgb(0xFA, 0xFA, 0xFA);
     private static readonly Color s_lightBorder = Color.FromArgb(0xD0, 0xD0, 0xD0);
-
-    private static readonly Color s_lightDisabledText = Color.FromArgb(0xA0, 0xA0, 0xA0);
 
     private static bool IsDark => Application.IsDarkModeEnabled;
 
@@ -182,25 +176,16 @@ internal sealed class ModernButtonDarkModeRenderer : ButtonDarkModeRendererBase
 
     public override Color GetTextColor(PushButtonState state, bool isDefault, Color backColor)
     {
-        if (state == PushButtonState.Disabled)
-        {
-            Color preferredForeColor = IsDark
-                ? s_darkDisabledText
-                : s_lightDisabledText;
-
-            return ModernControlColorMath.GetDisabledTextColor(
-                preferredForeColor,
-                backColor);
-        }
-
-        return ModernButtonColorMath.GetReadableForeColor(backColor);
+        return state == PushButtonState.Disabled
+            ? ModernControlColorMath.GetDisabledForeColor(backColor)
+            : ModernButtonColorMath.GetReadableForeColor(backColor);
     }
 
     public override Color GetBackgroundColor(PushButtonState state, bool isDefault)
     {
         if (state == PushButtonState.Disabled)
         {
-            return IsDark ? s_darkDisabled : s_lightDisabled;
+            return ModernControlColorMath.GetDisabledSurfaceColor();
         }
 
         if (isDefault)
