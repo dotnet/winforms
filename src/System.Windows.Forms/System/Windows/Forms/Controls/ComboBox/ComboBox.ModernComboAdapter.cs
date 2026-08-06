@@ -253,10 +253,10 @@ public partial class ComboBox
         }
 
         private static Color GetDropDownButtonBaseColor(ComboBox comboBox)
-             => Application.IsDarkModeEnabled
-                 && comboBox.DarkModeRequestState is true
-                     ? SystemColors.ControlDark
-                     : SystemColors.Window;
+            => Application.IsDarkModeEnabled
+                && comboBox.DarkModeRequestState is true
+                    ? SystemColors.ControlDark
+                    : SystemColors.Window;
 
         private void DrawDropDownListText(
             ComboBox comboBox,
