@@ -535,9 +535,8 @@ public partial class ComboBox : ListControl
             ResetComboAdapter();
 
             bool currentUsesModernMetrics = UsesModernComboAdapter;
-            bool modernMetricsChanged = previousUsesModernMetrics != currentUsesModernMetrics;
 
-            if (modernMetricsChanged)
+            if (previousUsesModernMetrics != currentUsesModernMetrics)
             {
                 ResetHeightCache();
                 CommonProperties.xClearPreferredSizeCache(this);
