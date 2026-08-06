@@ -3826,6 +3826,27 @@ public partial class ComboBox : ListControl
                     return;
                 }
 
+                // Modern NET11 mode, disabled DropDown: the native edit child sends
+                // WM_CTLCOLORSTATIC and the OS default would produce a white background,
+                // inconsistent with the disabled surface ModernComboAdapter paints for the rest
+                // of the field. In light mode, explicitly set disabled colors via system values.
+                // In dark mode, ModernComboAdapter already renders the disabled surface correctly,
+                // and the edit child inherits appropriate rendering from the parent control.
+                if (hwndChild == _childEdit?.HWND
+                    && UsesModernComboAdapter
+                    && !Enabled
+                    && !Application.IsDarkModeEnabled)
+                {
+                    PInvokeCore.SetBkColor(
+                        (HDC)m.WParamInternal,
+                        ColorTranslator.ToWin32(SystemColors.ButtonFace));
+                    PInvokeCore.SetTextColor(
+                        (HDC)m.WParamInternal,
+                        ColorTranslator.ToWin32(SystemColors.GrayText));
+                    m.ResultInternal = (LRESULT)(nint)PInvokeCore.GetSysColorBrush(SystemColors.ButtonFace);
+                    return;
+                }
+
                 // Additional handling for Simple style listbox when disabled
                 if (DropDownStyle == ComboBoxStyle.Simple
                     && Application.IsDarkModeEnabled

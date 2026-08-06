@@ -1,4 +1,4 @@
-// Licensed to the .NET Foundation under one or more agreements.
+﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
 using System.Drawing;
@@ -15,6 +15,50 @@ internal static class ModernControlColorMath
 
     private const float DisabledMuteAmount = 0.45f;
     private const int ContrastSearchIterations = 10;
+
+    // Shared disabled-state palette for modern renderers. Modern controls do not honor user-set
+    // BackColor/ForeColor while disabled, so these fixed surfaces replace them. This is the single
+    // source of truth: the modern Button renderers and the modern ComboBox adapter all read from
+    // here, so a disabled Button and a disabled ComboBox cannot drift apart.
+    private static readonly Color s_darkModeDisabledSurface = Color.FromArgb(0x25, 0x25, 0x25);
+    private static readonly Color s_lightModeDisabledSurface = Color.FromArgb(0xFA, 0xFA, 0xFA);
+    private static readonly Color s_darkModeDisabledBorder = Color.FromArgb(0x55, 0x55, 0x55);
+    private static readonly Color s_lightModeDisabledBorder = Color.FromArgb(0xD0, 0xD0, 0xD0);
+    private static readonly Color s_darkModeDisabledForeground = Color.FromArgb(0x88, 0x88, 0x88);
+    private static readonly Color s_lightModeDisabledForeground = Color.FromArgb(0xA0, 0xA0, 0xA0);
+
+    /// <summary>
+    ///  Gets the surface color for a disabled modern control, honoring the current color mode
+    ///  and high contrast settings.
+    /// </summary>
+    internal static Color GetDisabledSurfaceColor()
+        => SystemInformation.HighContrast
+            ? SystemColors.Control
+            : Application.IsDarkModeEnabled
+                ? s_darkModeDisabledSurface
+                : s_lightModeDisabledSurface;
+
+    /// <summary>
+    ///  Gets the border color for a disabled modern control, honoring the current color mode
+    ///  and high contrast settings.
+    /// </summary>
+    internal static Color GetDisabledBorderColor()
+        => SystemInformation.HighContrast
+            ? SystemColors.GrayText
+            : Application.IsDarkModeEnabled
+                ? s_darkModeDisabledBorder
+                : s_lightModeDisabledBorder;
+
+    /// <summary>
+    ///  Gets the contrast-adjusted foreground color for content drawn on
+    ///  <see cref="GetDisabledSurfaceColor"/>.
+    /// </summary>
+    internal static Color GetDisabledForeColor(Color backColor)
+        => GetDisabledTextColor(
+            Application.IsDarkModeEnabled
+                ? s_darkModeDisabledForeground
+                : s_lightModeDisabledForeground,
+            backColor);
 
     internal static Color GetDisabledTextColor(
         Color preferredForeColor,
