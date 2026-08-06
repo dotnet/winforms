@@ -654,12 +654,23 @@ public partial class ComboBox
         ResetComboAdapter();
         ResetHeightCache();
 
+        bool recreateSystemHandle = FlatStyle == FlatStyle.System
+            && IsHandleCreated;
+
         // Crossing the modern/classic boundary is reported as VisualStylesModeChangeImpact.Recreate
         // (see GetVisualStylesModeChangeImpact), so the base recreates the handle here. That is the
         // only clean way to unwind the modern native-window state (the WM_NCCALCSIZE client
         // expansion and the per-handle modern baseline); a fresh classic handle then behaves exactly
         // as before, and a fresh modern handle captures a clean baseline.
+        // FlatStyle.System stays native, but an existing native handle still needs a rebuild when
+        // visual-style mode changes to avoid stale geometry in designer/runtime transitions.
         base.OnVisualStylesModeChanged(e);
+
+        if (recreateSystemHandle && IsHandleCreated)
+        {
+            RecreateHandle();
+        }
+
         ApplyModernComboLayout();
         RefreshModernDropDownCornerPreference();
     }
