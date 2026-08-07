@@ -226,4 +226,30 @@ public class CheckBoxToggleSwitchTests
 
         Assert.Equal(VisualStylesMode.Inherit, checkBox.VisualStylesMode);
     }
+
+    [WinFormsTheory]
+    [InlineData(true)]
+    [InlineData(false)]
+    public void CheckBox_ToggleSwitch_TransparentBackColor_DoesNotThrow(bool useBackgroundImage)
+    {
+        using SystemVisualSettingsTestScope settingsScope = new(
+            clientAreaAnimationEnabled: false,
+            highContrastEnabled: false);
+        using Bitmap backgroundImage = new(10, 10);
+        using Panel parent = new() { BackColor = Color.LightBlue, Size = new Size(200, 100) };
+        using CheckBox checkBox = new()
+        {
+            Parent = parent,
+            Appearance = Appearance.ToggleSwitch,
+            VisualStylesMode = VisualStylesMode.Net11,
+            BackColor = Color.Transparent,
+            BackgroundImage = useBackgroundImage ? backgroundImage : null,
+            Size = new Size(140, 36),
+            Text = "Matrix"
+        };
+        parent.CreateControl();
+        using Bitmap bitmap = new(checkBox.Width, checkBox.Height);
+
+        checkBox.DrawToBitmap(bitmap, new Rectangle(Point.Empty, checkBox.Size));
+    }
 }
