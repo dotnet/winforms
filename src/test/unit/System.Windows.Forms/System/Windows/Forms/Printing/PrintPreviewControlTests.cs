@@ -70,13 +70,13 @@ public class PrintPreviewControlTests
     }
 
     [WinFormsFact]
-    public void PrintPreviewControl_PageWithNoImage_RendersWhiteNotForeColor()
+    public void PrintPreviewControl_PageWithNoImage_DefaultForeColor_RendersWhite()
     {
         // Regression test for #14838: a page with no drawable content (e.g. from an empty
-        // PrintDocument) must render as white paper, not as a solid ForeColor rectangle.
+        // PrintDocument), with ForeColor left at its default, must render as white paper,
+        // not as a solid black rectangle.
         using PrintPreviewControl control = new()
         {
-            ForeColor = Color.Black,
             Size = new Size(200, 200)
         };
 
@@ -93,6 +93,31 @@ public class PrintPreviewControlTests
         Color centerPixel = bitmap.GetPixel(bitmap.Width / 2, bitmap.Height / 2);
 
         Assert.Equal(Color.White.ToArgb(), centerPixel.ToArgb());
+    }
+
+    [WinFormsFact]
+    public void PrintPreviewControl_PageWithNoImage_ExplicitForeColor_RendersForeColor()
+    {
+        // ForeColor has driven the page background fill since the original .NET Framework port;
+        // an explicitly set value must still be honored (see PR #14857 discussion), not overridden
+        // by the white default that only applies when ForeColor was never set.
+        using PrintPreviewControl control = new()
+        {
+            ForeColor = Color.Red,
+            Size = new Size(200, 200)
+        };
+
+        control.CreateControl();
+
+        PreviewPageInfo[] pageInfo = [new(image: null, physicalSize: new Size(850, 1100))];
+        control.TestAccessor.Dynamic._pageInfo = pageInfo;
+
+        using Bitmap bitmap = new(control.Width, control.Height);
+        control.DrawToBitmap(bitmap, new Rectangle(Point.Empty, control.Size));
+
+        Color centerPixel = bitmap.GetPixel(bitmap.Width / 2, bitmap.Height / 2);
+
+        Assert.Equal(Color.Red.ToArgb(), centerPixel.ToArgb());
     }
 
     [Fact]

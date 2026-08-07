@@ -691,8 +691,10 @@ public partial class PrintPreviewControl : Control
                 Rectangle box = pageRenderArea[i];
                 g.DrawRectangle(Pens.Black, box);
 
-                // Page background is fixed white; ForeColor is unrelated (it colors message text only).
-                using (var brush = Color.White.GetCachedSolidBrushScope())
+                // Default page fill is white (paper); an explicitly set ForeColor is still honored,
+                // as it always has been.
+                Color pageColor = _isForeColorSet ? ForeColor : Color.White;
+                using (var brush = pageColor.GetCachedSolidBrushScope())
                 {
                     g.FillRectangle(brush, box);
                 }
