@@ -516,14 +516,6 @@ public partial class DataGridViewCheckBoxCell : DataGridViewCell, IDataGridViewE
             return Rectangle.Empty;
         }
 
-        Point ptCurrentCell = DataGridView.CurrentCellAddress;
-        if (ptCurrentCell.X == ColumnIndex &&
-            ptCurrentCell.Y == rowIndex && DataGridView.IsCurrentCellInEditMode)
-        {
-            // PaintPrivate does not paint the error icon if this is the current cell.
-            // So don't set the ErrorIconBounds either.
-            return Rectangle.Empty;
-        }
 
         ComputeBorderStyleCellStateAndCellBounds(
             rowIndex,
@@ -1073,16 +1065,11 @@ public partial class DataGridViewCheckBoxCell : DataGridViewCell, IDataGridViewE
         valBounds.Width -= borderWidths.Right;
         valBounds.Height -= borderWidths.Bottom;
         bool cellSelected = (elementState & DataGridViewElementStates.Selected) != 0;
-        bool drawAsMixedCheckBox = false, drawErrorText = true;
+        bool drawAsMixedCheckBox = false;
         CheckState checkState;
         ButtonState bs;
         Debug.Assert(DataGridView is not null);
         Point ptCurrentCell = DataGridView.CurrentCellAddress;
-        if (ptCurrentCell.X == ColumnIndex &&
-            ptCurrentCell.Y == rowIndex && DataGridView.IsCurrentCellInEditMode)
-        {
-            drawErrorText = false;
-        }
 
         if (formattedValue is not null and CheckState state)
         {
@@ -1554,7 +1541,7 @@ public partial class DataGridViewCheckBoxCell : DataGridViewCell, IDataGridViewE
             resultBounds = Rectangle.Empty;
         }
 
-        if (paint && PaintErrorIcon(paintParts) && drawErrorText && DataGridView.ShowCellErrors)
+        if (paint && PaintErrorIcon(paintParts) &&  DataGridView.ShowCellErrors)
         {
             PaintErrorIcon(g, cellStyle, rowIndex, cellBounds, errorBounds, errorText);
         }
