@@ -80,11 +80,19 @@ internal sealed class CheckBoxModernAdapter : CheckBoxBaseAdapter
     private void PaintCore(PaintEventArgs e)
     {
         Graphics graphics = e.GraphicsInternal;
-        ParentBackgroundRenderer.Paint(
-            Control,
-            graphics,
-            Control.ClientRectangle,
-            Control.BackColor);
+        if (!Control.UseVisualStyleBackColor && !Control.BackColor.HasTransparency())
+        {
+            using var backBrush = Control.BackColor.GetCachedSolidBrushScope();
+            graphics.FillRectangle(backBrush, Control.ClientRectangle);
+        }
+        else
+        {
+            ParentBackgroundRenderer.Paint(
+                Control,
+                graphics,
+                Control.ClientRectangle,
+                Control.BackColor);
+        }
 
         LayoutData layout = Layout(e).Layout();
         AdjustFocusRectangle(layout);

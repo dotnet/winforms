@@ -582,6 +582,7 @@ public class CheckBoxTests : AbstractButtonBaseTests
         using CheckBox box = new()
         {
             BackColor = Color.Red,
+            UseVisualStyleBackColor = true,
             CheckState = checkState,
             Size = new Size(40, 24),
             VisualStylesMode = VisualStylesMode.Net11
@@ -595,6 +596,31 @@ public class CheckBoxTests : AbstractButtonBaseTests
         box.CreateStandardAdapter().PaintUp(e, checkState);
 
         Assert.Equal(expectedAccent, CountPixels(bitmap, Color.Red) > 0);
+    }
+
+    [WinFormsFact]
+    public void CheckBox_ModernGlyph_UsesExplicitBackColorWhenVisualStyleBackgroundDisabled()
+    {
+        using Panel parent = new() { BackColor = Color.White };
+        using CheckBox box = new()
+        {
+            BackColor = Color.Aqua,
+            CheckState = CheckState.Unchecked,
+            Text = string.Empty,
+            Size = new Size(40, 24),
+            VisualStylesMode = VisualStylesMode.Net11
+        };
+
+        parent.Controls.Add(box);
+
+        using Bitmap bitmap = new(box.Width, box.Height);
+        using Graphics graphics = Graphics.FromImage(bitmap);
+        PaintEventArgs e = new(graphics, box.ClientRectangle);
+
+        box.CreateStandardAdapter().PaintUp(e, box.CheckState);
+
+        Color backgroundPixel = bitmap.GetPixel(box.Width - 2, box.Height / 2);
+        Assert.Equal(Color.Aqua.ToArgb(), backgroundPixel.ToArgb());
     }
 
     [WinFormsFact]
