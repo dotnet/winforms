@@ -77,16 +77,19 @@ internal sealed class AnimatedToggleSwitchRenderer : AnimatedControlRenderer
             focused: Control.Focused && ShowFocusCues);
 
         ToggleSwitchMetrics metrics = ToggleSwitchMetrics.Create(Control);
-        Size textSize = TextRenderer.MeasureText(Control.Text, Control.Font);
+        TextFormatFlags textFormatFlags = GetTextFormatFlags(Control);
+        Size textSize = MeasureText(Control, textFormatFlags);
         Rectangle contentBounds = ToggleSwitchMetrics.GetContentBounds(Control);
-        int totalHeight = Math.Max(textSize.Height, metrics.SwitchHeight);
-        int contentTop = contentBounds.Top + Math.Max(0, (contentBounds.Height - totalHeight) / 2);
-        int textY = contentTop + ((totalHeight - textSize.Height) / 2);
         Rectangle switchBounds = GetSwitchBounds(
             Control,
             RtlTranslatedCheckAlign,
             metrics,
             textSize);
+        Rectangle textBounds = GetTextBounds(
+            contentBounds,
+            switchBounds,
+            metrics,
+            RtlTranslatedCheckAlign);
 
         PaintControlBackground(graphics);
 
@@ -95,17 +98,8 @@ internal sealed class AnimatedToggleSwitchRenderer : AnimatedControlRenderer
             return;
         }
 
-        if (IsSwitchOnRight(RtlTranslatedCheckAlign))
-        {
-            int textX = Math.Max(contentBounds.Left, switchBounds.Left - metrics.TextGap - textSize.Width);
-            RenderSwitch(graphics, switchBounds, metrics);
-            RenderText(graphics, new Point(textX, textY));
-        }
-        else
-        {
-            RenderSwitch(graphics, switchBounds, metrics);
-            RenderText(graphics, new Point(contentBounds.Left + metrics.SwitchWidth + metrics.TextGap, textY));
-        }
+        RenderSwitch(graphics, switchBounds, metrics);
+        RenderText(graphics, textBounds, textFormatFlags);
 
         if (Control.Focused && ShowFocusCues)
         {
@@ -149,11 +143,14 @@ internal sealed class AnimatedToggleSwitchRenderer : AnimatedControlRenderer
         Control control,
         ContentAlignment checkAlign,
         ToggleSwitchMetrics metrics)
-        => GetSwitchBounds(
+    {
+        TextFormatFlags textFormatFlags = GetTextFormatFlags(control);
+        return GetSwitchBounds(
             control,
             checkAlign,
             metrics,
-            TextRenderer.MeasureText(control.Text, control.Font));
+            MeasureText(control, textFormatFlags));
+    }
 
     private static Rectangle GetSwitchBounds(
         Control control,
@@ -165,22 +162,101 @@ internal sealed class AnimatedToggleSwitchRenderer : AnimatedControlRenderer
         int totalHeight = Math.Max(textSize.Height, metrics.SwitchHeight);
         int contentTop = contentBounds.Top + Math.Max(0, (contentBounds.Height - totalHeight) / 2);
         int switchY = contentTop + ((totalHeight - metrics.SwitchHeight) / 2);
-        int switchX = IsSwitchOnRight(checkAlign)
-            ? Math.Max(contentBounds.Left, contentBounds.Right - metrics.SwitchWidth)
-            : contentBounds.Left;
+        int minimumSwitchX = contentBounds.Left;
+        int maximumSwitchX = Math.Max(minimumSwitchX, contentBounds.Right - metrics.SwitchWidth);
+        int edgeInset = Math.Max(1, (metrics.BorderThickness / 2) + 1);
+        int targetSwitchX = IsSwitchOnRight(checkAlign)
+            ? maximumSwitchX - edgeInset
+            : minimumSwitchX + edgeInset;
+        int switchX = Math.Max(minimumSwitchX, Math.Min(maximumSwitchX, targetSwitchX));
 
         return new Rectangle(switchX, switchY, metrics.SwitchWidth, metrics.SwitchHeight);
     }
 
-    private void RenderText(Graphics graphics, Point position)
+    internal static Rectangle GetTextBounds(
+        Control control,
+        ContentAlignment checkAlign,
+        ToggleSwitchMetrics metrics)
     {
+        TextFormatFlags textFormatFlags = GetTextFormatFlags(control);
+        Size textSize = MeasureText(control, textFormatFlags);
+        Rectangle contentBounds = ToggleSwitchMetrics.GetContentBounds(control);
+        Rectangle switchBounds = GetSwitchBounds(control, checkAlign, metrics, textSize);
+        return GetTextBounds(contentBounds, switchBounds, metrics, checkAlign);
+    }
+
+    private static Rectangle GetTextBounds(
+        Rectangle contentBounds,
+        Rectangle switchBounds,
+        ToggleSwitchMetrics metrics,
+        ContentAlignment checkAlign)
+    {
+        // Keep a small symmetric inset between the switch track and text to avoid visual collision
+        // with the rounded switch border in high DPI while preserving readability in narrow widths.
+        int textGapInset = GetSwitchTextInset(metrics);
+        int minimumTextGap = Math.Max(0, metrics.TextGap - textGapInset);
+
+        if (IsSwitchOnRight(checkAlign))
+        {
+            int right = Math.Min(
+                contentBounds.Right,
+                switchBounds.Left - minimumTextGap);
+            right = Math.Max(contentBounds.Left, right);
+            return Rectangle.FromLTRB(contentBounds.Left, contentBounds.Top, right, contentBounds.Bottom);
+        }
+
+        int left = Math.Max(
+            contentBounds.Left,
+            switchBounds.Right + minimumTextGap);
+        left = Math.Min(contentBounds.Right, left);
+        return Rectangle.FromLTRB(left, contentBounds.Top, contentBounds.Right, contentBounds.Bottom);
+    }
+
+    private static int GetSwitchTextInset(ToggleSwitchMetrics metrics)
+        => Math.Max(1, (metrics.BorderThickness / 2) + 1);
+
+    private static Size MeasureText(Control control, TextFormatFlags textFormatFlags)
+        => TextRenderer.MeasureText(
+            text: control.Text,
+            font: control.Font,
+            proposedSize: new Size(int.MaxValue, int.MaxValue),
+            flags: textFormatFlags);
+
+    private void RenderText(
+        Graphics graphics,
+        Rectangle textBounds,
+        TextFormatFlags textFormatFlags)
+    {
+        if (textBounds.Width <= 0 || textBounds.Height <= 0)
+        {
+            return;
+        }
+
         TextRenderer.DrawText(
             graphics,
             Control.Text,
             Control.Font,
-            position,
-            GetTextColor());
+            textBounds,
+            GetTextColor(),
+            textFormatFlags);
     }
+
+    private static TextFormatFlags GetTextFormatFlags(Control control) => control switch
+    {
+        Forms.CheckBox { FlatStyle: FlatStyle.System } checkBox => ControlPaint.CreateTextFormatFlags(
+            checkBox,
+            checkBox.TextAlign,
+            checkBox.ShowToolTip,
+            checkBox.UseMnemonic),
+        Forms.RadioButton { FlatStyle: FlatStyle.System } radioButton => ControlPaint.CreateTextFormatFlags(
+            radioButton,
+            radioButton.TextAlign,
+            radioButton.ShowToolTip,
+            radioButton.UseMnemonic),
+        Forms.CheckBox checkBox => checkBox.CreateTextFormatFlags(),
+        Forms.RadioButton radioButton => radioButton.CreateTextFormatFlags(),
+        _ => TextFormatFlags.WordBreak | TextFormatFlags.TextBoxControl
+    };
 
     internal Color GetTextColor()
         => Control.Enabled
