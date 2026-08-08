@@ -4,6 +4,7 @@
 #nullable disable
 
 using System.Drawing;
+using System.Reflection;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.Windows.Forms.TestUtilities;
 
@@ -54,6 +55,24 @@ public class OwnerDrawPropertyBagTests
         bag.Font = value;
         Assert.Same(value, bag.Font);
         Assert.Equal(value is null, bag.IsEmpty());
+    }
+
+    [WinFormsFact]
+    public void OwnerDrawPropertyBag_Font_SetDifferentValue_ResetsCachedFontWrapper()
+    {
+        using SubTreeView treeView = new();
+        OwnerDrawPropertyBag bag = treeView.GetItemRenderStyles(null, 0);
+        using Font firstFont = new(SystemFonts.MenuFont, FontStyle.Regular);
+        using Font secondFont = new(SystemFonts.MenuFont, FontStyle.Bold);
+
+        bag.Font = firstFont;
+        _ = bag.GetType().GetProperty("FontHandle", BindingFlags.Instance | BindingFlags.NonPublic)!.GetValue(bag);
+
+        FieldInfo fontWrapperField = bag.GetType().GetField("_fontWrapper", BindingFlags.Instance | BindingFlags.NonPublic)!;
+        Assert.NotNull(fontWrapperField.GetValue(bag));
+
+        bag.Font = secondFont;
+        Assert.Null(fontWrapperField.GetValue(bag));
     }
 
     [WinFormsTheory]
