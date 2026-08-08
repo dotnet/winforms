@@ -1299,9 +1299,13 @@ public partial class SplitContainer : ContainerControl, ISupportInitialize
         }
 
         _panel2MinSize = value;
-        if (value > Panel2.Width)
+        bool isVertical = Orientation == Orientation.Vertical;
+        int panel2Size = isVertical ? Panel2.Width : Panel2.Height;
+        int containerSize = isVertical ? Width : Height;
+        if (value > panel2Size)
         {
-            SplitterDistanceInternal = Panel2.Width + SplitterWidthInternal;  // Set the Splitter Distance to the start of Panel2
+            // Give Panel2 exactly the required minimum by moving the splitter.
+            SplitterDistanceInternal = Math.Max(containerSize - value - SplitterWidthInternal, 0);
         }
     }
 
