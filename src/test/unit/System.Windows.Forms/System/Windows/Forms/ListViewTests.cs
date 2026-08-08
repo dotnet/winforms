@@ -6066,6 +6066,74 @@ public class ListViewTests
         callCount.Should().Be(4);
     }
 
+    [WinFormsTheory]
+    [InlineData(0x1E, 0x1E, 0x1E, 0xFF, 0xFF, 0xFF)]  // Dark mode: dark bg, white text
+    [InlineData(0xFF, 0xFF, 0xFF, 0x00, 0x00, 0x00)]  // Light mode: white bg, black text
+    public void ListView_WmCtlColorEdit_WithMatchingLabelEditHwnd_SetsDCColorsAndReturnsNonZeroBrush(int backR, int backG, int backB, int foreR, int foreG, int foreB)
+    {
+        // Regression test for issue #12042
+        Color expectedBackColor = Color.FromArgb(backR, backG, backB);
+        Color expectedForeColor = Color.FromArgb(foreR, foreG, foreB);
+
+        using SubListView listView = new()
+        {
+            LabelEdit = true,
+            View = View.Details,
+            Size = new Size(300, 200),
+            BackColor = expectedBackColor,
+            ForeColor = expectedForeColor
+        };
+
+        listView.Columns.Add(new ColumnHeader { Text = "Column 1", Width = 200 });
+        listView.Items.Add(new ListViewItem("Item 1"));
+        listView.CreateControl();
+
+        // Select the item then trigger label editing via the timer (same pattern used in
+        // ListView_OnMouseClick_EditLabel_AsExpected).
+        PInvoke.SetFocus(listView);
+        listView.Items[0].Selected = true;
+
+        Point itemLocation = listView.Items[0].Bounds.Location + new Size(1, 1);
+        PInvokeCore.PostMessage(listView, PInvokeCore.WM_LBUTTONUP, 0, PARAM.FromPoint(itemLocation));
+        PInvokeCore.SendMessage(listView, PInvokeCore.WM_LBUTTONDOWN, 1, PARAM.FromPoint(itemLocation));
+        PInvokeCore.SendMessage(listView, PInvokeCore.WM_TIMER,
+            (WPARAM)(nint)listView.TestAccessor.Dynamic.LVLABELEDITTIMER);
+
+        HWND editHwnd = (HWND)(nint)PInvokeCore.SendMessage(listView, PInvoke.LVM_GETEDITCONTROL);
+
+        if (editHwnd == HWND.Null)
+        {
+            PInvokeCore.SendMessage(listView, PInvoke.LVM_CANCELEDITLABEL);
+            return;
+        }
+
+        using GetDcScope hdc = new(editHwnd);
+        Message msg = Message.Create(
+            listView.Handle,
+            (int)PInvokeCore.WM_CTLCOLOREDIT,
+            (nint)(HDC)hdc,
+            (nint)editHwnd);
+
+        listView.WndProc(ref msg);
+
+        // 1. A valid (non-null) brush handle must be returned.
+        Assert.NotEqual(IntPtr.Zero, (nint)msg.ResultInternal);
+
+        // 2. DC text color must match the ForeColor we set on the control.
+        Color actualTextColor = PInvoke.GetTextColor(hdc);
+        Assert.Equal(
+            ColorTranslator.ToWin32(expectedForeColor),
+            ColorTranslator.ToWin32(actualTextColor));
+
+        // 3. DC background color must match the BackColor we set on the control.
+        Color actualBkColor = PInvoke.GetBkColor(hdc);
+        Assert.Equal(
+            ColorTranslator.ToWin32(expectedBackColor),
+            ColorTranslator.ToWin32(actualBkColor));
+
+        PInvokeCore.SendMessage(listView, PInvoke.LVM_CANCELEDITLABEL);
+    }
+
     private class SubListViewItem : ListViewItem
     {
         public AccessibleObject CustomAccessibleObject { get; set; }
@@ -6171,6 +6239,8 @@ public class ListViewTests
         public new void OnCacheVirtualItems(CacheVirtualItemsEventArgs e) => base.OnCacheVirtualItems(e);
 
         public new void OnItemChecked(ItemCheckedEventArgs e) => base.OnItemChecked(e);
+
+        public new void WndProc(ref Message m) => base.WndProc(ref m);
     }
 
     private SubListView GetSubListViewWithData(View view, bool virtualMode, bool showGroups, bool withinGroup, bool createControl)
