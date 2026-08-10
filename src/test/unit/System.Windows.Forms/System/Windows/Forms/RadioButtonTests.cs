@@ -209,7 +209,7 @@ public class RadioButtonTests : AbstractButtonBaseTests
     [WinFormsTheory]
     [InlineData(false, false)]
     [InlineData(true, true)]
-    public void RadioButton_ModernGlyph_RendersAccentWhenChecked(bool isChecked, bool expectedAccent)
+    public void RadioButton_ModernGlyph_UsesExplicitBackColorWithoutTintingCheckedGlyph(bool isChecked, bool expectedAccent)
     {
         if (SystemInformation.HighContrast)
         {
@@ -235,7 +235,11 @@ public class RadioButtonTests : AbstractButtonBaseTests
             e,
             isChecked ? CheckState.Checked : CheckState.Unchecked);
 
-        Assert.Equal(expectedAccent, CountPixels(bitmap, Color.Red) > 0);
+        Color backgroundPixel = bitmap.GetPixel(control.Width - 2, control.Height / 2);
+        Assert.Equal(Color.Red.ToArgb(), backgroundPixel.ToArgb());
+        Assert.Equal(
+            expectedAccent,
+            CountPixels(bitmap, Application.SystemVisualSettings.AccentColor, channelTolerance: 24) > 0);
     }
 
     [WinFormsFact]

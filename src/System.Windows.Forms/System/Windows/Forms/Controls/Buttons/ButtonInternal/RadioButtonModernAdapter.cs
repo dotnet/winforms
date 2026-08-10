@@ -1,4 +1,4 @@
-// Licensed to the .NET Foundation under one or more agreements.
+﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
 using System.Drawing;
@@ -79,7 +79,10 @@ internal sealed class RadioButtonModernAdapter : RadioButtonBaseAdapter
     private void PaintCore(PaintEventArgs e)
     {
         Graphics graphics = e.GraphicsInternal;
-        if (!Control.UseVisualStyleBackColor && !Control.BackColor.HasTransparency())
+        bool useControlBackColor = !Control.BackColor.HasTransparency()
+            && (Control.ShouldSerializeBackColor() || !Control.UseVisualStyleBackColor);
+
+        if (useControlBackColor)
         {
             using var backBrush = Control.BackColor.GetCachedSolidBrushScope();
             graphics.FillRectangle(backBrush, Control.ClientRectangle);
@@ -97,11 +100,6 @@ internal sealed class RadioButtonModernAdapter : RadioButtonBaseAdapter
         AdjustFocusRectangle(layout);
         PaintBackgroundImage(e);
 
-        Color? customOnColor = Control.ShouldSerializeBackColor()
-            && Control.BackColor.A == byte.MaxValue
-                ? Control.BackColor
-                : null;
-
         Color? customBorderColor = Control.FlatAppearance.BorderColor.IsEmpty
             ? null
             : Control.FlatAppearance.BorderColor;
@@ -114,7 +112,7 @@ internal sealed class RadioButtonModernAdapter : RadioButtonBaseAdapter
             Control.Enabled,
             Control.MouseIsOver,
             Control.Focused && Control.ShowFocusCues,
-            customOnColor,
+            customOnColor: null,
             customBorderColor);
 
         PaintImage(e, layout);
@@ -124,11 +122,16 @@ internal sealed class RadioButtonModernAdapter : RadioButtonBaseAdapter
             : Application.IsDarkModeEnabled
                 ? Color.FromArgb(0xF0, 0xF0, 0xF0)
                 : SystemColors.WindowText;
+        Color disabledTextBackColor = Control.ShouldSerializeBackColor()
+            && Control.BackColor.A == byte.MaxValue
+                ? Control.BackColor
+                : Control.Parent?.BackColor ?? Control.BackColor;
+
         Color textColor = Control.Enabled
             ? preferredTextColor
             : ModernControlColorMath.GetDisabledTextColor(
                 preferredTextColor,
-                Control.Parent?.BackColor ?? Control.BackColor);
+                disabledTextBackColor);
 
         PaintField(e, layout, PaintRender(e).Calculate(), textColor, drawFocus: true);
     }

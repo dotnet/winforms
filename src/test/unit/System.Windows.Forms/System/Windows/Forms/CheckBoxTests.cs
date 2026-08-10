@@ -571,7 +571,7 @@ public class CheckBoxTests : AbstractButtonBaseTests
     [InlineData(CheckState.Unchecked, false)]
     [InlineData(CheckState.Checked, true)]
     [InlineData(CheckState.Indeterminate, true)]
-    public void CheckBox_ModernGlyph_RendersAccentForCheckedStates(CheckState checkState, bool expectedAccent)
+    public void CheckBox_ModernGlyph_UsesExplicitBackColorWithoutTintingCheckedGlyph(CheckState checkState, bool expectedAccent)
     {
         if (SystemInformation.HighContrast)
         {
@@ -595,7 +595,11 @@ public class CheckBoxTests : AbstractButtonBaseTests
 
         box.CreateStandardAdapter().PaintUp(e, checkState);
 
-        Assert.Equal(expectedAccent, CountPixels(bitmap, Color.Red) > 0);
+        Color backgroundPixel = bitmap.GetPixel(box.Width - 2, box.Height / 2);
+        Assert.Equal(Color.Red.ToArgb(), backgroundPixel.ToArgb());
+        Assert.Equal(
+            expectedAccent,
+            CountPixels(bitmap, Application.SystemVisualSettings.AccentColor) > 0);
     }
 
     [WinFormsFact]
