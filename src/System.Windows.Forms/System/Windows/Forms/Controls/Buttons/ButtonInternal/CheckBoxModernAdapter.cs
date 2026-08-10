@@ -99,8 +99,9 @@ internal sealed class CheckBoxModernAdapter : CheckBoxBaseAdapter
         PaintBackgroundImage(e);
 
         Color? customOnColor = Control.ShouldSerializeBackColor()
-            ? Control.BackColor
-            : null;
+            && Control.BackColor.A == byte.MaxValue
+                ? Control.BackColor
+                : null;
 
         Color? customBorderColor = Control.FlatAppearance.BorderColor.IsEmpty
             ? null

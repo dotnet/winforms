@@ -530,15 +530,25 @@ public partial class ComboBox : ListControl
                 return;
             }
 
-            bool usedModernMetrics = UsesModernComboAdapter;
+            bool previousUsesModernMetrics = UsesModernComboAdapter;
             _flatStyle = value;
             ResetComboAdapter();
 
-            if (usedModernMetrics != UsesModernComboAdapter)
+            bool currentUsesModernMetrics = UsesModernComboAdapter;
+
+            if (previousUsesModernMetrics != currentUsesModernMetrics)
             {
                 ResetHeightCache();
                 CommonProperties.xClearPreferredSizeCache(this);
-                ApplyModernComboLayout();
+
+                if (IsHandleCreated)
+                {
+                    RecreateHandle();
+                }
+                else
+                {
+                    ApplyModernComboLayout();
+                }
 
                 LayoutTransaction.DoLayout(
                     this,
@@ -553,8 +563,11 @@ public partial class ComboBox : ListControl
                         PropertyNames.FlatStyle);
                 }
             }
+            else
+            {
+                ApplyModernComboLayout();
+            }
 
-            ApplyModernComboLayout();
             RefreshModernDropDownCornerPreference();
             Invalidate();
         }
