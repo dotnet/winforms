@@ -201,7 +201,7 @@ public partial class ComboBox
                 return;
             }
 
-            Color background = GetEffectiveBackColor(comboBox);
+            Color background = GetDropDownButtonBaseColor(comboBox);
             Color buttonColor = comboBox._mousePressed
                 ? PopupButtonColorMath.Blend(
                     background,
@@ -251,6 +251,12 @@ public partial class ComboBox
             using var pen = chevronColor.GetCachedPenScope(stroke);
             graphics.DrawLines(pen, points);
         }
+
+        private static Color GetDropDownButtonBaseColor(ComboBox comboBox)
+            => Application.IsDarkModeEnabled
+                && comboBox.DarkModeRequestState is true
+                    ? SystemColors.ControlDark
+                    : SystemColors.Window;
 
         private void DrawDropDownListText(
             ComboBox comboBox,
