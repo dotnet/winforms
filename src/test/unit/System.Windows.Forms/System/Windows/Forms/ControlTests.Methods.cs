@@ -15,6 +15,439 @@ namespace System.Windows.Forms.Tests;
 
 public partial class ControlTests
 {
+#if NET11_0_OR_GREATER
+    [WinFormsFact]
+    public void Control_BeginEndSuspendPainting_InvokeWithoutHandle_Success()
+    {
+        using SubControl control = new();
+        ISupportSuspendPainting suspendPainting = control;
+
+        suspendPainting.BeginSuspendPainting();
+        suspendPainting.EndSuspendPainting();
+        suspendPainting.EndSuspendPainting();
+
+        Assert.False(control.IsHandleCreated);
+    }
+
+    [WinFormsFact]
+    public void Control_SuspendPainting_ScopeDisposes_Success()
+    {
+        using SubControl control = new();
+
+        using IDisposable scope = control.SuspendPainting();
+
+        Assert.False(control.IsHandleCreated);
+    }
+
+    [WinFormsFact]
+    public void Control_SuspendPainting_ScopeDispose_IsIdempotent()
+    {
+        using SubControl control = new();
+
+        IDisposable scope = control.SuspendPainting();
+        scope.Dispose();
+        scope.Dispose();
+
+        Assert.False(control.IsHandleCreated);
+    }
+
+    [WinFormsFact]
+    public async Task Control_SuspendPainting_ScopeSpansAwait_Success()
+    {
+        using SubControl control = new();
+
+        using IDisposable scope = control.SuspendPainting();
+        await Task.Yield();
+
+        Assert.False(control.IsHandleCreated);
+    }
+
+    [WinFormsFact]
+    public void Control_SuspendPainting_HandleCreatedWithinScope_RemainsSuspended()
+    {
+        using RedrawTrackingControl control = new();
+
+        IDisposable scope = control.SuspendPainting();
+        Assert.True(control.IsUpdating());
+        Assert.NotEqual(IntPtr.Zero, control.Handle);
+        Assert.Equal([false], control.RedrawStates);
+
+        scope.Dispose();
+
+        Assert.False(control.IsUpdating());
+        Assert.Equal([false, true], control.RedrawStates);
+    }
+
+    [WinFormsFact]
+    public void Control_SuspendPainting_HandleRecreatedWithinScope_RemainsSuspended()
+    {
+        using RedrawTrackingControl control = new();
+        Assert.NotEqual(IntPtr.Zero, control.Handle);
+
+        IDisposable scope = control.SuspendPainting();
+        control.RedrawStates.Clear();
+        control.RecreateHandle();
+
+        Assert.True(control.IsUpdating());
+        Assert.Equal([false], control.RedrawStates);
+
+        scope.Dispose();
+
+        Assert.False(control.IsUpdating());
+        Assert.Equal([false, true], control.RedrawStates);
+    }
+
+    [WinFormsFact]
+    public void Control_SuspendPainting_Parameterless_DoesNotSuspendLayout()
+    {
+        using SubControl control = new();
+
+        using IDisposable scope = control.SuspendPainting();
+
+        Assert.Equal((byte)0, control.LayoutSuspendCount);
+        Assert.False(control.IsHandleCreated);
+    }
+
+    [WinFormsFact]
+    public void Control_SuspendPainting_WithTargetOnly_SuspendsOnlyTargetLayout()
+    {
+        using SubControl control = new();
+        using Control child = new();
+        control.Controls.Add(child);
+
+        IDisposable scope = control.SuspendPainting(LayoutSuspendTraversal.TargetOnly);
+
+        Assert.Equal((byte)1, control.LayoutSuspendCount);
+        Assert.Equal((byte)0, child.LayoutSuspendCount);
+        Assert.False(control.IsHandleCreated);
+        Assert.False(child.IsHandleCreated);
+
+        scope.Dispose();
+
+        Assert.Equal((byte)0, control.LayoutSuspendCount);
+        Assert.Equal((byte)0, child.LayoutSuspendCount);
+    }
+
+    [WinFormsFact]
+    public void Control_SuspendPainting_WithTargetAndDescendants_SuspendsEntireTreeLayout()
+    {
+        using SubControl control = new();
+        using Control child = new();
+        using Control grandchild = new();
+        control.Controls.Add(child);
+        child.Controls.Add(grandchild);
+
+        IDisposable scope = control.SuspendPainting(LayoutSuspendTraversal.TargetAndDescendants);
+
+        Assert.Equal((byte)1, control.LayoutSuspendCount);
+        Assert.Equal((byte)1, child.LayoutSuspendCount);
+        Assert.Equal((byte)1, grandchild.LayoutSuspendCount);
+        Assert.False(control.IsHandleCreated);
+        Assert.False(child.IsHandleCreated);
+        Assert.False(grandchild.IsHandleCreated);
+
+        scope.Dispose();
+
+        Assert.Equal((byte)0, control.LayoutSuspendCount);
+        Assert.Equal((byte)0, child.LayoutSuspendCount);
+        Assert.Equal((byte)0, grandchild.LayoutSuspendCount);
+    }
+
+    [WinFormsFact]
+    public void Control_SuspendPainting_WithNone_DoesNotSuspendLayout()
+    {
+        using SubControl control = new();
+        using Control child = new();
+        control.Controls.Add(child);
+
+        using IDisposable scope = control.SuspendPainting(LayoutSuspendTraversal.None);
+
+        Assert.Equal((byte)0, control.LayoutSuspendCount);
+        Assert.Equal((byte)0, child.LayoutSuspendCount);
+        Assert.False(control.IsHandleCreated);
+    }
+
+    [WinFormsFact]
+    public void Control_SuspendPainting_WithFilter_SkipsControlAndContinuesTraversal()
+    {
+        using SubControl control = new();
+        using Control child = new();
+        using Control grandchild = new();
+        control.Controls.Add(child);
+        child.Controls.Add(grandchild);
+        List<Control> visitedControls = [];
+
+        IDisposable scope = control.SuspendPainting(candidate =>
+        {
+            visitedControls.Add(candidate);
+            return candidate != child;
+        });
+
+        Assert.Equal([control, child, grandchild], visitedControls);
+        Assert.Equal((byte)1, control.LayoutSuspendCount);
+        Assert.Equal((byte)0, child.LayoutSuspendCount);
+        Assert.Equal((byte)1, grandchild.LayoutSuspendCount);
+
+        scope.Dispose();
+
+        Assert.Equal((byte)0, control.LayoutSuspendCount);
+        Assert.Equal((byte)0, child.LayoutSuspendCount);
+        Assert.Equal((byte)0, grandchild.LayoutSuspendCount);
+    }
+
+    [WinFormsFact]
+    public void Control_SuspendPainting_WithLayoutSuspension_DisposeIsIdempotentAndBalancesNesting()
+    {
+        using RedrawTrackingControl control = new();
+        Assert.NotEqual(IntPtr.Zero, control.Handle);
+        int invalidatedCallCount = 0;
+        control.Invalidated += (sender, e) => invalidatedCallCount++;
+
+        IDisposable outerScope = control.SuspendPainting(LayoutSuspendTraversal.TargetOnly);
+        IDisposable innerScope = control.SuspendPainting(LayoutSuspendTraversal.TargetOnly);
+
+        Assert.Equal((byte)2, control.LayoutSuspendCount);
+        Assert.Equal([false], control.RedrawStates);
+
+        innerScope.Dispose();
+        innerScope.Dispose();
+        Assert.Equal((byte)1, control.LayoutSuspendCount);
+        Assert.Equal([false], control.RedrawStates);
+        Assert.Equal(0, invalidatedCallCount);
+
+        outerScope.Dispose();
+        outerScope.Dispose();
+        Assert.Equal((byte)0, control.LayoutSuspendCount);
+        Assert.Equal([false, true], control.RedrawStates);
+        Assert.Equal(1, invalidatedCallCount);
+    }
+
+    [WinFormsFact]
+    public void Control_SuspendPainting_WithLayoutSuspension_ResumesChildrenBeforeParentAndThenInvalidatesTree()
+    {
+        using SubControl control = new();
+        using Control child = new();
+        control.Controls.Add(child);
+        control.CreateControl();
+        child.CreateControl();
+        List<string> events = [];
+        control.Layout += (sender, e) => events.Add("parent-layout");
+        child.Layout += (sender, e) => events.Add("child-layout");
+        control.Invalidated += (sender, e) => events.Add("parent-invalidated");
+
+        IDisposable scope = control.SuspendPainting(LayoutSuspendTraversal.TargetAndDescendants);
+        control.PerformLayout();
+        child.PerformLayout();
+
+        Assert.Empty(events);
+
+        scope.Dispose();
+
+        Assert.Equal("child-layout", events[0]);
+        Assert.Equal("parent-layout", events[1]);
+        Assert.Contains("parent-invalidated", events);
+        Assert.All(events.Skip(2), entry => Assert.EndsWith("-invalidated", entry));
+    }
+
+    [WinFormsFact]
+    public void Control_SuspendPainting_WithInvalidTraversal_ThrowsInvalidEnumArgumentException()
+    {
+        using SubControl control = new();
+
+        Assert.Throws<InvalidEnumArgumentException>(
+            () => control.SuspendPainting((LayoutSuspendTraversal)(-1)));
+        Assert.Equal((byte)0, control.LayoutSuspendCount);
+        Assert.False(control.IsHandleCreated);
+    }
+
+    [WinFormsFact]
+    public void Control_SuspendPainting_WithNullFilter_ThrowsArgumentNullException()
+    {
+        using SubControl control = new();
+
+        Assert.Throws<ArgumentNullException>(
+            () => control.SuspendPainting((Func<Control, bool>)null));
+        Assert.Equal((byte)0, control.LayoutSuspendCount);
+        Assert.False(control.IsHandleCreated);
+    }
+
+    [WinFormsFact]
+    public void Control_SuspendPainting_WithThrowingFilter_DoesNotBeginSuspension()
+    {
+        using SubControl control = new();
+
+        Assert.Throws<InvalidOperationException>(
+            () => control.SuspendPainting(static _ => throw new InvalidOperationException()));
+        Assert.Equal((byte)0, control.LayoutSuspendCount);
+        Assert.False(control.IsHandleCreated);
+    }
+
+    [WinFormsTheory]
+    [EnumData<LayoutSuspendTraversal>]
+    public void ISupportSuspendPainting_SuspendPainting_WithNonControlTarget_ThrowsInvalidOperationException(
+        LayoutSuspendTraversal layoutSuspendTraversal)
+    {
+        SuspendPaintingTarget target = new();
+
+        Assert.Throws<InvalidOperationException>(
+            () => target.SuspendPainting(layoutSuspendTraversal));
+        Assert.Equal(0, target.BeginCallCount);
+        Assert.Equal(0, target.EndCallCount);
+    }
+
+    [WinFormsFact]
+    public void ISupportSuspendPainting_SuspendPainting_WithFilterAndNonControlTarget_ThrowsInvalidOperationException()
+    {
+        SuspendPaintingTarget target = new();
+        int filterCallCount = 0;
+
+        Assert.Throws<InvalidOperationException>(
+            () => target.SuspendPainting(control =>
+            {
+                filterCallCount++;
+                return true;
+            }));
+        Assert.Equal(0, filterCallCount);
+        Assert.Equal(0, target.BeginCallCount);
+        Assert.Equal(0, target.EndCallCount);
+    }
+
+    [WinFormsFact]
+    public void Control_SuspendPainting_WhenBeginThrows_BalancesPaintingSuspension()
+    {
+        using ThrowingBeginSuspendPaintingControl control = new();
+        Assert.NotEqual(IntPtr.Zero, control.Handle);
+
+        Assert.Throws<InvalidOperationException>(() => control.SuspendPainting());
+        Assert.False(control.IsUpdating());
+        Assert.Equal([false, true], control.RedrawStates);
+
+        control.ThrowOnBegin = false;
+        using (control.SuspendPainting())
+        {
+            Assert.True(control.IsUpdating());
+        }
+
+        Assert.False(control.IsUpdating());
+        Assert.Equal([false, true, false, true], control.RedrawStates);
+    }
+
+    [WinFormsFact]
+    public void Control_SuspendPainting_WhenNestedBeginThrowsBeforeAcquisition_PreservesOuterSuspension()
+    {
+        using ThrowingBeginSuspendPaintingControl control = new()
+        {
+            ThrowOnBegin = false
+        };
+        Assert.NotEqual(IntPtr.Zero, control.Handle);
+        IDisposable outerScope = control.SuspendPainting();
+        control.ThrowOnBegin = true;
+        control.CallBaseBeforeThrow = false;
+
+        Assert.Throws<InvalidOperationException>(() => control.SuspendPainting());
+        Assert.True(control.IsUpdating());
+        Assert.Equal([false], control.RedrawStates);
+
+        outerScope.Dispose();
+
+        Assert.False(control.IsUpdating());
+        Assert.Equal([false, true], control.RedrawStates);
+    }
+
+    [WinFormsFact]
+    public void Control_SuspendPainting_WhenLayoutResumeThrows_BalancesLayoutAndPaintingSuspension()
+    {
+        using ThrowingLayoutResumingControl control = new();
+        Assert.NotEqual(IntPtr.Zero, control.Handle);
+        IDisposable scope = control.SuspendPainting(LayoutSuspendTraversal.TargetOnly);
+        control.ThrowOnLayoutResuming = true;
+
+        Assert.Throws<InvalidOperationException>(() => scope.Dispose());
+        control.ThrowOnLayoutResuming = false;
+
+        Assert.Equal((byte)0, control.LayoutSuspendCount);
+        Assert.False(control.IsUpdating());
+        Assert.Equal([false, true], control.RedrawStates);
+    }
+
+    /// <summary>
+    ///  Records painting suspension calls without deriving from <see cref="Control"/>.
+    /// </summary>
+    private sealed class SuspendPaintingTarget : ISupportSuspendPainting
+    {
+        public int BeginCallCount { get; private set; }
+
+        public int EndCallCount { get; private set; }
+
+        public void BeginSuspendPainting() => BeginCallCount++;
+
+        public void EndSuspendPainting() => EndCallCount++;
+    }
+
+    /// <summary>
+    ///  Records redraw-state messages sent while painting is suspended.
+    /// </summary>
+    private class RedrawTrackingControl : Control
+    {
+        public List<bool> RedrawStates { get; } = [];
+
+        public new void RecreateHandle() => base.RecreateHandle();
+
+        protected override void WndProc(ref Message m)
+        {
+            if (m.MsgInternal == PInvokeCore.WM_SETREDRAW)
+            {
+                RedrawStates.Add((nint)m.WParamInternal != 0);
+            }
+
+            base.WndProc(ref m);
+        }
+    }
+
+    /// <summary>
+    ///  Throws after acquiring the base painting suspension.
+    /// </summary>
+    private sealed class ThrowingBeginSuspendPaintingControl : RedrawTrackingControl
+    {
+        public bool CallBaseBeforeThrow { get; set; } = true;
+
+        public bool ThrowOnBegin { get; set; } = true;
+
+        protected override void BeginSuspendPaintingCore()
+        {
+            if (ThrowOnBegin && !CallBaseBeforeThrow)
+            {
+                throw new InvalidOperationException();
+            }
+
+            base.BeginSuspendPaintingCore();
+
+            if (ThrowOnBegin)
+            {
+                throw new InvalidOperationException();
+            }
+        }
+    }
+
+    /// <summary>
+    ///  Throws while resuming layout.
+    /// </summary>
+    private sealed class ThrowingLayoutResumingControl : RedrawTrackingControl
+    {
+        public bool ThrowOnLayoutResuming { get; set; }
+
+        internal override void OnLayoutResuming(bool performLayout)
+        {
+            if (ThrowOnLayoutResuming)
+            {
+                throw new InvalidOperationException();
+            }
+
+            base.OnLayoutResuming(performLayout);
+        }
+    }
+#endif
+
     public static IEnumerable<object[]> AccessibilityNotifyClients_AccessibleEvents_Int_TestData()
     {
         yield return new object[] { AccessibleEvents.DescriptionChange, int.MinValue };

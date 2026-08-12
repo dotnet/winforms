@@ -242,6 +242,16 @@
         <target state="translated">只要在线程上创建了任何控件，则线程异常模式将不能再有任何更改。</target>
         <note />
       </trans-unit>
+      <trans-unit id="Application_VisualStylesModeCanOnlyBeSetOnce">
+        <source>The default visual styles mode can only be set once and cannot be changed afterwards.</source>
+        <target state="new">The default visual styles mode can only be set once and cannot be changed afterwards.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="Application_VisualStylesModeInheritInvalidAsDefault">
+        <source>VisualStylesMode.Inherit cannot be used as the application-wide default visual styles mode because the application root has no parent to inherit from.</source>
+        <target state="new">VisualStylesMode.Inherit cannot be used as the application-wide default visual styles mode because the application root has no parent to inherit from.</target>
+        <note />
+      </trans-unit>
       <trans-unit id="ApplyCaption">
         <source>&amp;Apply</source>
         <target state="translated">应用(&amp;A)</target>
@@ -1697,6 +1707,11 @@
         <target state="translated">指定控件的最小大小。</target>
         <note />
       </trans-unit>
+      <trans-unit id="ControlMutationExtensionsLayoutSuspensionRequiresControl">
+        <source>Layout suspension requires a target derived from Control.</source>
+        <target state="new">Layout suspension requires a target derived from Control.</target>
+        <note />
+      </trans-unit>
       <trans-unit id="ControlNotChild">
         <source>'child' is not a child control of this parent.</source>
         <target state="translated">“child”不是此父级的子控件。</target>
@@ -2027,6 +2042,11 @@
         <target state="translated">在系统颜色更改时引发的事件。</target>
         <note />
       </trans-unit>
+      <trans-unit id="ControlOnSystemVisualSettingsChangedDescr">
+        <source>Event raised when a Windows visual or accessibility setting changes.</source>
+        <target state="new">Event raised when a Windows visual or accessibility setting changes.</target>
+        <note />
+      </trans-unit>
       <trans-unit id="ControlOnTabIndexChangedDescr">
         <source>Event raised when the value of the TabIndex property is changed.</source>
         <target state="translated">TabIndex 属性值更改时引发的事件。</target>
@@ -2170,6 +2190,16 @@
       <trans-unit id="ControlVisibleDescr">
         <source>Determines whether the control is visible or hidden.</source>
         <target state="translated">确定该控件是可见的还是隐藏的。</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ControlVisualStylesModeChangedDescr">
+        <source>Occurs when the value of the VisualStylesMode property changes.</source>
+        <target state="new">Occurs when the value of the VisualStylesMode property changes.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ControlVisualStylesModeDescr">
+        <source>Determines how the control renders itself when visual styles are applied.</source>
+        <target state="new">Determines how the control renders itself when visual styles are applied.</target>
         <note />
       </trans-unit>
       <trans-unit id="ControlWidthDescr">
@@ -5420,6 +5450,11 @@ Do you want to replace it?</source>
         <target state="translated">此窗体在显示为对话框时将返回的值。</target>
         <note />
       </trans-unit>
+      <trans-unit id="FormFormRevealModeDescr">
+        <source>Indicates how the form is presented while its initial appearance is prepared. Classic never defers reveal. Deferred hides the form behind a DWM cloak until its background has painted, to reduce startup flash. Inherit resolves from the application-wide default.</source>
+        <target state="new">Indicates how the form is presented while its initial appearance is prepared. Classic never defers reveal. Deferred hides the form behind a DWM cloak until its background has painted, to reduce startup flash. Inherit resolves from the application-wide default.</target>
+        <note />
+      </trans-unit>
       <trans-unit id="FormHelpButtonClickedDescr">
         <source>Event raised when the help button is clicked.</source>
         <target state="translated">单击“帮助”按钮时引发的事件。</target>
@@ -5538,6 +5573,11 @@ Do you want to replace it?</source>
       <trans-unit id="FormOnFormClosingDescr">
         <source>Occurs whenever the user closes the form, before the form has been closed and specifies the close reason.</source>
         <target state="translated">每当用户关闭窗体时，在窗体已关闭并指定关闭原因前发生。</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="FormOnFormRevealModeChangedDescr">
+        <source>Occurs when the effective value of the FormRevealMode property changes.</source>
+        <target state="new">Occurs when the effective value of the FormRevealMode property changes.</target>
         <note />
       </trans-unit>
       <trans-unit id="FormOnInputLangChangeDescr">
@@ -8675,8 +8715,8 @@ Stack trace where the illegal operation occurred was:
         <note />
       </trans-unit>
       <trans-unit id="RadioButtonAppearanceDescr">
-        <source>Controls whether the RadioButton appears as normal or as a Windows PushButton.</source>
-        <target state="translated">控制 RadioButton 是按通常情况显示还是显示为 Windows PushButton。</target>
+        <source>Controls whether the RadioButton appears as normal, as a Windows PushButton, or as a toggle switch.</source>
+        <target state="new">Controls whether the RadioButton appears as normal, as a Windows PushButton, or as a toggle switch.</target>
         <note />
       </trans-unit>
       <trans-unit id="RadioButtonAutoCheckDescr">
@@ -11019,6 +11059,11 @@ Stack trace where the illegal operation occurred was:
         <target state="translated">连接树视图节点的线条的颜色。</target>
         <note />
       </trans-unit>
+      <trans-unit id="TreeViewNodeLeadingDescr">
+        <source>The uniform row-height leading factor applied to all nodes.</source>
+        <target state="new">The uniform row-height leading factor applied to all nodes.</target>
+        <note />
+      </trans-unit>
       <trans-unit id="TreeViewNodeMouseClickDescr">
         <source>Occurs when a node is clicked with the mouse.</source>
         <target state="translated">用鼠标单击节点时发生。</target>
@@ -11042,6 +11087,11 @@ Stack trace where the illegal operation occurred was:
       <trans-unit id="TreeViewNodesDescr">
         <source>The root nodes in the TreeView control.</source>
         <target state="translated">TreeView 控件中的根节点。</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="TreeViewOnNodeLeadingChangedDescr">
+        <source>Occurs when the value of the NodeLeading property changes.</source>
+        <target state="new">Occurs when the value of the NodeLeading property changes.</target>
         <note />
       </trans-unit>
       <trans-unit id="TreeViewPathSeparatorDescr">

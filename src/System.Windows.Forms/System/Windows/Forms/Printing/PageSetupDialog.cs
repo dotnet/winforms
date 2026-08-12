@@ -285,9 +285,10 @@ public sealed class PageSetupDialog : CommonDialog
             Span<char> buffer = stackalloc char[2];
             int result;
             fixed (char* pBuffer = buffer)
+            fixed (char* pLocaleName = PInvoke.LOCALE_NAME_SYSTEM_DEFAULT)
             {
                 result = PInvoke.GetLocaleInfoEx(
-                    PInvoke.LOCALE_NAME_SYSTEM_DEFAULT,
+                    pLocaleName,
                     PInvoke.LOCALE_IMEASURE,
                     pBuffer,
                     buffer.Length);
