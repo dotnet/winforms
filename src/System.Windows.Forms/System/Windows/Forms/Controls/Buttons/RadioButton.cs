@@ -32,6 +32,8 @@ public partial class RadioButton : ButtonBase
     private bool _autoCheck = true;
     private ContentAlignment _checkAlign = ContentAlignment.MiddleLeft;
     private Appearance _appearance = Appearance.Normal;
+    private Rendering.RadioButton.AnimatedRadioGlyphRenderer? _radioGlyphRenderer;
+    private Rendering.CheckBox.AnimatedToggleSwitchRenderer? _toggleSwitchRenderer;
     private int _flatSystemStylePaddingWidth;
     private int _flatSystemStyleMinimumHeight;
 
@@ -89,9 +91,11 @@ public partial class RadioButton : ButtonBase
                 using (LayoutTransaction.CreateTransactionIf(AutoSize, ParentInternal, this, PropertyNames.Appearance))
                 {
                     _appearance = value;
+                    ResetAdapter();
 
                     // UpdateOwnerDraw checks if OwnerDraw state changed and calls RecreateHandle if needed.
                     UpdateOwnerDraw();
+                    UpdateToggleSwitchStyles();
 
                     // If handle wasn't recreated (OwnerDraw state didn't change), refresh the appearance.
                     if (OwnerDraw)
@@ -158,6 +162,12 @@ public partial class RadioButton : ButtonBase
         {
             if (_isChecked != value)
             {
+                bool animateToggleSwitch = IsToggleSwitchAppearance && IsHandleCreated;
+                if (animateToggleSwitch)
+                {
+                    ToggleSwitchRenderer.PrepareStateChange();
+                }
+
                 _isChecked = value;
 
                 if (IsHandleCreated)
@@ -169,6 +179,11 @@ public partial class RadioButton : ButtonBase
                 Update();
                 PerformAutoUpdates(tabbedInto: false);
                 OnCheckedChanged(EventArgs.Empty);
+
+                if (animateToggleSwitch)
+                {
+                    ToggleSwitchRenderer.StartAnimation();
+                }
             }
         }
     }
@@ -181,10 +196,15 @@ public partial class RadioButton : ButtonBase
         // * but then ONLY when we're rendering with FlatStyle.Standard
         //   (because that would let us usually let us draw with the VisualStyleRenderers,
         //   which cause HighDPI issues in Dark Mode).
-        (!Application.IsDarkModeEnabled
-            || Appearance != Appearance.Button
-            || FlatStyle != FlatStyle.Standard)
-            && base.OwnerDraw;
+        IsToggleSwitchAppearance
+            || ((!Application.IsDarkModeEnabled
+                || Appearance != Appearance.Button
+                || FlatStyle != FlatStyle.Standard)
+                && base.OwnerDraw);
+
+    private bool IsToggleSwitchAppearance
+        => Appearance == Appearance.ToggleSwitch
+            && EffectiveVisualStylesMode >= VisualStylesMode.Net11;
 
     /// <hideinheritance/>
     [Browsable(false)]
@@ -263,6 +283,17 @@ public partial class RadioButton : ButtonBase
 
     internal override Size GetPreferredSizeCore(Size proposedConstraints)
     {
+        if (IsToggleSwitchAppearance)
+        {
+            return Rendering.CheckBox.ToggleSwitchMetrics.Create(this).GetPreferredSize(this);
+        }
+
+        if (Appearance == Appearance.Button && FlatStyle == FlatStyle.Popup)
+        {
+            return DarkModeAdapterFactory.CreatePopupAdapter(this).GetPreferredSizeCore(proposedConstraints)
+                + Padding.Size;
+        }
+
         if (FlatStyle != FlatStyle.System)
         {
             return base.GetPreferredSizeCore(proposedConstraints);
@@ -348,6 +379,44 @@ public partial class RadioButton : ButtonBase
         {
             PInvokeCore.SendMessage(this, PInvoke.BM_SETCHECK, (WPARAM)(BOOL)_isChecked);
         }
+
+        UpdateToggleSwitchStyles();
+    }
+
+    /// <inheritdoc/>
+    protected override void OnPaint(PaintEventArgs pevent)
+    {
+        if (IsToggleSwitchAppearance)
+        {
+            using GraphicsStateScope scope = new(pevent.Graphics);
+            ToggleSwitchRenderer.RenderControl(pevent.Graphics);
+            return;
+        }
+
+        base.OnPaint(pevent);
+    }
+
+    /// <inheritdoc/>
+    protected override void OnVisualStylesModeChanged(EventArgs e)
+    {
+        base.OnVisualStylesModeChanged(e);
+        UpdateOwnerDraw();
+        UpdateToggleSwitchStyles();
+
+        if (IsHandleCreated)
+        {
+            Invalidate();
+        }
+    }
+
+    /// <inheritdoc/>
+    protected override void OnSystemColorsChanged(EventArgs e)
+    {
+        base.OnSystemColorsChanged(e);
+        _radioGlyphRenderer?.InvalidateAccentColor();
+        _toggleSwitchRenderer?.InvalidateAccentColor();
+        UpdateOwnerDraw();
+        UpdateToggleSwitchStyles();
     }
 
     /// <summary>
@@ -467,11 +536,56 @@ public partial class RadioButton : ButtonBase
         }
     }
 
-    internal override ButtonBaseAdapter CreateFlatAdapter() => new RadioButtonFlatAdapter(this);
+    internal override ButtonBaseAdapter CreateFlatAdapter()
+        => UseModernGlyphRenderer
+            ? new RadioButtonModernAdapter(this, FlatStyle.Flat)
+            : new RadioButtonFlatAdapter(this);
 
-    internal override ButtonBaseAdapter CreatePopupAdapter() => new RadioButtonPopupAdapter(this);
+    internal override ButtonBaseAdapter CreatePopupAdapter()
+        => UseModernGlyphRenderer
+            ? new RadioButtonModernAdapter(this, FlatStyle.Popup)
+            : new RadioButtonPopupAdapter(this);
 
-    internal override ButtonBaseAdapter CreateStandardAdapter() => new RadioButtonStandardAdapter(this);
+    internal override ButtonBaseAdapter CreateStandardAdapter()
+        => UseModernGlyphRenderer
+            ? new RadioButtonModernAdapter(this, FlatStyle.Standard)
+            : new RadioButtonStandardAdapter(this);
+
+    internal Rendering.RadioButton.AnimatedRadioGlyphRenderer RadioGlyphRenderer
+        => _radioGlyphRenderer ??= new(this);
+
+    internal Rendering.CheckBox.AnimatedToggleSwitchRenderer ToggleSwitchRenderer =>
+        _toggleSwitchRenderer ??= new(this, Rendering.CheckBox.ModernCheckBoxStyle.Rounded);
+
+    private void UpdateToggleSwitchStyles()
+    {
+        if (IsToggleSwitchAppearance)
+        {
+            SetStyle(ControlStyles.OptimizedDoubleBuffer | ControlStyles.ResizeRedraw, true);
+            _toggleSwitchRenderer?.SynchronizeState();
+        }
+        else
+        {
+            _toggleSwitchRenderer?.StopAnimation();
+        }
+    }
+
+    private bool UseModernGlyphRenderer
+        => Appearance == Appearance.Normal
+            && EffectiveVisualStylesMode >= VisualStylesMode.Net11;
+
+    protected override void Dispose(bool disposing)
+    {
+        if (disposing)
+        {
+            _radioGlyphRenderer?.Dispose();
+            _radioGlyphRenderer = null;
+            _toggleSwitchRenderer?.Dispose();
+            _toggleSwitchRenderer = null;
+        }
+
+        base.Dispose(disposing);
+    }
 
     private void OnAppearanceChanged(EventArgs e)
     {
@@ -480,6 +594,11 @@ public partial class RadioButton : ButtonBase
             eh(this, e);
         }
     }
+
+    internal ContentAlignment RtlTranslatedCheckAlign
+        => RtlTranslateContent(CheckAlign);
+
+    internal bool ShowFocusCuesInternal => ShowFocusCues;
 
     protected override void OnMouseUp(MouseEventArgs mevent)
     {
