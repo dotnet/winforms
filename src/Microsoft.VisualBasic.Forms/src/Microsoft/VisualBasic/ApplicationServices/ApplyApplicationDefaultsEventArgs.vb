@@ -19,11 +19,15 @@ Namespace Microsoft.VisualBasic.ApplicationServices
 
         Friend Sub New(minimumSplashScreenDisplayTime As Integer,
                 highDpiMode As HighDpiMode,
-                colorMode As SystemColorMode)
+                colorMode As SystemColorMode,
+                formRevealMode As FormRevealMode,
+                visualStylesMode As VisualStylesMode)
 
             Me.MinimumSplashScreenDisplayTime = minimumSplashScreenDisplayTime
             Me.HighDpiMode = highDpiMode
             Me.ColorMode = colorMode
+            Me.FormRevealMode = formRevealMode
+            Me.VisualStylesMode = visualStylesMode
         End Sub
 
         ''' <summary>
@@ -31,6 +35,18 @@ Namespace Microsoft.VisualBasic.ApplicationServices
         '''  <see cref="Application.ColorMode"/> for the application.
         ''' </summary>
         Public Property ColorMode As SystemColorMode
+
+        ''' <summary>
+        '''  Setting this property inside the event handler determines the default
+        '''  <see cref="FormRevealMode"/> for newly created top-level forms.
+        ''' </summary>
+        Public Property FormRevealMode As FormRevealMode
+
+        ''' <summary>
+        '''  Setting this property inside the event handler determines the
+        '''  <see cref="Application.DefaultVisualStylesMode"/> for the application.
+        ''' </summary>
+        Public Property VisualStylesMode As VisualStylesMode
 
         ''' <summary>
         '''  Setting this property inside the event handler causes a

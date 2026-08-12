@@ -137,6 +137,9 @@ public partial class Form : ContainerControl
     private static readonly int s_propFormCaptionTextColor = PropertyStore.CreateKey();
     private static readonly int s_propFormCaptionBackColor = PropertyStore.CreateKey();
     private static readonly int s_propFormScreenCaptureMode = PropertyStore.CreateKey();
+#if NET11_0_OR_GREATER
+    private static readonly int s_propFormAppearanceCloaked = PropertyStore.CreateKey();
+#endif
 
     // Form per instance members
     // Note: Do not add anything to this list unless absolutely necessary.
@@ -3800,6 +3803,12 @@ public partial class Form : ContainerControl
     private void CallShownEvent()
     {
         OnShown(EventArgs.Empty);
+#if NET11_0_OR_GREATER
+        // Primary deferred-reveal trigger: OnShown is a guaranteed one-shot for a shown top-level
+        // form and runs before the first natural WM_PAINT, so revealing here shows the fully painted
+        // window tree at once rather than mid-paint.
+        RevealDeferredAppearance();
+#endif
     }
 
     /// <summary>
@@ -4209,6 +4218,10 @@ public partial class Form : ContainerControl
         {
             SetScreenCaptureModeInternal(FormScreenCaptureMode);
         }
+
+#if NET11_0_OR_GREATER
+        CloakForDeferredAppearanceIfNeeded();
+#endif
     }
 
     /// <summary>
@@ -4219,6 +4232,9 @@ public partial class Form : ContainerControl
     [EditorBrowsable(EditorBrowsableState.Advanced)]
     protected override void OnHandleDestroyed(EventArgs e)
     {
+#if NET11_0_OR_GREATER
+        ClearDeferredAppearanceCloakState();
+#endif
         base.OnHandleDestroyed(e);
         _formStateEx[s_formStateExUseMdiChildProc] = 0;
 
@@ -7174,6 +7190,15 @@ public partial class Form : ContainerControl
                 break;
             case PInvokeCore.WM_ERASEBKGND:
                 WmEraseBkgnd(ref m);
+                break;
+            case PInvokeCore.WM_PAINT:
+                base.WndProc(ref m);
+#if NET11_0_OR_GREATER
+                // Fallback deferred-reveal trigger. RevealDeferredAppearance is idempotent and forces
+                // a full-tree paint before uncloaking, so even if OnShown was delayed the window is
+                // never revealed mid-paint and never stays stuck cloaked.
+                RevealDeferredAppearance();
+#endif
                 break;
 
             case PInvokeCore.WM_NCDESTROY:

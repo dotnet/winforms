@@ -3,7 +3,10 @@
 
 using System.ComponentModel;
 using System.Drawing;
+using System.Drawing.Drawing2D;
 using System.Runtime.InteropServices;
+using System.Windows.Forms.Layout;
+using System.Windows.Forms.Rendering.Animation;
 using System.Windows.Forms.VisualStyles;
 using Microsoft.Win32;
 
@@ -18,7 +21,14 @@ public abstract partial class UpDownBase : ContainerControl
     private const int DefaultWheelScrollLinesPerPage = 1;
     private const int DefaultButtonsWidth = 16;
     private const int DefaultControlWidth = 120;
-    private const int ThemedBorderWidth = 1; // width of custom border we draw when themed
+
+    // width of custom border we draw when themed
+    private const int ThemedBorderWidth = 1;
+
+    // Modern (Net11+) chrome geometry. The edit and button group share the border thickness and
+    // internal chrome inset used by TextBoxBase; only the gap between the two buttons is additional.
+    private const int ModernButtonGroupSpacingLogical = 2;
+    private const int ModernFocusBandHeight = 4;
     private const BorderStyle DefaultBorderStyle = BorderStyle.Fixed3D;
     private const LeftRightAlignment DefaultUpDownAlign = LeftRightAlignment.Right;
     private const int DefaultTimerInterval = 500;
@@ -33,6 +43,7 @@ public abstract partial class UpDownBase : ContainerControl
     ///  The current border for this edit control.
     /// </summary>
     private BorderStyle _borderStyle = DefaultBorderStyle;
+    private AnimatedFocusIndicatorRenderer? _focusIndicatorRenderer;
 
     // Mouse wheel movement
     private int _wheelDelta;
@@ -47,6 +58,7 @@ public abstract partial class UpDownBase : ContainerControl
         _defaultButtonsWidth = LogicalToDeviceUnits(DefaultButtonsWidth);
 
         _upDownButtons = new UpDownButtons(this);
+
         _upDownEdit = new UpDownEdit(this)
         {
             BorderStyle = BorderStyle.None,
@@ -64,7 +76,10 @@ public abstract partial class UpDownBase : ContainerControl
 
         Controls.AddRange([_upDownButtons, _upDownEdit]);
 
-        SetStyle(ControlStyles.Opaque | ControlStyles.FixedHeight | ControlStyles.ResizeRedraw, true);
+        SetStyle(ControlStyles.Opaque
+            | ControlStyles.FixedHeight
+            | ControlStyles.ResizeRedraw, true);
+
         SetStyle(ControlStyles.StandardClick, false);
         SetStyle(ControlStyles.UseTextForAccessibility, false);
     }
@@ -220,6 +235,7 @@ public abstract partial class UpDownBase : ContainerControl
             CreateParams cp = base.CreateParams;
 
             cp.Style &= ~(int)WINDOW_STYLE.WS_BORDER;
+
             if (!Application.RenderWithVisualStyles)
             {
                 switch (_borderStyle)
@@ -236,6 +252,14 @@ public abstract partial class UpDownBase : ContainerControl
             return cp;
         }
     }
+
+    /// <summary>
+    ///  When <see langword="true"/>, the up/down buttons are laid out side by side (decrement on the
+    ///  leading edge, increment on the trailing edge) rather than stacked. This provides a larger,
+    ///  more accessible click target and is used when a modern <see cref="VisualStylesMode"/>
+    ///  (<see cref="VisualStylesMode.Net11"/> or above) is in effect.
+    /// </summary>
+    internal bool UseSideBySideButtons => EffectiveVisualStylesMode >= VisualStylesMode.Net11;
 
     /// <summary>
     ///  Deriving classes can override this to configure a default size for their control.
@@ -334,19 +358,36 @@ public abstract partial class UpDownBase : ContainerControl
     {
         get
         {
-            int height = FontHeight;
-
-            // Adjust for the border style
-            if (_borderStyle != BorderStyle.None)
+            if (!UseSideBySideButtons)
             {
-                height += SystemInformation.BorderSize.Height * 4 + 3;
-            }
-            else
-            {
-                height += 3;
+                int height = FontHeight;
+
+                // Adjust for the border style
+                if (_borderStyle != BorderStyle.None)
+                {
+                    height += SystemInformation.BorderSize.Height * 4 + 3;
+                }
+                else
+                {
+                    height += 3;
+                }
+
+                return height;
             }
 
-            return height;
+            int contentInset = ModernContentInset;
+            int preferredHeight = FontHeight + (contentInset * 2);
+
+            if (_borderStyle == BorderStyle.Fixed3D)
+            {
+                int roundedChromeMinimumHeight = LogicalToDeviceUnits(ModernControlVisualStyles.UpDownCornerRadius)
+                    + LogicalToDeviceUnits(ModernControlVisualStyles.BorderThickness)
+                    + LogicalToDeviceUnits(ModernControlVisualStyles.InternalChromeInset);
+
+                preferredHeight = Math.Max(preferredHeight, roundedChromeMinimumHeight);
+            }
+
+            return preferredHeight;
         }
     }
 
@@ -450,7 +491,13 @@ public abstract partial class UpDownBase : ContainerControl
 
     internal override Rectangle ApplyBoundsConstraints(int suggestedX, int suggestedY, int proposedWidth, int proposedHeight)
     {
-        return base.ApplyBoundsConstraints(suggestedX, suggestedY, proposedWidth, PreferredHeight);
+        int height = AutoSize
+            ? PreferredHeight + Padding.Vertical
+            : UseSideBySideButtons
+                ? proposedHeight
+                : PreferredHeight;
+
+        return base.ApplyBoundsConstraints(suggestedX, suggestedY, proposedWidth, height);
     }
 
     internal override void ReleaseUiaProvider(HWND handle)
@@ -478,6 +525,14 @@ public abstract partial class UpDownBase : ContainerControl
         base.RescaleConstantsForDpi(deviceDpiOld, deviceDpiNew);
         _defaultButtonsWidth = LogicalToDeviceUnits(DefaultButtonsWidth);
         _upDownButtons.Width = _defaultButtonsWidth;
+        CommonProperties.xClearPreferredSizeCache(this);
+
+        if (AutoSize)
+        {
+            Height = PreferredHeight;
+        }
+
+        PositionControls();
     }
 
     /// <summary>
@@ -503,7 +558,29 @@ public abstract partial class UpDownBase : ContainerControl
     protected override void OnHandleDestroyed(EventArgs e)
     {
         SystemEvents.UserPreferenceChanged -= UserPreferenceChanged;
+        _focusIndicatorRenderer?.Dispose();
+        _focusIndicatorRenderer = null;
         base.OnHandleDestroyed(e);
+    }
+
+    /// <inheritdoc/>
+    protected override void OnVisualStylesModeChanged(EventArgs e)
+    {
+        base.OnVisualStylesModeChanged(e);
+        _focusIndicatorRenderer?.Synchronize(Focused, invalidate: false);
+        CommonProperties.xClearPreferredSizeCache(this);
+
+        if (AutoSize)
+        {
+            Height = PreferredHeight;
+        }
+
+        PositionControls();
+
+        if (IsHandleCreated)
+        {
+            Invalidate(true);
+        }
     }
 
     /// <summary>
@@ -512,6 +589,14 @@ public abstract partial class UpDownBase : ContainerControl
     protected override void OnPaint(PaintEventArgs e)
     {
         base.OnPaint(e);
+
+        if (UseSideBySideButtons)
+        {
+            // In modern mode we draw a single frame around the whole control (edit and buttons); the
+            // themed/classic single-textbox border below does not apply.
+            DrawModernBorder(e);
+            return;
+        }
 
         Rectangle editBounds = _upDownEdit.Bounds;
         Color backColor = BackColor;
@@ -636,7 +721,11 @@ public abstract partial class UpDownBase : ContainerControl
     /// </summary>
     protected virtual void OnTextBoxResize(object? source, EventArgs e)
     {
-        Height = PreferredHeight;
+        if (!UseSideBySideButtons || AutoSize)
+        {
+            Height = PreferredHeight;
+        }
+
         PositionControls();
     }
 
@@ -755,6 +844,7 @@ public abstract partial class UpDownBase : ContainerControl
 
         // Evaluate number of bands to scroll
         int scrollBands = (int)(wheelScrollLines * partialNotches);
+
         if (scrollBands != 0)
         {
             int absScrollBands;
@@ -801,7 +891,11 @@ public abstract partial class UpDownBase : ContainerControl
         // Clear the font height cache
         FontHeight = -1;
 
-        Height = PreferredHeight;
+        if (!UseSideBySideButtons || AutoSize)
+        {
+            Height = PreferredHeight;
+        }
+
         PositionControls();
 
         base.OnFontChanged(e);
@@ -829,11 +923,19 @@ public abstract partial class UpDownBase : ContainerControl
     /// </summary>
     private void PositionControls()
     {
+        if (UseSideBySideButtons)
+        {
+            PositionControlsModern();
+            return;
+        }
+
         Rectangle upDownEditBounds = Rectangle.Empty;
         Rectangle upDownButtonsBounds = Rectangle.Empty;
 
-        Rectangle clientArea = new(Point.Empty, ClientSize);
-        int totalClientWidth = clientArea.Width;
+        Rectangle clientArea = LayoutUtils.DeflateRect(
+            new Rectangle(Point.Empty, ClientSize),
+            Padding);
+
         bool themed = Application.RenderWithVisualStyles;
         BorderStyle borderStyle = BorderStyle;
 
@@ -852,6 +954,7 @@ public abstract partial class UpDownBase : ContainerControl
         if (_upDownButtons is not null)
         {
             int borderFixup = (themed) ? 1 : 2;
+
             if (borderStyle == BorderStyle.None)
             {
                 borderFixup = 0;
@@ -872,8 +975,8 @@ public abstract partial class UpDownBase : ContainerControl
         if (updownAlign == LeftRightAlignment.Left)
         {
             // If the buttons are aligned to the left, swap position of text box/buttons
-            upDownButtonsBounds.X = totalClientWidth - upDownButtonsBounds.Right;
-            upDownEditBounds.X = totalClientWidth - upDownEditBounds.Right;
+            upDownButtonsBounds.X = clientArea.Left + (clientArea.Right - upDownButtonsBounds.Right);
+            upDownEditBounds.X = clientArea.Left + (clientArea.Right - upDownEditBounds.Right);
         }
 
         // Apply locations
@@ -886,10 +989,226 @@ public abstract partial class UpDownBase : ContainerControl
         }
     }
 
+    private int ModernContentInset
+        // Match the per-border-style internal padding a modern TextBoxBase applies (see
+        // ModernControlVisualStyles.GetFieldPadding): the border-padding component depends on the
+        // border style rather than the flat 1px border stroke. This keeps the edit/button content
+        // inset one pixel inside the frame for a Fixed3D border, aligning UpDownBase with the other
+        // modern controls (Fixed3D = 2 + 2, FixedSingle = 1 + 2, None = 1 + 2).
+        => LogicalToDeviceUnits(
+            (_borderStyle switch
+            {
+                BorderStyle.Fixed3D => ModernControlVisualStyles.Fixed3DBorderPadding,
+                BorderStyle.FixedSingle => ModernControlVisualStyles.FixedSingleBorderPadding,
+                _ => ModernControlVisualStyles.NoBorderPadding,
+            })
+            + ModernControlVisualStyles.InternalChromeInset);
+
+    internal int ModernButtonGroupSpacing
+        => LogicalToDeviceUnits(ModernButtonGroupSpacingLogical);
+
+    internal int GetModernButtonGroupWidth()
+        => (_defaultButtonsWidth * 2) + ModernButtonGroupSpacing;
+
+    internal int GetPreferredWidth(int textWidth, int height)
+        => UseSideBySideButtons
+            ? textWidth + (ModernContentInset * 2) + GetModernButtonGroupWidth()
+            : SizeFromClientSizeInternal(new(textWidth, height)).Width + _upDownButtons.Width;
+
+    /// <summary>
+    ///  Calculates the size and position of the upDownEdit control and the side-by-side updown buttons
+    ///  when a modern <see cref="VisualStylesMode"/> is in effect. Both the edit and the buttons are
+    ///  inset by <see cref="ModernContentInset"/> so they sit inside the frame drawn by
+    ///  <see cref="OnPaint"/> and clear its rounded corners.
+    /// </summary>
+    private void PositionControlsModern()
+    {
+        Rectangle clientArea = LayoutUtils.DeflateRect(
+            new Rectangle(Point.Empty, ClientSize),
+            Padding);
+
+        int pad = ModernContentInset;
+        int buttonsWidth = Math.Min(GetModernButtonGroupWidth(), Math.Max(0, clientArea.Width - (pad * 2)));
+
+        Rectangle inner = clientArea;
+        inner.Inflate(-pad, -pad);
+
+        if (inner.Width < 0 || inner.Height < 0)
+        {
+            inner = new Rectangle(
+                x: Math.Min(pad, clientArea.Width),
+                y: Math.Min(pad, clientArea.Height),
+                width: 0,
+                height: 0);
+        }
+
+        Rectangle upDownEditBounds = inner;
+        upDownEditBounds.Width = Math.Max(0, inner.Width - buttonsWidth);
+
+        Rectangle upDownButtonsBounds = new(
+            x: inner.Right - buttonsWidth,
+            y: inner.Top,
+            width: buttonsWidth,
+            height: inner.Height);
+
+        // Left/right updown align translation (also honors RTL).
+        if (RtlTranslateLeftRight(UpDownAlign) == LeftRightAlignment.Left)
+        {
+            upDownButtonsBounds.X = clientArea.Left + (clientArea.Right - upDownButtonsBounds.Right);
+            upDownEditBounds.X = clientArea.Left + (clientArea.Right - upDownEditBounds.Right);
+        }
+
+        _upDownEdit?.Bounds = upDownEditBounds;
+
+        if (_upDownButtons is not null)
+        {
+            _upDownButtons.Bounds = upDownButtonsBounds;
+            _upDownButtons.Invalidate();
+        }
+    }
+
+    /// <summary>
+    ///  Draws the modern frame around the whole control (edit and side-by-side buttons) using the same
+    ///  rounded/flat chrome a stand-alone modern TextBox paints in its non-client area. The corners are
+    ///  filled with the parent's back color so the rounded frame blends against it.
+    /// </summary>
+    private void DrawModernBorder(PaintEventArgs e)
+    {
+        Rectangle bounds = ClientRectangle;
+
+        if (bounds.Width <= 0 || bounds.Height <= 0)
+        {
+            return;
+        }
+
+        int cornerRadius = LogicalToDeviceUnits(ModernControlVisualStyles.UpDownCornerRadius);
+        int borderThickness = LogicalToDeviceUnits(ModernControlVisualStyles.BorderThickness);
+
+        // The adorner (border) color matches the modern TextBox chrome, which uses the fore color.
+        Color adornerColor = ForeColor;
+        Color parentBackColor = Parent?.BackColor ?? BackColor;
+        Color clientBackColor = BackColor;
+
+        using var clientBackgroundBrush = clientBackColor.GetCachedSolidBrushScope();
+        using var adornerPen = adornerColor.GetCachedPenScope(borderThickness);
+
+        Rectangle deflatedBounds = bounds;
+        deflatedBounds.Width -= 1;
+        deflatedBounds.Height -= 1;
+
+        Graphics graphics = e.Graphics;
+        using GraphicsStateScope graphicsState = new(graphics);
+        graphics.SmoothingMode = SmoothingMode.AntiAlias;
+
+        // AddRoundedRectangle receives the bounding size of each corner arc, so one corner size plus
+        // the border thickness is the minimum height that avoids overlapping curves.
+        bool canRenderRoundedChrome = TextBoxBase.CanRenderVisualStylesRoundedChrome(
+            deflatedBounds,
+            cornerRadius,
+            borderThickness);
+
+        ParentBackgroundRenderer.Paint(this, graphics, bounds, parentBackColor);
+
+        switch (_borderStyle)
+        {
+            case BorderStyle.None:
+                graphics.FillRectangle(clientBackgroundBrush, deflatedBounds);
+                break;
+
+            case BorderStyle.FixedSingle:
+                graphics.FillRectangle(clientBackgroundBrush, deflatedBounds);
+                graphics.DrawRectangle(adornerPen, deflatedBounds);
+                break;
+
+            case BorderStyle.Fixed3D:
+                if (canRenderRoundedChrome)
+                {
+                    using GraphicsPath bodyPath = new();
+                    bodyPath.AddRoundedRectangle(deflatedBounds, new Size(cornerRadius, cornerRadius));
+                    graphics.FillPath(clientBackgroundBrush, bodyPath);
+                    graphics.DrawPath(adornerPen, bodyPath);
+
+                    // The rounded chrome is clipped with a non-antialiased region; blend the resulting
+                    // corner artifacts into the parent by tracing the parent color just outside the border.
+                    ParentBackgroundRenderer.PaintRoundedBorderRegionMitigation(
+                        graphics,
+                        deflatedBounds,
+                        new Size(cornerRadius, cornerRadius),
+                        borderThickness,
+                        parentBackColor);
+                }
+                else
+                {
+                    graphics.FillRectangle(clientBackgroundBrush, deflatedBounds);
+                    graphics.DrawRectangle(adornerPen, deflatedBounds);
+                }
+
+                break;
+        }
+
+        if (_borderStyle == BorderStyle.Fixed3D && canRenderRoundedChrome)
+        {
+            Color focusColor = ModernFocusColor;
+            FocusIndicatorRenderer.DrawRoundedFocusIndicator(
+                graphics,
+                deflatedBounds,
+                cornerRadius,
+                borderThickness,
+                LogicalToDeviceUnits(ModernFocusBandHeight),
+                adornerColor,
+                focusColor);
+        }
+        else if (Focused && _borderStyle == BorderStyle.Fixed3D)
+        {
+            Color focusColor = ModernFocusColor;
+            using var focusPen = focusColor.GetCachedPenScope(borderThickness);
+            graphics.DrawLine(
+                focusPen,
+                deflatedBounds.Left,
+                deflatedBounds.Bottom,
+                deflatedBounds.Right,
+                deflatedBounds.Bottom);
+            graphics.DrawLine(
+                focusPen,
+                deflatedBounds.Left,
+                deflatedBounds.Bottom - 1,
+                deflatedBounds.Right,
+                deflatedBounds.Bottom - 1);
+        }
+    }
+
+    private AnimatedFocusIndicatorRenderer FocusIndicatorRenderer
+        => _focusIndicatorRenderer ??= new(this, InvalidateModernFocusIndicator);
+
+    private static Color ModernFocusColor
+        => TextBoxBase.GetVisualStylesFocusColor(Application.SystemVisualSettings.HighContrastEnabled);
+
+    private void SetModernFocusState(bool focused)
+    {
+        if (!UseSideBySideButtons || _borderStyle != BorderStyle.Fixed3D)
+        {
+            return;
+        }
+
+        FocusIndicatorRenderer.SetFocused(
+            focused,
+            animate: SystemInformation.UIEffectsEnabled && !SystemInformation.HighContrast);
+    }
+
+    private void InvalidateModernFocusIndicator()
+    {
+        int focusBandHeight = LogicalToDeviceUnits(ModernFocusBandHeight);
+        Rectangle focusBounds = ClientRectangle;
+        focusBounds.Y = Math.Max(focusBounds.Top, focusBounds.Bottom - focusBandHeight);
+        focusBounds.Height = Math.Min(focusBandHeight, focusBounds.Height);
+        Invalidate(focusBounds);
+    }
+
     /// <summary>
     ///  Selects a range of text in the up-down control.
     /// </summary>
-    public void Select(int start, int length) => _upDownEdit.Select(start, length);
+    public void Select(int start, int length)
+        => _upDownEdit.Select(start, length);
 
     /// <summary>
     ///  Create a new <see cref="MouseEventArgs"/> with the points translated from the <paramref name="child"/>
