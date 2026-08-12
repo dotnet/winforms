@@ -44,6 +44,11 @@ public sealed partial class Application
     private static bool s_useWaitCursor;
 
     private static SystemColorMode? s_colorMode;
+#if NET11_0_OR_GREATER
+    private static FormRevealMode? s_defaultFormRevealMode;
+#endif
+
+    private static VisualStylesMode? s_defaultVisualStylesMode;
 
     private const string DarkModeKeyPath = "HKEY_CURRENT_USER\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Themes\\Personalize";
     private const string DarkModeKey = "AppsUseLightTheme";
@@ -249,6 +254,45 @@ public sealed partial class Application
     /// </remarks>
     public static SystemColorMode ColorMode => s_colorMode ?? SystemColorMode.Classic;
 
+#if NET11_0_OR_GREATER
+    /// <summary>
+    ///  Gets the configured default <see cref="FormRevealMode"/> used as the reveal behavior for
+    ///  top-level forms that do not set <see cref="Form.FormRevealMode"/> explicitly.
+    /// </summary>
+    /// <remarks>
+    ///  <para>
+    ///   If no mode has been configured with <see cref="SetDefaultFormRevealMode(FormRevealMode)"/>, this
+    ///   returns <see cref="FormRevealMode.Inherit"/>. Unlike <see cref="Form.FormRevealMode"/>, this
+    ///   getter may return the unresolved <see cref="FormRevealMode.Inherit"/> sentinel; use
+    ///   <see cref="IsFormRevealDeferred"/> for the fully resolved answer.
+    ///  </para>
+    /// </remarks>
+    public static FormRevealMode DefaultFormRevealMode
+        => s_defaultFormRevealMode ?? FormRevealMode.Inherit;
+
+    /// <summary>
+    ///  Gets a value indicating whether newly created top-level forms use deferred reveal by default.
+    /// </summary>
+    /// <remarks>
+    ///  <para>
+    ///   This is the fully resolved answer: <see langword="true"/> when
+    ///   <see cref="DefaultFormRevealMode"/> is <see cref="FormRevealMode.Deferred"/>, or when it is
+    ///   <see cref="FormRevealMode.Inherit"/> (the default, when <see cref="SetDefaultFormRevealMode(FormRevealMode)"/>
+    ///   has never been called) and <see cref="IsDarkModeEnabled"/> is <see langword="true"/>.
+    ///   Accessibility trumps compatibility here: an application that opts into dark mode gets
+    ///   flash-reduced form reveal automatically, without also having to call
+    ///   <see cref="SetDefaultFormRevealMode(FormRevealMode)"/> explicitly.
+    ///  </para>
+    /// </remarks>
+    public static bool IsFormRevealDeferred => DefaultFormRevealMode switch
+    {
+        FormRevealMode.Deferred => true,
+        FormRevealMode.Classic => false,
+        _ => IsDarkModeEnabled
+    };
+
+#endif
+
     /// <summary>
     ///  True if the <see cref="ColorMode"/> has been set at least once.
     /// </summary>
@@ -381,6 +425,36 @@ public sealed partial class Application
         }
     }
 
+#if NET11_0_OR_GREATER
+    /// <summary>
+    ///  Sets the process-wide default <see cref="FormRevealMode"/> used for top-level forms that do
+    ///  not set <see cref="Form.FormRevealMode"/> explicitly.
+    /// </summary>
+    /// <param name="mode">The default form reveal mode to use for newly created top-level forms.</param>
+    /// <remarks>
+    ///  <para>
+    ///   Set the default form reveal mode before creating UI to ensure newly created forms use the
+    ///   intended startup presentation behavior. Unlike the visual-styles default-mode setter (which is
+    ///   write-once, since rendering-version selection is a static, one-time choice), this method can be
+    ///   called more than once, and <see cref="FormRevealMode.Inherit"/> is a valid argument (it resets
+    ///   the default back to its own ambient resolution via <see cref="IsFormRevealDeferred"/>). Free
+    ///   reassignment is intentional: the effective default is derived in part from <see cref="ColorMode"/>
+    ///   and <see cref="IsDarkModeEnabled"/>, which can themselves change for the lifetime of the process;
+    ///   locking this value after first use would make forms created after a later dark-mode change use a
+    ///   stale reveal behavior.
+    ///  </para>
+    /// </remarks>
+    /// <exception cref="InvalidEnumArgumentException">
+    ///  <paramref name="mode"/> is not a valid <see cref="FormRevealMode"/> value.
+    /// </exception>
+    public static void SetDefaultFormRevealMode(FormRevealMode mode)
+    {
+        SourceGenerated.EnumValidator.Validate(mode, nameof(mode));
+        s_defaultFormRevealMode = mode;
+    }
+
+#endif
+
     internal static Font DefaultFont => s_defaultFontScaled ?? s_defaultFont!;
 
     /// <summary>
@@ -430,8 +504,8 @@ public sealed partial class Application
         return systemColorMode;
     }
 
-    private static bool IsSystemDarkModeAvailable =>
-        !SystemInformation.HighContrast && OsVersion.IsWindows11_OrGreater();
+    private static bool IsSystemDarkModeAvailable
+        => !SystemInformation.HighContrast && OsVersion.IsWindows11_OrGreater();
 
     /// <summary>
     ///  Gets a value indicating whether the application is running in a dark system color context.
@@ -591,6 +665,86 @@ public sealed partial class Application
     /// </summary>
     public static bool RenderWithVisualStyles
         => ComCtlSupportsVisualStyles && VisualStyleRenderer.IsSupported;
+
+    /// <summary>
+    ///  Gets the default <see cref="VisualStylesMode"/> used as the rendering style guideline for the
+    ///  application's controls.
+    /// </summary>
+    /// <value>
+    ///  The <see cref="VisualStylesMode"/> used as the rendering style guideline for the application's
+    ///  controls. This is <see cref="VisualStylesMode.Classic"/> when visual styles are enabled and
+    ///  <see cref="VisualStylesMode.Disabled"/> otherwise, unless it has been changed by a call to
+    ///  <see cref="SetDefaultVisualStylesMode(VisualStylesMode)"/>.
+    /// </value>
+    /// <remarks>
+    ///  <para>
+    ///   The default value is <see cref="VisualStylesMode.Classic"/> so that applications that simply
+    ///   recompile against a newer framework keep their existing look. Opt in to a newer renderer by
+    ///   calling <see cref="SetDefaultVisualStylesMode(VisualStylesMode)"/>.
+    ///  </para>
+    ///  <para>
+    ///   While visual styles are disabled, the effective value remains <see cref="VisualStylesMode.Disabled"/>,
+    ///   even if a different default has already been requested through
+    ///   <see cref="SetDefaultVisualStylesMode(VisualStylesMode)"/>.
+    ///  </para>
+    /// </remarks>
+    public static VisualStylesMode DefaultVisualStylesMode
+        => s_defaultVisualStylesMode switch
+        {
+            { } visualStylesMode when UseVisualStyles => visualStylesMode,
+            { } => VisualStylesMode.Disabled,
+            _ => UseVisualStyles
+                ? VisualStylesMode.Classic
+                : VisualStylesMode.Disabled
+        };
+
+    /// <summary>
+    ///  Sets the default <see cref="VisualStylesMode"/> used as the rendering style guideline for the
+    ///  application's controls.
+    /// </summary>
+    /// <param name="styleSetting">The version of the visual styles renderer to use by default.</param>
+    /// <exception cref="InvalidOperationException">
+    ///  The default visual styles mode has already been set to a different value. It can only be set once.
+    /// </exception>
+    /// <exception cref="ArgumentException">
+    ///  <paramref name="styleSetting"/> is <see cref="VisualStylesMode.Inherit"/>, which is not valid as
+    ///  the application-wide default because the application root has no parent to inherit from.
+    /// </exception>
+    /// <exception cref="InvalidEnumArgumentException">
+    ///  <paramref name="styleSetting"/> is not a defined <see cref="VisualStylesMode"/> value.
+    /// </exception>
+    /// <remarks>
+    ///  <para>
+    ///   Call this method before creating any window. If visual styles have not been enabled through
+    ///   <see cref="EnableVisualStyles"/>, the effective mode remains <see cref="VisualStylesMode.Disabled"/>.
+    ///   Passing <see cref="VisualStylesMode.Disabled"/> has the same effect as not calling
+    ///   <see cref="EnableVisualStyles"/>.
+    ///  </para>
+    /// </remarks>
+    public static void SetDefaultVisualStylesMode(VisualStylesMode styleSetting)
+    {
+        // Validate the value. Inherit is the ambient sentinel and is invalid as the application default,
+        // since the application root has no parent to inherit from. The non-contiguous members (Inherit,
+        // Latest) prevent using the source generated enum validator.
+        _ = styleSetting switch
+        {
+            VisualStylesMode.Classic => styleSetting,
+            VisualStylesMode.Disabled => styleSetting,
+            VisualStylesMode.Net11 => styleSetting,
+            VisualStylesMode.Latest => styleSetting,
+            VisualStylesMode.Inherit => throw new ArgumentException(
+                SR.Application_VisualStylesModeInheritInvalidAsDefault,
+                nameof(styleSetting)),
+            _ => throw new InvalidEnumArgumentException(nameof(styleSetting), (int)styleSetting, typeof(VisualStylesMode))
+        };
+
+        if (s_defaultVisualStylesMode is { } current && current != styleSetting)
+        {
+            throw new InvalidOperationException(SR.Application_VisualStylesModeCanOnlyBeSetOnce);
+        }
+
+        s_defaultVisualStylesMode = styleSetting;
+    }
 
     /// <summary>
     ///  Gets or sets the format string to apply to top level window captions

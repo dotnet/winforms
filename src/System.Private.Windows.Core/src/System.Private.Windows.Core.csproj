@@ -15,9 +15,10 @@
 
     <!--
       CS3016: We don't care about CLS compliance since everything here is internal and we want to match native types.
+      CS3021: CsWin32-generated COM structs carry [CLSCompliant(false)]; we don't mark the assembly CLS-compliant.
       SYSLIB5005: System.Formats.Nrbf is experimental
     -->
-    <NoWarn>$(NoWarn);CS3016;SYSLIB5005</NoWarn>
+    <NoWarn>$(NoWarn);CS3016;CS3021;SYSLIB5005</NoWarn>
 
     <!--
       CA1822: The codebase contains a number of extension types where they reference instance state, but the analyzer
