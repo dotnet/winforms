@@ -178,6 +178,69 @@ public class TestAccessorTests
         Assert.Equal(42, (int)accessor.AMethod());
     }
 
+    [Fact]
+    public void TestAccessor_CanReadAutoPropertyBackingField()
+    {
+        AutoPropertyClass obj = new()
+        {
+            Count = 10
+        };
+
+        var accessor = new TestAccessor<AutoPropertyClass>(obj);
+        int value = accessor.Dynamic.Count;
+        Assert.Equal(10, value);
+    }
+
+    [Fact]
+    public void TestAccessor_CanWriteAutoPropertyBackingField()
+    {
+        AutoPropertyClass obj = new();
+        var accessor = new TestAccessor<AutoPropertyClass>(obj);
+        accessor.Dynamic.Count = 25;
+        Assert.Equal(25, obj.Count);
+    }
+
+    [Fact]
+    public void TestAccessor_CanRead_ReadOnlyAutoProperty()
+    {
+        ReadOnlyClass obj = new();
+        var accessor = new TestAccessor<ReadOnlyClass>(obj);
+        int value = accessor.Dynamic.Count;
+        Assert.Equal(5, value);
+    }
+
+    [Fact]
+    public void TestAccessor_FindsInheritedAutoProperty()
+    {
+        DerivedClass obj = new()
+        {
+            Count = 15
+        };
+
+        var accessor = new TestAccessor<DerivedClass>(obj);
+        int value = accessor.Dynamic.Count;
+        Assert.Equal(15, value);
+    }
+
+    private class AutoPropertyClass
+    {
+        public int Count { get; set; }
+    }
+
+    private class ReadOnlyClass
+    {
+        public int Count { get; } = 5;
+    }
+
+    private class BaseClass
+    {
+        public int Count { get; set; }
+    }
+
+    private class DerivedClass : BaseClass
+    {
+    }
+
     // As you can't use a ref struct as a generic parameter to Action/Func, you
     // need to use a defined delegate to access an internal method that takes
     // or returns a ref struct (such as Spans).
