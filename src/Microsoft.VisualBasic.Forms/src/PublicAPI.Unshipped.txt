@@ -1,0 +1,8 @@
+Microsoft.VisualBasic.ApplicationServices.ApplyApplicationDefaultsEventArgs.FormRevealMode() -> System.Windows.Forms.FormRevealMode
+Microsoft.VisualBasic.ApplicationServices.ApplyApplicationDefaultsEventArgs.FormRevealMode(AutoPropertyValue As System.Windows.Forms.FormRevealMode) -> Void
+Microsoft.VisualBasic.ApplicationServices.WindowsFormsApplicationBase.FormRevealMode() -> System.Windows.Forms.FormRevealMode
+Microsoft.VisualBasic.ApplicationServices.WindowsFormsApplicationBase.FormRevealMode(value As System.Windows.Forms.FormRevealMode) -> Void
+Microsoft.VisualBasic.ApplicationServices.ApplyApplicationDefaultsEventArgs.VisualStylesMode() -> System.Windows.Forms.VisualStylesMode
+Microsoft.VisualBasic.ApplicationServices.ApplyApplicationDefaultsEventArgs.VisualStylesMode(AutoPropertyValue As System.Windows.Forms.VisualStylesMode) -> Void
+Microsoft.VisualBasic.ApplicationServices.WindowsFormsApplicationBase.VisualStylesMode() -> System.Windows.Forms.VisualStylesMode
+Microsoft.VisualBasic.ApplicationServices.WindowsFormsApplicationBase.VisualStylesMode(value As System.Windows.Forms.VisualStylesMode) -> Void

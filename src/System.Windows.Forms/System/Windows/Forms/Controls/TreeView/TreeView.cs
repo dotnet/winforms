@@ -43,6 +43,7 @@ public partial class TreeView : Control
     private TreeViewEventHandler? _onAfterSelect;
     private ItemDragEventHandler? _onItemDrag;
     private TreeNodeMouseHoverEventHandler? _onNodeMouseHover;
+    private EventHandler? _onNodeLeadingChanged;
     private EventHandler? _onRightToLeftLayoutChanged;
 
     internal TreeNode? _selectedNode;
@@ -78,6 +79,7 @@ public partial class TreeView : Control
     private Collections.Specialized.BitVector32 _treeViewState; // see TREEVIEWSTATE_ constants above
 
     private static bool s_isScalingInitialized;
+    private static readonly int s_nodeLeadingProperty = PropertyStore.CreateKey();
     private static Size? s_stateImageSize;
     private static Size? StateImageSize
     {
@@ -114,6 +116,30 @@ public partial class TreeView : Control
             _selectedImageIndexer.ImageList = ImageList;
 
             return _selectedImageIndexer;
+        }
+    }
+
+    private bool RequiresNonEvenHeightStyle
+    {
+        get
+        {
+#if NET11_0_OR_GREATER
+            return _setOddHeight || UsesNodeLeading;
+#else
+            return _setOddHeight;
+#endif
+        }
+    }
+
+    private bool UsesNodeLeading
+    {
+        get
+        {
+#if NET11_0_OR_GREATER
+            return NodeLeading != 0.0f;
+#else
+            return false;
+#endif
         }
     }
 
@@ -170,6 +196,11 @@ public partial class TreeView : Control
         SetStyle(ControlStyles.UserPaint, false);
         SetStyle(ControlStyles.StandardClick, false);
         SetStyle(ControlStyles.UseTextForAccessibility, false);
+
+#if NET11_0_OR_GREATER
+        FontChanged += HandleNodeLeadingMetricChanged;
+        DpiChangedAfterParent += HandleNodeLeadingMetricChanged;
+#endif
     }
 
     internal override void ReleaseUiaProvider(HWND handle)
@@ -366,7 +397,7 @@ public partial class TreeView : Control
                 cp.Style |= (int)PInvoke.TVS_FULLROWSELECT;
             }
 
-            if (_setOddHeight)
+            if (RequiresNonEvenHeightStyle)
             {
                 cp.Style |= (int)PInvoke.TVS_NONEVENHEIGHT;
             }
@@ -760,6 +791,79 @@ public partial class TreeView : Control
         }
     }
 
+#if NET11_0_OR_GREATER
+    /// <summary>
+    ///  Gets or sets the per-node vertical leading factor applied on top of the live <see cref="Control.Font"/> height.
+    ///  Default <c>0.0f</c> selects legacy behavior.
+    /// </summary>
+    /// <value>
+    ///  A non-negative <see cref="float"/>. <c>0.0f</c> (default) selects legacy behavior.
+    ///  <c>1.0f</c> opts in to the honest row-height calculation. Values greater than <c>1.0f</c> add extra leading.
+    /// </value>
+    /// <remarks>
+    ///  <para>
+    ///   This property applies uniformly to all nodes in the control. It is not a per-node knob, and per-node row
+    ///   heights are not supported by the native <see cref="TreeView"/> control.
+    ///  </para>
+    ///  <para>
+    ///   <c>0.0f</c> keeps the legacy <see cref="ItemHeight"/> behavior, including the managed <c>FontHeight + 3</c>
+    ///   estimate and the default even-height rounding. <c>1.0f</c> opts in to a row height derived from the live
+    ///   <see cref="Control.Font"/> height with <c>TVS_NONEVENHEIGHT</c> enabled. Other positive values scale the
+    ///   honest base for denser or airier rows.
+    ///  </para>
+    ///  <para>
+    ///   The factor is dimensionless. The resulting pixels scale with <see cref="Control.Font"/>, whose height already
+    ///   carries the current DPI, so the factor itself does not scale with DPI.
+    ///  </para>
+    ///  <para>
+    ///   "Leading" (pronounced "ledding") is a typesetting term from the strips of lead metal once placed between
+    ///   lines of type to add vertical spacing; it is unrelated to leading or guiding.
+    ///  </para>
+    /// </remarks>
+    /// <exception cref="ArgumentOutOfRangeException">
+    ///  The value is negative or not finite.
+    /// </exception>
+    [SRCategory(nameof(SR.CatAppearance))]
+    [DefaultValue(0.0f)]
+    [SRDescription(nameof(SR.TreeViewNodeLeadingDescr))]
+    public float NodeLeading
+    {
+        get => Properties.GetValueOrDefault(s_nodeLeadingProperty, 0.0f);
+        set
+        {
+            if (!float.IsFinite(value))
+            {
+                throw new ArgumentOutOfRangeException(nameof(value));
+            }
+
+            ArgumentOutOfRangeException.ThrowIfNegative(value);
+
+            float oldValue = NodeLeading;
+            if (oldValue != value)
+            {
+                bool oldUsesNodeLeading = oldValue != 0.0f;
+                bool newUsesNodeLeading = value != 0.0f;
+
+                Properties.AddOrRemoveValue(s_nodeLeadingProperty, value, defaultValue: 0.0f);
+
+                if (IsHandleCreated)
+                {
+                    if (oldUsesNodeLeading != newUsesNodeLeading)
+                    {
+                        RecreateHandle();
+                    }
+                    else if (newUsesNodeLeading)
+                    {
+                        ApplyItemHeightFromCurrentSettings();
+                    }
+                }
+
+                OnNodeLeadingChanged(EventArgs.Empty);
+            }
+        }
+    }
+#endif
+
     /// <summary>
     ///  The height of every item in the tree view, in pixels.
     /// </summary>
@@ -769,6 +873,18 @@ public partial class TreeView : Control
     {
         get
         {
+#if NET11_0_OR_GREATER
+            if (UsesNodeLeading)
+            {
+                if (IsHandleCreated)
+                {
+                    return (int)PInvokeCore.SendMessage(this, PInvoke.TVM_GETITEMHEIGHT);
+                }
+
+                return GetNodeLeadingItemHeight();
+            }
+#endif
+
             if (_itemHeight != -1)
             {
                 return _itemHeight;
@@ -798,21 +914,28 @@ public partial class TreeView : Control
                 _itemHeight = value;
                 if (IsHandleCreated)
                 {
-                    if (_itemHeight % 2 != 0)
+                    if (UsesNodeLeading)
                     {
-                        _setOddHeight = true;
-                        try
-                        {
-                            RecreateHandle();
-                        }
-                        finally
-                        {
-                            _setOddHeight = false;
-                        }
+                        ApplyItemHeightFromCurrentSettings();
                     }
+                    else
+                    {
+                        if (_itemHeight % 2 != 0)
+                        {
+                            _setOddHeight = true;
+                            try
+                            {
+                                RecreateHandle();
+                            }
+                            finally
+                            {
+                                _setOddHeight = false;
+                            }
+                        }
 
-                    PInvokeCore.SendMessage(this, PInvoke.TVM_SETITEMHEIGHT, (WPARAM)value);
-                    _itemHeight = (int)PInvokeCore.SendMessage(this, PInvoke.TVM_GETITEMHEIGHT);
+                        PInvokeCore.SendMessage(this, PInvoke.TVM_SETITEMHEIGHT, (WPARAM)value);
+                        _itemHeight = (int)PInvokeCore.SendMessage(this, PInvoke.TVM_GETITEMHEIGHT);
+                    }
                 }
             }
         }
@@ -1481,6 +1604,19 @@ public partial class TreeView : Control
         remove => _onRightToLeftLayoutChanged -= value;
     }
 
+#if NET11_0_OR_GREATER
+    /// <summary>
+    ///  Occurs when the value of <see cref="NodeLeading"/> changes.
+    /// </summary>
+    [SRCategory(nameof(SR.CatPropertyChanged))]
+    [SRDescription(nameof(SR.TreeViewOnNodeLeadingChangedDescr))]
+    public event EventHandler? NodeLeadingChanged
+    {
+        add => _onNodeLeadingChanged += value;
+        remove => _onNodeLeadingChanged -= value;
+    }
+#endif
+
     /// <summary>
     ///  Disables redrawing of the tree view. A call to beginUpdate() must be
     ///  balanced by a following call to endUpdate(). Following a call to
@@ -1569,10 +1705,9 @@ public partial class TreeView : Control
     ///  beginUpdate(), any redrawing caused by operations performed on the
     ///  combo box is deferred until the call to endUpdate().
     /// </summary>
-    public void EndUpdate()
-    {
-        EndUpdateInternal();
-    }
+    public void EndUpdate() => EndUpdate(invalidate: true);
+
+    private void EndUpdate(bool invalidate) => EndUpdateInternal(invalidate);
 
     /// <summary>
     ///  Expands all nodes at the root level.
@@ -1796,6 +1931,16 @@ public partial class TreeView : Control
         }
     }
 
+#if NET11_0_OR_GREATER
+    private void HandleNodeLeadingMetricChanged(object? sender, EventArgs e)
+    {
+        if (UsesNodeLeading)
+        {
+            ApplyItemHeightFromCurrentSettings();
+        }
+    }
+#endif
+
     /// <summary>
     ///  Overridden to handle RETURN key.
     /// </summary>
@@ -1913,10 +2058,7 @@ public partial class TreeView : Control
             PInvokeCore.SendMessage(this, PInvoke.TVM_SETINDENT, (WPARAM)_indent);
         }
 
-        if (_itemHeight != -1)
-        {
-            PInvokeCore.SendMessage(this, PInvoke.TVM_SETITEMHEIGHT, (WPARAM)ItemHeight);
-        }
+        ApplyItemHeightFromCurrentSettings();
 
         // Essentially we are setting the width to be infinite so that the
         // TreeView never thinks it needs a scrollbar when the first node is created
@@ -1954,6 +2096,7 @@ public partial class TreeView : Control
                     flags);
             }
         }
+
         finally
         {
             _treeViewState[TREEVIEWSTATE_stopResizeWindowMsgs] = false;
@@ -2319,6 +2462,23 @@ public partial class TreeView : Control
         _onRightToLeftLayoutChanged?.Invoke(this, e);
     }
 
+#if NET11_0_OR_GREATER
+    /// <summary>
+    ///  Raises the <see cref="NodeLeadingChanged"/> event.
+    /// </summary>
+    /// <param name="e">An <see cref="EventArgs"/> that contains the event data.</param>
+    [EditorBrowsable(EditorBrowsableState.Advanced)]
+    protected virtual void OnNodeLeadingChanged(EventArgs e)
+    {
+        if (GetAnyDisposingInHierarchy())
+        {
+            return;
+        }
+
+        _onNodeLeadingChanged?.Invoke(this, e);
+    }
+#endif
+
     // Refresh the nodes by clearing the tree and adding the nodes back again
     //
     private void RefreshNodes()
@@ -2349,6 +2509,13 @@ public partial class TreeView : Control
         RecreateHandle();
     }
 
+#if NET11_0_OR_GREATER
+    /// <summary>
+    ///  This resets the node leading factor to the legacy default.
+    /// </summary>
+    private void ResetNodeLeading() => NodeLeading = 0.0f;
+#endif
+
     /// <summary>
     ///  Retrieves true if the indent should be persisted in code gen.
     /// </summary>
@@ -2358,6 +2525,10 @@ public partial class TreeView : Control
     ///  Retrieves true if the itemHeight should be persisted in code gen.
     /// </summary>
     private bool ShouldSerializeItemHeight() => (_itemHeight != -1);
+
+#if NET11_0_OR_GREATER
+    private bool ShouldSerializeNodeLeading() => Properties.ContainsKey(s_nodeLeadingProperty);
+#endif
 
     private bool ShouldSerializeSelectedImageIndex()
     {
@@ -2378,6 +2549,51 @@ public partial class TreeView : Control
 
         return ImageIndex != ImageList.Indexer.DefaultIndex;
     }
+
+    private void ApplyItemHeightFromCurrentSettings()
+    {
+        if (!IsHandleCreated)
+        {
+            return;
+        }
+
+#if NET11_0_OR_GREATER
+        if (UsesNodeLeading)
+        {
+            int itemHeight = GetNodeLeadingItemHeight();
+            if ((int)PInvokeCore.SendMessage(this, PInvoke.TVM_GETITEMHEIGHT) != itemHeight)
+            {
+                PInvokeCore.SendMessage(this, PInvoke.TVM_SETITEMHEIGHT, (WPARAM)itemHeight);
+            }
+
+            return;
+        }
+#endif
+
+        if (_itemHeight != -1)
+        {
+            PInvokeCore.SendMessage(this, PInvoke.TVM_SETITEMHEIGHT, (WPARAM)ItemHeight);
+        }
+    }
+
+#if NET11_0_OR_GREATER
+    private int GetNodeLeadingItemHeight()
+    {
+        double itemHeight = Math.Ceiling(NodeLeading * Font.Height);
+
+        if (itemHeight < 1)
+        {
+            return 1;
+        }
+
+        if (itemHeight >= short.MaxValue)
+        {
+            return short.MaxValue - 1;
+        }
+
+        return (int)itemHeight;
+    }
+#endif
 
     /// <summary>
     ///  Updated the sorted order

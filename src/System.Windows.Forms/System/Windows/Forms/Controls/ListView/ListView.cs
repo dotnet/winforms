@@ -3158,7 +3158,9 @@ public partial class ListView : Control
     /// <summary>
     ///  Cancels the effect of BeginUpdate.
     /// </summary>
-    public void EndUpdate()
+    public void EndUpdate() => EndUpdate(invalidate: true);
+
+    private void EndUpdate(bool invalidate)
     {
         // On the final EndUpdate, check to see if we've got any cached items.
         // If we do, insert them as normal, then turn off the painting freeze.
@@ -3167,7 +3169,7 @@ public partial class ListView : Control
             ApplyUpdateCachedItems();
         }
 
-        EndUpdateInternal();
+        EndUpdateInternal(invalidate);
     }
 
     private void EnsureDefaultGroup()
