@@ -171,6 +171,12 @@
   <data name="ApplicationCannotChangeApplicationExceptionMode" xml:space="preserve">
     <value>Application exception mode cannot be changed once any Controls are created in the application.</value>
   </data>
+  <data name="Application_VisualStylesModeCanOnlyBeSetOnce" xml:space="preserve">
+    <value>The default visual styles mode can only be set once and cannot be changed afterwards.</value>
+  </data>
+  <data name="Application_VisualStylesModeInheritInvalidAsDefault" xml:space="preserve">
+    <value>VisualStylesMode.Inherit cannot be used as the application-wide default visual styles mode because the application root has no parent to inherit from.</value>
+  </data>
   <data name="ApplyCaption" xml:space="preserve">
     <value>&amp;Apply</value>
   </data>
@@ -1035,6 +1041,9 @@
   <data name="ControlMinimumSizeDescr" xml:space="preserve">
     <value>Specifies the minimum size of the control.</value>
   </data>
+  <data name="ControlMutationExtensionsLayoutSuspensionRequiresControl" xml:space="preserve">
+    <value>Layout suspension requires a target derived from Control.</value>
+  </data>
   <data name="ControlNotChild" xml:space="preserve">
     <value>'child' is not a child control of this parent.</value>
   </data>
@@ -1223,6 +1232,9 @@
   </data>
   <data name="ControlOnSystemColorsChangedDescr" xml:space="preserve">
     <value>Event raised when the system colors change.</value>
+  </data>
+  <data name="ControlOnSystemVisualSettingsChangedDescr" xml:space="preserve">
+    <value>Event raised when a Windows visual or accessibility setting changes.</value>
   </data>
   <data name="ControlOnTabIndexChangedDescr" xml:space="preserve">
     <value>Event raised when the value of the TabIndex property is changed.</value>
@@ -3286,6 +3298,12 @@ Do you want to replace it?</value>
   <data name="FormTopMostDescr" xml:space="preserve">
     <value>Indicates whether the form always appears above all other forms that do not have this property set to true.</value>
   </data>
+  <data name="FormFormRevealModeDescr" xml:space="preserve">
+    <value>Indicates how the form is presented while its initial appearance is prepared. Classic never defers reveal. Deferred hides the form behind a DWM cloak until its background has painted, to reduce startup flash. Inherit resolves from the application-wide default.</value>
+  </data>
+  <data name="FormOnFormRevealModeChangedDescr" xml:space="preserve">
+    <value>Occurs when the effective value of the FormRevealMode property changes.</value>
+  </data>
   <data name="FormTransparencyKeyDescr" xml:space="preserve">
     <value>A color which will appear transparent when painted on the form.</value>
   </data>
@@ -4987,7 +5005,7 @@ Stack trace where the illegal operation occurred was:
     <value>Controls whether the Network button is displayed.</value>
   </data>
   <data name="RadioButtonAppearanceDescr" xml:space="preserve">
-    <value>Controls whether the RadioButton appears as normal or as a Windows PushButton.</value>
+    <value>Controls whether the RadioButton appears as normal, as a Windows PushButton, or as a toggle switch.</value>
   </data>
   <data name="RadioButtonAutoCheckDescr" xml:space="preserve">
     <value>Causes the radio button to automatically change state when clicked.</value>
@@ -6319,6 +6337,9 @@ Stack trace where the illegal operation occurred was:
   <data name="TreeViewLineColorDescr" xml:space="preserve">
     <value>The color of the lines that connect the nodes of the TreeView.</value>
   </data>
+  <data name="TreeViewNodeLeadingDescr" xml:space="preserve">
+    <value>The uniform row-height leading factor applied to all nodes.</value>
+  </data>
   <data name="TreeViewNodeMouseClickDescr" xml:space="preserve">
     <value>Occurs when a node is clicked with the mouse.</value>
   </data>
@@ -6333,6 +6354,9 @@ Stack trace where the illegal operation occurred was:
   </data>
   <data name="TreeViewNodeSorterDescr" xml:space="preserve">
     <value>The sorting comparer for the TreeView.</value>
+  </data>
+  <data name="TreeViewOnNodeLeadingChangedDescr" xml:space="preserve">
+    <value>Occurs when the value of the NodeLeading property changes.</value>
   </data>
   <data name="TreeViewPathSeparatorDescr" xml:space="preserve">
     <value>The string delimiter used for the path returned by a node's FullPath property.</value>
@@ -6930,6 +6954,12 @@ Stack trace where the illegal operation occurred was:
   </data>
   <data name="ControlDataContextChangedDescr" xml:space="preserve">
     <value>Occurs when the value of the DataContext property changes.</value>
+  </data>
+  <data name="ControlVisualStylesModeDescr" xml:space="preserve">
+    <value>Determines how the control renders itself when visual styles are applied.</value>
+  </data>
+  <data name="ControlVisualStylesModeChangedDescr" xml:space="preserve">
+    <value>Occurs when the value of the VisualStylesMode property changes.</value>
   </data>
   <data name="CommandComponentCommandParameterDescr" xml:space="preserve">
     <value>Gets or sets the parameter that is passed to the Command property's object on execution or on execution context request.</value>
