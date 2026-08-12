@@ -22,17 +22,22 @@ public class DECIMALTests
         Assert.Equal(0m, dec.ToDecimal());
     }
 
+    public static IEnumerable<object[]> DECIMAL_ToDecimal_TestData()
+    {
+        yield return new object[] { (double)int.MinValue, (decimal)int.MinValue };
+        yield return new object[] { -1.2, -1.2m };
+        yield return new object[] { 0d, 0m };
+        yield return new object[] { 1.2, 1.2m };
+        yield return new object[] { (double)int.MaxValue, (decimal)int.MaxValue };
+    }
+
     [Theory]
-    [InlineData((double)int.MinValue)]
-    [InlineData(-1.2)]
-    [InlineData(0)]
-    [InlineData(1.2)]
-    [InlineData((double)int.MaxValue)]
-    public void DECIMAL_ToDecimal_InvokeCustom_ReturnsExpected(double value)
+    [MemberData(nameof(DECIMAL_ToDecimal_TestData))]
+    public void DECIMAL_ToDecimal_InvokeCustom_ReturnsExpected(double value, decimal expected)
     {
         HRESULT hr = VarDecFromR8(value, out DECIMAL dec);
         Assert.Equal(HRESULT.S_OK, hr);
-        Assert.Equal((decimal)value, dec.ToDecimal());
+        Assert.Equal(expected, dec.ToDecimal());
     }
 
     [DllImport(Libraries.Oleaut32, ExactSpelling = true)]

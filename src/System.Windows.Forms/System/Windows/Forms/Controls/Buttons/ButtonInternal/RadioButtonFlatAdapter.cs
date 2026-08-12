@@ -13,7 +13,7 @@ internal class RadioButtonFlatAdapter : RadioButtonBaseAdapter
     {
         if (Control.Appearance == Appearance.Button)
         {
-            ButtonFlatAdapter adapter = new(Control);
+            ButtonBaseAdapter adapter = DarkModeAdapterFactory.CreateFlatAdapter(Control);
             adapter.PaintDown(e, Control.Checked ? CheckState.Checked : CheckState.Unchecked);
             return;
         }
@@ -33,7 +33,7 @@ internal class RadioButtonFlatAdapter : RadioButtonBaseAdapter
     {
         if (Control.Appearance == Appearance.Button)
         {
-            ButtonFlatAdapter adapter = new(Control);
+            ButtonBaseAdapter adapter = DarkModeAdapterFactory.CreateFlatAdapter(Control);
             adapter.PaintOver(e, Control.Checked ? CheckState.Checked : CheckState.Unchecked);
             return;
         }
@@ -53,7 +53,7 @@ internal class RadioButtonFlatAdapter : RadioButtonBaseAdapter
     {
         if (Control.Appearance == Appearance.Button)
         {
-            ButtonFlatAdapter adapter = new(Control);
+            ButtonBaseAdapter adapter = DarkModeAdapterFactory.CreateFlatAdapter(Control);
             adapter.PaintUp(e, Control.Checked ? CheckState.Checked : CheckState.Unchecked);
             return;
         }
@@ -80,7 +80,7 @@ internal class RadioButtonFlatAdapter : RadioButtonBaseAdapter
         PaintField(e, layout, colors, checkColor, drawFocus: true);
     }
 
-    protected override ButtonBaseAdapter CreateButtonAdapter() => new ButtonFlatAdapter(Control);
+    protected override ButtonBaseAdapter CreateButtonAdapter() => DarkModeAdapterFactory.CreateFlatAdapter(Control);
 
     // RadioButtonPopupLayout also uses this layout for down and over
     protected override LayoutOptions Layout(PaintEventArgs e)
