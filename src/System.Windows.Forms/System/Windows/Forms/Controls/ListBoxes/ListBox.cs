@@ -1350,9 +1350,11 @@ public partial class ListBox : ListControl
     ///  way of doing this. BeginUpdate should be called first, and this method
     ///  should be called when you want the control to start painting again.
     /// </summary>
-    public void EndUpdate()
+    public void EndUpdate() => EndUpdate(invalidate: true);
+
+    private void EndUpdate(bool invalidate)
     {
-        EndUpdateInternal();
+        EndUpdateInternal(invalidate);
         --_updateCount;
     }
 

@@ -242,6 +242,16 @@
         <target state="translated">Una volta creati controlli nel thread, non è possibile modificare la modalità eccezioni del thread.</target>
         <note />
       </trans-unit>
+      <trans-unit id="Application_VisualStylesModeCanOnlyBeSetOnce">
+        <source>The default visual styles mode can only be set once and cannot be changed afterwards.</source>
+        <target state="new">The default visual styles mode can only be set once and cannot be changed afterwards.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="Application_VisualStylesModeInheritInvalidAsDefault">
+        <source>VisualStylesMode.Inherit cannot be used as the application-wide default visual styles mode because the application root has no parent to inherit from.</source>
+        <target state="new">VisualStylesMode.Inherit cannot be used as the application-wide default visual styles mode because the application root has no parent to inherit from.</target>
+        <note />
+      </trans-unit>
       <trans-unit id="ApplyCaption">
         <source>&amp;Apply</source>
         <target state="translated">&amp;Applica</target>
@@ -1697,6 +1707,11 @@
         <target state="translated">Specifica le dimensioni minime del controllo.</target>
         <note />
       </trans-unit>
+      <trans-unit id="ControlMutationExtensionsLayoutSuspensionRequiresControl">
+        <source>Layout suspension requires a target derived from Control.</source>
+        <target state="new">Layout suspension requires a target derived from Control.</target>
+        <note />
+      </trans-unit>
       <trans-unit id="ControlNotChild">
         <source>'child' is not a child control of this parent.</source>
         <target state="translated">'child' non è un controllo figlio di questo elemento.</target>
@@ -2027,6 +2042,11 @@
         <target state="translated">Evento generato alla modifica dei colori di sistema.</target>
         <note />
       </trans-unit>
+      <trans-unit id="ControlOnSystemVisualSettingsChangedDescr">
+        <source>Event raised when a Windows visual or accessibility setting changes.</source>
+        <target state="new">Event raised when a Windows visual or accessibility setting changes.</target>
+        <note />
+      </trans-unit>
       <trans-unit id="ControlOnTabIndexChangedDescr">
         <source>Event raised when the value of the TabIndex property is changed.</source>
         <target state="translated">Generato quando il valore della proprietà TabIndex cambia.</target>
@@ -2170,6 +2190,16 @@
       <trans-unit id="ControlVisibleDescr">
         <source>Determines whether the control is visible or hidden.</source>
         <target state="translated">Determina se il controllo è visibile o nascosto.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ControlVisualStylesModeChangedDescr">
+        <source>Occurs when the value of the VisualStylesMode property changes.</source>
+        <target state="new">Occurs when the value of the VisualStylesMode property changes.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ControlVisualStylesModeDescr">
+        <source>Determines how the control renders itself when visual styles are applied.</source>
+        <target state="new">Determines how the control renders itself when visual styles are applied.</target>
         <note />
       </trans-unit>
       <trans-unit id="ControlWidthDescr">
@@ -5420,6 +5450,11 @@ Sostituirlo?</target>
         <target state="translated">Il valore che questo form restituirà se viene visualizzato come finestra di dialogo.</target>
         <note />
       </trans-unit>
+      <trans-unit id="FormFormRevealModeDescr">
+        <source>Indicates how the form is presented while its initial appearance is prepared. Classic never defers reveal. Deferred hides the form behind a DWM cloak until its background has painted, to reduce startup flash. Inherit resolves from the application-wide default.</source>
+        <target state="new">Indicates how the form is presented while its initial appearance is prepared. Classic never defers reveal. Deferred hides the form behind a DWM cloak until its background has painted, to reduce startup flash. Inherit resolves from the application-wide default.</target>
+        <note />
+      </trans-unit>
       <trans-unit id="FormHelpButtonClickedDescr">
         <source>Event raised when the help button is clicked.</source>
         <target state="translated">Evento generato quando si fa clic sul pulsante ?.</target>
@@ -5538,6 +5573,11 @@ Sostituirlo?</target>
       <trans-unit id="FormOnFormClosingDescr">
         <source>Occurs whenever the user closes the form, before the form has been closed and specifies the close reason.</source>
         <target state="translated">Generato prima della chiusura del form da parte dell'utente. Specifica il motivo della chiusura.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="FormOnFormRevealModeChangedDescr">
+        <source>Occurs when the effective value of the FormRevealMode property changes.</source>
+        <target state="new">Occurs when the effective value of the FormRevealMode property changes.</target>
         <note />
       </trans-unit>
       <trans-unit id="FormOnInputLangChangeDescr">
@@ -8675,8 +8715,8 @@ Analisi dello stack dove si è verificata l'operazione non valida:
         <note />
       </trans-unit>
       <trans-unit id="RadioButtonAppearanceDescr">
-        <source>Controls whether the RadioButton appears as normal or as a Windows PushButton.</source>
-        <target state="translated">Determina se il controllo RadioButton verrà visualizzato in modo standard o come un pulsante di comando di Windows.</target>
+        <source>Controls whether the RadioButton appears as normal, as a Windows PushButton, or as a toggle switch.</source>
+        <target state="new">Controls whether the RadioButton appears as normal, as a Windows PushButton, or as a toggle switch.</target>
         <note />
       </trans-unit>
       <trans-unit id="RadioButtonAutoCheckDescr">
@@ -11019,6 +11059,11 @@ Analisi dello stack dove si è verificata l'operazione non valida:
         <target state="translated">Il colore delle righe che connettono i nodi del controllo TreeView.</target>
         <note />
       </trans-unit>
+      <trans-unit id="TreeViewNodeLeadingDescr">
+        <source>The uniform row-height leading factor applied to all nodes.</source>
+        <target state="new">The uniform row-height leading factor applied to all nodes.</target>
+        <note />
+      </trans-unit>
       <trans-unit id="TreeViewNodeMouseClickDescr">
         <source>Occurs when a node is clicked with the mouse.</source>
         <target state="translated">Generato quando si fa clic con il mouse su un nodo.</target>
@@ -11042,6 +11087,11 @@ Analisi dello stack dove si è verificata l'operazione non valida:
       <trans-unit id="TreeViewNodesDescr">
         <source>The root nodes in the TreeView control.</source>
         <target state="translated">I nodi radice nel controllo TreeView.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="TreeViewOnNodeLeadingChangedDescr">
+        <source>Occurs when the value of the NodeLeading property changes.</source>
+        <target state="new">Occurs when the value of the NodeLeading property changes.</target>
         <note />
       </trans-unit>
       <trans-unit id="TreeViewPathSeparatorDescr">
