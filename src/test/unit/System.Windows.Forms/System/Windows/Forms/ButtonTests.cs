@@ -5,6 +5,7 @@
 
 using System.ComponentModel;
 using System.Drawing;
+using System.Reflection;
 using System.Windows.Forms.Layout;
 using System.Windows.Forms.TestUtilities;
 using Moq;
@@ -3682,6 +3683,60 @@ public class ButtonTests : AbstractButtonBaseTests
         attr.Should().BeAssignableTo<Attribute>();
     }
 
+    [WinFormsFact]
+    public void Button_OnSystemColorsChanged_RecreatesCachedAdapter()
+    {
+        using SubButton button = new()
+        {
+            VisualStylesMode = VisualStylesMode.Net11
+        };
+        object originalAdapter = button.AdapterAccessor;
+
+        button.OnSystemColorsChanged(EventArgs.Empty);
+
+        Assert.NotSame(originalAdapter, button.AdapterAccessor);
+    }
+
+    [WinFormsFact]
+    public void Button_OnVisualStylesModeChanged_RecreatesCachedAdapter()
+    {
+        using SubButton button = new()
+        {
+            VisualStylesMode = VisualStylesMode.Net11
+        };
+        object originalAdapter = button.AdapterAccessor;
+        var originalAnimator = button.BackColorAnimator;
+
+        button.OnVisualStylesModeChanged(EventArgs.Empty);
+
+        Assert.NotSame(originalAdapter, button.AdapterAccessor);
+        Assert.NotSame(originalAnimator, button.BackColorAnimator);
+    }
+
+    [WinFormsFact]
+    public void ButtonDarkModeAdapter_Paint_UpdatesRendererDpi()
+    {
+        using SubButton button = new()
+        {
+            FlatStyle = FlatStyle.Standard,
+            Size = new Size(120, 40),
+            VisualStylesMode = VisualStylesMode.Net11
+        };
+        var adapter = (ButtonInternal.ButtonDarkModeAdapter)button.CreateStandardAdapter();
+        object renderer = adapter.TestAccessor.Dynamic._buttonDarkModeRenderer;
+        PropertyInfo rendererDpiProperty = renderer.GetType()
+            .GetProperty("DeviceDpi", BindingFlags.Instance | BindingFlags.NonPublic)!;
+        rendererDpiProperty.SetValue(renderer, 144);
+        using Bitmap bitmap = new(button.Width, button.Height);
+        using Graphics graphics = Graphics.FromImage(bitmap);
+        PaintEventArgs e = new(graphics, button.ClientRectangle);
+
+        adapter.PaintUp(e, CheckState.Unchecked);
+
+        int rendererDpi = (int)rendererDpiProperty.GetValue(renderer)!;
+        Assert.Equal(button.DeviceDpi, rendererDpi);
+    }
+
     protected override ButtonBase CreateButton() => new SubButton();
 
     private class SubButton : Button
@@ -3744,6 +3799,8 @@ public class ButtonTests : AbstractButtonBaseTests
 
         public new bool ShowKeyboardCues => base.ShowKeyboardCues;
 
+        public object AdapterAccessor => Adapter;
+
         public new AccessibleObject CreateAccessibilityInstance() => base.CreateAccessibilityInstance();
 
         public new AutoSizeMode GetAutoSizeMode() => base.GetAutoSizeMode();
@@ -3771,6 +3828,10 @@ public class ButtonTests : AbstractButtonBaseTests
         public new void OnMouseLeave(EventArgs eventargs) => base.OnMouseLeave(eventargs);
 
         public new void OnMouseUp(MouseEventArgs eventargs) => base.OnMouseUp(eventargs);
+
+        public new void OnSystemColorsChanged(EventArgs e) => base.OnSystemColorsChanged(e);
+
+        public new void OnVisualStylesModeChanged(EventArgs e) => base.OnVisualStylesModeChanged(e);
 
         public new void OnTextChanged(EventArgs e) => base.OnTextChanged(e);
 
