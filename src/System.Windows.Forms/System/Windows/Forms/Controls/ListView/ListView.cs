@@ -4693,6 +4693,18 @@ public partial class ListView : Control
                 $"{DarkModeIdentifier}_{ExplorerThemeIdentifier}",
                 null);
 
+            // Apply dark mode theme to the ListView Tooltip
+            HWND toolTipHandle = (HWND)PInvokeCore.SendMessage(
+               this,
+               PInvoke.LVM_GETTOOLTIPS,
+               (WPARAM)0,
+               (LPARAM)0);
+
+            PInvoke.SetWindowTheme(
+                toolTipHandle,
+                $"{DarkModeIdentifier}_{ExplorerThemeIdentifier}",
+                null);
+
             // Get the ListView's ColumnHeader handle:
             HWND columnHeaderHandle = (HWND)PInvokeCore.SendMessage(
                 this,
