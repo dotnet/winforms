@@ -870,28 +870,16 @@ public abstract partial class TextBoxBase : Control
         };
 
     /// <summary>
-    ///  Returns the preferred height for modern Visual Styles, taking the carved padding band
-    ///  (including the live scrollbar allowance and the user <see cref="Padding"/>) into account.
+    ///  Returns the preferred height for modern Visual Styles.
     /// </summary>
+    /// <remarks>
+    ///  <para>
+    ///   For compatibility with classic single-line edit metrics, modern visual styles use the
+    ///   Everett-height formula as well.
+    ///  </para>
+    /// </remarks>
     private protected virtual int PreferredHeightCore
-    {
-        get
-        {
-            Padding visualStylesPadding = GetVisualStylesPadding(
-                includeScrollbars: true);
-            int preferredHeight = FontHeight + visualStylesPadding.Vertical;
-
-            if (AutoSize && !Multiline && BorderStyle == BorderStyle.Fixed3D)
-            {
-                preferredHeight = ModernControlVisualStyles.GetPreferredFieldHeight(
-                    FontHeight,
-                    visualStylesPadding,
-                    DeviceDpiInternal);
-            }
-
-            return preferredHeight;
-        }
-    }
+        => PreferredHeightClassic;
 
     /// <summary>
     ///  Returns the classic (Everett-compatible) preferred height for a single-line text box.
@@ -2509,6 +2497,38 @@ public abstract partial class TextBoxBase : Control
                 Padding padding = GetVisualStylesPadding(includeScrollbars: !ReservesNativeNonClientArea);
 
                 ref RECT clientRect = ref ncCalcSizeParams->rgrc._0;
+
+                if (!Multiline)
+                {
+                    // Keep enough single-line client height for native edit text metrics when an explicit
+                    // height is smaller than the modern chrome's preferred footprint.
+                    int clientHeight = clientRect.bottom - clientRect.top;
+                    int minimumSingleLineClientHeight = FontHeight + LogicalToDeviceUnits(3);
+                    int maxVerticalCarve = Math.Max(0, clientHeight - minimumSingleLineClientHeight);
+
+                    if (padding.Vertical > maxVerticalCarve)
+                    {
+                        int overflow = padding.Vertical - maxVerticalCarve;
+                        int minimumTopPadding = BorderStyle switch
+                        {
+                            BorderStyle.None => 0,
+                            BorderStyle.FixedSingle => ScaleVisualStylesMetric(ModernControlVisualStyles.BorderThickness),
+                            _ => ScaleVisualStylesMetric(ModernControlVisualStyles.InternalChromeInset + ModernControlVisualStyles.BorderThickness)
+                        };
+                        int minimumBottomPadding = BorderStyle == BorderStyle.None
+                            ? 0
+                            : ScaleVisualStylesMetric(ModernControlVisualStyles.BorderThickness);
+
+                        int availableTopReduction = Math.Max(0, padding.Top - minimumTopPadding);
+                        int topReduction = Math.Min(overflow, availableTopReduction);
+                        padding.Top -= topReduction;
+                        overflow -= topReduction;
+
+                        int availableBottomReduction = Math.Max(0, padding.Bottom - minimumBottomPadding);
+                        int bottomReduction = Math.Min(overflow, availableBottomReduction);
+                        padding.Bottom -= bottomReduction;
+                    }
+                }
 
                 // Never-invert clamp: a large Padding plus the live scrollbar allowance can drive the
                 // carved client rect to zero or inverted. A 0-1px client area is acceptable and intended
