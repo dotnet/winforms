@@ -2527,6 +2527,25 @@ public abstract partial class TextBoxBase : Control
                         int availableBottomReduction = Math.Max(0, padding.Bottom - minimumBottomPadding);
                         int bottomReduction = Math.Min(overflow, availableBottomReduction);
                         padding.Bottom -= bottomReduction;
+                        overflow -= bottomReduction;
+
+                        if (overflow > 0)
+                        {
+                            // Keep a visible top/bottom border band when bordered, even under extreme DPI/text-scale
+                            // combinations, so the modern frame does not collapse visually.
+                            int minimumVisibleVerticalPadding = BorderStyle == BorderStyle.None
+                                ? 0
+                                : ScaleVisualStylesMetric(ModernControlVisualStyles.BorderThickness);
+
+                            int availableBottomVisualReduction = Math.Max(0, padding.Bottom - minimumVisibleVerticalPadding);
+                            bottomReduction = Math.Min(overflow, availableBottomVisualReduction);
+                            padding.Bottom -= bottomReduction;
+                            overflow -= bottomReduction;
+
+                            int availableTopVisualReduction = Math.Max(0, padding.Top - minimumVisibleVerticalPadding);
+                            topReduction = Math.Min(overflow, availableTopVisualReduction);
+                            padding.Top -= topReduction;
+                        }
                     }
                 }
 

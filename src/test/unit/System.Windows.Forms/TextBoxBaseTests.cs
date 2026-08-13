@@ -284,6 +284,41 @@ public partial class TextBoxBaseTests
     }
 
     [WinFormsFact]
+    public void TextBoxBase_ModernFixed3D_HighDpiClientHeight_PreservesSingleLineTextMetrics()
+    {
+        using IDisposable dpiScope = ScaleHelper.EnterDpiAwarenessScope(DPI_AWARENESS_CONTEXT.DPI_AWARENESS_CONTEXT_PER_MONITOR_AWARE_V2);
+
+        if (!ScaleHelper.IsThreadPerMonitorV2Aware)
+        {
+            return;
+        }
+
+        using TextBox control = new()
+        {
+            AutoSize = false,
+            VisualStylesMode = VisualStylesMode.Net11,
+            BorderStyle = BorderStyle.Fixed3D,
+            DeviceDpiInternal = 216
+        };
+
+        control.Size = new Size(control.Width, control.PreferredHeight);
+        control.CreateControl();
+
+        PInvokeCore.GetClientRect(control, out RECT clientRect);
+        int minimumSingleLineClientHeight = control.Font.Height + ScaleHelper.ScaleToDpi(3, control.DeviceDpi);
+
+        PInvokeCore.GetWindowRect(control, out RECT windowRect);
+        Point clientTopLeft = default;
+        PInvoke.ClientToScreen(control, ref clientTopLeft);
+        int topInset = clientTopLeft.Y - windowRect.top;
+        int bottomInset = windowRect.bottom - (clientTopLeft.Y + clientRect.Height);
+
+        Assert.True(clientRect.Height >= minimumSingleLineClientHeight);
+        Assert.True(topInset >= ScaleHelper.ScaleToDpi(1, control.DeviceDpi));
+        Assert.True(bottomInset >= ScaleHelper.ScaleToDpi(1, control.DeviceDpi));
+    }
+
+    [WinFormsFact]
     public void MaskedTextBox_ModernFixed3D_NaturalHeight_UsesClassicPreferredHeightFormula()
     {
         using MaskedTextBox control = new()

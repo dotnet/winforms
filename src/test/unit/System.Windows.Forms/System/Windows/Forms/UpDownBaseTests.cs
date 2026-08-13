@@ -3132,9 +3132,9 @@ public class UpDownBaseTests
         Rectangle editBounds = upDownBase._upDownEdit.Bounds;
         Rectangle buttonsBounds = upDownBase._upDownButtons.Bounds;
 
-        // The modern button band contains two buttons and only the shared inter-button gap.
+        // The modern button band contains two modern-width buttons and only the shared inter-button gap.
         buttonsBounds.Width.Should().Be(
-            (upDownBase._defaultButtonsWidth * 2) + upDownBase.ModernButtonGroupSpacing);
+            (upDownBase.ModernButtonWidth * 2) + upDownBase.ModernButtonGroupSpacing);
 
         // Edit and buttons are laid out horizontally (side by side), not stacked, and do not overlap.
         buttonsBounds.Left.Should().BeGreaterThanOrEqualTo(editBounds.Right);
@@ -3308,8 +3308,42 @@ public class UpDownBaseTests
             + ScaleHelper.ScaleToDpi(2, deviceDpi);
         upDownBase.PreferredHeight.Should().BeGreaterThanOrEqualTo(minimumHeight);
         upDownBase.GetModernButtonGroupWidth().Should().Be(
-            (upDownBase._defaultButtonsWidth * 2) + ScaleHelper.ScaleToDpi(2, deviceDpi));
+            (upDownBase.ModernButtonWidth * 2) + ScaleHelper.ScaleToDpi(2, deviceDpi));
+        upDownBase.ModernButtonWidth.Should().Be(ScaleHelper.ScaleToDpi(14, deviceDpi));
         upDownBase.LogicalToDeviceUnits(4).Should().Be(inset);
+    }
+
+    [WinFormsFact]
+    public void UpDownBase_ModernVisualStylesMode_HighDpiEditHeight_PreservesSingleLineTextMetrics()
+    {
+        using IDisposable dpiScope = ScaleHelper.EnterDpiAwarenessScope(DPI_AWARENESS_CONTEXT.DPI_AWARENESS_CONTEXT_PER_MONITOR_AWARE_V2);
+        if (!ScaleHelper.IsThreadPerMonitorV2Aware)
+        {
+            return;
+        }
+
+        using SubUpDownBase upDownBase = new()
+        {
+            AutoSize = true
+        };
+
+        upDownBase.DeviceDpiInternal = 216;
+        upDownBase.RescaleConstantsForDpi(96, 216);
+        upDownBase.VisualStylesMode = VisualStylesMode.Net11;
+
+        if (!upDownBase.UseSideBySideButtons)
+        {
+            return;
+        }
+
+        upDownBase.CreateControl();
+
+        int minimumSingleLineEditHeight = upDownBase.Font.Height + upDownBase.LogicalToDeviceUnits(3);
+        int minimumVisibleInset = upDownBase.LogicalToDeviceUnits(1);
+
+        upDownBase._upDownEdit.Height.Should().BeGreaterThanOrEqualTo(minimumSingleLineEditHeight);
+        upDownBase._upDownEdit.Top.Should().BeGreaterThanOrEqualTo(minimumVisibleInset);
+        upDownBase._upDownEdit.Bottom.Should().BeLessThanOrEqualTo(upDownBase.ClientSize.Height - minimumVisibleInset);
     }
 
     [WinFormsTheory]
