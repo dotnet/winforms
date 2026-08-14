@@ -3,6 +3,7 @@
 
 using System.Drawing;
 using System.Windows.Forms.ButtonInternal;
+using System.Windows.Forms.Layout;
 using static System.Windows.Forms.ButtonInternal.ButtonBaseAdapter;
 
 namespace System.Windows.Forms.Tests;
@@ -33,6 +34,8 @@ public class ButtonPopupAdapterTests : IDisposable
         public Rectangle ClientRectangleValue { get; set; } = new(0, 0, 100, 30);
 
         internal override Rectangle OverChangeRectangle => ClientRectangleValue;
+
+        public void SetDefault(bool value) => IsDefault = value;
 
         internal override ButtonBaseAdapter CreateStandardAdapter() => new ButtonPopupAdapter(this);
 
@@ -140,5 +143,17 @@ public class ButtonPopupAdapterTests : IDisposable
         int sum = layoutOptions.BorderSize + layoutOptions.PaddingSize;
 
         sum.Should().Be(2);
+    }
+
+    [Fact]
+    public void GetPreferredSizeCore_DefaultState_DoesNotReserveOuterBand()
+    {
+        button.Text = "Popup";
+        Size normalSize = adapter.GetPreferredSizeCore(LayoutUtils.s_maxSize);
+
+        ((TestButtonBase)button).SetDefault(true);
+        Size defaultSize = adapter.GetPreferredSizeCore(LayoutUtils.s_maxSize);
+
+        defaultSize.Should().Be(normalSize);
     }
 }
