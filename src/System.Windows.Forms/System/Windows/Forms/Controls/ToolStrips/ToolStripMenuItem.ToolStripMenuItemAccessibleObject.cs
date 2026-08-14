@@ -123,11 +123,11 @@ public partial class ToolStripMenuItem
 
         internal override void Invoke()
         {
-            ToolStrip? owner = _owningToolStripMenuItem.Owner;
+            ToolStrip? owningToolStrip = _owningToolStripMenuItem.Owner;
 
-            if (owner is not null && owner.IsHandleCreated)
+            if (owningToolStrip is { IsHandleCreated: true })
             {
-                owner.BeginInvoke(new MethodInvoker(DoDefaultAction));
+                owningToolStrip.BeginInvoke(new MethodInvoker(DoDefaultAction));
 
                 return;
             }
