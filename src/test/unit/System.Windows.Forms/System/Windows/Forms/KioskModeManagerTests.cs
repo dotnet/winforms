@@ -117,6 +117,78 @@ public class KioskModeManagerTests
         Assert.Throws<ArgumentOutOfRangeException>("value", () => manager.MousePointerAutoHideDelay = -1);
     }
 
+    [WinFormsFact]
+    public void KioskModeManager_FullScreen_WithMousePointerAutoHideDelay_StartsTimer()
+    {
+        using Form form = new();
+        using KioskModeManager manager = new()
+        {
+            ContainerControl = form,
+            MousePointerAutoHideDelay = 3000,
+            FullScreen = true
+        };
+
+        Timer timer = manager.TestAccessor.Dynamic._mousePointerAutoHideTimer;
+
+        Assert.True(timer.Enabled);
+        Assert.Equal(3000, timer.Interval);
+    }
+
+    [WinFormsFact]
+    public void KioskModeManager_MousePointerAutoHideDelay_SetWhileFullScreen_UpdatesTimer()
+    {
+        using Form form = new();
+        using KioskModeManager manager = new()
+        {
+            ContainerControl = form,
+            MousePointerAutoHideDelay = 1000,
+            FullScreen = true
+        };
+
+        manager.MousePointerAutoHideDelay = 2500;
+        Timer timer = manager.TestAccessor.Dynamic._mousePointerAutoHideTimer;
+
+        Assert.True(timer.Enabled);
+        Assert.Equal(2500, timer.Interval);
+    }
+
+    [WinFormsFact]
+    public void KioskModeManager_MousePointerAutoHideDelay_SetZero_ShowsPointerAndStopsTimer()
+    {
+        using Form form = new();
+        using KioskModeManager manager = new()
+        {
+            ContainerControl = form,
+            MousePointerAutoHideDelay = 1000,
+            FullScreen = true
+        };
+        manager.TestAccessor.Dynamic.OnMousePointerAutoHideTimerTick(null, EventArgs.Empty);
+
+        manager.MousePointerAutoHideDelay = 0;
+        Timer timer = manager.TestAccessor.Dynamic._mousePointerAutoHideTimer;
+
+        Assert.False(manager.TestAccessor.Dynamic._isCursorHidden);
+        Assert.False(timer.Enabled);
+    }
+
+    [WinFormsTheory]
+    [BoolData]
+    public void KioskModeManager_MousePointerAutoHideTimerTick_WhenInactive_DoesNotHidePointer(
+        bool fullScreen)
+    {
+        using Form form = new();
+        using KioskModeManager manager = new()
+        {
+            ContainerControl = form,
+            MousePointerAutoHideDelay = fullScreen ? 0 : 1000,
+            FullScreen = fullScreen
+        };
+
+        manager.TestAccessor.Dynamic.OnMousePointerAutoHideTimerTick(null, EventArgs.Empty);
+
+        Assert.False(manager.TestAccessor.Dynamic._isCursorHidden);
+    }
+
     [WinFormsTheory]
     [InlineData(Keys.F11)]
     [InlineData(Keys.None)]
@@ -799,8 +871,11 @@ public class KioskModeManagerTests
 
         Message message = Message.Create(form.Handle, (int)PInvokeCore.WM_MOUSEMOVE, 0, 0);
         manager.TestAccessor.Dynamic.ProcessMessage(message);
+        Timer timer = manager.TestAccessor.Dynamic._mousePointerAutoHideTimer;
 
         Assert.False(manager.TestAccessor.Dynamic._isCursorHidden);
+        Assert.True(timer.Enabled);
+        Assert.Equal(1, timer.Interval);
     }
 
     private class SubKioskModeManager : KioskModeManager

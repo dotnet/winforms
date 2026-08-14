@@ -347,7 +347,9 @@ public class KioskModeManager : Component, ISupportInitialize
     ///  <para>
     ///   The timer is active only while the component is in fullscreen mode.
     ///   When the user moves the mouse after the component hid the pointer, the
-    ///   pointer is shown immediately and the timer starts again.
+    ///   pointer is shown immediately and the timer starts again. Mouse activity
+    ///   is observed from the application's message queue; the component does not
+    ///   install a mouse or keyboard hook to restore the pointer.
     ///  </para>
     /// </remarks>
     /// <exception cref="ArgumentOutOfRangeException">
@@ -797,7 +799,8 @@ public class KioskModeManager : Component, ISupportInitialize
     {
         StopMousePointerAutoHideTimer();
 
-        if (!_isCursorHidden)
+        // A timer message can already be queued when the timer is stopped.
+        if (_isFullScreen && _mousePointerAutoHideDelay > 0 && !_isCursorHidden)
         {
             Cursor.Hide();
             _isCursorHidden = true;
