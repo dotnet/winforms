@@ -33,10 +33,7 @@ public partial class ComboBox
                     + (2 * SystemInformation.FixedFrameBorderSize.Height);
             }
 
-            return ModernControlVisualStyles.GetPreferredFieldHeight(
-                fontHeight: FontHeight,
-                fieldPadding: GetModernFieldPadding(),
-                deviceDpi: DeviceDpiInternal);
+            return GetClassicPreferredHeight();
         }
     }
 
@@ -498,20 +495,19 @@ public partial class ComboBox
 
     private Padding GetModernChromeInsets()
     {
-        // Minimal modern field inset plus a small arc-clearance so the flat native edit child's
-        // rectangular corners are not painted into the rounded-corner arcs. This is chrome padding
-        // only; the caller still adds the user's Padding on top (see ComputeModernComboTargetState
-        // and GetModernFieldPadding). It deliberately excludes the classic 3D-border metrics
-        // (Fixed3DBorderPadding / InternalChromeInset) that the previous implementation inherited
-        // from the classic field model; the modern field owns a single rounded border across the
-        // full control, so those insets only produced a spurious inner margin.
-        int inset = ScaleHelper.ScaleToDpi(
+        // Keep only horizontal insets for rounded-corner arc clearance. Vertical insets are zero
+        // so classic-height combos in modern mode retain full native text legibility.
+        int horizontalInset = ScaleHelper.ScaleToDpi(
             ModernControlVisualStyles.BorderThickness
                 + ModernControlVisualStyles.ComboBoxStyleInset
                 + ModernControlVisualStyles.ComboBoxFieldArcClearance,
             DeviceDpiInternal);
 
-        return new Padding(inset);
+        return new Padding(
+            left: horizontalInset,
+            top: 0,
+            right: horizontalInset,
+            bottom: 0);
     }
 
     private Rectangle GetNativeComboBaselineEditBounds()
@@ -534,10 +530,9 @@ public partial class ComboBox
             ModernControlVisualStyles.ComboBoxStyleInset,
             DeviceDpiInternal);
 
-        // Vertical clearance is kept on the classic-derived field model so the modern preferred
-        // height stays aligned with TextBox (GetPreferredFieldHeight only consumes the vertical
-        // component). Horizontal clearance uses the minimal modern field inset so the field text
-        // and drop-down-list caption are not over-inset by classic 3D metrics.
+        // Vertical clearance keeps text and focus geometry stable in the hosted field, while
+        // horizontal clearance uses minimal modern insets so text and drop-down-list captions
+        // are not over-inset by classic 3D metrics.
         Padding verticalSource = ModernControlVisualStyles.GetFieldPadding(
             BorderStyle.Fixed3D,
             Padding + new Padding(styleInset),

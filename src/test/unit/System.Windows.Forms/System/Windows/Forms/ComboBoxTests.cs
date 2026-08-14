@@ -186,7 +186,7 @@ public class ComboBoxTests
     [InlineData(FlatStyle.Standard)]
     [InlineData(FlatStyle.Flat)]
     [InlineData(FlatStyle.Popup)]
-    public void ComboBox_ModernVisualStyles_PreferredHeightMatchesTextBox(
+    public void ComboBox_ModernVisualStyles_PreferredHeightMatchesClassic(
         FlatStyle flatStyle)
     {
         using SystemVisualSettingsTestScope settingsScope = new(
@@ -195,30 +195,27 @@ public class ComboBoxTests
         using Font font = new(
             Control.DefaultFont.FontFamily,
             11f);
-        using TextBox textBox = new()
+        using ComboBox classicComboBox = new()
         {
+            FlatStyle = flatStyle,
             Font = font,
-            Padding = new Padding(
-                ScaleHelper.ScaleToDpi(
-                    ModernControlVisualStyles.ComboBoxStyleInset,
-                    ScaleHelper.InitialSystemDpi)),
-            VisualStylesMode = VisualStylesMode.Net11
+            VisualStylesMode = VisualStylesMode.Classic
         };
-        using ComboBox comboBox = new()
+        using ComboBox modernComboBox = new()
         {
             FlatStyle = flatStyle,
             Font = font,
             VisualStylesMode = VisualStylesMode.Net11
         };
 
-        Assert.Equal(textBox.PreferredHeight, comboBox.PreferredHeight);
-        Assert.Equal(textBox.Height, comboBox.Height);
+        Assert.Equal(classicComboBox.PreferredHeight, modernComboBox.PreferredHeight);
+        Assert.Equal(classicComboBox.Height, modernComboBox.Height);
 
-        textBox.CreateControl();
-        comboBox.CreateControl();
+        classicComboBox.CreateControl();
+        modernComboBox.CreateControl();
 
-        Assert.Equal(textBox.PreferredHeight, comboBox.PreferredHeight);
-        Assert.Equal(textBox.Height, comboBox.Height);
+        Assert.Equal(classicComboBox.PreferredHeight, modernComboBox.PreferredHeight);
+        Assert.Equal(classicComboBox.Height, modernComboBox.Height);
     }
 
     [WinFormsTheory]
@@ -403,11 +400,11 @@ public class ComboBoxTests
             form.VisualStylesMode = VisualStylesMode.Net11;
 
             Assert.Equal(control.PreferredHeight, control.Height);
-            Assert.NotEqual(classicControlHeight, control.Height);
-            Assert.NotEqual(
+            Assert.Equal(classicControlHeight, control.Height);
+            Assert.Equal(
                 classicHeight,
                 tableLayoutPanel.GetRowHeights()[0]);
-            Assert.NotEqual(classicTableSize, tableLayoutPanel.Size);
+            Assert.Equal(classicTableSize, tableLayoutPanel.Size);
             Assert.Equal(1, handleCreatedCallCount);
 
             form.VisualStylesMode = VisualStylesMode.Classic;
@@ -1404,13 +1401,7 @@ public class ComboBoxTests
                     + ModernControlVisualStyles.ComboBoxFieldArcClearance,
                 deviceDpi),
             chromeInsets.Left);
-        Assert.Equal(
-            ScaleHelper.ScaleToDpi(
-                ModernControlVisualStyles.BorderThickness
-                    + ModernControlVisualStyles.ComboBoxStyleInset
-                    + ModernControlVisualStyles.ComboBoxFieldArcClearance,
-                deviceDpi),
-            chromeInsets.Top);
+        Assert.Equal(0, chromeInsets.Top);
     }
 
     [WinFormsFact]
