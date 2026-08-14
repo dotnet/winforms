@@ -798,6 +798,35 @@ public class ComboBoxTests
     [WinFormsTheory]
     [InlineData(ComboBoxStyle.DropDown)]
     [InlineData(ComboBoxStyle.Simple)]
+    public void ComboBox_ModernVisualStyles_EditHeightDoesNotClipText(
+        ComboBoxStyle dropDownStyle)
+    {
+        using SystemVisualSettingsTestScope settingsScope = new(
+            clientAreaAnimationEnabled: false,
+            highContrastEnabled: false);
+        using VisualStylesComboBox control = new()
+        {
+            DropDownStyle = dropDownStyle,
+            FlatStyle = FlatStyle.Standard,
+            Size = dropDownStyle == ComboBoxStyle.Simple
+                ? new Size(140, 100)
+                : new Size(140, 40),
+            Text = "Text with descenders: gjpqy",
+            VisualStylesMode = VisualStylesMode.Net11
+        };
+
+        control.CreateControl();
+        _ = control.Handle;
+        Rectangle nativeEditBounds = control.ModernEditBaseBounds;
+        Assert.False(nativeEditBounds.IsEmpty);
+
+        Assert.True(
+            control.GetEditBounds().Height >= nativeEditBounds.Height);
+    }
+
+    [WinFormsTheory]
+    [InlineData(ComboBoxStyle.DropDown)]
+    [InlineData(ComboBoxStyle.Simple)]
     public void ComboBox_ModernPadding_PositionsEditUsingTopAndBottom(
         ComboBoxStyle dropDownStyle)
     {
