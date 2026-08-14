@@ -2069,11 +2069,14 @@ public partial class TabControl : Control
                 // We use TCM_SETITEMSIZE instead
                 break;
             case PInvokeCore.WM_PARENTNOTIFY:
-                // Apply dark mode to spinner (updown) button when it's created
-                if (m.WParamInternal.LOWORD == PInvokeCore.WM_CREATE && Application.IsDarkModeEnabled)
+                // Apply dark mode theme to dynamically created child windows (e.g. spinner button)
+                if (Application.IsDarkModeEnabled && m.WParamInternal.LOWORD == PInvokeCore.WM_CREATE)
                 {
                     HWND childHandle = (HWND)m.LParamInternal;
-                    PInvoke.SetWindowTheme(childHandle, $"{DarkModeIdentifier}_{ExplorerThemeIdentifier}", null);
+                    if (!childHandle.IsNull)
+                    {
+                        StyleChildren(childHandle);
+                    }
                 }
 
                 base.WndProc(ref m);
