@@ -73,7 +73,7 @@ public partial class RadioButton : ButtonBase
     }
 
     /// <summary>
-    ///  Gets or sets the appearance of the radio button control is drawn.
+    ///  Gets or sets the value that determines the appearance of the radio button.
     /// </summary>
     /// <remarks>
     ///  <para>
