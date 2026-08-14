@@ -814,11 +814,14 @@ public class ComboBoxTests
             Text = "Text with descenders: gjpqy",
             VisualStylesMode = VisualStylesMode.Net11
         };
+
         control.CreateControl();
+        _ = control.Handle;
+        Rectangle nativeEditBounds = control.ModernEditBaseBounds;
+        Assert.False(nativeEditBounds.IsEmpty);
 
         Assert.True(
-            control.GetEditBounds().Height
-                >= control.ModernEditBaseBounds.Height);
+            control.GetEditBounds().Height >= nativeEditBounds.Height);
     }
 
     [WinFormsTheory]
