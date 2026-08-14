@@ -13,15 +13,14 @@ public partial class GroupBox
     /// <remarks>
     ///  <para>
     ///   In an effective .NET 11-or-later mode, <see cref="FlatStyle.Standard"/> renders a borderless rectangular
-    ///   surface with an enlarged caption, <see cref="FlatStyle.Flat"/> renders a rounded accent outline with an
-    ///   ambient-size inline caption, and <see cref="FlatStyle.Popup"/> renders a Windows-accent header band.
+    ///   surface, <see cref="FlatStyle.Flat"/> renders a rounded accent outline, and <see cref="FlatStyle.Popup"/>
+    ///   renders a rounded accent outline with a subtle accent-tinted header band.
     ///   <see cref="FlatStyle.System"/> remains a native <c>BS_GROUPBOX</c> in every mode.
     ///  </para>
     ///  <para>
-    ///   The modern Standard surface intentionally moves <see cref="Control.DisplayRectangle"/> down and reserves
-    ///   more space above its content than below. Its caption aligns with <see cref="Control.Padding"/>. When the
-    ///   ambient font is regular and a matching installed Semibold family exists, modern captions use that real
-    ///   face; otherwise they preserve the ambient weight. AutoSize layouts remeasure automatically. See the
+    ///   The modern Standard and Popup surfaces preserve the classic <see cref="Control.DisplayRectangle"/> so
+    ///   existing child layouts remain stable when switching visual styles. Modern captions preserve the ambient
+    ///   font family, size, and style while still following system text scale. See the
     ///   <see href="https://github.com/dotnet/winforms/blob/main/docs/net11-visualstyles-layout-guidance.md">
     ///   .NET 11 VisualStyles layout guidance</see>.
     ///  </para>
