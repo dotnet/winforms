@@ -73,8 +73,17 @@ public partial class RadioButton : ButtonBase
     }
 
     /// <summary>
-    ///  Gets or sets the appearance of the radio button control is drawn.
+    ///  Gets or sets the value that determines the appearance of the radio button.
     /// </summary>
+    /// <remarks>
+    ///  <para>
+    ///   <see cref="Appearance.ToggleSwitch"/> selects the framework's owner-drawn toggle renderer in an
+    ///   effective .NET 11-or-later mode. High Contrast resolves to classic rendering. Modern toggle metrics can
+    ///   increase preferred size; see the
+    ///   <see href="https://github.com/dotnet/winforms/blob/main/docs/net11-visualstyles-layout-guidance.md">
+    ///   .NET 11 VisualStyles layout guidance</see>.
+    ///  </para>
+    /// </remarks>
     [DefaultValue(Appearance.Normal)]
     [SRCategory(nameof(SR.CatAppearance))]
     [Localizable(true)]
@@ -124,6 +133,18 @@ public partial class RadioButton : ButtonBase
     /// <summary>
     ///  Gets or sets the location of the check box portion of the radio button control.
     /// </summary>
+    /// <remarks>
+    ///  <para>
+    ///   When <see cref="Appearance"/> is <see cref="Appearance.ToggleSwitch"/> and the control renders as a toggle
+    ///   switch in an effective .NET 11-or-later mode,
+    ///   <see cref="ContentAlignment.TopLeft"/>, <see cref="ContentAlignment.MiddleLeft"/>,
+    ///   <see cref="ContentAlignment.BottomLeft"/>, <see cref="ContentAlignment.TopCenter"/>,
+    ///   <see cref="ContentAlignment.MiddleCenter"/>, and <see cref="ContentAlignment.BottomCenter"/> are treated
+    ///   like left-aligned values, and
+    ///   <see cref="ContentAlignment.TopRight"/>, <see cref="ContentAlignment.MiddleRight"/>, and
+    ///   <see cref="ContentAlignment.BottomRight"/> are treated like right-aligned values.
+    ///  </para>
+    /// </remarks>
     [Localizable(true)]
     [SRCategory(nameof(SR.CatAppearance))]
     [DefaultValue(ContentAlignment.MiddleLeft)]
