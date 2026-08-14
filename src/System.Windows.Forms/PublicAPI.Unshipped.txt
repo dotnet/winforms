@@ -109,3 +109,5 @@ virtual System.Windows.Forms.Control.OnParentVisualStylesModeChanged(System.Even
 virtual System.Windows.Forms.Control.OnVisualStylesModeChanged(System.EventArgs! e) -> void
 virtual System.Windows.Forms.Control.VisualStylesMode.get -> System.Windows.Forms.VisualStylesMode
 virtual System.Windows.Forms.Control.VisualStylesMode.set -> void
+override System.Windows.Forms.PrintPreviewControl.ForeColor.get -> System.Drawing.Color
+override System.Windows.Forms.PrintPreviewControl.ForeColor.set -> void
