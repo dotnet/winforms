@@ -25,10 +25,6 @@ System.Windows.Forms.SystemVisualSettingsChangedEventArgs.OldSettings.get -> Sys
 System.Windows.Forms.SystemVisualSettingsChangedEventArgs
 System.Windows.Forms.SystemVisualSettingsChangedEventHandler
 virtual System.Windows.Forms.SystemVisualSettingsChangedEventHandler.Invoke(object? sender, System.Windows.Forms.SystemVisualSettingsChangedEventArgs! e) -> void
-System.Windows.Forms.TreeView.NodeLeading.get -> float
-System.Windows.Forms.TreeView.NodeLeading.set -> void
-System.Windows.Forms.TreeView.NodeLeadingChanged -> System.EventHandler?
-virtual System.Windows.Forms.TreeView.OnNodeLeadingChanged(System.EventArgs! e) -> void
 System.Windows.Forms.ControlMutationExtensions
 static System.Windows.Forms.ControlMutationExtensions.SuspendPainting(this System.Windows.Forms.ISupportSuspendPainting! target) -> System.IDisposable!
 static System.Windows.Forms.ControlMutationExtensions.SuspendPainting(this System.Windows.Forms.ISupportSuspendPainting! target, System.Func<System.Windows.Forms.Control!, bool>! suspendLayoutContainerFilter) -> System.IDisposable!
