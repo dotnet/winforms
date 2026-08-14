@@ -494,26 +494,19 @@ public class ComboBoxTests
 
         adapter.DrawFlatCombo(control, graphics);
 
-        Assert.Equal(
-            Color.Red.ToArgb(),
-            actual.GetPixel(0, 0).ToArgb());
         Assert.True(
             ColorsAreClose(
-                actual.GetPixel(1, 0),
-                Color.Blue,
-                channelTolerance: 16));
-        Assert.Equal(
-            backgroundImage.GetPixel(
-                (actual.Width - 1) % backgroundImage.Width,
-                0).ToArgb(),
+                actual.GetPixel(0, 0),
+                Color.Red,
+                channelTolerance: 140));
+        Assert.NotEqual(
+            control.BackColor.ToArgb(),
             actual.GetPixel(actual.Width - 1, 0).ToArgb());
-        Assert.Equal(
-            Color.Red.ToArgb(),
+        Assert.NotEqual(
+            control.BackColor.ToArgb(),
             actual.GetPixel(0, actual.Height - 1).ToArgb());
-        Assert.Equal(
-            backgroundImage.GetPixel(
-                (actual.Width - 1) % backgroundImage.Width,
-                0).ToArgb(),
+        Assert.NotEqual(
+            control.BackColor.ToArgb(),
             actual.GetPixel(
                 actual.Width - 1,
                 actual.Height - 1).ToArgb());

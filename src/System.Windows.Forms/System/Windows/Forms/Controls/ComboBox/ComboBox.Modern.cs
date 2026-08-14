@@ -524,29 +524,22 @@ public partial class ComboBox
 
     private Padding GetModernFieldPadding()
     {
-        SystemVisualSettings settings = Application.SystemVisualSettings;
-
         int styleInset = ScaleHelper.ScaleToDpi(
             ModernControlVisualStyles.ComboBoxStyleInset,
             DeviceDpiInternal);
 
-        // Vertical clearance keeps text and focus geometry stable in the hosted field, while
-        // horizontal clearance uses minimal modern insets so text and drop-down-list captions
-        // are not over-inset by classic 3D metrics.
-        Padding verticalSource = ModernControlVisualStyles.GetFieldPadding(
-            BorderStyle.Fixed3D,
-            Padding + new Padding(styleInset),
-            settings.FocusBorderMetrics,
-            settings.TextScaleFactor,
+        Padding horizontalSource = GetModernChromeInsets();
+        int verticalInset = ScaleHelper.ScaleToDpi(
+            ModernControlVisualStyles.BorderThickness,
             DeviceDpiInternal);
 
-        Padding horizontalSource = GetModernChromeInsets();
-
+        // Keep vertical reservation minimal when modern mode uses classic-height metrics so
+        // drop-down-list captions and native edit text are not clipped.
         return new Padding(
             left: horizontalSource.Left + Padding.Left,
-            top: verticalSource.Top,
+            top: verticalInset + Padding.Top,
             right: horizontalSource.Right + Padding.Right,
-            bottom: verticalSource.Bottom);
+            bottom: verticalInset + Padding.Bottom + styleInset);
     }
 
     /// <summary>
