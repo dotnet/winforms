@@ -68,8 +68,8 @@ public class ClipboardTests
     [InlineData(TextDataFormat.Text, TextDataFormat.UnicodeText)]
     [InlineData(TextDataFormat.UnicodeText, TextDataFormat.Text)]
     public void GetText_AutoConvertibleFormat_DoesNotAutoConvert(
-    TextDataFormat sourceFormat,
-    TextDataFormat requestedFormat)
+        TextDataFormat sourceFormat,
+        TextDataFormat requestedFormat)
     {
         const string text = "Hello, World!";
         string sourceDataFormat = ClipboardUtilities.ConvertToDataFormats(sourceFormat);
