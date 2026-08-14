@@ -2031,10 +2031,13 @@ public partial class TreeView : Control
                 (WPARAM)0,
                 (LPARAM)0);
 
-            PInvoke.SetWindowTheme(
-                toolTipHandle,
-                $"{DarkModeIdentifier}_{ExplorerThemeIdentifier}",
-                null);
+            if (!toolTipHandle.IsNull)
+            {
+                _ = PInvoke.SetWindowTheme(
+                    toolTipHandle,
+                    $"{DarkModeIdentifier}_{ExplorerThemeIdentifier}",
+                    null);
+            }
         }
 
         Color c = BackColor;
