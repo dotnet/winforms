@@ -27,6 +27,7 @@ public abstract partial class UpDownBase : ContainerControl
 
     // Modern (Net11+) chrome geometry. The edit and button group share the border thickness and
     // internal chrome inset used by TextBoxBase; only the gap between the two buttons is additional.
+    private const int ModernBorderHorizontalExtensionLogical = 2;
     private const int ModernButtonGroupSpacingLogical = 2;
     private const int ModernButtonWidthLogical = 14;
     private const int ModernFocusBandHeight = 4;
@@ -1157,6 +1158,11 @@ public abstract partial class UpDownBase : ContainerControl
                     bodyPath.AddRoundedRectangle(deflatedBounds, new Size(cornerRadius, cornerRadius));
                     graphics.FillPath(clientBackgroundBrush, bodyPath);
                     graphics.DrawPath(adornerPen, bodyPath);
+                    DrawExtendedHorizontalBorderSegments(
+                        graphics,
+                        adornerPen,
+                        deflatedBounds,
+                        cornerRadius);
 
                     // The rounded chrome is clipped with a non-antialiased region; blend the resulting
                     // corner artifacts into the parent by tracing the parent color just outside the border.
@@ -1205,6 +1211,39 @@ public abstract partial class UpDownBase : ContainerControl
                 deflatedBounds.Right,
                 deflatedBounds.Bottom - 1);
         }
+    }
+
+    private void DrawExtendedHorizontalBorderSegments(
+        Graphics graphics,
+        Pen borderPen,
+        Rectangle bounds,
+        int cornerRadius)
+    {
+        int extension = LogicalToDeviceUnits(ModernBorderHorizontalExtensionLogical);
+        int left = Math.Max(
+            bounds.Left,
+            bounds.Left + cornerRadius - extension);
+        int right = Math.Min(
+            bounds.Right,
+            bounds.Right - cornerRadius + extension);
+
+        if (left >= right)
+        {
+            return;
+        }
+
+        graphics.DrawLine(
+            borderPen,
+            left,
+            bounds.Top,
+            right,
+            bounds.Top);
+        graphics.DrawLine(
+            borderPen,
+            left,
+            bounds.Bottom,
+            right,
+            bounds.Bottom);
     }
 
     private AnimatedFocusIndicatorRenderer FocusIndicatorRenderer

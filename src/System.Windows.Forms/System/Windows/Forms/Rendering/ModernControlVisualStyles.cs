@@ -75,7 +75,7 @@ internal static class ModernControlVisualStyles
     internal const int NoBorderPadding = 1;
 
     /// <summary>Corner radius of the up-down control's rounded frame.</summary>
-    internal const int UpDownCornerRadius = 14;
+    internal const int UpDownCornerRadius = 10;
 
     internal static Padding GetFieldPadding(
         BorderStyle borderStyle,
