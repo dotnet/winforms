@@ -2691,6 +2691,36 @@ To replace this default dialog please handle the DataError event.</value>
   <data name="DescriptionImageList" xml:space="preserve">
     <value>Manages a collection of images that are typically used by other controls such as ListView, TreeView, or ToolStrip.</value>
   </data>
+  <data name="DescriptionKioskModeManager" xml:space="preserve">
+    <value>Manages common fullscreen, input, cursor, and power behavior for kiosk-style WinForms applications.</value>
+  </data>
+  <data name="KioskModeManagerAlwaysOnDescr" xml:space="preserve">
+    <value>Indicates whether Windows should keep the display and system awake while this component is active.</value>
+  </data>
+  <data name="KioskModeManagerContainerControlDescr" xml:space="preserve">
+    <value>The container whose containing form is controlled by the kiosk mode manager.</value>
+  </data>
+  <data name="KioskModeManagerContainerControlChangedDescr" xml:space="preserve">
+    <value>Occurs when the ContainerControl property value changes.</value>
+  </data>
+  <data name="KioskModeManagerEscapeExitsFullScreenDescr" xml:space="preserve">
+    <value>Indicates whether pressing Escape exits fullscreen mode.</value>
+  </data>
+  <data name="KioskModeManagerFullScreenDescr" xml:space="preserve">
+    <value>Gets or sets a value indicating whether the resolved form is currently fullscreen.</value>
+  </data>
+  <data name="KioskModeManagerFullScreenChangedDescr" xml:space="preserve">
+    <value>Occurs when the fullscreen state changes.</value>
+  </data>
+  <data name="KioskModeManagerMousePointerAutoHideDelayDescr" xml:space="preserve">
+    <value>The delay, in milliseconds, before the mouse pointer is hidden while fullscreen. A value of 0 disables automatic pointer hiding.</value>
+  </data>
+  <data name="KioskModeManagerToggleFullScreenKeysDescr" xml:space="preserve">
+    <value>The key combination that toggles between fullscreen and restored mode.</value>
+  </data>
+  <data name="KioskModeManagerTopMostInFullScreenDescr" xml:space="preserve">
+    <value>Indicates whether the form is topmost while fullscreen.</value>
+  </data>
   <data name="DescriptionLabel" xml:space="preserve">
     <value>Provides run-time information or descriptive text for a control.</value>
   </data>
@@ -6337,9 +6367,6 @@ Stack trace where the illegal operation occurred was:
   <data name="TreeViewLineColorDescr" xml:space="preserve">
     <value>The color of the lines that connect the nodes of the TreeView.</value>
   </data>
-  <data name="TreeViewNodeLeadingDescr" xml:space="preserve">
-    <value>The uniform row-height leading factor applied to all nodes.</value>
-  </data>
   <data name="TreeViewNodeMouseClickDescr" xml:space="preserve">
     <value>Occurs when a node is clicked with the mouse.</value>
   </data>
@@ -6354,9 +6381,6 @@ Stack trace where the illegal operation occurred was:
   </data>
   <data name="TreeViewNodeSorterDescr" xml:space="preserve">
     <value>The sorting comparer for the TreeView.</value>
-  </data>
-  <data name="TreeViewOnNodeLeadingChangedDescr" xml:space="preserve">
-    <value>Occurs when the value of the NodeLeading property changes.</value>
   </data>
   <data name="TreeViewPathSeparatorDescr" xml:space="preserve">
     <value>The string delimiter used for the path returned by a node's FullPath property.</value>
