@@ -265,7 +265,47 @@ public class RadioButtonTests : AbstractButtonBaseTests
     }
 
     [WinFormsFact]
-    public void RadioButton_ModernGlyph_BrightAccentUsesContrastingDotOutline()
+    public void RadioButton_ModernGlyph_TransparentBackColor_CheckedUsesWindowsAccent()
+    {
+        if (SystemInformation.HighContrast)
+        {
+            return;
+        }
+
+        using Panel parent = new() { BackColor = Color.White };
+        using RadioButton control = new()
+        {
+            BackColor = Color.Transparent,
+            Checked = true,
+            Size = new Size(40, 24),
+            VisualStylesMode = VisualStylesMode.Net11
+        };
+        parent.Controls.Add(control);
+
+        using Bitmap bitmap = new(control.Width, control.Height);
+        using Graphics graphics = Graphics.FromImage(bitmap);
+        PaintEventArgs e = new(graphics, control.ClientRectangle);
+
+        control.CreateStandardAdapter().PaintUp(e, CheckState.Checked);
+
+        Assert.True(
+            CountPixels(
+                bitmap,
+                Application.SystemVisualSettings.AccentColor,
+                channelTolerance: 24) > 0);
+    }
+
+    [WinFormsTheory]
+    [InlineData(0xFF, 0xB9, 0x00, 0, 0, 0)]
+    [InlineData(0x00, 0x66, 0xCC, 255, 255, 255)]
+    [InlineData(0x4D, 0x4D, 0x4D, 255, 255, 255)]
+    public void RadioButton_ModernGlyph_AccentUsesReadableDot(
+        int accentR,
+        int accentG,
+        int accentB,
+        int expectedR,
+        int expectedG,
+        int expectedB)
     {
         if (SystemInformation.HighContrast)
         {
@@ -277,7 +317,7 @@ public class RadioButtonTests : AbstractButtonBaseTests
         renderer.NotifyCheckedChanged(newChecked: true);
         using Bitmap bitmap = new(24, 24);
         using Graphics graphics = Graphics.FromImage(bitmap);
-        Color brightAccent = Color.FromArgb(0xFF, 0xB9, 0x00);
+        Color accent = Color.FromArgb(accentR, accentG, accentB);
 
         renderer.DrawGlyph(
             graphics,
@@ -286,10 +326,10 @@ public class RadioButtonTests : AbstractButtonBaseTests
             enabled: true,
             hovered: false,
             focused: false,
-            customOnColor: brightAccent,
+            customOnColor: accent,
             customBorderColor: null);
 
-        Assert.True(CountPixels(bitmap, Color.Black) > 0);
+        Assert.True(CountPixels(bitmap, Color.FromArgb(expectedR, expectedG, expectedB)) > 0);
     }
 
     [WinFormsFact]
@@ -331,15 +371,20 @@ public class RadioButtonTests : AbstractButtonBaseTests
     }
 
     private static int CountPixels(Bitmap bitmap, Color color)
+        => CountPixels(bitmap, color, channelTolerance: 0);
+
+    private static int CountPixels(Bitmap bitmap, Color color, int channelTolerance)
     {
-        int argb = color.ToArgb();
         int count = 0;
 
         for (int y = 0; y < bitmap.Height; y++)
         {
             for (int x = 0; x < bitmap.Width; x++)
             {
-                if (bitmap.GetPixel(x, y).ToArgb() == argb)
+                Color pixel = bitmap.GetPixel(x, y);
+                if (Math.Abs(pixel.R - color.R) <= channelTolerance
+                    && Math.Abs(pixel.G - color.G) <= channelTolerance
+                    && Math.Abs(pixel.B - color.B) <= channelTolerance)
                 {
                     count++;
                 }

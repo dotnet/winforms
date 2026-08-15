@@ -288,6 +288,64 @@ public class ComboBoxTests
     }
 
     [WinFormsFact]
+    public void ComboBox_ModernVisualStyles_FlatStyleTransitionToSystem_RecreatesHandle()
+    {
+        using SystemVisualSettingsTestScope settingsScope = new(
+            clientAreaAnimationEnabled: false,
+            highContrastEnabled: false);
+        using Panel parent = new();
+        using VisualStylesComboBox control = new()
+        {
+            FlatStyle = FlatStyle.Standard,
+            VisualStylesMode = VisualStylesMode.Net11
+        };
+        parent.Controls.Add(control);
+        parent.CreateControl();
+        control.CreateControl();
+
+        int handleCreatedCallCount = 0;
+        int handleDestroyedCallCount = 0;
+        control.HandleCreated += (sender, e) => handleCreatedCallCount++;
+        control.HandleDestroyed += (sender, e) => handleDestroyedCallCount++;
+
+        control.FlatStyle = FlatStyle.System;
+
+        Assert.True(control.IsHandleCreated);
+        Assert.Equal(1, handleDestroyedCallCount);
+        Assert.Equal(1, handleCreatedCallCount);
+        Assert.IsType<FlatComboAdapter>(control.CreateAdapter());
+    }
+
+    [WinFormsFact]
+    public void ComboBox_ModernVisualStyles_SystemModeBoundaryChangeWithHandle_RecreatesHandle()
+    {
+        using SystemVisualSettingsTestScope settingsScope = new(
+            clientAreaAnimationEnabled: false,
+            highContrastEnabled: false);
+        using Panel parent = new();
+        using VisualStylesComboBox control = new()
+        {
+            FlatStyle = FlatStyle.System,
+            VisualStylesMode = VisualStylesMode.Classic
+        };
+        parent.Controls.Add(control);
+        parent.CreateControl();
+        control.CreateControl();
+
+        int handleCreatedCallCount = 0;
+        int handleDestroyedCallCount = 0;
+        control.HandleCreated += (sender, e) => handleCreatedCallCount++;
+        control.HandleDestroyed += (sender, e) => handleDestroyedCallCount++;
+
+        control.VisualStylesMode = VisualStylesMode.Net11;
+
+        Assert.True(control.IsHandleCreated);
+        Assert.Equal(1, handleDestroyedCallCount);
+        Assert.Equal(1, handleCreatedCallCount);
+        Assert.IsType<FlatComboAdapter>(control.CreateAdapter());
+    }
+
+    [WinFormsFact]
     public void ComboBox_ModernVisualStyles_ModeChangeRemeasuresAutoSizeRow()
     {
         SystemVisualSettings previous =
@@ -497,7 +555,7 @@ public class ComboBoxTests
             control.ClientSize.Height);
         using Graphics graphics = Graphics.FromImage(actual);
         var adapter =
-            (ComboBox.ModernComboAdapter)control.CreateAdapter();
+            (ModernComboAdapter)control.CreateAdapter();
 
         adapter.DrawFlatCombo(control, graphics);
 
@@ -514,6 +572,148 @@ public class ComboBoxTests
                 ? expectedBorder.ToArgb()
                 : parent.BackColor.ToArgb(),
             actual.GetPixel(0, 0).ToArgb());
+    }
+
+    /// <summary>
+    ///  When Enabled is set to <see langword="false"/> in NET11 VisualStylesMode, the modern
+    ///  adapter must render the field with the shared disabled surface rather than the
+    ///  user-supplied <see cref="Control.BackColor"/>.
+    /// </summary>
+    [WinFormsTheory]
+    [InlineData(FlatStyle.Standard, ComboBoxStyle.DropDown)]
+    [InlineData(FlatStyle.Flat, ComboBoxStyle.DropDown)]
+    [InlineData(FlatStyle.Popup, ComboBoxStyle.DropDown)]
+    [InlineData(FlatStyle.Standard, ComboBoxStyle.DropDownList)]
+    [InlineData(FlatStyle.Flat, ComboBoxStyle.DropDownList)]
+    [InlineData(FlatStyle.Popup, ComboBoxStyle.DropDownList)]
+    public void ComboBox_ModernVisualStyles_Disabled_UsesDisabledSurfaceInsteadOfBackColor(
+        FlatStyle flatStyle,
+        ComboBoxStyle dropDownStyle)
+    {
+        using SystemVisualSettingsTestScope settingsScope = new(
+            clientAreaAnimationEnabled: false,
+            highContrastEnabled: false);
+        using Panel parent = new()
+        {
+            BackColor = Color.White,
+            Size = new Size(120, 60)
+        };
+
+        // Use a highly saturated color so it is clearly distinguishable from the disabled surface.
+        Color customBackColor = Color.Yellow;
+        using VisualStylesComboBox control = new()
+        {
+            BackColor = customBackColor,
+            DropDownStyle = dropDownStyle,
+            FlatStyle = flatStyle,
+            Size = new Size(100, 36),
+            VisualStylesMode = VisualStylesMode.Net11
+        };
+        parent.Controls.Add(control);
+        parent.CreateControl();
+        control.CreateControl();
+
+        // Verify the enabled render shows the custom BackColor in the field area.
+        var adapterEnabled = (ModernComboAdapter)control.CreateAdapter();
+        using Bitmap enabledBitmap = new(control.ClientSize.Width, control.ClientSize.Height);
+        using (Graphics g = Graphics.FromImage(enabledBitmap))
+        {
+            adapterEnabled.DrawFlatCombo(control, g);
+        }
+
+        // Verify the disabled render does NOT show the full custom BackColor.
+        control.Enabled = false;
+        var adapterDisabled = (ModernComboAdapter)control.CreateAdapter();
+        using Bitmap disabledBitmap = new(control.ClientSize.Width, control.ClientSize.Height);
+        using (Graphics g = Graphics.FromImage(disabledBitmap))
+        {
+            adapterDisabled.DrawFlatCombo(control, g);
+        }
+
+        // The enabled bitmap should contain pixels that are close to the original BackColor.
+        Assert.True(
+            CountPixels(enabledBitmap, customBackColor, channelTolerance: 20) > 0,
+            "Enabled ComboBox should render field with the BackColor.");
+
+        // The disabled bitmap must NOT contain the user BackColor, and must instead use the
+        // shared modern disabled surface (issue #14797).
+        Assert.True(
+            CountPixels(disabledBitmap, customBackColor, channelTolerance: 20) == 0,
+            "Disabled ComboBox must not render field with the BackColor.");
+        Assert.True(
+            CountPixels(
+                disabledBitmap,
+                ModernControlColorMath.GetDisabledSurfaceColor(),
+                channelTolerance: 4) > 0,
+            "Disabled ComboBox should render field with the disabled surface color.");
+    }
+
+    /// <summary>
+    ///  The drop-down button chevron and border must also use the disabled color palette
+    ///  when the ComboBox is disabled in NET11 VisualStylesMode.
+    /// </summary>
+    [WinFormsTheory]
+    [InlineData(FlatStyle.Standard)]
+    [InlineData(FlatStyle.Flat)]
+    [InlineData(FlatStyle.Popup)]
+    public void ComboBox_ModernVisualStyles_Disabled_UsesDisabledBorderAndButtonColors(
+        FlatStyle flatStyle)
+    {
+        using SystemVisualSettingsTestScope settingsScope = new(
+            clientAreaAnimationEnabled: false,
+            highContrastEnabled: false,
+            focusBorderMetrics: new Size(2, 2));
+        using Panel parent = new()
+        {
+            BackColor = Color.White,
+            Size = new Size(120, 60)
+        };
+        Color customForeColor = Color.Blue;
+        using VisualStylesComboBox control = new()
+        {
+            BackColor = Color.White,
+            FlatStyle = flatStyle,
+            ForeColor = customForeColor,
+            Size = new Size(100, 36),
+            VisualStylesMode = VisualStylesMode.Net11
+        };
+        parent.Controls.Add(control);
+        parent.CreateControl();
+        control.CreateControl();
+
+        // Enabled border should contain the custom ForeColor (for Standard/Flat).
+        var adapterEnabled = (ModernComboAdapter)control.CreateAdapter();
+        using Bitmap enabledBitmap = new(control.ClientSize.Width, control.ClientSize.Height);
+        using (Graphics g = Graphics.FromImage(enabledBitmap))
+        {
+            adapterEnabled.DrawFlatCombo(control, g);
+        }
+
+        // Disabled border must NOT use the raw ForeColor.
+        control.Enabled = false;
+        var adapterDisabled = (ModernComboAdapter)control.CreateAdapter();
+        using Bitmap disabledBitmap = new(control.ClientSize.Width, control.ClientSize.Height);
+        using (Graphics g = Graphics.FromImage(disabledBitmap))
+        {
+            adapterDisabled.DrawFlatCombo(control, g);
+        }
+
+        if (flatStyle != FlatStyle.Popup)
+        {
+            // Standard and Flat use the ForeColor for the border; it must be absent when disabled.
+            Assert.True(
+                CountPixels(enabledBitmap, customForeColor, channelTolerance: 16) > 0,
+                "Enabled ComboBox should render border with ForeColor.");
+            Assert.True(
+                CountPixels(disabledBitmap, customForeColor, channelTolerance: 16) == 0,
+                "Disabled ComboBox must not render border with the ForeColor.");
+            Assert.True(
+                CountPixels(
+                    disabledBitmap,
+                    ModernControlColorMath.GetDisabledBorderColor(),
+                    channelTolerance: 8) > 0,
+                "Disabled ComboBox should render border with the disabled border color.");
+        }
     }
 
     [WinFormsFact]
@@ -593,6 +793,35 @@ public class ComboBoxTests
         Rectangle updatedEditBounds = control.GetEditBounds();
         Assert.True(updatedEditBounds.Left > editBounds.Left);
         Assert.True(updatedEditBounds.Width < editBounds.Width);
+    }
+
+    [WinFormsTheory]
+    [InlineData(ComboBoxStyle.DropDown)]
+    [InlineData(ComboBoxStyle.Simple)]
+    public void ComboBox_ModernVisualStyles_EditHeightDoesNotClipText(
+        ComboBoxStyle dropDownStyle)
+    {
+        using SystemVisualSettingsTestScope settingsScope = new(
+            clientAreaAnimationEnabled: false,
+            highContrastEnabled: false);
+        using VisualStylesComboBox control = new()
+        {
+            DropDownStyle = dropDownStyle,
+            FlatStyle = FlatStyle.Standard,
+            Size = dropDownStyle == ComboBoxStyle.Simple
+                ? new Size(140, 100)
+                : new Size(140, 40),
+            Text = "Text with descenders: gjpqy",
+            VisualStylesMode = VisualStylesMode.Net11
+        };
+
+        control.CreateControl();
+        _ = control.Handle;
+        Rectangle nativeEditBounds = control.ModernEditBaseBounds;
+        Assert.False(nativeEditBounds.IsEmpty);
+
+        Assert.True(
+            control.GetEditBounds().Height >= nativeEditBounds.Height);
     }
 
     [WinFormsTheory]
@@ -1278,7 +1507,7 @@ public class ComboBoxTests
     {
         Assert.Equal(
             expected,
-            ComboBox.SupportsModernDropDownCorners(
+            SupportsModernDropDownCorners(
                 new Version(major, minor, build)));
     }
 
@@ -3978,7 +4207,7 @@ public class ComboBoxTests
     private sealed class VisualStylesComboBox : SubComboBox
     {
         public FlatComboAdapter CreateAdapter()
-            => base.CreateFlatComboAdapterInstance();
+            => CreateFlatComboAdapterInstance();
 
         public (int left, int right) GetEditMargins()
         {
@@ -4090,7 +4319,7 @@ public class ComboBoxTests
 
         public void RaiseSystemVisualSettingsChanged(
             SystemVisualSettingsChangedEventArgs e)
-            => base.OnSystemVisualSettingsChanged(e);
+            => OnSystemVisualSettingsChanged(e);
 
         internal override bool IsHighContrast => false;
     }

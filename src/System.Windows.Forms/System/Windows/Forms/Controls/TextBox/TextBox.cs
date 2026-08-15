@@ -440,7 +440,14 @@ public partial class TextBox : TextBoxBase
 
         if (Multiline && (_scrollBars & ScrollBars.Vertical) != 0)
         {
-            padding.Right = SystemInformation.GetVerticalScrollBarWidthForDpi(DeviceDpiInternal);
+            if (RightToLeft == RightToLeft.Yes)
+            {
+                padding.Left = SystemInformation.GetVerticalScrollBarWidthForDpi(DeviceDpiInternal);
+            }
+            else
+            {
+                padding.Right = SystemInformation.GetVerticalScrollBarWidthForDpi(DeviceDpiInternal);
+            }
         }
 
         return padding;

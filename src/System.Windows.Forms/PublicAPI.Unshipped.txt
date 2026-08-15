@@ -25,10 +25,6 @@ System.Windows.Forms.SystemVisualSettingsChangedEventArgs.OldSettings.get -> Sys
 System.Windows.Forms.SystemVisualSettingsChangedEventArgs
 System.Windows.Forms.SystemVisualSettingsChangedEventHandler
 virtual System.Windows.Forms.SystemVisualSettingsChangedEventHandler.Invoke(object? sender, System.Windows.Forms.SystemVisualSettingsChangedEventArgs! e) -> void
-System.Windows.Forms.TreeView.NodeLeading.get -> float
-System.Windows.Forms.TreeView.NodeLeading.set -> void
-System.Windows.Forms.TreeView.NodeLeadingChanged -> System.EventHandler?
-virtual System.Windows.Forms.TreeView.OnNodeLeadingChanged(System.EventArgs! e) -> void
 System.Windows.Forms.ControlMutationExtensions
 static System.Windows.Forms.ControlMutationExtensions.SuspendPainting(this System.Windows.Forms.ISupportSuspendPainting! target) -> System.IDisposable!
 static System.Windows.Forms.ControlMutationExtensions.SuspendPainting(this System.Windows.Forms.ISupportSuspendPainting! target, System.Func<System.Windows.Forms.Control!, bool>! suspendLayoutContainerFilter) -> System.IDisposable!
@@ -109,3 +105,30 @@ virtual System.Windows.Forms.Control.OnParentVisualStylesModeChanged(System.Even
 virtual System.Windows.Forms.Control.OnVisualStylesModeChanged(System.EventArgs! e) -> void
 virtual System.Windows.Forms.Control.VisualStylesMode.get -> System.Windows.Forms.VisualStylesMode
 virtual System.Windows.Forms.Control.VisualStylesMode.set -> void
+override System.Windows.Forms.PrintPreviewControl.ForeColor.get -> System.Drawing.Color
+override System.Windows.Forms.PrintPreviewControl.ForeColor.set -> void
+System.Windows.Forms.KioskModeManager
+System.Windows.Forms.KioskModeManager.AlwaysOn.get -> bool
+System.Windows.Forms.KioskModeManager.AlwaysOn.set -> void
+System.Windows.Forms.KioskModeManager.ContainerControl.get -> System.Windows.Forms.ContainerControl?
+System.Windows.Forms.KioskModeManager.ContainerControl.set -> void
+System.Windows.Forms.KioskModeManager.ContainerControlChanged -> System.EventHandler?
+override System.Windows.Forms.KioskModeManager.Dispose(bool disposing) -> void
+System.Windows.Forms.KioskModeManager.EscapeExitsFullScreen.get -> bool
+System.Windows.Forms.KioskModeManager.EscapeExitsFullScreen.set -> void
+System.Windows.Forms.KioskModeManager.FullScreen.get -> bool
+System.Windows.Forms.KioskModeManager.FullScreen.set -> void
+System.Windows.Forms.KioskModeManager.FullScreenChanged -> System.EventHandler?
+System.Windows.Forms.KioskModeManager.KioskModeManager() -> void
+System.Windows.Forms.KioskModeManager.KioskModeManager(System.ComponentModel.IContainer! container) -> void
+System.Windows.Forms.KioskModeManager.MousePointerAutoHideDelay.get -> int
+System.Windows.Forms.KioskModeManager.MousePointerAutoHideDelay.set -> void
+virtual System.Windows.Forms.KioskModeManager.OnContainerControlChanged(System.EventArgs! e) -> void
+virtual System.Windows.Forms.KioskModeManager.OnFullScreenChanged(System.EventArgs! e) -> void
+override System.Windows.Forms.KioskModeManager.Site.get -> System.ComponentModel.ISite?
+override System.Windows.Forms.KioskModeManager.Site.set -> void
+System.Windows.Forms.KioskModeManager.ToggleFullScreen() -> void
+System.Windows.Forms.KioskModeManager.ToggleFullScreenKeys.get -> System.Windows.Forms.Keys
+System.Windows.Forms.KioskModeManager.ToggleFullScreenKeys.set -> void
+System.Windows.Forms.KioskModeManager.TopMostInFullScreen.get -> bool
+System.Windows.Forms.KioskModeManager.TopMostInFullScreen.set -> void
