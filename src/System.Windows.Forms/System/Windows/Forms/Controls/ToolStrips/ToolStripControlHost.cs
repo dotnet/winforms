@@ -586,6 +586,21 @@ public partial class ToolStripControlHost : ToolStripItem
             return;
         }
 
+        // If the consumer explicitly requests a non-modern mode while hosted, stop tracking a prior
+        // forced Classic so we don't "restore" a stale modern mode when the host is removed.
+        if (_hostedControlVisualStylesModeForced
+            && _control is not null
+            && ShouldForceHostedControlClassicVisualStylesMode())
+        {
+            VisualStylesMode mode = _control.VisualStylesMode;
+            if (mode is VisualStylesMode.Classic or VisualStylesMode.Disabled)
+            {
+                _hostedControlVisualStylesModeBeforeForce = mode;
+                _hostedControlVisualStylesModeForced = false;
+                return;
+            }
+        }
+
         ApplyHostedControlVisualStylesModePolicy();
     }
 
