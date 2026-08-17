@@ -68,14 +68,28 @@ public partial class GroupBox
 
     private Padding GetModernDecorationPadding()
     {
-        int displayCaptionHeight = DisplayFontHeight;
-
         switch (FlatStyle)
         {
             case FlatStyle.Standard:
+                {
+                    int displayCaptionHeight = string.IsNullOrEmpty(Text)
+                        ? DisplayFontHeight
+                        : Math.Max(DisplayFontHeight, ModernCaptionFont.Height);
+
+                    return new Padding(
+                        left: Padding.Left,
+                        top: Padding.Top + displayCaptionHeight,
+                        right: Padding.Right,
+                        bottom: Padding.Bottom);
+                }
+
             case FlatStyle.Popup:
             default:
                 {
+                    int displayCaptionHeight = Math.Max(
+                        DisplayFontHeight,
+                        ModernCaptionFont.Height);
+
                     // Keep the content rectangle compatible with the classic GroupBox while the
                     // renderer keeps drawing the modern card/header surface and caption.
                     return new Padding(
@@ -126,7 +140,7 @@ public partial class GroupBox
             return (font.Height, 0);
         }
 
-        float lineHeightPixels = font.GetHeight(DeviceDpiInternal);
+        float lineHeightPixels = font.Height;
         int ascent = (int)Math.Ceiling(
             lineHeightPixels * family.GetCellAscent(style) / lineSpacingDesignUnits);
         int descent = (int)Math.Ceiling(
@@ -300,7 +314,7 @@ public partial class GroupBox
             : BackColor;
         Color headerColor = Application.SystemVisualSettings.AccentColor;
         Color headerSurfaceColor = PopupButtonColorMath.Blend(
-            bodyColor,
+            DisabledColor,
             headerColor,
             PopupHeaderAccentBlendAmount);
         Color borderColor = PopupButtonColorMath.TowardsContrast(
@@ -655,7 +669,7 @@ public partial class GroupBox
         {
             InvalidateModernCaptionFont();
 
-            if (FlatStyle == FlatStyle.Flat)
+            if (FlatStyle != FlatStyle.Standard || !string.IsNullOrEmpty(Text))
             {
                 CommonProperties.xClearPreferredSizeCache(this);
                 LayoutTransaction.DoLayout(
@@ -701,9 +715,7 @@ public partial class GroupBox
         bool newUsesModernMetrics = newMode >= VisualStylesMode.Net11;
 
         return oldUsesModernMetrics != newUsesModernMetrics
-            ? FlatStyle == FlatStyle.Flat
-                ? VisualStylesModeChangeImpact.Metrics
-                : VisualStylesModeChangeImpact.Repaint
+            ? VisualStylesModeChangeImpact.Metrics
             : VisualStylesModeChangeImpact.Repaint;
     }
 
