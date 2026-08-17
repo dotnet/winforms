@@ -92,10 +92,8 @@ internal class MaskedTextBoxTextEditorDropDown : UserControl
     {
         base.RescaleConstantsForDpi(deviceDpiOld, deviceDpiNew);
 
-        // DeviceDpi has already been updated to deviceDpiNew by the framework before
-        // this call, so LogicalToDeviceUnits returns values scaled to the new DPI.
-        Padding = new Padding(LogicalToDeviceUnits(LogicalPadding));
-        Size = LogicalToDeviceUnits(s_logicalSize);
+        Padding = new Padding(ScaleHelper.ScaleToDpi(LogicalPadding, deviceDpiNew));
+        Size = ScaleHelper.ScaleToDpi(s_logicalSize, deviceDpiNew);
     }
 
     private void maskedTextBox_MaskInputRejected(object? sender, MaskInputRejectedEventArgs e)

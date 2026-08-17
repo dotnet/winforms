@@ -61,12 +61,21 @@ public class MaskedTextBoxTextEditorDropDownTests
     public void DropDown_SizeAndPadding_ScalesWithDPI()
     {
         using MaskedTextBox maskedTextBox = new();
-        using MaskedTextBoxTextEditorDropDown dropDown = new(maskedTextBox);
+        using SubMaskedTextBoxTextEditorDropDown dropDown = new(maskedTextBox);
 
-        // Simulate a DPI change and verify that the dropdown recomputes its logical constants.
-        dropDown.TestAccessor.Dynamic.RescaleConstantsForDpi(96, 192);
+        dropDown.RescaleConstantsForDpi(96, 192);
+        dropDown.Size.Should().Be(new Size(200, 104));
+        dropDown.Padding.Should().Be(new Padding(32));
+        dropDown.IsHandleCreated.Should().BeFalse();
+    }
 
-        dropDown.Size.Should().Be(new Size(100, 52));
-        dropDown.Padding.Should().Be(new Padding(16));
+    private sealed class SubMaskedTextBoxTextEditorDropDown : MaskedTextBoxTextEditorDropDown
+    {
+        public SubMaskedTextBoxTextEditorDropDown(MaskedTextBox maskedTextBox) : base(maskedTextBox)
+        {
+        }
+
+        public new void RescaleConstantsForDpi(int deviceDpiOld, int deviceDpiNew)
+            => base.RescaleConstantsForDpi(deviceDpiOld, deviceDpiNew);
     }
 }
