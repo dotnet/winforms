@@ -90,8 +90,9 @@ internal sealed class RadioButtonModernAdapter : RadioButtonBaseAdapter
         PaintBackgroundImage(e);
 
         Color? customOnColor = Control.ShouldSerializeBackColor()
-            ? Control.BackColor
-            : null;
+            && Control.BackColor.A == byte.MaxValue
+                ? Control.BackColor
+                : null;
 
         Color? customBorderColor = Control.FlatAppearance.BorderColor.IsEmpty
             ? null
