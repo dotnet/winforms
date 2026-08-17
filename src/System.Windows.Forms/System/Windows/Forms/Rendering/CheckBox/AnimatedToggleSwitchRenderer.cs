@@ -215,7 +215,7 @@ internal sealed class AnimatedToggleSwitchRenderer : AnimatedControlRenderer
     private static int GetSwitchTextInset(ToggleSwitchMetrics metrics)
         => Math.Max(1, (metrics.BorderThickness / 2) + 1);
 
-    private static Size MeasureText(Control control, TextFormatFlags textFormatFlags)
+    internal static Size MeasureText(Control control, TextFormatFlags textFormatFlags)
         => TextRenderer.MeasureText(
             text: control.Text,
             font: control.Font,
@@ -241,7 +241,7 @@ internal sealed class AnimatedToggleSwitchRenderer : AnimatedControlRenderer
             textFormatFlags);
     }
 
-    private static TextFormatFlags GetTextFormatFlags(Control control) => control switch
+    internal static TextFormatFlags GetTextFormatFlags(Control control) => control switch
     {
         Forms.CheckBox { FlatStyle: FlatStyle.System } checkBox => ControlPaint.CreateTextFormatFlags(
             checkBox,
@@ -531,7 +531,8 @@ internal readonly struct ToggleSwitchMetrics
 
     internal Size GetPreferredSize(Control control)
     {
-        Size textSize = TextRenderer.MeasureText(control.Text, control.Font);
+        TextFormatFlags textFormatFlags = AnimatedToggleSwitchRenderer.GetTextFormatFlags(control);
+        Size textSize = AnimatedToggleSwitchRenderer.MeasureText(control, textFormatFlags);
         return new Size(
             SwitchWidth + TextGap + textSize.Width + control.Padding.Horizontal,
             Math.Max(SwitchHeight, textSize.Height) + control.Padding.Vertical);
