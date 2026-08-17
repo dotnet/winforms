@@ -718,6 +718,10 @@ public partial class ToolTip : Component, IExtenderProvider, IHandle<HWND>
             {
                 PInvoke.SetWindowTheme(HWND, string.Empty, string.Empty);
             }
+            else if (Application.IsDarkModeEnabled)
+            {
+                PInvoke.SetWindowTheme(HWND, $"{Control.DarkModeIdentifier}_{Control.ExplorerThemeIdentifier}", null);
+            }
         }
 
         // If in OwnerDraw mode, we don't want the default border.

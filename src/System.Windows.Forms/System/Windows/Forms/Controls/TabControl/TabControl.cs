@@ -1789,6 +1789,13 @@ public partial class TabControl : Control
 
     private BOOL StyleChildren(HWND handle)
     {
+        // Skip nested TabControls - they apply their own dark-mode theme
+        // via ApplyDarkModeOnDemand and must not be overridden by the parent.
+        if (FromHandle(handle) is TabControl)
+        {
+            return true;
+        }
+
         // Only apply theme to direct children (TabPages), not to controls within TabPages.
         // Controls like ComboBox need their own specific dark mode themes.
         HWND parent = PInvoke.GetParent(handle);

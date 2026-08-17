@@ -171,6 +171,12 @@
   <data name="ApplicationCannotChangeApplicationExceptionMode" xml:space="preserve">
     <value>Application exception mode cannot be changed once any Controls are created in the application.</value>
   </data>
+  <data name="Application_VisualStylesModeCanOnlyBeSetOnce" xml:space="preserve">
+    <value>The default visual styles mode can only be set once and cannot be changed afterwards.</value>
+  </data>
+  <data name="Application_VisualStylesModeInheritInvalidAsDefault" xml:space="preserve">
+    <value>VisualStylesMode.Inherit cannot be used as the application-wide default visual styles mode because the application root has no parent to inherit from.</value>
+  </data>
   <data name="ApplyCaption" xml:space="preserve">
     <value>&amp;Apply</value>
   </data>
@@ -1035,6 +1041,9 @@
   <data name="ControlMinimumSizeDescr" xml:space="preserve">
     <value>Specifies the minimum size of the control.</value>
   </data>
+  <data name="ControlMutationExtensionsLayoutSuspensionRequiresControl" xml:space="preserve">
+    <value>Layout suspension requires a target derived from Control.</value>
+  </data>
   <data name="ControlNotChild" xml:space="preserve">
     <value>'child' is not a child control of this parent.</value>
   </data>
@@ -1223,6 +1232,9 @@
   </data>
   <data name="ControlOnSystemColorsChangedDescr" xml:space="preserve">
     <value>Event raised when the system colors change.</value>
+  </data>
+  <data name="ControlOnSystemVisualSettingsChangedDescr" xml:space="preserve">
+    <value>Event raised when a Windows visual or accessibility setting changes.</value>
   </data>
   <data name="ControlOnTabIndexChangedDescr" xml:space="preserve">
     <value>Event raised when the value of the TabIndex property is changed.</value>
@@ -2679,6 +2691,36 @@ To replace this default dialog please handle the DataError event.</value>
   <data name="DescriptionImageList" xml:space="preserve">
     <value>Manages a collection of images that are typically used by other controls such as ListView, TreeView, or ToolStrip.</value>
   </data>
+  <data name="DescriptionKioskModeManager" xml:space="preserve">
+    <value>Manages common fullscreen, input, cursor, and power behavior for kiosk-style WinForms applications.</value>
+  </data>
+  <data name="KioskModeManagerAlwaysOnDescr" xml:space="preserve">
+    <value>Indicates whether Windows should keep the display and system awake while this component is active.</value>
+  </data>
+  <data name="KioskModeManagerContainerControlDescr" xml:space="preserve">
+    <value>The container whose containing form is controlled by the kiosk mode manager.</value>
+  </data>
+  <data name="KioskModeManagerContainerControlChangedDescr" xml:space="preserve">
+    <value>Occurs when the ContainerControl property value changes.</value>
+  </data>
+  <data name="KioskModeManagerEscapeExitsFullScreenDescr" xml:space="preserve">
+    <value>Indicates whether pressing Escape exits fullscreen mode.</value>
+  </data>
+  <data name="KioskModeManagerFullScreenDescr" xml:space="preserve">
+    <value>Gets or sets a value indicating whether the resolved form is currently fullscreen.</value>
+  </data>
+  <data name="KioskModeManagerFullScreenChangedDescr" xml:space="preserve">
+    <value>Occurs when the fullscreen state changes.</value>
+  </data>
+  <data name="KioskModeManagerMousePointerAutoHideDelayDescr" xml:space="preserve">
+    <value>The delay, in milliseconds, before the mouse pointer is hidden while fullscreen. A value of 0 disables automatic pointer hiding.</value>
+  </data>
+  <data name="KioskModeManagerToggleFullScreenKeysDescr" xml:space="preserve">
+    <value>The key combination that toggles between fullscreen and restored mode.</value>
+  </data>
+  <data name="KioskModeManagerTopMostInFullScreenDescr" xml:space="preserve">
+    <value>Indicates whether the form is topmost while fullscreen.</value>
+  </data>
   <data name="DescriptionLabel" xml:space="preserve">
     <value>Provides run-time information or descriptive text for a control.</value>
   </data>
@@ -3285,6 +3327,12 @@ Do you want to replace it?</value>
   </data>
   <data name="FormTopMostDescr" xml:space="preserve">
     <value>Indicates whether the form always appears above all other forms that do not have this property set to true.</value>
+  </data>
+  <data name="FormFormRevealModeDescr" xml:space="preserve">
+    <value>Indicates how the form is presented while its initial appearance is prepared. Classic never defers reveal. Deferred hides the form behind a DWM cloak until its background has painted, to reduce startup flash. Inherit resolves from the application-wide default.</value>
+  </data>
+  <data name="FormOnFormRevealModeChangedDescr" xml:space="preserve">
+    <value>Occurs when the effective value of the FormRevealMode property changes.</value>
   </data>
   <data name="FormTransparencyKeyDescr" xml:space="preserve">
     <value>A color which will appear transparent when painted on the form.</value>
@@ -4987,7 +5035,7 @@ Stack trace where the illegal operation occurred was:
     <value>Controls whether the Network button is displayed.</value>
   </data>
   <data name="RadioButtonAppearanceDescr" xml:space="preserve">
-    <value>Controls whether the RadioButton appears as normal or as a Windows PushButton.</value>
+    <value>Controls whether the RadioButton appears as normal, as a Windows PushButton, or as a toggle switch.</value>
   </data>
   <data name="RadioButtonAutoCheckDescr" xml:space="preserve">
     <value>Causes the radio button to automatically change state when clicked.</value>
@@ -6930,6 +6978,12 @@ Stack trace where the illegal operation occurred was:
   </data>
   <data name="ControlDataContextChangedDescr" xml:space="preserve">
     <value>Occurs when the value of the DataContext property changes.</value>
+  </data>
+  <data name="ControlVisualStylesModeDescr" xml:space="preserve">
+    <value>Determines how the control renders itself when visual styles are applied.</value>
+  </data>
+  <data name="ControlVisualStylesModeChangedDescr" xml:space="preserve">
+    <value>Occurs when the value of the VisualStylesMode property changes.</value>
   </data>
   <data name="CommandComponentCommandParameterDescr" xml:space="preserve">
     <value>Gets or sets the parameter that is passed to the Command property's object on execution or on execution context request.</value>

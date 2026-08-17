@@ -1878,6 +1878,23 @@ public partial class TreeView : Control
             PInvokeCore.SetWindowLong(this, WINDOW_LONG_PTR_INDEX.GWL_STYLE, style);
         }
 
+        if (Application.IsDarkModeEnabled && DarkModeRequestState is true)
+        {
+            HWND toolTipHandle = (HWND)PInvokeCore.SendMessage(
+                this,
+                PInvoke.TVM_GETTOOLTIPS,
+                (WPARAM)0,
+                (LPARAM)0);
+
+            if (!toolTipHandle.IsNull)
+            {
+                _ = PInvoke.SetWindowTheme(
+                    toolTipHandle,
+                    $"{DarkModeIdentifier}_{ExplorerThemeIdentifier}",
+                    null);
+            }
+        }
+
         Color c = BackColor;
 
         if (c != SystemColors.Window || Application.IsDarkModeEnabled)
