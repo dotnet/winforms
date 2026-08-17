@@ -49,6 +49,7 @@ public partial class PrintPreviewControl : Control
     private double _zoom = DefaultZoom;
     private bool _pageInfoCalcPending;
     private bool _exceptionPrinting;
+    private bool _isForeColorSet;
 
     /// <summary>
     ///  Initializes a new instance of the <see cref="PrintPreviewControl"/> class.
@@ -294,10 +295,30 @@ public partial class PrintPreviewControl : Control
 
     internal override bool ShouldSerializeBackColor() => !BackColor.Equals(SystemColors.AppWorkspace);
 
-    [EditorBrowsable(EditorBrowsableState.Never)]
-    public override void ResetForeColor() => ForeColor = Color.White;
+    /// <summary>
+    ///  Gets or sets the foreground color of the "no printable content" message text, and (when
+    ///  explicitly set) each previewed page's background.
+    /// </summary>
+    public override Color ForeColor
+    {
+        get => base.ForeColor;
+        set
+        {
+            // Tracked here, not via ForeColorChanged: that event only fires on an actual value
+            // change, so reassigning the current value would otherwise look like "never set".
+            _isForeColorSet = true;
+            base.ForeColor = value;
+        }
+    }
 
-    internal override bool ShouldSerializeForeColor() => !ForeColor.Equals(Color.White);
+    [EditorBrowsable(EditorBrowsableState.Never)]
+    public override void ResetForeColor()
+    {
+        ForeColor = SystemColors.ControlText;
+        _isForeColorSet = false;
+    }
+
+    internal override bool ShouldSerializeForeColor() => _isForeColorSet;
 
     internal override bool SupportsUiaProviders => true;
 
@@ -592,7 +613,7 @@ public partial class PrintPreviewControl : Control
 
     private void DrawMessage(Graphics g, Rectangle rect, bool isExceptionPrinting)
     {
-        Color brushColor = ShouldSerializeForeColor() ? ForeColor : SystemColors.ControlText;
+        Color brushColor = _isForeColorSet ? ForeColor : SystemColors.ControlText;
         if (SystemInformation.HighContrast && Parent is Control parent)
         {
             brushColor = parent.BackColor;
@@ -684,7 +705,10 @@ public partial class PrintPreviewControl : Control
             {
                 Rectangle box = pageRenderArea[i];
                 g.DrawRectangle(Pens.Black, box);
-                using (var brush = ForeColor.GetCachedSolidBrushScope())
+
+                // Default page fill is white; an explicitly set ForeColor is still honored, as it always has been.
+                Color pageColor = _isForeColorSet ? ForeColor : Color.White;
+                using (var brush = pageColor.GetCachedSolidBrushScope())
                 {
                     g.FillRectangle(brush, box);
                 }
