@@ -616,7 +616,7 @@ public class ButtonVisualStylesTests
     }
 
     [WinFormsFact]
-    public void ButtonDarkModeAdapter_ClassicInNet11Hierarchy_InheritedBackColor_DoesNotUseAmbientAsCustomBase()
+    public void ButtonDarkModeAdapter_ClassicInNet11Hierarchy_InheritedBackColor_UsesAmbientAsCustomBase()
     {
         using Form form = new()
         {
@@ -637,7 +637,9 @@ public class ButtonVisualStylesTests
 
         Color actual = (Color)accessor.GetButtonBackColor(VisualStyles.PushButtonState.Normal);
 
-        Assert.NotEqual(form.BackColor, actual);
+        Assert.False(button.ShouldSerializeBackColor());
+        Assert.Equal(form.BackColor, button.BackColor);
+        Assert.Equal(form.BackColor, actual);
     }
 
     [WinFormsFact]

@@ -96,8 +96,7 @@ internal class ButtonDarkModeAdapter : ButtonBaseAdapter
         else
         {
             bool hasExplicitBackColor = Control.ShouldSerializeBackColor();
-            bool hasUsableAmbientBackColor = _modern
-                && !Control.BackColor.HasTransparency()
+            bool hasUsableAmbientBackColor = !Control.BackColor.HasTransparency()
                 && Control.BackColor != Forms.Control.DefaultBackColor;
 
             if (hasExplicitBackColor || hasUsableAmbientBackColor)
