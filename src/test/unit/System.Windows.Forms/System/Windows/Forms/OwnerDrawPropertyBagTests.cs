@@ -4,7 +4,6 @@
 #nullable disable
 
 using System.Drawing;
-using System.Reflection;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.Windows.Forms.TestUtilities;
 
@@ -66,13 +65,13 @@ public class OwnerDrawPropertyBagTests
         using Font secondFont = new(SystemFonts.MenuFont, FontStyle.Bold);
 
         bag.Font = firstFont;
-        _ = bag.GetType().GetProperty("FontHandle", BindingFlags.Instance | BindingFlags.NonPublic)!.GetValue(bag);
+        _ = bag.FontHandle;
 
-        FieldInfo fontWrapperField = bag.GetType().GetField("_fontWrapper", BindingFlags.Instance | BindingFlags.NonPublic)!;
-        Assert.NotNull(fontWrapperField.GetValue(bag));
+        dynamic accessor = bag.TestAccessor.Dynamic;
+        Assert.NotNull(accessor._fontWrapper);
 
         bag.Font = secondFont;
-        Assert.Null(fontWrapperField.GetValue(bag));
+        Assert.Null(accessor._fontWrapper);
     }
 
     [WinFormsTheory]

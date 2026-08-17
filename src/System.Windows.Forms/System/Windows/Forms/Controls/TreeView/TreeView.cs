@@ -2783,7 +2783,7 @@ public partial class TreeView : Control
                 {
                     // Mess with the DC directly...
                     Debug.Assert(node._propBag is not null);
-                    if (node._propBag is not null && node._propBag.Font is not null)
+                    if (node._propBag is not null)
                     {
                         PInvokeCore.SelectObject(nmtvcd->nmcd.hdc, node._propBag.FontHandle);
 
