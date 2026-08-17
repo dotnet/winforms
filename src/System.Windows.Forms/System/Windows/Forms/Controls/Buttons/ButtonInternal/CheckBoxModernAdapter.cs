@@ -80,10 +80,10 @@ internal sealed class CheckBoxModernAdapter : CheckBoxBaseAdapter
     private void PaintCore(PaintEventArgs e)
     {
         Graphics graphics = e.GraphicsInternal;
-        bool useControlBackColor = !Control.BackColor.HasTransparency()
-            && (Control.ShouldSerializeBackColor() || !Control.UseVisualStyleBackColor);
+        bool useExplicitBackColor = Control.ShouldSerializeBackColor() || !Control.UseVisualStyleBackColor;
+        bool hasTransparentBackColor = Control.BackColor.HasTransparency();
 
-        if (useControlBackColor)
+        if (useExplicitBackColor && !hasTransparentBackColor)
         {
             using var backBrush = Control.BackColor.GetCachedSolidBrushScope();
             graphics.FillRectangle(backBrush, Control.ClientRectangle);
@@ -95,6 +95,12 @@ internal sealed class CheckBoxModernAdapter : CheckBoxBaseAdapter
                 graphics,
                 Control.ClientRectangle,
                 Control.BackColor);
+
+            if (useExplicitBackColor && hasTransparentBackColor && Control.BackColor.A > 0)
+            {
+                using var backBrush = Control.BackColor.GetCachedSolidBrushScope();
+                graphics.FillRectangle(backBrush, Control.ClientRectangle);
+            }
         }
 
         LayoutData layout = Layout(e).Layout();

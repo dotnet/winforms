@@ -216,10 +216,16 @@ public class RadioButtonTests : AbstractButtonBaseTests
             return;
         }
 
+        Color accentColor = Application.SystemVisualSettings.AccentColor;
+        Color backgroundColor = Color.FromArgb(
+            accentColor.R ^ 0xFF,
+            accentColor.G ^ 0xFF,
+            accentColor.B ^ 0xFF);
+
         using Panel parent = new() { BackColor = Color.White };
         using RadioButton control = new()
         {
-            BackColor = Color.Red,
+            BackColor = backgroundColor,
             UseVisualStyleBackColor = true,
             Checked = isChecked,
             Size = new Size(40, 24),
@@ -236,10 +242,10 @@ public class RadioButtonTests : AbstractButtonBaseTests
             isChecked ? CheckState.Checked : CheckState.Unchecked);
 
         Color backgroundPixel = bitmap.GetPixel(control.Width - 2, control.Height / 2);
-        Assert.Equal(Color.Red.ToArgb(), backgroundPixel.ToArgb());
+        Assert.Equal(backgroundColor.ToArgb(), backgroundPixel.ToArgb());
         Assert.Equal(
             expectedAccent,
-            CountPixels(bitmap, Application.SystemVisualSettings.AccentColor, channelTolerance: 24) > 0);
+            CountPixels(bitmap, accentColor, channelTolerance: 24) > 0);
     }
 
     [WinFormsFact]
@@ -265,6 +271,39 @@ public class RadioButtonTests : AbstractButtonBaseTests
 
         Color backgroundPixel = bitmap.GetPixel(control.Width - 2, control.Height / 2);
         Assert.Equal(Color.Aqua.ToArgb(), backgroundPixel.ToArgb());
+    }
+
+    [WinFormsFact]
+    public void RadioButton_ModernGlyph_UsesTranslucentBackColorWhenVisualStyleBackgroundEnabled()
+    {
+        Color parentBackColor = Color.White;
+        Color translucentBackColor = Color.FromArgb(128, Color.Aqua);
+
+        using Panel parent = new() { BackColor = parentBackColor };
+        using RadioButton control = new()
+        {
+            BackColor = translucentBackColor,
+            UseVisualStyleBackColor = true,
+            Checked = false,
+            Text = string.Empty,
+            Size = new Size(40, 24),
+            VisualStylesMode = VisualStylesMode.Net11
+        };
+
+        parent.Controls.Add(control);
+
+        using Bitmap bitmap = new(control.Width, control.Height);
+        using Graphics graphics = Graphics.FromImage(bitmap);
+        graphics.Clear(parentBackColor);
+        PaintEventArgs e = new(graphics, control.ClientRectangle);
+
+        control.CreateStandardAdapter().PaintUp(e, CheckState.Unchecked);
+
+        Color backgroundPixel = bitmap.GetPixel(control.Width - 2, control.Height / 2);
+        Color expected = BlendColors(parentBackColor, translucentBackColor);
+        Assert.InRange(Math.Abs(backgroundPixel.R - expected.R), 0, 1);
+        Assert.InRange(Math.Abs(backgroundPixel.G - expected.G), 0, 1);
+        Assert.InRange(Math.Abs(backgroundPixel.B - expected.B), 0, 1);
     }
 
     [WinFormsFact]
@@ -402,6 +441,18 @@ public class RadioButtonTests : AbstractButtonBaseTests
 
     private static int CountPixels(Bitmap bitmap, Color color)
         => CountPixels(bitmap, color, channelTolerance: 0);
+
+    private static Color BlendColors(Color background, Color overlay)
+    {
+        int alpha = overlay.A;
+        int inverseAlpha = byte.MaxValue - alpha;
+
+        int red = ((overlay.R * alpha) + (background.R * inverseAlpha) + 127) / 255;
+        int green = ((overlay.G * alpha) + (background.G * inverseAlpha) + 127) / 255;
+        int blue = ((overlay.B * alpha) + (background.B * inverseAlpha) + 127) / 255;
+
+        return Color.FromArgb(red, green, blue);
+    }
 
     private static int CountPixels(Bitmap bitmap, Color color, int channelTolerance)
     {
