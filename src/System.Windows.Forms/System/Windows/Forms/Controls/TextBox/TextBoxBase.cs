@@ -2503,7 +2503,7 @@ public abstract partial class TextBoxBase : Control
                     // Keep enough single-line client height for native edit text metrics when an explicit
                     // height is smaller than the modern chrome's preferred footprint.
                     int clientHeight = clientRect.bottom - clientRect.top;
-                    int minimumSingleLineClientHeight = FontHeight + LogicalToDeviceUnits(3);
+                    int minimumSingleLineClientHeight = FontHeight + 3;
                     int maxVerticalCarve = Math.Max(0, clientHeight - minimumSingleLineClientHeight);
 
                     if (padding.Vertical > maxVerticalCarve)

@@ -254,6 +254,8 @@ public partial class TextBoxBaseTests
 
         Color topCenter = bitmap.GetPixel(bitmap.Width / 2, 0);
         Color bottomCenter = bitmap.GetPixel(bitmap.Width / 2, bitmap.Height - 1);
+        Assert.NotEqual(parent.BackColor.ToArgb(), topCenter.ToArgb());
+        Assert.NotEqual(parent.BackColor.ToArgb(), bottomCenter.ToArgb());
         Assert.NotEqual(control.BackColor.ToArgb(), topCenter.ToArgb());
         Assert.NotEqual(control.BackColor.ToArgb(), bottomCenter.ToArgb());
     }
