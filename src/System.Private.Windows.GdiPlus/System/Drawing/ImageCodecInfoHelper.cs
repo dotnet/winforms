@@ -12,6 +12,7 @@ internal static class ImageCodecInfoHelper
     // encoder CLSIDs. There are only 5 encoders: PNG, JPEG, GIF, BMP, and TIFF. We'll just build the small cache
     // here to avoid all of the overhead. (We could probably just hard-code the values, but on the very small chance
     // that the list of encoders changes, we'll keep it dynamic.)
+    private static readonly Lock s_encoderLock = new();
     private static (Guid Format, Guid Encoder)[]? s_encoders;
 
     /// <summary>
@@ -34,31 +35,47 @@ internal static class ImageCodecInfoHelper
     {
         get
         {
-            if (s_encoders is null)
+            (Guid Format, Guid Encoder)[]? encoders = Volatile.Read(ref s_encoders);
+            if (encoders is null)
             {
-                GdiPlusInitialization.EnsureInitialized();
-
-                uint numEncoders;
-                uint size;
-
-                PInvokeGdiPlus.GdipGetImageEncodersSize(&numEncoders, &size).ThrowIfFailed();
-
-                using BufferScope<byte> buffer = new((int)size);
-
-                fixed (byte* b = buffer)
+                lock (s_encoderLock)
                 {
-                    PInvokeGdiPlus.GdipGetImageEncoders(numEncoders, size, (ImageCodecInfo*)b).ThrowIfFailed();
-                    ReadOnlySpan<ImageCodecInfo> codecInfo = new((ImageCodecInfo*)b, (int)numEncoders);
-                    s_encoders = new (Guid Format, Guid Encoder)[codecInfo.Length];
-
-                    for (int i = 0; i < codecInfo.Length; i++)
+                    encoders = s_encoders;
+                    if (encoders is null)
                     {
-                        s_encoders[i] = (codecInfo[i].FormatID, codecInfo[i].Clsid);
+                        encoders = CreateEncoders();
+                        Volatile.Write(ref s_encoders, encoders);
                     }
                 }
             }
 
-            return s_encoders;
+            return encoders;
+        }
+    }
+
+    private static unsafe (Guid Format, Guid Encoder)[] CreateEncoders()
+    {
+        GdiPlusInitialization.EnsureInitialized();
+
+        uint numEncoders;
+        uint size;
+
+        PInvokeGdiPlus.GdipGetImageEncodersSize(&numEncoders, &size).ThrowIfFailed();
+
+        using BufferScope<byte> buffer = new((int)size);
+
+        fixed (byte* b = buffer)
+        {
+            PInvokeGdiPlus.GdipGetImageEncoders(numEncoders, size, (ImageCodecInfo*)b).ThrowIfFailed();
+            ReadOnlySpan<ImageCodecInfo> codecInfo = new((ImageCodecInfo*)b, (int)numEncoders);
+            (Guid Format, Guid Encoder)[] encoders = new (Guid Format, Guid Encoder)[codecInfo.Length];
+
+            for (int i = 0; i < codecInfo.Length; i++)
+            {
+                encoders[i] = (codecInfo[i].FormatID, codecInfo[i].Clsid);
+            }
+
+            return encoders;
         }
     }
 }
