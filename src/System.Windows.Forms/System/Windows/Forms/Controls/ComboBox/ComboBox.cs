@@ -71,7 +71,6 @@ public partial class ComboBox : ListControl
     private short _prefHeightCache = -1;
     private short _maxDropDownItems = 8;
     private bool _integralHeight = true;
-    private bool _integralHeightExplicitlySet;
     private bool _mousePressed;
     private bool _mouseEvents;
     private bool _mouseInEdit;
@@ -358,8 +357,7 @@ public partial class ComboBox : ListControl
 
             if (!_integralHeight
                 || (UsesModernComboAdapter
-                    && DropDownStyle == ComboBoxStyle.Simple
-                    && !_integralHeightExplicitlySet))
+                    && DropDownStyle == ComboBoxStyle.Simple))
             {
                 cp.Style |= PInvoke.CBS_NOINTEGRALHEIGHT;
             }
@@ -495,7 +493,7 @@ public partial class ComboBox : ListControl
 
                 // The dropDownHeight is not reflected unless the
                 // ComboBox integralHeight == false..
-                SetIntegralHeightCore(value: false, userSet: false);
+                SetIntegralHeightCore(value: false);
             }
         }
     }
@@ -617,16 +615,11 @@ public partial class ComboBox : ListControl
     public bool IntegralHeight
     {
         get => _integralHeight;
-        set => SetIntegralHeightCore(value, userSet: true);
+        set => SetIntegralHeightCore(value);
     }
 
-    private void SetIntegralHeightCore(bool value, bool userSet)
+    private void SetIntegralHeightCore(bool value)
     {
-        if (userSet)
-        {
-            _integralHeightExplicitlySet = true;
-        }
-
         if (_integralHeight != value)
         {
             _integralHeight = value;

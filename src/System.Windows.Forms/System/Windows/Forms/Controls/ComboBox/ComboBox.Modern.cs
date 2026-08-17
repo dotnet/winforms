@@ -225,6 +225,22 @@ public partial class ComboBox
             }
             else
             {
+                // Keep enough vertical room for glyphs in editable DropDown mode: when chrome
+                // insets become large at some DPIs/styles, shrinking both top and bottom can make
+                // the native edit window shorter than the rendered text box line height.
+                int minimumReadableHeight = Math.Max(1, FontHeight);
+                int totalVerticalInset = topInset + bottomInset;
+                int availableHeight = Math.Max(1, editBounds.Height - totalVerticalInset);
+
+                if (availableHeight < minimumReadableHeight)
+                {
+                    int required = minimumReadableHeight - availableHeight;
+                    int topReduction = Math.Min(topInset, (required + 1) / 2);
+                    topInset -= topReduction;
+                    required -= topReduction;
+                    bottomInset -= Math.Min(bottomInset, required);
+                }
+
                 editBounds.Y += topInset;
 
                 editBounds.Height = Math.Max(
@@ -232,7 +248,7 @@ public partial class ComboBox
                     editBounds.Height - topInset - bottomInset);
 
                 editBounds.Height = Math.Max(
-                    1,
+                    minimumReadableHeight,
                     Math.Min(
                         editBounds.Height,
                         ClientRectangle.Bottom
@@ -611,11 +627,9 @@ public partial class ComboBox
             return;
         }
 
-        int bottomShrink = ScaleHelper.ScaleToDpi(
-            ModernSimpleBottomCropLogicalPixels,
-            DeviceDpiInternal);
-        int visibleHeight = Math.Max(1, targetBounds.Height - bottomShrink);
-        Size targetRegionSize = new(targetBounds.Width, visibleHeight);
+        Size targetRegionSize = new(
+            targetBounds.Width,
+            Math.Max(1, targetBounds.Height));
 
         if (listHandle == _modernSimpleListClipRegionHandle
             && targetRegionSize == _modernSimpleListClipRegionSize)
