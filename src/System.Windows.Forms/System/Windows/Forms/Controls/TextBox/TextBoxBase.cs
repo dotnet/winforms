@@ -2699,7 +2699,7 @@ public abstract partial class TextBoxBase : Control
     {
         int cornerRadius = ScaleVisualStylesMetric(ModernControlVisualStyles.FieldCornerRadius);
         Size focusBorderMetrics = GetVisualStylesFocusBorderMetrics();
-        int borderThickness = Math.Max(focusBorderMetrics.Width, focusBorderMetrics.Height);
+        int borderThickness = ModernControlVisualStyles.GetRoundedChromeBorderThickness(DeviceDpiInternal);
         int focusBandHeight = GetVisualStylesFocusBandHeight();
 
         Color adornerColor = ForeColor;

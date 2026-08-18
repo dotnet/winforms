@@ -14,6 +14,11 @@ internal static class ModernControlVisualStyles
     /// <summary>Stroke thickness of the modern rounded control border.</summary>
     internal const int BorderThickness = 1;
 
+    /// <summary>
+    ///  Maximum DPI at which modern rounded chrome keeps a one-pixel border stroke.
+    /// </summary>
+    internal const int RoundedChromeSinglePixelMaxDpi = (ScaleHelper.OneHundredPercentLogicalDpi * 5) / 2;
+
     /// <summary>Extra width added to the modern ComboBox drop-down button beyond the native metric.</summary>
     internal const int ComboBoxButtonExtraWidth = 4;
 
@@ -167,6 +172,23 @@ internal static class ModernControlVisualStyles
 
         return Math.Max(preferredHeight, roundedChromeMinimumHeight);
     }
+
+    /// <summary>
+    ///  Returns the border stroke thickness for modern rounded field chrome.
+    /// </summary>
+    /// <remarks>
+    ///  <para>
+    ///   The modern field border intentionally remains one physical pixel through 250% DPI to
+    ///   avoid visibly heavy corners from antialiasing accumulation on rounded paths.
+    ///  </para>
+    ///  <para>
+    ///   At very high DPI we allow a two-pixel stroke to preserve legibility.
+    ///  </para>
+    /// </remarks>
+    internal static int GetRoundedChromeBorderThickness(int deviceDpi)
+        => deviceDpi <= RoundedChromeSinglePixelMaxDpi
+            ? BorderThickness
+            : 2;
 
     private static int ScaleFocusMetric(
         int metric,
