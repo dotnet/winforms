@@ -6100,12 +6100,7 @@ public class ListViewTests
             (WPARAM)(nint)listView.TestAccessor.Dynamic.LVLABELEDITTIMER);
 
         HWND editHwnd = (HWND)(nint)PInvokeCore.SendMessage(listView, PInvoke.LVM_GETEDITCONTROL);
-
-        if (editHwnd == HWND.Null)
-        {
-            PInvokeCore.SendMessage(listView, PInvoke.LVM_CANCELEDITLABEL);
-            return;
-        }
+        Assert.NotEqual(HWND.Null, editHwnd);
 
         using GetDcScope hdc = new(editHwnd);
         Message msg = Message.Create(

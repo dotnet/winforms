@@ -7864,12 +7864,7 @@ public class TreeViewTests
 
         treeView.Nodes[0].BeginEdit();
         HWND editHwnd = (HWND)(nint)PInvokeCore.SendMessage(treeView, PInvoke.TVM_GETEDITCONTROL);
-
-        if (editHwnd == HWND.Null)
-        {
-            treeView.Nodes[0].EndEdit(cancel: true);
-            return;
-        }
+        Assert.NotEqual(HWND.Null, editHwnd);
 
         using GetDcScope hdc = new(editHwnd);
         Message msg = Message.Create(
