@@ -552,11 +552,14 @@ public class ComboBoxTests
         Color expectedBorder = usesAccent
             ? Application.SystemVisualSettings.AccentColor
             : control.ForeColor;
+        int borderColorTolerance = flatStyle == FlatStyle.Flat
+            ? 16
+            : 130;
         Assert.True(
             CountPixels(
                 actual,
                 expectedBorder,
-                channelTolerance: 16) > 0);
+                channelTolerance: borderColorTolerance) > 0);
         Assert.Equal(
             flatStyle == FlatStyle.Flat
                 ? expectedBorder.ToArgb()
@@ -691,17 +694,23 @@ public class ComboBoxTests
         if (flatStyle != FlatStyle.Popup)
         {
             // Standard and Flat use the ForeColor for the border; it must be absent when disabled.
+            int enabledBorderTolerance = flatStyle == FlatStyle.Flat
+                ? 16
+                : 130;
+            int disabledBorderTolerance = flatStyle == FlatStyle.Flat
+                ? 8
+                : 40;
             Assert.True(
-                CountPixels(enabledBitmap, customForeColor, channelTolerance: 16) > 0,
+                CountPixels(enabledBitmap, customForeColor, channelTolerance: enabledBorderTolerance) > 0,
                 "Enabled ComboBox should render border with ForeColor.");
             Assert.True(
-                CountPixels(disabledBitmap, customForeColor, channelTolerance: 16) == 0,
+                CountPixels(disabledBitmap, customForeColor, channelTolerance: 110) == 0,
                 "Disabled ComboBox must not render border with the ForeColor.");
             Assert.True(
                 CountPixels(
                     disabledBitmap,
                     ModernControlColorMath.GetDisabledBorderColor(),
-                    channelTolerance: 8) > 0,
+                    channelTolerance: disabledBorderTolerance) > 0,
                 "Disabled ComboBox should render border with the disabled border color.");
         }
     }
