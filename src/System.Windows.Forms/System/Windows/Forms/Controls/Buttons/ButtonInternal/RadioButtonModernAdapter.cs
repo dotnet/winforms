@@ -1,4 +1,4 @@
-// Licensed to the .NET Foundation under one or more agreements.
+﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
 using System.Drawing;
@@ -61,6 +61,7 @@ internal sealed class RadioButtonModernAdapter : RadioButtonBaseAdapter
     protected override LayoutOptions Layout(PaintEventArgs e)
     {
         LayoutOptions layout = CommonLayout();
+        layout.CheckPaddingSize = Control.LogicalToDeviceUnits(2);
         layout.CheckSize = Math.Max(
             Control.LogicalToDeviceUnits(13),
             (int)(Control.Font.Height * 0.9f));
