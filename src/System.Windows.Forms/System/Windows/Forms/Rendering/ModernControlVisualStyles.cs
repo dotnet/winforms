@@ -32,6 +32,9 @@ internal static class ModernControlVisualStyles
     /// <summary>Scale factor applied to the GroupBox caption font in modern mode.</summary>
     internal const float GroupBoxCaptionFontScale = 1.15f;
 
+    /// <summary>Opacity of the Standard GroupBox body shade over a background image.</summary>
+    internal const int GroupBoxCardBodyShadeAlpha = 0x20;
+
     /// <summary>Gap between the GroupBox caption text and the surrounding frame line.</summary>
     internal const int GroupBoxCaptionGap = 4;
 
@@ -55,6 +58,9 @@ internal static class ModernControlVisualStyles
 
     /// <summary>Vertical padding around the GroupBox header text.</summary>
     internal const int GroupBoxHeaderVerticalPadding = 5;
+
+    /// <summary>Opacity of the Popup GroupBox accent header over a background image.</summary>
+    internal const int GroupBoxPopupHeaderOverlayAlpha = 0x80;
 
     /// <summary>Extra content inset for the modern Popup-style GroupBox, applied on top of the header height.</summary>
     internal const int GroupBoxPopupContentInset = 2;
