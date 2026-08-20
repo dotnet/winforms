@@ -167,10 +167,8 @@ public partial class ComboBox
             int bottomInset = chromeInsets.Bottom + Padding.Bottom;
             editBounds.Y += topInset;
 
-            editBounds.Height = Math.Max(
-                1,
-                editBounds.Height - topInset - bottomInset);
-
+            // A single-line EDIT control's text visibility depends on its window height.
+            // Preserve the native height so glyphs are not clipped.
             editBounds.Height = Math.Max(
                 1,
                 Math.Min(
