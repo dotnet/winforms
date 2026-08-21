@@ -19,21 +19,31 @@ public class MissingPropertySerializationConfigurationAnalyzer : DiagnosticAnaly
     {
         context.ConfigureGeneratedCodeAnalysis(GeneratedCodeAnalysisFlags.None);
         context.EnableConcurrentExecution();
-        context.RegisterSymbolAction(AnalyzeSymbol, SymbolKind.Property);
+        context.RegisterCompilationStartAction(context =>
+        {
+            var iSiteSymbol = context.Compilation.GetTypeByMetadataName(typeof(ISite).FullName);
+            var iComponentSymbol = context.Compilation.GetTypeByMetadataName(typeof(IComponent).FullName);
+            var designerSerializationVisibilitySymbol = context.Compilation.GetTypeByMetadataName(typeof(DesignerSerializationVisibilityAttribute).FullName);
+            var defaultValueSymbol = context.Compilation.GetTypeByMetadataName(typeof(DefaultValueAttribute).FullName);
+            context.RegisterSymbolAction(context => AnalyzeSymbol(context, iSiteSymbol, iComponentSymbol, designerSerializationVisibilitySymbol, defaultValueSymbol), SymbolKind.Property);
+        });
     }
 
-    private static void AnalyzeSymbol(SymbolAnalysisContext context)
+    private static void AnalyzeSymbol(
+        SymbolAnalysisContext context,
+        INamedTypeSymbol? iSiteSymbol,
+        INamedTypeSymbol? iComponentSymbol,
+        INamedTypeSymbol? designerSerializationVisibilitySymbol,
+        INamedTypeSymbol? defaultValueSymbol)
     {
-        // We never flag a property named Site of type of ISite
-        if (context.Symbol is not IPropertySymbol propertySymbol
-            || propertySymbol.IsStatic)
+        var propertySymbol = (IPropertySymbol)context.Symbol;
+        if (propertySymbol.IsStatic)
         {
             return;
         }
 
         // A property of System.ComponentModel.ISite we never flag.
-        if (propertySymbol.Type.Name == nameof(ISite)
-            && propertySymbol.Type.ContainingNamespace.ToString() == "System.ComponentModel")
+        if (propertySymbol.Type.Equals(iSiteSymbol, SymbolEqualityComparer.Default))
         {
             return;
         }
@@ -45,13 +55,8 @@ public class MissingPropertySerializationConfigurationAnalyzer : DiagnosticAnaly
         }
 
         // Does the property belong to a class which implements the System.ComponentModel.IComponent interface?
-        if (propertySymbol.ContainingType is null
-            || !propertySymbol
-                .ContainingType
-                .AllInterfaces
-                .Any(i => i.Name == nameof(IComponent) &&
-                          i.ContainingNamespace is not null &&
-                          i.ContainingNamespace.ToString() == "System.ComponentModel"))
+        if (iComponentSymbol is not null &&
+            !propertySymbol.ContainingType.AllInterfaces.Contains(iComponentSymbol, SymbolEqualityComparer.Default))
         {
             return;
         }
@@ -72,8 +77,9 @@ public class MissingPropertySerializationConfigurationAnalyzer : DiagnosticAnaly
 
         // Is the property attributed with DesignerSerializationVisibility or DefaultValue?
         if (propertySymbol.GetAttributes()
-            .Any(a => a?.AttributeClass?.Name is (nameof(DesignerSerializationVisibilityAttribute))
-                or (nameof(DefaultValueAttribute))))
+            .Any(a => a.AttributeClass is not null &&
+                    (a.AttributeClass.Equals(designerSerializationVisibilitySymbol, SymbolEqualityComparer.Default) ||
+                    a.AttributeClass.Equals(defaultValueSymbol, SymbolEqualityComparer.Default))))
         {
             return;
         }
@@ -84,15 +90,13 @@ public class MissingPropertySerializationConfigurationAnalyzer : DiagnosticAnaly
         INamedTypeSymbol classSymbol = propertySymbol.ContainingType;
 
         // Now, let's check if the class has a method ShouldSerialize method:
-        IMethodSymbol? shouldSerializeMethod = classSymbol
-            .GetMembers()
-            .OfType<IMethodSymbol>()
-            .FirstOrDefault(m => m.Name == $"ShouldSerialize{propertySymbol.Name}");
-
         // Let's make sure the method returns a bool and has no parameters:
-        if (shouldSerializeMethod is null
-            || shouldSerializeMethod.ReturnType.SpecialType != SpecialType.System_Boolean
-            || shouldSerializeMethod.Parameters.Length > 0)
+        IMethodSymbol? shouldSerializeMethod = classSymbol
+            .GetMembers($"ShouldSerialize{propertySymbol.Name}")
+            .OfType<IMethodSymbol>()
+            .FirstOrDefault(m => m.ReturnType.SpecialType == SpecialType.System_Boolean && m.Parameters.IsEmpty);
+
+        if (shouldSerializeMethod is null)
         {
             // For ALL such other symbols, produce a diagnostic.
             var diagnostic = Diagnostic.Create(
