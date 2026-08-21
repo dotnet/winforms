@@ -89,6 +89,9 @@ public abstract partial class TextBoxBase : Control
     /// </summary>
     private bool _doubleClickFired;
 
+    // Pointer is over the control; drives the modern Hover stroke state.
+    private bool _hovered;
+
     private static int[]? s_shortcutsToDisable;
 
     // We store all boolean properties in here.
@@ -1841,6 +1844,28 @@ public abstract partial class TextBoxBase : Control
         }
 
         base.OnLostFocus(e);
+    }
+
+    protected override void OnMouseEnter(EventArgs e)
+    {
+        if (EffectiveVisualStylesMode >= VisualStylesMode.Net11)
+        {
+            _hovered = true;
+            InvalidateVisualStylesFrame();
+        }
+
+        base.OnMouseEnter(e);
+    }
+
+    protected override void OnMouseLeave(EventArgs e)
+    {
+        if (EffectiveVisualStylesMode >= VisualStylesMode.Net11)
+        {
+            _hovered = false;
+            InvalidateVisualStylesFrame();
+        }
+
+        base.OnMouseLeave(e);
     }
 
     protected override unsafe void OnSizeChanged(EventArgs e)
