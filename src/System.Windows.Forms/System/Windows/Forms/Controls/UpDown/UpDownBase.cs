@@ -27,7 +27,9 @@ public abstract partial class UpDownBase : ContainerControl
 
     // Modern (Net11+) chrome geometry. The edit and button group share the border thickness and
     // internal chrome inset used by TextBoxBase; only the gap between the two buttons is additional.
+    private const int ModernBorderHorizontalExtensionLogical = 2;
     private const int ModernButtonGroupSpacingLogical = 2;
+    private const int ModernButtonWidthLogical = 14;
     private const int ModernFocusBandHeight = 4;
     private const BorderStyle DefaultBorderStyle = BorderStyle.Fixed3D;
     private const LeftRightAlignment DefaultUpDownAlign = LeftRightAlignment.Right;
@@ -1007,8 +1009,11 @@ public abstract partial class UpDownBase : ContainerControl
     internal int ModernButtonGroupSpacing
         => LogicalToDeviceUnits(ModernButtonGroupSpacingLogical);
 
+    internal int ModernButtonWidth
+        => Math.Min(_defaultButtonsWidth, LogicalToDeviceUnits(ModernButtonWidthLogical));
+
     internal int GetModernButtonGroupWidth()
-        => (_defaultButtonsWidth * 2) + ModernButtonGroupSpacing;
+        => (ModernButtonWidth * 2) + ModernButtonGroupSpacing;
 
     internal int GetPreferredWidth(int textWidth, int height)
         => UseSideBySideButtons
@@ -1027,17 +1032,43 @@ public abstract partial class UpDownBase : ContainerControl
             new Rectangle(Point.Empty, ClientSize),
             Padding);
 
-        int pad = ModernContentInset;
-        int buttonsWidth = Math.Min(GetModernButtonGroupWidth(), Math.Max(0, clientArea.Width - (pad * 2)));
+        int horizontalPad = ModernContentInset;
+        int topPad = ModernContentInset;
+        int bottomPad = ModernContentInset;
 
-        Rectangle inner = clientArea;
-        inner.Inflate(-pad, -pad);
+        int minimumSingleLineEditHeight = FontHeight + LogicalToDeviceUnits(3);
+        int availableInnerHeight = clientArea.Height - (topPad + bottomPad);
+
+        if (availableInnerHeight < minimumSingleLineEditHeight)
+        {
+            int overflow = minimumSingleLineEditHeight - availableInnerHeight;
+            int minimumVisibleVerticalPadding = _borderStyle == BorderStyle.None
+                ? 0
+                : LogicalToDeviceUnits(ModernControlVisualStyles.BorderThickness);
+
+            int availableBottomReduction = Math.Max(0, bottomPad - minimumVisibleVerticalPadding);
+            int bottomReduction = Math.Min(overflow, availableBottomReduction);
+            bottomPad -= bottomReduction;
+            overflow -= bottomReduction;
+
+            int availableTopReduction = Math.Max(0, topPad - minimumVisibleVerticalPadding);
+            int topReduction = Math.Min(overflow, availableTopReduction);
+            topPad -= topReduction;
+        }
+
+        int buttonsWidth = Math.Min(GetModernButtonGroupWidth(), Math.Max(0, clientArea.Width - (horizontalPad * 2)));
+
+        Rectangle inner = new(
+            x: clientArea.Left + horizontalPad,
+            y: clientArea.Top + topPad,
+            width: clientArea.Width - (horizontalPad * 2),
+            height: clientArea.Height - (topPad + bottomPad));
 
         if (inner.Width < 0 || inner.Height < 0)
         {
             inner = new Rectangle(
-                x: Math.Min(pad, clientArea.Width),
-                y: Math.Min(pad, clientArea.Height),
+                x: Math.Min(horizontalPad, clientArea.Width),
+                y: Math.Min(topPad, clientArea.Height),
                 width: 0,
                 height: 0);
         }
@@ -1082,7 +1113,7 @@ public abstract partial class UpDownBase : ContainerControl
         }
 
         int cornerRadius = LogicalToDeviceUnits(ModernControlVisualStyles.UpDownCornerRadius);
-        int borderThickness = LogicalToDeviceUnits(ModernControlVisualStyles.BorderThickness);
+        int borderThickness = ModernControlVisualStyles.GetRoundedChromeBorderThickness(DeviceDpiInternal);
 
         // The adorner (border) color matches the modern TextBox chrome, which uses the fore color.
         Color adornerColor = ForeColor;
@@ -1127,6 +1158,11 @@ public abstract partial class UpDownBase : ContainerControl
                     bodyPath.AddRoundedRectangle(deflatedBounds, new Size(cornerRadius, cornerRadius));
                     graphics.FillPath(clientBackgroundBrush, bodyPath);
                     graphics.DrawPath(adornerPen, bodyPath);
+                    DrawExtendedHorizontalBorderSegments(
+                        graphics,
+                        adornerPen,
+                        deflatedBounds,
+                        cornerRadius);
 
                     // The rounded chrome is clipped with a non-antialiased region; blend the resulting
                     // corner artifacts into the parent by tracing the parent color just outside the border.
@@ -1175,6 +1211,39 @@ public abstract partial class UpDownBase : ContainerControl
                 deflatedBounds.Right,
                 deflatedBounds.Bottom - 1);
         }
+    }
+
+    private void DrawExtendedHorizontalBorderSegments(
+        Graphics graphics,
+        Pen borderPen,
+        Rectangle bounds,
+        int cornerRadius)
+    {
+        int extension = LogicalToDeviceUnits(ModernBorderHorizontalExtensionLogical);
+        int left = Math.Max(
+            bounds.Left,
+            bounds.Left + cornerRadius - extension);
+        int right = Math.Min(
+            bounds.Right,
+            bounds.Right - cornerRadius + extension);
+
+        if (left >= right)
+        {
+            return;
+        }
+
+        graphics.DrawLine(
+            borderPen,
+            left,
+            bounds.Top,
+            right,
+            bounds.Top);
+        graphics.DrawLine(
+            borderPen,
+            left,
+            bounds.Bottom,
+            right,
+            bounds.Bottom);
     }
 
     private AnimatedFocusIndicatorRenderer FocusIndicatorRenderer

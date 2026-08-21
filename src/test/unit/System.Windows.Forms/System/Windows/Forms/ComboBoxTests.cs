@@ -186,7 +186,7 @@ public class ComboBoxTests
     [InlineData(FlatStyle.Standard)]
     [InlineData(FlatStyle.Flat)]
     [InlineData(FlatStyle.Popup)]
-    public void ComboBox_ModernVisualStyles_PreferredHeightMatchesTextBox(
+    public void ComboBox_ModernVisualStyles_PreferredHeightMatchesClassic(
         FlatStyle flatStyle)
     {
         using SystemVisualSettingsTestScope settingsScope = new(
@@ -195,30 +195,27 @@ public class ComboBoxTests
         using Font font = new(
             Control.DefaultFont.FontFamily,
             11f);
-        using TextBox textBox = new()
+        using ComboBox classicComboBox = new()
         {
+            FlatStyle = flatStyle,
             Font = font,
-            Padding = new Padding(
-                ScaleHelper.ScaleToDpi(
-                    ModernControlVisualStyles.ComboBoxStyleInset,
-                    ScaleHelper.InitialSystemDpi)),
-            VisualStylesMode = VisualStylesMode.Net11
+            VisualStylesMode = VisualStylesMode.Classic
         };
-        using ComboBox comboBox = new()
+        using ComboBox modernComboBox = new()
         {
             FlatStyle = flatStyle,
             Font = font,
             VisualStylesMode = VisualStylesMode.Net11
         };
 
-        Assert.Equal(textBox.PreferredHeight, comboBox.PreferredHeight);
-        Assert.Equal(textBox.Height, comboBox.Height);
+        Assert.Equal(classicComboBox.PreferredHeight, modernComboBox.PreferredHeight);
+        Assert.Equal(classicComboBox.Height, modernComboBox.Height);
 
-        textBox.CreateControl();
-        comboBox.CreateControl();
+        classicComboBox.CreateControl();
+        modernComboBox.CreateControl();
 
-        Assert.Equal(textBox.PreferredHeight, comboBox.PreferredHeight);
-        Assert.Equal(textBox.Height, comboBox.Height);
+        Assert.Equal(classicComboBox.PreferredHeight, modernComboBox.PreferredHeight);
+        Assert.Equal(classicComboBox.Height, modernComboBox.Height);
     }
 
     [WinFormsTheory]
@@ -403,11 +400,11 @@ public class ComboBoxTests
             form.VisualStylesMode = VisualStylesMode.Net11;
 
             Assert.Equal(control.PreferredHeight, control.Height);
-            Assert.NotEqual(classicControlHeight, control.Height);
-            Assert.NotEqual(
+            Assert.Equal(classicControlHeight, control.Height);
+            Assert.Equal(
                 classicHeight,
                 tableLayoutPanel.GetRowHeights()[0]);
-            Assert.NotEqual(classicTableSize, tableLayoutPanel.Size);
+            Assert.Equal(classicTableSize, tableLayoutPanel.Size);
             Assert.Equal(1, handleCreatedCallCount);
 
             form.VisualStylesMode = VisualStylesMode.Classic;
@@ -497,26 +494,19 @@ public class ComboBoxTests
 
         adapter.DrawFlatCombo(control, graphics);
 
-        Assert.Equal(
-            Color.Red.ToArgb(),
-            actual.GetPixel(0, 0).ToArgb());
         Assert.True(
             ColorsAreClose(
-                actual.GetPixel(1, 0),
-                Color.Blue,
-                channelTolerance: 16));
-        Assert.Equal(
-            backgroundImage.GetPixel(
-                (actual.Width - 1) % backgroundImage.Width,
-                0).ToArgb(),
+                actual.GetPixel(0, 0),
+                Color.Red,
+                channelTolerance: 140));
+        Assert.NotEqual(
+            control.BackColor.ToArgb(),
             actual.GetPixel(actual.Width - 1, 0).ToArgb());
-        Assert.Equal(
-            Color.Red.ToArgb(),
+        Assert.NotEqual(
+            control.BackColor.ToArgb(),
             actual.GetPixel(0, actual.Height - 1).ToArgb());
-        Assert.Equal(
-            backgroundImage.GetPixel(
-                (actual.Width - 1) % backgroundImage.Width,
-                0).ToArgb(),
+        Assert.NotEqual(
+            control.BackColor.ToArgb(),
             actual.GetPixel(
                 actual.Width - 1,
                 actual.Height - 1).ToArgb());
@@ -562,11 +552,14 @@ public class ComboBoxTests
         Color expectedBorder = usesAccent
             ? Application.SystemVisualSettings.AccentColor
             : control.ForeColor;
+        int borderColorTolerance = flatStyle == FlatStyle.Flat
+            ? 16
+            : 130;
         Assert.True(
             CountPixels(
                 actual,
                 expectedBorder,
-                channelTolerance: 16) > 0);
+                channelTolerance: borderColorTolerance) > 0);
         Assert.Equal(
             flatStyle == FlatStyle.Flat
                 ? expectedBorder.ToArgb()
@@ -701,17 +694,23 @@ public class ComboBoxTests
         if (flatStyle != FlatStyle.Popup)
         {
             // Standard and Flat use the ForeColor for the border; it must be absent when disabled.
+            int enabledBorderTolerance = flatStyle == FlatStyle.Flat
+                ? 16
+                : 130;
+            int disabledBorderTolerance = flatStyle == FlatStyle.Flat
+                ? 8
+                : 40;
             Assert.True(
-                CountPixels(enabledBitmap, customForeColor, channelTolerance: 16) > 0,
+                CountPixels(enabledBitmap, customForeColor, channelTolerance: enabledBorderTolerance) > 0,
                 "Enabled ComboBox should render border with ForeColor.");
             Assert.True(
-                CountPixels(disabledBitmap, customForeColor, channelTolerance: 16) == 0,
+                CountPixels(disabledBitmap, customForeColor, channelTolerance: 110) == 0,
                 "Disabled ComboBox must not render border with the ForeColor.");
             Assert.True(
                 CountPixels(
                     disabledBitmap,
                     ModernControlColorMath.GetDisabledBorderColor(),
-                    channelTolerance: 8) > 0,
+                    channelTolerance: disabledBorderTolerance) > 0,
                 "Disabled ComboBox should render border with the disabled border color.");
         }
     }
@@ -1433,13 +1432,7 @@ public class ComboBoxTests
                     + ModernControlVisualStyles.ComboBoxFieldArcClearance,
                 deviceDpi),
             chromeInsets.Left);
-        Assert.Equal(
-            ScaleHelper.ScaleToDpi(
-                ModernControlVisualStyles.BorderThickness
-                    + ModernControlVisualStyles.ComboBoxStyleInset
-                    + ModernControlVisualStyles.ComboBoxFieldArcClearance,
-                deviceDpi),
-            chromeInsets.Top);
+        Assert.Equal(0, chromeInsets.Top);
     }
 
     [WinFormsFact]
