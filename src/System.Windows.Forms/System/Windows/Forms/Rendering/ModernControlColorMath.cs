@@ -16,6 +16,15 @@ internal static class ModernControlColorMath
     private const float DisabledMuteAmount = 0.45f;
     private const int ContrastSearchIterations = 10;
 
+    // WinUI control-stroke overlay alphas over the black (light mode) / white (dark mode) pole,
+    // verified against Common_themeresources_any.xaml. Composited in linear light (see below).
+    private const int StrokeDefaultAlphaLight = 0x0F;    // ControlStrokeColorDefault
+    private const int StrokeDefaultAlphaDark = 0x12;
+    private const int StrokeSecondaryAlphaLight = 0x29;  // ControlStrokeColorSecondary
+    private const int StrokeSecondaryAlphaDark = 0x18;
+    private const int StrokeStrongAlphaLight = 0x72;     // ControlStrongStrokeColorDefault
+    private const int StrokeStrongAlphaDark = 0x8B;
+
     // Shared disabled-state palette for modern renderers. Modern controls do not honor user-set
     // BackColor/ForeColor while disabled, so these fixed surfaces replace them. This is the single
     // source of truth: the modern Button renderers and the modern ComboBox adapter all read from
@@ -136,6 +145,56 @@ internal static class ModernControlColorMath
         }
 
         return result;
+    }
+
+    /// <summary>Gets the default, lightest field border stroke composited onto <paramref name="background"/>.</summary>
+    internal static Color GetFieldStrokeDefault(Color background, bool darkMode)
+        => CompositeStrokeOverlay(background, darkMode ? StrokeDefaultAlphaDark : StrokeDefaultAlphaLight, darkMode);
+
+    /// <summary>Gets the secondary field border stroke, a step stronger than default (used for Hover).</summary>
+    internal static Color GetFieldStrokeSecondary(Color background, bool darkMode)
+        => CompositeStrokeOverlay(background, darkMode ? StrokeSecondaryAlphaDark : StrokeSecondaryAlphaLight, darkMode);
+
+    /// <summary>Gets the strong field border stroke, used for the resting bottom (elevation) edge.</summary>
+    internal static Color GetFieldStrokeStrong(Color background, bool darkMode)
+        => CompositeStrokeOverlay(background, darkMode ? StrokeStrongAlphaDark : StrokeStrongAlphaLight, darkMode);
+
+    // Composites a black (light) or white (dark) overlay of the given 0-255 alpha onto an opaque
+    // background in linear light, returning an opaque color. A straight sRGB blend is wrong here.
+    private static Color CompositeStrokeOverlay(Color background, int overlayAlpha, bool darkMode)
+    {
+        background = ResolveOpaqueColor(background);
+        float alpha = Math.Clamp(overlayAlpha / 255f, 0f, 1f);
+        float pole = darkMode ? 1f : 0f;
+
+        return Color.FromArgb(
+            byte.MaxValue,
+            CompositeChannel(background.R),
+            CompositeChannel(background.G),
+            CompositeChannel(background.B));
+
+        byte CompositeChannel(byte channel)
+        {
+            float mixed = (pole * alpha) + (SrgbToLinear(channel) * (1f - alpha));
+            return LinearToSrgb(mixed);
+        }
+    }
+
+    private static float SrgbToLinear(byte channel)
+    {
+        float value = channel / 255f;
+        return value <= 0.04045f
+            ? value / 12.92f
+            : MathF.Pow((value + 0.055f) / 1.055f, 2.4f);
+    }
+
+    private static byte LinearToSrgb(float linear)
+    {
+        linear = Math.Clamp(linear, 0f, 1f);
+        float value = linear <= 0.0031308f
+            ? linear * 12.92f
+            : (1.055f * MathF.Pow(linear, 1f / 2.4f)) - 0.055f;
+        return (byte)MathF.Round(value * 255f);
     }
 
     private static bool HasMinimumContrast(
