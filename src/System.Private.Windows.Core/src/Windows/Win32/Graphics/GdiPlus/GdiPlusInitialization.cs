@@ -8,11 +8,18 @@ namespace Windows.Win32.Graphics.GdiPlus;
 /// </summary>
 internal static partial class GdiPlusInitialization
 {
+#if NET
+    private static readonly Lock s_initializationLock = new();
+#else
+    private static readonly object s_initializationLock = new();
+#endif
     private static nuint s_initToken;
 
     private static unsafe nuint Init()
     {
-        Debug.Assert(s_initToken == 0, "GdiplusInitialization: Initialize should not be called more than once!");
+        Debug.Assert(
+            Volatile.Read(ref s_initToken) == UIntPtr.Zero,
+            "GdiplusInitialization: Initialize should not be called more than once!");
 
         // GDI+ ref counts multiple calls to Startup in the same process, so calls from multiple
         // domains are ok, just make sure to pair each w/GdiplusShutdown
@@ -38,16 +45,26 @@ internal static partial class GdiPlusInitialization
     /// </remarks>
     internal static bool EnsureInitialized()
     {
-        if (s_initToken == 0)
+        nuint token = Volatile.Read(ref s_initToken);
+        if (token == UIntPtr.Zero)
         {
-            s_initToken = Init();
+            lock (s_initializationLock)
+            {
+                token = s_initToken;
+                if (token == UIntPtr.Zero)
+                {
+                    token = Init();
+                    Volatile.Write(ref s_initToken, token);
+                }
+            }
         }
 
-        return IsInitialized;
+        return token != UIntPtr.Zero;
     }
 
     /// <summary>
     ///  Returns <see langword="true"/> if GDI+ has been started.
     /// </summary>
-    internal static bool IsInitialized => s_initToken != 0;
+    internal static bool IsInitialized
+        => Volatile.Read(ref s_initToken) != UIntPtr.Zero;
 }
