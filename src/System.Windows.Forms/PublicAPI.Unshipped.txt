@@ -97,6 +97,7 @@ override System.Windows.Forms.RadioButton.OnPaint(System.Windows.Forms.PaintEven
 override System.Windows.Forms.RadioButton.OnSystemColorsChanged(System.EventArgs! e) -> void
 override System.Windows.Forms.RadioButton.OnVisualStylesModeChanged(System.EventArgs! e) -> void
 override System.Windows.Forms.UpDownBase.OnVisualStylesModeChanged(System.EventArgs! e) -> void
+override System.Windows.Forms.ToolStripControlHost.OnOwnerChanged(System.EventArgs! e) -> void
 static System.Windows.Forms.Application.DefaultVisualStylesMode.get -> System.Windows.Forms.VisualStylesMode
 static System.Windows.Forms.Application.SetDefaultVisualStylesMode(System.Windows.Forms.VisualStylesMode styleSetting) -> void
 virtual System.Windows.Forms.Control.DefaultVisualStylesMode.get -> System.Windows.Forms.VisualStylesMode
