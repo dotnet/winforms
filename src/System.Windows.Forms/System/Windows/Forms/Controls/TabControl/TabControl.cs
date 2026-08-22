@@ -2075,7 +2075,19 @@ public partial class TabControl : Control
             case MessageId.WM_REFLECT_MEASUREITEM:
                 // We use TCM_SETITEMSIZE instead
                 break;
+            case PInvokeCore.WM_PARENTNOTIFY:
+                // Apply dark mode theme to dynamically created child windows (e.g. spinner button)
+                if (Application.IsDarkModeEnabled && m.WParamInternal.LOWORD == PInvokeCore.WM_CREATE)
+                {
+                    HWND childHandle = (HWND)m.LParamInternal;
+                    if (!childHandle.IsNull)
+                    {
+                        StyleChildren(childHandle);
+                    }
+                }
 
+                base.WndProc(ref m);
+                break;
             case PInvokeCore.WM_NOTIFY:
             case MessageId.WM_REFLECT_NOTIFY:
                 NMHDR* nmhdr = (NMHDR*)(nint)m.LParamInternal;
