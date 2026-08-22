@@ -194,6 +194,25 @@ public partial class ControlTests
     }
 
     [WinFormsFact]
+    public void Control_VisualStylesMode_FirstSetToAmbientValue_PreservesLocalOverride()
+    {
+        using SubControlWithVisualStyles parent = new()
+        {
+            VisualStylesMode = VisualStylesMode.Classic
+        };
+        using SubControlWithVisualStyles child = new();
+        parent.Controls.Add(child);
+
+        child.VisualStylesMode = VisualStylesMode.Classic;
+        Assert.Equal(VisualStylesMode.Classic, child.VisualStylesMode);
+
+        parent.VisualStylesMode = VisualStylesMode.Net11;
+
+        Assert.Equal(VisualStylesMode.Classic, child.VisualStylesMode);
+        Assert.Equal(VisualStylesMode.Classic, child.EffectiveVisualStylesModeAccessor);
+    }
+
+    [WinFormsFact]
     public void Control_VisualStylesMode_ReparentingToDifferentMode_RaisesChanged()
     {
         using SubControlWithVisualStyles parent = new()
