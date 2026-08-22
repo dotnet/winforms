@@ -89,6 +89,9 @@ public abstract partial class TextBoxBase : Control
     /// </summary>
     private bool _doubleClickFired;
 
+    // Pointer is over the control; drives the modern Hover stroke state.
+    private bool _hovered;
+
     private static int[]? s_shortcutsToDisable;
 
     // We store all boolean properties in here.
@@ -1843,6 +1846,28 @@ public abstract partial class TextBoxBase : Control
         base.OnLostFocus(e);
     }
 
+    protected override void OnMouseEnter(EventArgs e)
+    {
+        if (EffectiveVisualStylesMode >= VisualStylesMode.Net11)
+        {
+            _hovered = true;
+            InvalidateVisualStylesFrame();
+        }
+
+        base.OnMouseEnter(e);
+    }
+
+    protected override void OnMouseLeave(EventArgs e)
+    {
+        if (EffectiveVisualStylesMode >= VisualStylesMode.Net11)
+        {
+            _hovered = false;
+            InvalidateVisualStylesFrame();
+        }
+
+        base.OnMouseLeave(e);
+    }
+
     protected override unsafe void OnSizeChanged(EventArgs e)
     {
         if (EffectiveVisualStylesMode >= VisualStylesMode.Net11)
@@ -2663,14 +2688,28 @@ public abstract partial class TextBoxBase : Control
         int borderThickness = Math.Max(focusBorderMetrics.Width, focusBorderMetrics.Height);
         int focusBandHeight = GetVisualStylesFocusBandHeight();
 
-        Color adornerColor = ForeColor;
+        ModernFieldStrokeContext strokeContext = new(
+            BackColor: BackColor,
+            Enabled: Enabled,
+            ReadOnly: ReadOnly,
+            Focused: Focused,
+            Hovered: _hovered,
+            DarkMode: Application.IsDarkModeEnabled,
+            HighContrast: Application.SystemVisualSettings.HighContrastEnabled,
+            AccentColor: Application.SystemVisualSettings.AccentColor,
+            DeviceDpi: DeviceDpi);
+        ModernFieldStroke stroke = ModernFieldStrokeResolver.GetStroke(strokeContext);
 
-        Color clientBackColor = BackColor;
+        int sideThickness = Math.Max(1, (int)MathF.Round(stroke.SideTopThicknessDip * DeviceDpi / 96f));
+        int bottomThickness = Math.Max(1, (int)MathF.Round(stroke.BottomThicknessDip * DeviceDpi / 96f));
+
+        Color adornerColor = stroke.SideTopColor;
+        Color clientBackColor = stroke.SurfaceColor;
         Color parentBackColor = Parent?.BackColor ?? BackColor;
 
         using var clientBackgroundBrush = clientBackColor.GetCachedSolidBrushScope();
         using var adornerBrush = adornerColor.GetCachedSolidBrushScope();
-        using var adornerPen = adornerColor.GetCachedPenScope(borderThickness);
+        using var adornerPen = adornerColor.GetCachedPenScope(sideThickness);
 
         Rectangle bounds = new(
             x: 0,
@@ -2767,34 +2806,29 @@ public abstract partial class TextBoxBase : Control
                 break;
         }
 
+        // Bottom (elevation and focus) edge: follows the rounded corners, clipped to a bottom band,
+        // drawn with the resolved bottom color and thickness. Replaces the former focus ring so that
+        // focus is expressed by this bottom edge alone (see #14906).
         if (BorderStyle == BorderStyle.Fixed3D && canRenderRoundedChrome)
         {
-            Color focusColor = GetVisualStylesFocusColor(Application.SystemVisualSettings.HighContrastEnabled);
-            FocusIndicatorRenderer.DrawRoundedFocusIndicator(
-                offscreenGraphics,
-                deflatedBounds,
-                cornerRadius,
-                borderThickness,
-                focusBandHeight,
-                adornerColor,
-                focusColor);
-        }
-        else if (Focused)
-        {
-            Color focusColor = GetVisualStylesFocusColor(Application.SystemVisualSettings.HighContrastEnabled);
-            using var focusPen = focusColor.GetCachedPenScope(borderThickness);
-            int focusLineCount = Math.Min(
-                Math.Max(2, focusBorderMetrics.Height),
-                Math.Max(1, deflatedBounds.Height));
-            for (int i = 0; i < focusLineCount; i++)
-            {
-                offscreenGraphics.DrawLine(
-                    focusPen,
-                    deflatedBounds.Left,
-                    deflatedBounds.Bottom - i,
-                    deflatedBounds.Right,
-                    deflatedBounds.Bottom - i);
-            }
+            int band = Math.Min(cornerRadius + bottomThickness + 1, focusBandHeight);
+            int bandTop = Math.Max(deflatedBounds.Top, deflatedBounds.Bottom - band + 1);
+            Rectangle bottomClip = Rectangle.FromLTRB(
+                deflatedBounds.Left,
+                bandTop,
+                deflatedBounds.Right + 1,
+                deflatedBounds.Bottom + 1);
+
+            GraphicsState bottomState = offscreenGraphics.Save();
+            offscreenGraphics.SetClip(bottomClip, CombineMode.Replace);
+
+            using GraphicsPath bottomPath = new();
+            bottomPath.AddRoundedRectangle(deflatedBounds, new Size(cornerRadius, cornerRadius));
+
+            using var bottomPen = stroke.BottomColor.GetCachedPenScope(bottomThickness);
+            offscreenGraphics.DrawPath(bottomPen, bottomPath);
+
+            offscreenGraphics.Restore(bottomState);
         }
 
         Rectangle[] nonClientBands = GetNonClientPaintBands(
