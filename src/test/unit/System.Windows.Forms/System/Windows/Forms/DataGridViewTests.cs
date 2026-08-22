@@ -4084,4 +4084,85 @@ public partial class DataGridViewTests : IDisposable
         dataGridView.Dispose();
         toolTipDisposeCount.Should().Be(1);
     }
+
+    [WinFormsFact]
+    public void DataGridView_DefaultCellStyle_SetWithForeColor_DoesNotInheritParentForeColor()
+    {
+        using Form form = new();
+        using DataGridView control = new();
+
+        control.DefaultCellStyle = new DataGridViewCellStyle
+        {
+            Alignment = DataGridViewContentAlignment.MiddleLeft,
+            BackColor = SystemColors.Window,
+            Font = Control.DefaultFont,
+            ForeColor = Color.Lime,
+            SelectionBackColor = SystemColors.Highlight,
+            SelectionForeColor = SystemColors.HighlightText,
+            WrapMode = DataGridViewTriState.False
+        };
+
+        control.Columns.Add(new DataGridViewTextBoxColumn());
+        int rowIndex = control.Rows.Add();
+
+        form.Controls.Add(control);
+
+        form.ForeColor = Color.Red;
+
+        Assert.Equal(Color.Lime, control.DefaultCellStyle.ForeColor);
+    }
+
+    public void DataGridView_DefaultCellStyle_WithoutForeColor_InheritsParentForeColor()
+    {
+        using Form form = new();
+        using DataGridView control = new();
+
+        control.DefaultCellStyle = new DataGridViewCellStyle
+        {
+            Alignment = DataGridViewContentAlignment.MiddleLeft,
+            BackColor = SystemColors.Window,
+            Font = Control.DefaultFont,
+            SelectionBackColor = SystemColors.Highlight,
+            SelectionForeColor = SystemColors.HighlightText,
+            WrapMode = DataGridViewTriState.False
+        };
+
+        control.Columns.Add(new DataGridViewTextBoxColumn());
+        int rowIndex = control.Rows.Add();
+
+        form.Controls.Add(control);
+
+        form.ForeColor = Color.Red;
+
+        Assert.Equal(Color.Red, control.DefaultCellStyle.ForeColor);
+        Assert.Equal(Color.Red, control.Rows[rowIndex].Cells[0].InheritedStyle.ForeColor);
+    }
+
+    [WinFormsFact]
+    public void DataGridView_DefaultCellStyle_EmptyForeColor_InheritsParentForeColor()
+    {
+        using Form form = new();
+        using DataGridView control = new();
+
+        control.DefaultCellStyle = new DataGridViewCellStyle
+        {
+            Alignment = DataGridViewContentAlignment.MiddleLeft,
+            BackColor = SystemColors.Window,
+            Font = Control.DefaultFont,
+            ForeColor = Color.Empty,
+            SelectionBackColor = SystemColors.Highlight,
+            SelectionForeColor = SystemColors.HighlightText,
+            WrapMode = DataGridViewTriState.False
+        };
+
+        control.Columns.Add(new DataGridViewTextBoxColumn());
+        int rowIndex = control.Rows.Add();
+
+        form.Controls.Add(control);
+
+        form.ForeColor = Color.Red;
+
+        Assert.Equal(Color.Red, control.DefaultCellStyle.ForeColor);
+        Assert.Equal(Color.Red, control.Rows[rowIndex].Cells[0].InheritedStyle.ForeColor);
+    }
 }

@@ -2042,6 +2042,9 @@ public partial class DataGridView : Control, ISupportInitialize
             // Update ambient font flag depending on cell style font
             _dataGridViewState1[State1_AmbientFont] = value?.Font == base.Font;
 
+            // If ForeColor is explicitly set, stop treating it as ambient so Form.ForeColor doesn't override it.
+            _dataGridViewState1[State1_AmbientForeColor] = value is null || value.ForeColor.IsEmpty;
+
             DataGridViewCellStyleDifferences dgvcsc = cs.GetDifferencesFrom(DefaultCellStyle);
             if (dgvcsc != DataGridViewCellStyleDifferences.None)
             {
