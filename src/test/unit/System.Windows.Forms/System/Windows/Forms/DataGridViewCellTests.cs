@@ -78,6 +78,30 @@ public partial class DataGridViewCellTests
     }
 
     [WinFormsFact]
+    public void DataGridViewCheckBoxCell_ErrorIconBounds_RemainsVisible_InEditMode()
+    {
+        using DataGridView dgv = new()
+        {
+            Size = new Size(100, 40),
+            ShowCellErrors = true
+        };
+        dgv.CreateControl();
+
+        using DataGridViewCheckBoxColumn column = new();
+        dgv.Columns.Add(column);
+        dgv.Rows.Add();
+
+        var cell = (DataGridViewCheckBoxCell)dgv.Rows[0].Cells[0];
+        cell.Value = false;
+        cell.ErrorText = "err";
+
+        dgv.CurrentCell = cell;
+        dgv.BeginEdit(true);
+
+        Assert.NotEqual(Rectangle.Empty, cell.ErrorIconBounds);
+    }
+
+    [WinFormsFact]
     public void DataGridViewCell_ContentBounds_GetWithDataGridView_ReturnsExpected()
     {
         using SubDataGridViewCell cellTemplate = new();
