@@ -25,6 +25,14 @@ internal static class ModernControlColorMath
     private const int StrokeStrongAlphaLight = 0x72;     // ControlStrongStrokeColorDefault
     private const int StrokeStrongAlphaDark = 0x8B;
 
+    // Hover overlay: tuned a step stronger than Secondary for a more noticeable cue (#14906 direction).
+    private const int StrokeHoverAlphaLight = 0x40;
+    private const int StrokeHoverAlphaDark = 0x28;
+
+    // Hover surface tint: a fill shift so hover reads clearly, per Leaf's #14906 table. Tunable.
+    private const int SurfaceHoverAlphaLight = 0x1C;
+    private const int SurfaceHoverAlphaDark = 0x1C;
+
     // Shared disabled-state palette for modern renderers. Modern controls do not honor user-set
     // BackColor/ForeColor while disabled, so these fixed surfaces replace them. This is the single
     // source of truth: the modern Button renderers and the modern ComboBox adapter all read from
@@ -151,9 +159,17 @@ internal static class ModernControlColorMath
     internal static Color GetFieldStrokeDefault(Color background, bool darkMode)
         => CompositeStrokeOverlay(background, darkMode ? StrokeDefaultAlphaDark : StrokeDefaultAlphaLight, darkMode);
 
-    /// <summary>Gets the secondary field border stroke, a step stronger than default (used for Hover).</summary>
+    /// <summary>Gets the secondary field border stroke, a step stronger than default.</summary>
     internal static Color GetFieldStrokeSecondary(Color background, bool darkMode)
         => CompositeStrokeOverlay(background, darkMode ? StrokeSecondaryAlphaDark : StrokeSecondaryAlphaLight, darkMode);
+
+    /// <summary>Gets the hover field border stroke: a bit stronger than secondary for a noticeable cue.</summary>
+    internal static Color GetFieldStrokeHover(Color background, bool darkMode)
+        => CompositeStrokeOverlay(background, darkMode ? StrokeHoverAlphaDark : StrokeHoverAlphaLight, darkMode);
+
+    /// <summary>Gets the Hover control surface: the background nudged darker (light) or lighter (dark).</summary>
+    internal static Color GetFieldHoverSurface(Color background, bool darkMode)
+        => CompositeStrokeOverlay(background, darkMode ? SurfaceHoverAlphaDark : SurfaceHoverAlphaLight, darkMode);
 
     /// <summary>Gets the strong field border stroke, used for the resting bottom (elevation) edge.</summary>
     internal static Color GetFieldStrokeStrong(Color background, bool darkMode)
