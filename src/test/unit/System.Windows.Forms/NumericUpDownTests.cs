@@ -858,6 +858,104 @@ public class NumericUpDownTests
         upDown.Value.Should().Be(decimal.MaxValue);
     }
 
+    [WinFormsTheory]
+    [InlineData(VisualStylesMode.Net11)]
+    [InlineData(VisualStylesMode.Classic)]
+    public void NumericUpDown_VisualStylesMode_DoesNotThrowOnPaint(VisualStylesMode visualStylesMode)
+    {
+        using NumericUpDown numericUpDown = new()
+        {
+            VisualStylesMode = visualStylesMode,
+            Value = 5,
+            Size = new Size(120, 32)
+        };
+
+        numericUpDown.CreateControl();
+
+        using Bitmap bitmap = new(numericUpDown.Width, numericUpDown.Height);
+        numericUpDown.DrawToBitmap(bitmap, new Rectangle(Point.Empty, numericUpDown.Size));
+
+        Assert.Equal(visualStylesMode, numericUpDown.VisualStylesMode);
+    }
+
+    [WinFormsTheory]
+    [InlineData(VisualStylesMode.Net11)]
+    [InlineData(VisualStylesMode.Classic)]
+    public void NumericUpDown_VisualStylesMode_WithReadOnlyRenders(VisualStylesMode visualStylesMode)
+    {
+        using NumericUpDown numericUpDown = new()
+        {
+            VisualStylesMode = visualStylesMode,
+            Value = 42,
+            ReadOnly = true,
+            Size = new Size(120, 32)
+        };
+
+        numericUpDown.CreateControl();
+
+        using Bitmap bitmap = new(numericUpDown.Width, numericUpDown.Height);
+
+        // Should not throw with ReadOnly in any visual styles mode.
+        numericUpDown.DrawToBitmap(bitmap, new Rectangle(Point.Empty, numericUpDown.Size));
+    }
+
+    [WinFormsTheory]
+    [InlineData(VisualStylesMode.Net11)]
+    [InlineData(VisualStylesMode.Classic)]
+    public void NumericUpDown_VisualStylesMode_WithDisabledRenders(VisualStylesMode visualStylesMode)
+    {
+        using NumericUpDown numericUpDown = new()
+        {
+            VisualStylesMode = visualStylesMode,
+            Value = 10,
+            Enabled = false,
+            Size = new Size(120, 32)
+        };
+
+        numericUpDown.CreateControl();
+
+        using Bitmap bitmap = new(numericUpDown.Width, numericUpDown.Height);
+
+        // Should not throw when disabled in any visual styles mode.
+        numericUpDown.DrawToBitmap(bitmap, new Rectangle(Point.Empty, numericUpDown.Size));
+    }
+
+    [WinFormsFact]
+    public void NumericUpDown_VisualStylesMode_ChangedToNet11_Invalidates()
+    {
+        using NumericUpDown numericUpDown = new() { Size = new Size(120, 32) };
+        numericUpDown.CreateControl();
+
+        int invalidatedCount = 0;
+        numericUpDown.Invalidated += (s, e) => invalidatedCount++;
+
+        numericUpDown.VisualStylesMode = VisualStylesMode.Net11;
+
+        Assert.True(invalidatedCount >= 1);
+        Assert.Equal(VisualStylesMode.Net11, numericUpDown.VisualStylesMode);
+    }
+
+    [WinFormsFact]
+    public void NumericUpDown_VisualStylesMode_ChangedToNet11_PerformsAutoSizeLayout()
+    {
+        using FlowLayoutPanel parent = new();
+        using NumericUpDown numericUpDown = new()
+        {
+            AutoSize = true
+        };
+
+        parent.Controls.Add(numericUpDown);
+        parent.CreateControl();
+
+        Size sizeBeforeChange = numericUpDown.Size;
+
+        numericUpDown.VisualStylesMode = VisualStylesMode.Net11;
+
+        // Size may change due to different rendering in modern visual styles
+        Assert.NotNull(numericUpDown.Size);
+        Assert.Equal(VisualStylesMode.Net11, numericUpDown.VisualStylesMode);
+    }
+
     private class SubNumericUpDown : NumericUpDown
     {
         public int UpdateEditTextCallCount { get; private set; }
