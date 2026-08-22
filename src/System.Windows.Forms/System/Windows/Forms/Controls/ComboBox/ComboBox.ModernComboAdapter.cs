@@ -408,6 +408,7 @@ public partial class ComboBox
             Color parentColor = comboBox.ParentInternal?.BackColor
                 ?? SystemColors.Control;
             ParentBackgroundRenderer.PaintRoundedBorderRegionMitigation(
+                comboBox,
                 graphics,
                 bounds,
                 new Size(radius, radius),
