@@ -55,9 +55,12 @@ internal static class ModernFieldStrokeResolver
     private static ModernFieldStroke GetThemedStroke(ModernFieldStrokeState state, in ModernFieldStrokeContext context)
     {
         bool dark = context.DarkMode;
-        Color surface = state == ModernFieldStrokeState.Disabled
-            ? ModernControlColorMath.GetDisabledSurfaceColor()
-            : context.BackColor;
+        Color surface = state switch
+        {
+            ModernFieldStrokeState.Disabled => ModernControlColorMath.GetDisabledSurfaceColor(),
+            ModernFieldStrokeState.Hover => ModernControlColorMath.GetFieldHoverSurface(context.BackColor, dark),
+            _ => context.BackColor,
+        };
 
         Color sideTop;
         Color bottom;
@@ -66,13 +69,13 @@ internal static class ModernFieldStrokeResolver
         switch (state)
         {
             case ModernFieldStrokeState.Focused:
-                sideTop = ModernControlColorMath.GetFieldStrokeSecondary(surface, dark);
+                sideTop = ModernControlColorMath.GetFieldStrokeHover(surface, dark);
                 bottom = context.AccentColor;
                 bottomDip = FocusBottomStrokeDip;
                 break;
 
             case ModernFieldStrokeState.Hover:
-                sideTop = ModernControlColorMath.GetFieldStrokeSecondary(surface, dark);
+                sideTop = ModernControlColorMath.GetFieldStrokeHover(surface, dark);
                 bottom = ModernControlColorMath.GetFieldStrokeStrong(surface, dark);
                 break;
 
