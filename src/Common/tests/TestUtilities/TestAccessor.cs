@@ -222,6 +222,12 @@ public class TestAccessor<T> : ITestAccessor
                         memberName,
                         BindingFlags.Static | BindingFlags.Instance | BindingFlags.NonPublic);
 
+                // Look for the compiler-generated backing field of an auto property.
+                if (info is null && type is not null)
+                {
+                    info = GetAutoPropertyBackingField(type, memberName);
+                }
+
                 if (info is not null || type == typeof(object))
                 {
                     // Found something, or already at the top of the type hierarchy
@@ -234,6 +240,12 @@ public class TestAccessor<T> : ITestAccessor
             while (true);
 
             return info;
+        }
+
+        private static FieldInfo? GetAutoPropertyBackingField(Type type, string propertyName)
+        {
+            string backingFieldName = $"<{propertyName}>k__BackingField";
+            return type.GetField(backingFieldName, BindingFlags.Static | BindingFlags.Instance | BindingFlags.NonPublic);
         }
     }
 }
