@@ -152,55 +152,55 @@ public class GroupBoxTests
         switch (flatStyle)
         {
             case FlatStyle.Standard:
-                {
-                    // Card reserves only the caption band plus its gap at the top; no internal
-                    // horizontal or bottom inset, so a docked child can fill the card.
-                    int top = captionFont.Height
-                        + ScaleHelper.ScaleToDpi(
-                            ModernControlVisualStyles.GroupBoxCaptionGap,
-                            deviceDpi);
-                    expectedInsets = new Padding(
-                        padding.Left,
-                        padding.Top + top,
-                        padding.Right,
-                        padding.Bottom);
-                    break;
-                }
+            {
+                // Card reserves only the caption band plus its gap at the top; no internal
+                // horizontal or bottom inset, so a docked child can fill the card.
+                int top = captionFont.Height
+                    + ScaleHelper.ScaleToDpi(
+                        ModernControlVisualStyles.GroupBoxCaptionGap,
+                        deviceDpi);
+                expectedInsets = new Padding(
+                    padding.Left,
+                    padding.Top + top,
+                    padding.Right,
+                    padding.Bottom);
+                break;
+            }
 
             case FlatStyle.Flat:
-                {
-                    // Content clears the descenders below the baseline border line, and sits just
-                    // inside the border on the other sides.
-                    (int ascent, int descent) = control.ModernCaptionMetrics;
-                    int leeway = ScaleHelper.ScaleToDpi(
-                        ModernControlVisualStyles.GroupBoxFlatBaselineLeeway,
-                        deviceDpi);
-                    int borderInset = control.ModernBorderThickness + leeway;
-                    expectedInsets = new Padding(
-                        padding.Left + borderInset,
-                        padding.Top + ascent + descent + leeway,
-                        padding.Right + borderInset,
-                        padding.Bottom + borderInset);
-                    break;
-                }
+            {
+                // Content clears the descenders below the baseline border line, and sits just
+                // inside the border on the other sides.
+                (int ascent, int descent) = control.ModernCaptionMetrics;
+                int leeway = ScaleHelper.ScaleToDpi(
+                    ModernControlVisualStyles.GroupBoxFlatBaselineLeeway,
+                    deviceDpi);
+                int borderInset = control.ModernBorderThickness + leeway;
+                expectedInsets = new Padding(
+                    padding.Left + borderInset,
+                    padding.Top + ascent + descent + leeway,
+                    padding.Right + borderInset,
+                    padding.Bottom + borderInset);
+                break;
+            }
 
             case FlatStyle.Popup:
-                {
-                    // Content is flush to the header rectangle (0 top gap) with a 2px inset elsewhere.
-                    int headerHeight = captionFont.Height
-                        + (2 * ScaleHelper.ScaleToDpi(
-                            ModernControlVisualStyles.GroupBoxHeaderVerticalPadding,
-                            deviceDpi));
-                    int inset = ScaleHelper.ScaleToDpi(
-                        ModernControlVisualStyles.GroupBoxPopupContentInset,
-                        deviceDpi);
-                    expectedInsets = new Padding(
-                        padding.Left + inset,
-                        padding.Top + headerHeight,
-                        padding.Right + inset,
-                        padding.Bottom + inset);
-                    break;
-                }
+            {
+                // Content is flush to the header rectangle (0 top gap) with a 2px inset elsewhere.
+                int headerHeight = captionFont.Height
+                    + (2 * ScaleHelper.ScaleToDpi(
+                        ModernControlVisualStyles.GroupBoxHeaderVerticalPadding,
+                        deviceDpi));
+                int inset = ScaleHelper.ScaleToDpi(
+                    ModernControlVisualStyles.GroupBoxPopupContentInset,
+                    deviceDpi);
+                expectedInsets = new Padding(
+                    padding.Left + inset,
+                    padding.Top + headerHeight,
+                    padding.Right + inset,
+                    padding.Bottom + inset);
+                break;
+            }
 
             default:
                 throw new InvalidOperationException();
