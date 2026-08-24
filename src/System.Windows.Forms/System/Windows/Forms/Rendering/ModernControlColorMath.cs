@@ -33,6 +33,10 @@ internal static class ModernControlColorMath
     private const int SurfaceHoverAlphaLight = 0x1C;
     private const int SurfaceHoverAlphaDark = 0x1C;
 
+    // Read-only surface tint: a subtle fill shift signalling non-editability, per Leaf's #14906 table.
+    private const int SurfaceReadOnlyAlphaLight = 0x0A;
+    private const int SurfaceReadOnlyAlphaDark = 0x0A;
+
     // Shared disabled-state palette for modern renderers. Modern controls do not honor user-set
     // BackColor/ForeColor while disabled, so these fixed surfaces replace them. This is the single
     // source of truth: the modern Button renderers and the modern ComboBox adapter all read from
@@ -43,6 +47,8 @@ internal static class ModernControlColorMath
     private static readonly Color s_lightModeDisabledBorder = Color.FromArgb(0xD0, 0xD0, 0xD0);
     private static readonly Color s_darkModeDisabledForeground = Color.FromArgb(0x88, 0x88, 0x88);
     private static readonly Color s_lightModeDisabledForeground = Color.FromArgb(0xA0, 0xA0, 0xA0);
+    private static readonly Color s_darkModeDisabledBorderStrong = Color.FromArgb(0x6A, 0x6A, 0x6A);
+    private static readonly Color s_lightModeDisabledBorderStrong = Color.FromArgb(0xB0, 0xB0, 0xB0);
 
     /// <summary>
     ///  Gets the stable border color for modern editable text controls when enabled.
@@ -73,6 +79,14 @@ internal static class ModernControlColorMath
             : Application.IsDarkModeEnabled
                 ? s_darkModeDisabledBorder
                 : s_lightModeDisabledBorder;
+
+    /// <summary>Gets the stronger disabled border color used for the disabled bottom (elevation) edge.</summary>
+    internal static Color GetDisabledStrongBorderColor()
+        => SystemInformation.HighContrast
+            ? SystemColors.GrayText
+            : Application.IsDarkModeEnabled
+                ? s_darkModeDisabledBorderStrong
+                : s_lightModeDisabledBorderStrong;
 
     /// <summary>
     ///  Gets the contrast-adjusted foreground color for content drawn on
@@ -170,6 +184,10 @@ internal static class ModernControlColorMath
     /// <summary>Gets the Hover control surface: the background nudged darker (light) or lighter (dark).</summary>
     internal static Color GetFieldHoverSurface(Color background, bool darkMode)
         => CompositeStrokeOverlay(background, darkMode ? SurfaceHoverAlphaDark : SurfaceHoverAlphaLight, darkMode);
+
+    /// <summary>Gets the ReadOnly control surface: a subtle non-editable tint of the background.</summary>
+    internal static Color GetFieldReadOnlySurface(Color background, bool darkMode)
+        => CompositeStrokeOverlay(background, darkMode ? SurfaceReadOnlyAlphaDark : SurfaceReadOnlyAlphaLight, darkMode);
 
     /// <summary>Gets the strong field border stroke, used for the resting bottom (elevation) edge.</summary>
     internal static Color GetFieldStrokeStrong(Color background, bool darkMode)

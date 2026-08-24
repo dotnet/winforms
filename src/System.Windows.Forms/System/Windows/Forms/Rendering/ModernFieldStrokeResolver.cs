@@ -59,8 +59,13 @@ internal static class ModernFieldStrokeResolver
         {
             ModernFieldStrokeState.Disabled => ModernControlColorMath.GetDisabledSurfaceColor(),
             ModernFieldStrokeState.Hover => ModernControlColorMath.GetFieldHoverSurface(context.BackColor, dark),
+            ModernFieldStrokeState.ReadOnly => ModernControlColorMath.GetFieldReadOnlySurface(context.BackColor, dark),
             _ => context.BackColor,
         };
+
+        // Strokes composite over the normal background so ReadOnly keeps the Rest strokes; only Hover
+        // darkens its strokes along with its surface.
+        Color strokeBackground = state == ModernFieldStrokeState.Hover ? surface : context.BackColor;
 
         Color sideTop;
         Color bottom;
@@ -69,25 +74,25 @@ internal static class ModernFieldStrokeResolver
         switch (state)
         {
             case ModernFieldStrokeState.Focused:
-                sideTop = ModernControlColorMath.GetFieldStrokeHover(surface, dark);
+                sideTop = ModernControlColorMath.GetFieldStrokeHover(strokeBackground, dark);
                 bottom = context.AccentColor;
                 bottomDip = FocusBottomStrokeDip;
                 break;
 
             case ModernFieldStrokeState.Hover:
-                sideTop = ModernControlColorMath.GetFieldStrokeHover(surface, dark);
-                bottom = ModernControlColorMath.GetFieldStrokeStrong(surface, dark);
+                sideTop = ModernControlColorMath.GetFieldStrokeHover(strokeBackground, dark);
+                bottom = ModernControlColorMath.GetFieldStrokeStrong(strokeBackground, dark);
                 break;
 
             case ModernFieldStrokeState.Disabled:
                 sideTop = ModernControlColorMath.GetDisabledBorderColor();
-                bottom = ModernControlColorMath.GetDisabledBorderColor();
+                bottom = ModernControlColorMath.GetDisabledStrongBorderColor();
                 break;
 
             default:
-                // Rest and ReadOnly share the resting look; ReadOnly differs only by surface.
-                sideTop = ModernControlColorMath.GetFieldStrokeDefault(surface, dark);
-                bottom = ModernControlColorMath.GetFieldStrokeStrong(surface, dark);
+                // Rest and ReadOnly share the resting strokes; ReadOnly differs only by its surface.
+                sideTop = ModernControlColorMath.GetFieldStrokeDefault(strokeBackground, dark);
+                bottom = ModernControlColorMath.GetFieldStrokeStrong(strokeBackground, dark);
                 break;
         }
 

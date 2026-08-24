@@ -35,7 +35,8 @@ public class ModernFieldStrokeResolverTests
         ModernFieldStroke stroke = ModernFieldStrokeResolver.GetStroke(
             Context(enabled: false, focused: true, readOnly: true, hovered: true));
 
-        stroke.BottomColor.Should().Be(ModernControlColorMath.GetDisabledBorderColor());
+        stroke.SideTopColor.Should().Be(ModernControlColorMath.GetDisabledBorderColor());
+        stroke.BottomColor.Should().Be(ModernControlColorMath.GetDisabledStrongBorderColor());
         stroke.SurfaceColor.Should().Be(ModernControlColorMath.GetDisabledSurfaceColor());
     }
 
@@ -50,14 +51,14 @@ public class ModernFieldStrokeResolverTests
     }
 
     [Fact]
-    public void ReadOnly_wins_over_hover_and_matches_rest_strokes()
+    public void ReadOnly_wins_over_hover_matches_rest_strokes_but_tints_surface()
     {
         ModernFieldStroke readOnly = ModernFieldStrokeResolver.GetStroke(Context(readOnly: true, hovered: true));
         ModernFieldStroke rest = ModernFieldStrokeResolver.GetStroke(Context());
 
         readOnly.SideTopColor.Should().Be(rest.SideTopColor);
         readOnly.BottomColor.Should().Be(rest.BottomColor);
-        readOnly.SurfaceColor.Should().Be(rest.SurfaceColor);
+        readOnly.SurfaceColor.Should().NotBe(rest.SurfaceColor);
     }
 
     [Fact]
