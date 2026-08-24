@@ -1,7 +1,5 @@
-// Licensed to the .NET Foundation under one or more agreements.
+﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
-
-using System.Drawing;
 
 namespace System.Windows.Forms;
 
@@ -21,9 +19,7 @@ internal static class ModernFieldStrokeResolver
     {
         ModernFieldStrokeState state = ResolveState(context);
 
-        return context.HighContrast
-            ? GetHighContrastStroke(state)
-            : GetThemedStroke(state, context);
+        return GetThemedStroke(state, context);
     }
 
     // Precedence: Disabled > Focused > ReadOnly > Hover > Rest.
@@ -97,21 +93,5 @@ internal static class ModernFieldStrokeResolver
         }
 
         return new ModernFieldStroke(sideTop, bottom, surface, BaseStrokeDip, bottomDip);
-    }
-
-    private static ModernFieldStroke GetHighContrastStroke(ModernFieldStrokeState state)
-    {
-        if (state == ModernFieldStrokeState.Disabled)
-        {
-            Color grayText = SystemColors.GrayText;
-            return new ModernFieldStroke(grayText, grayText, SystemColors.Control, BaseStrokeDip, BaseStrokeDip);
-        }
-
-        Color frame = SystemColors.WindowFrame;
-        bool focused = state == ModernFieldStrokeState.Focused;
-        Color bottom = focused ? SystemColors.Highlight : frame;
-        float bottomDip = focused ? FocusBottomStrokeDip : BaseStrokeDip;
-
-        return new ModernFieldStroke(frame, bottom, SystemColors.Window, BaseStrokeDip, bottomDip);
     }
 }

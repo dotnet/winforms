@@ -12,7 +12,6 @@ namespace System.Windows.Forms;
 /// <param name="Focused">Whether the control has keyboard focus.</param>
 /// <param name="Hovered">Whether the pointer is over the control.</param>
 /// <param name="DarkMode">Whether dark mode is in effect.</param>
-/// <param name="HighContrast">Whether High Contrast is in effect.</param>
 /// <param name="AccentColor">The system accent color.</param>
 /// <param name="DeviceDpi">The control's current device DPI.</param>
 internal readonly record struct ModernFieldStrokeContext(
@@ -22,6 +21,5 @@ internal readonly record struct ModernFieldStrokeContext(
     bool Focused,
     bool Hovered,
     bool DarkMode,
-    bool HighContrast,
     Color AccentColor,
     int DeviceDpi);

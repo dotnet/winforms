@@ -2695,7 +2695,6 @@ public abstract partial class TextBoxBase : Control
             Focused: Focused,
             Hovered: _hovered,
             DarkMode: Application.IsDarkModeEnabled,
-            HighContrast: Application.SystemVisualSettings.HighContrastEnabled,
             AccentColor: Application.SystemVisualSettings.AccentColor,
             DeviceDpi: DeviceDpi);
         ModernFieldStroke stroke = ModernFieldStrokeResolver.GetStroke(strokeContext);

@@ -14,8 +14,7 @@ public class ModernFieldStrokeResolverTests
         bool readOnly = false,
         bool focused = false,
         bool hovered = false,
-        bool darkMode = false,
-        bool highContrast = false)
+        bool darkMode = false)
         => new(
             BackColor: Color.White,
             Enabled: enabled,
@@ -23,7 +22,6 @@ public class ModernFieldStrokeResolverTests
             Focused: focused,
             Hovered: hovered,
             DarkMode: darkMode,
-            HighContrast: highContrast,
             AccentColor: s_accent,
             DeviceDpi: 96);
 
@@ -133,29 +131,4 @@ public class ModernFieldStrokeResolverTests
     [Fact]
     public void ForeColor_cannot_affect_the_stroke_by_construction()
         => typeof(ModernFieldStrokeContext).GetProperty("ForeColor").Should().BeNull();
-
-    // ---- High Contrast bypass ----
-
-    [Fact]
-    public void HighContrast_uses_system_frame_and_window()
-    {
-        ModernFieldStroke rest = ModernFieldStrokeResolver.GetStroke(Context(highContrast: true));
-
-        rest.SideTopColor.Should().Be(SystemColors.WindowFrame);
-        rest.SurfaceColor.Should().Be(SystemColors.Window);
-    }
-
-    [Fact]
-    public void HighContrast_focus_bottom_is_highlight()
-        => ModernFieldStrokeResolver.GetStroke(Context(focused: true, highContrast: true))
-            .BottomColor.Should().Be(SystemColors.Highlight);
-
-    [Fact]
-    public void HighContrast_disabled_uses_gray_text()
-    {
-        ModernFieldStroke disabled = ModernFieldStrokeResolver.GetStroke(Context(enabled: false, highContrast: true));
-
-        disabled.SideTopColor.Should().Be(SystemColors.GrayText);
-        disabled.BottomColor.Should().Be(SystemColors.GrayText);
-    }
 }

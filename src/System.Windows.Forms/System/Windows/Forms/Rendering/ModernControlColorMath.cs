@@ -18,7 +18,7 @@ internal static class ModernControlColorMath
 
     // WinUI control-stroke overlay alphas over the black (light mode) / white (dark mode) pole,
     // verified against Common_themeresources_any.xaml. Composited in linear light (see below).
-    private const int StrokeDefaultAlphaLight = 0x0F;    // ControlStrokeColorDefault
+    private const int StrokeDefaultAlphaLight = 0x1F;    // raised for light-mode prominence per #14906 (WinUI base 0x0F)
     private const int StrokeDefaultAlphaDark = 0x12;
     private const int StrokeSecondaryAlphaLight = 0x29;  // ControlStrokeColorSecondary
     private const int StrokeSecondaryAlphaDark = 0x18;
