@@ -58,7 +58,6 @@ public partial class PrintPreviewControl : Control
     {
         ResetBackColor();
         ResetForeColor();
-        ForeColorChanged += (_, _) => _isForeColorSet = true;
         Size = new Size(100, 100);
         SetStyle(ControlStyles.ResizeRedraw, false);
         SetStyle(ControlStyles.AllPaintingInWmPaint | ControlStyles.UserPaint | ControlStyles.OptimizedDoubleBuffer, true);
@@ -295,6 +294,22 @@ public partial class PrintPreviewControl : Control
     public override void ResetBackColor() => BackColor = SystemColors.AppWorkspace;
 
     internal override bool ShouldSerializeBackColor() => !BackColor.Equals(SystemColors.AppWorkspace);
+
+    /// <summary>
+    ///  Gets or sets the foreground color of the "no printable content" message text, and (when
+    ///  explicitly set) each previewed page's background.
+    /// </summary>
+    public override Color ForeColor
+    {
+        get => base.ForeColor;
+        set
+        {
+            // Tracked here, not via ForeColorChanged: that event only fires on an actual value
+            // change, so reassigning the current value would otherwise look like "never set".
+            _isForeColorSet = true;
+            base.ForeColor = value;
+        }
+    }
 
     [EditorBrowsable(EditorBrowsableState.Never)]
     public override void ResetForeColor()
@@ -690,7 +705,10 @@ public partial class PrintPreviewControl : Control
             {
                 Rectangle box = pageRenderArea[i];
                 g.DrawRectangle(Pens.Black, box);
-                using (var brush = ForeColor.GetCachedSolidBrushScope())
+
+                // Default page fill is white; an explicitly set ForeColor is still honored, as it always has been.
+                Color pageColor = _isForeColorSet ? ForeColor : Color.White;
+                using (var brush = pageColor.GetCachedSolidBrushScope())
                 {
                     g.FillRectangle(brush, box);
                 }

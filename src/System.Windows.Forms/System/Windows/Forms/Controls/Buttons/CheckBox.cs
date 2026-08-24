@@ -165,6 +165,18 @@ public partial class CheckBox : ButtonBase
     /// <summary>
     ///  Gets or sets the horizontal and vertical alignment of a check box on a check box control.
     /// </summary>
+    /// <remarks>
+    ///  <para>
+    ///   When <see cref="Appearance"/> is <see cref="Appearance.ToggleSwitch"/> and the control renders as a toggle
+    ///   switch in an effective .NET 11-or-later mode,
+    ///   <see cref="ContentAlignment.TopLeft"/>, <see cref="ContentAlignment.MiddleLeft"/>,
+    ///   <see cref="ContentAlignment.BottomLeft"/>, <see cref="ContentAlignment.TopCenter"/>,
+    ///   <see cref="ContentAlignment.MiddleCenter"/>, and <see cref="ContentAlignment.BottomCenter"/> are treated
+    ///   like left-aligned values, and
+    ///   <see cref="ContentAlignment.TopRight"/>, <see cref="ContentAlignment.MiddleRight"/>, and
+    ///   <see cref="ContentAlignment.BottomRight"/> are treated like right-aligned values.
+    ///  </para>
+    /// </remarks>
     [Bindable(true)]
     [Localizable(true)]
     [SRCategory(nameof(SR.CatAppearance))]
