@@ -17,12 +17,13 @@ internal static class ModernControlColorMath
     private const int ContrastSearchIterations = 10;
 
     // WinUI control-stroke overlay alphas over the black (light mode) / white (dark mode) pole,
-    // verified against Common_themeresources_any.xaml. Composited in linear light (see below).
-    private const int StrokeDefaultAlphaLight = 0x1F;    // raised for light-mode prominence per #14906 (WinUI base 0x0F)
+    // verified against Common_themeresources_any.xaml, except light-mode Strong, which is raised
+    // above WinUI so the visible bottom edge meets WCAG 1.4.11 (#14906). Composited in linear light.
+    private const int StrokeDefaultAlphaLight = 0x0F;    // ControlStrokeColorDefault
     private const int StrokeDefaultAlphaDark = 0x12;
     private const int StrokeSecondaryAlphaLight = 0x29;  // ControlStrokeColorSecondary
     private const int StrokeSecondaryAlphaDark = 0x18;
-    private const int StrokeStrongAlphaLight = 0x72;     // ControlStrongStrokeColorDefault
+    private const int StrokeStrongAlphaLight = 0xD1;     // resting bottom edge; ~4.5:1 for WCAG 1.4.11 + elevation (#14906). WinUI base 0x72 = 1.74:1. Value pending design.
     private const int StrokeStrongAlphaDark = 0x8B;
 
     // Hover overlay: tuned a step stronger than Secondary for a more noticeable cue (#14906 direction).
