@@ -2665,7 +2665,9 @@ public abstract partial class TextBoxBase : Control
 
         Color clientBackColor = BackColor;
         Color parentBackColor = Parent?.BackColor ?? BackColor;
-        Color adornerColor =  ModernControlColorMath.TextControlBorderColor;
+        Color adornerColor = Enabled
+            ? ModernControlColorMath.TextControlBorderColor
+            : ModernControlColorMath.GetDisabledBorderColor();
 
         using var clientBackgroundBrush = clientBackColor.GetCachedSolidBrushScope();
         using var adornerBrush = adornerColor.GetCachedSolidBrushScope();

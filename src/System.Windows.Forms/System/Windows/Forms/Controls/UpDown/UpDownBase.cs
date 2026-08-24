@@ -1086,7 +1086,9 @@ public abstract partial class UpDownBase : ContainerControl
 
         Color parentBackColor = Parent?.BackColor ?? BackColor;
         Color clientBackColor = BackColor;
-        Color adornerColor = ModernControlColorMath.TextControlBorderColor;
+        Color adornerColor = Enabled
+            ? ModernControlColorMath.TextControlBorderColor
+            : ModernControlColorMath.GetDisabledBorderColor();
 
         using var clientBackgroundBrush = clientBackColor.GetCachedSolidBrushScope();
         using var adornerPen = adornerColor.GetCachedPenScope(borderThickness);
