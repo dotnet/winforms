@@ -1,4 +1,4 @@
-// Licensed to the .NET Foundation under one or more agreements.
+﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
 using System.Drawing;
@@ -111,7 +111,7 @@ internal sealed class RadioButtonModernAdapter : RadioButtonBaseAdapter
 
         PaintImage(e, layout);
 
-        Color preferredTextColor = Control.ShouldSerializeForeColor()
+        Color preferredTextColor = Control.ForeColor != Forms.Control.DefaultForeColor
             ? Control.ForeColor
             : Application.IsDarkModeEnabled
                 ? Color.FromArgb(0xF0, 0xF0, 0xF0)

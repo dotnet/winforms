@@ -138,9 +138,7 @@ internal sealed class AnimatedPopupButtonRenderer : AnimatedControlRenderer
 
             faceColor = PopupButtonColorMath.Blend(baseColor, hoverColor, _hoverCurrent);
             faceColor = PopupButtonColorMath.Blend(faceColor, pressedColor, _pressCurrent);
-            bool useAutomaticForeColor = button.EffectiveVisualStylesModeInternal >= VisualStylesMode.Net11
-                ? !button.ShouldSerializeForeColor()
-                : button.ForeColor == Forms.Control.DefaultForeColor;
+            bool useAutomaticForeColor = button.ForeColor == Forms.Control.DefaultForeColor;
             foreColor = !useAutomaticForeColor
                 ? button.ForeColor
                 : _baseColorRenderer.GetTextColor(state, button.IsDefault, faceColor);
@@ -157,9 +155,7 @@ internal sealed class AnimatedPopupButtonRenderer : AnimatedControlRenderer
             BackColor = faceColor,
             ForeColor = foreColor,
             SurfaceColor = button.Parent?.BackColor ?? button.BackColor,
-            UseAutomaticForeColor = button.EffectiveVisualStylesModeInternal >= VisualStylesMode.Net11
-                ? !button.ShouldSerializeForeColor()
-                : button.ForeColor == Forms.Control.DefaultForeColor,
+            UseAutomaticForeColor = button.ForeColor == Forms.Control.DefaultForeColor,
             BorderColor = borderColor,
             BorderWidth = flatAppearance.BorderSize,
             Enabled = button.Enabled,
@@ -238,7 +234,9 @@ internal sealed class AnimatedPopupButtonRenderer : AnimatedControlRenderer
         _baseColorRenderer.DeviceDpi = button.DeviceDpi;
         _baseColorRenderer.FlatAppearance = flatAppearance;
 
-        bool hasCustomBackColor = button.BackColor != Forms.Control.DefaultBackColor;
+        bool hasCustomBackColor = button.EffectiveVisualStylesModeInternal >= VisualStylesMode.Net11
+            ? button.ShouldSerializeBackColor()
+            : button.BackColor != Forms.Control.DefaultBackColor;
         Color baseColor = hasCustomBackColor
             ? button.BackColor
             : _baseColorRenderer.GetBackgroundColor(PushButtonState.Normal, isDefault: false);
