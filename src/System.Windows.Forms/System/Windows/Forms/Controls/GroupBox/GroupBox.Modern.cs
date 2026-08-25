@@ -255,7 +255,7 @@ public partial class GroupBox
             BackgroundImageLayout,
             ClientRectangle,
             ClientRectangle,
-            DisplayRectangle.Location,
+            Point.Empty,
             RightToLeft);
     }
 

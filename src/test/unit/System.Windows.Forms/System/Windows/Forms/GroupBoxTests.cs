@@ -576,6 +576,56 @@ public class GroupBoxTests
             actual.GetPixel(sample.X, sample.Y).ToArgb());
     }
 
+    [WinFormsTheory]
+    [InlineData(FlatStyle.Standard)]
+    [InlineData(FlatStyle.Flat)]
+    [InlineData(FlatStyle.Popup)]
+    public void GroupBox_ModernVisualStyles_TiledBackgroundImageUsesClientOrigin(
+       FlatStyle flatStyle)
+    {
+        using SystemVisualSettingsTestScope settingsScope = new(
+            clientAreaAnimationEnabled: false,
+            highContrastEnabled: false);
+        using Bitmap backgroundImage = new(2, 2);
+        backgroundImage.SetPixel(0, 0, Color.Red);
+        backgroundImage.SetPixel(1, 0, Color.Green);
+        backgroundImage.SetPixel(0, 1, Color.Blue);
+        backgroundImage.SetPixel(1, 1, Color.Yellow);
+        using VisualStylesGroupBox control = new()
+        {
+            BackColor = Color.White,
+            BackgroundImage = backgroundImage,
+            BackgroundImageLayout = ImageLayout.Tile,
+            FlatStyle = flatStyle,
+            Size = new Size(100, 70),
+            Text = "Modern group",
+            VisualStylesMode = VisualStylesMode.Net11
+        };
+        control.CreateControl();
+        using Bitmap actual = new(control.Width, control.Height);
+        using Graphics graphics = Graphics.FromImage(actual);
+        using PaintEventArgs paintEventArgs = new(graphics, control.ClientRectangle);
+
+        control.OnPaint(paintEventArgs);
+
+        Point sample = new(actual.Width / 2, actual.Height / 2);
+        Color expected = backgroundImage.GetPixel(
+            sample.X % backgroundImage.Width,
+            sample.Y % backgroundImage.Height);
+        if (flatStyle == FlatStyle.Standard)
+        {
+            expected = PopupButtonColorMath.Composite(
+                Color.FromArgb(
+                    ModernControlVisualStyles.GroupBoxCardBodyShadeAlpha,
+                    Color.Black),
+                expected);
+        }
+
+        Assert.Equal(
+            expected.ToArgb(),
+            actual.GetPixel(sample.X, sample.Y).ToArgb());
+    }
+
     [WinFormsFact]
     public void GroupBox_ModernSystem_OnPaintBackgroundDoesNotPaintBackgroundImage()
     {
