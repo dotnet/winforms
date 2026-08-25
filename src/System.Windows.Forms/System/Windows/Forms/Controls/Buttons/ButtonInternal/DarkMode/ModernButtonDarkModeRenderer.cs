@@ -26,7 +26,8 @@ internal sealed class ModernButtonDarkModeRenderer : ButtonDarkModeRendererBase
     private const int FocusedCornerRadiusLogical = 6;
     private const int UnfocusedCornerRadiusLogical = 8;
     private const int BorderThicknessLogical = 1;
-    private const int ContentInsetLogical = 4;
+    private const int ContentInsetHorizontalLogical = 4;
+    private const int ContentInsetVerticalLogical = 2;
 
     // Dark scheme - normal button area.
     private static readonly Color s_darkNormal = Color.FromArgb(0x2D, 0x2D, 0x2D);
@@ -73,7 +74,11 @@ internal sealed class ModernButtonDarkModeRenderer : ButtonDarkModeRendererBase
         => focusRingVisible ? PaddingCore : Padding.Empty;
 
     internal override Padding GetPreferredSizePadding()
-        => new(FocusBodyInset + Scale(ContentInsetLogical));
+    {
+        int horizontal = FocusBodyInset + Scale(ContentInsetHorizontalLogical);
+        int vertical = FocusBodyInset + Scale(ContentInsetVerticalLogical);
+        return new Padding(horizontal, vertical, horizontal, vertical);
+    }
 
     private protected override bool UseModernStateDefaults => true;
 
@@ -126,8 +131,9 @@ internal sealed class ModernButtonDarkModeRenderer : ButtonDarkModeRendererBase
             }
         }
 
-        int inset = Scale(ContentInsetLogical);
-        return Rectangle.Inflate(bounds, -inset, -inset);
+        int horizontalInset = Scale(ContentInsetHorizontalLogical);
+        int verticalInset = Scale(ContentInsetVerticalLogical);
+        return Rectangle.Inflate(bounds, -horizontalInset, -verticalInset);
     }
 
     public override void DrawFocusIndicator(Graphics graphics, Rectangle bounds, bool isDefault)

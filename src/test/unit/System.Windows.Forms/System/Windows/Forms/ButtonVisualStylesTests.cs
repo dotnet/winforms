@@ -1,4 +1,4 @@
-// Licensed to the .NET Foundation under one or more agreements.
+﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
 #nullable disable
@@ -119,6 +119,42 @@ public class ButtonVisualStylesTests
         control.DrawToBitmap(actual, new Rectangle(Point.Empty, control.Size));
 
         Assert.Equal(255, actual.GetPixel(control.Width - 2, 2).A);
+    }
+
+    [WinFormsFact]
+    public void Button_VisualStylesMode_Net11_DefaultHeight_ProvidesSufficientTextBounds()
+    {
+        using Button button = new()
+        {
+            FlatStyle = FlatStyle.Standard,
+            VisualStylesMode = VisualStylesMode.Net11,
+            Text = "button2",
+            Size = new Size(75, 23)
+        };
+        button.CreateControl();
+
+        ButtonInternal.ButtonDarkModeAdapter adapter = (ButtonInternal.ButtonDarkModeAdapter)button.CreateStandardAdapter();
+        ButtonDarkModeRendererBase renderer = adapter.TestAccessor.Dynamic._buttonDarkModeRenderer;
+        using Bitmap bitmap = new(button.Width, button.Height);
+        using Graphics graphics = Graphics.FromImage(bitmap);
+
+        Rectangle contentBounds = renderer.DrawButtonBackground(
+            graphics,
+            button.ClientRectangle,
+            VisualStyles.PushButtonState.Normal,
+            isDefault: false,
+            focused: false,
+            backColor: Color.White);
+
+        ButtonInternal.ButtonBaseAdapter.LayoutData layout = adapter.GetLayoutData(contentBounds);
+
+        int minimumTextHeight = TextRenderer.MeasureText(
+            button.Text,
+            button.Font,
+            Size.Empty,
+            TextFormatFlags.SingleLine | TextFormatFlags.NoPadding).Height;
+
+        Assert.True(layout.TextBounds.Height >= minimumTextHeight - 1);
     }
 
     [WinFormsFact]
@@ -815,10 +851,9 @@ public class ButtonVisualStylesTests
             withoutBackgroundImage,
             new Rectangle(Point.Empty, button.Size));
 
-        Rectangle clipRectangle = Rectangle.Inflate(
-            button.ClientRectangle,
-            -4,
-            -4);
+        Rectangle clipRectangle = GetModernStandardContentBounds(
+            button,
+            focused: false);
         Rectangle expected = GetExpectedBackgroundImageBounds(
             button.ClientRectangle,
             clipRectangle,
