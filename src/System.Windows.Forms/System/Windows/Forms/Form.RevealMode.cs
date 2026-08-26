@@ -151,7 +151,7 @@ public partial class Form
     ///   prevents the forced repaint from recursively re-entering the reveal before the cloak clears.
     ///  </para>
     /// </remarks>
-    private void RevealDeferredAppearance()
+    private unsafe void RevealDeferredAppearance()
     {
         if (!DeferredAppearanceCloaked || _isRevealingDeferredAppearance)
         {
