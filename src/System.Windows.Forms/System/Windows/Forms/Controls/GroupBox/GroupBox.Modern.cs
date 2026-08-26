@@ -211,6 +211,15 @@ public partial class GroupBox
         // so it remains visible (issue #14779).
         PaintModernBackgroundImage(e, frameBounds);
 
+        if (BackgroundImage is not null)
+        {
+            Color bodyShadeColor = Color.FromArgb(
+                ModernControlVisualStyles.GroupBoxCardBodyShadeAlpha,
+                Color.Black);
+            using var bodyShadeBrush = bodyShadeColor.GetCachedSolidBrushScope();
+            e.Graphics.FillRectangle(bodyShadeBrush, frameBounds);
+        }
+
         DrawModernCaption(
             e.Graphics,
             captionBounds,
@@ -236,14 +245,17 @@ public partial class GroupBox
             return;
         }
 
+        using GraphicsStateScope state = new(e.Graphics);
+        e.Graphics.SetClip(clipBounds, CombineMode.Intersect);
+
         ControlPaint.DrawBackgroundImage(
             e.Graphics,
             BackgroundImage,
             Color.Transparent,
             BackgroundImageLayout,
             ClientRectangle,
-            clipBounds,
-            DisplayRectangle.Location,
+            ClientRectangle,
+            Point.Empty,
             RightToLeft);
     }
 
@@ -274,6 +286,11 @@ public partial class GroupBox
             borderColor = PopupButtonColorMath.Mute(borderColor, 0.55f);
         }
 
+        if (BackgroundImage is not null)
+        {
+            PaintModernBackgroundImage(e, ClientRectangle);
+        }
+
         DrawRoundedFrame(e.Graphics, frameBounds, borderColor);
 
         Rectangle captionBackground = GetFlatCaptionBackgroundBounds(
@@ -282,7 +299,14 @@ public partial class GroupBox
             frameBounds);
         if (!captionBackground.IsEmpty)
         {
-            PaintBackground(e, captionBackground);
+            if (BackgroundImage is null)
+            {
+                PaintBackground(e, captionBackground);
+            }
+            else
+            {
+                PaintModernBackgroundImage(e, captionBackground);
+            }
         }
 
         DrawModernCaption(
@@ -327,6 +351,12 @@ public partial class GroupBox
             borderColor = PopupButtonColorMath.Mute(borderColor, 0.55f);
         }
 
+        Color headerFillColor = BackgroundImage is null
+            ? headerSurfaceColor
+            : Color.FromArgb(
+                ModernControlVisualStyles.GroupBoxPopupHeaderOverlayAlpha,
+                headerColor);
+
         using GraphicsPath path = CreateModernFramePath(bounds);
         using (var bodyBrush = bodyColor.GetCachedSolidBrushScope())
         {
@@ -345,7 +375,7 @@ public partial class GroupBox
         using (GraphicsStateScope state = new(e.Graphics))
         {
             e.Graphics.SetClip(headerBounds);
-            using var headerBrush = headerSurfaceColor.GetCachedSolidBrushScope();
+            using var headerBrush = headerFillColor.GetCachedSolidBrushScope();
             e.Graphics.FillPath(headerBrush, path);
         }
 
@@ -357,6 +387,7 @@ public partial class GroupBox
         // artifacts into the parent by tracing the parent color just outside the border.
         int frameRadius = GetModernFrameCornerRadius(bounds);
         ParentBackgroundRenderer.PaintRoundedBorderRegionMitigation(
+            this,
             e.Graphics,
             bounds,
             new Size(frameRadius, frameRadius),
@@ -458,6 +489,7 @@ public partial class GroupBox
         // artifacts into the parent by tracing the parent color just outside the border.
         int frameRadius = GetModernFrameCornerRadius(bounds);
         ParentBackgroundRenderer.PaintRoundedBorderRegionMitigation(
+            this,
             graphics,
             bounds,
             new Size(frameRadius, frameRadius),

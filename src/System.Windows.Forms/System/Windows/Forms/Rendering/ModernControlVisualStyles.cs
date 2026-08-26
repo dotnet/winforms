@@ -29,6 +29,9 @@ internal static class ModernControlVisualStyles
     /// <summary>Height of the animated focus underline band drawn beneath a focused modern field.</summary>
     internal const int FocusBandHeight = 4;
 
+    /// <summary>Opacity of the Standard GroupBox body shade over a background image.</summary>
+    internal const int GroupBoxCardBodyShadeAlpha = 0x20;
+
     /// <summary>Gap between the GroupBox caption text and the surrounding frame line.</summary>
     internal const int GroupBoxCaptionGap = 4;
 
@@ -40,6 +43,9 @@ internal static class ModernControlVisualStyles
 
     /// <summary>Horizontal padding around the GroupBox header text.</summary>
     internal const int GroupBoxHeaderHorizontalPadding = 10;
+
+    /// <summary>Opacity of the Popup GroupBox accent header over a background image.</summary>
+    internal const int GroupBoxPopupHeaderOverlayAlpha = 0x80;
 
     /// <summary>
     ///  Inset between a control's border and its content, shared by modern text fields and the up-down
