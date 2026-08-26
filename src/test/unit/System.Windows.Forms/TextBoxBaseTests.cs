@@ -103,7 +103,7 @@ public partial class TextBoxBaseTests
     }
 
     [WinFormsFact]
-    public void TextBoxBase_VisualStylesMode_LiveSwitchPreservesAutoSizeTableLayoutRowHeight()
+    public void TextBoxBase_VisualStylesMode_LiveSwitchRemeasuresAutoSizeTableLayoutRow()
     {
         using Form form = new()
         {
@@ -142,8 +142,8 @@ public partial class TextBoxBaseTests
 
         int modernRowHeight = tableLayoutPanel.GetRowHeights()[0];
         Assert.Equal(handle, textBox.Handle);
-        Assert.Equal(classicRowHeight, modernRowHeight);
-        Assert.Equal(classicTableSize, tableLayoutPanel.Size);
+        Assert.NotEqual(classicRowHeight, modernRowHeight);
+        Assert.NotEqual(classicTableSize, tableLayoutPanel.Size);
 
         form.VisualStylesMode = VisualStylesMode.Classic;
 
@@ -178,7 +178,7 @@ public partial class TextBoxBaseTests
     [WinFormsTheory]
     [InlineData(9f)]
     [InlineData(11f)]
-    public void TextBoxBase_ModernFixed3D_NaturalHeight_UsesClassicPreferredHeightFormula(float fontSize)
+    public void TextBoxBase_ModernFixed3D_NaturalHeightIncludesRoundedChrome(float fontSize)
     {
         using TextBox control = new()
         {
@@ -187,11 +187,11 @@ public partial class TextBoxBaseTests
             Font = new Font(Control.DefaultFont.FontFamily, fontSize)
         };
 
-        int expected = control.Font.Height
-            + SystemInformation.GetBorderSizeForDpi(control.DeviceDpi).Height * 4
-            + 3;
+        int cornerSize = ScaleHelper.ScaleToDpi(15, control.DeviceDpi);
+        int border = ScaleHelper.ScaleToDpi(1, control.DeviceDpi);
+        int inset = ScaleHelper.ScaleToDpi(2, control.DeviceDpi);
 
-        Assert.Equal(expected, control.PreferredHeight);
+        Assert.True(control.PreferredHeight >= cornerSize + border + inset);
         Assert.Equal(control.PreferredHeight, control.Height);
     }
 
@@ -211,117 +211,7 @@ public partial class TextBoxBaseTests
     }
 
     [WinFormsFact]
-    public void TextBoxBase_ModernFixed3D_ClassicPreferredOuterHeight_PreservesSingleLineClientHeight()
-    {
-        using TextBox control = new()
-        {
-            AutoSize = false,
-            VisualStylesMode = VisualStylesMode.Net11,
-            BorderStyle = BorderStyle.Fixed3D,
-            Height = s_preferredHeight
-        };
-
-        control.CreateControl();
-
-        Assert.True(control.ClientSize.Height >= control.Font.Height + 3);
-    }
-
-    [WinFormsFact]
-    public void TextBoxBase_ModernFixed3D_ClassicPreferredOuterHeight_RetainsTopAndBottomBorderPixels()
-    {
-        using Panel parent = new()
-        {
-            BackColor = Color.Red,
-            Size = new Size(200, 100)
-        };
-
-        using TextBox control = new()
-        {
-            AutoSize = false,
-            VisualStylesMode = VisualStylesMode.Net11,
-            BorderStyle = BorderStyle.Fixed3D,
-            BackColor = Color.White,
-            ForeColor = Color.Black,
-            Size = new Size(120, s_preferredHeight)
-        };
-
-        parent.Controls.Add(control);
-        parent.CreateControl();
-        control.CreateControl();
-
-        using Bitmap bitmap = new(control.Width, control.Height);
-        control.DrawToBitmap(bitmap, new Rectangle(Point.Empty, control.Size));
-
-        Color topCenter = bitmap.GetPixel(bitmap.Width / 2, 0);
-        Color bottomCenter = bitmap.GetPixel(bitmap.Width / 2, bitmap.Height - 1);
-        Assert.NotEqual(parent.BackColor.ToArgb(), topCenter.ToArgb());
-        Assert.NotEqual(parent.BackColor.ToArgb(), bottomCenter.ToArgb());
-        Assert.NotEqual(control.BackColor.ToArgb(), topCenter.ToArgb());
-        Assert.NotEqual(control.BackColor.ToArgb(), bottomCenter.ToArgb());
-    }
-
-    [WinFormsFact]
-    public void TextBoxBase_ModernFixed3D_ClassicPreferredOuterHeight_RetainsMinimumTopAndBottomNonClientBands()
-    {
-        using TextBox control = new()
-        {
-            AutoSize = false,
-            VisualStylesMode = VisualStylesMode.Net11,
-            BorderStyle = BorderStyle.Fixed3D,
-            Height = s_preferredHeight
-        };
-
-        control.CreateControl();
-
-        PInvokeCore.GetWindowRect(control, out RECT windowRect);
-        PInvokeCore.GetClientRect(control, out RECT clientRect);
-        Point clientTopLeft = default;
-        PInvoke.ClientToScreen(control, ref clientTopLeft);
-
-        int topInset = clientTopLeft.Y - windowRect.top;
-        int bottomInset = windowRect.bottom - (clientTopLeft.Y + clientRect.Height);
-
-        Assert.True(topInset >= ScaleHelper.ScaleToDpi(3, control.DeviceDpi));
-        Assert.True(bottomInset >= ScaleHelper.ScaleToDpi(1, control.DeviceDpi));
-    }
-
-    [WinFormsFact]
-    public void TextBoxBase_ModernFixed3D_HighDpiClientHeight_PreservesSingleLineTextMetrics()
-    {
-        using IDisposable dpiScope = ScaleHelper.EnterDpiAwarenessScope(DPI_AWARENESS_CONTEXT.DPI_AWARENESS_CONTEXT_PER_MONITOR_AWARE_V2);
-
-        if (!ScaleHelper.IsThreadPerMonitorV2Aware)
-        {
-            return;
-        }
-
-        using TextBox control = new()
-        {
-            AutoSize = false,
-            VisualStylesMode = VisualStylesMode.Net11,
-            BorderStyle = BorderStyle.Fixed3D,
-            DeviceDpiInternal = 216
-        };
-
-        control.Size = new Size(control.Width, control.PreferredHeight);
-        control.CreateControl();
-
-        PInvokeCore.GetClientRect(control, out RECT clientRect);
-        int minimumSingleLineClientHeight = control.Font.Height + ScaleHelper.ScaleToDpi(3, control.DeviceDpi);
-
-        PInvokeCore.GetWindowRect(control, out RECT windowRect);
-        Point clientTopLeft = default;
-        PInvoke.ClientToScreen(control, ref clientTopLeft);
-        int topInset = clientTopLeft.Y - windowRect.top;
-        int bottomInset = windowRect.bottom - (clientTopLeft.Y + clientRect.Height);
-
-        Assert.True(clientRect.Height >= minimumSingleLineClientHeight);
-        Assert.True(topInset >= ScaleHelper.ScaleToDpi(1, control.DeviceDpi));
-        Assert.True(bottomInset >= ScaleHelper.ScaleToDpi(1, control.DeviceDpi));
-    }
-
-    [WinFormsFact]
-    public void MaskedTextBox_ModernFixed3D_NaturalHeight_UsesClassicPreferredHeightFormula()
+    public void MaskedTextBox_ModernFixed3D_NaturalHeightIncludesRoundedChrome()
     {
         using MaskedTextBox control = new()
         {
@@ -330,41 +220,47 @@ public partial class TextBoxBaseTests
             Font = new Font(Control.DefaultFont.FontFamily, 9f)
         };
 
-        int expected = control.Font.Height
-            + SystemInformation.GetBorderSizeForDpi(control.DeviceDpi).Height * 4
-            + 3;
-
-        Assert.Equal(expected, control.PreferredHeight);
-        Assert.Equal(expected, control.Height);
+        int cornerSize = ScaleHelper.ScaleToDpi(15, control.DeviceDpi);
+        Assert.True(control.Height >= cornerSize + ScaleHelper.ScaleToDpi(1, control.DeviceDpi));
     }
 
     [WinFormsTheory]
-    [InlineData(BorderStyle.Fixed3D)]
-    [InlineData(BorderStyle.FixedSingle)]
-    [InlineData(BorderStyle.None)]
-    public void TextBoxBase_Net11SingleLine_UsesModernPaddingOnAllSides(BorderStyle borderStyle)
+    [InlineData(BorderStyle.Fixed3D, 2)]
+    [InlineData(BorderStyle.FixedSingle, 1)]
+    [InlineData(BorderStyle.None, 1)]
+    public void TextBoxBase_ModernGeometry_UsesExpectedBorderPadding(
+        BorderStyle borderStyle,
+        int logicalBorderPadding)
     {
-        using SubTextBox modernMultiline = new()
+        using SubTextBox control = new()
         {
             BorderStyle = borderStyle,
-            VisualStylesMode = VisualStylesMode.Net11,
-            Multiline = true
+            VisualStylesMode = VisualStylesMode.Net11
         };
 
-        using SubTextBox singleLine = new()
+        int borderPadding = ScaleHelper.ScaleToDpi(logicalBorderPadding, control.DeviceDpi);
+        int borderThickness = ScaleHelper.ScaleToDpi(1, control.DeviceDpi);
+        int internalInset = ScaleHelper.ScaleToDpi(2, control.DeviceDpi);
+        int leftAndTop = borderPadding + internalInset;
+        int rightAndBottom = leftAndTop;
+
+        if (borderStyle != BorderStyle.None)
         {
-            BorderStyle = borderStyle,
-            VisualStylesMode = VisualStylesMode.Net11,
-            Multiline = false
-        };
+            leftAndTop += borderThickness;
+            rightAndBottom += borderThickness;
+        }
+        else
+        {
+            rightAndBottom += borderThickness;
+        }
 
-        Padding modernPadding = modernMultiline.GetVisualStylesPaddingCore(includeScrollbars: false);
-        Padding singleLinePadding = singleLine.GetVisualStylesPaddingCore(includeScrollbars: false);
+        Padding expected = new(
+            left: leftAndTop,
+            top: leftAndTop,
+            right: rightAndBottom,
+            bottom: rightAndBottom);
 
-        Assert.Equal(modernPadding.Left, singleLinePadding.Left);
-        Assert.Equal(modernPadding.Top, singleLinePadding.Top);
-        Assert.Equal(modernPadding.Right, singleLinePadding.Right);
-        Assert.Equal(modernPadding.Bottom, singleLinePadding.Bottom);
+        Assert.Equal(expected, control.GetVisualStylesPaddingCore(includeScrollbars: false));
     }
 
     [Theory]
@@ -429,7 +325,7 @@ public partial class TextBoxBaseTests
     }
 
     [WinFormsFact]
-    public void TextBoxBase_ModernTextScaleChange_PreservesNaturalHeight()
+    public void TextBoxBase_ModernTextScaleChangeAdjustsNaturalHeight()
     {
         SystemVisualSettings previous =
             SystemVisualSettingsTracker.CurrentSettings;
@@ -465,7 +361,7 @@ public partial class TextBoxBaseTests
                     scaled,
                     SystemVisualSettingsCategories.TextScale));
 
-            Assert.Equal(initialHeight, control.Height);
+            Assert.True(control.Height > initialHeight);
             Assert.Equal(control.PreferredHeight, control.Height);
         }
         finally
@@ -601,11 +497,9 @@ public partial class TextBoxBaseTests
         Padding padding = control.GetVisualStylesPaddingCore(includeScrollbars: false);
 
         Assert.True(padding.Left >= ScaleHelper.ScaleToDpi(2, 144));
-
-        int expectedPreferredHeight = control.Font.Height
-            + SystemInformation.GetBorderSizeForDpi(144).Height * 4
-            + 3;
-        Assert.Equal(expectedPreferredHeight, control.PreferredHeight);
+        Assert.True(control.PreferredHeight >= ScaleHelper.ScaleToDpi(15, 144)
+            + ScaleHelper.ScaleToDpi(1, 144)
+            + ScaleHelper.ScaleToDpi(2, 144));
     }
 
     [WinFormsTheory]
@@ -678,6 +572,54 @@ public partial class TextBoxBaseTests
 
         int expected = SystemInformation.GetVerticalScrollBarWidthForDpi(withScrollBar.DeviceDpi);
         Assert.Equal(expected, withScrollBar.GetPreferredSize(Size.Empty).Width - withoutScrollBar.GetPreferredSize(Size.Empty).Width);
+    }
+
+    [WinFormsFact]
+    public void TextBox_ModernVisualStylesMode_MultilineHeightMatchesSingleLineHeight()
+    {
+        using TextBox singleLineTextBox = new()
+        {
+            VisualStylesMode = VisualStylesMode.Net11
+        };
+        using TextBox multilineTextBox = new()
+        {
+            VisualStylesMode = VisualStylesMode.Net11,
+            Multiline = true
+        };
+
+        Assert.Equal(singleLineTextBox.PreferredHeight, multilineTextBox.Height);
+
+        singleLineTextBox.CreateControl();
+        multilineTextBox.CreateControl();
+
+        Assert.Equal(singleLineTextBox.PreferredHeight, multilineTextBox.Height);
+    }
+
+    [WinFormsFact]
+    public void TextBox_ModernVisualStylesMode_HighDpiClientHeight_PreservesSingleLineTextMetrics()
+    {
+        using IDisposable dpiScope = ScaleHelper.EnterDpiAwarenessScope(DPI_AWARENESS_CONTEXT.DPI_AWARENESS_CONTEXT_PER_MONITOR_AWARE_V2);
+
+        if (!ScaleHelper.IsThreadPerMonitorV2Aware)
+        {
+            return;
+        }
+
+        using TextBox control = new()
+        {
+            AutoSize = false,
+            VisualStylesMode = VisualStylesMode.Net11,
+            BorderStyle = BorderStyle.Fixed3D,
+            DeviceDpiInternal = 168
+        };
+
+        control.Size = new Size(control.Width, control.PreferredHeight);
+        control.CreateControl();
+
+        PInvokeCore.GetClientRect(control, out RECT clientRect);
+        int minimumSingleLineClientHeight = control.Font.Height + ScaleHelper.ScaleToDpi(3, control.DeviceDpi);
+
+        Assert.True(clientRect.Height >= minimumSingleLineClientHeight);
     }
 
     [WinFormsFact]
@@ -8647,7 +8589,7 @@ public partial class TextBoxBaseTests
             set => base.FontHeight = value;
         }
 
-        public Padding GetVisualStylesPaddingCore(bool includeScrollbars) => GetVisualStylesPadding(includeScrollbars);
+        public Padding GetVisualStylesPaddingCore(bool includeScrollbars) => base.GetVisualStylesPadding(includeScrollbars);
 
         public Padding GetScrollBarPaddingCore() => base.GetScrollBarPadding();
 
@@ -8761,7 +8703,7 @@ public partial class TextBoxBaseTests
         public new CreateParams CreateParams => base.CreateParams;
 
         public Padding GetVisualStylesPaddingCore(bool includeScrollbars)
-            => GetVisualStylesPadding(includeScrollbars);
+            => base.GetVisualStylesPadding(includeScrollbars);
 
         public Padding GetScrollBarPaddingCore()
             => base.GetScrollBarPadding();

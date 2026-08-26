@@ -428,8 +428,15 @@ public partial class ComboBox
         }
 
         private static int GetBorderThickness(ComboBox comboBox)
-            => ModernControlVisualStyles.GetRoundedChromeBorderThickness(
+        {
+            SystemVisualSettings settings = Application.SystemVisualSettings;
+            Size borderMetrics = ModernControlVisualStyles.GetFocusBorderMetrics(
+                settings.FocusBorderMetrics,
+                settings.TextScaleFactor,
                 comboBox.DeviceDpiInternal);
+
+            return Math.Max(borderMetrics.Width, borderMetrics.Height);
+        }
 
         private static GraphicsPath CreateFieldPath(
             ComboBox comboBox,

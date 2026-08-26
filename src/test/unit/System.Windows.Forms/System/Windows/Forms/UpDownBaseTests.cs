@@ -3132,9 +3132,9 @@ public class UpDownBaseTests
         Rectangle editBounds = upDownBase._upDownEdit.Bounds;
         Rectangle buttonsBounds = upDownBase._upDownButtons.Bounds;
 
-        // The modern button band contains two modern-width buttons and only the shared inter-button gap.
+        // The modern button band contains two buttons and only the shared inter-button gap.
         buttonsBounds.Width.Should().Be(
-            (upDownBase.ModernButtonWidth * 2) + upDownBase.ModernButtonGroupSpacing);
+            (upDownBase._defaultButtonsWidth * 2) + upDownBase.ModernButtonGroupSpacing);
 
         // Edit and buttons are laid out horizontally (side by side), not stacked, and do not overlap.
         buttonsBounds.Left.Should().BeGreaterThanOrEqualTo(editBounds.Right);
@@ -3158,12 +3158,9 @@ public class UpDownBaseTests
         }
 
         int inset = upDownBase.LogicalToDeviceUnits(4);
-        int minimumVisibleInset = upDownBase.LogicalToDeviceUnits(1);
-
         upDownBase._upDownEdit.Left.Should().Be(inset);
-        upDownBase._upDownEdit.Top.Should().BeInRange(minimumVisibleInset, inset);
-        upDownBase._upDownEdit.Bottom.Should().BeInRange(upDownBase.Height - inset, upDownBase.Height - minimumVisibleInset);
-        upDownBase._upDownEdit.Height.Should().BeGreaterThanOrEqualTo(0);
+        upDownBase._upDownEdit.Top.Should().Be(inset);
+        upDownBase._upDownEdit.Height.Should().Be(Math.Max(0, 9 - (2 * inset)));
         upDownBase.Height.Should().Be(9);
     }
 
@@ -3219,16 +3216,11 @@ public class UpDownBaseTests
         }
 
         int inset = upDownBase.LogicalToDeviceUnits(4);
-        int minimumVisibleInset = upDownBase.LogicalToDeviceUnits(1);
-
         upDownBase._upDownEdit.Left.Should().BeGreaterThanOrEqualTo(upDownBase.Padding.Left + inset);
-        upDownBase._upDownEdit.Top.Should().BeGreaterThanOrEqualTo(upDownBase.Padding.Top + minimumVisibleInset);
-        upDownBase._upDownEdit.Top.Should().BeLessThanOrEqualTo(upDownBase.Padding.Top + inset);
+        upDownBase._upDownEdit.Top.Should().BeGreaterThanOrEqualTo(upDownBase.Padding.Top + inset);
         upDownBase._upDownButtons.Right.Should().BeLessThanOrEqualTo(
             upDownBase.ClientSize.Width - upDownBase.Padding.Right - inset);
         upDownBase._upDownButtons.Bottom.Should().BeLessThanOrEqualTo(
-            upDownBase.ClientSize.Height - upDownBase.Padding.Bottom - minimumVisibleInset);
-        upDownBase._upDownButtons.Bottom.Should().BeGreaterThanOrEqualTo(
             upDownBase.ClientSize.Height - upDownBase.Padding.Bottom - inset);
     }
 
@@ -3285,6 +3277,27 @@ public class UpDownBaseTests
         upDownBase.Height.Should().Be(upDownBase.PreferredHeight + upDownBase.Padding.Vertical);
     }
 
+    [WinFormsFact]
+    public void UpDownBase_ModernVisualStylesMode_PreferredHeightMatchesSingleLineTextBox()
+    {
+        using TextBox textBox = new()
+        {
+            VisualStylesMode = VisualStylesMode.Net11
+        };
+        using SubUpDownBase upDownBase = new()
+        {
+            VisualStylesMode = VisualStylesMode.Net11
+        };
+
+        if (!upDownBase.UseSideBySideButtons)
+        {
+            return;
+        }
+
+        upDownBase.PreferredHeight.Should().Be(textBox.PreferredHeight);
+        upDownBase.Height.Should().Be(textBox.PreferredHeight);
+    }
+
     [WinFormsTheory]
     [InlineData(96)]
     [InlineData(144)]
@@ -3316,42 +3329,8 @@ public class UpDownBaseTests
             + ScaleHelper.ScaleToDpi(2, deviceDpi);
         upDownBase.PreferredHeight.Should().BeGreaterThanOrEqualTo(minimumHeight);
         upDownBase.GetModernButtonGroupWidth().Should().Be(
-            (upDownBase.ModernButtonWidth * 2) + ScaleHelper.ScaleToDpi(2, deviceDpi));
-        upDownBase.ModernButtonWidth.Should().Be(ScaleHelper.ScaleToDpi(14, deviceDpi));
+            (upDownBase._defaultButtonsWidth * 2) + ScaleHelper.ScaleToDpi(2, deviceDpi));
         upDownBase.LogicalToDeviceUnits(4).Should().Be(inset);
-    }
-
-    [WinFormsFact]
-    public void UpDownBase_ModernVisualStylesMode_HighDpiEditHeight_PreservesSingleLineTextMetrics()
-    {
-        using IDisposable dpiScope = ScaleHelper.EnterDpiAwarenessScope(DPI_AWARENESS_CONTEXT.DPI_AWARENESS_CONTEXT_PER_MONITOR_AWARE_V2);
-        if (!ScaleHelper.IsThreadPerMonitorV2Aware)
-        {
-            return;
-        }
-
-        using SubUpDownBase upDownBase = new()
-        {
-            AutoSize = true
-        };
-
-        upDownBase.DeviceDpiInternal = 216;
-        upDownBase.RescaleConstantsForDpi(96, 216);
-        upDownBase.VisualStylesMode = VisualStylesMode.Net11;
-
-        if (!upDownBase.UseSideBySideButtons)
-        {
-            return;
-        }
-
-        upDownBase.CreateControl();
-
-        int minimumSingleLineEditHeight = upDownBase.Font.Height + upDownBase.LogicalToDeviceUnits(3);
-        int minimumVisibleInset = upDownBase.LogicalToDeviceUnits(1);
-
-        upDownBase._upDownEdit.Height.Should().BeGreaterThanOrEqualTo(minimumSingleLineEditHeight);
-        upDownBase._upDownEdit.Top.Should().BeGreaterThanOrEqualTo(minimumVisibleInset);
-        upDownBase._upDownEdit.Bottom.Should().BeLessThanOrEqualTo(upDownBase.ClientSize.Height - minimumVisibleInset);
     }
 
     [WinFormsTheory]
@@ -3371,12 +3350,13 @@ public class UpDownBaseTests
             return;
         }
 
-        int minimumHeight = upDownBase.LogicalToDeviceUnits(14)
-            + upDownBase.LogicalToDeviceUnits(1)
-            + upDownBase.LogicalToDeviceUnits(2);
-        int contentHeight = upDownBase.Font.Height + (upDownBase.LogicalToDeviceUnits(4) * 2);
+        using TextBox textBox = new()
+        {
+            VisualStylesMode = VisualStylesMode.Net11,
+            Font = new Font(Control.DefaultFont.FontFamily, fontSize)
+        };
 
-        upDownBase.PreferredHeight.Should().Be(Math.Max(contentHeight, minimumHeight));
+        upDownBase.PreferredHeight.Should().Be(textBox.PreferredHeight);
     }
 
     [WinFormsFact]

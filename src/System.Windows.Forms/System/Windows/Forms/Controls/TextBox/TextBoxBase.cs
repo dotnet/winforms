@@ -774,6 +774,7 @@ public abstract partial class TextBoxBase : Control
 
                 RecreateHandle();
                 AdjustHeight(false);
+                EnsureModernMultilineAutoSizeHeight();
                 OnMultilineChanged(EventArgs.Empty);
             }
         }
@@ -870,16 +871,28 @@ public abstract partial class TextBoxBase : Control
         };
 
     /// <summary>
-    ///  Returns the preferred height for modern Visual Styles.
+    ///  Returns the preferred height for modern Visual Styles, taking the carved padding band
+    ///  (including the live scrollbar allowance and the user <see cref="Padding"/>) into account.
     /// </summary>
-    /// <remarks>
-    ///  <para>
-    ///   For compatibility with classic single-line edit metrics, modern visual styles use the
-    ///   Everett-height formula as well.
-    ///  </para>
-    /// </remarks>
     private protected virtual int PreferredHeightCore
-        => PreferredHeightClassic;
+    {
+        get
+        {
+            Padding visualStylesPadding = GetVisualStylesPadding(
+                includeScrollbars: true);
+            int preferredHeight = FontHeight + visualStylesPadding.Vertical;
+
+            if (AutoSize && !Multiline && BorderStyle == BorderStyle.Fixed3D)
+            {
+                preferredHeight = ModernControlVisualStyles.GetPreferredFieldHeight(
+                    FontHeight,
+                    visualStylesPadding,
+                    DeviceDpiInternal);
+            }
+
+            return preferredHeight;
+        }
+    }
 
     /// <summary>
     ///  Returns the classic (Everett-compatible) preferred height for a single-line text box.
@@ -1494,6 +1507,26 @@ public abstract partial class TextBoxBase : Control
         }
     }
 
+    private void EnsureModernMultilineAutoSizeHeight()
+    {
+        if (!_textBoxFlags[s_autoSize]
+            || !_textBoxFlags[s_multiline]
+            || EffectiveVisualStylesMode < VisualStylesMode.Net11)
+        {
+            return;
+        }
+
+        int singleLineHeight = PreferredHeight;
+
+        if (Height >= singleLineHeight)
+        {
+            return;
+        }
+
+        Height = singleLineHeight;
+        _requestedHeight = singleLineHeight;
+    }
+
     /// <summary>
     ///  Append text to the current text of text box.
     /// </summary>
@@ -1699,6 +1732,7 @@ public abstract partial class TextBoxBase : Control
         _triggerNewClientSizeRequest = false;
         base.OnVisualStylesModeChanged(e);
         AdjustHeight(false);
+        EnsureModernMultilineAutoSizeHeight();
         _focusIndicatorRenderer?.Synchronize(Focused, invalidate: false);
 
         RecalculateVisualStylesClientArea();
@@ -1717,6 +1751,7 @@ public abstract partial class TextBoxBase : Control
 
         CommonProperties.xClearPreferredSizeCache(this);
         AdjustHeight(false);
+        EnsureModernMultilineAutoSizeHeight();
         RecalculateVisualStylesClientArea();
 
         if (ParentInternal is { } parent)
@@ -2500,10 +2535,10 @@ public abstract partial class TextBoxBase : Control
 
                 if (!Multiline)
                 {
-                    // Keep enough single-line client height for native edit text metrics when an explicit
-                    // height is smaller than the modern chrome's preferred footprint.
+                    // Keep enough single-line client height for native edit text metrics when the modern
+                    // chrome carve would otherwise leave too little room at higher DPI scales.
                     int clientHeight = clientRect.bottom - clientRect.top;
-                    int minimumSingleLineClientHeight = FontHeight + 3;
+                    int minimumSingleLineClientHeight = FontHeight + ScaleVisualStylesMetric(3);
                     int maxVerticalCarve = Math.Max(0, clientHeight - minimumSingleLineClientHeight);
 
                     if (padding.Vertical > maxVerticalCarve)
@@ -2519,20 +2554,20 @@ public abstract partial class TextBoxBase : Control
                             ? 0
                             : ScaleVisualStylesMetric(ModernControlVisualStyles.BorderThickness);
 
-                        int availableTopReduction = Math.Max(0, padding.Top - minimumTopPadding);
-                        int topReduction = Math.Min(overflow, availableTopReduction);
-                        padding.Top -= topReduction;
-                        overflow -= topReduction;
-
+                        // Bias the recovery toward the bottom inset first so baseline-driven single-line
+                        // text sits slightly lower, while still preserving the minimum client height.
                         int availableBottomReduction = Math.Max(0, padding.Bottom - minimumBottomPadding);
                         int bottomReduction = Math.Min(overflow, availableBottomReduction);
                         padding.Bottom -= bottomReduction;
                         overflow -= bottomReduction;
 
+                        int availableTopReduction = Math.Max(0, padding.Top - minimumTopPadding);
+                        int topReduction = Math.Min(overflow, availableTopReduction);
+                        padding.Top -= topReduction;
+                        overflow -= topReduction;
+
                         if (overflow > 0)
                         {
-                            // Keep a visible top/bottom border band when bordered, even under extreme DPI/text-scale
-                            // combinations, so the modern frame does not collapse visually.
                             int minimumVisibleVerticalPadding = BorderStyle == BorderStyle.None
                                 ? 0
                                 : ScaleVisualStylesMetric(ModernControlVisualStyles.BorderThickness);
@@ -2699,7 +2734,7 @@ public abstract partial class TextBoxBase : Control
     {
         int cornerRadius = ScaleVisualStylesMetric(ModernControlVisualStyles.FieldCornerRadius);
         Size focusBorderMetrics = GetVisualStylesFocusBorderMetrics();
-        int borderThickness = ModernControlVisualStyles.GetRoundedChromeBorderThickness(DeviceDpiInternal);
+        int borderThickness = Math.Max(focusBorderMetrics.Width, focusBorderMetrics.Height);
         int focusBandHeight = GetVisualStylesFocusBandHeight();
 
         Color adornerColor = ForeColor;

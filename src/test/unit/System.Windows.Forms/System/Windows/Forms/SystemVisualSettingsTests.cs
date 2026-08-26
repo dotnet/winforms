@@ -1,4 +1,4 @@
-﻿// Licensed to the .NET Foundation under one or more agreements.
+// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
 using System.Drawing;
@@ -74,22 +74,6 @@ public class SystemVisualSettingsTests
                 | SystemVisualSettingsCategories.KeyboardCues
                 | SystemVisualSettingsCategories.FocusMetrics,
             changed);
-    }
-
-    [Theory]
-    [InlineData(96, 1)]
-    [InlineData(144, 1)]
-    [InlineData(192, 1)]
-    [InlineData(240, 1)]
-    [InlineData(241, 2)]
-    [InlineData(288, 2)]
-    public void ModernControlVisualStyles_GetRoundedChromeBorderThickness_ReturnsExpectedValue(
-        int deviceDpi,
-        int expectedThickness)
-    {
-        int thickness = ModernControlVisualStyles.GetRoundedChromeBorderThickness(deviceDpi);
-
-        Assert.Equal(expectedThickness, thickness);
     }
 
     [WinFormsFact]
