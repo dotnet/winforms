@@ -124,7 +124,7 @@ public static class Clipboard
         // would call back through the format enumerator which defaults to true.
         //
         // We now unwrap original objects when we can, so we need to emulate the old behavior.
-        return ContainsData(ConvertToDataFormats(format), autoConvert: true);
+        return ContainsData(ClipboardUtilities.ConvertToDataFormats(format), autoConvert: true);
     }
 
     /// <summary>
@@ -349,7 +349,7 @@ public static class Clipboard
             return false;
         }
 
-        return dataObject.TryGetData(format, out data);
+        return dataObject.TryGetData(format, autoConvert: false, out data);
     }
 
     /// <inheritdoc cref="TryGetData{T}(string, out T)"/>
@@ -392,20 +392,22 @@ public static class Clipboard
     {
         SourceGenerated.EnumValidator.Validate(format, nameof(format));
 
-        return GetTypedDataIfAvailable<string>(ConvertToDataFormats(format)) is string text ? text : string.Empty;
+        return GetTypedDataIfAvailable<string>(ClipboardUtilities.ConvertToDataFormats(format)) is string text ? text : string.Empty;
     }
 
     private static T? GetTypedDataIfAvailable<[DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.All)] T>(string format)
     {
         IDataObject? data = GetDataObject();
+        bool autoConvert = IsDataFormatAutoConvert(format);
+
         if (data is ITypedDataObject typed)
         {
-            return typed.TryGetData(format, autoConvert: true, out T? value) ? value : default;
+            return typed.TryGetData(format, autoConvert, out T? value) ? value : default;
         }
 
         if (data is IDataObject dataObject)
         {
-            return dataObject.GetData(format, autoConvert: true) is T value ? value : default;
+            return dataObject.GetData(format, autoConvert) is T value ? value : default;
         }
 
         return default;
@@ -475,16 +477,12 @@ public static class Clipboard
     {
         text.ThrowIfNullOrEmpty();
         SourceGenerated.EnumValidator.Validate(format, nameof(format));
-        SetDataObject(new DataObject(ConvertToDataFormats(format), text), copy: true);
+        SetDataObject(new DataObject(ClipboardUtilities.ConvertToDataFormats(format), text), copy: true);
     }
 
-    private static string ConvertToDataFormats(TextDataFormat format) => format switch
-    {
-        TextDataFormat.Text => DataFormats.Text,
-        TextDataFormat.UnicodeText => DataFormats.UnicodeText,
-        TextDataFormat.Rtf => DataFormats.Rtf,
-        TextDataFormat.Html => DataFormats.Html,
-        TextDataFormat.CommaSeparatedValue => DataFormats.CommaSeparatedValue,
-        _ => DataFormats.UnicodeText,
-    };
+    /// <summary>
+    ///  Check the auto convert for the specified data format.
+    /// </summary>
+    private static bool IsDataFormatAutoConvert(string format) =>
+        format == DataFormats.FileDrop || format == DataFormats.Bitmap;
 }
