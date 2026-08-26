@@ -3563,7 +3563,11 @@ public partial class Form : ContainerControl
                 PInvoke.DestroyMenu(dummyMenu);
             }
 
-            _nonModalFormCompletion?.TrySetResult();
+            lock (_lock)
+            {
+                _nonModalFormCompletion?.TrySetResult();
+                _nonModalFormCompletion = null;
+            }
         }
         else
         {
@@ -4080,13 +4084,21 @@ public partial class Form : ContainerControl
             ((FormClosedEventHandler?)Events[s_formClosedEvent])?.Invoke(this, e);
 
             // This effectively ends an `await form.ShowAsync();` call.
-            _nonModalFormCompletion?.TrySetResult();
+            lock (_lock)
+            {
+                _nonModalFormCompletion?.TrySetResult();
+                _nonModalFormCompletion = null;
+            }
         }
         catch (Exception ex)
         {
             if (_nonModalFormCompletion is not null)
             {
-                _nonModalFormCompletion.TrySetException(ex);
+                lock (_lock)
+                {
+                    _nonModalFormCompletion?.TrySetException(ex);
+                    _nonModalFormCompletion = null;
+                }
             }
             else
             {
@@ -5528,7 +5540,11 @@ public partial class Form : ContainerControl
     ///   If the operating system is in a non-interactive mode, this method will throw an <see cref="InvalidOperationException"/>.
     ///  </para>
     ///  <para>
-    ///   If the form is already displayed asynchronously, an <see cref="InvalidOperationException"/> will be thrown.
+    ///   Calling this method again while the form is already being displayed asynchronously
+    ///   (and has not yet completed) mirrors the idempotent behavior of <see cref="Show(IWin32Window?)"/>:
+    ///   instead of throwing, the previously returned <see cref="Task"/> is returned again.
+    ///   Mixing this method with a pending <see cref="ShowDialogAsync(IWin32Window)"/> call on the
+    ///   same form, however, is not supported and will throw an <see cref="InvalidOperationException"/>.
     ///  </para>
     ///  <para>
     ///   An <see cref="InvalidOperationException"/> will also occur if no
@@ -5579,12 +5595,12 @@ public partial class Form : ContainerControl
     /// <exception cref="InvalidOperationException">
     ///  <para>Thrown if:</para>
     ///  <list type="bullet">
-    ///   <item><description>The form is already visible.</description></item>
-    ///   <item><description>The form is disabled.</description></item>
-    ///   <item><description>The form is not a top-level form.</description></item>
-    ///   <item><description>The form is trying to set itself as its own owner.</description></item>
     ///   <item><description>
-    ///    Thrown if the form is already displayed asynchronously or if no
+    ///    An <paramref name="owner"/> is supplied and the form is already visible, is disabled,
+    ///    is not a top-level form (for example an MDI child), or is trying to set itself as its own owner.
+    ///   </description></item>
+    ///   <item><description>
+    ///    The form is already being shown modally (via <see cref="ShowDialogAsync()"/>) or if no
     ///    <see cref="WindowsFormsSynchronizationContext"/> could be retrieved or installed.
     ///   </description></item>
     ///   <item><description>The operating system is in a non-interactive mode.</description></item>
@@ -5599,10 +5615,15 @@ public partial class Form : ContainerControl
         // multiple calls to ShowAsync from interfering with each other.
         lock (_lock)
         {
-            if (_nonModalFormCompletion is not null
-                || _modalFormCompletion is not null)
+            if (_modalFormCompletion is not null)
             {
                 throw new InvalidOperationException(SR.Form_HasAlreadyBeenShownAsync);
+            }
+
+            if (_nonModalFormCompletion is not null)
+            {
+                // Mirrors Show(), which is idempotent when called on an already-visible form.
+                return _nonModalFormCompletion.Task;
             }
 
             _nonModalFormCompletion = new(
@@ -5626,7 +5647,8 @@ public partial class Form : ContainerControl
         {
             try
             {
-                if (owner is not null && !IsMdiChild)
+                // Show(owner) always throws for non-top-level forms (e.g. MDI children).
+                if (owner is not null)
                 {
                     Show(owner);
                 }

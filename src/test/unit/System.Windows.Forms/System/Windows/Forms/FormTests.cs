@@ -242,6 +242,44 @@ public partial class FormTests
     }
 
     [WinFormsFact]
+    public async Task Form_ShowAsync_WithOwner_OnMdiChild_ThrowsInvalidOperationException()
+    {
+        using Form mdiParent = new();
+        mdiParent.IsMdiContainer = true;
+
+        using Form owner = new();
+        using Form child = new();
+        child.MdiParent = mdiParent;
+
+        Assert.True(child.IsMdiChild);
+
+        mdiParent.Show();
+        owner.Show();
+
+        await Assert.ThrowsAsync<InvalidOperationException>(
+            () => child.ShowAsync(owner)).ConfigureAwait(false);
+
+        owner.Close();
+        mdiParent.Close();
+    }
+
+    [WinFormsFact]
+    public async Task Form_ShowAsync_CalledTwice_ReturnsSameTaskInsteadOfThrowing()
+    {
+        using Form form = new();
+
+        Task first = form.ShowAsync();
+        Task second = form.ShowAsync();
+
+        Assert.Same(first, second);
+        Assert.True(form.Visible);
+
+        form.Close();
+
+        await first.ConfigureAwait(false);
+    }
+
+    [WinFormsFact]
     public static void Form_Ctor_show_icon_by_default()
     {
         using Form form = new();
