@@ -2752,6 +2752,7 @@ public abstract partial class TextBoxBase : Control
                     // The rounded chrome is clipped with a non-antialiased region; blend the resulting
                     // corner artifacts into the parent by tracing the parent color just outside the border.
                     ParentBackgroundRenderer.PaintRoundedBorderRegionMitigation(
+                        this,
                         offscreenGraphics,
                         deflatedBounds,
                         new Size(cornerRadius, cornerRadius),

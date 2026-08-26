@@ -1,4 +1,4 @@
-// Licensed to the .NET Foundation under one or more agreements.
+﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
 using System.Drawing;
@@ -93,6 +93,39 @@ public class ParentBackgroundRendererTests
 
         Assert.NotEqual(Color.Lime.ToArgb(), bitmap.GetPixel(2, 2).ToArgb());
         Assert.Equal(Color.White.ToArgb(), bitmap.GetPixel(20, 15).ToArgb());
+    }
+
+    [WinFormsFact]
+    public void PaintRoundedBorderRegionMitigation_WithParentBackgroundImage_DoesNotPaintSolidColor()
+    {
+        using Bitmap backgroundImage = new(1, 1);
+        backgroundImage.SetPixel(0, 0, Color.Blue);
+        using Panel parent = new()
+        {
+            BackgroundImage = backgroundImage,
+            Size = new Size(40, 30)
+        };
+        using Control child = new() { Size = parent.Size };
+        parent.Controls.Add(child);
+        using Bitmap bitmap = new(child.Width, child.Height);
+        using Graphics graphics = Graphics.FromImage(bitmap);
+        graphics.Clear(Color.Lime);
+
+        ParentBackgroundRenderer.PaintRoundedBorderRegionMitigation(
+            child,
+            graphics,
+            new Rectangle(2, 2, 35, 25),
+            new Size(8, 8),
+            borderThickness: 1,
+            Color.Magenta);
+
+        for (int y = 0; y < bitmap.Height; y++)
+        {
+            for (int x = 0; x < bitmap.Width; x++)
+            {
+                Assert.Equal(Color.Lime.ToArgb(), bitmap.GetPixel(x, y).ToArgb());
+            }
+        }
     }
 
     private sealed class PatternControl : Control
