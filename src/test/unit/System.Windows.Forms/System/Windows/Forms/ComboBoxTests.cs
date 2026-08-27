@@ -827,6 +827,66 @@ public class ComboBoxTests
     }
 
     [WinFormsTheory]
+    [InlineData(96)]
+    [InlineData(120)]
+    public void ComboBox_ModernVisualStyles_DropDown_EditHeightDoesNotClipText_AtDpi(int deviceDpi)
+    {
+        using SystemVisualSettingsTestScope settingsScope = new(
+            clientAreaAnimationEnabled: false,
+            highContrastEnabled: false);
+        using VisualStylesComboBox control = new()
+        {
+            DropDownStyle = ComboBoxStyle.DropDown,
+            FlatStyle = FlatStyle.Standard,
+            Size = new Size(140, 40),
+            Text = "qqq gjpqy",
+            VisualStylesMode = VisualStylesMode.Net11
+        };
+        control.SetTestDeviceDpi(deviceDpi);
+
+        control.CreateControl();
+
+        int minimumTextHeight = TextRenderer.MeasureText(
+            control.Text,
+            control.Font,
+            new Size(int.MaxValue, int.MaxValue),
+            TextFormatFlags.NoPadding | TextFormatFlags.SingleLine).Height;
+
+        Assert.True(control.GetEditBounds().Height >= minimumTextHeight);
+    }
+
+    [WinFormsTheory]
+    [InlineData(96)]
+    [InlineData(120)]
+    public void ComboBox_ModernVisualStyles_DropDownList_TextDoesNotClip_AtDpi(int deviceDpi)
+    {
+        using SystemVisualSettingsTestScope settingsScope = new(
+            clientAreaAnimationEnabled: false,
+            highContrastEnabled: false);
+        using VisualStylesComboBox control = new()
+        {
+            DropDownStyle = ComboBoxStyle.DropDownList,
+            FlatStyle = FlatStyle.Standard,
+            Size = new Size(140, 40),
+            Text = "qqq gjpqy",
+            VisualStylesMode = VisualStylesMode.Net11
+        };
+        control.SetTestDeviceDpi(deviceDpi);
+
+        control.CreateControl();
+
+        int minimumTextHeight = TextRenderer.MeasureText(
+            control.Text,
+            control.Font,
+            new Size(int.MaxValue, int.MaxValue),
+            TextFormatFlags.NoPadding | TextFormatFlags.SingleLine).Height;
+
+        Assert.True(
+            control.ClientSize.Height - control.ModernFieldPadding.Vertical >= minimumTextHeight);
+    }
+
+
+    [WinFormsTheory]
     [InlineData(ComboBoxStyle.DropDown)]
     [InlineData(ComboBoxStyle.Simple)]
     public void ComboBox_ModernPadding_PositionsEditUsingTopAndBottom(

@@ -2734,7 +2734,7 @@ public abstract partial class TextBoxBase : Control
     {
         int cornerRadius = ScaleVisualStylesMetric(ModernControlVisualStyles.FieldCornerRadius);
         Size focusBorderMetrics = GetVisualStylesFocusBorderMetrics();
-        int borderThickness = Math.Max(focusBorderMetrics.Width, focusBorderMetrics.Height);
+        int borderThickness = ScaleVisualStylesMetric(ModernControlVisualStyles.BorderThickness);
         int focusBandHeight = GetVisualStylesFocusBandHeight();
 
         Color adornerColor = ForeColor;

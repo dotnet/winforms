@@ -24,7 +24,7 @@ internal static class ModernControlVisualStyles
     internal const int ComboBoxStyleInset = 1;
 
     /// <summary>Corner radius of a modern text field's rounded frame.</summary>
-    internal const int FieldCornerRadius = 15;
+    internal const int FieldCornerRadius = 10;
 
     /// <summary>Height of the animated focus underline band drawn beneath a focused modern field.</summary>
     internal const int FocusBandHeight = 4;
@@ -75,7 +75,7 @@ internal static class ModernControlVisualStyles
     internal const int NoBorderPadding = 1;
 
     /// <summary>Corner radius of the up-down control's rounded frame.</summary>
-    internal const int UpDownCornerRadius = 14;
+    internal const int UpDownCornerRadius = 10;
 
     internal static Padding GetFieldPadding(
         BorderStyle borderStyle,
