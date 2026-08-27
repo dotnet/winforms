@@ -927,6 +927,50 @@ public class CheckBoxTests : AbstractButtonBaseTests
     }
 
     [WinFormsFact]
+    public void CheckBox_ToggleSwitch_FocusedPaintsRoundedSolidFocusBorderAndReservesMargin()
+    {
+        using SystemVisualSettingsTestScope settingsScope = new(
+            clientAreaAnimationEnabled: false,
+            highContrastEnabled: false,
+            accentColor: Color.Red);
+        using CheckBox box = new()
+        {
+            Appearance = Appearance.ToggleSwitch,
+            BackColor = Color.White,
+            ForeColor = Color.Black,
+            Size = new Size(140, 36),
+            Text = "Toggle",
+            VisualStylesMode = VisualStylesMode.Net11
+        };
+
+        Rendering.CheckBox.ToggleSwitchMetrics metrics = Rendering.CheckBox.ToggleSwitchMetrics.Create(box);
+        Rectangle contentBounds = Rendering.CheckBox.ToggleSwitchMetrics.GetContentBounds(box, metrics);
+        Rectangle focusBounds = Rendering.CheckBox.ToggleSwitchMetrics.GetFocusBounds(box.ClientRectangle, metrics);
+        Size textSize = TextRenderer.MeasureText(box.Text, box.Font);
+        Size preferredSizeWithoutFocusMargin = new(
+            metrics.SwitchWidth + metrics.TextGap + textSize.Width + box.Padding.Horizontal,
+            Math.Max(metrics.SwitchHeight, textSize.Height) + box.Padding.Vertical);
+
+        Assert.Equal(box.Padding.Left + metrics.FocusMargin, contentBounds.Left);
+        Assert.Equal(box.Padding.Top + metrics.FocusMargin, contentBounds.Top);
+        Assert.Equal(
+            preferredSizeWithoutFocusMargin + new Size(2 * metrics.FocusMargin, 2 * metrics.FocusMargin),
+            box.GetPreferredSize(Size.Empty));
+
+        Rendering.CheckBox.AnimatedToggleSwitchRenderer renderer =
+            box.TestAccessor.Dynamic.ToggleSwitchRenderer;
+        renderer.SynchronizeState();
+        using Bitmap bitmap = new(box.Width, box.Height);
+        using Graphics graphics = Graphics.FromImage(bitmap);
+
+        renderer.TestAccessor.Dynamic.RenderFocusBorder(graphics, metrics);
+
+        Assert.True(CountPixels(bitmap, Color.Red) > 0);
+        Assert.NotEqual(Color.Red.ToArgb(), bitmap.GetPixel(focusBounds.Left, focusBounds.Top).ToArgb());
+        Assert.Equal(0, CountPixelsInColumn(bitmap, box.ClientRectangle.Right - 1, Color.Red));
+    }
+
+    [WinFormsFact]
     public void CheckBox_ToggleSwitch_SynchronizeState_SettlesInteractionChannels()
     {
         using SystemVisualSettingsTestScope settingsScope = new(clientAreaAnimationEnabled: true);
@@ -1028,6 +1072,22 @@ public class CheckBoxTests : AbstractButtonBaseTests
                 {
                     count++;
                 }
+            }
+        }
+
+        return count;
+    }
+
+    private static int CountPixelsInColumn(Bitmap bitmap, int column, Color color)
+    {
+        int argb = color.ToArgb();
+        int count = 0;
+
+        for (int y = 0; y < bitmap.Height; y++)
+        {
+            if (bitmap.GetPixel(column, y).ToArgb() == argb)
+            {
+                count++;
             }
         }
 
@@ -1442,10 +1502,10 @@ public class CheckBoxTests : AbstractButtonBaseTests
     }
 
     [WinFormsTheory]
-    [InlineData(Appearance.Button, FlatStyle.Standard,  "Test", 12, 8, 100, 20)]
-    [InlineData(Appearance.Normal, FlatStyle.System,    "Test", 12, 8, 100, 20)]
-    [InlineData(Appearance.Normal, FlatStyle.Flat,      "Test", 12, 8, 100, 20)]
-    [InlineData(Appearance.Normal, FlatStyle.Standard,  "Test", 12, 8, 100, 20)]
+    [InlineData(Appearance.Button, FlatStyle.Standard, "Test", 12, 8, 100, 20)]
+    [InlineData(Appearance.Normal, FlatStyle.System, "Test", 12, 8, 100, 20)]
+    [InlineData(Appearance.Normal, FlatStyle.Flat, "Test", 12, 8, 100, 20)]
+    [InlineData(Appearance.Normal, FlatStyle.Standard, "Test", 12, 8, 100, 20)]
     public void CheckBox_GetPreferredSizeCore_VariousStyles_ReturnsExpected(
         Appearance appearance, FlatStyle flatStyle, string text, int fontSize, int padding, int width, int height)
     {

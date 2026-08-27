@@ -1,4 +1,4 @@
-// Licensed to the .NET Foundation under one or more agreements.
+﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
 using System.Drawing;
@@ -78,7 +78,7 @@ internal sealed class AnimatedToggleSwitchRenderer : AnimatedControlRenderer
 
         ToggleSwitchMetrics metrics = ToggleSwitchMetrics.Create(Control);
         Size textSize = TextRenderer.MeasureText(Control.Text, Control.Font);
-        Rectangle contentBounds = ToggleSwitchMetrics.GetContentBounds(Control);
+        Rectangle contentBounds = ToggleSwitchMetrics.GetContentBounds(Control, metrics);
         int totalHeight = Math.Max(textSize.Height, metrics.SwitchHeight);
         int contentTop = contentBounds.Top + Math.Max(0, (contentBounds.Height - totalHeight) / 2);
         int textY = contentTop + ((totalHeight - textSize.Height) / 2);
@@ -109,12 +109,36 @@ internal sealed class AnimatedToggleSwitchRenderer : AnimatedControlRenderer
 
         if (Control.Focused && ShowFocusCues)
         {
-            Rectangle focusBounds = Rectangle.Inflate(Control.ClientRectangle, -1, -1);
-            ControlPaint.DrawFocusRectangle(
-                graphics,
-                focusBounds,
-                Control.ForeColor,
-                Control.BackColor);
+            RenderFocusBorder(graphics, metrics);
+        }
+    }
+
+    private void RenderFocusBorder(Graphics graphics, ToggleSwitchMetrics metrics)
+    {
+        Rectangle focusBounds = ToggleSwitchMetrics.GetFocusBounds(Control.ClientRectangle, metrics);
+        if (focusBounds.Width <= 0 || focusBounds.Height <= 0)
+        {
+            return;
+        }
+
+        Color focusColor = TextBoxBase.GetVisualStylesFocusColor(
+            Application.SystemVisualSettings.HighContrastEnabled);
+        using var focusPen = focusColor.GetCachedPenScope(metrics.FocusBorderThickness);
+        using GraphicsPath focusPath = new();
+
+        focusPath.AddRoundedRectangle(
+            focusBounds,
+            new Size(focusBounds.Height, focusBounds.Height));
+
+        SmoothingMode previousSmoothingMode = graphics.SmoothingMode;
+        try
+        {
+            graphics.SmoothingMode = SmoothingMode.AntiAlias;
+            graphics.DrawPath(focusPen, focusPath);
+        }
+        finally
+        {
+            graphics.SmoothingMode = previousSmoothingMode;
         }
     }
 
@@ -161,7 +185,7 @@ internal sealed class AnimatedToggleSwitchRenderer : AnimatedControlRenderer
         ToggleSwitchMetrics metrics,
         Size textSize)
     {
-        Rectangle contentBounds = ToggleSwitchMetrics.GetContentBounds(control);
+        Rectangle contentBounds = ToggleSwitchMetrics.GetContentBounds(control, metrics);
         int totalHeight = Math.Max(textSize.Height, metrics.SwitchHeight);
         int contentTop = contentBounds.Top + Math.Max(0, (contentBounds.Height - totalHeight) / 2);
         int switchY = contentTop + ((totalHeight - metrics.SwitchHeight) / 2);
@@ -394,7 +418,9 @@ internal readonly struct ToggleSwitchMetrics
         int thumbDiameter,
         int hoverThumbDiameter,
         int borderThickness,
-        int textGap)
+        int textGap,
+        int focusBorderThickness,
+        int focusMargin)
     {
         SwitchWidth = switchWidth;
         SwitchHeight = switchHeight;
@@ -402,6 +428,8 @@ internal readonly struct ToggleSwitchMetrics
         HoverThumbDiameter = hoverThumbDiameter;
         BorderThickness = borderThickness;
         TextGap = textGap;
+        FocusBorderThickness = focusBorderThickness;
+        FocusMargin = focusMargin;
     }
 
     internal int SwitchWidth { get; }
@@ -416,6 +444,10 @@ internal readonly struct ToggleSwitchMetrics
 
     internal int TextGap { get; }
 
+    internal int FocusBorderThickness { get; }
+
+    internal int FocusMargin { get; }
+
     internal static ToggleSwitchMetrics Create(Control control)
     {
         int switchHeight = Math.Max(
@@ -423,6 +455,8 @@ internal readonly struct ToggleSwitchMetrics
             (int)(control.Font.Height * 0.9f));
         int minimumMetric = Math.Max(1, control.LogicalToDeviceUnits(1));
         int borderThickness = Math.Max(minimumMetric, switchHeight / 12);
+        int focusBorderThickness = Math.Max(minimumMetric, control.LogicalToDeviceUnits(2));
+        int focusMargin = focusBorderThickness + Math.Max(minimumMetric, control.LogicalToDeviceUnits(2));
         int maximumThumbDiameter = Math.Max(1, switchHeight - (2 * borderThickness));
         int thumbDiameter = Math.Max(
             1,
@@ -440,24 +474,38 @@ internal readonly struct ToggleSwitchMetrics
             thumbDiameter: thumbDiameter,
             hoverThumbDiameter: hoverThumbDiameter,
             borderThickness: borderThickness,
-            textGap: textGap);
+            textGap: textGap,
+            focusBorderThickness: focusBorderThickness,
+            focusMargin: focusMargin);
     }
 
     internal static Rectangle GetContentBounds(Control control)
+        => GetContentBounds(control, Create(control));
+
+    internal static Rectangle GetContentBounds(Control control, ToggleSwitchMetrics metrics)
     {
         Padding padding = control.Padding;
+        int horizontalInset = padding.Horizontal + (2 * metrics.FocusMargin);
+        int verticalInset = padding.Vertical + (2 * metrics.FocusMargin);
+
         return new Rectangle(
-            padding.Left,
-            padding.Top,
-            Math.Max(0, control.ClientSize.Width - padding.Horizontal),
-            Math.Max(0, control.ClientSize.Height - padding.Vertical));
+            padding.Left + metrics.FocusMargin,
+            padding.Top + metrics.FocusMargin,
+            Math.Max(0, control.ClientSize.Width - horizontalInset),
+            Math.Max(0, control.ClientSize.Height - verticalInset));
+    }
+
+    internal static Rectangle GetFocusBounds(Rectangle clientRectangle, ToggleSwitchMetrics metrics)
+    {
+        int inset = metrics.FocusBorderThickness;
+        return Rectangle.Inflate(clientRectangle, -inset, -inset);
     }
 
     internal Size GetPreferredSize(Control control)
     {
         Size textSize = TextRenderer.MeasureText(control.Text, control.Font);
         return new Size(
-            SwitchWidth + TextGap + textSize.Width + control.Padding.Horizontal,
-            Math.Max(SwitchHeight, textSize.Height) + control.Padding.Vertical);
+            SwitchWidth + TextGap + textSize.Width + control.Padding.Horizontal + (2 * FocusMargin),
+            Math.Max(SwitchHeight, textSize.Height) + control.Padding.Vertical + (2 * FocusMargin));
     }
 }
