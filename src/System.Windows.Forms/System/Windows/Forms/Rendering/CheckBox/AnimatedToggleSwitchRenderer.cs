@@ -125,10 +125,11 @@ internal sealed class AnimatedToggleSwitchRenderer : AnimatedControlRenderer
             Application.SystemVisualSettings.HighContrastEnabled);
         using var focusPen = focusColor.GetCachedPenScope(metrics.FocusBorderThickness);
         using GraphicsPath focusPath = new();
+        int cornerSize = Math.Max(1, Math.Min(focusBounds.Width, focusBounds.Height));
 
         focusPath.AddRoundedRectangle(
             focusBounds,
-            new Size(focusBounds.Height, focusBounds.Height));
+            new Size(cornerSize, cornerSize));
 
         SmoothingMode previousSmoothingMode = graphics.SmoothingMode;
         try
