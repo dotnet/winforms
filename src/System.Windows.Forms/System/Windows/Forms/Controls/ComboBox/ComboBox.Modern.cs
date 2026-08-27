@@ -538,6 +538,22 @@ public partial class ComboBox
 
     private Padding GetModernFieldPadding()
     {
+        Padding horizontalSource = GetModernChromeInsets();
+
+        if (DropDownStyle == ComboBoxStyle.DropDownList
+            && ParentInternal is DataGridView.DataGridViewEditingPanel)
+        {
+            int verticalInset = ScaleHelper.ScaleToDpi(
+                ModernControlVisualStyles.BorderThickness,
+                DeviceDpiInternal);
+
+            return new Padding(
+                left: horizontalSource.Left + Padding.Left,
+                top: verticalInset + Padding.Top,
+                right: horizontalSource.Right + Padding.Right,
+                bottom: verticalInset + Padding.Bottom);
+        }
+
         SystemVisualSettings settings = Application.SystemVisualSettings;
 
         int styleInset = ScaleHelper.ScaleToDpi(
@@ -554,8 +570,6 @@ public partial class ComboBox
             settings.FocusBorderMetrics,
             settings.TextScaleFactor,
             DeviceDpiInternal);
-
-        Padding horizontalSource = GetModernChromeInsets();
 
         return new Padding(
             left: horizontalSource.Left + Padding.Left,

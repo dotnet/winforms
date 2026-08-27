@@ -310,6 +310,55 @@ public class DataGridViewComboBoxCellTests : IDisposable
         result.Should().Be(expected);
     }
 
+    [WinFormsFact]
+    public void InitializeEditingControl_Net11_EditingControlFitsEditingPanel()
+    {
+        using SystemVisualSettingsTestScope settingsScope = new(
+            clientAreaAnimationEnabled: false,
+            highContrastEnabled: false);
+        using Form form = new();
+        using DataGridView dataGridView = new()
+        {
+            VisualStylesMode = VisualStylesMode.Net11,
+            RowHeadersVisible = false,
+            AllowUserToAddRows = false,
+            AutoSizeRowsMode = DataGridViewAutoSizeRowsMode.None,
+            RowTemplate = { Height = 22 },
+            Size = new Size(300, 120)
+        };
+        using DataGridViewComboBoxColumn column = new();
+
+        column.Items.AddRange("A", "B", "C");
+        dataGridView.Columns.Add(column);
+        dataGridView.Rows.Add("A");
+
+        form.Controls.Add(dataGridView);
+        form.CreateControl();
+        dataGridView.CreateControl();
+
+        dataGridView.CurrentCell = dataGridView[0, 0];
+        dataGridView.BeginEdit(selectAll: false).Should().BeTrue();
+
+        DataGridViewComboBoxEditingControl editingControl = dataGridView.EditingControl.Should().BeOfType<DataGridViewComboBoxEditingControl>().Subject;
+
+        editingControl.Top.Should().BeGreaterThanOrEqualTo(0);
+        editingControl.Bottom.Should().BeLessThan(dataGridView.EditingPanel.ClientSize.Height);
+        editingControl.Height.Should().BeLessThanOrEqualTo(dataGridView.EditingPanel.ClientSize.Height);
+
+        Padding fieldPadding = (Padding)editingControl.TestAccessor.Dynamic.GetModernFieldPadding();
+        int textHeight = TextRenderer.MeasureText(
+            "gjpqy",
+            editingControl.Font,
+            new Size(int.MaxValue, int.MaxValue),
+            TextFormatFlags.NoPadding | TextFormatFlags.SingleLine).Height;
+
+        (editingControl.ClientSize.Height - fieldPadding.Vertical)
+            .Should()
+            .BeGreaterThanOrEqualTo(
+                textHeight,
+                $"text area must fit descenders: client={editingControl.ClientSize.Height}, padding={fieldPadding}, text={textHeight}");
+    }
+
     [Fact]
     public void ParseFormattedValue_UsesValueTypeConverter_WhenValueTypeConverterIsProvided()
     {
