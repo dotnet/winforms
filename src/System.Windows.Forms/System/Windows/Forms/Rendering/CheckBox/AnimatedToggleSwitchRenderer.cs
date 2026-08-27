@@ -90,6 +90,11 @@ internal sealed class AnimatedToggleSwitchRenderer : AnimatedControlRenderer
 
         PaintControlBackground(graphics);
 
+        if (Control.Focused && ShowFocusCues)
+        {
+            RenderFocusBorder(graphics, metrics);
+        }
+
         if (contentBounds.Width <= 0 || contentBounds.Height <= 0)
         {
             return;
@@ -105,11 +110,6 @@ internal sealed class AnimatedToggleSwitchRenderer : AnimatedControlRenderer
         {
             RenderSwitch(graphics, switchBounds, metrics);
             RenderText(graphics, new Point(contentBounds.Left + metrics.SwitchWidth + metrics.TextGap, textY));
-        }
-
-        if (Control.Focused && ShowFocusCues)
-        {
-            RenderFocusBorder(graphics, metrics);
         }
     }
 
