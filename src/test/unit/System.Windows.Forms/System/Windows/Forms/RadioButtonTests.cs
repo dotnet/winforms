@@ -238,6 +238,35 @@ public class RadioButtonTests : AbstractButtonBaseTests
     }
 
     [WinFormsFact]
+    public void RadioButton_ModernGlyph_RightToLeftHovered_DoesNotClipAtRightEdge()
+    {
+        using Panel parent = new() { BackColor = Color.White };
+        using RadioButton control = new()
+        {
+            BackColor = Color.White,
+            RightToLeft = RightToLeft.Yes,
+            Size = new Size(40, 24),
+            VisualStylesMode = VisualStylesMode.Net11
+        };
+        control.FlatAppearance.BorderColor = Color.Black;
+        parent.Controls.Add(control);
+
+        control.TestAccessor.Dynamic.OnMouseEnter(EventArgs.Empty);
+        control.RadioGlyphRenderer.SetInteractionState(hovered: true, focused: false);
+        control.RadioGlyphRenderer.EndAnimation();
+        using Bitmap bitmap = new(control.Width, control.Height);
+        using Graphics graphics = Graphics.FromImage(bitmap);
+        PaintEventArgs e = new(graphics, control.ClientRectangle);
+
+        control.CreateStandardAdapter().PaintOver(e, CheckState.Unchecked);
+
+        for (int y = 0; y < bitmap.Height; y++)
+        {
+            Assert.Equal(0, bitmap.GetPixel(bitmap.Width - 1, y).A);
+        }
+    }
+
+    [WinFormsFact]
     public void RadioButton_ModernGlyph_DefaultCheckedColorUsesWindowsAccent()
     {
         if (SystemInformation.HighContrast)

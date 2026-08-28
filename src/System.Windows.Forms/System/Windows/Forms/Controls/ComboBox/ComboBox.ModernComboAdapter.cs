@@ -408,6 +408,7 @@ public partial class ComboBox
             Color parentColor = comboBox.ParentInternal?.BackColor
                 ?? SystemColors.Control;
             ParentBackgroundRenderer.PaintRoundedBorderRegionMitigation(
+                comboBox,
                 graphics,
                 bounds,
                 new Size(radius, radius),
@@ -424,7 +425,7 @@ public partial class ComboBox
 
             return useAccent
                 ? Application.SystemVisualSettings.AccentColor
-                : comboBox.ForeColor;
+                : ModernControlColorMath.TextControlBorderColor;
         }
 
         private static int GetBorderThickness(ComboBox comboBox)
