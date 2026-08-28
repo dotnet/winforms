@@ -164,8 +164,15 @@ public class TestAccessor<T> : ITestAccessor
                     case FieldInfo fieldInfo:
                         fieldInfo.SetValue(_instance, value);
                         break;
-                    case PropertyInfo propertyInfo:
+                    case PropertyInfo { CanWrite: true } propertyInfo:
                         propertyInfo.SetValue(_instance, value);
+                        break;
+                    case PropertyInfo propertyInfo:
+                        // Non-public auto property without a setter (e.g. get-only). Fall back to the
+                        // compiler-generated backing field so tests can still set up state directly.
+                        FieldInfo backingField = GetAutoPropertyBackingField(propertyInfo.DeclaringType!, propertyInfo.Name)
+                            ?? throw new InvalidOperationException($"'{propertyInfo.Name}' has no setter and no backing field could be found.");
+                        backingField.SetValue(_instance, value);
                         break;
                     default:
                         throw new InvalidOperationException();
@@ -221,12 +228,6 @@ public class TestAccessor<T> : ITestAccessor
                     ?? type?.GetProperty(
                         memberName,
                         BindingFlags.Static | BindingFlags.Instance | BindingFlags.NonPublic);
-
-                // Look for the compiler-generated backing field of an auto property.
-                if (info is null && type is not null)
-                {
-                    info = GetAutoPropertyBackingField(type, memberName);
-                }
 
                 if (info is not null || type == typeof(object))
                 {
