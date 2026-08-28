@@ -54,14 +54,13 @@ internal static class ModernFieldStrokeResolver
         Color surface = state switch
         {
             ModernFieldStrokeState.Disabled => ModernControlColorMath.GetDisabledSurfaceColor(),
-            ModernFieldStrokeState.Hover => ModernControlColorMath.GetFieldHoverSurface(context.BackColor, dark),
             ModernFieldStrokeState.ReadOnly => ModernControlColorMath.GetFieldReadOnlySurface(context.BackColor, dark),
             _ => context.BackColor,
         };
 
-        // Strokes composite over the normal background so ReadOnly keeps the Rest strokes; only Hover
-        // darkens its strokes along with its surface.
-        Color strokeBackground = state == ModernFieldStrokeState.Hover ? surface : context.BackColor;
+        // Hover keeps the Rest surface so the editable area does not appear to shrink; it reads as Hover
+        // through its border color alone (#14997). All strokes composite over the normal background.
+        Color strokeBackground = context.BackColor;
 
         Color sideTop;
         Color bottom;
@@ -92,6 +91,12 @@ internal static class ModernFieldStrokeResolver
                 break;
         }
 
-        return new ModernFieldStroke(sideTop, bottom, surface, BaseStrokeDip, bottomDip);
+        return new ModernFieldStroke(
+            sideTop,
+            bottom,
+            surface,
+            BaseStrokeDip,
+            bottomDip,
+            HasFocusIndicator: state == ModernFieldStrokeState.Focused);
     }
 }

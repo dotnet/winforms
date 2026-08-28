@@ -60,12 +60,13 @@ public class ModernFieldStrokeResolverTests
     }
 
     [Fact]
-    public void Hover_tints_the_surface_relative_to_rest()
+    public void Hover_keeps_the_rest_surface_and_differs_by_border()
     {
         ModernFieldStroke hover = ModernFieldStrokeResolver.GetStroke(Context(hovered: true));
+        ModernFieldStroke rest = ModernFieldStrokeResolver.GetStroke(Context());
 
-        hover.SurfaceColor.Should().Be(ModernControlColorMath.GetFieldHoverSurface(Color.White, darkMode: false));
-        hover.SurfaceColor.Should().NotBe(Color.White);
+        hover.SurfaceColor.Should().Be(rest.SurfaceColor);
+        hover.SideTopColor.Should().NotBe(rest.SideTopColor);
     }
 
     // ---- Thicknesses (in DIPs) ----

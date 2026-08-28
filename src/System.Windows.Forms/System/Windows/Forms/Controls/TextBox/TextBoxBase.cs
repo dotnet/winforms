@@ -2703,6 +2703,7 @@ public abstract partial class TextBoxBase : Control
         // Making sure we never color outside the lines.
         deflatedBounds.Width -= 1;
         deflatedBounds.Height -= 1;
+        Rectangle focusIndicatorBand = Rectangle.Empty;
 
         // Keep the target clip excluded from the GDI+ drawing as well as from the explicit blits below.
         using Region region = new(bounds);
@@ -2781,31 +2782,55 @@ public abstract partial class TextBoxBase : Control
                 break;
         }
 
-        // Bottom (elevation and focus) edge. Rounded Fixed3D highlights the rounded corners along with
-        // the bottom, clipped to a bottom band (see #14906). Flat styles have no rounded corners, so they
-        // draw a straight focus underline while focused, keeping a focus indicator instead of losing it.
+        // Bottom (elevation and focus) edge. The rounded focus indicator grows out of the bottom border
+        // as a tapered fill, leaving the left, top, and right of the rounded frame untouched, so the
+        // corners do not become heavy (#14997). Non-focus states keep a resting bottom edge clipped to a
+        // band; flat styles draw a straight focus underline (see #14906).
         if (BorderStyle == BorderStyle.Fixed3D && canRenderRoundedChrome)
         {
-            int band = Math.Min(cornerRadius + bottomThickness + 1, focusBandHeight);
-            int bandTop = Math.Max(deflatedBounds.Top, deflatedBounds.Bottom - band + 1);
-            Rectangle bottomClip = Rectangle.FromLTRB(
-                deflatedBounds.Left,
-                bandTop,
-                deflatedBounds.Right + 1,
-                deflatedBounds.Bottom + 1);
+            if (stroke.HasFocusIndicator)
+            {
+                using GraphicsPath focusIndicatorPath = CreateVisualStylesFocusIndicatorPath(
+                    deflatedBounds,
+                    cornerRadius,
+                    bottomThickness);
+                using var focusIndicatorBrush = stroke.BottomColor.GetCachedSolidBrushScope();
 
-            GraphicsState bottomState = offscreenGraphics.Save();
-            offscreenGraphics.SetClip(bottomClip, CombineMode.Replace);
+                // The indicator overlays the bottom edge, including the scrollbar corner. It must not
+                // inherit the client or scrollbar exclusion used to preserve their native rendering.
+                GraphicsState focusIndicatorState = offscreenGraphics.Save();
+                offscreenGraphics.SetClip(bounds, CombineMode.Replace);
+                offscreenGraphics.FillPath(focusIndicatorBrush, focusIndicatorPath);
+                offscreenGraphics.Restore(focusIndicatorState);
+                focusIndicatorBand = Rectangle.FromLTRB(
+                    bounds.Left,
+                    Math.Max(bounds.Top, deflatedBounds.Bottom - bottomThickness / 2),
+                    bounds.Right,
+                    bounds.Bottom);
+            }
+            else
+            {
+                int band = Math.Min(cornerRadius + bottomThickness + 1, focusBandHeight);
+                int bandTop = Math.Max(deflatedBounds.Top, deflatedBounds.Bottom - band + 1);
+                Rectangle bottomClip = Rectangle.FromLTRB(
+                    deflatedBounds.Left,
+                    bandTop,
+                    deflatedBounds.Right + 1,
+                    deflatedBounds.Bottom + 1);
 
-            using GraphicsPath bottomPath = new();
-            bottomPath.AddRoundedRectangle(deflatedBounds, new Size(cornerRadius, cornerRadius));
+                GraphicsState bottomState = offscreenGraphics.Save();
+                offscreenGraphics.SetClip(bottomClip, CombineMode.Replace);
 
-            using var bottomPen = stroke.BottomColor.GetCachedPenScope(bottomThickness);
-            offscreenGraphics.DrawPath(bottomPen, bottomPath);
+                using GraphicsPath bottomPath = new();
+                bottomPath.AddRoundedRectangle(deflatedBounds, new Size(cornerRadius, cornerRadius));
 
-            offscreenGraphics.Restore(bottomState);
+                using var bottomPen = stroke.BottomColor.GetCachedPenScope(bottomThickness);
+                offscreenGraphics.DrawPath(bottomPen, bottomPath);
+
+                offscreenGraphics.Restore(bottomState);
+            }
         }
-        else if (Focused)
+        else if (stroke.HasFocusIndicator)
         {
             // Flat styles keep a straight focus underline across the full width.
             using var bottomPen = stroke.BottomColor.GetCachedPenScope(bottomThickness);
@@ -2836,11 +2861,57 @@ public abstract partial class TextBoxBase : Control
                         rop: ROP_CODE.SRCCOPY);
                 }
             }
+
+            if (!focusIndicatorBand.IsEmpty)
+            {
+                PInvokeCore.BitBlt(
+                    hdc: windowHdc,
+                    x: focusIndicatorBand.X,
+                    y: focusIndicatorBand.Y,
+                    cx: focusIndicatorBand.Width,
+                    cy: focusIndicatorBand.Height,
+                    hdcSrc: (HDC)bufferHdc,
+                    x1: focusIndicatorBand.X,
+                    y1: focusIndicatorBand.Y,
+                    rop: ROP_CODE.SRCCOPY);
+            }
         }
         finally
         {
             offscreenGraphics.ReleaseHdcInternal(bufferHdc);
         }
+    }
+
+    internal static GraphicsPath CreateVisualStylesFocusIndicatorPath(
+        Rectangle bounds,
+        int cornerSize,
+        int indicatorThickness)
+    {
+        float cornerRadius = cornerSize / 2f;
+        float upperHeight = indicatorThickness / 2f;
+        float lowerHeight = indicatorThickness - upperHeight;
+        float upperCornerInset = cornerRadius / 4f;
+        float lowerCornerInset = cornerRadius;
+
+        GraphicsPath path = new();
+        path.StartFigure();
+        path.AddLine(
+            bounds.Left + upperCornerInset,
+            bounds.Bottom - upperHeight,
+            bounds.Right - upperCornerInset,
+            bounds.Bottom - upperHeight);
+        path.AddLine(
+            bounds.Right - upperCornerInset,
+            bounds.Bottom - upperHeight,
+            bounds.Right - lowerCornerInset,
+            bounds.Bottom + lowerHeight);
+        path.AddLine(
+            bounds.Right - lowerCornerInset,
+            bounds.Bottom + lowerHeight,
+            bounds.Left + lowerCornerInset,
+            bounds.Bottom + lowerHeight);
+        path.CloseFigure();
+        return path;
     }
 
     private static Rectangle[] GetNonClientPaintBands(Rectangle bounds, Rectangle clientBounds)

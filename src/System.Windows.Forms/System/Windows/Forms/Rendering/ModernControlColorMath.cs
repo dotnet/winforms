@@ -23,16 +23,12 @@ internal static class ModernControlColorMath
     private const int StrokeDefaultAlphaDark = 0x12;
     private const int StrokeSecondaryAlphaLight = 0x29;  // ControlStrokeColorSecondary
     private const int StrokeSecondaryAlphaDark = 0x18;
-    private const int StrokeStrongAlphaLight = 0xD1;     // resting bottom edge; ~4.5:1 for WCAG 1.4.11 + elevation (#14906). WinUI base 0x72 = 1.74:1. Value pending design.
+    private const int StrokeStrongAlphaLight = 0xB6;     // resting bottom edge; ~3.1:1, the WCAG 1.4.11 floor, lightened from 0xD1 so it is less heavy than the focus accent (#14906, #14997).
     private const int StrokeStrongAlphaDark = 0x8B;
 
     // Hover overlay: tuned a step stronger than Secondary for a more noticeable cue (#14906 direction).
     private const int StrokeHoverAlphaLight = 0x40;
     private const int StrokeHoverAlphaDark = 0x28;
-
-    // Hover surface tint: a fill shift so hover reads clearly, per Leaf's #14906 table. Tunable.
-    private const int SurfaceHoverAlphaLight = 0x1C;
-    private const int SurfaceHoverAlphaDark = 0x1C;
 
     // Read-only surface tint: a subtle fill shift signalling non-editability, per Leaf's #14906 table.
     private const int SurfaceReadOnlyAlphaLight = 0x0A;
@@ -181,10 +177,6 @@ internal static class ModernControlColorMath
     /// <summary>Gets the hover field border stroke: a bit stronger than secondary for a noticeable cue.</summary>
     internal static Color GetFieldStrokeHover(Color background, bool darkMode)
         => CompositeStrokeOverlay(background, darkMode ? StrokeHoverAlphaDark : StrokeHoverAlphaLight, darkMode);
-
-    /// <summary>Gets the Hover control surface: the background nudged darker (light) or lighter (dark).</summary>
-    internal static Color GetFieldHoverSurface(Color background, bool darkMode)
-        => CompositeStrokeOverlay(background, darkMode ? SurfaceHoverAlphaDark : SurfaceHoverAlphaLight, darkMode);
 
     /// <summary>Gets the ReadOnly control surface: a subtle non-editable tint of the background.</summary>
     internal static Color GetFieldReadOnlySurface(Color background, bool darkMode)
