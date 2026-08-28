@@ -551,7 +551,7 @@ public class ComboBoxTests
 
         Color expectedBorder = usesAccent
             ? Application.SystemVisualSettings.AccentColor
-            : control.ForeColor;
+            : ModernControlColorMath.TextControlBorderColor;
         int borderColorTolerance = flatStyle == FlatStyle.Flat
             ? 64
             : 192;
@@ -4107,8 +4107,13 @@ public class ComboBoxTests
     public void ComboBox_GetItemHeight_Invoke_ReturnsExpected(DrawMode drawMode)
     {
         int index = 0;
-        int expected = 15;
-        using ComboBox control = CreateComboBox(drawMode, expected);
+        int itemHeight = 15;
+        using ComboBox control = CreateComboBox(drawMode, itemHeight);
+
+        int expected = drawMode == DrawMode.Normal
+            ? control.ItemHeight
+            : itemHeight;
+
         control.GetItemHeight(index).Should().Be(expected);
     }
 
@@ -4214,17 +4219,20 @@ public class ComboBoxTests
             handleCreatedInvoked++;
         };
 
-        comboBox.Height.Should().Be(23);
+        int defaultDropDownStyleHeight = comboBox.PreferredHeight;
+
+        comboBox.Height.Should().Be(defaultDropDownStyleHeight);
 
         comboBox.CreateControl();
 
-        comboBox.Height.Should().Be(23);
+        comboBox.Height.Should().Be(defaultDropDownStyleHeight);
         comboBox.DropDownStyle.Should().Be(ComboBoxStyle.DropDown);
 
         comboBox.DropDownStyle = ComboBoxStyle.Simple;
 
-        // DefaultSimpleStyleHeight is 150 in ComboBox class
-        comboBox.Height.Should().Be(150);
+        int expectedSimpleStyleHeight = ScaleHelper.ScaleToInitialSystemDpi(150);
+
+        comboBox.Height.Should().Be(expectedSimpleStyleHeight);
         comboBox.DropDownStyle.Should().Be(ComboBoxStyle.Simple);
         handleCreatedInvoked.Should().Be(2);
     }
