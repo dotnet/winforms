@@ -964,6 +964,15 @@ public abstract partial class TextBoxBase : Control
             DeviceDpiInternal);
     }
 
+    private int GetVisualStylesFocusBandHeight()
+    {
+        SystemVisualSettings settings = Application.SystemVisualSettings;
+        return GetVisualStylesFocusBandHeight(
+            settings.FocusBorderMetrics,
+            settings.TextScaleFactor,
+            DeviceDpiInternal);
+    }
+
     internal static Size GetVisualStylesFocusBorderMetrics(
         Size focusBorderMetrics,
         float textScaleFactor,
@@ -2653,6 +2662,7 @@ public abstract partial class TextBoxBase : Control
         int cornerRadius = ScaleVisualStylesMetric(ModernControlVisualStyles.FieldCornerRadius);
         Size focusBorderMetrics = GetVisualStylesFocusBorderMetrics();
         int borderThickness = Math.Max(focusBorderMetrics.Width, focusBorderMetrics.Height);
+        int focusBandHeight = GetVisualStylesFocusBandHeight();
 
         ModernFieldStrokeContext strokeContext = new(
             BackColor: BackColor,
@@ -2771,27 +2781,35 @@ public abstract partial class TextBoxBase : Control
                 break;
         }
 
-        // Bottom (elevation and focus) edge: a straight horizontal segment near the bottom, kept flat so
-        // it does not ride up the corner arcs the way a clipped rounded path would. It runs a little past
-        // the tangent points toward the corners so it is not stubby against the wide corner radius.
-        // Rounded Fixed3D draws it in every state; flat styles draw it only while focused, so those
-        // controls keep a focus indicator instead of losing it entirely (see #14906).
-        bool roundedChrome = BorderStyle == BorderStyle.Fixed3D && canRenderRoundedChrome;
-        if (roundedChrome || Focused)
+        // Bottom (elevation and focus) edge. Rounded Fixed3D highlights the rounded corners along with
+        // the bottom, clipped to a bottom band (see #14906). Flat styles have no rounded corners, so they
+        // draw a straight focus underline while focused, keeping a focus indicator instead of losing it.
+        if (BorderStyle == BorderStyle.Fixed3D && canRenderRoundedChrome)
         {
-            // Half the corner radius extends the underline toward the corners while the thick pen still
-            // meets the arc; going much closer would let the flat end poke below the rounded corner.
-            int inset = roundedChrome ? cornerRadius / 2 : 0;
-            int bottomLeft = deflatedBounds.Left + inset;
-            int bottomRight = deflatedBounds.Right - inset;
+            int band = Math.Min(cornerRadius + bottomThickness + 1, focusBandHeight);
+            int bandTop = Math.Max(deflatedBounds.Top, deflatedBounds.Bottom - band + 1);
+            Rectangle bottomClip = Rectangle.FromLTRB(
+                deflatedBounds.Left,
+                bandTop,
+                deflatedBounds.Right + 1,
+                deflatedBounds.Bottom + 1);
 
-            if (bottomRight > bottomLeft)
-            {
-                // Same y the rounded body used for its bottom edge, so a thicker focus stroke grows about
-                // the same line. cornerRadius and bottomThickness are already DPI-scaled.
-                using var bottomPen = stroke.BottomColor.GetCachedPenScope(bottomThickness);
-                offscreenGraphics.DrawLine(bottomPen, bottomLeft, deflatedBounds.Bottom, bottomRight, deflatedBounds.Bottom);
-            }
+            GraphicsState bottomState = offscreenGraphics.Save();
+            offscreenGraphics.SetClip(bottomClip, CombineMode.Replace);
+
+            using GraphicsPath bottomPath = new();
+            bottomPath.AddRoundedRectangle(deflatedBounds, new Size(cornerRadius, cornerRadius));
+
+            using var bottomPen = stroke.BottomColor.GetCachedPenScope(bottomThickness);
+            offscreenGraphics.DrawPath(bottomPen, bottomPath);
+
+            offscreenGraphics.Restore(bottomState);
+        }
+        else if (Focused)
+        {
+            // Flat styles keep a straight focus underline across the full width.
+            using var bottomPen = stroke.BottomColor.GetCachedPenScope(bottomThickness);
+            offscreenGraphics.DrawLine(bottomPen, deflatedBounds.Left, deflatedBounds.Bottom, deflatedBounds.Right, deflatedBounds.Bottom);
         }
 
         Rectangle[] nonClientBands = GetNonClientPaintBands(
