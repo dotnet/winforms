@@ -3592,6 +3592,31 @@ public partial class DataGridViewTests : IDisposable
     }
 
     [WinFormsFact]
+    public void DataGridView_ReleaseUiaProvider_WithAccessibilityObject_DoesNotUnshareRows()
+    {
+        const int RowCount = 100;
+
+        using DataGridView control = new()
+        {
+            ColumnCount = 1,
+            RowCount = RowCount
+        };
+
+        for (int rowIndex = 0; rowIndex < control.Rows.Count; rowIndex++)
+        {
+            Assert.Equal(-1, control.Rows.SharedRow(rowIndex).Index);
+        }
+
+        _ = control.AccessibilityObject;
+
+        control.ReleaseUiaProvider(control.HWND);
+
+        int sharedRowCount = Enumerable.Range(0, control.Rows.Count)
+            .Count(rowIndex => control.Rows.SharedRow(rowIndex).Index == -1);
+        Assert.InRange(sharedRowCount, RowCount - 1, RowCount);
+    }
+
+    [WinFormsFact]
     public void DataGridView_CellDoubleClickEvent_Raised_Success()
     {
         SubDataGridView dataGridView = new();
