@@ -26,6 +26,7 @@ internal static partial class LocalAppContextSwitches
     internal const string EnableMsoComponentManagerSwitchName = "Switch.System.Windows.Forms.EnableMsoComponentManager";
     internal const string TreeNodeCollectionAddRangeRespectsSortOrderSwitchName = "System.Windows.Forms.TreeNodeCollectionAddRangeRespectsSortOrder";
     internal const string MoveTreeViewTextLocationOnePixelSwitchName = "System.Windows.Forms.TreeView.MoveTreeViewTextLocationOnePixel";
+    internal const string MirrorTopMostForModalDialogsSwitchName = "System.Windows.Forms.MirrorTopMostForModalDialogs";
 
     private static int s_scaleTopLevelFormMinMaxSizeForDpi;
     private static int s_anchorLayoutV2;
@@ -37,6 +38,7 @@ internal static partial class LocalAppContextSwitches
     private static int s_noClientNotifications;
     private static int s_enableMsoComponentManager;
     private static int s_treeNodeCollectionAddRangeRespectsSortOrder;
+    private static int s_mirrorTopMostForModalDialogs;
 
     private static int s_moveTreeViewTextLocationOnePixel;
 
@@ -220,6 +222,18 @@ internal static partial class LocalAppContextSwitches
     {
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         get => GetCachedSwitchValue(TreeNodeCollectionAddRangeRespectsSortOrderSwitchName, ref s_treeNodeCollectionAddRangeRespectsSortOrder);
+    }
+
+    /// <summary>
+    ///  When true, ShowDialog will temporarily set the dialog as TopMost if its owner is TopMost.
+    ///  This prevents the dialog from being covered by the owner during the modal session.
+    ///  The original TopMost state is restored after closing.
+    ///  Default is false. Set to true for .NET Framework-compatible behavior.
+    /// </summary>
+    public static bool MirrorTopMostForModalDialogs
+    {
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        get => GetCachedSwitchValue(MirrorTopMostForModalDialogsSwitchName, ref s_mirrorTopMostForModalDialogs);
     }
 
     /// <summary>
