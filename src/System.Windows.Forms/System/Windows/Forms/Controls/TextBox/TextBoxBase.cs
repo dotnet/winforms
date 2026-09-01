@@ -964,15 +964,6 @@ public abstract partial class TextBoxBase : Control
             DeviceDpiInternal);
     }
 
-    private int GetVisualStylesFocusBandHeight()
-    {
-        SystemVisualSettings settings = Application.SystemVisualSettings;
-        return GetVisualStylesFocusBandHeight(
-            settings.FocusBorderMetrics,
-            settings.TextScaleFactor,
-            DeviceDpiInternal);
-    }
-
     internal static Size GetVisualStylesFocusBorderMetrics(
         Size focusBorderMetrics,
         float textScaleFactor,
@@ -2662,7 +2653,6 @@ public abstract partial class TextBoxBase : Control
         int cornerRadius = ScaleVisualStylesMetric(ModernControlVisualStyles.FieldCornerRadius);
         Size focusBorderMetrics = GetVisualStylesFocusBorderMetrics();
         int borderThickness = Math.Max(focusBorderMetrics.Width, focusBorderMetrics.Height);
-        int focusBandHeight = GetVisualStylesFocusBandHeight();
 
         ModernFieldStrokeContext strokeContext = new(
             BackColor: BackColor,
@@ -2685,6 +2675,7 @@ public abstract partial class TextBoxBase : Control
         using var clientBackgroundBrush = clientBackColor.GetCachedSolidBrushScope();
         using var adornerBrush = adornerColor.GetCachedSolidBrushScope();
         using var adornerPen = adornerColor.GetCachedPenScope(sideThickness);
+        using var flatBorderPen = stroke.BottomColor.GetCachedPenScope(sideThickness);
 
         Rectangle bounds = new(
             x: 0,
@@ -2751,7 +2742,7 @@ public abstract partial class TextBoxBase : Control
             case BorderStyle.FixedSingle:
 
                 offscreenGraphics.FillRectangle(clientBackgroundBrush, deflatedBounds);
-                offscreenGraphics.DrawRectangle(adornerPen, deflatedBounds);
+                offscreenGraphics.DrawRectangle(flatBorderPen, deflatedBounds);
                 break;
 
             case BorderStyle.Fixed3D:
@@ -2776,63 +2767,39 @@ public abstract partial class TextBoxBase : Control
                 {
                     // Chrome degradation fallback - flat render in place of the broken lozenge.
                     offscreenGraphics.FillRectangle(clientBackgroundBrush, deflatedBounds);
-                    offscreenGraphics.DrawRectangle(adornerPen, deflatedBounds);
+                    offscreenGraphics.DrawRectangle(flatBorderPen, deflatedBounds);
                 }
 
                 break;
         }
 
-        // Bottom (elevation and focus) edge. The rounded focus indicator grows out of the bottom border
-        // as a tapered fill, leaving the left, top, and right of the rounded frame untouched, so the
-        // corners do not become heavy (#14997). Non-focus states keep a resting bottom edge clipped to a
-        // band; flat styles draw a straight focus underline (see #14906).
+        // Bottom (elevation and focus) edge. Rounded Fixed3D draws the same tapered straight edge in every
+        // state, meeting the corners without riding up the arcs (#14997); states differ only by the
+        // resolved color and thickness. None draws a straight focus underline only while focused; the other
+        // flat styles already carry a visible box border.
         if (BorderStyle == BorderStyle.Fixed3D && canRenderRoundedChrome)
         {
-            if (stroke.HasFocusIndicator)
-            {
-                using GraphicsPath focusIndicatorPath = CreateVisualStylesFocusIndicatorPath(
-                    deflatedBounds,
-                    cornerRadius,
-                    bottomThickness);
-                using var focusIndicatorBrush = stroke.BottomColor.GetCachedSolidBrushScope();
+            using GraphicsPath bottomEdgePath = CreateVisualStylesBottomEdgePath(
+                deflatedBounds,
+                cornerRadius,
+                bottomThickness);
+            using var bottomEdgeBrush = stroke.BottomColor.GetCachedSolidBrushScope();
 
-                // The indicator overlays the bottom edge, including the scrollbar corner. It must not
-                // inherit the client or scrollbar exclusion used to preserve their native rendering.
-                GraphicsState focusIndicatorState = offscreenGraphics.Save();
-                offscreenGraphics.SetClip(bounds, CombineMode.Replace);
-                offscreenGraphics.FillPath(focusIndicatorBrush, focusIndicatorPath);
-                offscreenGraphics.Restore(focusIndicatorState);
-                focusIndicatorBand = Rectangle.FromLTRB(
-                    bounds.Left,
-                    Math.Max(bounds.Top, deflatedBounds.Bottom - bottomThickness / 2),
-                    bounds.Right,
-                    bounds.Bottom);
-            }
-            else
-            {
-                int band = Math.Min(cornerRadius + bottomThickness + 1, focusBandHeight);
-                int bandTop = Math.Max(deflatedBounds.Top, deflatedBounds.Bottom - band + 1);
-                Rectangle bottomClip = Rectangle.FromLTRB(
-                    deflatedBounds.Left,
-                    bandTop,
-                    deflatedBounds.Right + 1,
-                    deflatedBounds.Bottom + 1);
-
-                GraphicsState bottomState = offscreenGraphics.Save();
-                offscreenGraphics.SetClip(bottomClip, CombineMode.Replace);
-
-                using GraphicsPath bottomPath = new();
-                bottomPath.AddRoundedRectangle(deflatedBounds, new Size(cornerRadius, cornerRadius));
-
-                using var bottomPen = stroke.BottomColor.GetCachedPenScope(bottomThickness);
-                offscreenGraphics.DrawPath(bottomPen, bottomPath);
-
-                offscreenGraphics.Restore(bottomState);
-            }
+            // The edge overlays the bottom, including the scrollbar corner. It must not inherit the client
+            // or scrollbar exclusion used to preserve their native rendering.
+            GraphicsState bottomEdgeState = offscreenGraphics.Save();
+            offscreenGraphics.SetClip(bounds, CombineMode.Replace);
+            offscreenGraphics.FillPath(bottomEdgeBrush, bottomEdgePath);
+            offscreenGraphics.Restore(bottomEdgeState);
+            focusIndicatorBand = Rectangle.FromLTRB(
+                bounds.Left,
+                Math.Max(bounds.Top, deflatedBounds.Bottom - bottomThickness / 2),
+                bounds.Right,
+                bounds.Bottom);
         }
-        else if (stroke.HasFocusIndicator)
+        else if (BorderStyle == BorderStyle.None && stroke.HasFocusIndicator)
         {
-            // Flat styles keep a straight focus underline across the full width.
+            // None has no box, so express focus with a straight underline.
             using var bottomPen = stroke.BottomColor.GetCachedPenScope(bottomThickness);
             offscreenGraphics.DrawLine(bottomPen, deflatedBounds.Left, deflatedBounds.Bottom, deflatedBounds.Right, deflatedBounds.Bottom);
         }
@@ -2882,7 +2849,7 @@ public abstract partial class TextBoxBase : Control
         }
     }
 
-    internal static GraphicsPath CreateVisualStylesFocusIndicatorPath(
+    internal static GraphicsPath CreateVisualStylesBottomEdgePath(
         Rectangle bounds,
         int cornerSize,
         int indicatorThickness)

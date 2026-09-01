@@ -35,7 +35,7 @@ public class ModernFieldStrokeResolverTests
 
         stroke.SideTopColor.Should().Be(ModernControlColorMath.GetDisabledBorderColor());
         stroke.BottomColor.Should().Be(ModernControlColorMath.GetDisabledStrongBorderColor());
-        stroke.SurfaceColor.Should().Be(ModernControlColorMath.GetDisabledSurfaceColor());
+        stroke.SurfaceColor.Should().Be(Color.White);
     }
 
     [Fact]
@@ -45,18 +45,18 @@ public class ModernFieldStrokeResolverTests
             Context(focused: true, readOnly: true, hovered: true));
 
         stroke.BottomColor.Should().Be(s_accent);
-        stroke.BottomThicknessDip.Should().Be(4f);
+        stroke.BottomThicknessDip.Should().Be(3f);
     }
 
     [Fact]
-    public void ReadOnly_wins_over_hover_matches_rest_strokes_but_tints_surface()
+    public void ReadOnly_wins_over_hover_and_matches_the_rest_stroke()
     {
         ModernFieldStroke readOnly = ModernFieldStrokeResolver.GetStroke(Context(readOnly: true, hovered: true));
         ModernFieldStroke rest = ModernFieldStrokeResolver.GetStroke(Context());
 
         readOnly.SideTopColor.Should().Be(rest.SideTopColor);
         readOnly.BottomColor.Should().Be(rest.BottomColor);
-        readOnly.SurfaceColor.Should().NotBe(rest.SurfaceColor);
+        readOnly.SurfaceColor.Should().Be(rest.SurfaceColor);
     }
 
     [Fact]
@@ -81,8 +81,8 @@ public class ModernFieldStrokeResolverTests
     }
 
     [Fact]
-    public void Focus_bottom_is_four_dip()
-        => ModernFieldStrokeResolver.GetStroke(Context(focused: true)).BottomThicknessDip.Should().Be(4f);
+    public void Focus_bottom_is_three_dip()
+        => ModernFieldStrokeResolver.GetStroke(Context(focused: true)).BottomThicknessDip.Should().Be(3f);
 
     [Theory]
     [InlineData(96)]

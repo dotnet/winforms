@@ -12,7 +12,7 @@ namespace System.Windows.Forms;
 internal static class ModernFieldStrokeResolver
 {
     private const float BaseStrokeDip = 2f;
-    private const float FocusBottomStrokeDip = 4f;
+    private const float FocusBottomStrokeDip = 3f;
 
     /// <summary>Resolves the completed stroke for the given context.</summary>
     internal static ModernFieldStroke GetStroke(in ModernFieldStrokeContext context)
@@ -51,15 +51,10 @@ internal static class ModernFieldStrokeResolver
     private static ModernFieldStroke GetThemedStroke(ModernFieldStrokeState state, in ModernFieldStrokeContext context)
     {
         bool dark = context.DarkMode;
-        Color surface = state switch
-        {
-            ModernFieldStrokeState.Disabled => ModernControlColorMath.GetDisabledSurfaceColor(),
-            ModernFieldStrokeState.ReadOnly => ModernControlColorMath.GetFieldReadOnlySurface(context.BackColor, dark),
-            _ => context.BackColor,
-        };
-
-        // Hover keeps the Rest surface so the editable area does not appear to shrink; it reads as Hover
-        // through its border color alone (#14997). All strokes composite over the normal background.
+        // Every state keeps the control's own surface, so no inner border appears between the painted band
+        // and the native client area (#14997). States are expressed through border color and thickness,
+        // and all strokes composite over the normal background.
+        Color surface = context.BackColor;
         Color strokeBackground = context.BackColor;
 
         Color sideTop;
