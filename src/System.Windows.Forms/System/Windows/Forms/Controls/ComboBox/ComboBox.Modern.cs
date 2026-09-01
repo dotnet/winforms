@@ -81,6 +81,7 @@ public partial class ComboBox
         {
             IsCaptured = true,
             DeviceDpi = DeviceDpiInternal,
+            FontHeight = FontHeight,
             SelectionFieldItemHeight = selectionFieldItemHeight,
             SelectionFieldFrameHeight = Math.Max(
                 0,
@@ -169,17 +170,40 @@ public partial class ComboBox
         {
             int topInset = chromeInsets.Top + Padding.Top;
             int bottomInset = chromeInsets.Bottom + Padding.Bottom;
-            editBounds.Y += topInset;
+            int availableTop = ClientRectangle.Top + topInset;
+            int availableBottom = ClientRectangle.Bottom - bottomInset;
 
-            // A single-line EDIT control's text visibility depends on its window height.
-            // Preserve the native height so glyphs are not clipped.
-            editBounds.Height = Math.Max(
-                1,
-                Math.Min(
-                    editBounds.Height,
-                    ClientRectangle.Bottom
-                        - bottomInset
-                        - editBounds.Top));
+            if (DropDownStyle == ComboBoxStyle.DropDown)
+            {
+                // Keep the native text-safe height and center the EDIT child instead of putting
+                // all additional modern field height below its text.
+                int availableHeight = Math.Max(1, availableBottom - availableTop);
+                int nativeEditHeight = ScaleNativeBaselineValue(
+                    _nativeComboBaseline.EditBounds.Height);
+                int baselineFontHeight = ScaleNativeBaselineValue(
+                    _nativeComboBaseline.FontHeight);
+                int textSafeEditHeight = nativeEditHeight
+                    + FontHeight
+                    - baselineFontHeight;
+
+                editBounds.Height = Math.Max(
+                    1,
+                    Math.Min(textSafeEditHeight, availableHeight));
+                editBounds.Y = availableTop
+                    + ((availableHeight - editBounds.Height + 1) / 2);
+            }
+            else
+            {
+                editBounds.Y += topInset;
+
+                // A single-line EDIT control's text visibility depends on its window height.
+                // Preserve the native height so glyphs are not clipped.
+                editBounds.Height = Math.Max(
+                    1,
+                    Math.Min(
+                        editBounds.Height,
+                        availableBottom - editBounds.Top));
+            }
 
             // Inset the edit window horizontally so its rectangular corners clear the rounded
             // field arcs, and reserve the (now wider) drop-down button on the button side.

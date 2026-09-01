@@ -895,6 +895,45 @@ public class ComboBoxTests
     [WinFormsTheory]
     [InlineData(96)]
     [InlineData(120)]
+    [InlineData(144)]
+    [InlineData(168)]
+    [InlineData(192)]
+    [InlineData(216)]
+    [InlineData(240)]
+    [InlineData(288)]
+    public void ComboBox_ModernVisualStyles_DropDown_EditIsCentered_AtDpi(
+        int deviceDpi)
+    {
+        using SystemVisualSettingsTestScope settingsScope = new(
+            clientAreaAnimationEnabled: false,
+            highContrastEnabled: false);
+        using VisualStylesComboBox control = new()
+        {
+            DropDownStyle = ComboBoxStyle.DropDown,
+            FlatStyle = FlatStyle.Standard,
+            Size = new Size(140, 40),
+            VisualStylesMode = VisualStylesMode.Net11
+        };
+        control.SetTestDeviceDpi(deviceDpi);
+
+        control.CreateControl();
+
+        Rectangle editBounds = control.GetEditBounds();
+        int availableTop = control.ClientRectangle.Top
+            + control.ModernChromeInsets.Top
+            + control.Padding.Top;
+        int availableBottom = control.ClientRectangle.Bottom
+            - control.ModernChromeInsets.Bottom
+            - control.Padding.Bottom;
+        int topSpace = editBounds.Top - availableTop;
+        int bottomSpace = availableBottom - editBounds.Bottom;
+
+        Assert.InRange(topSpace - bottomSpace, 0, 1);
+    }
+
+    [WinFormsTheory]
+    [InlineData(96)]
+    [InlineData(120)]
     public void ComboBox_ModernVisualStyles_DropDownList_TextDoesNotClip_AtDpi(int deviceDpi)
     {
         using SystemVisualSettingsTestScope settingsScope = new(
