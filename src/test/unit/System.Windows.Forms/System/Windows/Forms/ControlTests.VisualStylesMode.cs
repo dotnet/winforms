@@ -283,6 +283,23 @@ public partial class ControlTests
     }
 
     [WinFormsFact]
+    public void Control_VisualStylesMode_SetValueMatchingParent_PreservesLocalOverride()
+    {
+        using SubControlWithVisualStyles parent = new()
+        {
+            VisualStylesMode = VisualStylesMode.Classic
+        };
+        using SubControlWithVisualStyles child = new();
+        parent.Controls.Add(child);
+        PropertyDescriptor property = TypeDescriptor.GetProperties(child)[nameof(Control.VisualStylesMode)];
+
+        property.SetValue(child, VisualStylesMode.Classic);
+
+        Assert.Equal(VisualStylesMode.Classic, child.VisualStylesMode);
+        Assert.True(property.ShouldSerializeValue(child));
+    }
+
+    [WinFormsFact]
     public void Control_VisualStylesMode_ParentChangeWithLocalValue_DoesNotRaiseChanged()
     {
         using SubControlWithVisualStyles parent = new()
