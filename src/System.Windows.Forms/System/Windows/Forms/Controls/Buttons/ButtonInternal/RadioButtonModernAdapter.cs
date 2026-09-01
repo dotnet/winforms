@@ -111,7 +111,7 @@ internal sealed class RadioButtonModernAdapter : RadioButtonBaseAdapter
 
         PaintImage(e, layout);
 
-        Color preferredTextColor = Control.ForeColor != Forms.Control.DefaultForeColor
+        Color preferredTextColor = Control.ShouldSerializeForeColor() || Control.ForeColor != Forms.Control.DefaultForeColor
             ? Control.ForeColor
             : Application.IsDarkModeEnabled
                 ? Color.FromArgb(0xF0, 0xF0, 0xF0)

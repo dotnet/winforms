@@ -9,7 +9,7 @@ using PushButtonState = System.Windows.Forms.VisualStyles.PushButtonState;
 namespace System.Windows.Forms.Rendering.Button;
 
 /// <summary>
-///  Drives and renders a <see cref="Forms.ButtonBase"/> whose <see cref="Forms.ButtonBase.FlatStyle"/> is
+///  Drives and renders a <see cref="ButtonBase"/> whose <see cref="ButtonBase.FlatStyle"/> is
 ///  <see cref="FlatStyle.Popup"/> when modern visual styles or dark mode are active, using the concave key-cap
 ///  look of <see cref="PopupButtonKeyCapRenderer"/>.
 /// </summary>
@@ -119,6 +119,7 @@ internal sealed class AnimatedPopupButtonRenderer : AnimatedControlRenderer
         Color faceColor;
         Color foreColor;
         Color borderColor;
+        bool useAutomaticForeColor = false;
 
         if (highContrast)
         {
@@ -138,8 +139,8 @@ internal sealed class AnimatedPopupButtonRenderer : AnimatedControlRenderer
 
             faceColor = PopupButtonColorMath.Blend(baseColor, hoverColor, _hoverCurrent);
             faceColor = PopupButtonColorMath.Blend(faceColor, pressedColor, _pressCurrent);
-            bool useAutomaticForeColor = button.ForeColor == Forms.Control.DefaultForeColor
-                 && !button.ShouldSerializeForeColor();
+            useAutomaticForeColor = button.ForeColor == Control.DefaultForeColor
+                && !button.ShouldSerializeForeColor();
             foreColor = !useAutomaticForeColor
                 ? button.ForeColor
                 : _baseColorRenderer.GetTextColor(state, button.IsDefault, faceColor);
@@ -156,7 +157,7 @@ internal sealed class AnimatedPopupButtonRenderer : AnimatedControlRenderer
             BackColor = faceColor,
             ForeColor = foreColor,
             SurfaceColor = button.Parent?.BackColor ?? button.BackColor,
-            UseAutomaticForeColor = button.ForeColor == Forms.Control.DefaultForeColor,
+            UseAutomaticForeColor = useAutomaticForeColor,
             BorderColor = borderColor,
             BorderWidth = flatAppearance.BorderSize,
             Enabled = button.Enabled,
@@ -230,14 +231,14 @@ internal sealed class AnimatedPopupButtonRenderer : AnimatedControlRenderer
 
     internal (Color BaseColor, Color HoverColor, Color PressedColor) GetStateColors()
     {
-        Forms.ButtonBase button = Button;
+        ButtonBase button = Button;
         FlatButtonAppearance flatAppearance = button.FlatAppearance;
         _baseColorRenderer.DeviceDpi = button.DeviceDpi;
         _baseColorRenderer.FlatAppearance = flatAppearance;
 
         bool hasCustomBackColor = button.EffectiveVisualStylesModeInternal >= VisualStylesMode.Net11
             ? button.ShouldSerializeBackColor()
-            : button.BackColor != Forms.Control.DefaultBackColor;
+            : button.BackColor != Control.DefaultBackColor;
         Color baseColor = hasCustomBackColor
             ? button.BackColor
             : _baseColorRenderer.GetBackgroundColor(PushButtonState.Normal, isDefault: false);
