@@ -13,11 +13,13 @@ namespace System.Private.Windows.Ole;
 internal unsafe class FailingGetDataNativeDataObject : NativeDataObjectMock
 {
     private readonly ushort _format;
+    private readonly TYMED _tymed;
     private readonly HRESULT _failureHResult;
 
-    public FailingGetDataNativeDataObject(ushort format, HRESULT failureHResult = default)
+    public FailingGetDataNativeDataObject(ushort format, TYMED tymed, HRESULT failureHResult = default)
     {
         _format = format;
+        _tymed = tymed;
 
         // Default to CLIPBRD_E_CANT_OPEN which can happen during clipboard contention.
         _failureHResult = failureHResult == default ? HRESULT.CLIPBRD_E_CANT_OPEN : failureHResult;
@@ -25,12 +27,10 @@ internal unsafe class FailingGetDataNativeDataObject : NativeDataObjectMock
 
     public override HRESULT QueryGetData(FORMATETC* pformatetc)
     {
-        if (pformatetc is null)
-        {
-            return HRESULT.DV_E_FORMATETC;
-        }
-
-        if (pformatetc->cfFormat != _format)
+        if (pformatetc is null
+            || pformatetc->cfFormat != _format
+            || pformatetc->dwAspect != (uint)DVASPECT.DVASPECT_CONTENT
+            || pformatetc->lindex != -1)
         {
             return HRESULT.DV_E_FORMATETC;
         }

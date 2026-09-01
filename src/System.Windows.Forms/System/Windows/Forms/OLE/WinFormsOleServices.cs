@@ -99,6 +99,11 @@ internal sealed class WinFormsOleServices : IOleServices
             // get the data out.
             Debug.WriteLineIf(result == HRESULT.CLIPBRD_E_BAD_DATA, "CLIPBRD_E_BAD_DATA returned when trying to get clipboard data.");
 
+            if (result.Failed && CoreAppContextSwitches.ClipboardThrowExceptionsForGetAPIs)
+            {
+                result.ThrowOnFailure();
+            }
+
             try
             {
                 // GDI+ doesn't own this HBITMAP, but we can't delete it while the object is still around. So we
