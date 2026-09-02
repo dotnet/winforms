@@ -64,7 +64,9 @@ internal static class ModernFieldStrokeResolver
         switch (state)
         {
             case ModernFieldStrokeState.Focused:
-                sideTop = ModernControlColorMath.GetFieldStrokeHover(strokeBackground, dark);
+                // Focus keeps the subtle resting side color (per Leaf's design image); the accent bottom
+                // edge is the focus cue, not a heavier grey box around the sides.
+                sideTop = ModernControlColorMath.GetFieldStrokeDefault(strokeBackground, dark);
                 bottom = context.AccentColor;
                 bottomDip = FocusBottomStrokeDip;
                 break;
