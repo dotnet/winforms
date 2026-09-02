@@ -20,7 +20,7 @@ internal static class ModernControlColorMath
     // verified against Common_themeresources_any.xaml, except light-mode Strong, which is raised
     // above WinUI so the visible bottom edge meets WCAG 1.4.11 (#14906). Composited in linear light.
     private const int StrokeDefaultAlphaLight = 0x0F;    // ControlStrokeColorDefault
-    private const int StrokeDefaultAlphaDark = 0x12;
+    private const int StrokeDefaultAlphaDark = 0x03;     // near-invisible dark rest side, matching the light/classic look where the side effectively vanishes (WinUI value is 0x12, #14919)
     private const int StrokeSecondaryAlphaLight = 0x29;  // ControlStrokeColorSecondary
     private const int StrokeSecondaryAlphaDark = 0x18;
     private const int StrokeStrongAlphaLight = 0xB6;     // resting bottom edge; ~3.1:1, the WCAG 1.4.11 floor, lightened from 0xD1 so it is less heavy than the focus accent (#14906, #14997).
