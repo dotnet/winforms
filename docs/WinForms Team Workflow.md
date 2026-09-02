@@ -96,8 +96,7 @@ The pull request has completed the applicable pre-FTE validation and is waiting 
 ### Entry Criteria
 
 - The pull request is ready for FTE review.
-- The "Waiting Review" label is applied when applicable.
-
+- The `waiting-review` label is applied when applicable.
 ### Exit Criteria
 
 - Required review feedback has been addressed.
