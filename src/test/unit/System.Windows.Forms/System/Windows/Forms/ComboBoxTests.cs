@@ -1392,7 +1392,32 @@ public class ComboBoxTests
                 throw new InvalidOperationException();
         }
 
-        Assert.Equal(expectedState, GetNativeComboState(actual));
+        var actualState = GetNativeComboState(actual);
+        Assert.Equal(expectedState.size, actualState.size);
+        Assert.Equal(expectedState.selectionHeight, actualState.selectionHeight);
+        Assert.Equal(expectedState.margins, actualState.margins);
+        Assert.Equal(expectedState.itemBounds, actualState.itemBounds);
+        Assert.Equal(expectedState.buttonBounds, actualState.buttonBounds);
+        Assert.Equal(expectedState.editBounds.X, actualState.editBounds.X);
+        Assert.Equal(expectedState.editBounds.Width, actualState.editBounds.Width);
+
+        // Native EDIT font metrics can differ by one device pixel depending on whether the font
+        // was set before or after handle creation, but its visual center must remain stable.
+        const int nativeRoundingTolerance = 1;
+        Assert.InRange(
+            Math.Abs(expectedState.editBounds.Y - actualState.editBounds.Y),
+            0,
+            nativeRoundingTolerance);
+        Assert.InRange(
+            Math.Abs(expectedState.editBounds.Height - actualState.editBounds.Height),
+            0,
+            nativeRoundingTolerance);
+        Assert.InRange(
+            Math.Abs(
+                ((2 * expectedState.editBounds.Y) + expectedState.editBounds.Height)
+                    - ((2 * actualState.editBounds.Y) + actualState.editBounds.Height)),
+            0,
+            nativeRoundingTolerance);
     }
 
     [WinFormsTheory]
