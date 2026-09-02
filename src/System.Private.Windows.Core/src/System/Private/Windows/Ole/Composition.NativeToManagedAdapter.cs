@@ -489,6 +489,8 @@ internal unsafe partial class Composition<TOleServices, TNrbfSerializer, TDataFo
                 tymed = (uint)Com.TYMED.TYMED_ISTREAM
             };
 
+            // We are not throwing exception from QueryGetData when CoreAppContextSwitches.ClipboardThrowExceptionsForGetAPIs is true
+            // so as to retain the .NET 9 behavior.
             if (dataObject->QueryGetData(formatEtc).Failed)
             {
                 return false;

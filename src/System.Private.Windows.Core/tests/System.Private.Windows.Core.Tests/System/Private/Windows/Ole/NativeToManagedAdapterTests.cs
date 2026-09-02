@@ -385,7 +385,7 @@ public unsafe class NativeToManagedAdapterTests
         // This can happen in practice when there's clipboard contention - QueryGetData succeeds
         // but GetData fails because another application modified the clipboard in between.
 
-        using FailingGetDataNativeDataObject dataObject = new((ushort)_format.Id, TYMED.TYMED_HGLOBAL);
+        using FailingGetDataNativeDataObject dataObject = new((ushort)_format.Id);
 
         var composition = Composition.Create(ComHelpers.GetComPointer<IDataObject>(dataObject));
 
@@ -398,39 +398,32 @@ public unsafe class NativeToManagedAdapterTests
     }
 
     [Theory]
-    [InlineData((uint)TYMED.TYMED_HGLOBAL)]
-    [InlineData((uint)TYMED.TYMED_ISTREAM)]
-    public void GetData_WhenGetDataFailsAndSwitchDisabled_ReturnsNull(uint tymed)
+    [InlineData(false)]
+    [InlineData(true)]
+    public void GetData_WhenGetDataFails_ReturnsExpected(bool enableSwitch)
     {
         using AppContextSwitchScope scope = new(
             CoreAppContextSwitches.ClipboardThrowExceptionsForGetAPIsSwitchName,
             getDefaultValue: () => false,
-            enable: false);
-        using FailingGetDataNativeDataObject dataObject = new((ushort)_format.Id, (TYMED)tymed);
+            enable: enableSwitch);
+
+        using FailingGetDataNativeDataObject dataObject = new(
+            (ushort)_format.Id,
+            HRESULT.CLIPBRD_E_CANT_OPEN);
 
         var composition = Composition.Create(ComHelpers.GetComPointer<IDataObject>(dataObject));
-        object? data = composition.GetData(nameof(NativeToManagedAdapterTests));
 
-        data.Should().BeNull();
-    }
-
-    [Theory]
-    [InlineData((uint)TYMED.TYMED_HGLOBAL)]
-    [InlineData((uint)TYMED.TYMED_ISTREAM)]
-    public void GetData_WhenGetDataFailsAndSwitchEnabled_Throws(uint tymed)
-    {
-        using AppContextSwitchScope scope = new(
-            CoreAppContextSwitches.ClipboardThrowExceptionsForGetAPIsSwitchName,
-            getDefaultValue: () => false,
-            enable: true);
-        using FailingGetDataNativeDataObject dataObject = new((ushort)_format.Id, (TYMED)tymed, HRESULT.CLIPBRD_E_CANT_OPEN);
-
-        var composition = Composition.Create(ComHelpers.GetComPointer<IDataObject>(dataObject));
-        Action action = () => composition.GetData(nameof(NativeToManagedAdapterTests));
-
-        action.Should()
-            .Throw<COMException>()
-            .And.HResult.Should()
-            .Be((int)HRESULT.CLIPBRD_E_CANT_OPEN);
+        if (enableSwitch)
+        {
+            Action action = () => composition.GetData(nameof(NativeToManagedAdapterTests));
+            action.Should()
+                .Throw<COMException>()
+                .And.HResult.Should()
+                .Be((int)HRESULT.CLIPBRD_E_CANT_OPEN);
+        }
+        else
+        {
+            composition.GetData(nameof(NativeToManagedAdapterTests)).Should().BeNull();
+        }
     }
 }
