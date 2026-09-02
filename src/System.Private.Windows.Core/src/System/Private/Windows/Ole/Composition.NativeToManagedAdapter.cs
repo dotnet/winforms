@@ -393,6 +393,18 @@ internal unsafe partial class Composition<TOleServices, TNrbfSerializer, TDataFo
             return result;
         }
 
+        // Handles a failed clipboard get operation by either throwing (when the opt-in switch is set)
+        // or reporting failure to the caller. Always returns false so callers can 'return HandleFailedHResult(hr);'.
+        private static bool HandleFailedHResult(HRESULT hr)
+        {
+            if (CoreAppContextSwitches.ClipboardThrowExceptionsForGetAPIs)
+            {
+                hr.ThrowOnFailure();
+            }
+
+            return false;
+        }
+
         private static bool TryGetHGLOBALData<T>(
             Com.IDataObject* dataObject,
             ref readonly DataRequest request,
@@ -410,12 +422,13 @@ internal unsafe partial class Composition<TOleServices, TNrbfSerializer, TDataFo
                 tymed = (uint)Com.TYMED.TYMED_HGLOBAL
             };
 
-            if (dataObject->QueryGetData(formatetc).Failed)
+            HRESULT hr = dataObject->QueryGetData(formatetc);
+            if (hr.Failed)
             {
-                return false;
+                return HandleFailedHResult(hr);
             }
 
-            HRESULT hr = dataObject->GetData(formatetc, out Com.STGMEDIUM medium);
+            hr = dataObject->GetData(formatetc, out Com.STGMEDIUM medium);
 
             // One of the ways this can happen is when we attempt to put binary formatted data onto the
             // clipboard, which will succeed as Windows ignores all errors when putting data on the clipboard.
@@ -433,19 +446,7 @@ internal unsafe partial class Composition<TOleServices, TNrbfSerializer, TDataFo
             // (This can easily happen when the clipboard content changes between QueryGetData and GetData calls.)
             if (hr.Failed)
             {
-                if (CoreAppContextSwitches.ClipboardThrowExceptionsForGetAPIs)
-                {
-                    hr.ThrowOnFailure();
-                }
-
-                return false;
-            }
-
-            // If GetData failed, don't try to read from the medium - it may contain uninitialized data.
-            // (This can easily happen when the clipboard content changes between QueryGetData and GetData calls.)
-            if (hr.Failed)
-            {
-                return false;
+                return HandleFailedHResult(hr);
             }
 
             bool result = false;
@@ -489,22 +490,16 @@ internal unsafe partial class Composition<TOleServices, TNrbfSerializer, TDataFo
                 tymed = (uint)Com.TYMED.TYMED_ISTREAM
             };
 
-            // We are not throwing exception from QueryGetData when CoreAppContextSwitches.ClipboardThrowExceptionsForGetAPIs is true
-            // so as to retain the .NET 9 behavior.
-            if (dataObject->QueryGetData(formatEtc).Failed)
-            {
-                return false;
-            }
-
-            HRESULT hr = dataObject->GetData(formatEtc, out Com.STGMEDIUM medium);
+            HRESULT hr = dataObject->QueryGetData(formatEtc);
             if (hr.Failed)
             {
-                if (CoreAppContextSwitches.ClipboardThrowExceptionsForGetAPIs)
-                {
-                    hr.ThrowOnFailure();
-                }
+                return HandleFailedHResult(hr);
+            }
 
-                return false;
+            hr = dataObject->GetData(formatEtc, out Com.STGMEDIUM medium);
+            if (hr.Failed)
+            {
+                return HandleFailedHResult(hr);
             }
 
             HGLOBAL hglobal = default;
