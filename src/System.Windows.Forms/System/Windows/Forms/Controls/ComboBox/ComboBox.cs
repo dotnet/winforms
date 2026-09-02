@@ -2007,9 +2007,8 @@ public partial class ComboBox : ListControl
     // constraints on their size.
     internal override Rectangle ApplyBoundsConstraints(int suggestedX, int suggestedY, int proposedWidth, int proposedHeight)
     {
-        if ((DropDownStyle is ComboBoxStyle.DropDown
+        if (DropDownStyle is ComboBoxStyle.DropDown
             or ComboBoxStyle.DropDownList)
-            && ParentInternal is not DataGridView.DataGridViewEditingPanel)
         {
             proposedHeight = PreferredHeight;
         }

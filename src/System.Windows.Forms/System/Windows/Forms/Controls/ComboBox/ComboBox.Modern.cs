@@ -346,19 +346,11 @@ public partial class ComboBox
             width: ScaleNativeBaselineValue(size.Width),
             height: ScaleNativeBaselineValue(size.Height));
 
-    private bool IsHostedInDataGridViewEditingPanel
-        => ParentInternal is DataGridView.DataGridViewEditingPanel;
-
     /// <summary>
     ///  Applies the complete native ComboBox target for the current managed state.
     /// </summary>
     private unsafe void ApplyModernComboLayout()
     {
-        if (IsHostedInDataGridViewEditingPanel)
-        {
-            return;
-        }
-
         if (!IsHandleCreated)
         {
             ApplyManagedPreferredHeightBeforeHandle();
