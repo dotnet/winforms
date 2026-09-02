@@ -7456,15 +7456,7 @@ public unsafe partial class Control :
 
         if (Properties.ContainsKey(s_visualStylesModeProperty))
         {
-            if (Properties.GetValueOrDefault<VisualStylesMode>(s_visualStylesModeProperty)
-                == ParentInternal?.ResolvedVisualStylesMode)
-            {
-                // Same as the parent value, make it ambient again by removing it.
-                Properties.RemoveValue(s_visualStylesModeProperty);
-            }
-
-            // A local value isolates this subtree from parent changes. If the local value matched the
-            // parent's new value, removing it preserves the effective value while making it ambient again.
+            // A local value isolates this subtree from parent changes.
             return;
         }
 

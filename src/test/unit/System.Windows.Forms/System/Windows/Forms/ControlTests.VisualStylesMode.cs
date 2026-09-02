@@ -181,14 +181,18 @@ public partial class ControlTests
         Assert.Equal(VisualStylesMode.Disabled, child.VisualStylesMode);
         Assert.Equal(VisualStylesMode.Net11, parent.VisualStylesMode);
 
-        // Setting the child back to the parent's value makes it ambient again, so a later
-        // change on the parent flows through to the child once more.
+        // Setting the child to the parent's value preserves the explicit override.
         child.VisualStylesMode = VisualStylesMode.Net11;
-        Assert.Equal(VisualStylesMode.Inherit, child.VisualStylesMode);
+        Assert.Equal(VisualStylesMode.Net11, child.VisualStylesMode);
         Assert.Equal(VisualStylesMode.Net11, child.EffectiveVisualStylesModeAccessor);
 
         parent.VisualStylesMode = VisualStylesMode.Classic;
         Assert.Equal(VisualStylesMode.Classic, parent.VisualStylesMode);
+        Assert.Equal(VisualStylesMode.Net11, child.VisualStylesMode);
+        Assert.Equal(VisualStylesMode.Net11, child.EffectiveVisualStylesModeAccessor);
+
+        // Explicitly setting Inherit makes the child ambient again.
+        child.VisualStylesMode = VisualStylesMode.Inherit;
         Assert.Equal(VisualStylesMode.Inherit, child.VisualStylesMode);
         Assert.Equal(VisualStylesMode.Classic, child.EffectiveVisualStylesModeAccessor);
     }
@@ -318,6 +322,33 @@ public partial class ControlTests
 
         Assert.Equal(VisualStylesMode.Disabled, child.VisualStylesMode);
         Assert.Equal(0, callCount);
+    }
+
+    [WinFormsFact]
+    public void Control_VisualStylesMode_ParentChangeMatchingLocalValue_PreservesLocalOverride()
+    {
+        using SubControlWithVisualStyles parent = new()
+        {
+            VisualStylesMode = VisualStylesMode.Classic
+        };
+
+        using SubControlWithVisualStyles child = new()
+        {
+            VisualStylesMode = VisualStylesMode.Disabled
+        };
+
+        parent.Controls.Add(child);
+        PropertyDescriptor property = TypeDescriptor.GetProperties(child)[nameof(Control.VisualStylesMode)];
+
+        parent.VisualStylesMode = VisualStylesMode.Disabled;
+
+        Assert.Equal(VisualStylesMode.Disabled, child.VisualStylesMode);
+        Assert.True(property.ShouldSerializeValue(child));
+
+        parent.VisualStylesMode = VisualStylesMode.Net11;
+
+        Assert.Equal(VisualStylesMode.Disabled, child.VisualStylesMode);
+        Assert.Equal(VisualStylesMode.Disabled, child.EffectiveVisualStylesModeAccessor);
     }
 
     [WinFormsFact]
