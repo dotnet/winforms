@@ -58,6 +58,17 @@
     <IncludeTestAssembly>true</IncludeTestAssembly>
 
     <CollectCoverage Condition="'$(CollectCoverage)' == '' and '$(IsTestProject)' == 'true' and '$(TargetFramework)' != ''">true</CollectCoverage>
+
+    <!--
+      coverlet.msbuild 8.0.0 splits its task assemblies by MSBuild host: under 'dotnet build' (MSBuildRuntimeType ==
+      'Core') it loads tasks\net8.0\coverlet.core.dll, which references System.Runtime, Version=8.0.0.0. The
+      instrumenter copies its tracker type out of that assembly into the assembly under test, so the injected
+      Coverlet.Core.Instrumentation.Tracker.* type carries the same reference. .NET Framework cannot resolve
+      System.Runtime 8.0.0.0, so the tracker's type initializer throws TypeInitializationException at test time.
+      Instrument .NET (Core) targets only.
+    -->
+    <CollectCoverage Condition="'$(TargetFramework)' == 'net481'">false</CollectCoverage>
+
     <SingleHit>true</SingleHit>
     <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
     <CoverletOutputFormat>opencover</CoverletOutputFormat>
