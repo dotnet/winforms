@@ -899,10 +899,10 @@ public unsafe partial class Control :
 
             VisualStylesMode oldEffectiveValue = EffectiveVisualStylesMode;
 
-            // Inherit was requested explicitly, or the requested value matches the ambient (parent) value:
+            // Inherit was requested explicitly, or the requested value matches the uncoerced ambient value:
             // drop any local override so the value is inherited again.
             if (value == VisualStylesMode.Inherit
-                || (ParentInternal is { } parent && parent.ResolvedVisualStylesMode == value))
+                || (ParentInternal is { } parent && parent.UncoercedVisualStylesMode == value))
             {
                 Properties.RemoveValue(s_visualStylesModeProperty);
             }
@@ -927,17 +927,29 @@ public unsafe partial class Control :
     private void ResetVisualStylesMode()
         => VisualStylesMode = VisualStylesMode.Inherit;
 
-    private VisualStylesMode ResolvedVisualStylesMode
+    private VisualStylesMode UncoercedVisualStylesMode
     {
         get
         {
             VisualStylesMode value = VisualStylesMode;
 
             return value == VisualStylesMode.Inherit
-                ? ParentInternal?.ResolvedVisualStylesMode ?? DefaultVisualStylesMode
+                ? ParentInternal?.UncoercedVisualStylesMode ?? DefaultVisualStylesMode
                 : value;
         }
     }
+
+    private VisualStylesMode ResolvedVisualStylesMode
+        => GetSupportedVisualStylesMode(
+            VisualStylesMode == VisualStylesMode.Inherit
+                ? ParentInternal?.ResolvedVisualStylesMode ?? DefaultVisualStylesMode
+                : VisualStylesMode);
+
+    /// <summary>
+    ///  Coerces a requested visual styles mode to one supported by this control.
+    /// </summary>
+    private protected virtual VisualStylesMode GetSupportedVisualStylesMode(VisualStylesMode mode)
+        => mode;
 
     /// <summary>
     ///  Gets the renderer-authoritative <see cref="Forms.VisualStylesMode"/> that controls must honor when deciding
@@ -7449,7 +7461,7 @@ public unsafe partial class Control :
         if (Properties.ContainsKey(s_visualStylesModeProperty))
         {
             if (Properties.GetValueOrDefault<VisualStylesMode>(s_visualStylesModeProperty)
-                == ParentInternal?.ResolvedVisualStylesMode)
+                == ParentInternal?.UncoercedVisualStylesMode)
             {
                 // Same as the parent value, make it ambient again by removing it.
                 Properties.RemoveValue(s_visualStylesModeProperty);
@@ -7460,14 +7472,28 @@ public unsafe partial class Control :
             return;
         }
 
-        if (e is VisualStylesModeChangeEventArgs transition
-            && (!transition.IsCurrent
-                || ParentInternal?.EffectiveVisualStylesMode != transition.NewEffectiveVisualStylesMode))
+        if (e is VisualStylesModeChangeEventArgs transition)
         {
+            if (!transition.IsCurrent
+                || ParentInternal?.EffectiveVisualStylesMode != transition.NewEffectiveVisualStylesMode)
+            {
+                return;
+            }
+
+            VisualStylesModeChangeEventArgs transitionForControl = transition.CreateForControl(this);
+            if (transitionForControl.OldEffectiveVisualStylesMode
+                != transitionForControl.NewEffectiveVisualStylesMode)
+            {
+                OnVisualStylesModeChanged(transitionForControl);
+            }
+            else if (ChildControls is { } children)
+            {
+                CascadeVisualStylesModeChanged(children, transitionForControl, transitionForControl);
+            }
+
             return;
         }
 
-        // In every other case we're going to raise the event.
         OnVisualStylesModeChanged(e);
     }
 
@@ -7534,18 +7560,24 @@ public unsafe partial class Control :
 
         public VisualStylesModeChangeEventArgs CreateForControl(Control control)
         {
-            if (SystemVisualSettingsTransition is not { } systemVisualSettingsTransition)
+            if (SystemVisualSettingsTransition is { } systemVisualSettingsTransition)
             {
-                return this;
+                return new(
+                    _state,
+                    control,
+                    control.Properties.GetValueOrDefault(s_visualStylesModeChangeVersionProperty, 0),
+                    control.GetEffectiveVisualStylesMode(systemVisualSettingsTransition.OldSettings.HighContrastEnabled),
+                    control.GetEffectiveVisualStylesMode(systemVisualSettingsTransition.NewSettings.HighContrastEnabled),
+                    systemVisualSettingsTransition);
             }
 
             return new(
                 _state,
                 control,
                 control.Properties.GetValueOrDefault(s_visualStylesModeChangeVersionProperty, 0),
-                control.GetEffectiveVisualStylesMode(systemVisualSettingsTransition.OldSettings.HighContrastEnabled),
-                control.GetEffectiveVisualStylesMode(systemVisualSettingsTransition.NewSettings.HighContrastEnabled),
-                systemVisualSettingsTransition);
+                control.GetSupportedVisualStylesMode(OldEffectiveVisualStylesMode),
+                control.GetSupportedVisualStylesMode(NewEffectiveVisualStylesMode),
+                systemVisualSettingsTransition: null);
         }
 
         public void PerformLayouts()
