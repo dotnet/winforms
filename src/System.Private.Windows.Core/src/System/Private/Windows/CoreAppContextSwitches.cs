@@ -20,9 +20,13 @@ internal static class CoreAppContextSwitches
     internal const string DragDropDisableSyncOverAsyncSwitchName =
         "Windows.DragDrop.DisableSyncOverAsync";
 
+    internal const string ClipboardThrowExceptionsForGetAPIsSwitchName =
+        "Windows.Clipboard.ThrowExceptionsForGetAPIs";
+
     private static int s_clipboardDragDropEnableUnsafeBinaryFormatterSerialization;
     private static int s_clipboardDragDropEnableNrbfSerialization;
     private static int s_dragDropDisableSyncOverAsync;
+    private static int s_clipboardThrowExceptionsForGetAPIs;
 
     private static bool GetCachedSwitchValue(string switchName, ref int cachedSwitchValue)
     {
@@ -118,5 +122,11 @@ internal static class CoreAppContextSwitches
     {
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         get => GetCachedSwitchValue(DragDropDisableSyncOverAsyncSwitchName, ref s_dragDropDisableSyncOverAsync);
+    }
+
+    public static bool ClipboardThrowExceptionsForGetAPIs
+    {
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        get => GetCachedSwitchValue(ClipboardThrowExceptionsForGetAPIsSwitchName, ref s_clipboardThrowExceptionsForGetAPIs);
     }
 }

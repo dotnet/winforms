@@ -4,6 +4,7 @@
 using System.ComponentModel;
 using System.Formats.Nrbf;
 using System.Private.Windows.BinaryFormat;
+using System.Runtime.InteropServices;
 using System.Text.Json;
 using Windows.Win32;
 using Windows.Win32.Foundation;
@@ -258,5 +259,61 @@ public unsafe class NativeToManagedAdapterTests
 
         MemoryStream result = (MemoryStream)data!;
         result.ToArray().Should().Equal(0xBE, 0xAD, 0xCA, 0xFE);
+    }
+
+    [Fact]
+    public void GetData_WhenGetDataFails_ReturnsNullInsteadOfCorruptedData()
+    {
+        // This test verifies the fix for returning corrupted data when GetData fails.
+        // https://github.com/dotnet/wpf/issues/11402
+        //
+        // Previously, if IDataObject::GetData returned a failure HRESULT, the code would still
+        // try to read from the STGMEDIUM which could contain uninitialized data, leading to:
+        // - Empty strings (if garbage memory happened to have null at the start)
+        // - Mojibake/corrupted text (if garbage memory was interpreted as characters)
+        //
+        // This can happen in practice when there's clipboard contention - QueryGetData succeeds
+        // but GetData fails because another application modified the clipboard in between.
+
+        using FailingGetDataNativeDataObject dataObject = new((ushort)_format.Id);
+
+        var composition = Composition.Create(ComHelpers.GetComPointer<IDataObject>(dataObject));
+
+        // GetData should return null when the underlying GetData call fails,
+        // not corrupted data from uninitialized memory.
+        object? data = composition.GetData(nameof(NativeToManagedAdapterTests));
+
+        // Should return null, not corrupted data
+        data.Should().BeNull();
+    }
+
+    [Theory]
+    [InlineData(false)]
+    [InlineData(true)]
+    public void GetData_WhenGetDataFails_ReturnsExpected(bool enableSwitch)
+    {
+        using AppContextSwitchScope scope = new(
+            CoreAppContextSwitches.ClipboardThrowExceptionsForGetAPIsSwitchName,
+            getDefaultValue: () => false,
+            enable: enableSwitch);
+
+        using FailingGetDataNativeDataObject dataObject = new(
+            (ushort)_format.Id,
+            HRESULT.CLIPBRD_E_CANT_OPEN);
+
+        var composition = Composition.Create(ComHelpers.GetComPointer<IDataObject>(dataObject));
+
+        if (enableSwitch)
+        {
+            Action action = () => composition.GetData(nameof(NativeToManagedAdapterTests));
+            action.Should()
+                .Throw<COMException>()
+                .And.HResult.Should()
+                .Be((int)HRESULT.CLIPBRD_E_CANT_OPEN);
+        }
+        else
+        {
+            composition.GetData(nameof(NativeToManagedAdapterTests)).Should().BeNull();
+        }
     }
 }
