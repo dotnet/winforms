@@ -66,6 +66,10 @@
       Coverlet.Core.Instrumentation.Tracker.* type carries the same reference. .NET Framework cannot resolve
       System.Runtime 8.0.0.0, so the tracker's type initializer throws TypeInitializationException at test time.
       Instrument .NET (Core) targets only.
+
+      Upstream bug: https://github.com/coverlet-coverage/coverlet/issues/1818. Later releases are not yet a way out:
+      8.0.1 reports no .NET Framework coverage at all (coverlet #1842), and 10.0.1 regressed with a different
+      TypeInitializationException on net481 (coverlet #2009). Tracked by https://github.com/dotnet/winforms/issues/15030.
     -->
     <CollectCoverage Condition="'$(TargetFramework)' == 'net481'">false</CollectCoverage>
 
