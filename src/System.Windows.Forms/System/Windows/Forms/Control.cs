@@ -7458,28 +7458,46 @@ public unsafe partial class Control :
             return;
         }
 
-        if (Properties.ContainsKey(s_visualStylesModeProperty))
+        VisualStylesModeChangeEventArgs? transition = e as VisualStylesModeChangeEventArgs;
+        if (transition is not null
+            && (!transition.IsCurrent
+                || ParentInternal?.EffectiveVisualStylesMode != transition.NewEffectiveVisualStylesMode))
         {
-            if (Properties.GetValueOrDefault<VisualStylesMode>(s_visualStylesModeProperty)
-                == ParentInternal?.UncoercedVisualStylesMode)
-            {
-                // Same as the parent value, make it ambient again by removing it.
-                Properties.RemoveValue(s_visualStylesModeProperty);
-            }
-
-            // A local value isolates this subtree from parent changes. If the local value matched the
-            // parent's new value, removing it preserves the effective value while making it ambient again.
             return;
         }
 
-        if (e is VisualStylesModeChangeEventArgs transition)
+        if (Properties.ContainsKey(s_visualStylesModeProperty))
         {
-            if (!transition.IsCurrent
-                || ParentInternal?.EffectiveVisualStylesMode != transition.NewEffectiveVisualStylesMode)
+            if (Properties.GetValueOrDefault<VisualStylesMode>(s_visualStylesModeProperty)
+                != ParentInternal?.UncoercedVisualStylesMode)
+            {
+                // A local value isolates this subtree from parent changes.
+                return;
+            }
+
+            VisualStylesMode oldEffectiveVisualStylesMode = EffectiveVisualStylesMode;
+
+            // Same as the parent value, make it ambient again by removing it.
+            Properties.RemoveValue(s_visualStylesModeProperty);
+
+            VisualStylesMode newEffectiveVisualStylesMode = EffectiveVisualStylesMode;
+            if (oldEffectiveVisualStylesMode == newEffectiveVisualStylesMode)
             {
                 return;
             }
 
+            OnVisualStylesModeChanged(
+                transition?.CreateForControl(
+                    this,
+                    oldEffectiveVisualStylesMode,
+                    newEffectiveVisualStylesMode)
+                ?? e);
+
+            return;
+        }
+
+        if (transition is not null)
+        {
             VisualStylesModeChangeEventArgs transitionForControl = transition.CreateForControl(this);
             if (transitionForControl.OldEffectiveVisualStylesMode
                 != transitionForControl.NewEffectiveVisualStylesMode)
@@ -7571,14 +7589,23 @@ public unsafe partial class Control :
                     systemVisualSettingsTransition);
             }
 
-            return new(
+            return CreateForControl(
+                control,
+                control.GetSupportedVisualStylesMode(OldEffectiveVisualStylesMode),
+                control.GetSupportedVisualStylesMode(NewEffectiveVisualStylesMode));
+        }
+
+        public VisualStylesModeChangeEventArgs CreateForControl(
+            Control control,
+            VisualStylesMode oldEffectiveVisualStylesMode,
+            VisualStylesMode newEffectiveVisualStylesMode)
+            => new(
                 _state,
                 control,
                 control.Properties.GetValueOrDefault(s_visualStylesModeChangeVersionProperty, 0),
-                control.GetSupportedVisualStylesMode(OldEffectiveVisualStylesMode),
-                control.GetSupportedVisualStylesMode(NewEffectiveVisualStylesMode),
+                oldEffectiveVisualStylesMode,
+                newEffectiveVisualStylesMode,
                 systemVisualSettingsTransition: null);
-        }
 
         public void PerformLayouts()
         {
