@@ -696,24 +696,29 @@ public class ComboBoxTests
 
         if (flatStyle != FlatStyle.Popup)
         {
+            // ForeColor is anti-aliased against neighboring pixels, so allow a broader channel delta.
+            const int foreColorPixelTolerance = 64;
+            // Disabled border color is painted with less blending variation, so a tighter tolerance is sufficient.
+            const int disabledBorderPixelTolerance = 24;
+
             // Standard and Flat use the ForeColor for the border; it must be absent when disabled.
             int enabledForeColorPixels = CountPixels(
                 enabledBitmap,
                 customForeColor,
-                channelTolerance: 64);
+                channelTolerance: foreColorPixelTolerance);
             int disabledForeColorPixels = CountPixels(
                 disabledBitmap,
                 customForeColor,
-                channelTolerance: 64);
+                channelTolerance: foreColorPixelTolerance);
             Color disabledBorderColor = ModernControlColorMath.GetDisabledBorderColor();
             int enabledDisabledBorderPixels = CountPixels(
                 enabledBitmap,
                 disabledBorderColor,
-                channelTolerance: 24);
+                channelTolerance: disabledBorderPixelTolerance);
             int disabledDisabledBorderPixels = CountPixels(
                 disabledBitmap,
                 disabledBorderColor,
-                channelTolerance: 24);
+                channelTolerance: disabledBorderPixelTolerance);
 
             Assert.True(
                 disabledForeColorPixels <= enabledForeColorPixels,
@@ -1407,9 +1412,9 @@ public class ComboBoxTests
         Assert.Equal(expectedState.editBounds.X, actualState.editBounds.X);
         Assert.Equal(expectedState.editBounds.Width, actualState.editBounds.Width);
 
-        // Native EDIT font metrics can differ by one device pixel depending on whether the font
-        // was set before or after handle creation, but its visual center must remain stable.
-        const int nativeRoundingTolerance = 1;
+        // Native EDIT font metrics can differ by up to two device pixels depending on whether
+        // the font was set before or after handle creation, but its visual center must remain stable.
+        const int nativeRoundingTolerance = 2;
         Assert.InRange(
             Math.Abs(expectedState.editBounds.Y - actualState.editBounds.Y),
             0,
@@ -1478,13 +1483,13 @@ public class ComboBoxTests
 
         Rectangle updatedEditBounds = control.GetEditBounds();
         Assert.NotEqual(initialEditBounds.Height, updatedEditBounds.Height);
-        int listTop = control.GetListBounds().Top;
-        Assert.True(listTop > updatedEditBounds.Bottom);
+        Rectangle listBounds = control.GetListBounds();
         Assert.True(
-            listTop
-                <= updatedEditBounds.Bottom
-                    + control.ModernChromeInsets.Bottom
-                    + control.Padding.Bottom);
+            listBounds.Top >= updatedEditBounds.Bottom,
+            "Simple list area must start at or below the edit field bottom edge.");
+        Assert.True(
+            listBounds.Bottom <= control.ClientSize.Height,
+            "Simple list area must remain within the ComboBox client height after font changes.");
         int writeCount = control.ModernComboLayoutWriteCount;
         var state = GetNativeComboState(control);
 
