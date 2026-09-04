@@ -638,6 +638,73 @@ public class ClipboardTests
     }
 
     [WinFormsFact]
+    public void ThrowExceptionsForClipboardGetAPIs_AppContextSwitch()
+    {
+        string switchName = CoreAppContextSwitches.ClipboardThrowExceptionsForGetAPIsSwitchName;
+
+        CoreAppContextSwitches.ClipboardThrowExceptionsForGetAPIs.Should().BeFalse();
+
+        using (AppContextSwitchScope scope = new(switchName, getDefaultValue: () => false, enable: true))
+        {
+            CoreAppContextSwitches.ClipboardThrowExceptionsForGetAPIs.Should().BeTrue();
+        }
+
+        using (AppContextSwitchScope scope = new(switchName, getDefaultValue: () => false, enable: false))
+        {
+            CoreAppContextSwitches.ClipboardThrowExceptionsForGetAPIs.Should().BeFalse();
+        }
+    }
+
+    [WinFormsTheory]
+    [InlineData(nameof(Clipboard.GetText), DataFormatNames.UnicodeText)]
+    [InlineData(nameof(Clipboard.GetAudioStream), DataFormatNames.WaveAudio)]
+    [InlineData(nameof(Clipboard.GetImage), DataFormatNames.Bitmap)]
+    [InlineData(nameof(Clipboard.GetFileDropList), DataFormatNames.FileDrop)]
+    [InlineData(nameof(Clipboard.GetData), "Custom")]
+    public void GetApi_GetDataFailsAndSwitchEnabled_Throws(string api, string format)
+    {
+        try
+        {
+            DataObject dataObject = new();
+            dataObject.SetData(format, data: null);
+            Clipboard.SetDataObject(dataObject, copy: true);
+
+            Action action = api switch
+            {
+                nameof(Clipboard.GetText) => () => Clipboard.GetText(),
+                nameof(Clipboard.GetAudioStream) => () => Clipboard.GetAudioStream(),
+                nameof(Clipboard.GetImage) => () => Clipboard.GetImage(),
+                nameof(Clipboard.GetFileDropList) => () => Clipboard.GetFileDropList(),
+                nameof(Clipboard.GetData) => () => Clipboard.GetData(format),
+                _ => throw new InvalidOperationException()
+            };
+
+            using (AppContextSwitchScope scope = new(
+                CoreAppContextSwitches.ClipboardThrowExceptionsForGetAPIsSwitchName,
+                getDefaultValue: () => false,
+                enable: false))
+            {
+                action.Should().NotThrow();
+            }
+
+            using (AppContextSwitchScope scope = new(
+                CoreAppContextSwitches.ClipboardThrowExceptionsForGetAPIsSwitchName,
+                getDefaultValue: () => false,
+                enable: true))
+            {
+                action.Should()
+                    .Throw<COMException>()
+                    .And.HResult.Should()
+                    .Be((int)HRESULT.CLIPBRD_E_BAD_DATA);
+            }
+        }
+        finally
+        {
+            Clipboard.Clear();
+        }
+    }
+
+    [WinFormsFact]
     public void TryGetInt_ReturnsExpected()
     {
         int expected = 101;

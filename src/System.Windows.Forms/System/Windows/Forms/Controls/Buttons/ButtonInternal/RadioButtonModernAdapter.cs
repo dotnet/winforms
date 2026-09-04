@@ -61,6 +61,7 @@ internal sealed class RadioButtonModernAdapter : RadioButtonBaseAdapter
     protected override LayoutOptions Layout(PaintEventArgs e)
     {
         LayoutOptions layout = CommonLayout();
+        layout.CheckPaddingSize = Control.LogicalToDeviceUnits(2);
         layout.CheckSize = Math.Max(
             Control.LogicalToDeviceUnits(13),
             (int)(Control.Font.Height * 0.9f));
@@ -79,20 +80,32 @@ internal sealed class RadioButtonModernAdapter : RadioButtonBaseAdapter
     private void PaintCore(PaintEventArgs e)
     {
         Graphics graphics = e.GraphicsInternal;
-        ParentBackgroundRenderer.Paint(
-            Control,
-            graphics,
-            Control.ClientRectangle,
-            Control.BackColor);
+        bool useExplicitBackColor = Control.ShouldSerializeBackColor() || !Control.UseVisualStyleBackColor;
+        bool hasTransparentBackColor = Control.BackColor.HasTransparency();
+
+        if (useExplicitBackColor && !hasTransparentBackColor)
+        {
+            using var backBrush = Control.BackColor.GetCachedSolidBrushScope();
+            graphics.FillRectangle(backBrush, Control.ClientRectangle);
+        }
+        else
+        {
+            ParentBackgroundRenderer.Paint(
+                Control,
+                graphics,
+                Control.ClientRectangle,
+                Control.BackColor);
+
+            if (useExplicitBackColor && hasTransparentBackColor && Control.BackColor.A > 0)
+            {
+                using var backBrush = Control.BackColor.GetCachedSolidBrushScope();
+                graphics.FillRectangle(backBrush, Control.ClientRectangle);
+            }
+        }
 
         LayoutData layout = Layout(e).Layout();
         AdjustFocusRectangle(layout);
         PaintBackgroundImage(e);
-
-        Color? customOnColor = Control.ShouldSerializeBackColor()
-            && Control.BackColor.A == byte.MaxValue
-                ? Control.BackColor
-                : null;
 
         Color? customBorderColor = Control.FlatAppearance.BorderColor.IsEmpty
             ? null
@@ -106,7 +119,7 @@ internal sealed class RadioButtonModernAdapter : RadioButtonBaseAdapter
             Control.Enabled,
             Control.MouseIsOver,
             Control.Focused && Control.ShowFocusCues,
-            customOnColor,
+            customOnColor: null,
             customBorderColor);
 
         PaintImage(e, layout);
@@ -116,11 +129,16 @@ internal sealed class RadioButtonModernAdapter : RadioButtonBaseAdapter
             : Application.IsDarkModeEnabled
                 ? Color.FromArgb(0xF0, 0xF0, 0xF0)
                 : SystemColors.WindowText;
+        Color disabledTextBackColor = Control.ShouldSerializeBackColor()
+            && Control.BackColor.A == byte.MaxValue
+                ? Control.BackColor
+                : Control.Parent?.BackColor ?? Control.BackColor;
+
         Color textColor = Control.Enabled
             ? preferredTextColor
             : ModernControlColorMath.GetDisabledTextColor(
                 preferredTextColor,
-                Control.Parent?.BackColor ?? Control.BackColor);
+                disabledTextBackColor);
 
         PaintField(e, layout, PaintRender(e).Calculate(), textColor, drawFocus: true);
     }

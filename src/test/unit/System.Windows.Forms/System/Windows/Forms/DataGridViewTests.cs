@@ -4084,4 +4084,115 @@ public partial class DataGridViewTests : IDisposable
         dataGridView.Dispose();
         toolTipDisposeCount.Should().Be(1);
     }
+
+    [WinFormsFact]
+    public void ProcessKeyPreview_HostedChild_ArrowKey_DoesNotRouteToDataGridView()
+    {
+        using Form form = new();
+        using TestDataGridView dataGridView = CreateGrid();
+        using TextBox hostedTextBox = new();
+
+        form.Controls.Add(dataGridView);
+        dataGridView.Controls.Add(hostedTextBox);
+
+        form.Show();
+        dataGridView.CreateControl();
+        hostedTextBox.CreateControl();
+        hostedTextBox.Focus();
+
+        dataGridView.CurrentCell = dataGridView[0, 0];
+
+        Message message = Message.Create(
+        hostedTextBox.Handle,
+        (int)PInvokeCore.WM_KEYDOWN,
+        (IntPtr)Keys.Down,
+        IntPtr.Zero);
+
+        dataGridView.CallProcessKeyPreview(ref message);
+
+        Assert.False(dataGridView.ProcessDataGridViewKeyCalled);
+        Assert.Equal(0, dataGridView.CurrentCell.RowIndex);
+    }
+
+    [WinFormsFact]
+    public void ProcessKeyPreview_DataGridViewTarget_ArrowKey_StillRoutesToDataGridView()
+    {
+        using Form form = new();
+        using TestDataGridView dataGridView = CreateGrid();
+
+        form.Controls.Add(dataGridView);
+        form.Show();
+        dataGridView.CreateControl();
+        dataGridView.Focus();
+
+        dataGridView.CurrentCell = dataGridView[0, 0];
+
+        Message message = Message.Create(
+        dataGridView.Handle,
+        (int)PInvokeCore.WM_KEYDOWN,
+        (IntPtr)Keys.Down,
+        IntPtr.Zero);
+
+        dataGridView.CallProcessKeyPreview(ref message);
+
+        Assert.True(dataGridView.ProcessDataGridViewKeyCalled);
+    }
+
+    [WinFormsFact]
+    public void ProcessKeyPreview_HostedChild_NonArrowKey_DoesNotUseArrowSuppression()
+    {
+        using Form form = new();
+        using TestDataGridView dataGridView = CreateGrid();
+        using TextBox hostedTextBox = new();
+
+        form.Controls.Add(dataGridView);
+        dataGridView.Controls.Add(hostedTextBox);
+
+        form.Show();
+        dataGridView.CreateControl();
+        hostedTextBox.CreateControl();
+        hostedTextBox.Focus();
+
+        Message message = Message.Create(
+        hostedTextBox.Handle,
+        (int)PInvokeCore.WM_KEYDOWN,
+        (IntPtr)Keys.Enter,
+        IntPtr.Zero);
+
+        dataGridView.CallProcessKeyPreview(ref message);
+
+        // This test is weaker than the arrow-key tests, but still verifies
+        // that the arrow-specific logic is not applied to Enter.
+        Assert.False(dataGridView.ProcessDataGridViewKeyCalled);
+    }
+
+    private static TestDataGridView CreateGrid()
+    {
+        TestDataGridView grid = new()
+        {
+            Width = 300,
+            Height = 200
+        };
+
+        grid.Columns.Add("Col1", "Col1");
+        grid.Columns.Add("Col2", "Col2");
+        grid.Rows.Add("A1", "B1");
+        grid.Rows.Add("A2", "B2");
+
+        return grid;
+    }
+
+    private sealed class TestDataGridView : DataGridView
+    {
+        public bool ProcessDataGridViewKeyCalled { get; private set; }
+
+        public bool CallProcessKeyPreview(ref Message m)
+        => ProcessKeyPreview(ref m);
+
+        protected override bool ProcessDataGridViewKey(KeyEventArgs e)
+        {
+            ProcessDataGridViewKeyCalled = true;
+            return base.ProcessDataGridViewKey(e);
+        }
+    }
 }

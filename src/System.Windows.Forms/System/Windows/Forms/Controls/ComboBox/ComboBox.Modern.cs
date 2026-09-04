@@ -14,6 +14,10 @@ public partial class ComboBox
     private bool _nativeComboHandleInitialized;
     private bool _normalizingNativeComboBaseline;
     private int _modernComboLayoutWriteCount;
+    private HWND _modernSimpleListClipRegionHandle;
+    private Size _modernSimpleListClipRegionSize;
+    private int _modernSimpleListClipRegionApplyCount;
+    private const int ModernSimpleBottomCropLogicalPixels = 2;
 
     internal bool UsesModernComboAdapter
         => EffectiveVisualStylesMode >= VisualStylesMode.Net11
@@ -165,17 +169,6 @@ public partial class ComboBox
         {
             int topInset = chromeInsets.Top + Padding.Top;
             int bottomInset = chromeInsets.Bottom + Padding.Bottom;
-            editBounds.Y += topInset;
-
-            // A single-line EDIT control's text visibility depends on its window height.
-            // Preserve the native height so glyphs are not clipped.
-            editBounds.Height = Math.Max(
-                1,
-                Math.Min(
-                    editBounds.Height,
-                    ClientRectangle.Bottom
-                        - bottomInset
-                        - editBounds.Top));
 
             // Inset the edit window horizontally so its rectangular corners clear the rounded
             // field arcs, and reserve the (now wider) drop-down button on the button side.
@@ -187,30 +180,104 @@ public partial class ComboBox
                     ModernControlVisualStyles.ComboBoxButtonExtraWidth,
                     DeviceDpiInternal);
 
-            if (RightToLeft == RightToLeft.Yes)
+            if (DropDownStyle == ComboBoxStyle.Simple)
             {
-                // In RTL the drop-down button sits on the left, so its reservation goes there.
-                editBounds.X += rightInset + extraButtonWidth;
+                int dividerThickness = GetModernSimpleDividerThickness();
+                int simpleBottomShrink = ScaleHelper.ScaleToDpi(
+                    ModernSimpleBottomCropLogicalPixels,
+                    DeviceDpiInternal);
+                int simpleListBottom = ClientRectangle.Bottom - simpleBottomShrink - dividerThickness;
+                int simpleEditTop = topInset + ScaleHelper.ScaleToDpi(1, DeviceDpiInternal);
+                int selectionFieldHeight = Math.Max(
+                    1,
+                    (int)PInvokeCore.SendMessage(
+                        this,
+                        PInvoke.CB_GETITEMHEIGHT,
+                        (WPARAM)(-1)));
+                int minimumReadableHeight = Math.Max(
+                    1,
+                    FontHeight + ScaleHelper.ScaleToDpi(2, DeviceDpiInternal));
+                int preferredSimpleEditHeight = Math.Max(selectionFieldHeight, minimumReadableHeight)
+                    + ScaleHelper.ScaleToDpi(2, DeviceDpiInternal);
+                int maxSimpleEditHeight = Math.Max(
+                    1,
+                    simpleListBottom - dividerThickness - simpleEditTop);
+
+                // Keep the editor in the top field lane with enough height for full glyph rendering,
+                // draw an accent divider below it, and let the permanent list consume the remaining
+                // space down to the rounded field border.
+                editBounds.Y = simpleEditTop;
+                editBounds.Height = Math.Min(preferredSimpleEditHeight, maxSimpleEditHeight);
+                editBounds.X = leftInset;
+                editBounds.Width = Math.Max(
+                    1,
+                    ClientRectangle.Width - leftInset - rightInset);
+
+                if (!simpleListBounds.IsEmpty)
+                {
+                    simpleListBounds.X = editBounds.Left;
+                    simpleListBounds.Width = editBounds.Width;
+                    simpleListBounds.Y = editBounds.Bottom + dividerThickness;
+                    simpleListBounds.Height = Math.Max(
+                        1,
+                        simpleListBottom - simpleListBounds.Y);
+                }
             }
             else
             {
-                editBounds.X += leftInset;
-            }
+                // Keep enough vertical room for glyphs in editable DropDown mode: when chrome
+                // insets become large at some DPIs/styles, shrinking both top and bottom can make
+                // the native edit window shorter than the rendered text box line height.
+                int minimumReadableHeight = Math.Max(1, FontHeight);
+                int totalVerticalInset = topInset + bottomInset;
+                int availableHeight = Math.Max(1, editBounds.Height - totalVerticalInset);
 
-            editBounds.Width = Math.Max(
-                1,
-                editBounds.Width - leftInset - rightInset - extraButtonWidth);
+                if (availableHeight < minimumReadableHeight)
+                {
+                    int required = minimumReadableHeight - availableHeight;
+                    int topReduction = Math.Min(topInset, (required + 1) / 2);
+                    topInset -= topReduction;
+                    required -= topReduction;
+                    bottomInset -= Math.Min(bottomInset, required);
+                }
 
-            if (!simpleListBounds.IsEmpty)
-            {
-                int simpleListBottom = GetCurrentSimpleListBottom(
-                    simpleListBounds.Bottom);
+                editBounds.Y += topInset;
 
-                simpleListBounds.Y = editBounds.Bottom + bottomInset;
-
-                simpleListBounds.Height = Math.Max(
+                editBounds.Height = Math.Max(
                     1,
-                    simpleListBottom - simpleListBounds.Y);
+                    editBounds.Height - topInset - bottomInset);
+
+                editBounds.Height = Math.Max(
+                    minimumReadableHeight,
+                    Math.Min(
+                        editBounds.Height,
+                        ClientRectangle.Bottom
+                            - bottomInset
+                            - editBounds.Top));
+
+                if (RightToLeft == RightToLeft.Yes)
+                {
+                    // In RTL the drop-down button sits on the left, so its reservation goes there.
+                    editBounds.X += rightInset + extraButtonWidth;
+                }
+                else
+                {
+                    editBounds.X += leftInset;
+                }
+
+                editBounds.Width = Math.Max(
+                    1,
+                    editBounds.Width - leftInset - rightInset - extraButtonWidth);
+
+                if (!simpleListBounds.IsEmpty)
+                {
+                    int simpleListBottom = GetCurrentSimpleListBottom(
+                        simpleListBounds.Bottom);
+                    simpleListBounds.Y = editBounds.Bottom + bottomInset;
+                    simpleListBounds.Height = Math.Max(
+                        1,
+                        simpleListBottom - simpleListBounds.Y);
+                }
             }
         }
 
@@ -277,6 +344,60 @@ public partial class ComboBox
                 1,
                 simpleListBounds.Height + heightDelta);
         }
+    }
+
+    private void ConfigureModernSimpleListSurface(HWND listHandle)
+    {
+        if (DropDownStyle != ComboBoxStyle.Simple
+            || !UsesModernComboAdapter
+            || listHandle.IsNull)
+        {
+            return;
+        }
+
+        WINDOW_STYLE style = (WINDOW_STYLE)PInvokeCore.GetWindowLong(
+            listHandle,
+            WINDOW_LONG_PTR_INDEX.GWL_STYLE);
+        WINDOW_EX_STYLE exStyle = (WINDOW_EX_STYLE)PInvokeCore.GetWindowLong(
+            listHandle,
+            WINDOW_LONG_PTR_INDEX.GWL_EXSTYLE);
+
+        WINDOW_STYLE updatedStyle = style & ~WINDOW_STYLE.WS_BORDER;
+        WINDOW_EX_STYLE updatedExStyle = exStyle & ~WINDOW_EX_STYLE.WS_EX_CLIENTEDGE;
+
+        if (updatedStyle == style && updatedExStyle == exStyle)
+        {
+            return;
+        }
+
+        if (updatedStyle != style)
+        {
+            PInvokeCore.SetWindowLong(
+                listHandle,
+                WINDOW_LONG_PTR_INDEX.GWL_STYLE,
+                (nint)updatedStyle);
+        }
+
+        if (updatedExStyle != exStyle)
+        {
+            PInvokeCore.SetWindowLong(
+                listHandle,
+                WINDOW_LONG_PTR_INDEX.GWL_EXSTYLE,
+                (nint)updatedExStyle);
+        }
+
+        PInvoke.SetWindowPos(
+            listHandle,
+            HWND.Null,
+            0,
+            0,
+            0,
+            0,
+            SET_WINDOW_POS_FLAGS.SWP_NOMOVE
+                | SET_WINDOW_POS_FLAGS.SWP_NOSIZE
+                | SET_WINDOW_POS_FLAGS.SWP_NOZORDER
+                | SET_WINDOW_POS_FLAGS.SWP_NOACTIVATE
+                | SET_WINDOW_POS_FLAGS.SWP_FRAMECHANGED);
     }
 
     private unsafe int GetCurrentSimpleListBottom(
@@ -363,6 +484,8 @@ public partial class ComboBox
             {
                 return;
             }
+
+            ConfigureModernSimpleListSurface(comboBoxInfo.hwndList);
 
             if (!target.EditBounds.IsEmpty)
             {
@@ -462,25 +585,82 @@ public partial class ComboBox
 
     private void ApplyChildBounds(HWND childHandle, Rectangle targetBounds)
     {
+        bool isModernSimpleList = UsesModernComboAdapter
+            && DropDownStyle == ComboBoxStyle.Simple
+            && childHandle == _childListBox?.HWND;
+
         if (childHandle.IsNull
-            || targetBounds.IsEmpty
-            || GetChildBounds(childHandle) == targetBounds)
+            || targetBounds.IsEmpty)
         {
             return;
         }
 
-        PInvoke.SetWindowPos(
-            childHandle,
-            HWND.Null,
-            targetBounds.Left,
-            targetBounds.Top,
-            targetBounds.Width,
-            targetBounds.Height,
-            SET_WINDOW_POS_FLAGS.SWP_NOACTIVATE
-                | SET_WINDOW_POS_FLAGS.SWP_NOZORDER);
+        if (GetChildBounds(childHandle) != targetBounds)
+        {
+            PInvoke.SetWindowPos(
+                childHandle,
+                HWND.Null,
+                targetBounds.Left,
+                targetBounds.Top,
+                targetBounds.Width,
+                targetBounds.Height,
+                SET_WINDOW_POS_FLAGS.SWP_NOACTIVATE
+                    | SET_WINDOW_POS_FLAGS.SWP_NOZORDER);
 
-        _modernComboLayoutWriteCount++;
+            _modernComboLayoutWriteCount++;
+        }
+
+        if (isModernSimpleList)
+        {
+            ConfigureModernSimpleListClipRegion(
+                childHandle,
+                targetBounds);
+        }
     }
+
+    private void ConfigureModernSimpleListClipRegion(
+        HWND listHandle,
+        Rectangle targetBounds)
+    {
+        if (listHandle.IsNull)
+        {
+            return;
+        }
+
+        Size targetRegionSize = new(
+            targetBounds.Width,
+            Math.Max(1, targetBounds.Height));
+
+        if (listHandle == _modernSimpleListClipRegionHandle
+            && targetRegionSize == _modernSimpleListClipRegionSize)
+        {
+            return;
+        }
+
+        using RegionScope region = new(
+            0,
+            0,
+            targetRegionSize.Width,
+            targetRegionSize.Height);
+
+        if (PInvoke.SetWindowRgn(
+            listHandle,
+            region,
+            fRedraw: true) != 0)
+        {
+            region.RelinquishOwnership();
+            _modernSimpleListClipRegionHandle = listHandle;
+            _modernSimpleListClipRegionSize = targetRegionSize;
+            _modernSimpleListClipRegionApplyCount++;
+        }
+    }
+
+    private int GetModernSimpleDividerThickness()
+        => Math.Max(
+            1,
+            ScaleHelper.ScaleToDpi(
+                ModernControlVisualStyles.BorderThickness,
+                DeviceDpiInternal));
 
     private Rectangle GetChildBounds(HWND child)
     {
@@ -523,6 +703,9 @@ public partial class ComboBox
 
     private int GetModernComboLayoutWriteCount()
         => _modernComboLayoutWriteCount;
+
+    private int GetModernSimpleListClipRegionApplyCount()
+        => _modernSimpleListClipRegionApplyCount;
 
     private Padding GetModernFieldPadding()
     {
