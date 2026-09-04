@@ -92,6 +92,7 @@ public partial class ComboBox
                 graphics,
                 clientBounds);
             DrawDropDownButton(comboBox, graphics);
+            DrawSimpleEditListDivider(comboBox, graphics);
 
             switch (_flatStyle)
             {
@@ -387,6 +388,45 @@ public partial class ComboBox
                 graphics,
                 bounds,
                 parentColor);
+        }
+
+        private static void DrawSimpleEditListDivider(
+            ComboBox comboBox,
+            Graphics graphics)
+        {
+            if (comboBox.DropDownStyle != ComboBoxStyle.Simple
+                || comboBox._childListBox is null)
+            {
+                return;
+            }
+
+            Rectangle listBounds = comboBox.GetChildBounds(comboBox._childListBox.HWND);
+            if (listBounds.IsEmpty)
+            {
+                return;
+            }
+
+            int dividerThickness = Math.Max(
+                1,
+                ScaleHelper.ScaleToDpi(
+                    ModernControlVisualStyles.BorderThickness,
+                    comboBox.DeviceDpiInternal));
+            int lineY = listBounds.Top - dividerThickness;
+            if (lineY < 0)
+            {
+                return;
+            }
+
+            Padding chromeInsets = comboBox.GetModernChromeInsets();
+            int left = chromeInsets.Left + comboBox.Padding.Left;
+            int right = comboBox.ClientRectangle.Right - chromeInsets.Right - comboBox.Padding.Right - 1;
+            if (right < left)
+            {
+                return;
+            }
+
+            using var pen = Application.SystemVisualSettings.AccentColor.GetCachedPenScope(dividerThickness);
+            graphics.DrawLine(pen, left, lineY, right, lineY);
         }
 
         private static void DrawRoundedBorder(

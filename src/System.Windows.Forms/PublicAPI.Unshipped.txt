@@ -5,6 +5,8 @@ static System.Windows.Forms.Application.SystemVisualSettingsChanged -> System.Wi
 System.Windows.Forms.PropertyGrid.VisualStylesModeChanged -> System.EventHandler?
 virtual System.Windows.Forms.Control.OnSystemVisualSettingsChanged(System.Windows.Forms.SystemVisualSettingsChangedEventArgs! e) -> void
 System.Windows.Forms.Control.SystemVisualSettingsChanged -> System.Windows.Forms.SystemVisualSettingsChangedEventHandler?
+System.Windows.Forms.DataGridViewCellStyle.SortGlyphColor.get -> System.Drawing.Color
+System.Windows.Forms.DataGridViewCellStyle.SortGlyphColor.set -> void
 System.Windows.Forms.SystemVisualSettings.AccentColor.get -> System.Drawing.Color
 System.Windows.Forms.SystemVisualSettings.ClientAreaAnimationEnabled.get -> bool
 System.Windows.Forms.SystemVisualSettings.FocusBorderMetrics.get -> System.Drawing.Size
