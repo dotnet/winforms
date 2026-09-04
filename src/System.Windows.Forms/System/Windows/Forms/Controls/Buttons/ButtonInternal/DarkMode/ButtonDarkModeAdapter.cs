@@ -85,24 +85,39 @@ internal class ButtonDarkModeAdapter : ButtonBaseAdapter
     {
         Color backColor;
 
-        if (Control.BackColor != Forms.Control.DefaultBackColor)
+        // Net11 default buttons must always use the accent-driven palette, even when BackColor is set.
+        if (_modern && Control.IsDefault)
         {
             backColor = ButtonDarkModeRenderer.GetBackgroundColor(
                 state,
-                Control.IsDefault,
-                Control.BackColor);
-
-            if (IsHighContrastHighlighted())
-            {
-                backColor = SystemColors.HighlightText;
-            }
+                isDefault: true,
+                customBaseColor: Color.Empty);
         }
         else
         {
-            backColor = ButtonDarkModeRenderer.GetBackgroundColor(
-                state,
-                Control.IsDefault,
-                customBaseColor: Color.Empty);
+            bool hasExplicitBackColor = Control.ShouldSerializeBackColor();
+            bool hasUsableAmbientBackColor = !Control.BackColor.HasTransparency()
+                && Control.BackColor != Forms.Control.DefaultBackColor;
+
+            if (hasExplicitBackColor || hasUsableAmbientBackColor)
+            {
+                backColor = ButtonDarkModeRenderer.GetBackgroundColor(
+                    state,
+                    Control.IsDefault,
+                    Control.BackColor);
+            }
+            else
+            {
+                backColor = ButtonDarkModeRenderer.GetBackgroundColor(
+                    state,
+                    Control.IsDefault,
+                    customBaseColor: Color.Empty);
+            }
+        }
+
+        if (IsHighContrastHighlighted())
+        {
+            backColor = SystemColors.HighlightText;
         }
 
         if (_animateBackgroundColors)

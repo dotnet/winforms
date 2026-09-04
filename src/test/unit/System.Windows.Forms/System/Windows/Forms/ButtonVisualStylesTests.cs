@@ -1,4 +1,4 @@
-// Licensed to the .NET Foundation under one or more agreements.
+﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
 #nullable disable
@@ -119,6 +119,71 @@ public class ButtonVisualStylesTests
         control.DrawToBitmap(actual, new Rectangle(Point.Empty, control.Size));
 
         Assert.Equal(255, actual.GetPixel(control.Width - 2, 2).A);
+    }
+
+    [WinFormsTheory]
+    [InlineData(false)]
+    [InlineData(true)]
+    public void Button_ModernDefaultState_UsesAccent_WhenHostedOnContainer(bool hostedOnTabPage)
+    {
+        if (!Application.RenderWithVisualStyles)
+        {
+            return;
+        }
+
+        using Form form = new() { VisualStylesMode = VisualStylesMode.Net11 };
+        using Button button = new()
+        {
+            FlatStyle = FlatStyle.Standard,
+            Size = new Size(120, 32),
+            Text = string.Empty,
+            VisualStylesMode = VisualStylesMode.Inherit
+        };
+
+        if (hostedOnTabPage)
+        {
+            using TabControl tabControl = new() { Size = new Size(180, 120) };
+            using TabPage tabPage = new()
+            {
+                Size = tabControl.Size,
+                UseVisualStyleBackColor = true
+            };
+
+            tabPage.Controls.Add(button);
+            tabControl.TabPages.Add(tabPage);
+            form.Controls.Add(tabControl);
+            form.AcceptButton = button;
+            form.CreateControl();
+            tabControl.CreateControl();
+            tabPage.CreateControl();
+            button.CreateControl();
+
+            using Bitmap actual = new(button.Width, button.Height);
+            button.DrawToBitmap(actual, new Rectangle(Point.Empty, button.Size));
+
+            Color expected = ModernButtonColorMath.GetDefaultButtonColor(
+                Application.SystemVisualSettings.AccentColor,
+                VisualStyles.PushButtonState.Normal);
+            Color center = actual.GetPixel(button.Width / 2, button.Height / 2);
+
+            Assert.Equal(expected.ToArgb(), center.ToArgb());
+            return;
+        }
+
+        form.Controls.Add(button);
+        form.AcceptButton = button;
+        form.CreateControl();
+        button.CreateControl();
+
+        using Bitmap bitmap = new(button.Width, button.Height);
+        button.DrawToBitmap(bitmap, new Rectangle(Point.Empty, button.Size));
+
+        Color expectedColor = ModernButtonColorMath.GetDefaultButtonColor(
+            Application.SystemVisualSettings.AccentColor,
+            VisualStyles.PushButtonState.Normal);
+        Color actualColor = bitmap.GetPixel(button.Width / 2, button.Height / 2);
+
+        Assert.Equal(expectedColor.ToArgb(), actualColor.ToArgb());
     }
 
     [WinFormsFact]
@@ -510,6 +575,74 @@ public class ButtonVisualStylesTests
     }
 
     [WinFormsFact]
+    public void ButtonDarkModeAdapter_NonNet11_ExplicitBackColor_DefaultStatePreservesBackColor()
+    {
+        using Button button = new()
+        {
+            FlatStyle = FlatStyle.Standard,
+            VisualStylesMode = VisualStylesMode.Classic,
+            BackColor = Color.FromArgb(10, 20, 30)
+        };
+        button.NotifyDefault(true);
+
+        ButtonInternal.ButtonDarkModeAdapter adapter = new(button);
+        dynamic accessor = adapter.TestAccessor.Dynamic;
+
+        Color actual = (Color)accessor.GetButtonBackColor(VisualStyles.PushButtonState.Normal);
+
+        Assert.Equal(button.BackColor, actual);
+    }
+
+    [WinFormsFact]
+    public void ButtonDarkModeAdapter_ClassicInNet11Hierarchy_ExplicitBackColor_DefaultStatePreservesBackColor()
+    {
+        using Form form = new() { VisualStylesMode = VisualStylesMode.Net11 };
+        using Button button = new()
+        {
+            FlatStyle = FlatStyle.Standard,
+            VisualStylesMode = VisualStylesMode.Classic,
+            BackColor = Color.FromArgb(10, 20, 30)
+        };
+        form.Controls.Add(button);
+        form.AcceptButton = button;
+        button.NotifyDefault(true);
+
+        ButtonInternal.ButtonDarkModeAdapter adapter = new(button);
+        dynamic accessor = adapter.TestAccessor.Dynamic;
+
+        Color actual = (Color)accessor.GetButtonBackColor(VisualStyles.PushButtonState.Normal);
+
+        Assert.Equal(button.BackColor, actual);
+    }
+
+    [WinFormsFact]
+    public void ButtonDarkModeAdapter_ClassicInNet11Hierarchy_InheritedBackColor_UsesAmbientAsCustomBase()
+    {
+        using Form form = new()
+        {
+            VisualStylesMode = VisualStylesMode.Net11,
+            BackColor = Color.FromArgb(31, 63, 95)
+        };
+        using Button button = new()
+        {
+            FlatStyle = FlatStyle.Standard,
+            VisualStylesMode = VisualStylesMode.Classic,
+            UseVisualStyleBackColor = true
+        };
+        form.Controls.Add(button);
+        button.NotifyDefault(true);
+
+        ButtonInternal.ButtonDarkModeAdapter adapter = new(button);
+        dynamic accessor = adapter.TestAccessor.Dynamic;
+
+        Color actual = (Color)accessor.GetButtonBackColor(VisualStyles.PushButtonState.Normal);
+
+        Assert.False(button.ShouldSerializeBackColor());
+        Assert.Equal(form.BackColor, button.BackColor);
+        Assert.Equal(form.BackColor, actual);
+    }
+
+    [WinFormsFact]
     public void ModernButtonDarkModeRenderer_CornerRadiusDependsOnFocusAndDefaultState()
     {
         ModernButtonDarkModeRenderer renderer = new() { DeviceDpi = 96 };
@@ -543,6 +676,29 @@ public class ButtonVisualStylesTests
         button.FlatAppearance.MouseOverBackColor = Color.Blue;
         Assert.Equal(Color.Red, renderer.GetBackgroundColor(VisualStyles.PushButtonState.Pressed, false, Color.Empty));
         Assert.Equal(Color.Blue, renderer.GetBackgroundColor(VisualStyles.PushButtonState.Hot, false, Color.Empty));
+    }
+
+    [WinFormsTheory]
+    [InlineData(VisualStyles.PushButtonState.Normal)]
+    [InlineData(VisualStyles.PushButtonState.Hot)]
+    [InlineData(VisualStyles.PushButtonState.Pressed)]
+    public void ButtonDarkModeAdapter_Net11_DefaultStateWithExplicitBackColor_UsesAccent(
+        VisualStyles.PushButtonState state)
+    {
+        using Button button = new()
+        {
+            FlatStyle = FlatStyle.Standard,
+            VisualStylesMode = VisualStylesMode.Net11,
+            BackColor = Color.FromArgb(16, 48, 80)
+        };
+        button.NotifyDefault(true);
+        ButtonInternal.ButtonDarkModeAdapter adapter = new(button);
+        dynamic accessor = adapter.TestAccessor.Dynamic;
+        Color accent = Application.SystemVisualSettings.AccentColor;
+
+        Color actual = (Color)accessor.GetButtonBackColor(state);
+
+        Assert.Equal(ModernButtonColorMath.GetDefaultButtonColor(accent, state), actual);
     }
 
     [WinFormsTheory]
