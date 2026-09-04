@@ -16,6 +16,61 @@ namespace System.Windows.Forms.Tests;
 
 public partial class ToolStripTests : IDisposable
 {
+    [WinFormsTheory]
+    [InlineData(VisualStylesMode.Net11)]
+    [InlineData(VisualStylesMode.Latest)]
+    public void ToolStrip_VisualStylesMode_ModernMode_UsesClassicEffectiveMode(VisualStylesMode value)
+    {
+        using SubToolStrip control = new() { VisualStylesMode = value };
+
+        Assert.Equal(value, control.VisualStylesMode);
+        Assert.Equal(VisualStylesMode.Classic, control.EffectiveVisualStylesModeAccessor);
+        Assert.False(control.IsHandleCreated);
+    }
+
+    [WinFormsTheory]
+    [InlineData(VisualStylesMode.Net11)]
+    [InlineData(VisualStylesMode.Latest)]
+    public void ToolStrip_VisualStylesMode_InheritedModernMode_UsesClassicEffectiveMode(VisualStylesMode value)
+    {
+        using Control parent = new() { VisualStylesMode = value };
+        using SubToolStrip control = new();
+        parent.Controls.Add(control);
+
+        Assert.Equal(VisualStylesMode.Inherit, control.VisualStylesMode);
+        Assert.Equal(VisualStylesMode.Classic, control.EffectiveVisualStylesModeAccessor);
+        Assert.False(control.IsHandleCreated);
+    }
+
+    [WinFormsFact]
+    public void ToolStrip_VisualStylesMode_ParentChangesToModernMode_DoesNotRaiseChanged()
+    {
+        using Control parent = new() { VisualStylesMode = VisualStylesMode.Classic };
+        using SubToolStrip control = new();
+        parent.Controls.Add(control);
+        int callCount = 0;
+        control.VisualStylesModeChanged += (sender, e) => callCount++;
+
+        parent.VisualStylesMode = VisualStylesMode.Net11;
+
+        Assert.Equal(VisualStylesMode.Classic, control.EffectiveVisualStylesModeAccessor);
+        Assert.Equal(0, callCount);
+    }
+
+    [WinFormsFact]
+    public void ToolStrip_VisualStylesMode_ExplicitClassic_RemainsLocalOverride()
+    {
+        using Control parent = new() { VisualStylesMode = VisualStylesMode.Net11 };
+        using SubToolStrip control = new();
+        parent.Controls.Add(control);
+        control.VisualStylesMode = VisualStylesMode.Classic;
+
+        parent.VisualStylesMode = VisualStylesMode.Disabled;
+
+        Assert.Equal(VisualStylesMode.Classic, control.VisualStylesMode);
+        Assert.Equal(VisualStylesMode.Classic, control.EffectiveVisualStylesModeAccessor);
+    }
+
     [WinFormsFact]
     public void ToolStrip_Ctor_Default()
     {
@@ -7536,6 +7591,8 @@ public partial class ToolStripTests : IDisposable
         public new bool CanEnableIme => base.CanEnableIme;
 
         public new bool CanRaiseEvents => base.CanRaiseEvents;
+
+        public VisualStylesMode EffectiveVisualStylesModeAccessor => base.EffectiveVisualStylesMode;
 
         public new CreateParams CreateParams => base.CreateParams;
 

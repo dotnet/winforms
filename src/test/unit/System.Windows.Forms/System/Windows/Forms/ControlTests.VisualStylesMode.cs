@@ -497,6 +497,33 @@ public partial class ControlTests
     }
 
     [WinFormsFact]
+    public void Control_VisualStylesMode_LocalOverrideRemovedByCoercedParent_RaisesChangedAndCascades()
+    {
+        using DataGridView parent = new() { VisualStylesMode = VisualStylesMode.Disabled };
+        using SubControlWithVisualStyles child = new()
+        {
+            HighContrast = false,
+            VisualStylesMode = VisualStylesMode.Latest
+        };
+        using SubControlWithVisualStyles grandchild = new() { HighContrast = false };
+        child.Controls.Add(grandchild);
+        parent.Controls.Add(child);
+
+        int childChangedCallCount = 0;
+        child.VisualStylesModeChanged += (sender, e) => childChangedCallCount++;
+        int grandchildChangedCallCount = 0;
+        grandchild.VisualStylesModeChanged += (sender, e) => grandchildChangedCallCount++;
+
+        parent.VisualStylesMode = VisualStylesMode.Latest;
+
+        Assert.Equal(VisualStylesMode.Inherit, child.VisualStylesMode);
+        Assert.Equal(VisualStylesMode.Classic, child.EffectiveVisualStylesModeAccessor);
+        Assert.Equal(VisualStylesMode.Classic, grandchild.EffectiveVisualStylesModeAccessor);
+        Assert.Equal(1, childChangedCallCount);
+        Assert.Equal(1, grandchildChangedCallCount);
+    }
+
+    [WinFormsFact]
     public void Appearance_ToggleSwitch_HasExpectedValue()
     {
         Assert.Equal(2, (int)Appearance.ToggleSwitch);
