@@ -127,7 +127,7 @@ internal sealed class RadioButtonModernAdapter : RadioButtonBaseAdapter
         Color preferredTextColor = Control.ShouldSerializeForeColor() || Control.ForeColor != Forms.Control.DefaultForeColor
             ? Control.ForeColor
             : Application.IsDarkModeEnabled
-                ? Color.FromArgb(0xF0, 0xF0, 0xF0)
+                ? DarkModeButtonColors.DefaultColors.AcceptButtonTextColor // Use the default accept button text color in dark mode for radio buttons.
                 : SystemColors.WindowText;
         Color disabledTextBackColor = Control.ShouldSerializeBackColor()
             && Control.BackColor.A == byte.MaxValue
