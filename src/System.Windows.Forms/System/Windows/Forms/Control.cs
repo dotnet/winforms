@@ -899,10 +899,18 @@ public unsafe partial class Control :
 
             VisualStylesMode oldEffectiveValue = EffectiveVisualStylesMode;
 
-            // Inherit was requested explicitly, or the requested value matches the ambient (parent) value:
-            // drop any local override so the value is inherited again.
+            bool hadLocalOverride = Properties.TryGetValue(
+                s_visualStylesModeProperty,
+                out VisualStylesMode existingRawValue)
+                && existingRawValue != VisualStylesMode.Inherit;
+
+            // Inherit always clears the local override. Setting to the ambient (parent) value clears only when
+            // transitioning an existing local override back to ambient.
             if (value == VisualStylesMode.Inherit
-                || (ParentInternal is { } parent && parent.ResolvedVisualStylesMode == value))
+                || (hadLocalOverride
+                    && existingRawValue != value
+                    && ParentInternal is { } parent
+                    && parent.ResolvedVisualStylesMode == value))
             {
                 Properties.RemoveValue(s_visualStylesModeProperty);
             }
