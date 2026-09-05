@@ -1159,20 +1159,27 @@ public class CheckBoxTests : AbstractButtonBaseTests
         Assert.False(control.GetTopLevel());
     }
 
-    [WinFormsFact]
-    public void CheckBox_RaiseAutomationEvent_Invoke_Success()
+    public static IEnumerable<object[]> CheckState_NotificationText_TestData()
+    {
+        yield return new object[] { CheckState.Unchecked, SR.CheckBoxUncheckedNotificationText };
+        yield return new object[] { CheckState.Checked, SR.CheckBoxCheckedNotificationText };
+        yield return new object[] { CheckState.Indeterminate, SR.CheckBoxIndeterminateNotificationText };
+    }
+
+    [WinFormsTheory]
+    [MemberData(nameof(CheckState_NotificationText_TestData))]
+    public void CheckBox_RaiseAutomationEvent_Invoke_Success(CheckState checkState, string expectedText)
     {
         using TestCheckBox checkBox = new();
-        Assert.False(checkBox.IsHandleCreated);
-
         var accessibleObject = (SubCheckBoxAccessibleObject)checkBox.AccessibilityObject;
-        Assert.Equal(0, accessibleObject.RaiseAutomationEventCallsCount);
-        Assert.Equal(0, accessibleObject.RaiseAutomationPropertyChangedEventCallsCount);
 
-        checkBox.Checked = true;
+        // Approach the target from a different state so the setter raises a real change
+        // (default is Unchecked; setting the same value is a no-op at CheckBox.cs:195).
+        checkBox.CheckState = checkState == CheckState.Checked ? CheckState.Unchecked : CheckState.Checked;
 
-        Assert.Equal(1, accessibleObject.RaiseAutomationEventCallsCount);
-        Assert.Equal(1, accessibleObject.RaiseAutomationPropertyChangedEventCallsCount);
+        checkBox.CheckState = checkState;
+
+        Assert.Equal(expectedText, accessibleObject.LastNotificationText);
         Assert.False(checkBox.IsHandleCreated);
     }
 
@@ -1365,6 +1372,10 @@ public class CheckBoxTests : AbstractButtonBaseTests
 
         public int RaiseAutomationPropertyChangedEventCallsCount { get; private set; }
 
+        public int RaiseAutomationNotificationCallsCount { get; private set; }
+
+        public string LastNotificationText { get; private set; }
+
         internal override bool RaiseAutomationEvent(UIA_EVENT_ID eventId)
         {
             RaiseAutomationEventCallsCount++;
@@ -1375,6 +1386,16 @@ public class CheckBoxTests : AbstractButtonBaseTests
         {
             RaiseAutomationPropertyChangedEventCallsCount++;
             return base.RaiseAutomationPropertyChangedEvent(propertyId, oldValue, newValue);
+        }
+
+        internal override bool InternalRaiseAutomationNotification(
+            Automation.AutomationNotificationKind notificationKind,
+            Automation.AutomationNotificationProcessing notificationProcessing,
+            string notificationText)
+        {
+            RaiseAutomationNotificationCallsCount++;
+            LastNotificationText = notificationText;
+            return base.InternalRaiseAutomationNotification(notificationKind, notificationProcessing, notificationText);
         }
     }
 
@@ -1523,10 +1544,10 @@ public class CheckBoxTests : AbstractButtonBaseTests
     }
 
     [WinFormsTheory]
-    [InlineData(Appearance.Button, FlatStyle.Standard,  "Test", 12, 8, 100, 20)]
-    [InlineData(Appearance.Normal, FlatStyle.System,    "Test", 12, 8, 100, 20)]
-    [InlineData(Appearance.Normal, FlatStyle.Flat,      "Test", 12, 8, 100, 20)]
-    [InlineData(Appearance.Normal, FlatStyle.Standard,  "Test", 12, 8, 100, 20)]
+    [InlineData(Appearance.Button, FlatStyle.Standard, "Test", 12, 8, 100, 20)]
+    [InlineData(Appearance.Normal, FlatStyle.System, "Test", 12, 8, 100, 20)]
+    [InlineData(Appearance.Normal, FlatStyle.Flat, "Test", 12, 8, 100, 20)]
+    [InlineData(Appearance.Normal, FlatStyle.Standard, "Test", 12, 8, 100, 20)]
     public void CheckBox_GetPreferredSizeCore_VariousStyles_ReturnsExpected(
         Appearance appearance, FlatStyle flatStyle, string text, int fontSize, int padding, int width, int height)
     {
