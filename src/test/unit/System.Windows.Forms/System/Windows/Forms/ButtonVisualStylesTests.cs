@@ -1625,6 +1625,68 @@ public class ButtonVisualStylesTests
     private static int GetLuminance(Color color)
         => ((299 * color.R) + (587 * color.G) + (114 * color.B)) / 1000;
 
+    [WinFormsTheory]
+    [InlineData(VisualStylesMode.Net11)]
+    [InlineData(VisualStylesMode.Classic)]
+    public void Button_VisualStylesMode_DoesNotThrowOnPaint(VisualStylesMode visualStylesMode)
+    {
+        using Button button = new()
+        {
+            VisualStylesMode = visualStylesMode,
+            Text = "Test Button",
+            Size = new Size(120, 32)
+        };
+
+        button.CreateControl();
+
+        using Bitmap bitmap = new(button.Width, button.Height);
+        button.DrawToBitmap(bitmap, new Rectangle(Point.Empty, button.Size));
+
+        Assert.Equal(visualStylesMode, button.VisualStylesMode);
+    }
+
+    [WinFormsTheory]
+    [InlineData(VisualStylesMode.Net11)]
+    [InlineData(VisualStylesMode.Classic)]
+    public void Button_VisualStylesMode_WithFlatStyleRenders(VisualStylesMode visualStylesMode)
+    {
+        using Button button = new()
+        {
+            VisualStylesMode = visualStylesMode,
+            FlatStyle = FlatStyle.Flat,
+            Text = "Flat Button",
+            Size = new Size(120, 32)
+        };
+
+        button.CreateControl();
+
+        using Bitmap bitmap = new(button.Width, button.Height);
+
+        // Should not throw with FlatStyle in any visual styles mode.
+        button.DrawToBitmap(bitmap, new Rectangle(Point.Empty, button.Size));
+    }
+
+    [WinFormsTheory]
+    [InlineData(VisualStylesMode.Net11)]
+    [InlineData(VisualStylesMode.Classic)]
+    public void Button_VisualStylesMode_WithDisabledRenders(VisualStylesMode visualStylesMode)
+    {
+        using Button button = new()
+        {
+            VisualStylesMode = visualStylesMode,
+            Text = "Disabled Button",
+            Enabled = false,
+            Size = new Size(120, 32)
+        };
+
+        button.CreateControl();
+
+        using Bitmap bitmap = new(button.Width, button.Height);
+
+        // Should not throw when disabled in any visual styles mode.
+        button.DrawToBitmap(bitmap, new Rectangle(Point.Empty, button.Size));
+    }
+
     /// <summary>
     ///  Exposes colorization messages for renderer-refresh tests.
     /// </summary>
