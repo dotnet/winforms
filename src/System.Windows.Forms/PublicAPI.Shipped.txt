@@ -1606,7 +1606,6 @@ override System.Windows.Forms.ProgressBar.DoubleBuffered.set -> void
 override System.Windows.Forms.ProgressBar.Font.get -> System.Drawing.Font!
 override System.Windows.Forms.ProgressBar.Font.set -> void
 override System.Windows.Forms.ProgressBar.OnBackColorChanged(System.EventArgs! e) -> void
-override System.Windows.Forms.ProgressBar.OnCreateControl() -> void
 override System.Windows.Forms.ProgressBar.OnForeColorChanged(System.EventArgs! e) -> void
 override System.Windows.Forms.ProgressBar.OnHandleCreated(System.EventArgs! e) -> void
 override System.Windows.Forms.ProgressBar.OnHandleDestroyed(System.EventArgs! e) -> void
