@@ -11,6 +11,24 @@ namespace System.Windows.Forms.Tests;
 
 public class RadioButtonPopupAdapterTests : IDisposable
 {
+    private static bool HasPixelChanged(Bitmap bitmap, Rectangle bounds)
+    {
+        Color referenceColor = bitmap.GetPixel(bounds.X, bounds.Y);
+
+        for (int x = bounds.X; x < bounds.Right; x++)
+        {
+            for (int y = bounds.Y; y < bounds.Bottom; y++)
+            {
+                if (bitmap.GetPixel(x, y) != referenceColor)
+                {
+                    return true;
+                }
+            }
+        }
+
+        return false;
+    }
+
     private class TestRadioButton : RadioButton
     {
         public void InvokeOnMouseEnter(EventArgs e) => base.OnMouseEnter(e);
@@ -59,6 +77,8 @@ public class RadioButtonPopupAdapterTests : IDisposable
         Action action = () => adapter.PaintDown(e, control.Checked ? CheckState.Checked : CheckState.Unchecked);
 
         action.Should().NotThrow();
+        HasPixelChanged(bitmap, new Rectangle(0, 0, bitmap.Width, bitmap.Height))
+            .Should().BeTrue("PaintDown should render to the bitmap.");
     }
 
     [WinFormsTheory]
@@ -80,6 +100,8 @@ public class RadioButtonPopupAdapterTests : IDisposable
         Action action = () => adapter.PaintOver(e, control.Checked ? CheckState.Checked : CheckState.Unchecked);
 
         action.Should().NotThrow();
+        HasPixelChanged(bitmap, new Rectangle(0, 0, bitmap.Width, bitmap.Height))
+            .Should().BeTrue("PaintOver should render to the bitmap.");
     }
 
     [WinFormsTheory]
@@ -101,6 +123,8 @@ public class RadioButtonPopupAdapterTests : IDisposable
         Action action = () => adapter.PaintUp(e, control.Checked ? CheckState.Checked : CheckState.Unchecked);
 
         action.Should().NotThrow();
+        HasPixelChanged(bitmap, new Rectangle(0, 0, bitmap.Width, bitmap.Height))
+            .Should().BeTrue("PaintUp should render to the bitmap.");
     }
 
     [WinFormsFact]
@@ -196,6 +220,8 @@ public class RadioButtonPopupAdapterTests : IDisposable
         Action action = () => adapter.PaintUp(e, CheckState.Checked);
 
         action.Should().NotThrow();
+        HasPixelChanged(bitmap, new Rectangle(0, 0, bitmap.Width, bitmap.Height))
+            .Should().BeTrue("PaintUp should render to the bitmap.");
     }
 
     [WinFormsTheory]
@@ -215,6 +241,8 @@ public class RadioButtonPopupAdapterTests : IDisposable
         Action action = () => adapter.PaintDown(e, state);
 
         action.Should().NotThrow();
+        HasPixelChanged(bitmap, new Rectangle(0, 0, bitmap.Width, bitmap.Height))
+            .Should().BeTrue("PaintDown should render to the bitmap.");
     }
 
     [WinFormsTheory]
@@ -234,5 +262,7 @@ public class RadioButtonPopupAdapterTests : IDisposable
         Action action = () => adapter.PaintOver(e, state);
 
         action.Should().NotThrow();
+        HasPixelChanged(bitmap, new Rectangle(0, 0, bitmap.Width, bitmap.Height))
+            .Should().BeTrue("PaintOver should render to the bitmap.");
     }
 }

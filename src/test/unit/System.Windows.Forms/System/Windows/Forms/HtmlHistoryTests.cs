@@ -184,6 +184,36 @@ public class HtmlHistoryTests
     }
 
     [WinFormsFact]
+    public async Task HtmlHistory_Go_EdgeCaseIndices_AreForwardedWithoutManagedRangeValidation()
+    {
+        using Control parent = new();
+        using WebBrowser control = new()
+        {
+            Parent = parent
+        };
+
+        using TempFile file1 = CreateTempFile(HtmlPage1);
+        using TempFile file2 = CreateTempFile(HtmlPage2);
+
+        await NavigateToPathAsync(control, file1.Path);
+        await NavigateToPathAsync(control, file2.Path);
+
+        control.Document.Should().NotBeNull();
+        control.Document!.Window.Should().NotBeNull();
+        using HtmlHistory? history = control.Document.Window.History;
+        history.Should().NotBeNull();
+
+        Action goNegative = () => history!.Go(-1);
+        Action goOutOfRange = () => history!.Go(int.MaxValue);
+
+        Exception? negativeException = Record.Exception(goNegative);
+        Exception? outOfRangeException = Record.Exception(goOutOfRange);
+
+        (negativeException is null || negativeException is not ArgumentOutOfRangeException).Should().BeTrue();
+        (outOfRangeException is null || outOfRangeException is not ArgumentOutOfRangeException).Should().BeTrue();
+    }
+
+    [WinFormsFact]
     public async Task HtmlHistory_Dispose_IsIdempotentAndMembersThrow()
     {
         using Control parent = new();
@@ -232,8 +262,9 @@ public class HtmlHistoryTests
         control.DocumentCompleted += Handler;
         try
         {
-            await Task.Run(() => control.Navigate(path));
-            Assert.True(await source.Task);
+             CancellationToken cancellationToken = TestContext.Current.CancellationToken;
+             await Task.Run(() => control.Navigate(path), cancellationToken);
+             Assert.True(await source.Task.WaitAsync(cancellationToken));
         }
         finally
         {
