@@ -112,14 +112,14 @@ public class CursorEditorTests
         MethodInfo startMethod = type.GetMethod("Start", BindingFlags.Public | BindingFlags.Instance)!;
 
         IDictionary cache = (IDictionary)cursorWidthCacheField.GetValue(cursorUI)!;
-        Assert.NotEqual(0, cache.Count);
+        Assert.NotEmpty(cache);
 
         endMethod.Invoke(cursorUI, null);
-        Assert.Equal(0, cache.Count);
+        Assert.Empty(cache);
 
         Mock<IWindowsFormsEditorService> mockEditorService = new(MockBehavior.Strict);
         startMethod.Invoke(cursorUI, [mockEditorService.Object, Cursors.Default]);
-        Assert.NotEqual(0, cache.Count);
+        Assert.NotEmpty(cache);
     }
 
     [WinFormsFact]
