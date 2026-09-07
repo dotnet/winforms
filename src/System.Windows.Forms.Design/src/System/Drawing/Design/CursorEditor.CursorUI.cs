@@ -85,7 +85,7 @@ public partial class CursorEditor
                 e.Graphics.FillRectangle(SystemBrushes.Control, new Rectangle(e.Bounds.X + 2, e.Bounds.Y + 2, _cursorWidth, e.Bounds.Height - 4));
                 e.Graphics.DrawRectangle(SystemPens.WindowText, new Rectangle(e.Bounds.X + 2, e.Bounds.Y + 2, _cursorWidth - 1, e.Bounds.Height - 4 - 1));
 
-                using (DeviceContextHdcScope dc = new(e.Graphics, applyGraphicsState: false))
+                using (DeviceContextHdcScope dc = new(e, applyGraphicsState: false))
                 {
                     PInvokeCore.DrawIconEx(
                         (HDC)dc,
