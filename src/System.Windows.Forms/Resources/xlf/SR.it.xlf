@@ -4551,7 +4551,7 @@ Per sostituire questa finestra di dialogo, gestisci l'evento DataError.</target>
       </trans-unit>
       <trans-unit id="DescriptionKioskModeManager">
         <source>Manages common fullscreen, input, cursor, and power behavior for kiosk-style WinForms applications.</source>
-        <target state="new">Manages common fullscreen, input, cursor, and power behavior for kiosk-style WinForms applications.</target>
+        <target state="translated">Gestisce il comportamento comune di schermo intero, input, cursore e alimentazione per le applicazioni Windows Forms a schermo intero.</target>
         <note />
       </trans-unit>
       <trans-unit id="DescriptionLabel">
@@ -6151,47 +6151,47 @@ Analisi dello stack dove si è verificata l'operazione non valida:
       </trans-unit>
       <trans-unit id="KioskModeManagerAlwaysOnDescr">
         <source>Indicates whether Windows should keep the display and system awake while this component is active.</source>
-        <target state="new">Indicates whether Windows should keep the display and system awake while this component is active.</target>
+        <target state="translated">Indica se Windows deve mantenere attivo lo schermo e il sistema mentre questo componente è attivo.</target>
         <note />
       </trans-unit>
       <trans-unit id="KioskModeManagerContainerControlChangedDescr">
         <source>Occurs when the ContainerControl property value changes.</source>
-        <target state="new">Occurs when the ContainerControl property value changes.</target>
+        <target state="translated">Si verifica quando il valore della proprietà ContainerControl cambia.</target>
         <note />
       </trans-unit>
       <trans-unit id="KioskModeManagerContainerControlDescr">
         <source>The container whose containing form is controlled by the kiosk mode manager.</source>
-        <target state="new">The container whose containing form is controlled by the kiosk mode manager.</target>
+        <target state="translated">Contenitore il cui modulo contenitore è controllato dal gestore della modalità tutto schermo.</target>
         <note />
       </trans-unit>
       <trans-unit id="KioskModeManagerEscapeExitsFullScreenDescr">
         <source>Indicates whether pressing Escape exits fullscreen mode.</source>
-        <target state="new">Indicates whether pressing Escape exits fullscreen mode.</target>
+        <target state="translated">Indica se, premendo ESC, si esce dalla modalità a schermo intero.</target>
         <note />
       </trans-unit>
       <trans-unit id="KioskModeManagerFullScreenDescr">
         <source>Gets or sets a value indicating whether the resolved form is currently fullscreen.</source>
-        <target state="new">Gets or sets a value indicating whether the resolved form is currently fullscreen.</target>
+        <target state="translated">Ottiene o imposta un valore che indica se il modulo risolto è attualmente a schermo intero.</target>
         <note />
       </trans-unit>
       <trans-unit id="KioskModeManagerFullScreenChangedDescr">
         <source>Occurs when the fullscreen state changes.</source>
-        <target state="new">Occurs when the fullscreen state changes.</target>
+        <target state="translated">Si verifica quando cambia lo stato a schermo intero.</target>
         <note />
       </trans-unit>
       <trans-unit id="KioskModeManagerMousePointerAutoHideDelayDescr">
         <source>The delay, in milliseconds, before the mouse pointer is hidden while fullscreen. A value of 0 disables automatic pointer hiding.</source>
-        <target state="new">The delay, in milliseconds, before the mouse pointer is hidden while fullscreen. A value of 0 disables automatic pointer hiding.</target>
+        <target state="translated">Ritardo, in millisecondi, prima che il puntatore del mouse venga nascosto durante la modalità a schermo intero. Il valore 0 disabilita l'occultamento automatico del puntatore.</target>
         <note />
       </trans-unit>
       <trans-unit id="KioskModeManagerToggleFullScreenKeysDescr">
         <source>The key combination that toggles between fullscreen and restored mode.</source>
-        <target state="new">The key combination that toggles between fullscreen and restored mode.</target>
+        <target state="translated">La combinazione di tasti che consente di passare dalla modalità a schermo intero alla modalità ripristinata.</target>
         <note />
       </trans-unit>
       <trans-unit id="KioskModeManagerTopMostInFullScreenDescr">
         <source>Indicates whether the form is topmost while fullscreen.</source>
-        <target state="new">Indicates whether the form is topmost while fullscreen.</target>
+        <target state="translated">Indica se il modulo è in primo piano in modalità a schermo intero.</target>
         <note />
       </trans-unit>
       <trans-unit id="LabelAutoEllipsisDescr">

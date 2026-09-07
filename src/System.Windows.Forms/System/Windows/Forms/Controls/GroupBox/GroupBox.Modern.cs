@@ -1,7 +1,6 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
-using System.Collections.Concurrent;
 using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Drawing.Text;
@@ -12,10 +11,7 @@ namespace System.Windows.Forms;
 
 public partial class GroupBox
 {
-    private const string MissingSemiBoldFamily = "";
-
-    private static readonly ConcurrentDictionary<string, string> s_semiBoldFamilyNames =
-        new(StringComparer.OrdinalIgnoreCase);
+    private const float PopupHeaderAccentBlendAmount = 0.12f;
 
     private Font? _modernCaptionFont;
     private Font? _modernCaptionSourceFont;
@@ -72,67 +68,53 @@ public partial class GroupBox
 
     private Padding GetModernDecorationPadding()
     {
-        int captionHeight = ModernCaptionFont.Height;
-
         switch (FlatStyle)
         {
             case FlatStyle.Standard:
-            {
-                // Card: reserve the caption band plus its visual gap to the card. No internal
-                // horizontal or bottom inset, so a docked child with Padding = 0 fills the card.
-                int gap = ScaleModernMetric(ModernControlVisualStyles.GroupBoxCaptionGap);
+                {
+                    int displayCaptionHeight = string.IsNullOrEmpty(Text)
+                        ? DisplayFontHeight
+                        : Math.Max(DisplayFontHeight, ModernCaptionFont.Height);
 
-                return new Padding(
-                    left: Padding.Left,
-                    top: Padding.Top + captionHeight + gap,
-                    right: Padding.Right,
-                    bottom: Padding.Bottom);
-            }
-
-            case FlatStyle.Flat:
-            {
-                // Outline: the top border line runs along the caption baseline, so content clears
-                // the descenders that hang below it (descent + 1px leeway). Left/right/bottom sit
-                // just inside the border.
-                (int ascent, int descent) = GetModernCaptionMetrics();
-                int leeway = ScaleModernMetric(
-                    ModernControlVisualStyles.GroupBoxFlatBaselineLeeway);
-                int borderInset = GetModernBorderThickness() + leeway;
-
-                return new Padding(
-                    left: Padding.Left + borderInset,
-                    top: Padding.Top + ascent + descent + leeway,
-                    right: Padding.Right + borderInset,
-                    bottom: Padding.Bottom + borderInset);
-            }
+                    return new Padding(
+                        left: Padding.Left,
+                        top: Padding.Top + displayCaptionHeight,
+                        right: Padding.Right,
+                        bottom: Padding.Bottom);
+                }
 
             case FlatStyle.Popup:
-            {
-                // Accent header: content is flush to the bottom of the filled header rectangle
-                // (0 top gap) with a 2px inset on the remaining sides.
-                int verticalPadding = ScaleModernMetric(
-                    ModernControlVisualStyles.GroupBoxHeaderVerticalPadding);
-                int headerHeight = captionHeight + (2 * verticalPadding);
-                int inset = ScaleModernMetric(
-                    ModernControlVisualStyles.GroupBoxPopupContentInset);
-
-                return new Padding(
-                    left: Padding.Left + inset,
-                    top: Padding.Top + headerHeight,
-                    right: Padding.Right + inset,
-                    bottom: Padding.Bottom + inset);
-            }
-
             default:
-            {
-                int gap = ScaleModernMetric(ModernControlVisualStyles.GroupBoxCaptionGap);
+                {
+                    int displayCaptionHeight = Math.Max(
+                        DisplayFontHeight,
+                        ModernCaptionFont.Height);
 
-                return new Padding(
-                    left: Padding.Left,
-                    top: Padding.Top + captionHeight + gap,
-                    right: Padding.Right,
-                    bottom: Padding.Bottom);
-            }
+                    // Keep the content rectangle compatible with the classic GroupBox while the
+                    // renderer keeps drawing the modern card/header surface and caption.
+                    return new Padding(
+                        left: Padding.Left,
+                        top: Padding.Top + displayCaptionHeight,
+                        right: Padding.Right,
+                        bottom: Padding.Bottom);
+                }
+
+            case FlatStyle.Flat:
+                {
+                    // Outline: the top border line runs along the caption baseline, so content clears
+                    // the descenders that hang below it (descent + 1px leeway). Left/right/bottom sit
+                    // just inside the border.
+                    (int ascent, int descent) = GetModernCaptionMetrics();
+                    int leeway = ScaleModernMetric(
+                        ModernControlVisualStyles.GroupBoxFlatBaselineLeeway);
+                    int borderInset = GetModernBorderThickness() + leeway;
+
+                    return new Padding(
+                        left: Padding.Left + borderInset,
+                        top: Padding.Top + ascent + descent + leeway,
+                        right: Padding.Right + borderInset,
+                        bottom: Padding.Bottom + borderInset);
+                }
         }
     }
 
@@ -158,7 +140,7 @@ public partial class GroupBox
             return (font.Height, 0);
         }
 
-        float lineHeightPixels = font.GetHeight(DeviceDpiInternal);
+        float lineHeightPixels = font.Height;
         int ascent = (int)Math.Ceiling(
             lineHeightPixels * family.GetCellAscent(style) / lineSpacingDesignUnits);
         int descent = (int)Math.Ceiling(
@@ -202,13 +184,12 @@ public partial class GroupBox
     private void DrawModernCard(PaintEventArgs e, Rectangle bounds)
     {
         int captionHeight = ModernCaptionFont.Height;
-        int captionGap = ScaleModernMetric(
-            ModernControlVisualStyles.GroupBoxCaptionGap);
+        int frameTop = DisplayFontHeight;
         Rectangle frameBounds = new(
             bounds.Left,
-            bounds.Top + captionHeight + captionGap,
+            bounds.Top + frameTop,
             bounds.Width,
-            Math.Max(0, bounds.Height - captionHeight - captionGap));
+            Math.Max(0, bounds.Height - frameTop));
         Rectangle captionBounds = GetStandardCaptionBounds(
             bounds,
             captionHeight);
@@ -229,6 +210,15 @@ public partial class GroupBox
         // BackgroundImage painted by OnPaintBackground. Composite the image back over the surface
         // so it remains visible (issue #14779).
         PaintModernBackgroundImage(e, frameBounds);
+
+        if (BackgroundImage is not null)
+        {
+            Color bodyShadeColor = Color.FromArgb(
+                ModernControlVisualStyles.GroupBoxCardBodyShadeAlpha,
+                Color.Black);
+            using var bodyShadeBrush = bodyShadeColor.GetCachedSolidBrushScope();
+            e.Graphics.FillRectangle(bodyShadeBrush, frameBounds);
+        }
 
         DrawModernCaption(
             e.Graphics,
@@ -255,14 +245,17 @@ public partial class GroupBox
             return;
         }
 
+        using GraphicsStateScope state = new(e.Graphics);
+        e.Graphics.SetClip(clipBounds, CombineMode.Intersect);
+
         ControlPaint.DrawBackgroundImage(
             e.Graphics,
             BackgroundImage,
             Color.Transparent,
             BackgroundImageLayout,
             ClientRectangle,
-            clipBounds,
-            DisplayRectangle.Location,
+            ClientRectangle,
+            Point.Empty,
             RightToLeft);
     }
 
@@ -293,6 +286,11 @@ public partial class GroupBox
             borderColor = PopupButtonColorMath.Mute(borderColor, 0.55f);
         }
 
+        if (BackgroundImage is not null)
+        {
+            PaintModernBackgroundImage(e, ClientRectangle);
+        }
+
         DrawRoundedFrame(e.Graphics, frameBounds, borderColor);
 
         Rectangle captionBackground = GetFlatCaptionBackgroundBounds(
@@ -301,7 +299,14 @@ public partial class GroupBox
             frameBounds);
         if (!captionBackground.IsEmpty)
         {
-            PaintBackground(e, captionBackground);
+            if (BackgroundImage is null)
+            {
+                PaintBackground(e, captionBackground);
+            }
+            else
+            {
+                PaintModernBackgroundImage(e, captionBackground);
+            }
         }
 
         DrawModernCaption(
@@ -312,11 +317,11 @@ public partial class GroupBox
 
     private void DrawModernPopup(PaintEventArgs e, Rectangle bounds)
     {
-        int verticalPadding = ScaleModernMetric(
-            ModernControlVisualStyles.GroupBoxHeaderVerticalPadding);
         int horizontalPadding = ScaleModernMetric(
             ModernControlVisualStyles.GroupBoxHeaderHorizontalPadding);
-        int headerHeight = ModernCaptionFont.Height + (2 * verticalPadding);
+        int headerHeight = Math.Max(
+            DisplayFontHeight,
+            ModernCaptionFont.Height);
         Rectangle headerBounds = new(
             bounds.Left,
             bounds.Top,
@@ -325,23 +330,32 @@ public partial class GroupBox
 
         Rectangle captionBounds = GetPopupCaptionBounds(
             bounds,
-            ModernCaptionFont.Height,
             horizontalPadding,
-            verticalPadding);
+            headerHeight);
 
         Color bodyColor = BackColor.A == 0
             ? Color.Transparent
             : BackColor;
         Color headerColor = Application.SystemVisualSettings.AccentColor;
+        Color headerSurfaceColor = PopupButtonColorMath.Blend(
+            DisabledColor,
+            headerColor,
+            PopupHeaderAccentBlendAmount);
         Color borderColor = PopupButtonColorMath.TowardsContrast(
             headerColor,
             0.2f);
         if (!Enabled)
         {
             bodyColor = PopupButtonColorMath.Mute(bodyColor, 0.55f);
-            headerColor = PopupButtonColorMath.Mute(headerColor, 0.55f);
+            headerSurfaceColor = PopupButtonColorMath.Mute(headerSurfaceColor, 0.55f);
             borderColor = PopupButtonColorMath.Mute(borderColor, 0.55f);
         }
+
+        Color headerFillColor = BackgroundImage is null
+            ? headerSurfaceColor
+            : Color.FromArgb(
+                ModernControlVisualStyles.GroupBoxPopupHeaderOverlayAlpha,
+                headerColor);
 
         using GraphicsPath path = CreateModernFramePath(bounds);
         using (var bodyBrush = bodyColor.GetCachedSolidBrushScope())
@@ -361,7 +375,7 @@ public partial class GroupBox
         using (GraphicsStateScope state = new(e.Graphics))
         {
             e.Graphics.SetClip(headerBounds);
-            using var headerBrush = headerColor.GetCachedSolidBrushScope();
+            using var headerBrush = headerFillColor.GetCachedSolidBrushScope();
             e.Graphics.FillPath(headerBrush, path);
         }
 
@@ -373,18 +387,17 @@ public partial class GroupBox
         // artifacts into the parent by tracing the parent color just outside the border.
         int frameRadius = GetModernFrameCornerRadius(bounds);
         ParentBackgroundRenderer.PaintRoundedBorderRegionMitigation(
+            this,
             e.Graphics,
             bounds,
             new Size(frameRadius, frameRadius),
             GetModernBorderThickness(),
             ParentInternal?.BackColor ?? BackColor);
 
-        Color captionColor = Enabled
-            ? PopupButtonColorMath.GetReadableForeColor(headerColor)
-            : ModernControlColorMath.GetDisabledTextColor(
-                PopupButtonColorMath.GetReadableForeColor(headerColor),
-                headerColor);
-        DrawModernCaption(e.Graphics, captionBounds, captionColor);
+        DrawModernCaption(
+            e.Graphics,
+            captionBounds,
+            GetCaptionColor(headerSurfaceColor));
     }
 
     private Rectangle GetFlatCaptionBounds(
@@ -441,21 +454,20 @@ public partial class GroupBox
 
     private Rectangle GetPopupCaptionBounds(
         Rectangle bounds,
-        int captionHeight,
         int horizontalPadding,
-        int verticalPadding)
+        int headerHeight)
     {
         Rectangle captionBounds = GetStandardCaptionBounds(
             bounds,
-            captionHeight);
+            headerHeight);
 
         return new Rectangle(
             captionBounds.Left + horizontalPadding,
-            captionBounds.Top + verticalPadding,
+            captionBounds.Top,
             Math.Max(
                 0,
                 captionBounds.Width - (2 * horizontalPadding)),
-            captionHeight);
+            headerHeight);
     }
 
     private void DrawRoundedFrame(
@@ -477,6 +489,7 @@ public partial class GroupBox
         // artifacts into the parent by tracing the parent color just outside the border.
         int frameRadius = GetModernFrameCornerRadius(bounds);
         ParentBackgroundRenderer.PaintRoundedBorderRegionMitigation(
+            this,
             graphics,
             bounds,
             new Size(frameRadius, frameRadius),
@@ -525,74 +538,14 @@ public partial class GroupBox
 
     private Font CreateModernCaptionFont(float textScale)
     {
-        float styleScale = FlatStyle == FlatStyle.Flat
-            ? 1f
-            : ModernControlVisualStyles.GroupBoxCaptionFontScale;
-        string semiBoldFamilyName = Font.Style == FontStyle.Regular
-            ? s_semiBoldFamilyNames.GetOrAdd(
-                Font.FontFamily.Name,
-                FindSemiBoldFamilyName)
-            : MissingSemiBoldFamily;
-
-        if (semiBoldFamilyName.Length == 0)
-        {
-            return new Font(
-                Font.FontFamily,
-                Font.Size * styleScale * textScale,
-                Font.Style,
-                Font.Unit,
-                Font.GdiCharSet,
-                Font.GdiVerticalFont);
-        }
-
-        using FontFamily semiBoldFamily = new(semiBoldFamilyName);
         return new Font(
-            semiBoldFamily,
-            Font.Size * styleScale * textScale,
-            FontStyle.Regular,
+            Font.FontFamily,
+            Font.Size * textScale,
+            Font.Style,
             Font.Unit,
             Font.GdiCharSet,
             Font.GdiVerticalFont);
     }
-
-    internal static string FindSemiBoldFamilyName(string sourceFamilyName)
-    {
-        string baseFamilyName = sourceFamilyName.EndsWith(
-            " Regular",
-            StringComparison.OrdinalIgnoreCase)
-            ? sourceFamilyName[..^" Regular".Length]
-            : sourceFamilyName;
-        string expectedName = IsSemiBoldFamilyName(sourceFamilyName)
-            ? sourceFamilyName
-            : $"{baseFamilyName} Semibold";
-
-        using InstalledFontCollection installedFonts = new();
-        foreach (FontFamily family in installedFonts.Families)
-        {
-            if (family.Name.Equals(
-                expectedName,
-                StringComparison.OrdinalIgnoreCase))
-            {
-                return family.Name;
-            }
-        }
-
-        return MissingSemiBoldFamily;
-    }
-
-    internal static bool IsSemiBoldFamilyName(string familyName)
-        => familyName.Contains(
-            "Semibold",
-            StringComparison.OrdinalIgnoreCase)
-            || familyName.Contains(
-                "Semi Bold",
-                StringComparison.OrdinalIgnoreCase)
-            || familyName.Contains(
-                "Demibold",
-                StringComparison.OrdinalIgnoreCase)
-            || familyName.Contains(
-                "Demi Bold",
-                StringComparison.OrdinalIgnoreCase);
 
     private int GetModernBorderThickness()
     {
@@ -747,17 +700,21 @@ public partial class GroupBox
         if ((e.Changed & SystemVisualSettingsCategories.TextScale) != 0)
         {
             InvalidateModernCaptionFont();
-            CommonProperties.xClearPreferredSizeCache(this);
-            LayoutTransaction.DoLayout(
-                this,
-                this,
-                PropertyNames.SystemVisualSettings);
-            if (ParentInternal is { } parent)
+
+            if (FlatStyle != FlatStyle.Standard || !string.IsNullOrEmpty(Text))
             {
+                CommonProperties.xClearPreferredSizeCache(this);
                 LayoutTransaction.DoLayout(
-                    parent,
+                    this,
                     this,
                     PropertyNames.SystemVisualSettings);
+                if (ParentInternal is { } parent)
+                {
+                    LayoutTransaction.DoLayout(
+                        parent,
+                        this,
+                        PropertyNames.SystemVisualSettings);
+                }
             }
         }
 

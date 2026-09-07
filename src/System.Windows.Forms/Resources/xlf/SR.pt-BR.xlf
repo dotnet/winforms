@@ -4551,7 +4551,7 @@ Para substituir a caixa de diálogo padrão, manipule o evento DataError.</targe
       </trans-unit>
       <trans-unit id="DescriptionKioskModeManager">
         <source>Manages common fullscreen, input, cursor, and power behavior for kiosk-style WinForms applications.</source>
-        <target state="new">Manages common fullscreen, input, cursor, and power behavior for kiosk-style WinForms applications.</target>
+        <target state="translated">Gerencia o comportamento comum de tela inteira, entrada, cursor e energia para aplicativos WinForms no estilo quiosque.</target>
         <note />
       </trans-unit>
       <trans-unit id="DescriptionLabel">
@@ -6151,47 +6151,47 @@ O rastreamento de pilha em que a operação ilegal ocorreu foi:
       </trans-unit>
       <trans-unit id="KioskModeManagerAlwaysOnDescr">
         <source>Indicates whether Windows should keep the display and system awake while this component is active.</source>
-        <target state="new">Indicates whether Windows should keep the display and system awake while this component is active.</target>
+        <target state="translated">Indica se o Windows deve manter a exibição e o sistema ativos enquanto esse componente está ativo.</target>
         <note />
       </trans-unit>
       <trans-unit id="KioskModeManagerContainerControlChangedDescr">
         <source>Occurs when the ContainerControl property value changes.</source>
-        <target state="new">Occurs when the ContainerControl property value changes.</target>
+        <target state="translated">Ocorre quando o valor da propriedade ContainerControl é alterado.</target>
         <note />
       </trans-unit>
       <trans-unit id="KioskModeManagerContainerControlDescr">
         <source>The container whose containing form is controlled by the kiosk mode manager.</source>
-        <target state="new">The container whose containing form is controlled by the kiosk mode manager.</target>
+        <target state="translated">O contêiner cujo formulário recipiente é controlado pelo gerenciador de modo de quiosque.</target>
         <note />
       </trans-unit>
       <trans-unit id="KioskModeManagerEscapeExitsFullScreenDescr">
         <source>Indicates whether pressing Escape exits fullscreen mode.</source>
-        <target state="new">Indicates whether pressing Escape exits fullscreen mode.</target>
+        <target state="translated">Indica se pressionar Escape sai do modo de tela inteira.</target>
         <note />
       </trans-unit>
       <trans-unit id="KioskModeManagerFullScreenDescr">
         <source>Gets or sets a value indicating whether the resolved form is currently fullscreen.</source>
-        <target state="new">Gets or sets a value indicating whether the resolved form is currently fullscreen.</target>
+        <target state="translated">Obtém ou define um valor que indica se o formulário resolvido está atualmente em tela inteira.</target>
         <note />
       </trans-unit>
       <trans-unit id="KioskModeManagerFullScreenChangedDescr">
         <source>Occurs when the fullscreen state changes.</source>
-        <target state="new">Occurs when the fullscreen state changes.</target>
+        <target state="translated">Ocorre quando o estado de tela inteira é alterado.</target>
         <note />
       </trans-unit>
       <trans-unit id="KioskModeManagerMousePointerAutoHideDelayDescr">
         <source>The delay, in milliseconds, before the mouse pointer is hidden while fullscreen. A value of 0 disables automatic pointer hiding.</source>
-        <target state="new">The delay, in milliseconds, before the mouse pointer is hidden while fullscreen. A value of 0 disables automatic pointer hiding.</target>
+        <target state="translated">O atraso, em milissegundos, antes que o ponteiro do mouse seja oculto enquanto estiver em tela inteira. Um valor de 0 desabilita a ocultação automática de ponteiro.</target>
         <note />
       </trans-unit>
       <trans-unit id="KioskModeManagerToggleFullScreenKeysDescr">
         <source>The key combination that toggles between fullscreen and restored mode.</source>
-        <target state="new">The key combination that toggles between fullscreen and restored mode.</target>
+        <target state="translated">A combinação de teclas que alterna entre a tela inteira e o modo restaurado.</target>
         <note />
       </trans-unit>
       <trans-unit id="KioskModeManagerTopMostInFullScreenDescr">
         <source>Indicates whether the form is topmost while fullscreen.</source>
-        <target state="new">Indicates whether the form is topmost while fullscreen.</target>
+        <target state="translated">Indica se o formulário é superior enquanto tela inteira.</target>
         <note />
       </trans-unit>
       <trans-unit id="LabelAutoEllipsisDescr">

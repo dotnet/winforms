@@ -1084,10 +1084,11 @@ public abstract partial class UpDownBase : ContainerControl
         int cornerRadius = LogicalToDeviceUnits(ModernControlVisualStyles.UpDownCornerRadius);
         int borderThickness = LogicalToDeviceUnits(ModernControlVisualStyles.BorderThickness);
 
-        // The adorner (border) color matches the modern TextBox chrome, which uses the fore color.
-        Color adornerColor = ForeColor;
         Color parentBackColor = Parent?.BackColor ?? BackColor;
         Color clientBackColor = BackColor;
+        Color adornerColor = Enabled
+            ? ModernControlColorMath.TextControlBorderColor
+            : ModernControlColorMath.GetDisabledBorderColor();
 
         using var clientBackgroundBrush = clientBackColor.GetCachedSolidBrushScope();
         using var adornerPen = adornerColor.GetCachedPenScope(borderThickness);
@@ -1131,6 +1132,7 @@ public abstract partial class UpDownBase : ContainerControl
                     // The rounded chrome is clipped with a non-antialiased region; blend the resulting
                     // corner artifacts into the parent by tracing the parent color just outside the border.
                     ParentBackgroundRenderer.PaintRoundedBorderRegionMitigation(
+                        this,
                         graphics,
                         deflatedBounds,
                         new Size(cornerRadius, cornerRadius),
