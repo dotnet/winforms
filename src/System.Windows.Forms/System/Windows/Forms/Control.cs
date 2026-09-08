@@ -899,10 +899,7 @@ public unsafe partial class Control :
 
             VisualStylesMode oldEffectiveValue = EffectiveVisualStylesMode;
 
-            // Inherit was requested explicitly, or the requested value matches the uncoerced ambient value:
-            // drop any local override so the value is inherited again.
-            if (value == VisualStylesMode.Inherit
-                || (ParentInternal is { } parent && parent.UncoercedVisualStylesMode == value))
+            if (value == VisualStylesMode.Inherit)
             {
                 Properties.RemoveValue(s_visualStylesModeProperty);
             }
@@ -7468,31 +7465,7 @@ public unsafe partial class Control :
 
         if (Properties.ContainsKey(s_visualStylesModeProperty))
         {
-            if (Properties.GetValueOrDefault<VisualStylesMode>(s_visualStylesModeProperty)
-                != ParentInternal?.UncoercedVisualStylesMode)
-            {
-                // A local value isolates this subtree from parent changes.
-                return;
-            }
-
-            VisualStylesMode oldEffectiveVisualStylesMode = EffectiveVisualStylesMode;
-
-            // Same as the parent value, make it ambient again by removing it.
-            Properties.RemoveValue(s_visualStylesModeProperty);
-
-            VisualStylesMode newEffectiveVisualStylesMode = EffectiveVisualStylesMode;
-            if (oldEffectiveVisualStylesMode == newEffectiveVisualStylesMode)
-            {
-                return;
-            }
-
-            OnVisualStylesModeChanged(
-                transition?.CreateForControl(
-                    this,
-                    oldEffectiveVisualStylesMode,
-                    newEffectiveVisualStylesMode)
-                ?? e);
-
+            // A local value isolates this subtree from parent changes.
             return;
         }
 
