@@ -16,21 +16,20 @@ internal static class ModernControlColorMath
     private const float DisabledMuteAmount = 0.45f;
     private const int ContrastSearchIterations = 10;
 
-    // WinUI control-stroke overlay alphas over the black (light mode) / white (dark mode) pole,
-    // verified against Common_themeresources_any.xaml, except light-mode Strong, which is raised
-    // above WinUI so the visible bottom edge meets WCAG 1.4.11 (#14906). Composited in linear light.
+    // WinUI stroke alphas use black in light mode or white in dark mode; values follow
+    // Common_themeresources_any.xaml except Strong, raised to meet WCAG 1.4.11 (#14906).
     private const int StrokeDefaultAlphaLight = 0x0F;    // ControlStrokeColorDefault
-    private const int StrokeDefaultAlphaDark = 0x03;     // near-invisible dark rest side, matching the light/classic look where the side effectively vanishes (WinUI value is 0x12, #14919)
+    private const int StrokeDefaultAlphaDark = 0x03;     // Dark rest side; WinUI is 0x12 (#14919).
     private const int StrokeSecondaryAlphaLight = 0x29;  // ControlStrokeColorSecondary
     private const int StrokeSecondaryAlphaDark = 0x18;
-    private const int StrokeStrongAlphaLight = 0xB6;     // resting bottom edge; ~3.1:1, the WCAG 1.4.11 floor, lightened from 0xD1 so it is less heavy than the focus accent (#14906, #14997).
+    private const int StrokeStrongAlphaLight = 0xB6;     // Resting bottom; ~3.1:1 WCAG 1.4.11 floor, from 0xD1 (#14906, #14997).
     private const int StrokeStrongAlphaDark = 0x8B;
 
-    // Hover overlay: tuned a step stronger than Secondary for a more noticeable cue (#14906 direction).
+    // Hover is one step stronger than Secondary (#14906).
     private const int StrokeHoverAlphaLight = 0x40;
     private const int StrokeHoverAlphaDark = 0x28;
 
-    // Read-only surface tint: a subtle fill shift signalling non-editability, per Leaf's #14906 table.
+    // ReadOnly surface tint from Leaf's #14906 table.
     private const int SurfaceReadOnlyAlphaLight = 0x0A;
     private const int SurfaceReadOnlyAlphaDark = 0x0A;
 
@@ -77,7 +76,7 @@ internal static class ModernControlColorMath
                 ? s_darkModeDisabledBorder
                 : s_lightModeDisabledBorder;
 
-    /// <summary>Gets the stronger disabled border color used for the disabled bottom (elevation) edge.</summary>
+    /// <summary>Returns the strong disabled bottom-edge color.</summary>
     internal static Color GetDisabledStrongBorderColor()
         => SystemInformation.HighContrast
             ? SystemColors.GrayText
@@ -166,28 +165,27 @@ internal static class ModernControlColorMath
         return result;
     }
 
-    /// <summary>Gets the default, lightest field border stroke composited onto <paramref name="background"/>.</summary>
+    /// <summary>Returns the lightest field stroke over <paramref name="background"/>.</summary>
     internal static Color GetFieldStrokeDefault(Color background, bool darkMode)
         => CompositeStrokeOverlay(background, darkMode ? StrokeDefaultAlphaDark : StrokeDefaultAlphaLight, darkMode);
 
-    /// <summary>Gets the secondary field border stroke, a step stronger than default.</summary>
+    /// <summary>Returns the secondary field stroke.</summary>
     internal static Color GetFieldStrokeSecondary(Color background, bool darkMode)
         => CompositeStrokeOverlay(background, darkMode ? StrokeSecondaryAlphaDark : StrokeSecondaryAlphaLight, darkMode);
 
-    /// <summary>Gets the hover field border stroke: a bit stronger than secondary for a noticeable cue.</summary>
+    /// <summary>Returns the hover stroke, stronger than secondary.</summary>
     internal static Color GetFieldStrokeHover(Color background, bool darkMode)
         => CompositeStrokeOverlay(background, darkMode ? StrokeHoverAlphaDark : StrokeHoverAlphaLight, darkMode);
 
-    /// <summary>Gets the ReadOnly control surface: a subtle non-editable tint of the background.</summary>
+    /// <summary>Returns the ReadOnly surface tint.</summary>
     internal static Color GetFieldReadOnlySurface(Color background, bool darkMode)
         => CompositeStrokeOverlay(background, darkMode ? SurfaceReadOnlyAlphaDark : SurfaceReadOnlyAlphaLight, darkMode);
 
-    /// <summary>Gets the strong field border stroke, used for the resting bottom (elevation) edge.</summary>
+    /// <summary>Returns the strong resting bottom-edge stroke.</summary>
     internal static Color GetFieldStrokeStrong(Color background, bool darkMode)
         => CompositeStrokeOverlay(background, darkMode ? StrokeStrongAlphaDark : StrokeStrongAlphaLight, darkMode);
 
-    // Composites a black (light) or white (dark) overlay of the given 0-255 alpha onto an opaque
-    // background in linear light, returning an opaque color. A straight sRGB blend is wrong here.
+    // Composites a 0-255 black/white overlay onto an opaque background in linear light.
     private static Color CompositeStrokeOverlay(Color background, int overlayAlpha, bool darkMode)
     {
         background = ResolveOpaqueColor(background);

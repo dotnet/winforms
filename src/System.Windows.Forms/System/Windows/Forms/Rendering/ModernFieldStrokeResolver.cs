@@ -4,17 +4,16 @@
 namespace System.Windows.Forms;
 
 /// <summary>
-///  Resolves a <see cref="ModernFieldStroke"/> for a modern editable control from its
-///  <see cref="ModernFieldStrokeContext"/>. This is the single chokepoint: paint paths call
-///  <see cref="GetStroke"/> and receive a completed stroke, while state precedence and all color
-///  and thickness selection stay private here. Visual target: see #14906.
+///  Builds a <see cref="ModernFieldStroke"/> from <see cref="ModernFieldStrokeContext"/>.
+///  Paint paths call <see cref="GetStroke"/>; this class owns precedence, colors, and thicknesses.
+///  Visual target: #14906.
 /// </summary>
 internal static class ModernFieldStrokeResolver
 {
     private const float BaseStrokeDip = 2f;
     private const float FocusBottomStrokeDip = 3f;
 
-    /// <summary>Resolves the completed stroke for the given context.</summary>
+    /// <summary>Resolves a stroke from the supplied context.</summary>
     internal static ModernFieldStroke GetStroke(in ModernFieldStrokeContext context)
     {
         ModernFieldStrokeState state = ResolveState(context);
@@ -22,7 +21,7 @@ internal static class ModernFieldStrokeResolver
         return GetThemedStroke(state, context);
     }
 
-    // Precedence: Disabled > Focused > ReadOnly > Hover > Rest.
+    // Priority: Disabled > Focused > ReadOnly > Hover > Rest.
     private static ModernFieldStrokeState ResolveState(in ModernFieldStrokeContext context)
     {
         if (!context.Enabled)
@@ -51,9 +50,7 @@ internal static class ModernFieldStrokeResolver
     private static ModernFieldStroke GetThemedStroke(ModernFieldStrokeState state, in ModernFieldStrokeContext context)
     {
         bool dark = context.DarkMode;
-        // Every state keeps the control's own surface, so no inner border appears between the painted band
-        // and the native client area (#14997). States are expressed through border color and thickness,
-        // and all strokes composite over the normal background.
+        // The control surface prevents an inner boundary with the native client area (#14997).
         Color surface = context.BackColor;
         Color strokeBackground = context.BackColor;
 
@@ -64,8 +61,7 @@ internal static class ModernFieldStrokeResolver
         switch (state)
         {
             case ModernFieldStrokeState.Focused:
-                // Focus keeps the subtle resting side color (per Leaf's design image); the accent bottom
-                // edge is the focus cue, not a heavier grey box around the sides.
+                // Focus keeps the resting side color; the accent bottom edge supplies the cue.
                 sideTop = ModernControlColorMath.GetFieldStrokeDefault(strokeBackground, dark);
                 bottom = context.AccentColor;
                 bottomDip = FocusBottomStrokeDip;
@@ -82,7 +78,7 @@ internal static class ModernFieldStrokeResolver
                 break;
 
             default:
-                // Rest and ReadOnly share the resting strokes; ReadOnly differs only by its surface.
+                // Rest and ReadOnly share edge strokes; only their surfaces differ.
                 sideTop = ModernControlColorMath.GetFieldStrokeDefault(strokeBackground, dark);
                 bottom = ModernControlColorMath.GetFieldStrokeStrong(strokeBackground, dark);
                 break;

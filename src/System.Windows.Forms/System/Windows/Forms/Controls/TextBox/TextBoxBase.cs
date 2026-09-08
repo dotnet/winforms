@@ -87,7 +87,7 @@ public abstract partial class TextBoxBase : Control
     /// </summary>
     private bool _doubleClickFired;
 
-    // Pointer is over the control; drives the modern Hover stroke state.
+    // Pointer presence for modern Hover strokes.
     private bool _hovered;
 
     private static int[]? s_shortcutsToDisable;
@@ -2774,10 +2774,8 @@ public abstract partial class TextBoxBase : Control
                 break;
         }
 
-        // Bottom (elevation and focus) edge. Rounded Fixed3D draws the same tapered straight edge in every
-        // state, meeting the corners without riding up the arcs (#14997); states differ only by the
-        // resolved color and thickness. None draws a straight focus underline only while focused; the other
-        // flat styles already carry a visible box border.
+        // Rounded Fixed3D uses one tapered bottom edge that meets the arcs (#14997).
+        // None uses a focus underline; other flat styles have a box border.
         if (BorderStyle == BorderStyle.Fixed3D && canRenderRoundedChrome)
         {
             using GraphicsPath bottomEdgePath = CreateVisualStylesBottomEdgePath(
@@ -2786,8 +2784,7 @@ public abstract partial class TextBoxBase : Control
                 bottomThickness);
             using var bottomEdgeBrush = stroke.BottomColor.GetCachedSolidBrushScope();
 
-            // The edge overlays the bottom, including the scrollbar corner. It must not inherit the client
-            // or scrollbar exclusion used to preserve their native rendering.
+            // Cover the bottom and scrollbar corner outside native-rendering exclusions.
             GraphicsState bottomEdgeState = offscreenGraphics.Save();
             offscreenGraphics.SetClip(bounds, CombineMode.Replace);
             offscreenGraphics.FillPath(bottomEdgeBrush, bottomEdgePath);
@@ -2800,7 +2797,7 @@ public abstract partial class TextBoxBase : Control
         }
         else if (BorderStyle == BorderStyle.None && stroke.HasFocusIndicator)
         {
-            // None has no box, so express focus with a straight underline.
+            // None represents focus with a straight underline.
             using var bottomPen = stroke.BottomColor.GetCachedPenScope(bottomThickness);
             offscreenGraphics.DrawLine(bottomPen, deflatedBounds.Left, deflatedBounds.Bottom, deflatedBounds.Right, deflatedBounds.Bottom);
         }

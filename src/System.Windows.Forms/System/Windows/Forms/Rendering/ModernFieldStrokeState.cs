@@ -4,23 +4,23 @@
 namespace System.Windows.Forms;
 
 /// <summary>
-///  The interaction state of a modern (Net11) editable-control border, used to resolve its per-state
-///  stroke. When several apply, precedence is Disabled > Focused > ReadOnly > Hover > Rest.
+///  Interaction state for a modern (Net11) editable-control border stroke.
+///  Multiple states use priority Disabled > Focused > ReadOnly > Hover > Rest.
 /// </summary>
 internal enum ModernFieldStrokeState
 {
-    /// <summary>Default resting appearance.</summary>
+    /// <summary>Normal appearance.</summary>
     Rest,
 
-    /// <summary>The pointer is over the control.</summary>
+    /// <summary>Pointer is over the control.</summary>
     Hover,
 
-    /// <summary>The control has keyboard focus.</summary>
+    /// <summary>Control has keyboard focus.</summary>
     Focused,
 
-    /// <summary>The control is disabled.</summary>
+    /// <summary>Control is disabled.</summary>
     Disabled,
 
-    /// <summary>The control is read-only.</summary>
+    /// <summary>Control is read-only.</summary>
     ReadOnly,
 }

@@ -25,7 +25,7 @@ public class ModernFieldStrokeResolverTests
             AccentColor: s_accent,
             DeviceDpi: 96);
 
-    // ---- Precedence: Disabled > Focused > ReadOnly > Hover > Rest ----
+    // ---- Priority: Disabled > Focused > ReadOnly > Hover > Rest ----
 
     [Fact]
     public void Disabled_wins_over_everything()
@@ -69,7 +69,7 @@ public class ModernFieldStrokeResolverTests
         hover.SideTopColor.Should().NotBe(rest.SideTopColor);
     }
 
-    // ---- Thicknesses (in DIPs) ----
+    // ---- DIP thicknesses ----
 
     [Fact]
     public void Rest_uses_two_dip_side_and_bottom()
@@ -96,7 +96,7 @@ public class ModernFieldStrokeResolverTests
         stroke.BottomThicknessDip.Should().Be(2f);
     }
 
-    // ---- Color math (linear-light overlays) ----
+    // ---- Linear-light colors ----
 
     [Fact]
     public void Resolved_colors_are_opaque()
