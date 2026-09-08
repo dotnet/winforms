@@ -22,6 +22,11 @@ public partial class ListViewItem
 
         private int LastChildIndex => HasImage ? _owningListView.Columns.Count : _owningListView.Columns.Count - 1;
 
+        public override string? Name => !_owningListView.FullRowSelect
+            ? base.Name
+            : string.Join(", ", Enumerable.Range(0, _owningListView.Columns.Count)
+                .Select(column => GetChild(column + FirstSubItemIndex)?.Name));
+
         protected override View View => View.Details;
 
         /// <summary>
