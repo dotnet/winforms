@@ -45,6 +45,9 @@ public abstract partial class TextBoxBase
 
         internal override bool IsIAccessibleExSupported() => true;
 
+        internal override IRawElementProviderFragmentRoot.Interface? FragmentRoot
+            => this;
+
         internal override bool IsPatternSupported(UIA_PATTERN_ID patternId)
             => patternId switch
             {
