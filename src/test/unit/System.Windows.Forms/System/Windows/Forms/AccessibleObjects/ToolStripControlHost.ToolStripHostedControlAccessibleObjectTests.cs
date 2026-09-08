@@ -65,7 +65,7 @@ public class ToolStripControlHost_ToolStripHostedControlAccessibleObjectTests : 
             new(_textBox, null);
         IRawElementProviderFragmentRoot.Interface fragmentRoot = accessibleObject.FragmentRoot;
 
-        fragmentRoot.Should().BeNull();
+        fragmentRoot.Should().Be(_textBox.AccessibilityObject.FragmentRoot);
     }
 
     [WinFormsFact]
