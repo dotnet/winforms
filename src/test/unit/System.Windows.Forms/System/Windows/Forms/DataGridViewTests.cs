@@ -43,10 +43,29 @@ public partial class DataGridViewTests : IDisposable
     [InlineData(VisualStylesMode.Latest)]
     public void DataGridView_VisualStylesMode_ModernMode_UsesClassicEffectiveMode(VisualStylesMode value)
     {
+        using AppContextSwitchScope scope = new(
+            WinFormsAppContextSwitchNames.DataGridViewModernRendering,
+            enable: false);
         using SubDataGridView control = new() { VisualStylesMode = value };
 
         Assert.Equal(value, control.VisualStylesMode);
         Assert.Equal(VisualStylesMode.Classic, control.EffectiveVisualStylesModeAccessor);
+        Assert.False(control.IsHandleCreated);
+    }
+
+    [WinFormsTheory]
+    [InlineData(VisualStylesMode.Net11)]
+    [InlineData(VisualStylesMode.Latest)]
+    public void DataGridView_VisualStylesMode_ModernRenderingEnabled_UsesRequestedEffectiveMode(
+        VisualStylesMode value)
+    {
+        using AppContextSwitchScope scope = new(
+            WinFormsAppContextSwitchNames.DataGridViewModernRendering,
+            enable: true);
+        using SubDataGridView control = new() { VisualStylesMode = value };
+
+        Assert.Equal(value, control.VisualStylesMode);
+        Assert.Equal(value, control.EffectiveVisualStylesModeAccessor);
         Assert.False(control.IsHandleCreated);
     }
 

@@ -24,7 +24,9 @@ namespace System.Windows.Forms;
 public partial class ToolStrip : ScrollableControl, IArrangedElement, ISupportToolStripPanel
 {
     private protected override VisualStylesMode GetSupportedVisualStylesMode(VisualStylesMode mode)
-        => mode >= VisualStylesMode.Net11 ? VisualStylesMode.Classic : mode;
+        => mode < VisualStylesMode.Net11 || AppContextSwitches.ToolStripModernRendering
+            ? mode
+            : VisualStylesMode.Classic;
 
     private static Size s_onePixel = new(1, 1);
     internal static Point s_invalidMouseEnter = new(int.MaxValue, int.MaxValue);

@@ -7465,7 +7465,33 @@ public unsafe partial class Control :
 
         if (Properties.ContainsKey(s_visualStylesModeProperty))
         {
-            // A local value isolates this subtree from parent changes.
+            if (ParentInternal is not { } parent
+                || Properties.GetValueOrDefault<VisualStylesMode>(s_visualStylesModeProperty)
+                    != parent.UncoercedVisualStylesMode
+                || parent.UncoercedVisualStylesMode == parent.EffectiveVisualStylesMode)
+            {
+                // A local value isolates this subtree from parent changes.
+                return;
+            }
+
+            VisualStylesMode oldEffectiveVisualStylesMode = EffectiveVisualStylesMode;
+
+            // Inherit the parent's coerced mode when the local value matches its uncoerced mode.
+            Properties.RemoveValue(s_visualStylesModeProperty);
+
+            VisualStylesMode newEffectiveVisualStylesMode = EffectiveVisualStylesMode;
+            if (oldEffectiveVisualStylesMode == newEffectiveVisualStylesMode)
+            {
+                return;
+            }
+
+            OnVisualStylesModeChanged(
+                transition?.CreateForControl(
+                    this,
+                    oldEffectiveVisualStylesMode,
+                    newEffectiveVisualStylesMode)
+                ?? e);
+
             return;
         }
 

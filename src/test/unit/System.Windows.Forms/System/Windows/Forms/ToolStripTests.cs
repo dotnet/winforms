@@ -21,11 +21,32 @@ public partial class ToolStripTests : IDisposable
     [InlineData(VisualStylesMode.Latest)]
     public void ToolStrip_VisualStylesMode_ModernMode_UsesClassicEffectiveMode(VisualStylesMode value)
     {
+        using AppContextSwitchScope scope = new(
+            WinFormsAppContextSwitchNames.ToolStripModernRendering,
+            enable: false);
         using SubToolStrip control = new() { VisualStylesMode = value };
 
         Assert.Equal(value, control.VisualStylesMode);
         Assert.Equal(VisualStylesMode.Classic, control.EffectiveVisualStylesModeAccessor);
         Assert.False(control.IsHandleCreated);
+    }
+
+    [WinFormsTheory]
+    [InlineData(VisualStylesMode.Net11)]
+    [InlineData(VisualStylesMode.Latest)]
+    public void ToolStrip_VisualStylesMode_ModernRenderingEnabled_UsesRequestedEffectiveMode(
+        VisualStylesMode value)
+    {
+        using AppContextSwitchScope scope = new(
+            WinFormsAppContextSwitchNames.ToolStripModernRendering,
+            enable: true);
+        using SubToolStrip toolStrip = new() { VisualStylesMode = value };
+        using SubMenuStripWithVisualStyles menuStrip = new() { VisualStylesMode = value };
+
+        Assert.Equal(value, toolStrip.EffectiveVisualStylesModeAccessor);
+        Assert.Equal(value, menuStrip.EffectiveVisualStylesModeAccessor);
+        Assert.False(toolStrip.IsHandleCreated);
+        Assert.False(menuStrip.IsHandleCreated);
     }
 
     [WinFormsTheory]
@@ -7566,6 +7587,14 @@ public partial class ToolStripTests : IDisposable
         public new ToolStripItemCollection DisplayedItems => base.DisplayedItems;
 
         public new bool ProcessDialogChar(char charCode) => base.ProcessDialogChar(charCode);
+    }
+
+    /// <summary>
+    ///  Exposes the effective visual styles mode for MenuStrip tests.
+    /// </summary>
+    private sealed class SubMenuStripWithVisualStyles : MenuStrip
+    {
+        public VisualStylesMode EffectiveVisualStylesModeAccessor => base.EffectiveVisualStylesMode;
     }
 
     private class SubToolStrip : ToolStrip
