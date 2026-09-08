@@ -69,7 +69,11 @@ public partial class LinkLabel : Label, IButtonControl
     [SRDescription(nameof(SR.LinkLabelActiveLinkColorDescr))]
     public Color ActiveLinkColor
     {
-        get => _activeLinkColor.IsEmpty ? IEActiveLinkColor : _activeLinkColor;
+        get => !_activeLinkColor.IsEmpty
+            ? _activeLinkColor
+            : Application.IsDarkModeEnabled
+                ? LinkUtilities.DarkModeActiveLinkColor
+                : IEActiveLinkColor;
         set
         {
             if (_activeLinkColor != value)
@@ -234,9 +238,13 @@ public partial class LinkLabel : Label, IButtonControl
     [SRDescription(nameof(SR.LinkLabelLinkColorDescr))]
     public Color LinkColor
     {
-        get => _linkColor.IsEmpty
-            ? SystemInformation.HighContrast ? SystemColors.HotTrack : IELinkColor
-            : _linkColor;
+        get => !_linkColor.IsEmpty
+            ? _linkColor
+            : SystemInformation.HighContrast
+                ? SystemColors.HotTrack
+                : Application.IsDarkModeEnabled
+                    ? LinkUtilities.DarkModeLinkColor
+                    : IELinkColor;
         set
         {
             if (_linkColor != value)
@@ -345,9 +353,13 @@ public partial class LinkLabel : Label, IButtonControl
     [SRDescription(nameof(SR.LinkLabelVisitedLinkColorDescr))]
     public Color VisitedLinkColor
     {
-        get => _visitedLinkColor.IsEmpty
-            ? SystemInformation.HighContrast ? LinkUtilities.GetVisitedLinkColor() : IEVisitedLinkColor
-            : _visitedLinkColor;
+        get => !_visitedLinkColor.IsEmpty
+            ? _visitedLinkColor
+            : SystemInformation.HighContrast
+                ? LinkUtilities.GetVisitedLinkColor()
+                : Application.IsDarkModeEnabled
+                    ? LinkUtilities.DarkModeVisitedLinkColor
+                    : IEVisitedLinkColor;
         set
         {
             if (_visitedLinkColor != value)

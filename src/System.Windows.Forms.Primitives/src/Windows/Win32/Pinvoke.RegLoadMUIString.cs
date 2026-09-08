@@ -8,7 +8,7 @@ namespace Windows.Win32;
 
 internal static partial class PInvoke
 {
-    /// <inheritdoc cref="RegLoadMUIString(System.Registry.HKEY, string, PWSTR, uint, uint*, uint, string)"/>
+    /// <inheritdoc cref="RegLoadMUIString(System.Registry.HKEY, PCWSTR, PWSTR, uint, uint*, uint, PCWSTR)"/>
     [SkipLocalsInit]
     public static unsafe bool RegLoadMUIString(RegistryKey key, string keyName, out string localizedValue)
     {
@@ -17,11 +17,12 @@ internal static partial class PInvoke
         while (true)
         {
             fixed (char* pszOutBuf = buffer)
+            fixed (char* pszKeyName = keyName)
             {
                 uint bytes = 0;
                 var errorCode = RegLoadMUIString(
                     (System.Registry.HKEY)key.Handle.DangerousGetHandle(),
-                    keyName,
+                    pszKeyName,
                     pszOutBuf,
                     (uint)(buffer.Length * sizeof(char)),
                     &bytes,

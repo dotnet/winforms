@@ -3,6 +3,11 @@
   This project is an adapter to use the Framework version of msbuild from dotnet build.
 -->
 <Project Sdk="Microsoft.Build.NoTargets/3.6.0">
+
+  <PropertyGroup>
+    <IsTestUtilityProject>true</IsTestUtilityProject>
+  </PropertyGroup>
+
   <ItemGroup>
     <PackageReference Include="vswhere" Version="$(VsWherePackageVersion)" IsImplicitlyDefined="true" GeneratePathProperty="true" />
   </ItemGroup>
@@ -26,7 +31,6 @@
   </Target>
 
   <Target Name="FindFrameworkMsbuild">
-
     <Error
       Text="Pkgvswhere is not set."
       Condition="'$(Pkgvswhere)' == ''" />
@@ -37,7 +41,7 @@
 
     <!-- Work out VS installation path, so we can find MSBuild.exe -->
     <Exec
-      Command="vswhere.exe -latest -prerelease -property installationPath -requires Microsoft.Component.MSBuild"
+      Command='"$(VSWherePath)\vswhere.exe" -latest -prerelease -property installationPath -requires Microsoft.Component.MSBuild'
       WorkingDirectory="$(VSWherePath)"
       EchoOff="true"
       ConsoleToMsBuild="true"
@@ -56,6 +60,6 @@
     <Error
       Text="Could not find MSBuild path. '%24%28_MSBuildCurrentPath%29' == '$(_MSBuildCurrentPath)'"
       Condition="!Exists('$(_MSBuildCurrentPath)')" />
-
   </Target>
+
 </Project>

@@ -111,10 +111,13 @@ public static partial class ControlPaint
                     ARGB dark = SystemColors.ControlDark;
                     ARGB darkDark = SystemColors.ControlDarkDark;
 
+                    static byte Interpolate(byte darkChannel, byte darkDarkChannel, float percentDarker) =>
+                                           unchecked((byte)(darkChannel - (int)((darkChannel - darkDarkChannel) * percentDarker)));
+
                     return Color.FromArgb(
-                        (byte)(dark.R - (byte)((dark.R - darkDark.R) * percDarker)),
-                        (byte)(dark.G - (byte)((dark.G - darkDark.G) * percDarker)),
-                        (byte)(dark.B - (byte)((dark.B - darkDark.B) * percDarker)));
+                        Interpolate(dark.R, darkDark.R, percDarker),
+                        Interpolate(dark.G, darkDark.G, percDarker),
+                        Interpolate(dark.B, darkDark.B, percDarker));
                 }
             }
         }
@@ -162,10 +165,13 @@ public static partial class ControlPaint
                     ARGB light = SystemColors.ControlLight;
                     ARGB lightLight = SystemColors.ControlLightLight;
 
+                    static byte Interpolate(byte lightChannel, byte lightLightChannel, float percentLighter) =>
+                        unchecked((byte)(lightChannel - (int)((lightChannel - lightLightChannel) * percentLighter)));
+
                     return Color.FromArgb(
-                        (byte)(light.R - (byte)((light.R - lightLight.R) * percentLighter)),
-                        (byte)(light.G - (byte)((light.G - lightLight.G) * percentLighter)),
-                        (byte)(light.B - (byte)((light.B - lightLight.B) * percentLighter)));
+                        Interpolate(light.R, lightLight.R, percentLighter),
+                        Interpolate(light.G, lightLight.G, percentLighter),
+                        Interpolate(light.B, lightLight.B, percentLighter));
                 }
             }
             else

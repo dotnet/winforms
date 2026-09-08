@@ -17,6 +17,747 @@ public partial class TextBoxBaseTests
 {
     private static readonly int s_preferredHeight = Control.DefaultFont.Height + SystemInformation.BorderSize.Height * 4 + 3;
 
+    [WinFormsTheory]
+    [InlineData(typeof(TextBox))]
+    [InlineData(typeof(MaskedTextBox))]
+    [InlineData(typeof(RichTextBox))]
+    public void TextBoxBase_ModernVisualStyles_DrawToBitmapIncludesRoundedChrome(Type controlType)
+    {
+        using Panel parent = new()
+        {
+            BackColor = Color.Red,
+            Size = new Size(160, 80)
+        };
+        using TextBoxBase control = (TextBoxBase)Activator.CreateInstance(controlType);
+        control.BackColor = Color.White;
+        control.BorderStyle = BorderStyle.Fixed3D;
+        control.Size = new Size(140, 50);
+        control.VisualStylesMode = VisualStylesMode.Net11;
+        parent.Controls.Add(control);
+        parent.CreateControl();
+        control.CreateControl();
+
+        using Bitmap bitmap = new(control.Width, control.Height);
+        control.DrawToBitmap(bitmap, new Rectangle(Point.Empty, control.Size));
+
+        Assert.Equal(Color.Red.ToArgb(), bitmap.GetPixel(0, 0).ToArgb());
+        Assert.NotEqual(Color.Red.ToArgb(), bitmap.GetPixel(bitmap.Width / 2, bitmap.Height / 2).ToArgb());
+    }
+
+    [WinFormsFact]
+    public void TextBoxBase_VisualStylesModeChanged_PreservesHandleAndSelection()
+    {
+        using TextBox control = new()
+        {
+            Text = "Visual styles mode refresh",
+            SelectionStart = 8,
+            SelectionLength = 6
+        };
+        control.CreateControl();
+        IntPtr handle = control.Handle;
+
+        control.VisualStylesMode = control.VisualStylesMode == VisualStylesMode.Net11
+            ? VisualStylesMode.Disabled
+            : VisualStylesMode.Net11;
+
+        Assert.Equal(handle, control.Handle);
+        Assert.Equal(8, control.SelectionStart);
+        Assert.Equal(6, control.SelectionLength);
+    }
+
+    [WinFormsFact]
+    public void TextBoxBase_VisualStylesMode_MetricsImpact_ClearsPreferredSizeCache()
+    {
+        using VisualStylesModeTextBox control = new()
+        {
+            HighContrast = false,
+            VisualStylesMode = VisualStylesMode.Classic
+        };
+
+        Assert.Equal(new Size(100, 20), control.GetPreferredSize(Size.Empty));
+        Assert.Equal(new Size(100, 20), control.GetPreferredSize(Size.Empty));
+        Assert.Equal(1, control.PreferredSizeCoreCallCount);
+
+        control.VisualStylesMode = VisualStylesMode.Net11;
+
+        Assert.Equal(new Size(100, 30), control.GetPreferredSize(Size.Empty));
+        Assert.Equal(2, control.PreferredSizeCoreCallCount);
+    }
+
+    [WinFormsFact]
+    public void TextBoxBase_VisualStylesMode_Net11ToLatest_RepaintsWithoutClearingPreferredSizeCache()
+    {
+        using VisualStylesModeTextBox control = new()
+        {
+            HighContrast = false,
+            VisualStylesMode = VisualStylesMode.Net11
+        };
+
+        Assert.Equal(new Size(100, 30), control.GetPreferredSize(Size.Empty));
+        Assert.Equal(1, control.PreferredSizeCoreCallCount);
+
+        control.VisualStylesMode = VisualStylesMode.Latest;
+
+        Assert.Equal(new Size(100, 30), control.GetPreferredSize(Size.Empty));
+        Assert.Equal(1, control.PreferredSizeCoreCallCount);
+    }
+
+    [WinFormsFact]
+    public void TextBoxBase_VisualStylesMode_LiveSwitchRemeasuresAutoSizeTableLayoutRow()
+    {
+        using Form form = new()
+        {
+            AutoSize = true,
+            AutoSizeMode = AutoSizeMode.GrowAndShrink,
+            VisualStylesMode = VisualStylesMode.Classic
+        };
+        using TableLayoutPanel tableLayoutPanel = new()
+        {
+            AutoSize = true,
+            AutoSizeMode = AutoSizeMode.GrowAndShrink,
+            ColumnCount = 1,
+            RowCount = 1
+        };
+        tableLayoutPanel.ColumnStyles.Add(new ColumnStyle(SizeType.AutoSize));
+        tableLayoutPanel.RowStyles.Add(new RowStyle(SizeType.AutoSize));
+        form.Controls.Add(tableLayoutPanel);
+
+        using VisualStylesModeTextBox textBox = new()
+        {
+            Anchor = AnchorStyles.Left | AnchorStyles.Right | AnchorStyles.Top,
+            AutoSize = true,
+            HighContrast = false,
+            Width = 140
+        };
+        tableLayoutPanel.Controls.Add(textBox, 0, 0);
+        form.CreateControl();
+        tableLayoutPanel.CreateControl();
+        textBox.CreateControl();
+
+        IntPtr handle = textBox.Handle;
+        int classicRowHeight = tableLayoutPanel.GetRowHeights()[0];
+        Size classicTableSize = tableLayoutPanel.Size;
+
+        form.VisualStylesMode = VisualStylesMode.Net11;
+
+        int modernRowHeight = tableLayoutPanel.GetRowHeights()[0];
+        Assert.Equal(handle, textBox.Handle);
+        Assert.NotEqual(classicRowHeight, modernRowHeight);
+        Assert.NotEqual(classicTableSize, tableLayoutPanel.Size);
+
+        form.VisualStylesMode = VisualStylesMode.Classic;
+
+        Assert.Equal(handle, textBox.Handle);
+        Assert.Equal(classicRowHeight, tableLayoutPanel.GetRowHeights()[0]);
+        Assert.Equal(classicTableSize, tableLayoutPanel.Size);
+    }
+
+    [WinFormsFact]
+    public void TextBoxBase_VisualStylesMode_MetricsImpactWithAutoSizeDisabled_RequestsParentLayout()
+    {
+        using VisualStylesModePanel parent = new()
+        {
+            HighContrast = false,
+            VisualStylesMode = VisualStylesMode.Classic
+        };
+        using VisualStylesModeTextBox textBox = new()
+        {
+            AutoSize = false,
+            HighContrast = false
+        };
+        parent.Controls.Add(textBox);
+
+        int layoutCallCount = 0;
+        parent.Layout += (sender, e) => layoutCallCount++;
+
+        parent.VisualStylesMode = VisualStylesMode.Net11;
+
+        Assert.Equal(1, layoutCallCount);
+    }
+
+    [WinFormsTheory]
+    [InlineData(9f)]
+    [InlineData(11f)]
+    public void TextBoxBase_ModernFixed3D_NaturalHeightIncludesRoundedChrome(float fontSize)
+    {
+        using TextBox control = new()
+        {
+            VisualStylesMode = VisualStylesMode.Net11,
+            BorderStyle = BorderStyle.Fixed3D,
+            Font = new Font(Control.DefaultFont.FontFamily, fontSize)
+        };
+
+        int cornerSize = ScaleHelper.ScaleToDpi(15, control.DeviceDpi);
+        int border = ScaleHelper.ScaleToDpi(1, control.DeviceDpi);
+        int inset = ScaleHelper.ScaleToDpi(2, control.DeviceDpi);
+
+        Assert.True(control.PreferredHeight >= cornerSize + border + inset);
+        Assert.Equal(control.PreferredHeight, control.Height);
+    }
+
+    [WinFormsFact]
+    public void TextBoxBase_ModernFixed3D_ExplicitlySmallControlPreservesHeight()
+    {
+        using TextBox control = new()
+        {
+            AutoSize = false,
+            VisualStylesMode = VisualStylesMode.Net11,
+            BorderStyle = BorderStyle.Fixed3D,
+            Size = new Size(100, 10)
+        };
+
+        Assert.Equal(10, control.Height);
+        Assert.True(control.PreferredHeight > control.Height);
+    }
+
+    [WinFormsFact]
+    public void MaskedTextBox_ModernFixed3D_NaturalHeightIncludesRoundedChrome()
+    {
+        using MaskedTextBox control = new()
+        {
+            VisualStylesMode = VisualStylesMode.Net11,
+            BorderStyle = BorderStyle.Fixed3D,
+            Font = new Font(Control.DefaultFont.FontFamily, 9f)
+        };
+
+        int cornerSize = ScaleHelper.ScaleToDpi(15, control.DeviceDpi);
+        Assert.True(control.Height >= cornerSize + ScaleHelper.ScaleToDpi(1, control.DeviceDpi));
+    }
+
+    [WinFormsTheory]
+    [InlineData(BorderStyle.Fixed3D, 2)]
+    [InlineData(BorderStyle.FixedSingle, 1)]
+    [InlineData(BorderStyle.None, 1)]
+    public void TextBoxBase_ModernGeometry_UsesExpectedBorderPadding(
+        BorderStyle borderStyle,
+        int logicalBorderPadding)
+    {
+        using SubTextBox control = new()
+        {
+            BorderStyle = borderStyle,
+            VisualStylesMode = VisualStylesMode.Net11
+        };
+
+        int borderPadding = ScaleHelper.ScaleToDpi(logicalBorderPadding, control.DeviceDpi);
+        int borderThickness = ScaleHelper.ScaleToDpi(1, control.DeviceDpi);
+        int internalInset = ScaleHelper.ScaleToDpi(2, control.DeviceDpi);
+        int leftAndTop = borderPadding + internalInset;
+        int rightAndBottom = leftAndTop;
+
+        if (borderStyle != BorderStyle.None)
+        {
+            leftAndTop += borderThickness;
+            rightAndBottom += borderThickness;
+        }
+        else
+        {
+            rightAndBottom += borderThickness;
+        }
+
+        Padding expected = new(
+            left: leftAndTop,
+            top: leftAndTop,
+            right: rightAndBottom,
+            bottom: rightAndBottom);
+
+        Assert.Equal(expected, control.GetVisualStylesPaddingCore(includeScrollbars: false));
+    }
+
+    [Theory]
+    [InlineData(1, 1, 1f, 96, 1, 1, 4)]
+    [InlineData(2, 3, 1.5f, 96, 3, 5, 6)]
+    [InlineData(1, 2, 1.5f, 144, 3, 5, 9)]
+    public void TextBoxBase_ModernFocusMetrics_ScaleWithTextSizeAndDpi(
+        int focusBorderWidth,
+        int focusBorderHeight,
+        float textScaleFactor,
+        int deviceDpi,
+        int expectedBorderWidth,
+        int expectedBorderHeight,
+        int expectedFocusBandHeight)
+    {
+        Size focusBorderMetrics = new(focusBorderWidth, focusBorderHeight);
+
+        Assert.Equal(
+            new Size(expectedBorderWidth, expectedBorderHeight),
+            TextBoxBase.GetVisualStylesFocusBorderMetrics(
+                focusBorderMetrics,
+                textScaleFactor,
+                deviceDpi));
+        Assert.Equal(
+            expectedFocusBandHeight,
+            TextBoxBase.GetVisualStylesFocusBandHeight(
+                focusBorderMetrics,
+                textScaleFactor,
+                deviceDpi));
+    }
+
+    [WinFormsFact]
+    public void TextBoxBase_SystemVisualSettingsAccentAndAnimationsDoNotRequestLayout()
+    {
+        using VisualStylesModePanel parent = new() { VisualStylesMode = VisualStylesMode.Net11 };
+        using SubTextBox textBox = new() { VisualStylesMode = VisualStylesMode.Net11 };
+        parent.Controls.Add(textBox);
+        int layoutCallCount = 0;
+        parent.Layout += (sender, e) => layoutCallCount++;
+        SystemVisualSettings oldSettings = new(
+            Color.Crimson,
+            1f,
+            highContrastEnabled: false,
+            clientAreaAnimationEnabled: true,
+            keyboardCuesVisible: false,
+            focusBorderMetrics: new Size(1, 1));
+        SystemVisualSettings newSettings = new(
+            Color.RoyalBlue,
+            1f,
+            highContrastEnabled: false,
+            clientAreaAnimationEnabled: false,
+            keyboardCuesVisible: false,
+            focusBorderMetrics: new Size(1, 1));
+
+        parent.RaiseSystemVisualSettingsChanged(
+            new SystemVisualSettingsChangedEventArgs(
+                oldSettings,
+                newSettings,
+                SystemVisualSettingsCategories.AccentColor | SystemVisualSettingsCategories.ClientAreaAnimations));
+
+        Assert.Equal(0, layoutCallCount);
+    }
+
+    [WinFormsFact]
+    public void TextBoxBase_ModernTextScaleChangeAdjustsNaturalHeight()
+    {
+        SystemVisualSettings previous =
+            SystemVisualSettingsTracker.CurrentSettings;
+        SystemVisualSettings initial = new(
+            previous.AccentColor,
+            1f,
+            highContrastEnabled: false,
+            previous.ClientAreaAnimationEnabled,
+            previous.KeyboardCuesVisible,
+            previous.FocusBorderMetrics);
+        SystemVisualSettings scaled = new(
+            previous.AccentColor,
+            1.5f,
+            highContrastEnabled: false,
+            previous.ClientAreaAnimationEnabled,
+            previous.KeyboardCuesVisible,
+            previous.FocusBorderMetrics);
+
+        try
+        {
+            SystemVisualSettingsTracker.ResetForTesting(initial);
+            using SubTextBox control = new()
+            {
+                AutoSize = true,
+                VisualStylesMode = VisualStylesMode.Net11
+            };
+            int initialHeight = control.Height;
+
+            SystemVisualSettingsTracker.ResetForTesting(scaled);
+            control.RaiseSystemVisualSettingsChanged(
+                new SystemVisualSettingsChangedEventArgs(
+                    initial,
+                    scaled,
+                    SystemVisualSettingsCategories.TextScale));
+
+            Assert.True(control.Height > initialHeight);
+            Assert.Equal(control.PreferredHeight, control.Height);
+        }
+        finally
+        {
+            SystemVisualSettingsTracker.ResetForTesting(previous);
+        }
+    }
+
+    [Theory]
+    [InlineData(16, 16, 15, 1, true)]
+    [InlineData(15, 16, 15, 1, false)]
+    [InlineData(16, 15, 15, 1, false)]
+    public void TextBoxBase_CanRenderVisualStylesRoundedChrome_RequiresBothDimensions(
+        int width,
+        int height,
+        int cornerSize,
+        int borderThickness,
+        bool expected)
+    {
+        bool actual = TextBoxBase.CanRenderVisualStylesRoundedChrome(
+            new Rectangle(0, 0, width, height),
+            cornerSize,
+            borderThickness);
+
+        Assert.Equal(expected, actual);
+    }
+
+    [Theory]
+    [InlineData(false)]
+    [InlineData(true)]
+    public void TextBoxBase_GetVisualStylesFocusColor_ReturnsExpected(bool highContrast)
+    {
+        Color expected = highContrast
+            ? SystemColors.Highlight
+            : Application.SystemVisualSettings.AccentColor;
+
+        Assert.Equal(expected, TextBoxBase.GetVisualStylesFocusColor(highContrast));
+    }
+
+    [WinFormsFact]
+    public void TextBoxBase_ModernFixed3D_FocusTransitionReversesFromCurrentBlend()
+    {
+        using SystemVisualSettingsTestScope settingsScope = new(clientAreaAnimationEnabled: true);
+
+        if (SystemInformation.HighContrast)
+        {
+            return;
+        }
+
+        using SubTextBox control = new()
+        {
+            BorderStyle = BorderStyle.Fixed3D,
+            VisualStylesMode = VisualStylesMode.Net11
+        };
+        control.CreateControl();
+
+        control.OnGotFocus(EventArgs.Empty);
+        Rendering.Animation.AnimatedFocusIndicatorRenderer renderer =
+            control.TestAccessor.Dynamic._focusIndicatorRenderer;
+
+        if (!SystemInformation.UIEffectsEnabled)
+        {
+            Assert.Equal(1f, renderer.FocusAmount);
+            Assert.False(renderer.IsRunning);
+            control.OnLostFocus(EventArgs.Empty);
+            Assert.Equal(0f, renderer.FocusAmount);
+            return;
+        }
+
+        Assert.True(renderer.IsRunning);
+        renderer.AnimationProc(0.5f);
+        Assert.Equal(0.75f, renderer.FocusAmount, precision: 3);
+
+        control.OnLostFocus(EventArgs.Empty);
+        renderer.AnimationProc(0.5f);
+
+        Assert.Equal(0.1875f, renderer.FocusAmount, precision: 4);
+        renderer.EndAnimation();
+        Assert.False(renderer.IsRunning);
+        Assert.Equal(0f, renderer.FocusAmount);
+    }
+
+    [WinFormsTheory]
+    [InlineData(BorderStyle.None)]
+    [InlineData(BorderStyle.FixedSingle)]
+    public void TextBoxBase_ModernNon3DBorder_FocusDoesNotStartAnimation(BorderStyle borderStyle)
+    {
+        if (SystemInformation.HighContrast)
+        {
+            return;
+        }
+
+        using SubTextBox control = new()
+        {
+            BorderStyle = borderStyle,
+            VisualStylesMode = VisualStylesMode.Net11
+        };
+        control.CreateControl();
+
+        control.OnGotFocus(EventArgs.Empty);
+
+        Assert.Null(control.TestAccessor.Dynamic._focusIndicatorRenderer);
+    }
+
+    [WinFormsFact]
+    public void TextBoxBase_ModernGeometry_UsesInternalInsetBeforeUserPadding()
+    {
+        using SubTextBox control = new()
+        {
+            VisualStylesMode = VisualStylesMode.Net11
+        };
+
+        Padding baseline = control.GetVisualStylesPaddingCore(includeScrollbars: false);
+        control.Padding = new Padding(1, 2, 3, 4);
+        Padding padded = control.GetVisualStylesPaddingCore(includeScrollbars: false);
+
+        Assert.True(baseline.Left >= ScaleHelper.ScaleToDpi(2, control.DeviceDpi));
+        Assert.Equal(baseline.Left + 1, padded.Left);
+        Assert.Equal(baseline.Top + 2, padded.Top);
+        Assert.Equal(baseline.Right + 3, padded.Right);
+        Assert.Equal(baseline.Bottom + 4, padded.Bottom);
+    }
+
+    [WinFormsFact]
+    public void TextBoxBase_ModernGeometry_ScalesInternalInsetWithDpi()
+    {
+        using SubTextBox control = new()
+        {
+            VisualStylesMode = VisualStylesMode.Net11
+        };
+        control.DeviceDpiInternal = 144;
+
+        Padding padding = control.GetVisualStylesPaddingCore(includeScrollbars: false);
+
+        Assert.True(padding.Left >= ScaleHelper.ScaleToDpi(2, 144));
+        Assert.True(control.PreferredHeight >= ScaleHelper.ScaleToDpi(15, 144)
+            + ScaleHelper.ScaleToDpi(1, 144)
+            + ScaleHelper.ScaleToDpi(2, 144));
+    }
+
+    [WinFormsTheory]
+    [InlineData(typeof(TextBox))]
+    [InlineData(typeof(MaskedTextBox))]
+    [InlineData(typeof(RichTextBox))]
+    public void TextBoxBase_ModernGeometry_ClearsOnePixelInsideNativeClient(Type controlType)
+    {
+        using TextBoxBase control = (TextBoxBase)Activator.CreateInstance(controlType);
+        control.VisualStylesMode = VisualStylesMode.Net11;
+        control.Size = new Size(180, 40);
+        control.CreateControl();
+
+        Rectangle bounds = new(Point.Empty, control.Size);
+        dynamic accessor = typeof(TextBoxBase).TestAccessor.Dynamic;
+        Rectangle nativeClient = Rectangle.Intersect(
+            bounds,
+            control.TestAccessor.Dynamic.GetNativeClientRectangle());
+        Rectangle protectedClient = accessor.GetProtectedClientBounds(nativeClient);
+        Rectangle[] bands = accessor.GetNonClientPaintBands(bounds, protectedClient);
+
+        Assert.True(nativeClient.Width > 2);
+        Assert.True(nativeClient.Height > 2);
+        Assert.Equal(Rectangle.Inflate(nativeClient, -1, -1), protectedClient);
+
+        foreach (Rectangle band in bands)
+        {
+            Assert.False(band.IntersectsWith(protectedClient));
+        }
+
+        for (int y = nativeClient.Top; y < nativeClient.Bottom; y++)
+        {
+            for (int x = nativeClient.Left; x < nativeClient.Right; x++)
+            {
+                Point point = new(x, y);
+                int containingBands = bands.Count(band => band.Contains(point));
+                Assert.Equal(protectedClient.Contains(point) ? 0 : 1, containingBands);
+            }
+        }
+    }
+
+    [Theory]
+    [InlineData(0, 0)]
+    [InlineData(1, 1)]
+    [InlineData(2, 2)]
+    public void TextBoxBase_GetProtectedClientBounds_DoesNotCollapseSmallClients(int width, int height)
+    {
+        Rectangle clientBounds = new(3, 4, width, height);
+
+        Rectangle actual = typeof(TextBoxBase).TestAccessor.Dynamic.GetProtectedClientBounds(clientBounds);
+
+        Assert.Equal(clientBounds, actual);
+    }
+
+    [WinFormsFact]
+    public void TextBox_ModernGeometry_DoesNotDoubleCountScrollbars()
+    {
+        using TextBox withoutScrollBar = new()
+        {
+            VisualStylesMode = VisualStylesMode.Net11,
+            Multiline = true,
+            ScrollBars = ScrollBars.None
+        };
+        using TextBox withScrollBar = new()
+        {
+            VisualStylesMode = VisualStylesMode.Net11,
+            Multiline = true,
+            ScrollBars = ScrollBars.Vertical
+        };
+
+        int expected = SystemInformation.GetVerticalScrollBarWidthForDpi(withScrollBar.DeviceDpi);
+        Assert.Equal(expected, withScrollBar.GetPreferredSize(Size.Empty).Width - withoutScrollBar.GetPreferredSize(Size.Empty).Width);
+    }
+
+    [WinFormsFact]
+    public void RichTextBox_ModernGeometry_UsesInternalInsetAndNativeScrollbars()
+    {
+        using SubRichTextBox control = new()
+        {
+            VisualStylesMode = VisualStylesMode.Net11,
+            ScrollBars = RichTextBoxScrollBars.Vertical
+        };
+
+        Padding padding = control.GetVisualStylesPaddingCore(includeScrollbars: true);
+        Assert.True(padding.Left >= ScaleHelper.ScaleToDpi(2, control.DeviceDpi));
+        Assert.Equal(
+            SystemInformation.GetVerticalScrollBarWidthForDpi(control.DeviceDpi),
+            control.GetScrollBarPaddingCore().Right);
+    }
+
+    [WinFormsTheory]
+    [InlineData(RichTextBoxScrollBars.Both, false, 0)]
+    [InlineData(RichTextBoxScrollBars.Both, true, 2)]
+    [InlineData(RichTextBoxScrollBars.ForcedBoth, false, 2)]
+    public void RichTextBox_ModernGeometry_DetectsOnlyVisibleNativeScrollBars(
+        RichTextBoxScrollBars scrollBars,
+        bool overflow,
+        int expectedScrollBarCount)
+    {
+        using RichTextBox control = new()
+        {
+            VisualStylesMode = VisualStylesMode.Net11,
+            ScrollBars = scrollBars,
+            WordWrap = false,
+            Size = new Size(160, 80),
+            Text = overflow
+                ? string.Join("\r\n", Enumerable.Repeat(new string('W', 200), 20))
+                : "Short"
+        };
+        control.CreateControl();
+
+        Rectangle bounds = new(Point.Empty, control.Size);
+        Rectangle[] scrollBarBounds = control.TestAccessor.Dynamic.GetVisibleScrollBarRectangles(bounds);
+
+        Assert.Equal(expectedScrollBarCount, scrollBarBounds.Length);
+        Assert.All(
+            scrollBarBounds,
+            scrollBarRectangle =>
+            {
+                Assert.Equal(scrollBarRectangle, Rectangle.Intersect(bounds, scrollBarRectangle));
+                Assert.True(scrollBarRectangle.Width > 0);
+                Assert.True(scrollBarRectangle.Height > 0);
+            });
+    }
+
+    [WinFormsFact]
+    public void TextBox_ModernGeometry_DetectsVisibleNativeScrollBars()
+    {
+        using TextBox control = new()
+        {
+            VisualStylesMode = VisualStylesMode.Net11,
+            Multiline = true,
+            ScrollBars = ScrollBars.Both,
+            WordWrap = false,
+            Size = new Size(160, 80),
+            Text = string.Join("\r\n", Enumerable.Repeat(new string('W', 200), 20))
+        };
+        control.CreateControl();
+
+        Rectangle bounds = new(Point.Empty, control.Size);
+        Rectangle[] scrollBarBounds = control.TestAccessor.Dynamic.GetVisibleScrollBarRectangles(bounds);
+
+        Assert.Equal(2, scrollBarBounds.Length);
+    }
+
+    [Fact]
+    public void TextBoxBase_GetNonClientPaintBands_ExcludesAdditionalProtectedBounds()
+    {
+        Rectangle bounds = new(0, 0, 20, 15);
+        Rectangle clientBounds = new(3, 2, 10, 9);
+        Rectangle[] scrollBarBounds =
+        [
+            new Rectangle(16, 2, 4, 9),
+            new Rectangle(3, 12, 13, 3)
+        ];
+        dynamic accessor = typeof(TextBoxBase).TestAccessor.Dynamic;
+
+        Rectangle[] bands = accessor.GetNonClientPaintBands(
+            bounds,
+            clientBounds,
+            scrollBarBounds);
+
+        for (int y = bounds.Top; y < bounds.Bottom; y++)
+        {
+            for (int x = bounds.Left; x < bounds.Right; x++)
+            {
+                Point point = new(x, y);
+                bool isProtected = clientBounds.Contains(point)
+                    || scrollBarBounds.Any(scrollBarBoundsItem => scrollBarBoundsItem.Contains(point));
+                int containingBands = bands.Count(band => band.Contains(point));
+
+                Assert.Equal(isProtected ? 0 : 1, containingBands);
+            }
+        }
+    }
+
+    public static IEnumerable<object[]> NonClientPaintBands_TestData()
+    {
+        yield return
+        [
+            new Rectangle(0, 0, 10, 8),
+            new Rectangle(2, 2, 6, 4)
+        ];
+        yield return
+        [
+            new Rectangle(0, 0, 1, 1),
+            new Rectangle(0, 0, 1, 1)
+        ];
+        yield return
+        [
+            new Rectangle(0, 0, 2, 2),
+            new Rectangle(1, 1, 0, 0)
+        ];
+        yield return
+        [
+            new Rectangle(0, 0, 20, 15),
+            new Rectangle(3, 2, 10, 9)
+        ];
+        yield return [Rectangle.Empty, Rectangle.Empty];
+    }
+
+    [Theory]
+    [MemberData(nameof(NonClientPaintBands_TestData))]
+    public void TextBoxBase_GetNonClientPaintBands_ReturnsCompleteNonOverlappingBands(
+        Rectangle bounds,
+        Rectangle clientBounds)
+    {
+        dynamic accessor = typeof(TextBoxBase).TestAccessor.Dynamic;
+        Rectangle[] bands = accessor.GetNonClientPaintBands(bounds, clientBounds);
+        Rectangle protectedBounds = Rectangle.Intersect(bounds, clientBounds);
+
+        Assert.Equal(4, bands.Length);
+
+        for (int i = 0; i < bands.Length; i++)
+        {
+            Rectangle band = bands[i];
+
+            if (band.Width <= 0 || band.Height <= 0)
+            {
+                continue;
+            }
+
+            Assert.Equal(band, Rectangle.Intersect(bounds, band));
+            if (protectedBounds.Width > 0 && protectedBounds.Height > 0)
+            {
+                Assert.False(band.IntersectsWith(protectedBounds));
+            }
+
+            for (int j = i + 1; j < bands.Length; j++)
+            {
+                if (bands[j].Width > 0 && bands[j].Height > 0)
+                {
+                    Assert.False(band.IntersectsWith(bands[j]));
+                }
+            }
+        }
+
+        for (int y = bounds.Top; y < bounds.Bottom; y++)
+        {
+            for (int x = bounds.Left; x < bounds.Right; x++)
+            {
+                Point point = new(x, y);
+                bool isProtected = protectedBounds.Contains(point);
+                int containingBands = 0;
+
+                foreach (Rectangle band in bands)
+                {
+                    if (band.Contains(point))
+                    {
+                        containingBands++;
+                    }
+                }
+
+                Assert.Equal(isProtected ? 0 : 1, containingBands);
+            }
+        }
+    }
+
     [WinFormsFact]
     public void TextBoxBase_CreateParams_GetDefault_ReturnsExpected()
     {
@@ -113,6 +854,41 @@ public partial class TextBoxBaseTests
         Assert.Equal(0, createParams.Y);
         Assert.Same(createParams, control.CreateParams);
         Assert.False(control.IsHandleCreated);
+    }
+
+    [WinFormsTheory]
+    [InlineData(typeof(SubTextBox), BorderStyle.None)]
+    [InlineData(typeof(SubTextBox), BorderStyle.Fixed3D)]
+    [InlineData(typeof(SubTextBox), BorderStyle.FixedSingle)]
+    [InlineData(typeof(SubMaskedTextBox), BorderStyle.None)]
+    [InlineData(typeof(SubMaskedTextBox), BorderStyle.Fixed3D)]
+    [InlineData(typeof(SubMaskedTextBox), BorderStyle.FixedSingle)]
+    [InlineData(typeof(SubRichTextBox), BorderStyle.None)]
+    [InlineData(typeof(SubRichTextBox), BorderStyle.Fixed3D)]
+    [InlineData(typeof(SubRichTextBox), BorderStyle.FixedSingle)]
+    public void TextBoxBase_CreateParams_ModernVisualStyles_RemovesNativeBorderStyles(
+        Type controlType,
+        BorderStyle borderStyle)
+    {
+        if (SystemInformation.HighContrast)
+        {
+            return;
+        }
+
+        using TextBoxBase control = (TextBoxBase)Activator.CreateInstance(controlType);
+        control.BorderStyle = borderStyle;
+        control.VisualStylesMode = VisualStylesMode.Net11;
+
+        CreateParams createParams = control switch
+        {
+            SubTextBox textBox => textBox.CreateParams,
+            SubMaskedTextBox maskedTextBox => maskedTextBox.CreateParams,
+            SubRichTextBox richTextBox => richTextBox.CreateParams,
+            _ => throw new InvalidOperationException()
+        };
+
+        Assert.Equal(0, createParams.Style & (int)WINDOW_STYLE.WS_BORDER);
+        Assert.Equal(0, createParams.ExStyle & (int)WINDOW_EX_STYLE.WS_EX_CLIENTEDGE);
     }
 
     [WinFormsTheory]
@@ -5036,22 +5812,69 @@ public partial class TextBoxBaseTests
 
     [WinFormsTheory]
     [MemberData(nameof(GetPreferredSize_TestData))]
-    public void TextBox_GetPreferredSize_InvokeWithPadding_ReturnsExpected(bool multiline, bool wordWrap, BorderStyle borderStyle, Size proposedSize, Size expected)
+    public void TextBox_GetPreferredSize_InvokeWithPaddingWithoutModernVisualStyles_IncludesPadding(bool multiline, bool wordWrap, BorderStyle borderStyle, Size proposedSize, Size expected)
     {
         Padding padding = new(1, 2, 3, 4);
+        expected += padding.Size;
         using SubTextBox control = new()
         {
+            VisualStylesMode = VisualStylesMode.Classic,
             Padding = padding,
             Multiline = multiline,
             WordWrap = wordWrap,
             BorderStyle = borderStyle
         };
-        Assert.Equal(expected + padding.Size, control.GetPreferredSize(proposedSize));
+        Assert.Equal(expected, control.GetPreferredSize(proposedSize));
         Assert.False(control.IsHandleCreated);
 
         // Call again.
-        Assert.Equal(expected + padding.Size, control.GetPreferredSize(proposedSize));
+        Assert.Equal(expected, control.GetPreferredSize(proposedSize));
         Assert.False(control.IsHandleCreated);
+    }
+
+    [WinFormsTheory]
+    [InlineData(VisualStylesMode.Net11)]
+    [InlineData(VisualStylesMode.Latest)]
+    public void TextBoxBase_Padding_WithModernVisualStyles_ChangesPreferredSize(VisualStylesMode visualStylesMode)
+    {
+        Padding padding = new(1, 2, 3, 4);
+        Size proposedSize = new(200, 80);
+
+        using TextBox baseline = new()
+        {
+            VisualStylesMode = visualStylesMode
+        };
+
+        using TextBox padded = new()
+        {
+            VisualStylesMode = visualStylesMode,
+            Padding = padding
+        };
+
+        Size baselinePreferredSize = baseline.GetPreferredSize(proposedSize);
+        Size paddedPreferredSize = padded.GetPreferredSize(proposedSize);
+
+        Assert.Equal(baselinePreferredSize.Width + padding.Horizontal, paddedPreferredSize.Width);
+        Assert.Equal(baselinePreferredSize.Height + padding.Vertical, paddedPreferredSize.Height);
+    }
+
+    [WinFormsTheory]
+    [InlineData(VisualStylesMode.Net11)]
+    [InlineData(VisualStylesMode.Latest)]
+    public void TextBoxBase_Padding_WithModernVisualStyles_ChangesVisualStylesPadding(VisualStylesMode visualStylesMode)
+    {
+        Padding padding = new(1, 2, 3, 4);
+
+        using SubTextBox baseline = new() { VisualStylesMode = visualStylesMode };
+        using SubTextBox padded = new() { VisualStylesMode = visualStylesMode, Padding = padding };
+
+        Padding baselineVisualStylesPadding = baseline.GetVisualStylesPaddingCore(includeScrollbars: false);
+        Padding paddedVisualStylesPadding = padded.GetVisualStylesPaddingCore(includeScrollbars: false);
+
+        Assert.Equal(baselineVisualStylesPadding.Left + padding.Left, paddedVisualStylesPadding.Left);
+        Assert.Equal(baselineVisualStylesPadding.Top + padding.Top, paddedVisualStylesPadding.Top);
+        Assert.Equal(baselineVisualStylesPadding.Right + padding.Right, paddedVisualStylesPadding.Right);
+        Assert.Equal(baselineVisualStylesPadding.Bottom + padding.Bottom, paddedVisualStylesPadding.Bottom);
     }
 
     public static IEnumerable<object[]> GetPreferredSize_WithText_TestData()
@@ -7718,6 +8541,10 @@ public partial class TextBoxBaseTests
             set => base.FontHeight = value;
         }
 
+        public Padding GetVisualStylesPaddingCore(bool includeScrollbars) => base.GetVisualStylesPadding(includeScrollbars);
+
+        public Padding GetScrollBarPaddingCore() => base.GetScrollBarPadding();
+
         public new ImeMode ImeModeBase
         {
             get => base.ImeModeBase;
@@ -7752,11 +8579,15 @@ public partial class TextBoxBaseTests
 
         public new void OnFontChanged(EventArgs e) => base.OnFontChanged(e);
 
+        public new void OnGotFocus(EventArgs e) => base.OnGotFocus(e);
+
         public new void OnHandleCreated(EventArgs e) => base.OnHandleCreated(e);
 
         public new void OnHandleDestroyed(EventArgs e) => base.OnHandleDestroyed(e);
 
         public new void OnHideSelectionChanged(EventArgs e) => base.OnHideSelectionChanged(e);
+
+        public new void OnLostFocus(EventArgs e) => base.OnLostFocus(e);
 
         public new void OnModifiedChanged(EventArgs e) => base.OnModifiedChanged(e);
 
@@ -7784,7 +8615,55 @@ public partial class TextBoxBaseTests
 
         public new void SetStyle(ControlStyles flag, bool value) => base.SetStyle(flag, value);
 
+        public void RaiseSystemVisualSettingsChanged(
+            SystemVisualSettingsChangedEventArgs e)
+            => base.OnSystemVisualSettingsChanged(e);
+
         public new void WndProc(ref Message m) => base.WndProc(ref m);
+    }
+
+    private class VisualStylesModeTextBox : TextBox
+    {
+        public bool HighContrast { get; set; }
+
+        public int PreferredSizeCoreCallCount { get; private set; }
+
+        internal override bool IsHighContrast => HighContrast;
+
+        internal override Size GetPreferredSizeCore(Size proposedConstraints)
+        {
+            PreferredSizeCoreCallCount++;
+
+            return EffectiveVisualStylesMode >= VisualStylesMode.Net11
+                ? new Size(100, 30)
+                : new Size(100, 20);
+        }
+    }
+
+    private class VisualStylesModePanel : Panel
+    {
+        public bool HighContrast { get; set; }
+
+        internal override bool IsHighContrast => HighContrast;
+
+        public void RaiseSystemVisualSettingsChanged(SystemVisualSettingsChangedEventArgs e)
+            => base.OnSystemVisualSettingsChanged(e);
+    }
+
+    private class SubRichTextBox : RichTextBox
+    {
+        public new CreateParams CreateParams => base.CreateParams;
+
+        public Padding GetVisualStylesPaddingCore(bool includeScrollbars)
+            => base.GetVisualStylesPadding(includeScrollbars);
+
+        public Padding GetScrollBarPaddingCore()
+            => base.GetScrollBarPadding();
+    }
+
+    private class SubMaskedTextBox : MaskedTextBox
+    {
+        public new CreateParams CreateParams => base.CreateParams;
     }
 
     private class SubTextBoxBase : TextBoxBase

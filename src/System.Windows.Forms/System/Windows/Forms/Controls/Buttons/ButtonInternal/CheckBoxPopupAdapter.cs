@@ -16,7 +16,7 @@ internal class CheckBoxPopupAdapter : CheckBoxBaseAdapter
     {
         if (Control.Appearance == Appearance.Button)
         {
-            ButtonPopupAdapter adapter = new(Control);
+            ButtonBaseAdapter adapter = DarkModeAdapterFactory.CreatePopupAdapter(Control);
             adapter.PaintUp(e, Control.CheckState);
         }
         else
@@ -51,7 +51,7 @@ internal class CheckBoxPopupAdapter : CheckBoxBaseAdapter
     {
         if (Control.Appearance == Appearance.Button)
         {
-            ButtonPopupAdapter adapter = new(Control);
+            ButtonBaseAdapter adapter = DarkModeAdapterFactory.CreatePopupAdapter(Control);
             adapter.PaintOver(e, Control.CheckState);
         }
         else
@@ -94,7 +94,7 @@ internal class CheckBoxPopupAdapter : CheckBoxBaseAdapter
     {
         if (Control.Appearance == Appearance.Button)
         {
-            ButtonPopupAdapter adapter = new(Control);
+            ButtonBaseAdapter adapter = DarkModeAdapterFactory.CreatePopupAdapter(Control);
             adapter.PaintDown(e, Control.CheckState);
         }
         else
@@ -115,7 +115,7 @@ internal class CheckBoxPopupAdapter : CheckBoxBaseAdapter
         }
     }
 
-    protected override ButtonBaseAdapter CreateButtonAdapter() => new ButtonPopupAdapter(Control);
+    protected override ButtonBaseAdapter CreateButtonAdapter() => DarkModeAdapterFactory.CreatePopupAdapter(Control);
 
     protected override LayoutOptions Layout(PaintEventArgs e)
     {

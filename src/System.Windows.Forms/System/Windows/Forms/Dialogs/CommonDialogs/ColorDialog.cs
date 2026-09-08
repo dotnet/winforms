@@ -105,7 +105,7 @@ public class ColorDialog : CommonDialog
     /// <summary>
     ///  Our HINSTANCE from Windows.
     /// </summary>
-    protected virtual nint Instance => PInvoke.GetModuleHandle((PCWSTR)null);
+    protected virtual nint Instance => PInvoke.GetModuleHandle(default(PCWSTR));
 
     /// <summary>
     ///  Returns our CHOOSECOLOR options.

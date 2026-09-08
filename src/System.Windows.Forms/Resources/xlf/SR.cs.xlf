@@ -242,6 +242,16 @@
         <target state="translated">Režim výjimky vlákna nelze změnit po vytvoření ovládacích prvků ve vlákně.</target>
         <note />
       </trans-unit>
+      <trans-unit id="Application_VisualStylesModeCanOnlyBeSetOnce">
+        <source>The default visual styles mode can only be set once and cannot be changed afterwards.</source>
+        <target state="translated">Výchozí režim vizuálních stylů lze nastavit jen jednou a potom ho už nejde změnit.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="Application_VisualStylesModeInheritInvalidAsDefault">
+        <source>VisualStylesMode.Inherit cannot be used as the application-wide default visual styles mode because the application root has no parent to inherit from.</source>
+        <target state="translated">VisualStylesMode.Inherit nejde použít jako výchozí režim vizuálních stylů pro celou aplikaci, protože kořen aplikace nemá nadřazený prvek, ze kterého by ho mohl zdědit.</target>
+        <note />
+      </trans-unit>
       <trans-unit id="ApplyCaption">
         <source>&amp;Apply</source>
         <target state="translated">&amp;Použít</target>
@@ -1697,6 +1707,11 @@
         <target state="translated">Určuje minimální velikost ovládacího prvku.</target>
         <note />
       </trans-unit>
+      <trans-unit id="ControlMutationExtensionsLayoutSuspensionRequiresControl">
+        <source>Layout suspension requires a target derived from Control.</source>
+        <target state="translated">Pozastavení rozložení vyžaduje cíl odvozený od třídy Control.</target>
+        <note />
+      </trans-unit>
       <trans-unit id="ControlNotChild">
         <source>'child' is not a child control of this parent.</source>
         <target state="translated">Objekt child není podřízeným ovládacím prvkem tohoto nadřazeného objektu.</target>
@@ -2027,6 +2042,11 @@
         <target state="translated">Událost aktivovaná při změně systémových barev</target>
         <note />
       </trans-unit>
+      <trans-unit id="ControlOnSystemVisualSettingsChangedDescr">
+        <source>Event raised when a Windows visual or accessibility setting changes.</source>
+        <target state="translated">Událost vyvolaná při změně vizuálního nastavení nebo nastavení přístupnosti systému Windows.</target>
+        <note />
+      </trans-unit>
       <trans-unit id="ControlOnTabIndexChangedDescr">
         <source>Event raised when the value of the TabIndex property is changed.</source>
         <target state="translated">Událost aktivovaná při změně hodnoty vlastnosti TabIndex</target>
@@ -2170,6 +2190,16 @@
       <trans-unit id="ControlVisibleDescr">
         <source>Determines whether the control is visible or hidden.</source>
         <target state="translated">Určuje, zda je ovládací prvek viditelný nebo skrytý.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ControlVisualStylesModeChangedDescr">
+        <source>Occurs when the value of the VisualStylesMode property changes.</source>
+        <target state="translated">Nastane při změně hodnoty vlastnosti VisualStylesMode.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ControlVisualStylesModeDescr">
+        <source>Determines how the control renders itself when visual styles are applied.</source>
+        <target state="translated">Určuje, jak se ovládací prvek vykresluje při použití vizuálních stylů.</target>
         <note />
       </trans-unit>
       <trans-unit id="ControlWidthDescr">
@@ -4519,6 +4549,11 @@ Chcete-li nahradit toto výchozí dialogové okno, nastavte popisovač události
         <target state="translated">Spravuje kolekci obrázků, které standardně používají ovládací prvky, jako například ListView, TreeView nebo ToolStrip.</target>
         <note />
       </trans-unit>
+      <trans-unit id="DescriptionKioskModeManager">
+        <source>Manages common fullscreen, input, cursor, and power behavior for kiosk-style WinForms applications.</source>
+        <target state="translated">Spravuje běžné chování celoobrazovkového režimu, vstupu, kurzoru a napájení pro aplikace WinForms ve stylu celoobrazovkového režimu.</target>
+        <note />
+      </trans-unit>
       <trans-unit id="DescriptionLabel">
         <source>Provides run-time information or descriptive text for a control.</source>
         <target state="translated">Poskytuje běhové informace nebo popisný text pro ovládací prvek.</target>
@@ -5420,6 +5455,11 @@ Chcete ho nahradit?</target>
         <target state="translated">Hodnota, kterou tento formulář vrátí, pokud bude zobrazen jako dialogové okno.</target>
         <note />
       </trans-unit>
+      <trans-unit id="FormFormRevealModeDescr">
+        <source>Indicates how the form is presented while its initial appearance is prepared. Classic never defers reveal. Deferred hides the form behind a DWM cloak until its background has painted, to reduce startup flash. Inherit resolves from the application-wide default.</source>
+        <target state="translated">Určuje, jak se formulář zobrazuje při přípravě svého počátečního vzhledu. Režim Classic zobrazení nikdy neodkládá. Režim Deferred skryje formulář za maskováním Správce oken plochy (DWM), dokud se nevykreslí jeho pozadí, aby se omezilo bliknutí při spuštění. Režim Inherit se přebírá z výchozího nastavení pro celou aplikaci.</target>
+        <note />
+      </trans-unit>
       <trans-unit id="FormHelpButtonClickedDescr">
         <source>Event raised when the help button is clicked.</source>
         <target state="translated">Událost aktivovaná při kliknutí na tlačítko nápovědy</target>
@@ -5538,6 +5578,11 @@ Chcete ho nahradit?</target>
       <trans-unit id="FormOnFormClosingDescr">
         <source>Occurs whenever the user closes the form, before the form has been closed and specifies the close reason.</source>
         <target state="translated">Vyvolá se vždy, když uživatel zavírá formulář, a to před jeho zavřením, a určí důvod zavření.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="FormOnFormRevealModeChangedDescr">
+        <source>Occurs when the effective value of the FormRevealMode property changes.</source>
+        <target state="translated">Nastane při změně efektivní hodnoty vlastnosti FormRevealMode.</target>
         <note />
       </trans-unit>
       <trans-unit id="FormOnInputLangChangeDescr">
@@ -6102,6 +6147,51 @@ Trasování zásobníku, kde došlo k neplatné operaci:
       <trans-unit id="KeysConverterInvalidKeyCombination">
         <source>Key combination is not valid.</source>
         <target state="translated">Kombinace klíčů je neplatná.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="KioskModeManagerAlwaysOnDescr">
+        <source>Indicates whether Windows should keep the display and system awake while this component is active.</source>
+        <target state="translated">Určuje, jestli má systém Windows ponechat displej a systém aktivní, když je tato komponenta aktivní.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="KioskModeManagerContainerControlChangedDescr">
+        <source>Occurs when the ContainerControl property value changes.</source>
+        <target state="translated">Nastane při změně hodnoty vlastnosti ContainerControl.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="KioskModeManagerContainerControlDescr">
+        <source>The container whose containing form is controlled by the kiosk mode manager.</source>
+        <target state="translated">Kontejner, jehož nadřazený formulář řídí správce celoobrazovkového režimu</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="KioskModeManagerEscapeExitsFullScreenDescr">
+        <source>Indicates whether pressing Escape exits fullscreen mode.</source>
+        <target state="translated">Určuje, jestli se stisknutím klávesy Escape ukončí celoobrazovkový režim.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="KioskModeManagerFullScreenDescr">
+        <source>Gets or sets a value indicating whether the resolved form is currently fullscreen.</source>
+        <target state="translated">Získá nebo nastaví hodnotu určující, jestli je přeložený formulář aktuálně v celoobrazovkovém režimu.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="KioskModeManagerFullScreenChangedDescr">
+        <source>Occurs when the fullscreen state changes.</source>
+        <target state="translated">Nastane při změně stavu celoobrazovkového režimu.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="KioskModeManagerMousePointerAutoHideDelayDescr">
+        <source>The delay, in milliseconds, before the mouse pointer is hidden while fullscreen. A value of 0 disables automatic pointer hiding.</source>
+        <target state="translated">Prodleva v milisekundách před skrytím ukazatele myši v celoobrazovkovém režimu Hodnota 0 zakáže automatické skrývání ukazatele.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="KioskModeManagerToggleFullScreenKeysDescr">
+        <source>The key combination that toggles between fullscreen and restored mode.</source>
+        <target state="translated">Kombinace kláves, která přepíná mezi celoobrazovkovým a obnoveným režimem.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="KioskModeManagerTopMostInFullScreenDescr">
+        <source>Indicates whether the form is topmost while fullscreen.</source>
+        <target state="translated">Určuje, jestli je formulář v celoobrazovkovém režimu zobrazený vždy nahoře.</target>
         <note />
       </trans-unit>
       <trans-unit id="LabelAutoEllipsisDescr">
@@ -8675,8 +8765,8 @@ Trasování zásobníku, kde došlo k neplatné operaci:
         <note />
       </trans-unit>
       <trans-unit id="RadioButtonAppearanceDescr">
-        <source>Controls whether the RadioButton appears as normal or as a Windows PushButton.</source>
-        <target state="translated">Určuje, zda je ovládací prvek RadioButton zobrazen standardně nebo jako tlačítko systému Windows (PushButton).</target>
+        <source>Controls whether the RadioButton appears as normal, as a Windows PushButton, or as a toggle switch.</source>
+        <target state="translated">Určuje, jestli se RadioButton zobrazí jako běžný přepínač, Windows PushButton, nebo přepínací tlačítko.</target>
         <note />
       </trans-unit>
       <trans-unit id="RadioButtonAutoCheckDescr">

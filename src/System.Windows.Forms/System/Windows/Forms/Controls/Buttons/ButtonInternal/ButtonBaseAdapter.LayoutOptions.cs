@@ -17,6 +17,12 @@ internal abstract partial class ButtonBaseAdapter
 
         private bool _disableWordWrapping;
 
+        internal bool DisableWordWrapping
+        {
+            get => _disableWordWrapping;
+            set => _disableWordWrapping = value;
+        }
+
         // If this is changed to a property callers will need to be updated
         // as they modify fields in the Rectangle.
         public Rectangle Client;
@@ -42,6 +48,8 @@ internal abstract partial class ButtonBaseAdapter
         public bool LayoutRTL { get; set; }
         public bool VerticalText { get; set; }
         public bool UseCompatibleTextRendering { get; set; }
+        public bool ClipImagesToClient { get; set; }
+        public bool EnsureImagePreferredSizeInset { get; set; }
 
         /// <summary>
         ///  .NET Framework 1.0/1.1 compatibility
@@ -217,6 +225,7 @@ internal abstract partial class ButtonBaseAdapter
                 // will happen but the layout would not be adjusted to allow text wrapping. If someone has a
                 // carriage return in the text we'll honor that for preferred size, but we won't wrap based
                 // on constraints.
+                bool disableWordWrapping = _disableWordWrapping;
                 try
                 {
                     _disableWordWrapping = true;
@@ -224,12 +233,18 @@ internal abstract partial class ButtonBaseAdapter
                 }
                 finally
                 {
-                    _disableWordWrapping = false;
+                    _disableWordWrapping = disableWordWrapping;
                 }
             }
 
             // Combine pieces to get final preferred size.
             Size requiredSize = Compose(checkSize, ImageSize, textSize);
+            if (EnsureImagePreferredSizeInset && ImageSize != Size.Empty)
+            {
+                Size imageRequiredSize = Compose(checkSize, requiredImageSize, Size.Empty);
+                requiredSize = LayoutUtils.UnionSizes(requiredSize, imageRequiredSize);
+            }
+
             requiredSize += bordersAndPadding;
 
             return requiredSize;

@@ -11,7 +11,7 @@ internal class RadioButtonPopupAdapter : RadioButtonFlatAdapter
     {
         if (Control.Appearance == Appearance.Button)
         {
-            ButtonPopupAdapter adapter = new(Control);
+            ButtonBaseAdapter adapter = DarkModeAdapterFactory.CreatePopupAdapter(Control);
             adapter.PaintUp(e, Control.Checked ? CheckState.Checked : CheckState.Unchecked);
         }
         else
@@ -40,7 +40,7 @@ internal class RadioButtonPopupAdapter : RadioButtonFlatAdapter
     {
         if (Control.Appearance == Appearance.Button)
         {
-            ButtonPopupAdapter adapter = new(Control);
+            ButtonBaseAdapter adapter = DarkModeAdapterFactory.CreatePopupAdapter(Control);
             adapter.PaintOver(e, Control.Checked ? CheckState.Checked : CheckState.Unchecked);
         }
         else
@@ -65,7 +65,7 @@ internal class RadioButtonPopupAdapter : RadioButtonFlatAdapter
     {
         if (Control.Appearance == Appearance.Button)
         {
-            ButtonPopupAdapter adapter = new(Control);
+            ButtonBaseAdapter adapter = DarkModeAdapterFactory.CreatePopupAdapter(Control);
             adapter.PaintDown(e, Control.Checked ? CheckState.Checked : CheckState.Unchecked);
         }
         else
@@ -85,7 +85,7 @@ internal class RadioButtonPopupAdapter : RadioButtonFlatAdapter
         }
     }
 
-    protected override ButtonBaseAdapter CreateButtonAdapter() => new ButtonPopupAdapter(Control);
+    protected override ButtonBaseAdapter CreateButtonAdapter() => DarkModeAdapterFactory.CreatePopupAdapter(Control);
 
     protected override LayoutOptions Layout(PaintEventArgs e)
     {

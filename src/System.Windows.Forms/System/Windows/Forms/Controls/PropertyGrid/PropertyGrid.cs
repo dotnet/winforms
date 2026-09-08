@@ -80,6 +80,10 @@ public partial class PropertyGrid : ContainerControl, IComPropertyBrowser, IProp
     private Color _selectedItemWithFocusBackColor = SystemColors.Highlight;
     private bool _canShowVisualStyleGlyphs = true;
 
+    // The PropertyGrid pins its effective VisualStylesMode to Classic (see the VisualStylesMode override).
+    // A value assigned through the setter is remembered here for potential future use only.
+    private VisualStylesMode _requestedVisualStylesMode = VisualStylesMode.Inherit;
+
     private AttributeCollection? _browsableAttributes;
 
     private SnappableControl? _targetMove;
@@ -817,6 +821,47 @@ public partial class PropertyGrid : ContainerControl, IComPropertyBrowser, IProp
     {
         add => base.PaddingChanged += value;
         remove => base.PaddingChanged -= value;
+    }
+
+    /// <summary>
+    ///  Gets or sets how the <see cref="PropertyGrid"/> renders itself when visual styles are applied.
+    /// </summary>
+    /// <value>
+    ///  Always <see cref="VisualStylesMode.Classic"/>. Assigning a different value is remembered but does
+    ///  not change how the grid or its hosted editing controls render.
+    /// </value>
+    /// <remarks>
+    ///  <para>
+    ///   The <see cref="PropertyGrid"/> pins its effective <see cref="VisualStylesMode"/> to
+    ///   <see cref="VisualStylesMode.Classic"/>. The editing controls hosted inside the grid (the value
+    ///   text boxes and drop-down editors) read the ambient <see cref="VisualStylesMode"/> from their
+    ///   parent. They must render in the classic style so their frames and glyphs line up with the grid's
+    ///   own fixed layout. Because this override always returns <see cref="VisualStylesMode.Classic"/> and
+    ///   <see cref="VisualStylesMode"/> is a virtual ambient property, those children never switch to a
+    ///   modern renderer, regardless of <see cref="Application.DefaultVisualStylesMode"/> or the parent
+    ///   form's setting.
+    ///  </para>
+    ///  <para>
+    ///   A value assigned through the setter is stored for potential future use but currently has no
+    ///   effect; the getter continues to report <see cref="VisualStylesMode.Classic"/>. This keeps the
+    ///   surface forward compatible for a later release in which the grid may honor a modern mode.
+    ///  </para>
+    /// </remarks>
+    [Browsable(false)]
+    [EditorBrowsable(EditorBrowsableState.Never)]
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+    public override VisualStylesMode VisualStylesMode
+    {
+        get => VisualStylesMode.Classic;
+        set => _requestedVisualStylesMode = value;
+    }
+
+    [Browsable(false)]
+    [EditorBrowsable(EditorBrowsableState.Never)]
+    public new event EventHandler? VisualStylesModeChanged
+    {
+        add => base.VisualStylesModeChanged += value;
+        remove => base.VisualStylesModeChanged -= value;
     }
 
     /// <summary>
@@ -1708,12 +1753,19 @@ public partial class PropertyGrid : ContainerControl, IComPropertyBrowser, IProp
         EventHandler eventHandler,
         bool useRadioButtonRole = false)
     {
+        // ToolStripItem/ToolStripButton bake Margin and the minimum button width from
+        // ScaleHelper.InitialSystemDpi (the process's startup DPI) at construction time. Re-apply both
+        // explicitly so a button (re)created after a runtime DPI change reflects the grid's actual current
+        // DPI; DeviceDpi routes through ToolStripButton's own existing, correct DeviceDpi setter override.
+        // See https://github.com/dotnet/winforms/issues/8268.
         PropertyGridToolStripButton button = new(this, useRadioButtonRole)
         {
             Text = toolTipText,
             AutoToolTip = true,
             DisplayStyle = ToolStripItemDisplayStyle.Image,
-            ImageIndex = imageIndex
+            ImageIndex = imageIndex,
+            Margin = ScaleHelper.ScaleToDpi(new Padding(0, 1, 0, 2), DeviceDpi),
+            DeviceDpi = DeviceDpi
         };
 
         button.Click += eventHandler;
@@ -2061,14 +2113,17 @@ public partial class PropertyGrid : ContainerControl, IComPropertyBrowser, IProp
             ImageSize = s_largeButtonSize
         };
 
-        if (ScaleHelper.IsScalingRequired)
+        if (ScaleHelper.IsScalingRequirementMet)
         {
             AddLargeImage(_alphaBitmap);
             AddLargeImage(_categoryBitmap);
 
-            foreach (var tab in _tabs)
+            if (_tabs.Count > 1)
             {
-                AddLargeImage(tab.Tab.Bitmap);
+                foreach (var tab in _tabs)
+                {
+                    AddLargeImage(tab.Tab.Bitmap);
+                }
             }
 
             AddLargeImage(_propertyPageBitmap);
@@ -2092,7 +2147,7 @@ public partial class PropertyGrid : ContainerControl, IComPropertyBrowser, IProp
         }
     }
 
-    // This method should be called only inside a if (DpiHelper.IsScalingRequired) clause.
+    // This method should be called only inside a if (ScaleHelper.IsScalingRequirementMet) clause.
     private void AddLargeImage(Bitmap? originalBitmap)
     {
         if (originalBitmap is null)
@@ -3628,7 +3683,7 @@ public partial class PropertyGrid : ContainerControl, IComPropertyBrowser, IProp
 
     private void ResetHelpBackColor() => _helpPane.ResetBackColor();
 
-    private void ResetHelpForeColor() => _helpPane.ResetBackColor();
+    private void ResetHelpForeColor() => _helpPane.ResetForeColor();
 
     /// <summary>
     ///  This method is intended for use in replacing a specific selected root object with another object of the
@@ -3826,7 +3881,7 @@ public partial class PropertyGrid : ContainerControl, IComPropertyBrowser, IProp
         {
             _normalButtonImages?.Dispose();
             _normalButtonImages = new ImageList();
-            if (ScaleHelper.IsScalingRequired)
+            if (ScaleHelper.IsScalingRequirementMet)
             {
                 _normalButtonImages.ImageSize = s_normalButtonSize;
             }
@@ -3964,6 +4019,9 @@ public partial class PropertyGrid : ContainerControl, IComPropertyBrowser, IProp
         }
 
         _toolStrip.ImageList = LargeButtons ? _largeButtonImages : _normalButtonImages;
+
+        // Covers LargeButtons only (_largeButtonImages isn't ready earlier); a no-op otherwise.
+        _toolStrip.ImageScalingSize = _toolStrip.ImageList!.ImageSize;
 
         using (SuspendLayoutScope scope = new(_toolStrip))
         {

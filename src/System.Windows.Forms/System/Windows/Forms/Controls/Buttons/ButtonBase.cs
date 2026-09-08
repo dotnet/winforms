@@ -6,6 +6,7 @@ using System.Drawing;
 using System.Drawing.Design;
 using System.Windows.Forms.ButtonInternal;
 using System.Windows.Forms.Layout;
+using System.Windows.Forms.Rendering.Button;
 using Windows.Win32.System.Variant;
 using Windows.Win32.UI.Accessibility;
 
@@ -46,6 +47,8 @@ public abstract partial class ButtonBase : Control, ICommandBindingTargetProvide
 
     private ButtonBaseAdapter? _adapter;
     private FlatStyle _cachedAdapterType;
+    private ButtonBackColorAnimator? _backColorAnimator;
+    private AnimatedPopupButtonRenderer? _popupKeyCapRenderer;
 
     // Backing fields for the infrastructure to make ToolStripItem bindable and introduce (bindable) ICommand.
     private Input.ICommand? _command;
@@ -337,52 +340,7 @@ public abstract partial class ButtonBase : Control, ICommandBindingTargetProvide
         }
     }
 
-    /// <summary>
-    ///  Gets or sets the flat style appearance of the button control.
-    /// </summary>
-    /// <remarks>
-    ///  <para>
-    ///   The <see cref="FlatStyle"/> property determines how the button is rendered. The following values are supported:
-    ///  </para>
-    ///  <list type="bullet">
-    ///   <item>
-    ///    <term><see cref="FlatStyle.Standard"/></term>
-    ///    <description>
-    ///     The default style. The button is not wrapping the system button. It is rendered using the StandardButton adapter.
-    ///     VisualStyleRenderer from the OS is used for certain parts, which may have issues in high-resolution scenarios.
-    ///     Dark mode works to some extent, but improvements are needed.
-    ///    </description>
-    ///   </item>
-    ///   <item>
-    ///    <term><see cref="FlatStyle.Popup"/></term>
-    ///    <description>
-    ///     The button is fully owner-drawn. No rendering is delegated to the OS, not even VisualStyleRenderer.
-    ///     This style works well in dark mode and is fully controlled by the application.
-    ///     3D effects are expected but may not be rendered; consider revisiting for meaningful styling.
-    ///    </description>
-    ///   </item>
-    ///   <item>
-    ///    <term><see cref="FlatStyle.Flat"/></term>
-    ///    <description>
-    ///     The button is fully owner-drawn, with no OS calls or VisualStyleRenderer usage.
-    ///     This fits modern design language and works well in dark mode.
-    ///    </description>
-    ///   </item>
-    ///   <item>
-    ///    <term><see cref="FlatStyle.System"/></term>
-    ///    <description>
-    ///     The button wraps the system button and is not owner-drawn.
-    ///     No <c>OnPaint</c>, <c>OnPaintBackground</c>, or adapter is involved.
-    ///     In dark mode, this style is used as a fallback for Standard-style buttons.
-    ///    </description>
-    ///   </item>
-    ///  </list>
-    /// </remarks>
-    [SRCategory(nameof(SR.CatAppearance))]
-    [DefaultValue(FlatStyle.Standard)]
-    [Localizable(true)]
-    [SRDescription(nameof(SR.ButtonFlatStyleDescr))]
-    public FlatStyle FlatStyle
+    public partial FlatStyle FlatStyle
     {
         get => _flatStyle;
         set
@@ -838,6 +796,10 @@ public abstract partial class ButtonBase : Control, ICommandBindingTargetProvide
             _imageList?.Disposed -= DetachImageList;
             _textToolTip?.Dispose();
             _textToolTip = null;
+            _backColorAnimator?.Dispose();
+            _backColorAnimator = null;
+            _popupKeyCapRenderer?.Dispose();
+            _popupKeyCapRenderer = null;
         }
 
         base.Dispose(disposing);
@@ -1067,6 +1029,29 @@ public abstract partial class ButtonBase : Control, ICommandBindingTargetProvide
         return null;
     }
 
+    internal ButtonBackColorAnimator BackColorAnimator
+        => _backColorAnimator ??= new(this);
+
+    private AnimatedPopupButtonRenderer PopupKeyCapRenderer
+        => _popupKeyCapRenderer ??= new(this);
+
+    private bool IsPopupKeyCapAppearance
+        => FlatStyle == FlatStyle.Popup
+            && EffectiveVisualStylesMode >= VisualStylesMode.Net11
+            && this is Button
+                or CheckBox { Appearance: Appearance.Button }
+                or RadioButton { Appearance: Appearance.Button };
+
+    private bool IsPopupKeyCapSelected
+        => this is CheckBox { Checked: true }
+            or RadioButton { Checked: true };
+
+    private protected void ResetAdapter()
+    {
+        _adapter = null;
+        _cachedAdapterType = (FlatStyle)(-1);
+    }
+
     internal virtual StringFormat CreateStringFormat()
     {
         if (Adapter is null)
@@ -1250,11 +1235,69 @@ public abstract partial class ButtonBase : Control, ICommandBindingTargetProvide
             Animate();
             ImageAnimator.UpdateFrames(Image);
 
-            PaintControl(pevent);
+            if (IsPopupKeyCapAppearance)
+            {
+                PopupKeyCapRenderer.SetInteractionState(
+                    hovered: MouseIsOver,
+                    pressed: MouseIsDown,
+                    selected: IsPopupKeyCapSelected);
+
+                using GraphicsStateScope scope = new(pevent.Graphics);
+                PopupKeyCapRenderer.RenderControl(pevent.Graphics);
+            }
+            else
+            {
+                PaintControl(pevent);
+            }
         }
 
         base.OnPaint(pevent);
     }
+
+    /// <inheritdoc/>
+    protected override void OnVisualStylesModeChanged(EventArgs e)
+    {
+        using (LayoutTransaction.CreateTransactionIf(
+            AutoSize,
+            ParentInternal,
+            this,
+            PropertyNames.VisualStylesMode))
+        {
+            base.OnVisualStylesModeChanged(e);
+
+            // Renderer padding can change with VisualStylesMode, so recreate the adapter before layout
+            // recomputes the preferred size.
+            ResetAdapter();
+
+            _backColorAnimator?.Dispose();
+            _backColorAnimator = null;
+            _popupKeyCapRenderer?.Dispose();
+            _popupKeyCapRenderer = null;
+
+            if (IsHandleCreated)
+            {
+                Invalidate();
+            }
+        }
+    }
+
+    /// <inheritdoc/>
+    protected override void OnSystemColorsChanged(EventArgs e)
+    {
+        ResetAdapter();
+        _backColorAnimator?.Dispose();
+        _backColorAnimator = null;
+        _popupKeyCapRenderer?.Dispose();
+        _popupKeyCapRenderer = null;
+        base.OnSystemColorsChanged(e);
+    }
+
+    /// <summary>
+    ///  Exposes the (otherwise <c>private protected</c>) <see cref="Control.EffectiveVisualStylesMode"/>
+    ///  to the owner-drawn button adapters in the <c>ButtonInternal</c> namespace, so that renderer selection
+    ///  honors the Windows High Contrast clamp just like the control's own paint and <see cref="CreateParams"/>.
+    /// </summary>
+    internal VisualStylesMode EffectiveVisualStylesModeInternal => EffectiveVisualStylesMode;
 
     protected override void OnParentChanged(EventArgs e)
     {

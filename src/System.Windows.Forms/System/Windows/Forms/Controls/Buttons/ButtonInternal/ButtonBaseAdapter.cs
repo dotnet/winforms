@@ -4,6 +4,7 @@
 using System.Drawing;
 using System.Runtime.CompilerServices;
 using System.Windows.Forms.Layout;
+using System.Windows.Forms.Rendering.Button;
 
 namespace System.Windows.Forms.ButtonInternal;
 
@@ -59,7 +60,56 @@ internal abstract partial class ButtonBaseAdapter
         return options.GetPreferredSizeCore(proposedSize);
     }
 
+    protected static Size GetPopupPreferredSizeCore(LayoutOptions layout, Size proposedSize)
+    {
+        layout.GrowBorderBy1PxWhenDefault = false;
+        layout.MaxFocus = false;
+        layout.BorderSize = 0;
+        layout.PaddingSize = 1;
+
+        return layout.GetPreferredSizeCore(proposedSize);
+    }
+
+    protected static Size GetModernPopupPreferredSizeCore(
+        LayoutOptions layout,
+        Size proposedSize,
+        int deviceDpi,
+        int borderSize)
+        => GetModernPreferredSizeCore(
+            layout,
+            proposedSize,
+            PopupButtonKeyCapRenderer.GetPreferredSizeChrome(deviceDpi, borderSize));
+
+    protected static Size GetModernPreferredSizeCore(
+        LayoutOptions layout,
+        Size proposedSize,
+        Size chromeSize)
+    {
+        layout.GrowBorderBy1PxWhenDefault = false;
+        layout.MaxFocus = false;
+        layout.BorderSize = 0;
+        layout.PaddingSize = 0;
+
+        Size contentConstraint = new(
+            proposedSize.Width > 0 ? Math.Max(1, proposedSize.Width - chromeSize.Width) : proposedSize.Width,
+            proposedSize.Height > 0 ? Math.Max(1, proposedSize.Height - chromeSize.Height) : proposedSize.Height);
+
+        return layout.GetPreferredSizeCore(contentConstraint) + chromeSize;
+    }
+
     protected abstract LayoutOptions Layout(PaintEventArgs e);
+
+    internal LayoutData GetLayoutData(Rectangle contentBounds)
+    {
+        LayoutOptions options = CommonLayout();
+        options.Client = LayoutUtils.DeflateRect(contentBounds, Control.Padding);
+        options.GrowBorderBy1PxWhenDefault = false;
+        options.BorderSize = 0;
+        options.PaddingSize = 0;
+        options.MaxFocus = false;
+
+        return options.Layout();
+    }
 
     internal abstract void PaintUp(PaintEventArgs e, CheckState state);
 
@@ -379,18 +429,24 @@ internal abstract partial class ButtonBaseAdapter
 
         if (!layout.Options.DotNetOneButtonCompat)
         {
-            Rectangle bounds = new(
-                ButtonBorderSize,
-                ButtonBorderSize,
-                Control.Width - (2 * ButtonBorderSize),
-                Control.Height - (2 * ButtonBorderSize));
+            Rectangle bounds = layout.Options.ClipImagesToClient
+                ? layout.Client
+                : new Rectangle(
+                    ButtonBorderSize,
+                    ButtonBorderSize,
+                    Control.Width - (2 * ButtonBorderSize),
+                    Control.Height - (2 * ButtonBorderSize));
 
             Region newClip = oldClip.Clone();
             newClip.Intersect(bounds);
 
-            // If we don't do this, DrawImageUnscaled will happily draw the entire image, even though imageBounds
-            // is smaller than the image size.
-            newClip.Intersect(imageBounds);
+            // DrawImageUnscaled ignores a reduced destination size, so clip only when layout had to squeeze
+            // the image. Avoiding an unnecessary exact-edge clip preserves the outer image pixels.
+            if (imageBounds.Width < image.Width || imageBounds.Height < image.Height)
+            {
+                newClip.Intersect(imageBounds);
+            }
+
             graphics.Clip = newClip;
         }
         else
@@ -407,6 +463,10 @@ internal abstract partial class ButtonBaseAdapter
             {
                 // Need to specify width and height
                 ControlPaint.DrawImageDisabled(graphics, image, imageBounds, unscaledImage: true);
+            }
+            else if (!layout.Options.DotNetOneButtonCompat)
+            {
+                graphics.DrawImageUnscaled(image, imageBounds.Location);
             }
             else
             {
@@ -543,25 +603,40 @@ internal abstract partial class ButtonBaseAdapter
     }
 
     /// <summary>
-    ///  Draws the button's image.
+    ///  Draws the button's background image.
+    /// </summary>
+    internal void PaintBackgroundImage(
+        PaintEventArgs e,
+        Rectangle? clipRectangle = null)
+    {
+        if (Control.BackgroundImage is null
+            || DisplayInformation.HighContrast)
+        {
+            return;
+        }
+
+        Rectangle imageClip = clipRectangle ?? Control.ClientRectangle;
+        if (clipRectangle is null)
+        {
+            imageClip.Inflate(-ButtonBorderSize, -ButtonBorderSize);
+        }
+
+        ControlPaint.DrawBackgroundImage(
+            e.GraphicsInternal,
+            Control.BackgroundImage,
+            Color.Transparent,
+            Control.BackgroundImageLayout,
+            Control.ClientRectangle,
+            imageClip,
+            Control.DisplayRectangle.Location,
+            Control.RightToLeft);
+    }
+
+    /// <summary>
+    ///  Draws the button's foreground image.
     /// </summary>
     internal void PaintImage(PaintEventArgs e, LayoutData layout)
     {
-        if (Application.IsDarkModeEnabled && Control.DarkModeRequestState is true && Control.BackgroundImage is not null)
-        {
-            Rectangle bounds = Control.ClientRectangle;
-            bounds.Inflate(-ButtonBorderSize, -ButtonBorderSize);
-            ControlPaint.DrawBackgroundImage(
-                e.GraphicsInternal,
-                Control.BackgroundImage,
-                Color.Transparent,
-                Control.BackgroundImageLayout,
-                Control.ClientRectangle,
-                bounds,
-                Control.DisplayRectangle.Location,
-                Control.RightToLeft);
-        }
-
         if (Control.Image is not null)
         {
             // Setup new clip region & draw

@@ -14,6 +14,77 @@ namespace System.Windows.Forms.Tests;
 public class UpDownBaseTests
 {
     [WinFormsFact]
+    public void UpDownBase_ModernFocusColor_UsesWindowsAccentColor()
+    {
+        using SubUpDownBase control = new();
+
+        Color expected = SystemInformation.HighContrast
+            ? SystemColors.Highlight
+            : Application.SystemVisualSettings.AccentColor;
+        Color actual = typeof(UpDownBase).TestAccessor.Dynamic.ModernFocusColor;
+
+        actual.ToArgb().Should().Be(expected.ToArgb());
+    }
+
+    [WinFormsFact]
+    public void UpDownBase_ModernVisualStylesMode_FocusTransitionReversesFromCurrentBlend()
+    {
+        using SystemVisualSettingsTestScope settingsScope = new(clientAreaAnimationEnabled: true);
+        using SubUpDownBase control = new()
+        {
+            VisualStylesMode = VisualStylesMode.Net11
+        };
+        control.CreateControl();
+
+        if (!control.UseSideBySideButtons)
+        {
+            return;
+        }
+
+        dynamic accessor = ((UpDownBase)control).TestAccessor.Dynamic;
+        accessor.SetModernFocusState(true);
+        Rendering.Animation.AnimatedFocusIndicatorRenderer renderer =
+            accessor._focusIndicatorRenderer;
+
+        if (!SystemInformation.UIEffectsEnabled)
+        {
+            renderer.FocusAmount.Should().Be(1f);
+            renderer.IsRunning.Should().BeFalse();
+            accessor.SetModernFocusState(false);
+            renderer.FocusAmount.Should().Be(0f);
+            return;
+        }
+
+        renderer.IsRunning.Should().BeTrue();
+        renderer.AnimationProc(0.5f);
+        renderer.FocusAmount.Should().BeApproximately(0.75f, 0.001f);
+
+        accessor.SetModernFocusState(false);
+        renderer.AnimationProc(0.5f);
+
+        renderer.FocusAmount.Should().BeApproximately(0.1875f, 0.001f);
+        renderer.EndAnimation();
+        renderer.IsRunning.Should().BeFalse();
+        renderer.FocusAmount.Should().Be(0f);
+    }
+
+    [WinFormsFact]
+    public void UpDownBase_VisualStylesModeChanged_RepositionsChildControls()
+    {
+        using SubUpDownBase control = new();
+        control.CreateControl();
+        Rectangle editBounds = control.TextBox.Bounds;
+        Rectangle buttonsBounds = control.UpDownButtonsInternal.Bounds;
+
+        control.VisualStylesMode = control.VisualStylesMode == VisualStylesMode.Net11
+            ? VisualStylesMode.Disabled
+            : VisualStylesMode.Net11;
+
+        Assert.NotEqual(editBounds, control.TextBox.Bounds);
+        Assert.NotEqual(buttonsBounds, control.UpDownButtonsInternal.Bounds);
+    }
+
+    [WinFormsFact]
     public void UpDownBase_Ctor_Default()
     {
         using SubUpDownBase control = new();
@@ -3041,6 +3112,243 @@ public class UpDownBaseTests
 
         actualEditToolTipText.Should().BeEmpty();
         actualButtonsToolTipText.Should().BeEmpty();
+    }
+
+    [WinFormsFact]
+    public void UpDownBase_ModernVisualStylesMode_LaysOutButtonsSideBySide()
+    {
+        using SubUpDownBase upDownBase = new();
+        upDownBase.VisualStylesMode = VisualStylesMode.Net11;
+        upDownBase.Size = new Size(120, upDownBase.PreferredHeight);
+        upDownBase.CreateControl();
+
+        // Skip when the environment forces Classic (for example High Contrast), since the modern
+        // side-by-side layout only applies under an effective modern mode.
+        if (!upDownBase.UseSideBySideButtons)
+        {
+            return;
+        }
+
+        Rectangle editBounds = upDownBase._upDownEdit.Bounds;
+        Rectangle buttonsBounds = upDownBase._upDownButtons.Bounds;
+
+        // The modern button band contains two buttons and only the shared inter-button gap.
+        buttonsBounds.Width.Should().Be(
+            (upDownBase._defaultButtonsWidth * 2) + upDownBase.ModernButtonGroupSpacing);
+
+        // Edit and buttons are laid out horizontally (side by side), not stacked, and do not overlap.
+        buttonsBounds.Left.Should().BeGreaterThanOrEqualTo(editBounds.Right);
+        buttonsBounds.Height.Should().BeGreaterThan(0);
+        editBounds.Width.Should().BeGreaterThan(0);
+    }
+
+    [WinFormsFact]
+    public void UpDownBase_ModernVisualStylesMode_UsesSmallInsetAndPreservesExplicitSmallHeight()
+    {
+        using SubUpDownBase upDownBase = new()
+        {
+            VisualStylesMode = VisualStylesMode.Net11,
+            Size = new Size(120, 9)
+        };
+        upDownBase.CreateControl();
+
+        if (!upDownBase.UseSideBySideButtons)
+        {
+            return;
+        }
+
+        int inset = upDownBase.LogicalToDeviceUnits(4);
+        upDownBase._upDownEdit.Left.Should().Be(inset);
+        upDownBase._upDownEdit.Top.Should().Be(inset);
+        upDownBase._upDownEdit.Height.Should().Be(Math.Max(0, 9 - (2 * inset)));
+        upDownBase.Height.Should().Be(9);
+    }
+
+    [WinFormsTheory]
+    [InlineData(RightToLeft.No)]
+    [InlineData(RightToLeft.Yes)]
+    public void UpDownBase_ModernVisualStylesMode_PreservesButtonOrderForRightToLeft(RightToLeft rightToLeft)
+    {
+        using SubUpDownBase upDownBase = new()
+        {
+            VisualStylesMode = VisualStylesMode.Net11,
+            RightToLeft = rightToLeft,
+            Size = new Size(120, 40)
+        };
+        upDownBase.CreateControl();
+
+        if (!upDownBase.UseSideBySideButtons)
+        {
+            return;
+        }
+
+        Rectangle upBounds = upDownBase._upDownButtons.GetButtonRectangle(UpDownBase.ButtonID.Up);
+        Rectangle downBounds = upDownBase._upDownButtons.GetButtonRectangle(UpDownBase.ButtonID.Down);
+        if (rightToLeft == RightToLeft.Yes)
+        {
+            upBounds.Left.Should().BeLessThan(downBounds.Left);
+        }
+        else
+        {
+            upBounds.Left.Should().BeGreaterThan(downBounds.Left);
+        }
+
+        upBounds.IntersectsWith(downBounds).Should().BeFalse();
+        Rectangle leftBounds = upBounds.Left < downBounds.Left ? upBounds : downBounds;
+        Rectangle rightBounds = upBounds.Left < downBounds.Left ? downBounds : upBounds;
+        (rightBounds.Left - leftBounds.Right).Should().Be(upDownBase.ModernButtonGroupSpacing);
+    }
+
+    [WinFormsFact]
+    public void UpDownBase_ModernVisualStylesMode_LayoutHonorsPadding()
+    {
+        using SubUpDownBase upDownBase = new()
+        {
+            Padding = new Padding(5, 4, 7, 6),
+            Size = new Size(160, 60),
+            VisualStylesMode = VisualStylesMode.Net11
+        };
+        upDownBase.CreateControl();
+
+        if (!upDownBase.UseSideBySideButtons)
+        {
+            return;
+        }
+
+        int inset = upDownBase.LogicalToDeviceUnits(4);
+        upDownBase._upDownEdit.Left.Should().BeGreaterThanOrEqualTo(upDownBase.Padding.Left + inset);
+        upDownBase._upDownEdit.Top.Should().BeGreaterThanOrEqualTo(upDownBase.Padding.Top + inset);
+        upDownBase._upDownButtons.Right.Should().BeLessThanOrEqualTo(
+            upDownBase.ClientSize.Width - upDownBase.Padding.Right - inset);
+        upDownBase._upDownButtons.Bottom.Should().BeLessThanOrEqualTo(
+            upDownBase.ClientSize.Height - upDownBase.Padding.Bottom - inset);
+    }
+
+    [WinFormsFact]
+    public void UpDownBase_ModernVisualStylesMode_LeftAlignedLayoutHonorsAsymmetricPadding()
+    {
+        using SubUpDownBase upDownBase = new()
+        {
+            Padding = new Padding(5, 4, 20, 6),
+            Size = new Size(160, 60),
+            UpDownAlign = LeftRightAlignment.Left,
+            VisualStylesMode = VisualStylesMode.Net11
+        };
+        upDownBase.CreateControl();
+
+        if (!upDownBase.UseSideBySideButtons)
+        {
+            return;
+        }
+
+        int inset = upDownBase.LogicalToDeviceUnits(4);
+        upDownBase._upDownButtons.Left.Should().BeGreaterThanOrEqualTo(upDownBase.Padding.Left + inset);
+        upDownBase._upDownEdit.Right.Should().BeLessThanOrEqualTo(
+            upDownBase.ClientSize.Width - upDownBase.Padding.Right - inset);
+    }
+
+    [WinFormsFact]
+    public void UpDownBase_ClassicVisualStylesMode_LeftAlignedLayoutHonorsAsymmetricPadding()
+    {
+        using SubUpDownBase upDownBase = new()
+        {
+            Padding = new Padding(5, 4, 20, 6),
+            Size = new Size(160, 40),
+            UpDownAlign = LeftRightAlignment.Left,
+            VisualStylesMode = VisualStylesMode.Classic
+        };
+        upDownBase.CreateControl();
+
+        upDownBase._upDownButtons.Left.Should().BeGreaterThanOrEqualTo(upDownBase.Padding.Left);
+        upDownBase._upDownEdit.Right.Should().BeLessThanOrEqualTo(
+            upDownBase.ClientSize.Width - upDownBase.Padding.Right);
+    }
+
+    [WinFormsFact]
+    public void UpDownBase_ModernVisualStylesMode_AutoSizeIncludesVerticalPadding()
+    {
+        using SubUpDownBase upDownBase = new()
+        {
+            AutoSize = true,
+            Padding = new Padding(0, 4, 0, 6),
+            VisualStylesMode = VisualStylesMode.Net11
+        };
+
+        upDownBase.Height.Should().Be(upDownBase.PreferredHeight + upDownBase.Padding.Vertical);
+    }
+
+    [WinFormsTheory]
+    [InlineData(96)]
+    [InlineData(144)]
+    [InlineData(192)]
+    public void UpDownBase_ModernVisualStylesMode_ScalesInsetAndPreferredHeight(int deviceDpi)
+    {
+        using IDisposable dpiScope = ScaleHelper.EnterDpiAwarenessScope(DPI_AWARENESS_CONTEXT.DPI_AWARENESS_CONTEXT_PER_MONITOR_AWARE_V2);
+        if (!ScaleHelper.IsThreadPerMonitorV2Aware)
+        {
+            return;
+        }
+
+        using SubUpDownBase upDownBase = new()
+        {
+            AutoSize = true
+        };
+        upDownBase.DeviceDpiInternal = deviceDpi;
+        upDownBase.RescaleConstantsForDpi(96, deviceDpi);
+        upDownBase.VisualStylesMode = VisualStylesMode.Net11;
+
+        if (!upDownBase.UseSideBySideButtons)
+        {
+            return;
+        }
+
+        int inset = ScaleHelper.ScaleToDpi(4, deviceDpi);
+        int minimumHeight = ScaleHelper.ScaleToDpi(14, deviceDpi)
+            + ScaleHelper.ScaleToDpi(1, deviceDpi)
+            + ScaleHelper.ScaleToDpi(2, deviceDpi);
+        upDownBase.PreferredHeight.Should().BeGreaterThanOrEqualTo(minimumHeight);
+        upDownBase.GetModernButtonGroupWidth().Should().Be(
+            (upDownBase._defaultButtonsWidth * 2) + ScaleHelper.ScaleToDpi(2, deviceDpi));
+        upDownBase.LogicalToDeviceUnits(4).Should().Be(inset);
+    }
+
+    [WinFormsTheory]
+    [InlineData(9)]
+    [InlineData(11)]
+    public void UpDownBase_ModernVisualStylesMode_PreferredHeightLeavesRoomForRoundedChrome(float fontSize)
+    {
+        using SubUpDownBase upDownBase = new()
+        {
+            VisualStylesMode = VisualStylesMode.Net11,
+            AutoSize = true,
+            Font = new Font(Control.DefaultFont.FontFamily, fontSize)
+        };
+
+        if (!upDownBase.UseSideBySideButtons)
+        {
+            return;
+        }
+
+        int minimumHeight = upDownBase.LogicalToDeviceUnits(14)
+            + upDownBase.LogicalToDeviceUnits(1)
+            + upDownBase.LogicalToDeviceUnits(2);
+        int contentHeight = upDownBase.Font.Height + (upDownBase.LogicalToDeviceUnits(4) * 2);
+
+        upDownBase.PreferredHeight.Should().Be(Math.Max(contentHeight, minimumHeight));
+    }
+
+    [WinFormsFact]
+    public void UpDownBase_ModernVisualStylesMode_DrawToBitmap_DoesNotThrow()
+    {
+        using SubUpDownBase upDownBase = new();
+        upDownBase.VisualStylesMode = VisualStylesMode.Net11;
+        upDownBase.Size = new Size(120, 30);
+        upDownBase.CreateControl();
+
+        using Bitmap bitmap = new(upDownBase.Width, upDownBase.Height);
+        Action drawToBitmap = () => upDownBase.DrawToBitmap(bitmap, new Rectangle(Point.Empty, upDownBase.Size));
+
+        drawToBitmap.Should().NotThrow();
     }
 
     private class CustomValidateUpDownBase : UpDownBase

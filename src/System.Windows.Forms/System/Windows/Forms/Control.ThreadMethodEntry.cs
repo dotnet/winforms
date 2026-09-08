@@ -76,7 +76,14 @@ public partial class Control
             lock (_invokeSyncObject)
             {
                 IsCompleted = true;
-                _resetEvent?.Set();
+                try
+                {
+                    _resetEvent?.Set();
+                }
+                catch (ObjectDisposedException)
+                {
+                    // AsyncWaitHandle exposes the event and allows callers to dispose it before completion.
+                }
             }
         }
     }

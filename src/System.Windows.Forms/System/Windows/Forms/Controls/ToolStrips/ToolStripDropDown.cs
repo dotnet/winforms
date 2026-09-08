@@ -991,7 +991,7 @@ public partial class ToolStripDropDown : ToolStrip
 
             Rectangle suggestedScreenBounds = new(screenPoint, suggestedBounds.Size);
             dropDownBounds = WorkingAreaConstrained
-                ? WindowsFormsUtils.ConstrainToScreenWorkingAreaBounds(suggestedScreenBounds)
+                ? WindowsFormsUtils.ConstrainToScreenWorkingAreaBounds(suggestedScreenBounds, GetToplevelOwnerToolStrip())
                 : WindowsFormsUtils.ConstrainToScreenBounds(suggestedScreenBounds);
         }
         else
@@ -1040,7 +1040,7 @@ public partial class ToolStripDropDown : ToolStrip
         dropDownBounds.Location = new Point(start.X + offset.X, start.Y + offset.Y);
         if (WorkingAreaConstrained)
         {
-            dropDownBounds = WindowsFormsUtils.ConstrainToScreenWorkingAreaBounds(dropDownBounds);
+            dropDownBounds = WindowsFormsUtils.ConstrainToScreenWorkingAreaBounds(dropDownBounds, GetToplevelOwnerToolStrip());
         }
 
         return dropDownBounds;

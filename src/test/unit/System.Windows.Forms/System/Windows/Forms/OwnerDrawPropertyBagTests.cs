@@ -56,6 +56,24 @@ public class OwnerDrawPropertyBagTests
         Assert.Equal(value is null, bag.IsEmpty());
     }
 
+    [WinFormsFact]
+    public void OwnerDrawPropertyBag_Font_SetDifferentValue_ResetsCachedFontWrapper()
+    {
+        using SubTreeView treeView = new();
+        OwnerDrawPropertyBag bag = treeView.GetItemRenderStyles(null, 0);
+        using Font firstFont = new(SystemFonts.MenuFont, FontStyle.Regular);
+        using Font secondFont = new(SystemFonts.MenuFont, FontStyle.Bold);
+
+        bag.Font = firstFont;
+        _ = bag.FontHandle;
+
+        dynamic accessor = bag.TestAccessor.Dynamic;
+        Assert.NotNull(accessor._fontWrapper);
+
+        bag.Font = secondFont;
+        Assert.Null(accessor._fontWrapper);
+    }
+
     [WinFormsTheory]
     [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetColorWithEmptyTheoryData))]
     public void OwnerDrawPropertyBag_ForeColor_Set_GetReturnsExpected(Color value)
