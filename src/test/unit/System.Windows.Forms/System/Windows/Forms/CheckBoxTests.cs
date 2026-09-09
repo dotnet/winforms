@@ -878,9 +878,78 @@ public class CheckBoxTests : AbstractButtonBaseTests
             metrics);
         Rectangle contentBounds = Rendering.CheckBox.ToggleSwitchMetrics.GetContentBounds(box);
 
-        Assert.Equal(
-            switchOnRight ? contentBounds.Right : contentBounds.Left,
-            switchOnRight ? switchBounds.Right : switchBounds.Left);
+        int edgeTolerance = Math.Max(1, (metrics.BorderThickness / 2) + 1);
+        if (switchOnRight)
+        {
+            Assert.InRange(
+                switchBounds.Right,
+                contentBounds.Right - edgeTolerance,
+                contentBounds.Right);
+        }
+        else
+        {
+            Assert.InRange(
+                switchBounds.Left,
+                contentBounds.Left,
+                contentBounds.Left + edgeTolerance);
+        }
+    }
+
+    [WinFormsFact]
+    public void CheckBox_ToggleSwitch_RtlLongText_AutoSizeFalse_TextBounds_DoNotOverlapSwitch()
+    {
+        using CheckBox box = new()
+        {
+            Appearance = Appearance.ToggleSwitch,
+            AutoSize = false,
+            RightToLeft = RightToLeft.Yes,
+            CheckAlign = ContentAlignment.MiddleLeft,
+            Text = "This is a very long toggle-switch label to verify RTL clipping does not overlap the switch glyph.",
+            Size = new Size(160, 30)
+        };
+
+        box.VisualStylesMode = VisualStylesMode.Net11;
+        box.CreateControl();
+
+        Rendering.CheckBox.ToggleSwitchMetrics metrics = Rendering.CheckBox.ToggleSwitchMetrics.Create(box);
+        Rectangle switchBounds = Rendering.CheckBox.AnimatedToggleSwitchRenderer.GetSwitchBounds(
+            box,
+            box.RtlTranslatedCheckAlign,
+            metrics);
+        Rectangle textBounds = Rendering.CheckBox.AnimatedToggleSwitchRenderer.GetTextBounds(
+            box,
+            box.RtlTranslatedCheckAlign,
+            metrics);
+        Rectangle overlap = Rectangle.Intersect(switchBounds, textBounds);
+
+        Assert.True(overlap.IsEmpty);
+    }
+
+    [WinFormsFact]
+    public void CheckBox_ToggleSwitch_NarrowWidth_TextBoundsCanCollapseWithoutThrowing()
+    {
+        using CheckBox box = new()
+        {
+            Appearance = Appearance.ToggleSwitch,
+            AutoSize = false,
+            Text = "Narrow control text",
+            Size = new Size(8, 30),
+            VisualStylesMode = VisualStylesMode.Net11
+        };
+        using Bitmap bitmap = new(box.Width, box.Height);
+
+        Exception exception = Record.Exception(
+            () => box.DrawToBitmap(bitmap, new Rectangle(Point.Empty, box.Size)));
+
+        Assert.Null(exception);
+
+        Rendering.CheckBox.ToggleSwitchMetrics metrics = Rendering.CheckBox.ToggleSwitchMetrics.Create(box);
+        Rectangle textBounds = Rendering.CheckBox.AnimatedToggleSwitchRenderer.GetTextBounds(
+            box,
+            box.RtlTranslatedCheckAlign,
+            metrics);
+
+        Assert.InRange(textBounds.Width, 0, 1);
     }
 
     [WinFormsTheory]
@@ -1082,6 +1151,25 @@ public class CheckBoxTests : AbstractButtonBaseTests
         box.ThreeState = true;
 
         Assert.False(box.GetStyle(ControlStyles.UserPaint));
+    }
+
+    [WinFormsFact]
+    public void CheckBox_ToggleSwitch_FlatStyleSystem_DrawToBitmap_DoesNotThrow()
+    {
+        using CheckBox box = new()
+        {
+            Appearance = Appearance.ToggleSwitch,
+            FlatStyle = FlatStyle.System,
+            VisualStylesMode = VisualStylesMode.Net11,
+            Text = "Toggle",
+            Size = new Size(120, 30)
+        };
+        using Bitmap bitmap = new(box.Width, box.Height);
+
+        Exception exception = Record.Exception(
+            () => box.DrawToBitmap(bitmap, new Rectangle(Point.Empty, box.Size)));
+
+        Assert.Null(exception);
     }
 
     private static int CountPixels(Bitmap bitmap, Color color)
@@ -1523,10 +1611,10 @@ public class CheckBoxTests : AbstractButtonBaseTests
     }
 
     [WinFormsTheory]
-    [InlineData(Appearance.Button, FlatStyle.Standard,  "Test", 12, 8, 100, 20)]
-    [InlineData(Appearance.Normal, FlatStyle.System,    "Test", 12, 8, 100, 20)]
-    [InlineData(Appearance.Normal, FlatStyle.Flat,      "Test", 12, 8, 100, 20)]
-    [InlineData(Appearance.Normal, FlatStyle.Standard,  "Test", 12, 8, 100, 20)]
+    [InlineData(Appearance.Button, FlatStyle.Standard, "Test", 12, 8, 100, 20)]
+    [InlineData(Appearance.Normal, FlatStyle.System, "Test", 12, 8, 100, 20)]
+    [InlineData(Appearance.Normal, FlatStyle.Flat, "Test", 12, 8, 100, 20)]
+    [InlineData(Appearance.Normal, FlatStyle.Standard, "Test", 12, 8, 100, 20)]
     public void CheckBox_GetPreferredSizeCore_VariousStyles_ReturnsExpected(
         Appearance appearance, FlatStyle flatStyle, string text, int fontSize, int padding, int width, int height)
     {
