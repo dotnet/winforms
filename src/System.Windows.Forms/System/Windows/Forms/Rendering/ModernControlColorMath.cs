@@ -205,6 +205,12 @@ internal static class ModernControlColorMath
         }
     }
 
+    // SrgbToLinear and its inverse, LinearToSrgb, implement the standard sRGB transfer
+    // function from IEC 61966-2-1, converting gamma-encoded channel values to and from
+    // linear light. It uses a small linear segment near black and an approximately 2.4
+    // gamma power segment above it; 0.04045, 12.92, 0.055, 1.055, 2.4, and 0.0031308
+    // are standard sRGB constants, not tuned values. Physically correct alpha compositing
+    // is done in linear light, so overlay colors are decoded, blended, then re-encoded.
     private static float SrgbToLinear(byte channel)
     {
         float value = channel / 255f;
