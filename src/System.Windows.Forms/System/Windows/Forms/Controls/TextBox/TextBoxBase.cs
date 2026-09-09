@@ -2742,7 +2742,7 @@ public abstract partial class TextBoxBase : Control
             case BorderStyle.FixedSingle:
 
                 offscreenGraphics.FillRectangle(clientBackgroundBrush, deflatedBounds);
-                offscreenGraphics.DrawRectangle(flatBorderPen, deflatedBounds);
+                offscreenGraphics.DrawRectangle(adornerPen, deflatedBounds);
                 break;
 
             case BorderStyle.Fixed3D:
@@ -2775,7 +2775,7 @@ public abstract partial class TextBoxBase : Control
         }
 
         // Rounded Fixed3D uses one tapered bottom edge that meets the arcs (#14997).
-        // None uses a focus underline; other flat styles have a box border.
+        // FixedSingle uses a straight bottom edge in every state; None uses one only for focus.
         if (BorderStyle == BorderStyle.Fixed3D && canRenderRoundedChrome)
         {
             using GraphicsPath bottomEdgePath = CreateVisualStylesBottomEdgePath(
@@ -2794,6 +2794,16 @@ public abstract partial class TextBoxBase : Control
                 Math.Max(bounds.Top, deflatedBounds.Bottom - bottomThickness / 2),
                 bounds.Right,
                 bounds.Bottom);
+        }
+        else if (BorderStyle == BorderStyle.FixedSingle)
+        {
+            using var bottomPen = stroke.BottomColor.GetCachedPenScope(bottomThickness);
+            offscreenGraphics.DrawLine(
+                bottomPen,
+                deflatedBounds.Left,
+                deflatedBounds.Bottom,
+                deflatedBounds.Right,
+                deflatedBounds.Bottom);
         }
         else if (BorderStyle == BorderStyle.None && stroke.HasFocusIndicator)
         {

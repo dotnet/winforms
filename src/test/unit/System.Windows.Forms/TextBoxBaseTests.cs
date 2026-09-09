@@ -44,6 +44,37 @@ public partial class TextBoxBaseTests
         Assert.NotEqual(Color.Red.ToArgb(), bitmap.GetPixel(bitmap.Width / 2, bitmap.Height / 2).ToArgb());
     }
 
+    [WinFormsTheory]
+    [InlineData(false)]
+    [InlineData(true)]
+    public void TextBoxBase_ModernFixedSingle_EmphasizesOnlyBottomBorder(bool focused)
+    {
+        using Form form = new();
+        using Button focusTarget = new();
+        using TextBox control = new()
+        {
+            BackColor = Color.White,
+            BorderStyle = BorderStyle.FixedSingle,
+            Size = new Size(140, 40),
+            VisualStylesMode = VisualStylesMode.Net11
+        };
+        form.Controls.AddRange([focusTarget, control]);
+        form.Show();
+
+        Control focusedControl = focused ? control : focusTarget;
+        Assert.True(focusedControl.Focus());
+
+        using Bitmap bitmap = new(control.Width, control.Height);
+        control.DrawToBitmap(bitmap, new Rectangle(Point.Empty, control.Size));
+
+        Color top = bitmap.GetPixel(bitmap.Width / 2, 0);
+        Color left = bitmap.GetPixel(0, bitmap.Height / 2);
+        Color bottom = bitmap.GetPixel(bitmap.Width / 2, bitmap.Height - 1);
+
+        Assert.Equal(top.ToArgb(), left.ToArgb());
+        Assert.NotEqual(top.ToArgb(), bottom.ToArgb());
+    }
+
     [WinFormsFact]
     public void TextBoxBase_VisualStylesModeChanged_PreservesHandleAndSelection()
     {
