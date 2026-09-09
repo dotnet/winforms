@@ -197,7 +197,15 @@ public sealed partial class AnchorEditor
         {
             public ControlPlaceholder()
             {
-                BackColor = SystemColors.Control;
+                if (Application.IsDarkModeEnabled)
+                {
+                    BackColor = SystemColors.ControlDark;
+                }
+                else
+                {
+                    BackColor = SystemColors.Control;
+                }
+
                 TabStop = false;
                 SetStyle(ControlStyles.Selectable, false);
             }
@@ -206,6 +214,10 @@ public sealed partial class AnchorEditor
             {
                 Rectangle rc = ClientRectangle;
                 ControlPaint.DrawButton(e.Graphics, rc, ButtonState.Normal);
+                if (Application.IsDarkModeEnabled)
+                {
+                    e.Graphics.Clear(BackColor);
+                }
             }
         }
 
