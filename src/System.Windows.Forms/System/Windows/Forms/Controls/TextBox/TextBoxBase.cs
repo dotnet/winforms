@@ -774,6 +774,7 @@ public abstract partial class TextBoxBase : Control
 
                 RecreateHandle();
                 AdjustHeight(false);
+                EnsureModernMultilineAutoSizeHeight();
                 OnMultilineChanged(EventArgs.Empty);
             }
         }
@@ -1506,6 +1507,26 @@ public abstract partial class TextBoxBase : Control
         }
     }
 
+    private void EnsureModernMultilineAutoSizeHeight()
+    {
+        if (!_textBoxFlags[s_autoSize]
+            || !_textBoxFlags[s_multiline]
+            || EffectiveVisualStylesMode < VisualStylesMode.Net11)
+        {
+            return;
+        }
+
+        int singleLineHeight = PreferredHeight;
+
+        if (Height >= singleLineHeight)
+        {
+            return;
+        }
+
+        Height = singleLineHeight;
+        _requestedHeight = singleLineHeight;
+    }
+
     /// <summary>
     ///  Append text to the current text of text box.
     /// </summary>
@@ -1711,6 +1732,7 @@ public abstract partial class TextBoxBase : Control
         _triggerNewClientSizeRequest = false;
         base.OnVisualStylesModeChanged(e);
         AdjustHeight(false);
+        EnsureModernMultilineAutoSizeHeight();
         _focusIndicatorRenderer?.Synchronize(Focused, invalidate: false);
 
         RecalculateVisualStylesClientArea();
@@ -1729,6 +1751,7 @@ public abstract partial class TextBoxBase : Control
 
         CommonProperties.xClearPreferredSizeCache(this);
         AdjustHeight(false);
+        EnsureModernMultilineAutoSizeHeight();
         RecalculateVisualStylesClientArea();
 
         if (ParentInternal is { } parent)
@@ -2510,6 +2533,57 @@ public abstract partial class TextBoxBase : Control
 
                 ref RECT clientRect = ref ncCalcSizeParams->rgrc._0;
 
+                if (!Multiline)
+                {
+                    // Keep enough single-line client height for native edit text metrics when the modern
+                    // chrome carve would otherwise leave too little room at higher DPI scales.
+                    int clientHeight = clientRect.bottom - clientRect.top;
+                    int minimumSingleLineClientHeight = FontHeight + ScaleVisualStylesMetric(3);
+                    int maxVerticalCarve = Math.Max(0, clientHeight - minimumSingleLineClientHeight);
+
+                    if (padding.Vertical > maxVerticalCarve)
+                    {
+                        int overflow = padding.Vertical - maxVerticalCarve;
+                        int minimumTopPadding = BorderStyle switch
+                        {
+                            BorderStyle.None => 0,
+                            BorderStyle.FixedSingle => ScaleVisualStylesMetric(ModernControlVisualStyles.BorderThickness),
+                            _ => ScaleVisualStylesMetric(ModernControlVisualStyles.InternalChromeInset + ModernControlVisualStyles.BorderThickness)
+                        };
+                        int minimumBottomPadding = BorderStyle == BorderStyle.None
+                            ? 0
+                            : ScaleVisualStylesMetric(ModernControlVisualStyles.BorderThickness);
+
+                        // Bias the recovery toward the bottom inset first so baseline-driven single-line
+                        // text sits slightly lower, while still preserving the minimum client height.
+                        int availableBottomReduction = Math.Max(0, padding.Bottom - minimumBottomPadding);
+                        int bottomReduction = Math.Min(overflow, availableBottomReduction);
+                        padding.Bottom -= bottomReduction;
+                        overflow -= bottomReduction;
+
+                        int availableTopReduction = Math.Max(0, padding.Top - minimumTopPadding);
+                        int topReduction = Math.Min(overflow, availableTopReduction);
+                        padding.Top -= topReduction;
+                        overflow -= topReduction;
+
+                        if (overflow > 0)
+                        {
+                            int minimumVisibleVerticalPadding = BorderStyle == BorderStyle.None
+                                ? 0
+                                : ScaleVisualStylesMetric(ModernControlVisualStyles.BorderThickness);
+
+                            int availableBottomVisualReduction = Math.Max(0, padding.Bottom - minimumVisibleVerticalPadding);
+                            bottomReduction = Math.Min(overflow, availableBottomVisualReduction);
+                            padding.Bottom -= bottomReduction;
+                            overflow -= bottomReduction;
+
+                            int availableTopVisualReduction = Math.Max(0, padding.Top - minimumVisibleVerticalPadding);
+                            topReduction = Math.Min(overflow, availableTopVisualReduction);
+                            padding.Top -= topReduction;
+                        }
+                    }
+                }
+
                 // Never-invert clamp: a large Padding plus the live scrollbar allowance can drive the
                 // carved client rect to zero or inverted. A 0-1px client area is acceptable and intended
                 // (shipping multiline TextBox already collapses this way); we only prevent underflow past
@@ -2660,7 +2734,7 @@ public abstract partial class TextBoxBase : Control
     {
         int cornerRadius = ScaleVisualStylesMetric(ModernControlVisualStyles.FieldCornerRadius);
         Size focusBorderMetrics = GetVisualStylesFocusBorderMetrics();
-        int borderThickness = Math.Max(focusBorderMetrics.Width, focusBorderMetrics.Height);
+        int borderThickness = ScaleVisualStylesMetric(ModernControlVisualStyles.BorderThickness);
         int focusBandHeight = GetVisualStylesFocusBandHeight();
 
         Color clientBackColor = BackColor;
