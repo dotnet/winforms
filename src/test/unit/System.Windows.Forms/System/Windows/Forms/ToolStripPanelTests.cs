@@ -354,6 +354,228 @@ public class ToolStripPanelTests
         Assert.Null(exception);
     }
 
+    [WinFormsFact]
+    public void ToolStripPanel_Join_Horizontal_NewRowBoundary_UsesPaddingTop_NotPaddingLeft()
+    {
+        using Form form = new()
+        {
+            ClientSize = new Size(600, 200)
+        };
+        using ToolStripPanel panel = new()
+        {
+            Dock = DockStyle.Top,
+            Padding = new Padding(left: 300, top: 5, right: 300, bottom: 0)
+        };
+        using ToolStrip toolStrip1 = new();
+        using ToolStrip toolStrip2 = new();
+        toolStrip1.Items.Add(new ToolStripButton("Btn1"));
+        toolStrip2.Items.Add(new ToolStripButton("Btn2"));
+
+        form.Controls.Add(panel);
+        form.Show();
+
+        Assert.Equal(Orientation.Horizontal, panel.Orientation);
+
+        panel.Join(toolStrip1, new Point(0, 0));
+        panel.PerformLayout();
+        Application.DoEvents();
+
+        int secondRowY = toolStrip1.Bottom + 5;
+        Assert.InRange(secondRowY, panel.Padding.Top + 1, panel.Padding.Left - 1);
+
+        panel.Join(toolStrip2, new Point(0, secondRowY));
+        panel.PerformLayout();
+        Application.DoEvents();
+
+        Assert.True(toolStrip2.Top >= toolStrip1.Bottom);
+    }
+
+    [WinFormsFact]
+    public void ToolStripPanel_Join_Horizontal_RightToLeft_NewRowBoundary_UsesPaddingTop_NotPaddingLeft()
+    {
+        using Form form = new()
+        {
+            ClientSize = new Size(600, 200),
+            RightToLeft = RightToLeft.Yes
+        };
+        using ToolStripPanel panel = new()
+        {
+            Dock = DockStyle.Top,
+            RightToLeft = RightToLeft.Yes,
+            Padding = new Padding(left: 300, top: 5, right: 300, bottom: 0)
+        };
+        using ToolStrip toolStrip1 = new();
+        using ToolStrip toolStrip2 = new();
+        toolStrip1.Items.Add(new ToolStripButton("Btn1"));
+        toolStrip2.Items.Add(new ToolStripButton("Btn2"));
+
+        form.Controls.Add(panel);
+        form.Show();
+
+        panel.Join(toolStrip1, new Point(0, 0));
+        panel.PerformLayout();
+        Application.DoEvents();
+
+        int secondRowY = toolStrip1.Bottom + 5;
+        Assert.InRange(secondRowY, panel.Padding.Top + 1, panel.Padding.Left - 1);
+
+        panel.Join(toolStrip2, new Point(0, secondRowY));
+        panel.PerformLayout();
+        Application.DoEvents();
+
+        Assert.True(toolStrip2.Top >= toolStrip1.Bottom);
+    }
+
+    [WinFormsFact]
+    public void ToolStripPanel_Join_Vertical_NewRowBoundary_UsesPaddingLeft_NotPaddingTop()
+    {
+        using Form form = new()
+        {
+            ClientSize = new Size(200, 600)
+        };
+        using ToolStripPanel panel = new()
+        {
+            Dock = DockStyle.Left,
+            Padding = new Padding(left: 5, top: 300, right: 0, bottom: 300)
+        };
+        using ToolStrip toolStrip1 = new();
+        using ToolStrip toolStrip2 = new();
+        toolStrip1.Items.Add(new ToolStripButton("Btn1"));
+        toolStrip2.Items.Add(new ToolStripButton("Btn2"));
+
+        form.Controls.Add(panel);
+        form.Show();
+
+        Assert.Equal(Orientation.Vertical, panel.Orientation);
+
+        panel.Join(toolStrip1, new Point(0, 0));
+        panel.PerformLayout();
+        Application.DoEvents();
+
+        int secondColumnX = toolStrip1.Right + 5;
+        Assert.InRange(secondColumnX, panel.Padding.Left + 1, panel.Padding.Top - 1);
+
+        panel.Join(toolStrip2, new Point(secondColumnX, 0));
+        panel.PerformLayout();
+        Application.DoEvents();
+
+        Assert.True(toolStrip2.Left >= toolStrip1.Right);
+    }
+
+    [WinFormsFact]
+    public void ToolStripPanel_Join_Horizontal_InsertBeforeExistingControlInRow_UsesRequestedLocation_NotShiftedByPaddingLeft()
+    {
+        using Form form = new() { ClientSize = new Size(600, 200) };
+        using ToolStripPanel panel = new()
+        {
+            Dock = DockStyle.Top,
+            Padding = new Padding(left: 4, top: 0, right: 4, bottom: 0)
+        };
+        using ToolStrip toolStrip1 = new() { Size = new Size(50, 25) };
+        using ToolStrip toolStrip2 = new() { Size = new Size(50, 25) };
+        toolStrip1.Items.Add(new ToolStripButton("Btn1"));
+        toolStrip2.Items.Add(new ToolStripButton("Btn2"));
+
+        form.Controls.Add(panel);
+        form.Show();
+
+        panel.Join(toolStrip2, new Point(20, 0));
+        panel.PerformLayout();
+        Application.DoEvents();
+
+        Point requestedLocation = new(10, 0);
+        panel.Join(toolStrip1, requestedLocation);
+        panel.PerformLayout();
+        Application.DoEvents();
+
+        Assert.Single(panel.RowsInternal);
+        Assert.Equal(requestedLocation, toolStrip1.Location);
+        Assert.True(toolStrip2.Left >= toolStrip1.Right);
+    }
+
+    [WinFormsFact]
+    public void ToolStripPanel_Join_Vertical_InsertBeforeExistingControlInColumn_UsesRequestedLocation_NotShiftedByPaddingTop()
+    {
+        using Form form = new() { ClientSize = new Size(200, 600) };
+        using ToolStripPanel panel = new()
+        {
+            Dock = DockStyle.Left,
+            Padding = new Padding(left: 0, top: 4, right: 0, bottom: 4)
+        };
+        using ToolStrip toolStrip1 = new() { Size = new Size(25, 50) };
+        using ToolStrip toolStrip2 = new() { Size = new Size(25, 50) };
+        toolStrip1.Items.Add(new ToolStripButton("Btn1"));
+        toolStrip2.Items.Add(new ToolStripButton("Btn2"));
+
+        form.Controls.Add(panel);
+        form.Show();
+
+        panel.Join(toolStrip2, new Point(0, 20));
+        panel.PerformLayout();
+        Application.DoEvents();
+
+        Point requestedLocation = new(0, 10);
+        panel.Join(toolStrip1, requestedLocation);
+        panel.PerformLayout();
+        Application.DoEvents();
+
+        Assert.Single(panel.RowsInternal);
+        Assert.Equal(requestedLocation, toolStrip1.Location);
+        Assert.True(toolStrip2.Top >= toolStrip1.Bottom);
+    }
+
+    [WinFormsFact]
+    public void ToolStripPanel_Join_Horizontal_FirstControlInRow_UsesRequestedLocation_NotShiftedByPaddingLeft()
+    {
+        using Form form = new()
+        {
+            ClientSize = new Size(600, 200)
+        };
+        using ToolStripPanel panel = new()
+        {
+            Dock = DockStyle.Top,
+            Padding = new Padding(left: 4, top: 0, right: 4, bottom: 0)
+        };
+        using ToolStrip toolStrip = new();
+        toolStrip.Items.Add(new ToolStripButton("Btn1"));
+
+        form.Controls.Add(panel);
+        form.Show();
+
+        Point requestedLocation = new(7, 0);
+        panel.Join(toolStrip, requestedLocation);
+        panel.PerformLayout();
+        Application.DoEvents();
+
+        Assert.Equal(requestedLocation, toolStrip.Location);
+    }
+
+    [WinFormsFact]
+    public void ToolStripPanel_Join_Vertical_FirstControlInRow_UsesRequestedLocation_NotShiftedByPaddingTop()
+    {
+        using Form form = new()
+        {
+            ClientSize = new Size(200, 600)
+        };
+        using ToolStripPanel panel = new()
+        {
+            Dock = DockStyle.Left,
+            Padding = new Padding(left: 0, top: 4, right: 0, bottom: 4)
+        };
+        using ToolStrip toolStrip = new();
+        toolStrip.Items.Add(new ToolStripButton("Btn1"));
+
+        form.Controls.Add(panel);
+        form.Show();
+
+        Point requestedLocation = new(0, 7);
+        panel.Join(toolStrip, requestedLocation);
+        panel.PerformLayout();
+        Application.DoEvents();
+
+        Assert.Equal(requestedLocation, toolStrip.Location);
+    }
+
     private class SubToolStripPanel : ToolStripPanel
     {
         public new SizeF AutoScaleFactor => base.AutoScaleFactor;
