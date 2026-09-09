@@ -360,35 +360,37 @@ public abstract partial class UpDownBase : ContainerControl
         {
             if (!UseSideBySideButtons)
             {
-                int height = FontHeight;
-
-                // Adjust for the border style
-                if (_borderStyle != BorderStyle.None)
-                {
-                    height += SystemInformation.BorderSize.Height * 4 + 3;
-                }
-                else
-                {
-                    height += 3;
-                }
-
-                return height;
+                return GetClassicPreferredHeight();
             }
 
-            int contentInset = ModernContentInset;
-            int preferredHeight = FontHeight + (contentInset * 2);
+            SystemVisualSettings settings = Application.SystemVisualSettings;
 
-            if (_borderStyle == BorderStyle.Fixed3D)
-            {
-                int roundedChromeMinimumHeight = LogicalToDeviceUnits(ModernControlVisualStyles.UpDownCornerRadius)
-                    + LogicalToDeviceUnits(ModernControlVisualStyles.BorderThickness)
-                    + LogicalToDeviceUnits(ModernControlVisualStyles.InternalChromeInset);
-
-                preferredHeight = Math.Max(preferredHeight, roundedChromeMinimumHeight);
-            }
+            int preferredHeight = ModernControlVisualStyles.GetSingleLineTextBoxPreferredHeight(
+                fontHeight: Font.Height,
+                borderStyle: _borderStyle,
+                focusBorderMetrics: settings.FocusBorderMetrics,
+                textScaleFactor: settings.TextScaleFactor,
+                deviceDpi: DeviceDpiInternal);
 
             return preferredHeight;
         }
+    }
+
+    private int GetClassicPreferredHeight()
+    {
+        int height = FontHeight;
+
+        // Adjust for the border style
+        if (_borderStyle != BorderStyle.None)
+        {
+            height += SystemInformation.BorderSize.Height * 4 + 3;
+        }
+        else
+        {
+            height += 3;
+        }
+
+        return height;
     }
 
     /// <summary>
@@ -566,11 +568,20 @@ public abstract partial class UpDownBase : ContainerControl
     /// <inheritdoc/>
     protected override void OnVisualStylesModeChanged(EventArgs e)
     {
+        bool usedModernMetrics = UseSideBySideButtons;
+        int oldPreferredHeight = PreferredHeight;
+
         base.OnVisualStylesModeChanged(e);
         _focusIndicatorRenderer?.Synchronize(Focused, invalidate: false);
         CommonProperties.xClearPreferredSizeCache(this);
 
-        if (AutoSize)
+        bool usesModernMetrics = UseSideBySideButtons;
+        bool heightStillAtClassicPreferred = Height == GetClassicPreferredHeight();
+
+        if (AutoSize
+            || (usedModernMetrics != usesModernMetrics
+                && Height == oldPreferredHeight)
+            || (usesModernMetrics && heightStillAtClassicPreferred))
         {
             Height = PreferredHeight;
         }

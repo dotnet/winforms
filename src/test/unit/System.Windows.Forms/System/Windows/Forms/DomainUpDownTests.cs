@@ -48,6 +48,27 @@ public class DomainUpDownTests : IDisposable
     }
 
     [WinFormsFact]
+    public void DomainUpDown_ModernVisualStylesMode_PreferredHeightMatchesSingleLineTextBox()
+    {
+        using TextBox textBox = new()
+        {
+            VisualStylesMode = VisualStylesMode.Net11
+        };
+        using DomainUpDown control = new()
+        {
+            VisualStylesMode = VisualStylesMode.Net11
+        };
+
+        if (!control.UseSideBySideButtons)
+        {
+            return;
+        }
+
+        Assert.Equal(textBox.PreferredHeight, control.PreferredHeight);
+        Assert.Equal(textBox.PreferredHeight, control.Height);
+    }
+
+    [WinFormsFact]
     public void DomainUpDown_Ctor_Default()
     {
         _sub.ActiveControl.Should().BeNull();
