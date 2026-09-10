@@ -297,6 +297,32 @@ public class DataGridViewComboBoxCellTests : IDisposable
     }
 
     [Theory]
+    [InlineData(false, false, "COMBOBOX", 6)]
+    [InlineData(true, false, "COMBOBOX", 7)]
+    [InlineData(false, true, "DarkMode_CFD::COMBOBOX", 6)]
+    [InlineData(true, true, "DarkMode_CFD::COMBOBOX", 7)]
+    public void GetDropDownButtonElement_ReturnsExpectedElement(
+        bool rightToLeft,
+        bool useDarkMode,
+        string expectedClassName,
+        int expectedPart)
+    {
+        Type rendererType = typeof(DataGridViewComboBoxCell).GetNestedType(
+            "DataGridViewComboBoxCellRenderer",
+            Reflection.BindingFlags.NonPublic)!;
+        Reflection.MethodInfo getElement = rendererType.GetMethod(
+            "GetDropDownButtonElement",
+            Reflection.BindingFlags.Public | Reflection.BindingFlags.Static)!;
+
+        VisualStyles.VisualStyleElement result = (VisualStyles.VisualStyleElement)getElement.Invoke(
+            null,
+            [rightToLeft, useDarkMode])!;
+
+        result.ClassName.Should().Be(expectedClassName);
+        result.Part.Should().Be(expectedPart);
+    }
+
+    [Theory]
     [InlineData(Keys.A, false, false, false, true)]
     [InlineData(Keys.F4, false, false, false, true)]
     [InlineData(Keys.Space, false, false, false, true)]

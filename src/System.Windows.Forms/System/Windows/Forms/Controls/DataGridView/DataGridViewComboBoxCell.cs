@@ -2384,7 +2384,7 @@ public partial class DataGridViewComboBoxCell : DataGridViewCell
             return Color.White;
         }
 
-        if (useVisualStyleTextColor && !useDarkModeColors)
+        if (useVisualStyleTextColor)
         {
             return DataGridViewComboBoxCellRenderer.VisualStyleRenderer.GetColor(ColorProperty.TextColor);
         }

@@ -16,6 +16,8 @@ public partial class DataGridViewComboBoxCell
         private static readonly VisualStyleElement s_comboBoxDropDownButtonRight = VisualStyleElement.ComboBox.DropDownButtonRight.Normal;
         private static readonly VisualStyleElement s_comboBoxDropDownButtonLeft = VisualStyleElement.ComboBox.DropDownButtonLeft.Normal;
         private static readonly VisualStyleElement s_comboBoxReadOnlyButton = VisualStyleElement.ComboBox.ReadOnlyButton.Normal;
+        private static readonly VisualStyleElement s_darkComboBoxDropDownButtonRight = CreateDarkModeElement(s_comboBoxDropDownButtonRight);
+        private static readonly VisualStyleElement s_darkComboBoxDropDownButtonLeft = CreateDarkModeElement(s_comboBoxDropDownButtonLeft);
 
         public static VisualStyleRenderer VisualStyleRenderer
         {
@@ -54,23 +56,20 @@ public partial class DataGridViewComboBoxCell
 
         public static void DrawDropDownButton(Graphics g, Rectangle bounds, ComboBoxState state, bool rightToLeft)
         {
-            if (Application.IsDarkModeEnabled && AppContextSwitches.DataGridViewDarkModeTheming)
-            {
-                ComboBoxRenderer.DrawDropDownButton(g, bounds, state);
-                return;
-            }
-
-            if (rightToLeft)
-            {
-                InitializeRenderer(s_comboBoxDropDownButtonLeft, (int)state);
-            }
-            else
-            {
-                InitializeRenderer(s_comboBoxDropDownButtonRight, (int)state);
-            }
+            bool useDarkMode = Application.IsDarkModeEnabled && AppContextSwitches.DataGridViewDarkModeTheming;
+            InitializeRenderer(GetDropDownButtonElement(rightToLeft, useDarkMode), (int)state);
 
             t_visualStyleRenderer.DrawBackground(g, bounds);
         }
+
+        public static VisualStyleElement GetDropDownButtonElement(bool rightToLeft, bool useDarkMode)
+            => (rightToLeft, useDarkMode) switch
+            {
+                (true, true) => s_darkComboBoxDropDownButtonLeft,
+                (true, false) => s_comboBoxDropDownButtonLeft,
+                (false, true) => s_darkComboBoxDropDownButtonRight,
+                _ => s_comboBoxDropDownButtonRight
+            };
 
         public static void DrawReadOnlyButton(Graphics g, Rectangle bounds, ComboBoxState state)
         {
@@ -105,5 +104,11 @@ public partial class DataGridViewComboBoxCell
                 t_visualStyleRenderer.SetParameters(visualStyleElement.ClassName, visualStyleElement.Part, state);
             }
         }
+
+        private static VisualStyleElement CreateDarkModeElement(VisualStyleElement element)
+            => VisualStyleElement.CreateElement(
+                $"{Control.DarkModeIdentifier}_{Control.ComboBoxButtonThemeIdentifier}::{Control.ComboboxClassIdentifier}",
+                element.Part,
+                element.State);
     }
 }
