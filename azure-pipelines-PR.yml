@@ -6,6 +6,7 @@ trigger:
   branches:
     include:
       - main
+      - integration/11.0-RC2
       - release/*
       - internal/release/*
       - internal/experimental/*
@@ -29,6 +30,7 @@ pr:
   branches:
     include:
       - main
+      - integration/11.0-RC2
       - vnext
       - release/*
       - internal/release/*
