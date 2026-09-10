@@ -4,6 +4,8 @@
 #nullable disable
 
 using System.Drawing;
+using Moq;
+using Moq.Protected;
 using static System.Windows.Forms.ListViewItem;
 
 namespace System.Windows.Forms.Tests;
@@ -682,10 +684,8 @@ public class ListViewItem_IKeyboardToolTipTests
         Assert.Equal(expected, ((IKeyboardToolTip)listViewItem).HasRtlModeEnabled());
     }
 
-    [ActiveIssue("https://github.com/dotnet/winforms/issues/12319")]
     [WinFormsTheory]
-    // Comment the data out due to ActiveIssue "https://github.com/dotnet/winforms/issues/12319".
-    // [InlineData(true, true, true, true)]
+    [InlineData(true, true, true, true)]
     [InlineData(true, true, false, false)]
     [InlineData(true, false, true, true)]
     [InlineData(true, false, false, false)]
@@ -696,33 +696,29 @@ public class ListViewItem_IKeyboardToolTipTests
         bool isHovered,
         bool expected)
     {
-        Point initialPosition = Cursor.Position;
-        try
+        Mock<ListView> mockListView = new() { CallBase = true };
+        using ListView listView = mockListView.Object;
+        listView.VirtualMode = virtualMode;
+        listView.VirtualListSize = 1;
+
+        // Cover every possible virtual-screen coordinate without moving the physical cursor.
+        // https://learn.microsoft.com/windows/win32/gdi/the-virtual-screen
+        Rectangle bounds = isHovered
+            ? new(short.MinValue, short.MinValue, ushort.MaxValue + 1, ushort.MaxValue + 1)
+            : Rectangle.Empty;
+        Mock<ListView.ListViewAccessibleObject> mockAccessibleObject = new(MockBehavior.Strict, listView);
+        mockAccessibleObject.Setup(a => a.Bounds).Returns(bounds);
+        mockListView.Protected().Setup<AccessibleObject>("CreateAccessibilityInstance").Returns(mockAccessibleObject.Object);
+
+        ListViewItem listViewItem = new();
+        if (insideListView)
         {
-            ListViewItem listViewItem = new();
-            using var listView = GetListView(virtualMode);
-
-            if (insideListView)
-            {
-                listViewItem = AssignItemToListView(listView, listViewItem);
-            }
-
-            listView.CreateControl();
-
-            Point position = listView.AccessibilityObject.Bounds.Location;
-            if (!isHovered)
-            {
-                position.X--;
-                position.Y--;
-            }
-
-            Cursor.Position = position;
-            Assert.Equal(expected, ((IKeyboardToolTip)listViewItem).IsHoveredWithMouse());
+            listViewItem = AssignItemToListView(listView, listViewItem);
         }
-        finally
-        {
-            Cursor.Position = initialPosition;
-        }
+
+        Assert.Equal(expected, ((IKeyboardToolTip)listViewItem).IsHoveredWithMouse());
+        mockAccessibleObject.VerifyGet(a => a.Bounds, insideListView ? Times.AtLeastOnce() : Times.Never());
+        Assert.False(listView.IsHandleCreated);
     }
 
     [WinFormsTheory]
