@@ -26,6 +26,8 @@ internal static partial class LocalAppContextSwitches
     internal const string EnableMsoComponentManagerSwitchName = "Switch.System.Windows.Forms.EnableMsoComponentManager";
     internal const string TreeNodeCollectionAddRangeRespectsSortOrderSwitchName = "System.Windows.Forms.TreeNodeCollectionAddRangeRespectsSortOrder";
     internal const string MoveTreeViewTextLocationOnePixelSwitchName = "System.Windows.Forms.TreeView.MoveTreeViewTextLocationOnePixel";
+    internal const string ToolStripModernRenderingSwitchName = "System.Windows.Forms.ToolStripModernRendering";
+    internal const string DataGridViewModernRenderingSwitchName = "System.Windows.Forms.DataGridViewModernRendering";
 
     private static int s_scaleTopLevelFormMinMaxSizeForDpi;
     private static int s_anchorLayoutV2;
@@ -39,6 +41,8 @@ internal static partial class LocalAppContextSwitches
     private static int s_treeNodeCollectionAddRangeRespectsSortOrder;
 
     private static int s_moveTreeViewTextLocationOnePixel;
+    private static int s_toolStripModernRendering;
+    private static int s_dataGridViewModernRendering;
 
     private static FrameworkName? s_targetFrameworkName;
 
@@ -230,5 +234,25 @@ internal static partial class LocalAppContextSwitches
     {
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         get => GetCachedSwitchValue(MoveTreeViewTextLocationOnePixelSwitchName, ref s_moveTreeViewTextLocationOnePixel);
+    }
+
+    /// <summary>
+    ///  Indicates whether ToolStrip controls, including MenuStrip, support modern visual styles.
+    ///  Defaults to <see langword="false"/>.
+    /// </summary>
+    public static bool ToolStripModernRendering
+    {
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        get => GetCachedSwitchValue(ToolStripModernRenderingSwitchName, ref s_toolStripModernRendering);
+    }
+
+    /// <summary>
+    ///  Indicates whether DataGridView controls support modern visual styles.
+    ///  Defaults to <see langword="false"/>.
+    /// </summary>
+    public static bool DataGridViewModernRendering
+    {
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        get => GetCachedSwitchValue(DataGridViewModernRenderingSwitchName, ref s_dataGridViewModernRendering);
     }
 }
