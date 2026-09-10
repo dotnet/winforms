@@ -22,11 +22,11 @@ source context.
 2. Fetch the GitHub pull ref and base branch:
 
    ```powershell
-$baseBranch = gh pr view $pr --repo $repo --json baseRefName --jq ".baseRefName"
-$headOid = gh pr view $pr --repo $repo --json headRefOid --jq ".headRefOid"
-$remote = "upstream" # Remote that points to $repo; use `git remote -v` to confirm
-git fetch $remote "pull/$pr/head:refs/remotes/pull/$pr/head" --quiet
-git fetch $remote $baseBranch --quiet
+   $baseBranch = gh pr view $pr --repo $repo --json baseRefName --jq ".baseRefName"
+   $headOid = gh pr view $pr --repo $repo --json headRefOid --jq ".headRefOid"
+   $remote = "upstream" # Remote that points to $repo; use `git remote -v` to confirm
+   git fetch $remote "pull/$pr/head:refs/remotes/pull/$pr/head" --quiet
+   git fetch $remote $baseBranch --quiet
    ```
 
 3. Create a uniquely named temporary worktree outside the repository:
@@ -39,7 +39,7 @@ git fetch $remote $baseBranch --quiet
 4. Compute the actual PR range:
 
    ```powershell
-   $baseOid = git merge-base "origin/$baseBranch" $headOid
+   $baseOid = git merge-base "$remote/$baseBranch" $headOid
    git -C $reviewRoot diff --name-status --find-renames --find-copies "$baseOid...$headOid"
    git -C $reviewRoot diff --find-renames --find-copies "$baseOid...$headOid"
    ```
