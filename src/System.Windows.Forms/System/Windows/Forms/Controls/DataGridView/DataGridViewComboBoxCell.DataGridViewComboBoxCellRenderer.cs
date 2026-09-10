@@ -17,11 +17,6 @@ public partial class DataGridViewComboBoxCell
         private static readonly VisualStyleElement s_comboBoxDropDownButtonLeft = VisualStyleElement.ComboBox.DropDownButtonLeft.Normal;
         private static readonly VisualStyleElement s_comboBoxReadOnlyButton = VisualStyleElement.ComboBox.ReadOnlyButton.Normal;
 
-        // Dark Mode element for drop-down button (same as ComboBoxRenderer uses)
-        private static VisualStyleElement ComboBoxDropDownButtonElement => Application.IsDarkModeEnabled
-            ? VisualStyleElement.CreateElement($"{Control.DarkModeIdentifier}_{Control.ComboBoxButtonThemeIdentifier}::{Control.ComboboxClassIdentifier}", 1, 1)
-            : VisualStyleElement.ComboBox.DropDownButton.Normal;
-
         public static VisualStyleRenderer VisualStyleRenderer
         {
             get
@@ -59,12 +54,27 @@ public partial class DataGridViewComboBoxCell
 
         public static void DrawDropDownButton(Graphics g, Rectangle bounds, ComboBoxState state, bool rightToLeft)
         {
-            // Use Dark Mode element when enabled
             if (Application.IsDarkModeEnabled && AppContextSwitches.DataGridViewDarkModeTheming)
             {
-                InitializeRenderer(ComboBoxDropDownButtonElement, (int)state);
+                g.FillRectangle(Brushes.Black, bounds);
+
+                if (bounds.Width >= 7 && bounds.Height >= 5)
+                {
+                    Point center = new(bounds.Left + bounds.Width / 2, bounds.Top + bounds.Height / 2);
+                    g.FillPolygon(
+                        Brushes.White,
+                        (ReadOnlySpan<Point>)
+                        [
+                            new(center.X - 3, center.Y - 2),
+                            new(center.X + 3, center.Y - 2),
+                            new(center.X, center.Y + 2)
+                        ]);
+                }
+
+                return;
             }
-            else if (rightToLeft)
+
+            if (rightToLeft)
             {
                 InitializeRenderer(s_comboBoxDropDownButtonLeft, (int)state);
             }

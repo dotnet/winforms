@@ -482,6 +482,25 @@ public class DataGridViewButtonCellTests : IDisposable
     }
 
     [Fact]
+    public void GetButtonColors_ReturnsCellStyleColors()
+    {
+        DataGridViewCellStyle style = new()
+        {
+            BackColor = Color.Red,
+            ForeColor = Color.Green,
+            SelectionBackColor = Color.Blue,
+            SelectionForeColor = Color.Yellow
+        };
+
+        (Color BackColor, Color ForeColor) result = _dataGridViewButtonCell.TestAccessor.Dynamic.GetButtonColors(
+            style,
+            cellSelected: false,
+            paintSelectionBackground: true);
+
+        result.Should().Be((style.BackColor, style.ForeColor));
+    }
+
+    [Fact]
     public void ToString_ReturnsExpectedFormat_WithDefaultIndices()
     {
         string result = _dataGridViewButtonCell.ToString();

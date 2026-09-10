@@ -277,6 +277,26 @@ public class DataGridViewComboBoxCellTests : IDisposable
     }
 
     [Theory]
+    [InlineData(false)]
+    [InlineData(true)]
+    public void GetTextColor_WithDarkModeColors_ReturnsWhite(bool selected)
+    {
+        DataGridViewCellStyle style = new()
+        {
+            ForeColor = Color.White,
+            SelectionForeColor = Color.Yellow
+        };
+
+        Color result = _dataGridViewComboBoxCell.TestAccessor.Dynamic.GetTextColor(
+            style,
+            selected,
+            useVisualStyleTextColor: true,
+            useDarkModeColors: true);
+
+        result.Should().Be(Color.White);
+    }
+
+    [Theory]
     [InlineData(Keys.A, false, false, false, true)]
     [InlineData(Keys.F4, false, false, false, true)]
     [InlineData(Keys.Space, false, false, false, true)]
