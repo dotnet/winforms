@@ -344,8 +344,9 @@ test belongs.
 Run only validation that helps confirm or refute a suspected problem. Prefer
 the smallest relevant test project or filtered test. This repository uses
 xUnit v3 on Microsoft.Testing.Platform (not the legacy VSTest adapter). Note
-that `dotnet test --filter` does not work; to filter tests use
-`dotnet test -- --filter-method/--filter-class ...` or run the built test executable (see `running-tests`).
+that `dotnet test --filter` does not work; filtering is still available through
+`dotnet test -- --filter-method/--filter-class ...` or by running the built test
+executable directly (see the `running-tests` skill for exact command syntax).
 
 Use `.\build.cmd` for an authoritative repository build because it enables the
 Arcade CI configuration, PublicAPI analyzers, code-style/documentation
