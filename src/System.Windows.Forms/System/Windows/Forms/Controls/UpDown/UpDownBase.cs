@@ -29,6 +29,8 @@ public abstract partial class UpDownBase : ContainerControl
     // internal chrome inset used by TextBoxBase; only the gap between the two buttons is additional.
     private const int ModernButtonGroupSpacingLogical = 2;
     private const int ModernFocusBandHeight = 4;
+    // Thickness, in DIPs, of the modern focus edge.
+    private const int ModernFocusEdgeThickness = 3;
     private const BorderStyle DefaultBorderStyle = BorderStyle.Fixed3D;
     private const LeftRightAlignment DefaultUpDownAlign = LeftRightAlignment.Right;
     private const int DefaultTimerInterval = 500;
@@ -1097,8 +1099,9 @@ public abstract partial class UpDownBase : ContainerControl
 
         Color parentBackColor = Parent?.BackColor ?? BackColor;
         Color clientBackColor = BackColor;
+        // Match TextBoxBase's lighter field stroke while retaining the up-down frame on all sides.
         Color adornerColor = Enabled
-            ? ModernControlColorMath.TextControlBorderColor
+            ? ModernControlColorMath.GetFieldStrokeStrong(clientBackColor, Application.IsDarkModeEnabled)
             : ModernControlColorMath.GetDisabledBorderColor();
 
         using var clientBackgroundBrush = clientBackColor.GetCachedSolidBrushScope();
@@ -1161,15 +1164,20 @@ public abstract partial class UpDownBase : ContainerControl
 
         if (_borderStyle == BorderStyle.Fixed3D && canRenderRoundedChrome)
         {
-            Color focusColor = ModernFocusColor;
-            FocusIndicatorRenderer.DrawRoundedFocusIndicator(
-                graphics,
-                deflatedBounds,
-                cornerRadius,
-                borderThickness,
-                LogicalToDeviceUnits(ModernFocusBandHeight),
-                adornerColor,
-                focusColor);
+            if (FocusIndicatorRenderer.FocusAmount > 0f)
+            {
+                // Fade the focus accent into the shared tapered edge instead of a rounded band.
+                Color focusEdgeColor = FocusIndicatorRenderer.GetCurrentColor(adornerColor, ModernFocusColor);
+                using GraphicsPath focusEdgePath = TextBoxBase.CreateVisualStylesBottomEdgePath(
+                    deflatedBounds,
+                    cornerRadius,
+                    LogicalToDeviceUnits(ModernFocusEdgeThickness));
+                using var focusEdgeBrush = focusEdgeColor.GetCachedSolidBrushScope();
+                GraphicsState focusEdgeState = graphics.Save();
+                graphics.SetClip(bounds, CombineMode.Replace);
+                graphics.FillPath(focusEdgeBrush, focusEdgePath);
+                graphics.Restore(focusEdgeState);
+            }
         }
         else if (Focused && _borderStyle == BorderStyle.Fixed3D)
         {
