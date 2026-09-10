@@ -149,22 +149,7 @@ public partial class GroupBox : Control
             }
 
             Size size = ClientSize;
-            int displayFontHeight = DisplayFontHeight;
 
-            // For efficiency, so that we don't need to read property store four times
-            Padding padding = Padding;
-            return new Rectangle(
-                padding.Left,
-                displayFontHeight + padding.Top,
-                Math.Max(size.Width - padding.Horizontal, 0),
-                Math.Max(size.Height - displayFontHeight - padding.Vertical, 0));
-        }
-    }
-
-    private int DisplayFontHeight
-    {
-        get
-        {
             if (_fontHeight == -1)
             {
                 _fontHeight = Font.Height;
@@ -178,7 +163,13 @@ public partial class GroupBox : Control
                 _cachedFont = Font;
             }
 
-            return _fontHeight;
+            // For efficiency, so that we don't need to read property store four times
+            Padding padding = Padding;
+            return new Rectangle(
+                padding.Left,
+                _fontHeight + padding.Top,
+                Math.Max(size.Width - padding.Horizontal, 0),
+                Math.Max(size.Height - _fontHeight - padding.Vertical, 0));
         }
     }
 
