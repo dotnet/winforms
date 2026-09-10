@@ -106,6 +106,7 @@ public sealed unsafe partial class HtmlDocument
             base.Dispose(disposing);
             if (disposing)
             {
+                base.DisconnectFromEvents();
                 _htmlDocument?.NativeHtmlDocument2.Dispose();
                 _htmlDocument = null!;
                 DisposeHelper.NullAndDispose(ref _associatedWindow);

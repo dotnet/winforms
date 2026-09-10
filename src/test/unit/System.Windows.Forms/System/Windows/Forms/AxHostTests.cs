@@ -1516,6 +1516,52 @@ public class AxHostTests
         Assert.Equal(1u, remainingReferences);
     }
 
+    [WinFormsTheory]
+    [InlineData(false, false)]
+    [InlineData(false, true)]
+    [InlineData(true, false)]
+    [InlineData(true, true)]
+    public unsafe void AxHost_QuickActivate_Ownership_Font(bool useAxHost, bool failActivation)
+    {
+        using Font font = new("Arial", 10, FontStyle.Regular, GraphicsUnit.Point);
+        using ContainerControl parent = new() { Font = font };
+        using SubAxHost control = new(EmptyClsidString);
+        parent.Controls.Add(control);
+        HRESULT activationResult = failActivation ? HRESULT.E_FAIL : HRESULT.S_OK;
+        using QuickActivateFontControl activeX = new(activationResult);
+
+        if (useAxHost)
+        {
+            control.TestAccessor.Dynamic._instance = activeX;
+            try
+            {
+                Assert.Equal(!failActivation, (bool)control.TestAccessor.Dynamic.QuickActivate());
+            }
+            finally
+            {
+                control.TestAccessor.Dynamic._instance = null;
+            }
+        }
+        else
+        {
+            using ComScope<IFont> created = new(SubAxHost.Ownership_AmbientFont_GetIFontPointerFromFont(font));
+            QACONTAINER container = new()
+            {
+                cbSize = (uint)sizeof(QACONTAINER),
+                pFont = created.Value
+            };
+            QACONTROL activatedControl = new() { cbSize = (uint)sizeof(QACONTROL) };
+            Assert.Equal(activationResult, activeX.QuickActivate(&container, &activatedControl));
+        }
+
+        Assert.NotNull(activeX.Font);
+        using BSTR fontName = activeX.Font->Name;
+        Assert.Equal(font.Name, fontName.ToString());
+        activeX.Font->AddRef();
+        uint remainingReferences = activeX.Font->Release();
+        Assert.Equal(1u, remainingReferences);
+    }
+
     [WinFormsFact]
     public unsafe void AxHost_Ownership_AmbientFont_BalancedControl_HasStableOwnership()
     {
@@ -3297,6 +3343,30 @@ public class AxHostTests
         AxHost.ConnectionPointCookie cookie = site.TestAccessor.Dynamic._connectionPoint;
         cookie.Should().NotBeNull();
         cookie.Connected.Should().BeTrue();
+    }
+
+    /// <summary>
+    ///  Retains one font reference independently of the quick-activation caller.
+    /// </summary>
+    private unsafe class QuickActivateFontControl(HRESULT activationResult) : IQuickActivate.Interface, IDisposable
+    {
+        private IFont* _font;
+
+        public IFont* Font => _font;
+
+        public HRESULT QuickActivate(QACONTAINER* container, QACONTROL* control)
+        {
+            Assert.NotNull(container->pFont);
+            _font = container->pFont;
+            _font->AddRef();
+            return activationResult;
+        }
+
+        public HRESULT SetContentExtent(SIZE* size) => HRESULT.E_NOTIMPL;
+
+        public HRESULT GetContentExtent(SIZE* size) => HRESULT.E_NOTIMPL;
+
+        public void Dispose() => DisposeHelper.NullAndRelease(ref _font);
     }
 
     private class SubComponentEditor : ComponentEditor

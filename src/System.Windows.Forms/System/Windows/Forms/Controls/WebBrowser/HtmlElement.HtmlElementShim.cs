@@ -127,6 +127,7 @@ public sealed partial class HtmlElement
             base.Dispose(disposing);
             if (disposing)
             {
+                base.DisconnectFromEvents();
                 _htmlElement?.NativeHtmlElement?.Dispose();
                 _htmlElement = null!;
                 DisposeHelper.NullAndDispose(ref _associatedWindow);

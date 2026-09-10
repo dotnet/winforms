@@ -3316,7 +3316,8 @@ public abstract unsafe partial class AxHost : Control, ISupportInitialize, ICust
 
         qaContainer.pClientSite = ComHelpers.GetComPointer<IOleClientSite>(_oleSite);
         qaContainer.pPropertyNotifySink = ComHelpers.GetComPointer<IPropertyNotifySink>(_oleSite);
-        qaContainer.pFont = GetIFontPointerFromFont(GetParentContainer()._parent.Font);
+        using ComScope<IFont> font = new(GetIFontPointerFromFont(GetParentContainer()._parent.Font));
+        qaContainer.pFont = font.Value;
         qaContainer.dwAppearance = 0;
         qaContainer.lcid = (int)PInvokeCore.GetThreadLocale();
 

@@ -1499,6 +1499,59 @@ public class HtmlDocumentTests
     }
 
     [WinFormsTheory]
+    [InlineData(false)]
+    [InlineData(true)]
+    public async Task HtmlDocument_AttachEventHandler_Ownership_AttachedEvents(bool disposeShim)
+    {
+        using Control parent = new();
+        using WebBrowser control = new() { Parent = parent };
+        HtmlDocument document = await GetDocument(
+            control,
+            "<html><body><p>Attached event lifetime</p></body></html>",
+            TimeSpan.FromSeconds(15));
+        int callbackCount = 0;
+        EventHandler attachedHandler = (sender, eventArgs) => callbackCount++;
+        document.AttachEventHandler("onclick", attachedHandler);
+        HtmlDocument.HtmlDocumentShim shim = document.TestAccessor.Dynamic.DocumentShim;
+        Dictionary<EventHandler, HtmlToClrEventProxy> attachedEvents = shim.TestAccessor.Dynamic._attachedEventList;
+        Assert.Single(attachedEvents);
+        HtmlToClrEventProxy proxy = attachedEvents[attachedHandler];
+
+        Validate();
+
+        unsafe void Validate()
+        {
+            using var nativeDocument = document.NativeHtmlDocument2.GetInterface<IHTMLDocument4>();
+            using var observer = ComHelpers.GetComScope<IUnknown>(proxy);
+            HtmlElementEventHandler standardHandler = (sender, eventArgs) => { };
+            document.Click += standardHandler;
+            document.Click -= standardHandler;
+
+            using BSTR onClick = new("onclick");
+            VARIANT eventObject = default;
+            VARIANT_BOOL cancelled = default;
+            Assert.True(nativeDocument.Value->fireEvent(onClick, &eventObject, &cancelled).Succeeded);
+            Assert.Equal(1, callbackCount);
+
+            if (disposeShim)
+            {
+                shim.Dispose();
+            }
+            else
+            {
+                document.DetachEventHandler("onclick", attachedHandler);
+            }
+
+            Assert.True(nativeDocument.Value->fireEvent(onClick, &eventObject, &cancelled).Succeeded);
+            observer.Value->AddRef();
+            uint remainingReferences = observer.Value->Release();
+            uint[] remainingState = [(uint)callbackCount, (uint)attachedEvents.Count, remainingReferences];
+            Assert.Equal([1u, 0u, 1u], remainingState);
+            GC.KeepAlive(proxy);
+        }
+    }
+
+    [WinFormsTheory]
     [InlineData("onclick")]
     [InlineData("oncontextmenu")]
     [InlineData("onfocusin")]

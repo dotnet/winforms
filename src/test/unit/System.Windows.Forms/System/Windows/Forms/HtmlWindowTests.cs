@@ -131,9 +131,20 @@ public class HtmlWindowTests
         oldDocument.Click += documentClickHandler;
         oldElement.Click += elementClickHandler;
 
+        EventHandler attachedHandler = (sender, eventArgs) => { };
+        oldDocument.AttachEventHandler("onclick", attachedHandler);
+        oldElement.AttachEventHandler("onclick", attachedHandler);
+        oldWindow.AttachEventHandler("onload", attachedHandler);
+
         HtmlWindow.HtmlWindowShim oldWindowShim = oldWindow.TestAccessor.Dynamic.WindowShim;
         HtmlDocument.HtmlDocumentShim oldDocumentShim = oldDocument.TestAccessor.Dynamic.DocumentShim;
         HtmlElement.HtmlElementShim oldElementShim = oldElement.TestAccessor.Dynamic.ElementShim;
+        Dictionary<EventHandler, HtmlToClrEventProxy> documentAttachedEvents = oldDocumentShim.TestAccessor.Dynamic._attachedEventList;
+        Dictionary<EventHandler, HtmlToClrEventProxy> elementAttachedEvents = oldElementShim.TestAccessor.Dynamic._attachedEventList;
+        Dictionary<EventHandler, HtmlToClrEventProxy> windowAttachedEvents = oldWindowShim.TestAccessor.Dynamic._attachedEventList;
+        Assert.Single(documentAttachedEvents);
+        Assert.Single(elementAttachedEvents);
+        Assert.Single(windowAttachedEvents);
         AgileComPointer<IHTMLWindow2> documentAssociatedWindow = oldDocumentShim.TestAccessor.Dynamic._associatedWindow;
         AgileComPointer<IHTMLWindow2> elementAssociatedWindow = oldElementShim.TestAccessor.Dynamic._associatedWindow;
         Assert.NotNull(documentAssociatedWindow);
@@ -272,6 +283,9 @@ public class HtmlWindowTests
         Assert.Equal([0u, 0u], remainingWindowRegistrations);
         Assert.Null(oldDocumentShim.TestAccessor.Dynamic._associatedWindow);
         Assert.Null(oldElementShim.TestAccessor.Dynamic._associatedWindow);
+
+        int[] remainingAttachedHandlers = [documentAttachedEvents.Count, elementAttachedEvents.Count, windowAttachedEvents.Count];
+        Assert.Equal([0, 0, 0], remainingAttachedHandlers);
 
         GC.KeepAlive(oldWindowCookie);
         GC.KeepAlive(oldDocumentCookie);
