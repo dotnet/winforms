@@ -1083,6 +1083,11 @@ public abstract partial class UpDownBase : ContainerControl
             return;
         }
 
+        BufferedGraphicsContext bufferContext = BufferedGraphicsManager.Current;
+        using BufferedGraphics buffer = bufferContext.Allocate(e.Graphics, bounds);
+        // Modern chrome is painted to one buffer and copied once to avoid flicker on the live surface.
+        Graphics graphics = buffer.Graphics;
+
         // Match the field rounding so the frame reads like the modern text box.
         int cornerRadius = LogicalToDeviceUnits(ModernControlVisualStyles.FieldCornerRadius);
         int borderThickness = LogicalToDeviceUnits(ModernControlVisualStyles.BorderThickness);
@@ -1101,7 +1106,6 @@ public abstract partial class UpDownBase : ContainerControl
         deflatedBounds.Width -= 1;
         deflatedBounds.Height -= 1;
 
-        Graphics graphics = e.Graphics;
         using GraphicsStateScope graphicsState = new(graphics);
         graphics.SmoothingMode = SmoothingMode.AntiAlias;
 
@@ -1189,6 +1193,8 @@ public abstract partial class UpDownBase : ContainerControl
                 deflatedBounds.Right,
                 deflatedBounds.Bottom - 1);
         }
+
+        buffer.Render(e.Graphics);
     }
 
     private AnimatedFocusIndicatorRenderer FocusIndicatorRenderer
