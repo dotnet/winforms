@@ -43,7 +43,7 @@ public sealed partial class HtmlElement
             typeof(Interop.Mshtml.DHTMLScriptEvents2)
         ];
 
-        private readonly AgileComPointer<IHTMLWindow2>? _associatedWindow;
+        private AgileComPointer<IHTMLWindow2>? _associatedWindow;
         private AxHost.ConnectionPointCookie? _cookie;   // To hook up events from the native HtmlElement
         private HtmlElement _htmlElement;
 
@@ -129,6 +129,7 @@ public sealed partial class HtmlElement
             {
                 _htmlElement?.NativeHtmlElement?.Dispose();
                 _htmlElement = null!;
+                DisposeHelper.NullAndDispose(ref _associatedWindow);
             }
         }
 

@@ -134,6 +134,15 @@ public class HtmlWindowTests
         HtmlWindow.HtmlWindowShim oldWindowShim = oldWindow.TestAccessor.Dynamic.WindowShim;
         HtmlDocument.HtmlDocumentShim oldDocumentShim = oldDocument.TestAccessor.Dynamic.DocumentShim;
         HtmlElement.HtmlElementShim oldElementShim = oldElement.TestAccessor.Dynamic.ElementShim;
+        AgileComPointer<IHTMLWindow2> documentAssociatedWindow = oldDocumentShim.TestAccessor.Dynamic._associatedWindow;
+        AgileComPointer<IHTMLWindow2> elementAssociatedWindow = oldElementShim.TestAccessor.Dynamic._associatedWindow;
+        Assert.NotNull(documentAssociatedWindow);
+        Assert.NotNull(elementAssociatedWindow);
+        Assert.NotSame(documentAssociatedWindow, elementAssociatedWindow);
+        Assert.NotSame(oldWindow.NativeHtmlWindow, documentAssociatedWindow);
+        Assert.NotSame(oldWindow.NativeHtmlWindow, elementAssociatedWindow);
+        Assert.NotEqual(0u, (uint)documentAssociatedWindow.TestAccessor.Dynamic._cookie);
+        Assert.NotEqual(0u, (uint)elementAssociatedWindow.TestAccessor.Dynamic._cookie);
         AxHost.ConnectionPointCookie oldWindowCookie = oldWindowShim.TestAccessor.Dynamic._cookie;
         AxHost.ConnectionPointCookie oldDocumentCookie = oldDocumentShim.TestAccessor.Dynamic._cookie;
         AxHost.ConnectionPointCookie oldElementCookie = oldElementShim.TestAccessor.Dynamic._cookie;
@@ -254,6 +263,15 @@ public class HtmlWindowTests
                 || oldDocumentWrapperRetained
                 || oldElementWrapperRetained,
             cleanupState);
+
+        uint[] remainingWindowRegistrations =
+        [
+            (uint)documentAssociatedWindow.TestAccessor.Dynamic._cookie,
+            (uint)elementAssociatedWindow.TestAccessor.Dynamic._cookie
+        ];
+        Assert.Equal([0u, 0u], remainingWindowRegistrations);
+        Assert.Null(oldDocumentShim.TestAccessor.Dynamic._associatedWindow);
+        Assert.Null(oldElementShim.TestAccessor.Dynamic._associatedWindow);
 
         GC.KeepAlive(oldWindowCookie);
         GC.KeepAlive(oldDocumentCookie);
@@ -437,6 +455,15 @@ public class HtmlWindowTests
         HtmlWindow.HtmlWindowShim windowShim = window.TestAccessor.Dynamic.WindowShim;
         HtmlDocument.HtmlDocumentShim documentShim = document.TestAccessor.Dynamic.DocumentShim;
         HtmlElement.HtmlElementShim elementShim = element.TestAccessor.Dynamic.ElementShim;
+        AgileComPointer<IHTMLWindow2> documentAssociatedWindow = documentShim.TestAccessor.Dynamic._associatedWindow;
+        AgileComPointer<IHTMLWindow2> elementAssociatedWindow = elementShim.TestAccessor.Dynamic._associatedWindow;
+        Assert.NotNull(documentAssociatedWindow);
+        Assert.NotNull(elementAssociatedWindow);
+        Assert.NotSame(documentAssociatedWindow, elementAssociatedWindow);
+        Assert.NotSame(window.NativeHtmlWindow, documentAssociatedWindow);
+        Assert.NotSame(window.NativeHtmlWindow, elementAssociatedWindow);
+        Assert.NotEqual(0u, (uint)documentAssociatedWindow.TestAccessor.Dynamic._cookie);
+        Assert.NotEqual(0u, (uint)elementAssociatedWindow.TestAccessor.Dynamic._cookie);
         AxHost.ConnectionPointCookie windowCookie = windowShim.TestAccessor.Dynamic._cookie;
         AxHost.ConnectionPointCookie documentCookie = documentShim.TestAccessor.Dynamic._cookie;
         AxHost.ConnectionPointCookie elementCookie = elementShim.TestAccessor.Dynamic._cookie;
@@ -475,6 +502,20 @@ public class HtmlWindowTests
                 || elementWrapperRetained,
             cleanupState);
         Assert.Equal(0, callbackCount);
+
+        uint[] remainingWindowRegistrations =
+        [
+            (uint)documentAssociatedWindow.TestAccessor.Dynamic._cookie,
+            (uint)elementAssociatedWindow.TestAccessor.Dynamic._cookie
+        ];
+        Assert.Equal([0u, 0u], remainingWindowRegistrations);
+        Assert.Null(documentShim.TestAccessor.Dynamic._associatedWindow);
+        Assert.Null(elementShim.TestAccessor.Dynamic._associatedWindow);
+
+        documentShim.Dispose();
+        elementShim.Dispose();
+        Assert.Null(documentShim.AssociatedWindow);
+        Assert.Null(elementShim.AssociatedWindow);
 
         GC.KeepAlive(windowCookie);
         GC.KeepAlive(documentCookie);
