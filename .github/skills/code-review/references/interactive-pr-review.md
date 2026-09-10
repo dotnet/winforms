@@ -22,10 +22,11 @@ source context.
 2. Fetch the GitHub pull ref and base branch:
 
    ```powershell
-   $baseBranch = gh pr view $pr --repo $repo --json baseRefName --jq ".baseRefName"
-   $headOid = gh pr view $pr --repo $repo --json headRefOid --jq ".headRefOid"
-   git fetch origin "pull/$pr/head:refs/remotes/pull/$pr/head" --quiet
-   git fetch origin $baseBranch --quiet
+$baseBranch = gh pr view $pr --repo $repo --json baseRefName --jq ".baseRefName"
+$headOid = gh pr view $pr --repo $repo --json headRefOid --jq ".headRefOid"
+$remote = "upstream" # Remote that points to $repo; use `git remote -v` to confirm
+git fetch $remote "pull/$pr/head:refs/remotes/pull/$pr/head" --quiet
+git fetch $remote $baseBranch --quiet
    ```
 
 3. Create a uniquely named temporary worktree outside the repository:
