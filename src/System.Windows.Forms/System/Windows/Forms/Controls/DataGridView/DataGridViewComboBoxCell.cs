@@ -2324,7 +2324,8 @@ public partial class DataGridViewComboBoxCell : DataGridViewCell
                                 && !SystemInformation.HighContrast;
                             bool useDarkModeColors = Application.IsDarkModeEnabled
                                 && AppContextSwitches.DataGridViewDarkModeTheming
-                                && !SystemInformation.HighContrast;
+                                && !SystemInformation.HighContrast
+                                && (drawDropDownButton || drawComboBox);
                             Color textColor = GetTextColor(
                                 cellStyle,
                                 cellSelected,
@@ -2383,7 +2384,7 @@ public partial class DataGridViewComboBoxCell : DataGridViewCell
             return Color.White;
         }
 
-        if (useVisualStyleTextColor)
+        if (useVisualStyleTextColor && !useDarkModeColors)
         {
             return DataGridViewComboBoxCellRenderer.VisualStyleRenderer.GetColor(ColorProperty.TextColor);
         }

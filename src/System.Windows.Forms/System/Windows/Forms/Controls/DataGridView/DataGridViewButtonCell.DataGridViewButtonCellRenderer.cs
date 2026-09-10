@@ -31,7 +31,8 @@ public partial class DataGridViewButtonCell
         public static (Rectangle ContentBounds, Color TextColor) DrawButton(
             Graphics g,
             Rectangle bounds,
-            int buttonState,
+            PushButtonState state,
+            bool isDefault,
             FlatStyle flatStyle,
             int deviceDpi,
             bool useModernRenderer)
@@ -42,20 +43,29 @@ public partial class DataGridViewButtonCell
             {
                 ButtonDarkModeRendererBase renderer = GetDarkModeRenderer(flatStyle, useModernRenderer);
                 renderer.DeviceDpi = deviceDpi;
-                PushButtonState state = GetPushButtonState(buttonState);
-                Color backColor = renderer.GetBackgroundColor(state, isDefault: false, customBaseColor: Color.Empty);
-                Rectangle contentBounds = renderer.DrawButtonBackground(
-                    g,
-                    bounds,
-                    state,
-                    isDefault: false,
-                    focused: false,
-                    backColor);
+                Color backColor = renderer.GetBackgroundColor(state, isDefault, customBaseColor: Color.Empty);
+                Rectangle contentBounds;
+                using (new GraphicsStateScope(g))
+                {
+                    contentBounds = renderer.DrawButtonBackground(
+                        g,
+                        bounds,
+                        state,
+                        isDefault,
+                        focused: false,
+                        backColor);
+                }
 
-                return (contentBounds, renderer.GetTextColor(state, isDefault: false, backColor));
+                return (contentBounds, renderer.GetTextColor(state, isDefault, backColor));
             }
 
-            DataGridViewButtonRenderer.SetParameters(s_buttonElement.ClassName, s_buttonElement.Part, buttonState);
+            PushButtonState visualStyleState = isDefault && state == PushButtonState.Normal
+                ? PushButtonState.Default
+                : state;
+            DataGridViewButtonRenderer.SetParameters(
+                s_buttonElement.ClassName,
+                s_buttonElement.Part,
+                (int)visualStyleState);
             DataGridViewButtonRenderer.DrawBackground(g, bounds, Rectangle.Truncate(g.ClipBounds));
             return (
                 DataGridViewButtonRenderer.GetBackgroundContentRectangle(g, bounds),
@@ -63,17 +73,14 @@ public partial class DataGridViewButtonCell
         }
 
         public static Color GetDarkModeTextColor(
-            int buttonState,
+            PushButtonState state,
+            bool isDefault,
             FlatStyle flatStyle,
-            int deviceDpi,
             bool useModernRenderer)
         {
             ButtonDarkModeRendererBase renderer = GetDarkModeRenderer(flatStyle, useModernRenderer);
-            renderer.DeviceDpi = deviceDpi;
-            PushButtonState state = GetPushButtonState(buttonState);
-            Color backColor = renderer.GetBackgroundColor(state, isDefault: false, customBaseColor: Color.Empty);
-
-            return renderer.GetTextColor(state, isDefault: false, backColor);
+            Color backColor = renderer.GetBackgroundColor(state, isDefault, customBaseColor: Color.Empty);
+            return renderer.GetTextColor(state, isDefault, backColor);
         }
 
         private static ButtonDarkModeRendererBase GetDarkModeRenderer(FlatStyle flatStyle, bool useModernRenderer)
@@ -84,15 +91,6 @@ public partial class DataGridViewButtonCell
                     : s_flatButtonDarkModeRenderer ??= new FlatButtonDarkModeRenderer(),
                 FlatStyle.System => s_systemButtonDarkModeRenderer ??= new SystemButtonDarkModeRenderer(),
                 _ => throw new ArgumentOutOfRangeException(nameof(flatStyle))
-            };
-
-        private static PushButtonState GetPushButtonState(int buttonState)
-            => buttonState switch
-            {
-                (int)PushButtonState.Hot => PushButtonState.Hot,
-                (int)PushButtonState.Pressed => PushButtonState.Pressed,
-                (int)PushButtonState.Disabled => PushButtonState.Disabled,
-                _ => PushButtonState.Normal
             };
     }
 }

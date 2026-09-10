@@ -279,11 +279,11 @@ public class DataGridViewComboBoxCellTests : IDisposable
     [Theory]
     [InlineData(false)]
     [InlineData(true)]
-    public void GetTextColor_WithDarkModeColors_ReturnsWhite(bool selected)
+    public void GetTextColor_WithDarkModeColors_ReturnsThemeColor(bool selected)
     {
         DataGridViewCellStyle style = new()
         {
-            ForeColor = Color.White,
+            ForeColor = Color.Black,
             SelectionForeColor = Color.Yellow
         };
 

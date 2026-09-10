@@ -56,21 +56,7 @@ public partial class DataGridViewComboBoxCell
         {
             if (Application.IsDarkModeEnabled && AppContextSwitches.DataGridViewDarkModeTheming)
             {
-                g.FillRectangle(Brushes.Black, bounds);
-
-                if (bounds.Width >= 7 && bounds.Height >= 5)
-                {
-                    Point center = new(bounds.Left + bounds.Width / 2, bounds.Top + bounds.Height / 2);
-                    g.FillPolygon(
-                        Brushes.White,
-                        (ReadOnlySpan<Point>)
-                        [
-                            new(center.X - 3, center.Y - 2),
-                            new(center.X + 3, center.Y - 2),
-                            new(center.X, center.Y + 2)
-                        ]);
-                }
-
+                ComboBoxRenderer.DrawDropDownButton(g, bounds, state);
                 return;
             }
 
