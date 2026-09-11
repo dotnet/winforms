@@ -350,8 +350,8 @@ public class DataGridViewButtonCellTests : IDisposable
 
             object? drawResult = drawButton.Invoke(
                 null,
-                [graphics, new Rectangle(0, 0, 20, 20), state, false, FlatStyle.Standard, 96, true]);
-            Color result = (Color)getTextColor.Invoke(null, [state, false, FlatStyle.Standard, true])!;
+                [graphics, new Rectangle(0, 0, 20, 20), state, false, FlatStyle.Standard, 96]);
+            Color result = (Color)getTextColor.Invoke(null, [state, false, FlatStyle.Standard])!;
             (Rectangle ContentBounds, Color TextColor) renderedButton = ((Rectangle, Color))drawResult!;
 
             renderedButton.TextColor.Should().Be(result);
@@ -564,8 +564,7 @@ public class DataGridViewButtonCellTests : IDisposable
                     VisualStyles.PushButtonState.Normal,
                     false,
                     FlatStyle.Standard,
-                    96,
-                    false
+                    96
                 ]);
 
             graphics.SmoothingMode.Should().Be(SmoothingMode.None);
@@ -580,12 +579,11 @@ public class DataGridViewButtonCellTests : IDisposable
     }
 
     [WinFormsTheory]
-    [InlineData(false, KnownColor.Red, KnownColor.Green)]
-    [InlineData(true, KnownColor.Blue, KnownColor.Yellow)]
+    [InlineData(false, KnownColor.Red)]
+    [InlineData(true, KnownColor.Blue)]
     public void Paint_DarkMode_UsesStyleColorOnlyForCellBackground(
         bool selected,
-        KnownColor expectedBackColor,
-        KnownColor expectedForeColor)
+        KnownColor expectedBackColor)
     {
         if (SystemInformation.HighContrast)
         {
@@ -614,7 +612,6 @@ public class DataGridViewButtonCellTests : IDisposable
             DataGridViewButtonCell cell = (DataGridViewButtonCell)dataGridView[0, 0];
             DataGridViewCellStyle inheritedStyle = cell.InheritedStyle;
             Color expectedBack = Color.FromKnownColor(expectedBackColor);
-            Color expectedFore = Color.FromKnownColor(expectedForeColor);
             inheritedStyle.BackColor.Should().Be(Color.Red);
             inheritedStyle.ForeColor.Should().Be(Color.Green);
             inheritedStyle.SelectionBackColor.Should().Be(Color.Blue);
@@ -640,40 +637,11 @@ public class DataGridViewButtonCellTests : IDisposable
 
             bitmap.GetPixel(0, 0).ToArgb().Should().Be(expectedBack.ToArgb());
             bitmap.GetPixel(15, 10).Should().NotBe(expectedBack);
-            (Color BackColor, Color ForeColor) colors = cell.TestAccessor.Dynamic.GetButtonColors(
-                inheritedStyle,
-                selected,
-                paintSelectionBackground: true);
-            colors.Should().Be((expectedBack, expectedFore));
         }
         finally
         {
             applicationAccessor.s_colorMode = previousColorMode;
         }
-    }
-
-    [Theory]
-    [InlineData(false, KnownColor.Red, KnownColor.Green)]
-    [InlineData(true, KnownColor.Blue, KnownColor.Yellow)]
-    public void GetButtonColors_ReturnsCellStyleColors(
-        bool selected,
-        KnownColor expectedBackColor,
-        KnownColor expectedForeColor)
-    {
-        DataGridViewCellStyle style = new()
-        {
-            BackColor = Color.Red,
-            ForeColor = Color.Green,
-            SelectionBackColor = Color.Blue,
-            SelectionForeColor = Color.Yellow
-        };
-
-        (Color BackColor, Color ForeColor) result = _dataGridViewButtonCell.TestAccessor.Dynamic.GetButtonColors(
-            style,
-            cellSelected: selected,
-            paintSelectionBackground: true);
-
-        result.Should().Be((Color.FromKnownColor(expectedBackColor), Color.FromKnownColor(expectedForeColor)));
     }
 
     [Fact]
