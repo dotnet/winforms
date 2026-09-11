@@ -16,8 +16,6 @@ namespace System.Windows.Forms;
 [SRDescription(nameof(SR.DescriptionDataGridView))]
 public partial class DataGridView : Control, ISupportInitialize
 {
-    internal VisualStylesMode EffectiveVisualStylesModeInternal => EffectiveVisualStylesMode;
-
     private protected override VisualStylesMode GetSupportedVisualStylesMode(VisualStylesMode mode)
         => mode < VisualStylesMode.Net11 || AppContextSwitches.DataGridViewModernRendering
             ? mode

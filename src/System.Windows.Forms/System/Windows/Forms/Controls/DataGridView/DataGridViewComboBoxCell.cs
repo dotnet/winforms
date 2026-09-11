@@ -2381,7 +2381,7 @@ public partial class DataGridViewComboBoxCell : DataGridViewCell
     {
         if (useDarkModeColors)
         {
-            return Color.White;
+            return cellSelected ? cellStyle.SelectionForeColor : cellStyle.ForeColor;
         }
 
         if (useVisualStyleTextColor)

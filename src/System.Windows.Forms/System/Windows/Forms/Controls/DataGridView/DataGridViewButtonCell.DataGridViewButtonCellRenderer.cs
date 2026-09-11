@@ -11,12 +11,6 @@ public partial class DataGridViewButtonCell
     private static class DataGridViewButtonCellRenderer
     {
         private static VisualStyleRenderer? s_visualStyleRenderer;
-        [ThreadStatic]
-        private static ButtonDarkModeRendererBase? s_flatButtonDarkModeRenderer;
-        [ThreadStatic]
-        private static ButtonDarkModeRendererBase? s_modernButtonDarkModeRenderer;
-        [ThreadStatic]
-        private static ButtonDarkModeRendererBase? s_systemButtonDarkModeRenderer;
 
         public static VisualStyleRenderer DataGridViewButtonRenderer
         {
@@ -34,14 +28,13 @@ public partial class DataGridViewButtonCell
             PushButtonState state,
             bool isDefault,
             FlatStyle flatStyle,
-            int deviceDpi,
-            bool useModernRenderer)
+            int deviceDpi)
         {
             if (Application.IsDarkModeEnabled
                 && AppContextSwitches.DataGridViewDarkModeTheming
                 && !SystemInformation.HighContrast)
             {
-                ButtonDarkModeRendererBase renderer = GetDarkModeRenderer(flatStyle, useModernRenderer);
+                ButtonDarkModeRendererBase renderer = GetDarkModeRenderer(flatStyle);
                 renderer.DeviceDpi = deviceDpi;
                 Color backColor = renderer.GetBackgroundColor(state, isDefault, customBaseColor: Color.Empty);
                 Rectangle contentBounds;
@@ -75,21 +68,18 @@ public partial class DataGridViewButtonCell
         public static Color GetDarkModeTextColor(
             PushButtonState state,
             bool isDefault,
-            FlatStyle flatStyle,
-            bool useModernRenderer)
+            FlatStyle flatStyle)
         {
-            ButtonDarkModeRendererBase renderer = GetDarkModeRenderer(flatStyle, useModernRenderer);
+            ButtonDarkModeRendererBase renderer = GetDarkModeRenderer(flatStyle);
             Color backColor = renderer.GetBackgroundColor(state, isDefault, customBaseColor: Color.Empty);
             return renderer.GetTextColor(state, isDefault, backColor);
         }
 
-        private static ButtonDarkModeRendererBase GetDarkModeRenderer(FlatStyle flatStyle, bool useModernRenderer)
+        private static ButtonDarkModeRendererBase GetDarkModeRenderer(FlatStyle flatStyle)
             => flatStyle switch
             {
-                FlatStyle.Standard => useModernRenderer
-                    ? s_modernButtonDarkModeRenderer ??= new ModernButtonDarkModeRenderer()
-                    : s_flatButtonDarkModeRenderer ??= new FlatButtonDarkModeRenderer(),
-                FlatStyle.System => s_systemButtonDarkModeRenderer ??= new SystemButtonDarkModeRenderer(),
+                FlatStyle.Standard => new FlatButtonDarkModeRenderer(),
+                FlatStyle.System => new SystemButtonDarkModeRenderer(),
                 _ => throw new ArgumentOutOfRangeException(nameof(flatStyle))
             };
     }
