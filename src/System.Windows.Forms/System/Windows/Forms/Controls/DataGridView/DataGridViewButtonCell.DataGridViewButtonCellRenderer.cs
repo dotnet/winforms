@@ -8,13 +8,33 @@ namespace System.Windows.Forms;
 
 public partial class DataGridViewButtonCell
 {
+    private static (Rectangle ContentBounds, Color TextColor) DrawButton(
+        Graphics graphics,
+        Rectangle bounds,
+        PushButtonState state,
+        bool isDefault,
+        FlatStyle flatStyle,
+        int deviceDpi)
+        => DataGridViewButtonCellRenderer.DrawButton(
+            graphics,
+            bounds,
+            state,
+            isDefault,
+            flatStyle,
+            deviceDpi);
+
+    private static Rectangle GetButtonContentBounds(
+        Graphics graphics,
+        Rectangle bounds,
+        FlatStyle flatStyle,
+        int deviceDpi)
+        => DataGridViewButtonCellRenderer.GetContentBounds(graphics, bounds, flatStyle, deviceDpi);
+
     private static class DataGridViewButtonCellRenderer
     {
         private static VisualStyleRenderer? s_visualStyleRenderer;
-
         [ThreadStatic]
         private static FlatButtonDarkModeRenderer? s_flatButtonDarkModeRenderer;
-
         [ThreadStatic]
         private static SystemButtonDarkModeRenderer? s_systemButtonDarkModeRenderer;
 
@@ -43,20 +63,20 @@ public partial class DataGridViewButtonCell
                 ButtonDarkModeRendererBase renderer = GetDarkModeRenderer(flatStyle);
                 renderer.DeviceDpi = deviceDpi;
                 Color backColor = renderer.GetBackgroundColor(state, isDefault, customBaseColor: Color.Empty);
-                Rectangle paddedBounds = ApplyRendererPadding(renderer, bounds);
-                Rectangle contentBounds;
                 using (new GraphicsStateScope(g))
                 {
-                    contentBounds = renderer.DrawButtonBackground(
+                    renderer.DrawButtonBackground(
                         g,
-                        paddedBounds,
+                        bounds,
                         state,
                         isDefault,
                         focused: false,
                         backColor);
                 }
 
-                return (contentBounds, GetTextColor(renderer, state, isDefault, flatStyle, backColor));
+                return (
+                    GetContentBounds(g, bounds, flatStyle, deviceDpi),
+                    GetTextColor(renderer, state, isDefault, flatStyle, backColor));
             }
 
             PushButtonState visualStyleState = isDefault && state == PushButtonState.Normal
@@ -68,8 +88,26 @@ public partial class DataGridViewButtonCell
                 (int)visualStyleState);
             DataGridViewButtonRenderer.DrawBackground(g, bounds, Rectangle.Truncate(g.ClipBounds));
             return (
-                DataGridViewButtonRenderer.GetBackgroundContentRectangle(g, bounds),
+                GetContentBounds(g, bounds, flatStyle, deviceDpi),
                 DataGridViewButtonRenderer.GetColor(ColorProperty.TextColor));
+        }
+
+        public static Rectangle GetContentBounds(
+            Graphics g,
+            Rectangle bounds,
+            FlatStyle flatStyle,
+            int deviceDpi)
+        {
+            if (Application.IsDarkModeEnabled
+                && AppContextSwitches.DataGridViewDarkModeTheming
+                && !SystemInformation.HighContrast)
+            {
+                ButtonDarkModeRendererBase renderer = GetDarkModeRenderer(flatStyle);
+                renderer.DeviceDpi = deviceDpi;
+                return Rectangle.Inflate(bounds, -3, -3);
+            }
+
+            return DataGridViewButtonRenderer.GetBackgroundContentRectangle(g, bounds);
         }
 
         public static Color GetDarkModeTextColor(
@@ -82,6 +120,15 @@ public partial class DataGridViewButtonCell
             return GetTextColor(renderer, state, isDefault, flatStyle, backColor);
         }
 
+        public static Color GetDarkModeBackgroundColor(
+            PushButtonState state,
+            bool isDefault,
+            FlatStyle flatStyle)
+        {
+            ButtonDarkModeRendererBase renderer = GetDarkModeRenderer(flatStyle);
+            return renderer.GetBackgroundColor(state, isDefault, customBaseColor: Color.Empty);
+        }
+
         private static ButtonDarkModeRendererBase GetDarkModeRenderer(FlatStyle flatStyle)
             => flatStyle switch
             {
@@ -89,17 +136,6 @@ public partial class DataGridViewButtonCell
                 FlatStyle.System => s_systemButtonDarkModeRenderer ??= new SystemButtonDarkModeRenderer(),
                 _ => throw new ArgumentOutOfRangeException(nameof(flatStyle))
             };
-
-        private static Rectangle ApplyRendererPadding(ButtonDarkModeRendererBase renderer, Rectangle bounds)
-        {
-            Padding padding = renderer.GetPreferredSizePadding();
-
-            return new Rectangle(
-                bounds.X + padding.Left,
-                bounds.Y + padding.Top,
-                bounds.Width - padding.Horizontal,
-                bounds.Height - padding.Vertical);
-        }
 
         private static Color GetTextColor(
             ButtonDarkModeRendererBase renderer,

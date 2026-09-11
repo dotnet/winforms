@@ -739,7 +739,7 @@ public partial class DataGridViewButtonCell : DataGridViewCell
                         if (paint && PaintContentBackground(paintParts))
                         {
                             Rectangle buttonBounds = valBounds;
-                            (valBounds, renderedTextColor) = DataGridViewButtonCellRenderer.DrawButton(
+                            (valBounds, renderedTextColor) = DrawButton(
                                 g,
                                 valBounds,
                                 pushButtonState,
@@ -751,7 +751,11 @@ public partial class DataGridViewButtonCell : DataGridViewCell
                         else
                         {
                             resultBounds = valBounds;
-                            valBounds = DataGridViewButtonCellRenderer.DataGridViewButtonRenderer.GetBackgroundContentRectangle(g, valBounds);
+                            valBounds = GetButtonContentBounds(
+                                g,
+                                valBounds,
+                                FlatStyle,
+                                DataGridView.DeviceDpi);
                         }
                     }
                     else
@@ -899,7 +903,20 @@ public partial class DataGridViewButtonCell : DataGridViewCell
             // Draw focus rectangle
             if (FlatStyle is FlatStyle.System or FlatStyle.Standard)
             {
-                ControlPaint.DrawFocusRectangle(g, Rectangle.Inflate(valBounds, -1, -1), Color.Empty, cellStyle.ForeColor);
+                Color focusBackColor = useDarkModeRenderer
+                    ? DataGridViewButtonCellRenderer.GetDarkModeBackgroundColor(
+                        pushButtonState,
+                        isDefault,
+                        FlatStyle)
+                    : cellStyle.ForeColor;
+                Rectangle focusBounds = useDarkModeRenderer
+                    ? Rectangle.Inflate(resultBounds, -2, -2)
+                    : Rectangle.Inflate(valBounds, -1, -1);
+                DrawFocusRectangle(
+                    g,
+                    focusBounds,
+                    cellStyle.ForeColor,
+                    focusBackColor);
             }
             else if (FlatStyle == FlatStyle.Flat)
             {
@@ -959,11 +976,11 @@ public partial class DataGridViewButtonCell : DataGridViewCell
                     options.DotNetOneButtonCompat = false;
                     ButtonBaseAdapter.LayoutData layout = options.Layout();
 
-                    ControlPaint.DrawFocusRectangle(
+                    DrawFocusRectangle(
                         g,
                         layout.Focus,
-                        Color.Empty,
-                        cellStyle.ForeColor);
+                        foreBrushColor,
+                        cellSelected ? cellStyle.SelectionBackColor : cellStyle.BackColor);
                 }
             }
         }

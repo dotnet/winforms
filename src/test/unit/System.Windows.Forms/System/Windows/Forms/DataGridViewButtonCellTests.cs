@@ -580,7 +580,7 @@ public class DataGridViewButtonCellTests : IDisposable
     }
 
     [WinFormsFact]
-    public void DrawButton_DarkMode_SystemStyle_AppliesPaddingAndUsesReadableDefaultTextColor()
+    public void DrawButton_DarkMode_SystemStyle_UsesStandardContentBoundsAndReadableDefaultTextColor()
     {
         if (SystemInformation.HighContrast)
         {
@@ -604,8 +604,11 @@ public class DataGridViewButtonCellTests : IDisposable
             Reflection.MethodInfo drawButton = rendererType.GetMethod(
                 "DrawButton",
                 Reflection.BindingFlags.Public | Reflection.BindingFlags.Static)!;
+            Reflection.MethodInfo getContentBounds = rendererType.GetMethod(
+                "GetContentBounds",
+                Reflection.BindingFlags.Public | Reflection.BindingFlags.Static)!;
 
-            object? result = drawButton.Invoke(
+            object? systemResult = drawButton.Invoke(
                 null,
                 [
                     graphics,
@@ -615,10 +618,25 @@ public class DataGridViewButtonCellTests : IDisposable
                     FlatStyle.System,
                     96
                 ]);
+            object? standardResult = drawButton.Invoke(
+                null,
+                [
+                    graphics,
+                    new Rectangle(0, 0, 30, 30),
+                    VisualStyles.PushButtonState.Normal,
+                    true,
+                    FlatStyle.Standard,
+                    96
+                ]);
 
-            (Rectangle ContentBounds, Color TextColor) renderResult = ((Rectangle, Color))result!;
-            renderResult.ContentBounds.Should().Be(new Rectangle(5, 5, 20, 20));
-            renderResult.TextColor.GetBrightness().Should().BeGreaterThan(0.5f);
+            (Rectangle ContentBounds, Color TextColor) systemRenderResult = ((Rectangle, Color))systemResult!;
+            (Rectangle ContentBounds, Color TextColor) standardRenderResult = ((Rectangle, Color))standardResult!;
+            Rectangle foregroundOnlyBounds = (Rectangle)getContentBounds.Invoke(
+                null,
+                [graphics, new Rectangle(0, 0, 30, 30), FlatStyle.System, 96])!;
+            systemRenderResult.ContentBounds.Should().Be(standardRenderResult.ContentBounds);
+            foregroundOnlyBounds.Should().Be(systemRenderResult.ContentBounds);
+            systemRenderResult.TextColor.GetBrightness().Should().BeGreaterThan(0.5f);
         }
         finally
         {
