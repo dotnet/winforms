@@ -12,6 +12,12 @@ public partial class DataGridViewButtonCell
     {
         private static VisualStyleRenderer? s_visualStyleRenderer;
 
+        [ThreadStatic]
+        private static FlatButtonDarkModeRenderer? s_flatButtonDarkModeRenderer;
+
+        [ThreadStatic]
+        private static SystemButtonDarkModeRenderer? s_systemButtonDarkModeRenderer;
+
         public static VisualStyleRenderer DataGridViewButtonRenderer
         {
             get
@@ -37,19 +43,20 @@ public partial class DataGridViewButtonCell
                 ButtonDarkModeRendererBase renderer = GetDarkModeRenderer(flatStyle);
                 renderer.DeviceDpi = deviceDpi;
                 Color backColor = renderer.GetBackgroundColor(state, isDefault, customBaseColor: Color.Empty);
+                Rectangle paddedBounds = ApplyRendererPadding(renderer, bounds);
                 Rectangle contentBounds;
                 using (new GraphicsStateScope(g))
                 {
                     contentBounds = renderer.DrawButtonBackground(
                         g,
-                        bounds,
+                        paddedBounds,
                         state,
                         isDefault,
                         focused: false,
                         backColor);
                 }
 
-                return (contentBounds, renderer.GetTextColor(state, isDefault, backColor));
+                return (contentBounds, GetTextColor(renderer, state, isDefault, flatStyle, backColor));
             }
 
             PushButtonState visualStyleState = isDefault && state == PushButtonState.Normal
@@ -72,15 +79,34 @@ public partial class DataGridViewButtonCell
         {
             ButtonDarkModeRendererBase renderer = GetDarkModeRenderer(flatStyle);
             Color backColor = renderer.GetBackgroundColor(state, isDefault, customBaseColor: Color.Empty);
-            return renderer.GetTextColor(state, isDefault, backColor);
+            return GetTextColor(renderer, state, isDefault, flatStyle, backColor);
         }
 
         private static ButtonDarkModeRendererBase GetDarkModeRenderer(FlatStyle flatStyle)
             => flatStyle switch
             {
-                FlatStyle.Standard => new FlatButtonDarkModeRenderer(),
-                FlatStyle.System => new SystemButtonDarkModeRenderer(),
+                FlatStyle.Standard => s_flatButtonDarkModeRenderer ??= new FlatButtonDarkModeRenderer(),
+                FlatStyle.System => s_systemButtonDarkModeRenderer ??= new SystemButtonDarkModeRenderer(),
                 _ => throw new ArgumentOutOfRangeException(nameof(flatStyle))
             };
+
+        private static Rectangle ApplyRendererPadding(ButtonDarkModeRendererBase renderer, Rectangle bounds)
+        {
+            Padding padding = renderer.GetPreferredSizePadding();
+
+            return new Rectangle(
+                bounds.X + padding.Left,
+                bounds.Y + padding.Top,
+                bounds.Width - padding.Horizontal,
+                bounds.Height - padding.Vertical);
+        }
+
+        private static Color GetTextColor(
+            ButtonDarkModeRendererBase renderer,
+            PushButtonState state,
+            bool isDefault,
+            FlatStyle flatStyle,
+            Color backColor)
+            => renderer.GetTextColor(state, isDefault && flatStyle != FlatStyle.System, backColor);
     }
 }

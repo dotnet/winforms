@@ -547,6 +547,7 @@ public class DataGridViewButtonCellTests : IDisposable
                 enable: true);
             using Bitmap bitmap = new(20, 20);
             using Graphics graphics = Graphics.FromImage(bitmap);
+            graphics.Clear(Color.Red);
             graphics.SmoothingMode = SmoothingMode.None;
             graphics.SmoothingMode.Should().Be(SmoothingMode.None);
 
@@ -571,6 +572,53 @@ public class DataGridViewButtonCellTests : IDisposable
             (Rectangle ContentBounds, Color TextColor) renderResult = ((Rectangle, Color))result!;
             renderResult.TextColor.Should().NotBe(Color.Green);
             bitmap.GetPixel(10, 10).Should().NotBe(Color.Red);
+        }
+        finally
+        {
+            applicationAccessor.s_colorMode = previousColorMode;
+        }
+    }
+
+    [WinFormsFact]
+    public void DrawButton_DarkMode_SystemStyle_AppliesPaddingAndUsesReadableDefaultTextColor()
+    {
+        if (SystemInformation.HighContrast)
+        {
+            return;
+        }
+
+        var applicationAccessor = typeof(Application).TestAccessor.Dynamic;
+        SystemColorMode? previousColorMode = applicationAccessor.s_colorMode;
+
+        try
+        {
+            applicationAccessor.s_colorMode = SystemColorMode.Dark;
+            using AppContextSwitchScope scope = new(
+                "System.Windows.Forms.DataGridViewDarkModeTheming",
+                enable: true);
+            using Bitmap bitmap = new(30, 30);
+            using Graphics graphics = Graphics.FromImage(bitmap);
+            Type rendererType = typeof(DataGridViewButtonCell).GetNestedType(
+                "DataGridViewButtonCellRenderer",
+                Reflection.BindingFlags.NonPublic)!;
+            Reflection.MethodInfo drawButton = rendererType.GetMethod(
+                "DrawButton",
+                Reflection.BindingFlags.Public | Reflection.BindingFlags.Static)!;
+
+            object? result = drawButton.Invoke(
+                null,
+                [
+                    graphics,
+                    new Rectangle(0, 0, 30, 30),
+                    VisualStyles.PushButtonState.Normal,
+                    true,
+                    FlatStyle.System,
+                    96
+                ]);
+
+            (Rectangle ContentBounds, Color TextColor) renderResult = ((Rectangle, Color))result!;
+            renderResult.ContentBounds.Should().Be(new Rectangle(5, 5, 20, 20));
+            renderResult.TextColor.GetBrightness().Should().BeGreaterThan(0.5f);
         }
         finally
         {
