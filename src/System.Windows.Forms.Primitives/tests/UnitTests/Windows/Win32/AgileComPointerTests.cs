@@ -25,6 +25,86 @@ public class AgileComPointerTests
         Assert.Equal(0u, count);
     }
 
+    [StaTheory]
+    [InlineData(false)]
+    [InlineData(true)]
+    public unsafe void AgileComPointer_GetManagedObject_Ownership_Git(bool useTypedHelper)
+    {
+        using MemoryStream data = new([42]);
+        ComManagedStream source = new(data);
+        using var stream = ComHelpers.GetComScope<IStream>(source);
+        using var observer = stream.Query<IUnknown>();
+        uint beforeRegistration = GetReferenceCount(observer.Value);
+        uint afterRegistration;
+        uint[] afterRetrieval = new uint[3];
+
+        using (AgileComPointer<IStream> agileStream = new(stream.Value, takeOwnership: false))
+        {
+            afterRegistration = GetReferenceCount(observer.Value);
+
+            for (int retrievalIndex = 0; retrievalIndex < afterRetrieval.Length; retrievalIndex++)
+            {
+                object actual;
+                if (useTypedHelper)
+                {
+                    actual = agileStream.GetManagedObject();
+                }
+                else
+                {
+                    using var retrieved = agileStream.GetInterface();
+                    actual = ComHelpers.GetObjectForIUnknown(retrieved.AsUnknown);
+                }
+
+                Assert.Same(source, actual);
+                Assert.True(((ComManagedStream)actual).GetDataStream().CanRead);
+                afterRetrieval[retrievalIndex] = GetReferenceCount(observer.Value);
+            }
+        }
+
+        uint afterDisposal = GetReferenceCount(observer.Value);
+        uint expectedRegistered = beforeRegistration + 1;
+        uint[] expectedCounts =
+        [
+            expectedRegistered,
+            expectedRegistered,
+            expectedRegistered,
+            expectedRegistered,
+            beforeRegistration
+        ];
+        uint[] actualCounts = [afterRegistration, .. afterRetrieval, afterDisposal];
+        Assert.Equal(expectedCounts, actualCounts);
+        Assert.Equal(42, source.GetDataStream().ReadByte());
+        Assert.Equal(HRESULT.S_OK, stream.Value->Commit(0));
+
+        static uint GetReferenceCount(IUnknown* unknown)
+        {
+            unknown->AddRef();
+            return unknown->Release();
+        }
+    }
+
+    [StaFact]
+    public unsafe void AgileComPointer_IsDisposed_TracksOnlyItsOwnRegistration()
+    {
+        using MemoryStream data = new();
+        ComManagedStream source = new(data);
+        using var stream = ComHelpers.GetComScope<IStream>(source);
+        using AgileComPointer<IStream> first = new(stream.Value, takeOwnership: false);
+        using AgileComPointer<IStream> second = new(stream.Value, takeOwnership: false);
+        Assert.False(first.IsDisposed);
+        Assert.False(second.IsDisposed);
+
+        first.Dispose();
+        first.Dispose();
+
+        Assert.True(first.IsDisposed);
+        Assert.False(second.IsDisposed);
+        using var retained = second.GetInterface();
+        Assert.Equal(HRESULT.S_OK, retained.Value->Commit(0));
+        second.Dispose();
+        Assert.True(second.IsDisposed);
+    }
+
     [StaFact]
     public async Task AgileComPointer_MultiThread_COMPointerValue_ForSameObject()
     {
