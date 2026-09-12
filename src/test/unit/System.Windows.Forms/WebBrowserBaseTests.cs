@@ -5,7 +5,10 @@
 
 using System.ComponentModel;
 using System.Drawing;
+using System.Runtime.InteropServices;
 using Moq;
+using Windows.Win32.System.Com;
+using Windows.Win32.System.Ole;
 using Size = System.Drawing.Size;
 
 namespace System.Windows.Forms.Tests;
@@ -13,6 +16,128 @@ namespace System.Windows.Forms.Tests;
 [Collection("Sequential")] // workaround for WebBrowser control corrupting memory when run on multiple UI threads (instantiated via GUID)
 public class WebBrowserBaseTests
 {
+    [WinFormsTheory]
+    [InlineData(false)]
+    [InlineData(true)]
+    public unsafe void WebBrowserBase_LoadedToPassive_ReleasesNativeReferences(bool useHost)
+    {
+        using WebBrowser control = new();
+        object nativeObject;
+        if (useHost)
+        {
+            control.TransitionUpTo(WebBrowserHelper.AXState.Loaded);
+            nativeObject = control.ActiveXInstance;
+        }
+        else
+        {
+            Guid classId = new("8856F961-340A-11D0-A96B-00C04FD705A2");
+            using ComScope<IUnknown> created = new(null);
+            PInvokeCore.CoCreateInstance(&classId, null, CLSCTX.CLSCTX_INPROC_SERVER, IID.Get<IUnknown>(), created).ThrowOnFailure();
+            nativeObject = Marshal.GetObjectForIUnknown((nint)created.Value);
+        }
+
+        Assert.True(Marshal.IsComObject(nativeObject));
+        using ComScope<IUnknown> observer = new((IUnknown*)Marshal.GetIUnknownForObject(nativeObject));
+        try
+        {
+            // The wrapper must remain usable after its creation reference has been released.
+            ((IOleObject.Interface)nativeObject).GetMiscStatus(DVASPECT.DVASPECT_CONTENT, out _).ThrowOnFailure();
+        }
+        finally
+        {
+            if (useHost)
+            {
+                control.TransitionDownTo(WebBrowserHelper.AXState.Passive);
+            }
+            else
+            {
+                Marshal.FinalReleaseComObject(nativeObject);
+            }
+        }
+
+        Assert.Null(control.ActiveXInstance);
+        Assert.False(control.IsHandleCreated);
+
+        // Direct creation is the control case: with the RCW gone, only this observer may own a reference.
+        observer.Value->AddRef();
+        uint remainingReferences = observer.Value->Release();
+        Assert.Equal(1u, remainingReferences);
+    }
+
+    [WinFormsFact]
+    public unsafe void WebBrowserBase_RunningToPassive_ReleasesClientSiteReference()
+    {
+        using WebBrowser control = new();
+        WebBrowserSiteBase site = control.ActiveXSite;
+        using var observer = ComHelpers.GetComScope<IOleClientSite>(site);
+        observer.Value->AddRef();
+        uint before = observer.Value->Release();
+
+        control.TransitionUpTo(WebBrowserHelper.AXState.Running);
+        Assert.Equal(WebBrowserHelper.AXState.Running, control.ActiveXState);
+        using (var oleObject = ComHelpers.GetComScope<IOleObject>(control.ActiveXInstance))
+        {
+            using ComScope<IOleClientSite> retainedSite = new(null);
+            oleObject.Value->GetClientSite(retainedSite).ThrowOnFailure();
+            Assert.False(retainedSite.IsNull);
+            Assert.Same(site, ComHelpers.GetObjectForIUnknown(retainedSite.AsUnknown));
+        }
+
+        control.TransitionDownTo(WebBrowserHelper.AXState.Passive);
+        Assert.Null(control.ActiveXInstance);
+        IOleClientSite* observedSite = observer.Value;
+        Assert.Throws<NotImplementedException>(() => observedSite->SaveObject());
+
+        // Window/native teardown is insufficient: an extra site CCW reference still roots the host.
+        // Compare the same managed site's count before activation and after every native owner is gone.
+        observer.Value->AddRef();
+        Assert.Equal(before, observer.Value->Release());
+        GC.KeepAlive(control);
+    }
+
+    [WinFormsTheory]
+    [InlineData(false)]
+    [InlineData(true)]
+    public unsafe void WebBrowserContainer_SetActiveObject_ReleasesClientSiteReference(bool useContainer)
+    {
+        using WebBrowser control = new();
+        control.TransitionUpTo(WebBrowserHelper.AXState.Loaded);
+        using var oleObject = ComHelpers.GetComScope<IOleObject>(control.ActiveXInstance);
+        using var activeObject = ComHelpers.GetComScope<IOleInPlaceActiveObject>(control.ActiveXInstance);
+        using WebBrowserSiteBase site = new(control);
+        using var clientSite = ComHelpers.GetComScope<IOleClientSite>(site);
+        using var observer = clientSite.Query<IUnknown>();
+        oleObject.Value->SetClientSite(clientSite).ThrowOnFailure();
+
+        try
+        {
+            observer.Value->AddRef();
+            uint before = observer.Value->Release();
+
+            if (useContainer)
+            {
+                WebBrowserContainer container = new(control);
+                Assert.Equal(HRESULT.S_OK, ((IOleInPlaceFrame.Interface)container).SetActiveObject(activeObject, default));
+            }
+            else
+            {
+                using ComScope<IOleClientSite> returnedSite = new(null);
+                oleObject.Value->GetClientSite(returnedSite).ThrowOnFailure();
+                Assert.Same(site, ComHelpers.GetObjectForIUnknown(returnedSite.AsUnknown));
+            }
+
+            IOleClientSite* observedSite = clientSite.Value;
+            Assert.Throws<NotImplementedException>(() => observedSite->SaveObject());
+            observer.Value->AddRef();
+            uint after = observer.Value->Release();
+            Assert.Equal(before, after);
+        }
+        finally
+        {
+            oleObject.Value->SetClientSite(null).ThrowOnFailure();
+        }
+    }
+
     public static IEnumerable<object[]> Bounds_Set_TestData()
     {
         yield return new object[] { 0, 0, 0, 0 };
