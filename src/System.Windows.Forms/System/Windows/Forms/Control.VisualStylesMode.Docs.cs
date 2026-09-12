@@ -27,6 +27,9 @@ public partial class Control
     ///   shrink slightly. Prefer <see cref="TableLayoutPanel"/> or <see cref="FlowLayoutPanel"/> for adaptive layouts.
     ///  </para>
     ///  <para>
+    ///   This setting is not applied to controls hosted through <see cref="ToolStripControlHost"/>.
+    ///  </para>
+    ///  <para>
     ///   High Contrast resolves the effective mode to classic rendering. See the
     ///   <see href="https://github.com/dotnet/winforms/blob/main/docs/net11-visualstyles-layout-guidance.md">
     ///   .NET 11 VisualStyles layout guidance</see> for migration patterns.
