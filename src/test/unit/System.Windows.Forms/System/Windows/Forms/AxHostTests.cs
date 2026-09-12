@@ -1471,6 +1471,204 @@ public class AxHostTests
         Assert.Equal(1, result.GdiCharSet);
     }
 
+    [WinFormsTheory]
+    [InlineData(false, false)]
+    [InlineData(false, true)]
+    [InlineData(true, false)]
+    [InlineData(true, true)]
+    public unsafe void AxHost_FontConversion_ReleasesNativeReferences(bool useAxHost, bool dispatch)
+    {
+        using Font font = new("Arial", 10);
+        object nativeFont;
+        if (useAxHost)
+        {
+            nativeFont = dispatch ? SubAxHost.GetIFontDispFromFont(font) : SubAxHost.GetIFontFromFont(font);
+        }
+        else
+        {
+            using ComScope<IUnknown> created = new(null);
+            Guid interfaceId = dispatch ? IID.GetRef<IFontDisp>() : IID.GetRef<IFont>();
+            FONTDESC description = new()
+            {
+                cbSizeofstruct = (uint)sizeof(FONTDESC),
+                cySize = (CY)font.SizeInPoints,
+                sWeight = 400,
+                sCharset = 1
+            };
+
+            fixed (char* name = font.Name)
+            {
+                description.lpstrName = name;
+                PInvoke.OleCreateFontIndirect(&description, &interfaceId, created).ThrowOnFailure();
+            }
+
+            nativeFont = Marshal.GetObjectForIUnknown((nint)created.Value);
+        }
+
+        Assert.True(Marshal.IsComObject(nativeFont));
+        using ComScope<IUnknown> observer = new((IUnknown*)Marshal.GetIUnknownForObject(nativeFont));
+        Marshal.FinalReleaseComObject(nativeFont);
+
+        // The direct-creation cases establish that this native font has no other owners. Keep the observer alive
+        // while checking, and balance the diagnostic AddRef before asserting so failure cannot strand that probe.
+        observer.Value->AddRef();
+        uint remainingReferences = observer.Value->Release();
+        Assert.Equal(1u, remainingReferences);
+    }
+
+    [WinFormsTheory]
+    [InlineData(false, false)]
+    [InlineData(false, true)]
+    [InlineData(true, false)]
+    [InlineData(true, true)]
+    public unsafe void AxHost_QuickActivate_Ownership_Font(bool useAxHost, bool failActivation)
+    {
+        using Font font = new("Arial", 10, FontStyle.Regular, GraphicsUnit.Point);
+        using ContainerControl parent = new() { Font = font };
+        using SubAxHost control = new(EmptyClsidString);
+        parent.Controls.Add(control);
+        HRESULT activationResult = failActivation ? HRESULT.E_FAIL : HRESULT.S_OK;
+        using QuickActivateFontControl activeX = new(activationResult);
+
+        if (useAxHost)
+        {
+            control.TestAccessor.Dynamic._instance = activeX;
+            try
+            {
+                Assert.Equal(!failActivation, (bool)control.TestAccessor.Dynamic.QuickActivate());
+            }
+            finally
+            {
+                control.TestAccessor.Dynamic._instance = null;
+            }
+        }
+        else
+        {
+            using ComScope<IFont> created = new(SubAxHost.Ownership_AmbientFont_GetIFontPointerFromFont(font));
+            QACONTAINER container = new()
+            {
+                cbSize = (uint)sizeof(QACONTAINER),
+                pFont = created.Value
+            };
+            QACONTROL activatedControl = new() { cbSize = (uint)sizeof(QACONTROL) };
+            Assert.Equal(activationResult, activeX.QuickActivate(&container, &activatedControl));
+        }
+
+        Assert.NotNull(activeX.Font);
+        using BSTR fontName = activeX.Font->Name;
+        Assert.Equal(font.Name, fontName.ToString());
+        activeX.Font->AddRef();
+        uint remainingReferences = activeX.Font->Release();
+        Assert.Equal(1u, remainingReferences);
+    }
+
+    [WinFormsFact]
+    public unsafe void AxHost_Ownership_AmbientFont_BalancedControl_HasStableOwnership()
+    {
+        using Font initialFont = new("Arial", 10, FontStyle.Regular, GraphicsUnit.Point);
+        using Font changedFont = new(
+            "Arial",
+            13,
+            FontStyle.Bold | FontStyle.Italic | FontStyle.Underline | FontStyle.Strikeout,
+            GraphicsUnit.Point);
+
+        uint initialReferenceCount = AxHost_Ownership_AmbientFont_GetBalancedControlReferenceCount(initialFont);
+        uint changedReferenceCount = AxHost_Ownership_AmbientFont_GetBalancedControlReferenceCount(changedFont);
+
+        Assert.Equal(initialReferenceCount, changedReferenceCount);
+    }
+
+    [WinFormsFact]
+    public unsafe void AxHost_Ownership_AmbientFont_SiteDispatch_MatchesBalancedControl()
+    {
+        using Font initialFont = new("Arial", 10, FontStyle.Regular, GraphicsUnit.Point);
+        using Font changedFont = new(
+            "Arial",
+            13,
+            FontStyle.Bold | FontStyle.Italic | FontStyle.Underline | FontStyle.Strikeout,
+            GraphicsUnit.Point);
+        using Control parent = new() { Font = initialFont };
+        using SubAxHost control = new(EmptyClsidString);
+        parent.Controls.Add(control);
+
+        object site = control.TestAccessor.Dynamic._oleSite;
+        using var siteDispatch = ComHelpers.GetComScope<IDispatch>(site);
+        long[] referenceCountDeltas = new long[2];
+
+        uint controlReferenceCount = AxHost_Ownership_AmbientFont_GetBalancedControlReferenceCount(initialFont);
+        uint siteReferenceCount = AxHost_Ownership_AmbientFont_GetSiteReferenceCount(siteDispatch.Value, initialFont);
+        referenceCountDeltas[0] = (long)siteReferenceCount - controlReferenceCount;
+
+        parent.Font = changedFont;
+        controlReferenceCount = AxHost_Ownership_AmbientFont_GetBalancedControlReferenceCount(changedFont);
+        siteReferenceCount = AxHost_Ownership_AmbientFont_GetSiteReferenceCount(siteDispatch.Value, changedFont);
+        referenceCountDeltas[1] = (long)siteReferenceCount - controlReferenceCount;
+
+        Assert.Equal([0L, 0L], referenceCountDeltas);
+    }
+
+    private static unsafe uint AxHost_Ownership_AmbientFont_GetBalancedControlReferenceCount(Font font)
+    {
+        object nativeFont = AxHost_Ownership_AmbientFont_CreateBalancedControlFont(font);
+        using VARIANT result = default;
+        Marshal.GetNativeVariantForObject(nativeFont, (nint)(&result));
+
+        uint referenceCount = AxHost_Ownership_AmbientFont_ValidateAndGetReferenceCount(&result, font);
+        GC.KeepAlive(nativeFont);
+        return referenceCount;
+    }
+
+    private static unsafe object AxHost_Ownership_AmbientFont_CreateBalancedControlFont(Font font)
+    {
+        using ComScope<IFont> created = new(SubAxHost.Ownership_AmbientFont_GetIFontPointerFromFont(font));
+        using ComScope<IUnknown> identity = created.Query<IUnknown>();
+        return ComHelpers.GetObjectForIUnknown(identity.Value);
+    }
+
+    private static unsafe uint AxHost_Ownership_AmbientFont_GetSiteReferenceCount(
+        IDispatch* siteDispatch,
+        Font expectedFont)
+    {
+        using VARIANT result = siteDispatch->GetProperty(PInvokeCore.DISPID_AMBIENT_FONT);
+        return AxHost_Ownership_AmbientFont_ValidateAndGetReferenceCount(&result, expectedFont);
+    }
+
+    private static unsafe uint AxHost_Ownership_AmbientFont_ValidateAndGetReferenceCount(
+        VARIANT* result,
+        Font expectedFont)
+    {
+        Assert.Equal(VARENUM.VT_DISPATCH, result->vt);
+        Assert.NotNull(result->data.pdispVal);
+
+        object nativeFont = ComHelpers.GetObjectForIUnknown((IUnknown*)result->data.pdispVal);
+        Assert.True(Marshal.IsComObject(nativeFont));
+
+        using ComScope<IFont> observer = new(null);
+        result->data.pdispVal->QueryInterface(IID.Get<IFont>(), observer).ThrowOnFailure();
+
+        using BSTR fontName = observer.Value->Name;
+        Assert.Equal(expectedFont.Name, fontName.ToString());
+        double nativeSizeInPoints = observer.Value->Size.int64 / 10_000d;
+        Assert.InRange(
+            nativeSizeInPoints,
+            expectedFont.SizeInPoints - 0.25,
+            expectedFont.SizeInPoints + 0.25);
+        Assert.Equal(expectedFont.Bold, (bool)observer.Value->Bold);
+        Assert.Equal(expectedFont.Italic, (bool)observer.Value->Italic);
+        Assert.Equal(expectedFont.Underline, (bool)observer.Value->Underline);
+        Assert.Equal(expectedFont.Strikeout, (bool)observer.Value->Strikethrough);
+
+        uint referenceCount = AxHost_Ownership_AmbientFont_GetReferenceCount(observer.Value);
+        GC.KeepAlive(nativeFont);
+        return referenceCount;
+    }
+
+    private static unsafe uint AxHost_Ownership_AmbientFont_GetReferenceCount(IFont* font)
+    {
+        font->AddRef();
+        return font->Release();
+    }
+
     [WinFormsFact]
     public void AxHost_GetIFontDispFromFont_InvokeComplexStyle_Roundtrips()
     {
@@ -1626,6 +1824,54 @@ public class AxHostTests
         Assert.Equal(original.Size, result.Size);
         Assert.Equal(PixelFormat.Format32bppRgb, result.PixelFormat);
         Assert.Equal(Color.FromArgb(unchecked((int)0xFF010203)), original.GetPixel(1, 2));
+    }
+
+    [WinFormsTheory]
+    [InlineData(false, false)]
+    [InlineData(false, true)]
+    [InlineData(true, false)]
+    [InlineData(true, true)]
+    public void AxHost_PictureRoundTrip_ReleasesNativeBitmaps(bool useAxHost, bool dispatch)
+    {
+        List<HGDIOBJ> retainedBitmaps = [];
+        for (int iteration = 0; iteration < 3; iteration++)
+        {
+            using Bitmap original = new(16, 16);
+            original.SetPixel(1, 2, Color.Red);
+            object picture = (useAxHost, dispatch) switch
+            {
+                (true, true) => SubAxHost.GetIPictureDispFromPicture(original),
+                (true, false) => SubAxHost.GetIPictureFromPicture(original),
+                _ => IPictureExtensions.CreateObjectFromImage(original)
+            };
+            HGDIOBJ nativeBitmap;
+
+            try
+            {
+                ((IPicture.Interface)picture).get_Handle(out OLE_HANDLE handle).ThrowOnFailure();
+                nativeBitmap = (HGDIOBJ)(nint)(uint)handle;
+                Assert.True(PInvokeCore.GetObject(nativeBitmap, out BITMAP bitmap));
+                Assert.Equal(original.Width, bitmap.bmWidth);
+                Assert.Equal(original.Height, bitmap.bmHeight);
+
+                using var roundTrip = Assert.IsType<Bitmap>(dispatch
+                    ? SubAxHost.GetPictureFromIPictureDisp(picture)
+                    : SubAxHost.GetPictureFromIPicture(picture));
+                Assert.Equal(original.Size, roundTrip.Size);
+                Assert.Equal(Color.Red.ToArgb(), roundTrip.GetPixel(1, 2).ToArgb());
+            }
+            finally
+            {
+                Marshal.FinalReleaseComObject(picture);
+            }
+
+            if (PInvokeCore.GetObject(nativeBitmap, out BITMAP _))
+            {
+                retainedBitmaps.Add(nativeBitmap);
+            }
+        }
+
+        Assert.Empty(retainedBitmaps);
     }
 
     [WinFormsFact]
@@ -3099,6 +3345,30 @@ public class AxHostTests
         cookie.Connected.Should().BeTrue();
     }
 
+    /// <summary>
+    ///  Retains one font reference independently of the quick-activation caller.
+    /// </summary>
+    private unsafe class QuickActivateFontControl(HRESULT activationResult) : IQuickActivate.Interface, IDisposable
+    {
+        private IFont* _font;
+
+        public IFont* Font => _font;
+
+        public HRESULT QuickActivate(QACONTAINER* container, QACONTROL* control)
+        {
+            Assert.NotNull(container->pFont);
+            _font = container->pFont;
+            _font->AddRef();
+            return activationResult;
+        }
+
+        public HRESULT SetContentExtent(SIZE* size) => HRESULT.E_NOTIMPL;
+
+        public HRESULT GetContentExtent(SIZE* size) => HRESULT.E_NOTIMPL;
+
+        public void Dispose() => DisposeHelper.NullAndRelease(ref _font);
+    }
+
     private class SubComponentEditor : ComponentEditor
     {
         public override bool EditComponent(ITypeDescriptorContext context, object component)
@@ -3230,6 +3500,9 @@ public class AxHostTests
         public static new object GetIFontDispFromFont(Font font) => AxHost.GetIFontDispFromFont(font);
 
         public static new object GetIFontFromFont(Font font) => AxHost.GetIFontFromFont(font);
+
+        public static unsafe IFont* Ownership_AmbientFont_GetIFontPointerFromFont(Font font)
+            => AxHost.GetIFontPointerFromFont(font);
 
         public static new object GetIPictureFromCursor(Cursor cursor) => AxHost.GetIPictureFromCursor(cursor);
 

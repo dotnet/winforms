@@ -95,6 +95,7 @@ public sealed partial class HtmlWindow
             base.Dispose(disposing);
             if (disposing)
             {
+                base.DisconnectFromEvents();
                 _htmlWindow?.NativeHtmlWindow?.Dispose();
                 _htmlWindow = null!;
             }

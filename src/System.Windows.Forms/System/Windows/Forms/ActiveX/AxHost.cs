@@ -3316,7 +3316,8 @@ public abstract unsafe partial class AxHost : Control, ISupportInitialize, ICust
 
         qaContainer.pClientSite = ComHelpers.GetComPointer<IOleClientSite>(_oleSite);
         qaContainer.pPropertyNotifySink = ComHelpers.GetComPointer<IPropertyNotifySink>(_oleSite);
-        qaContainer.pFont = GetIFontPointerFromFont(GetParentContainer()._parent.Font);
+        using ComScope<IFont> font = new(GetIFontPointerFromFont(GetParentContainer()._parent.Font));
+        qaContainer.pFont = font.Value;
         qaContainer.dwAppearance = 0;
         qaContainer.lcid = (int)PInvokeCore.GetThreadLocale();
 
@@ -3659,6 +3660,10 @@ public abstract unsafe partial class AxHost : Control, ISupportInitialize, ICust
         catch
         {
         }
+        finally
+        {
+            ifont->Release();
+        }
 
         return null;
     }
@@ -3734,8 +3739,9 @@ public abstract unsafe partial class AxHost : Control, ISupportInitialize, ICust
         {
             FONTDESC fontdesc = GetFONTDESCFromFont(font);
             fontdesc.lpstrName = n;
-            PInvoke.OleCreateFontIndirect(in fontdesc, in IID.GetRef<IFontDisp>(), out void* lplpvObj).ThrowOnFailure();
-            return ComHelpers.GetObjectForIUnknown((IFontDisp*)lplpvObj);
+            using ComScope<IFontDisp> lplpvObj = new(null);
+            PInvoke.OleCreateFontIndirect(&fontdesc, IID.Get<IFontDisp>(), lplpvObj).ThrowOnFailure();
+            return ComHelpers.GetObjectForIUnknown(lplpvObj);
         }
     }
 

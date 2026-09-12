@@ -6,6 +6,7 @@
 using System.Drawing;
 using System.Runtime.InteropServices;
 using System.Text;
+using Windows.Win32.System.Com;
 using Windows.Win32.System.Variant;
 using Windows.Win32.Web.MsHtml;
 
@@ -569,6 +570,81 @@ public class HtmlDocumentTests
         Assert.True(domDocument is IHTMLDocument2.Interface);
         Assert.True(domDocument is IHTMLDocument3.Interface);
         Assert.True(domDocument is IHTMLDocument4.Interface);
+    }
+
+    [WinFormsTheory]
+    [InlineData("Document", false)]
+    [InlineData("Document", true)]
+    [InlineData("Element", false)]
+    [InlineData("Element", true)]
+    [InlineData("Window", false)]
+    [InlineData("Window", true)]
+    [InlineData("History", false)]
+    [InlineData("History", true)]
+    public async Task HtmlDocument_DomGetter_Get_Ownership_Dom(string getterName, bool usePublicGetter)
+    {
+        using Control parent = new();
+        using WebBrowser control = new()
+        {
+            Parent = parent
+        };
+
+        const string Html = "<html><head><title>C4 Ownership</title></head>"
+            + "<body><div id=\"ownership-target\">C4 element</div></body></html>";
+        HtmlDocument document = await GetDocument(control, Html, TimeSpan.FromSeconds(15));
+
+        validate();
+
+        unsafe void validate()
+        {
+            switch (getterName)
+            {
+                case "Document":
+                    AssertDomGetterOwnership(
+                        document.NativeHtmlDocument2,
+                        () => document.DomDocument,
+                        () => Assert.Equal("C4 Ownership", document.Title),
+                        usePublicGetter);
+                    break;
+                case "Element":
+                    HtmlElement element = document.GetElementById("ownership-target");
+                    AssertDomGetterOwnership(
+                        element.NativeHtmlElement,
+                        () => element.DomElement,
+                        () =>
+                        {
+                            Assert.Equal("ownership-target", element.Id);
+                            Assert.Equal("C4 element", element.InnerText);
+                        },
+                        usePublicGetter);
+                    break;
+                case "Window":
+                    HtmlWindow window = document.Window;
+                    HtmlDocument windowDocument = window.Document;
+                    AssertDomGetterOwnership(
+                        window.NativeHtmlWindow,
+                        () => window.DomWindow,
+                        () => Assert.Equal("C4 Ownership", windowDocument.Title),
+                        usePublicGetter);
+                    break;
+                case "History":
+                    HtmlWindow historyWindow = document.Window;
+                    using (HtmlHistory history = historyWindow.History)
+                    {
+                        int historyLength = history.Length;
+                        AgileComPointer<IOmHistory> nativeHistory = history.TestAccessor.Dynamic._htmlHistory;
+                        AssertDomGetterOwnership(
+                            nativeHistory,
+                            () => history.DomHistory,
+                            () => Assert.Equal(historyLength, history.Length),
+                            usePublicGetter);
+                    }
+
+                    break;
+                default:
+                    throw new InvalidOperationException($"Unknown DOM getter '{getterName}'.");
+            }
+        }
     }
 
     [WinFormsFact]
@@ -1423,6 +1499,59 @@ public class HtmlDocumentTests
     }
 
     [WinFormsTheory]
+    [InlineData(false)]
+    [InlineData(true)]
+    public async Task HtmlDocument_AttachEventHandler_Ownership_AttachedEvents(bool disposeShim)
+    {
+        using Control parent = new();
+        using WebBrowser control = new() { Parent = parent };
+        HtmlDocument document = await GetDocument(
+            control,
+            "<html><body><p>Attached event lifetime</p></body></html>",
+            TimeSpan.FromSeconds(15));
+        int callbackCount = 0;
+        EventHandler attachedHandler = (sender, eventArgs) => callbackCount++;
+        document.AttachEventHandler("onclick", attachedHandler);
+        HtmlDocument.HtmlDocumentShim shim = document.TestAccessor.Dynamic.DocumentShim;
+        Dictionary<EventHandler, HtmlToClrEventProxy> attachedEvents = shim.TestAccessor.Dynamic._attachedEventList;
+        Assert.Single(attachedEvents);
+        HtmlToClrEventProxy proxy = attachedEvents[attachedHandler];
+
+        Validate();
+
+        unsafe void Validate()
+        {
+            using var nativeDocument = document.NativeHtmlDocument2.GetInterface<IHTMLDocument4>();
+            using var observer = ComHelpers.GetComScope<IUnknown>(proxy);
+            HtmlElementEventHandler standardHandler = (sender, eventArgs) => { };
+            document.Click += standardHandler;
+            document.Click -= standardHandler;
+
+            using BSTR onClick = new("onclick");
+            VARIANT eventObject = default;
+            VARIANT_BOOL cancelled = default;
+            Assert.True(nativeDocument.Value->fireEvent(onClick, &eventObject, &cancelled).Succeeded);
+            Assert.Equal(1, callbackCount);
+
+            if (disposeShim)
+            {
+                shim.Dispose();
+            }
+            else
+            {
+                document.DetachEventHandler("onclick", attachedHandler);
+            }
+
+            Assert.True(nativeDocument.Value->fireEvent(onClick, &eventObject, &cancelled).Succeeded);
+            observer.Value->AddRef();
+            uint remainingReferences = observer.Value->Release();
+            uint[] remainingState = [(uint)callbackCount, (uint)attachedEvents.Count, remainingReferences];
+            Assert.Equal([1u, 0u, 1u], remainingState);
+            GC.KeepAlive(proxy);
+        }
+    }
+
+    [WinFormsTheory]
     [InlineData("onclick")]
     [InlineData("oncontextmenu")]
     [InlineData("onfocusin")]
@@ -2029,6 +2158,178 @@ public class HtmlDocumentTests
         }
     }
 
+    [WinFormsTheory]
+    [InlineData(false)]
+    [InlineData(true)]
+    public async Task HtmlDocument_Click_ConnectDisconnect_Ownership_DomEvents_Document(bool useStandardEventApi)
+    {
+        using Control parent = new();
+        using WebBrowser control = new()
+        {
+            Parent = parent
+        };
+
+        const string Html = "<html><head><title>C6 Document Events</title></head>"
+            + "<body><p>Document Click</p></body></html>";
+        HtmlDocument document = await GetDocument(control, Html, TimeSpan.FromSeconds(15));
+        HtmlWindow associatedWindow = document.Window;
+        object nativeDocument = document.DomDocument;
+        object nativeWindow = associatedWindow.DomWindow;
+
+        validate();
+
+        unsafe void validate()
+        {
+            using var retainedDocument = document.NativeHtmlDocument2.GetInterface();
+            using var observer = retainedDocument.Query<IUnknown>();
+            using var document4 = retainedDocument.Query<IHTMLDocument4>();
+            using BSTR onClick = new("onclick");
+
+            Assert.Same(nativeDocument, ComHelpers.GetObjectForIUnknown(retainedDocument.AsUnknown));
+            Assert.Equal("C6 Document Events", document.Title);
+
+            HtmlDocument.HtmlDocumentShim documentShim = document.TestAccessor.Dynamic.DocumentShim;
+            int callbackCount = 0;
+            object callbackSender = null;
+            EventArgs callbackEventArgs = null;
+            HtmlElementEventHandler handler = (sender, eventArgs) =>
+            {
+                callbackCount++;
+                callbackSender = sender;
+                callbackEventArgs = eventArgs;
+            };
+
+            document.Click += handler;
+            AxHost.ConnectionPointCookie warmCookie = documentShim.TestAccessor.Dynamic._cookie;
+            Assert.NotNull(warmCookie);
+            Assert.True(warmCookie.Connected);
+            fireClick(document4.Value, onClick);
+            Assert.Equal(1, callbackCount);
+            Assert.Same(document, callbackSender);
+            Assert.IsType<HtmlElementEventArgs>(callbackEventArgs);
+
+            document.Click -= handler;
+            Assert.Null(documentShim.TestAccessor.Dynamic._cookie);
+            Assert.False(warmCookie.Connected);
+            callbackSender = null;
+            callbackEventArgs = null;
+            fireClick(document4.Value, onClick);
+            Assert.Equal(1, callbackCount);
+            Assert.Null(callbackSender);
+            Assert.Null(callbackEventArgs);
+
+            callbackCount = 0;
+            if (!useStandardEventApi)
+            {
+                document.Click += handler;
+                AxHost.ConnectionPointCookie registrationCookie = documentShim.TestAccessor.Dynamic._cookie;
+                Assert.NotNull(registrationCookie);
+                Assert.True(registrationCookie.Connected);
+                documentShim.DisconnectFromEvents();
+                Assert.Null(documentShim.TestAccessor.Dynamic._cookie);
+                Assert.False(registrationCookie.Connected);
+            }
+
+            Type eventSinkType = typeof(HtmlDocument).GetNestedType(
+                "HTMLDocumentEvents2",
+                global::System.Reflection.BindingFlags.NonPublic);
+            Assert.NotNull(eventSinkType);
+
+            uint baseline = getReferenceCount(observer.Value);
+            long[] deltas = new long[3];
+            object[] eventSources = new object[deltas.Length];
+            object[] eventSinks = new object[deltas.Length];
+            AxHost.ConnectionPointCookie[] disconnectedCookies = new AxHost.ConnectionPointCookie[deltas.Length];
+
+            for (int eventCycle = 0; eventCycle < deltas.Length; eventCycle++)
+            {
+                callbackSender = null;
+                callbackEventArgs = null;
+
+                AxHost.ConnectionPointCookie cookie;
+                if (useStandardEventApi)
+                {
+                    document.Click += handler;
+                    cookie = documentShim.TestAccessor.Dynamic._cookie;
+                }
+                else
+                {
+                    eventSources[eventCycle] = ComHelpers.GetObjectForIUnknown(retainedDocument.AsUnknown);
+                    Assert.Same(nativeDocument, eventSources[eventCycle]);
+
+                    eventSinks[eventCycle] = Activator.CreateInstance(eventSinkType, document);
+                    Assert.Equal(eventSinkType, eventSinks[eventCycle].GetType());
+                    Assert.True(typeof(Interop.Mshtml.DHTMLDocumentEvents2).IsInstanceOfType(eventSinks[eventCycle]));
+
+                    cookie = new AxHost.ConnectionPointCookie(
+                        eventSources[eventCycle],
+                        eventSinks[eventCycle],
+                        typeof(Interop.Mshtml.DHTMLDocumentEvents2),
+                        throwException: false);
+                }
+
+                Assert.NotNull(cookie);
+                Assert.True(cookie.Connected);
+                fireClick(document4.Value, onClick);
+
+                int expectedCallbackCount = eventCycle + 1;
+                Assert.Equal(expectedCallbackCount, callbackCount);
+                Assert.Same(document, callbackSender);
+                Assert.IsType<HtmlElementEventArgs>(callbackEventArgs);
+
+                if (useStandardEventApi)
+                {
+                    document.Click -= handler;
+                }
+                else
+                {
+                    cookie.Disconnect();
+                }
+
+                Assert.Null(documentShim.TestAccessor.Dynamic._cookie);
+                Assert.False(cookie.Connected);
+
+                callbackSender = null;
+                callbackEventArgs = null;
+                fireClick(document4.Value, onClick);
+                Assert.Equal(expectedCallbackCount, callbackCount);
+                Assert.Null(callbackSender);
+                Assert.Null(callbackEventArgs);
+
+                disconnectedCookies[eventCycle] = cookie;
+                deltas[eventCycle] = (long)getReferenceCount(observer.Value) - baseline;
+            }
+
+            if (!useStandardEventApi)
+            {
+                document.Click -= handler;
+            }
+
+            Assert.Null(documentShim.TestAccessor.Dynamic._cookie);
+            Assert.Equal([0L, 0L, 0L], deltas);
+
+            GC.KeepAlive(disconnectedCookies);
+            GC.KeepAlive(eventSinks);
+            GC.KeepAlive(eventSources);
+            GC.KeepAlive(nativeWindow);
+            GC.KeepAlive(nativeDocument);
+            GC.KeepAlive(associatedWindow);
+
+            static void fireClick(IHTMLDocument4* nativeDocument4, BSTR eventName)
+            {
+                VARIANT eventObject = default;
+                VARIANT_BOOL cancelled = default;
+                Assert.True(nativeDocument4->fireEvent(eventName, &eventObject, &cancelled).Succeeded);
+            }
+
+            static uint getReferenceCount(IUnknown* unknown)
+            {
+                unknown->AddRef();
+                return unknown->Release();
+            }
+        }
+    }
+
     [WinFormsFact]
     public async Task HtmlDocument_ContextMenuShowing_InvokeEvent_Success()
     {
@@ -2371,14 +2672,55 @@ public class HtmlDocumentTests
         }
     }
 
-    private static async Task<HtmlDocument> GetDocument(WebBrowser control, string html)
+    private static unsafe void AssertDomGetterOwnership<TInterface>(
+        AgileComPointer<TInterface> nativePointer,
+        Func<object> getDomObject,
+        Action validateWrapper,
+        bool usePublicGetter)
+        where TInterface : unmanaged, IComIID
+    {
+        object expected = getDomObject();
+        using var retainedInterface = nativePointer.GetInterface();
+        using var observer = retainedInterface.Query<IUnknown>();
+
+        Assert.Same(expected, ComHelpers.GetObjectForIUnknown(retainedInterface.AsUnknown));
+        validateWrapper();
+
+        uint baseline = getReferenceCount(observer.Value);
+        object[] actual = new object[3];
+        long[] deltas = new long[actual.Length];
+        for (int retrievalIndex = 0; retrievalIndex < actual.Length; retrievalIndex++)
+        {
+            actual[retrievalIndex] = usePublicGetter
+                ? getDomObject()
+                : ComHelpers.GetObjectForIUnknown(retainedInterface.AsUnknown);
+            deltas[retrievalIndex] = (long)getReferenceCount(observer.Value) - baseline;
+        }
+
+        foreach (object retrieved in actual)
+        {
+            Assert.Same(expected, retrieved);
+        }
+
+        Assert.True(expected.GetType().IsCOMObject);
+        validateWrapper();
+        Assert.Equal([0L, 0L, 0L], deltas);
+
+        static uint getReferenceCount(IUnknown* unknown)
+        {
+            unknown->AddRef();
+            return unknown->Release();
+        }
+    }
+
+    private static async Task<HtmlDocument> GetDocument(WebBrowser control, string html, TimeSpan? timeout = null)
     {
         TaskCompletionSource<bool> source = new();
         control.DocumentCompleted += (sender, e) => source.SetResult(true);
 
         using var file = CreateTempFile(html);
         await Task.Run(() => control.Navigate(file.Path));
-        Assert.True(await source.Task);
+        Assert.True(await (timeout.HasValue ? source.Task.WaitAsync(timeout.Value) : source.Task));
 
         return control.Document;
     }

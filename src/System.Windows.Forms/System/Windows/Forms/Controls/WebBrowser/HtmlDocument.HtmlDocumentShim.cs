@@ -22,7 +22,7 @@ public sealed unsafe partial class HtmlDocument
     /// </summary>
     internal class HtmlDocumentShim : HtmlShim
     {
-        private readonly AgileComPointer<IHTMLWindow2>? _associatedWindow;
+        private AgileComPointer<IHTMLWindow2>? _associatedWindow;
         private AxHost.ConnectionPointCookie? _cookie;
         private HtmlDocument _htmlDocument;
 
@@ -106,8 +106,10 @@ public sealed unsafe partial class HtmlDocument
             base.Dispose(disposing);
             if (disposing)
             {
+                base.DisconnectFromEvents();
                 _htmlDocument?.NativeHtmlDocument2.Dispose();
                 _htmlDocument = null!;
+                DisposeHelper.NullAndDispose(ref _associatedWindow);
             }
         }
 

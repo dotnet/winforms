@@ -1831,7 +1831,7 @@ public unsafe partial class AccessibleObject :
 
     object? IAccessible.get_accChild(object childID)
     {
-        ComScope<IDispatch> child = new(null);
+        using ComScope<IDispatch> child = new(null);
         ((UIA.IAccessible.Interface)this).get_accChild(ChildIdToVARIANT(childID), child);
         return child.IsNull ? null : ComHelpers.GetObjectForIUnknown(child);
     }
@@ -2238,7 +2238,7 @@ public unsafe partial class AccessibleObject :
     {
         get
         {
-            ComScope<IDispatch> dispatch = new(null);
+            using ComScope<IDispatch> dispatch = new(null);
             ((UIA.IAccessible.Interface)this).get_accParent(dispatch).AssertSuccess();
             return dispatch.IsNull ? null : ComHelpers.GetObjectForIUnknown(dispatch);
         }

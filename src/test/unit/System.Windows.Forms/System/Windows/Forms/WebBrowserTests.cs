@@ -8,6 +8,7 @@ using System.Drawing;
 using System.Runtime.InteropServices;
 using System.Text;
 using System.Windows.Forms.TestUtilities;
+using Windows.Win32.System.Com;
 using Point = System.Drawing.Point;
 using Size = System.Drawing.Size;
 
@@ -16,6 +17,62 @@ namespace System.Windows.Forms.Tests;
 [Collection("Sequential")] // workaround for WebBrowser control corrupting memory when run on multiple UI threads
 public class WebBrowserTests
 {
+    [WinFormsFact]
+    public unsafe void WebBrowser_OpenCloseView_ReleasesNativeInstance()
+    {
+        List<uint> remainingReferences = [];
+        for (int iteration = 0; iteration < 3; iteration++)
+        {
+            using Form form = new();
+            using WebBrowser browser = new() { Dock = DockStyle.Fill };
+            form.Controls.Add(browser);
+            form.Show();
+            browser.Focus();
+
+            HWND formWindow = (HWND)form.Handle;
+            HWND browserWindow = (HWND)browser.Handle;
+            using var observer = ComHelpers.GetComScope<IUnknown>(browser.ActiveXInstance);
+            form.Close();
+            browser.Dispose();
+            Assert.False(PInvoke.IsWindow(formWindow));
+            Assert.False(PInvoke.IsWindow(browserWindow));
+            Assert.Null(browser.ActiveXInstance);
+
+            observer.Value->AddRef();
+            remainingReferences.Add(observer.Value->Release());
+        }
+
+        Assert.All(remainingReferences, count => Assert.Equal(1u, count));
+    }
+
+    [WinFormsFact]
+    public async Task WebBrowser_LocalHtmlView_CloseDestroysWindows()
+    {
+        for (int iteration = 0; iteration < 3; iteration++)
+        {
+            using Form form = new();
+            using WebBrowser browser = new() { Dock = DockStyle.Fill };
+            form.Controls.Add(browser);
+            form.Show();
+            browser.Focus();
+
+            TaskCompletionSource<bool> loaded = new(TaskCreationOptions.RunContinuationsAsynchronously);
+            browser.DocumentCompleted += (sender, args) => loaded.TrySetResult(true);
+            browser.DocumentText = "<html><head><title>Local report</title></head><body>Report content</body></html>";
+            await loaded.Task.WaitAsync(TimeSpan.FromSeconds(15));
+            Assert.Equal("Local report", browser.DocumentTitle);
+
+            HWND formWindow = (HWND)form.Handle;
+            HWND browserWindow = (HWND)browser.Handle;
+            form.Close();
+            browser.Dispose();
+
+            Assert.False(PInvoke.IsWindow(formWindow));
+            Assert.False(PInvoke.IsWindow(browserWindow));
+            Assert.Null(browser.ActiveXInstance);
+        }
+    }
+
     [WinFormsFact]
     public void WebBrowser_Ctor_Default()
     {

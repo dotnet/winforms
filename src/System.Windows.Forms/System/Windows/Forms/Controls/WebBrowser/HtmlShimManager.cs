@@ -175,7 +175,7 @@ internal sealed class HtmlShimManager : IDisposable
 
                 foreach (HtmlDocument.HtmlDocumentShim shim in shims)
                 {
-                    if (shim.AssociatedWindow == unloadedWindow.NativeHtmlWindow)
+                    if (IsAssociatedWindow(shim, unloadedWindow))
                     {
                         _htmlDocumentShims.Remove(shim.Document);
                         shim.Dispose();
@@ -193,7 +193,7 @@ internal sealed class HtmlShimManager : IDisposable
 
                 foreach (HtmlElement.HtmlElementShim shim in shims)
                 {
-                    if (shim.AssociatedWindow == unloadedWindow.NativeHtmlWindow)
+                    if (IsAssociatedWindow(shim, unloadedWindow))
                     {
                         _htmlElementShims.Remove(shim.Element);
                         shim.Dispose();
@@ -210,6 +210,18 @@ internal sealed class HtmlShimManager : IDisposable
                 }
             }
         }
+    }
+
+    private static unsafe bool IsAssociatedWindow(HtmlShim shim, HtmlWindow window)
+    {
+        IHTMLWindow2.Interface? associatedWindow = shim.AssociatedWindow;
+        if (associatedWindow is null)
+        {
+            return false;
+        }
+
+        using var nativeAssociatedWindow = ComHelpers.GetComScope<IHTMLWindow2>(associatedWindow);
+        return window.NativeHtmlWindow.IsSameNativeObject(nativeAssociatedWindow.Value);
     }
 
     public void Dispose()

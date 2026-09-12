@@ -103,8 +103,8 @@ internal unsafe class WebBrowserContainer : IOleContainer.Interface, IOleInPlace
             return HRESULT.S_OK;
         }
 
-        IOleClientSite* clientSite;
-        oleObject.Value->GetClientSite(&clientSite);
+        using ComScope<IOleClientSite> clientSite = new(null);
+        oleObject.Value->GetClientSite(clientSite);
         object clientSiteObject = ComHelpers.GetObjectForIUnknown(clientSite);
         if (clientSiteObject is WebBrowserSiteBase webBrowserSiteBase)
         {

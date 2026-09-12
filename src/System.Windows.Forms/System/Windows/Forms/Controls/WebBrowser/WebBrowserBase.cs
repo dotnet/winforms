@@ -832,16 +832,19 @@ public unsafe partial class WebBrowserBase : Control
             // First, create the ActiveX control
             Debug.Assert(_activeXInstance is null, "activeXInstance must be null");
 
-            HRESULT hr = PInvokeCore.CoCreateInstance(
-                in _clsid,
-                null,
-                CLSCTX.CLSCTX_INPROC_SERVER,
-                IID.GetRef<IUnknown>(),
-                out void* unknown);
+            using ComScope<IUnknown> unknown = new(null);
 
-            hr.ThrowOnFailure();
+            fixed (Guid* clsid = &_clsid)
+            {
+                PInvokeCore.CoCreateInstance(
+                    clsid,
+                    null,
+                    CLSCTX.CLSCTX_INPROC_SERVER,
+                    IID.Get<IUnknown>(),
+                    unknown).ThrowOnFailure();
+            }
 
-            _activeXInstance = ComHelpers.GetObjectForIUnknown((IUnknown*)unknown);
+            _activeXInstance = ComHelpers.GetObjectForIUnknown(unknown);
 
             Debug.Assert(_activeXInstance is not null, "w/o an exception being thrown we must have an object...");
 

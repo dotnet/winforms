@@ -193,7 +193,7 @@ internal static unsafe partial class ComHelpers
             return false;
         }
 
-        return TryGetObjectForIUnknown(unknown, out @object);
+        return TryGetObjectForIUnknown(unknown, takeOwnership: true, out @object);
     }
 
     /// <inheritdoc cref="TryGetObjectForIUnknown{TObject}(ComUnknown*, bool, out TObject)"/>
@@ -285,8 +285,9 @@ internal static unsafe partial class ComHelpers
             return GetObjectForIUnknown(unknown);
         }
 
-        unknown->QueryInterface(IID.Get<ComUnknown>(), (void**)&unknown).ThrowOnFailure();
-        return GetObjectForIUnknown(unknown);
+        using ComScope<ComUnknown> queriedUnknown = new(null);
+        unknown->QueryInterface(IID.Get<ComUnknown>(), queriedUnknown).ThrowOnFailure();
+        return GetObjectForIUnknown(queriedUnknown.Value);
     }
 
     /// <inheritdoc cref="GetObjectForIUnknown(ComUnknown*)"/>
