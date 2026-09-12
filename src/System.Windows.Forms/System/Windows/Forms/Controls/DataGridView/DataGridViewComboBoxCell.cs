@@ -1892,14 +1892,9 @@ public partial class DataGridViewComboBoxCell : DataGridViewCell
 
         bool paintXPThemes = !paintFlat && DataGridView.ApplyVisualStylesToInnerCells;
         bool paintPostXPThemes = paintXPThemes && PostXPThemesExist;
-
-        ComboBoxState comboBoxState = ComboBoxState.Normal;
-        if (DataGridView.MouseEnteredCellAddress.Y == rowIndex &&
-            DataGridView.MouseEnteredCellAddress.X == ColumnIndex &&
-            s_mouseInDropDownButtonBounds)
-        {
-            comboBoxState = ComboBoxState.Hot;
-        }
+        bool useDarkModeComboBoxRenderer = Application.IsDarkModeEnabled
+            && AppContextSwitches.DataGridViewDarkModeTheming
+            && !SystemInformation.HighContrast;
 
         if (paint && PaintBorder(paintParts))
         {
@@ -1915,6 +1910,14 @@ public partial class DataGridViewComboBoxCell : DataGridViewCell
         Point ptCurrentCell = DataGridView.CurrentCellAddress;
         bool cellCurrent = ptCurrentCell.X == ColumnIndex && ptCurrentCell.Y == rowIndex;
         bool cellEdited = cellCurrent && DataGridView.EditingControl is not null;
+        ComboBoxState comboBoxState = ComboBoxState.Normal;
+        if (DataGridView.MouseEnteredCellAddress.Y == rowIndex &&
+            DataGridView.MouseEnteredCellAddress.X == ColumnIndex &&
+            s_mouseInDropDownButtonBounds)
+        {
+            comboBoxState = ComboBoxState.Hot;
+        }
+
         bool cellSelected = (elementState & DataGridViewElementStates.Selected) != 0;
         bool drawComboBox = DisplayStyle == DataGridViewComboBoxDisplayStyle.ComboBox &&
                             ((DisplayStyleForCurrentCellOnly && cellCurrent) || !DisplayStyleForCurrentCellOnly);
@@ -1959,7 +1962,10 @@ public partial class DataGridViewComboBoxCell : DataGridViewCell
                 {
                     if (paintPostXPThemes)
                     {
-                        DataGridViewComboBoxCellRenderer.DrawBorder(g, valBounds);
+                        if (!useDarkModeComboBoxRenderer)
+                        {
+                            DataGridViewComboBoxCellRenderer.DrawBorder(g, valBounds);
+                        }
                     }
                     else
                     {
@@ -2054,11 +2060,16 @@ public partial class DataGridViewComboBoxCell : DataGridViewCell
                             {
                                 if (drawComboBox)
                                 {
-                                    DataGridViewComboBoxCellRenderer.DrawDropDownButton(g, dropRect, comboBoxState, DataGridView.RightToLeftInternal);
+                                    DataGridViewComboBoxCellRenderer.DrawDropDownButton(
+                                        g,
+                                        dropRect,
+                                        useDarkModeComboBoxRenderer && cellSelected ? ComboBoxState.Hot : comboBoxState,
+                                        DataGridView.RightToLeftInternal,
+                                        integrated: true);
                                 }
                                 else
                                 {
-                                    DataGridViewComboBoxCellRenderer.DrawReadOnlyButton(g, valBounds, comboBoxState);
+                                    DataGridViewComboBoxCellRenderer.DrawReadOnlyButton(g, valBounds, comboBoxState, brushColor);
                                     DataGridViewComboBoxCellRenderer.DrawDropDownButton(g, dropRect, ComboBoxState.Normal);
                                 }
 
@@ -2202,6 +2213,17 @@ public partial class DataGridViewComboBoxCell : DataGridViewCell
             }
         }
 
+        if (paint
+            && useDarkModeComboBoxRenderer
+            && paintPostXPThemes
+            && drawComboBox
+            && PaintContentBackground(paintParts)
+            && valBounds.Width > 0
+            && valBounds.Height > 0)
+        {
+            DataGridViewComboBoxCellRenderer.DrawBorder(g, valBounds);
+        }
+
         Rectangle errorBounds = valBounds;
         Rectangle textBounds = Rectangle.Inflate(valBounds, -2, -2);
 
@@ -2260,7 +2282,9 @@ public partial class DataGridViewComboBoxCell : DataGridViewCell
                     focusBounds.Width++;
                     focusBounds.Y--;
                     focusBounds.Height += 2;
-                    ControlPaint.DrawFocusRectangle(g, focusBounds, Color.Empty, cellStyle.ForeColor);
+                    Color focusForeColor = cellSelected ? cellStyle.SelectionForeColor : cellStyle.ForeColor;
+                    Color focusBackColor = cellSelected ? cellStyle.SelectionBackColor : cellStyle.BackColor;
+                    DrawFocusRectangle(g, focusBounds, focusForeColor, focusBackColor);
                 }
                 else if (paintPostXPThemes)
                 {
@@ -2271,12 +2295,16 @@ public partial class DataGridViewComboBoxCell : DataGridViewCell
                     focusBounds.Height -= 2;
                     if (focusBounds.Width > 0 && focusBounds.Height > 0)
                     {
-                        ControlPaint.DrawFocusRectangle(g, focusBounds, Color.Empty, cellStyle.ForeColor);
+                        Color focusForeColor = cellSelected ? cellStyle.SelectionForeColor : cellStyle.ForeColor;
+                        Color focusBackColor = cellSelected ? cellStyle.SelectionBackColor : cellStyle.BackColor;
+                        DrawFocusRectangle(g, focusBounds, focusForeColor, focusBackColor);
                     }
                 }
                 else
                 {
-                    ControlPaint.DrawFocusRectangle(g, textBounds, Color.Empty, cellStyle.ForeColor);
+                    Color focusForeColor = cellSelected ? cellStyle.SelectionForeColor : cellStyle.ForeColor;
+                    Color focusBackColor = cellSelected ? cellStyle.SelectionBackColor : cellStyle.BackColor;
+                    DrawFocusRectangle(g, textBounds, focusForeColor, focusBackColor);
                 }
             }
 
@@ -2319,15 +2347,18 @@ public partial class DataGridViewComboBoxCell : DataGridViewCell
                                 flags |= TextFormatFlags.EndEllipsis;
                             }
 
-                            Color textColor;
-                            if (paintPostXPThemes && (drawDropDownButton || drawComboBox) && !SystemInformation.HighContrast)
-                            {
-                                textColor = DataGridViewComboBoxCellRenderer.VisualStyleRenderer.GetColor(ColorProperty.TextColor);
-                            }
-                            else
-                            {
-                                textColor = cellSelected ? cellStyle.SelectionForeColor : cellStyle.ForeColor;
-                            }
+                            bool useVisualStyleTextColor = paintPostXPThemes
+                                && (drawDropDownButton || drawComboBox)
+                                && !SystemInformation.HighContrast;
+                            bool useDarkModeColors = Application.IsDarkModeEnabled
+                                && AppContextSwitches.DataGridViewDarkModeTheming
+                                && !SystemInformation.HighContrast
+                                && (drawDropDownButton || drawComboBox);
+                            Color textColor = GetTextColor(
+                                cellStyle,
+                                cellSelected,
+                                useVisualStyleTextColor,
+                                useDarkModeColors);
 
                             TextRenderer.DrawText(
                                 g,
@@ -2368,6 +2399,25 @@ public partial class DataGridViewComboBoxCell : DataGridViewCell
         }
 
         return resultBounds;
+    }
+
+    private static Color GetTextColor(
+        DataGridViewCellStyle cellStyle,
+        bool cellSelected,
+        bool useVisualStyleTextColor,
+        bool useDarkModeColors)
+    {
+        if (useDarkModeColors)
+        {
+            return cellSelected ? cellStyle.SelectionForeColor : cellStyle.ForeColor;
+        }
+
+        if (useVisualStyleTextColor)
+        {
+            return DataGridViewComboBoxCellRenderer.VisualStyleRenderer.GetColor(ColorProperty.TextColor);
+        }
+
+        return cellSelected ? cellStyle.SelectionForeColor : cellStyle.ForeColor;
     }
 
     public override object? ParseFormattedValue(
