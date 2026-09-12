@@ -1380,6 +1380,11 @@
         <target state="translated">대화 상자에서 처음에 열 디렉터리를 선택합니다.</target>
         <note />
       </trans-unit>
+      <trans-unit id="InitialDirectoryTitle">
+        <source>Initial Directory</source>
+        <target state="new">Initial Directory</target>
+        <note />
+      </trans-unit>
       <trans-unit id="InvalidArgument">
         <source>'{1}' is not a valid value for '{0}'.</source>
         <target state="translated">'{1}'은(는) '{0}'에 사용할 수 없는 값입니다.</target>
@@ -1715,6 +1720,11 @@ Press Ctrl+Enter to accept Text.</source>
       <trans-unit id="SelectedPathEditorLabel">
         <source>Select the path to the folder that will initially be selected in the FolderBrowserDialog.</source>
         <target state="translated">FolderBrowserDialog에서 처음 선택되어 표시될 폴더의 경로를 선택합니다.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="SelectedPathTitle">
+        <source>Selected Path</source>
+        <target state="new">Selected Path</target>
         <note />
       </trans-unit>
       <trans-unit id="SerializationManagerAlreadyInSession">

@@ -1380,6 +1380,11 @@
         <target state="translated">ダイアログで最初に開くディレクトリを選択してください。</target>
         <note />
       </trans-unit>
+      <trans-unit id="InitialDirectoryTitle">
+        <source>Initial Directory</source>
+        <target state="new">Initial Directory</target>
+        <note />
+      </trans-unit>
       <trans-unit id="InvalidArgument">
         <source>'{1}' is not a valid value for '{0}'.</source>
         <target state="translated">'{1}' は '{0}' に有効な値ではありません。</target>
@@ -1715,6 +1720,11 @@ Press Ctrl+Enter to accept Text.</source>
       <trans-unit id="SelectedPathEditorLabel">
         <source>Select the path to the folder that will initially be selected in the FolderBrowserDialog.</source>
         <target state="translated">FolderBrowserDialog で最初に選択されるフォルダーへのパスを選択してください。</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="SelectedPathTitle">
+        <source>Selected Path</source>
+        <target state="new">Selected Path</target>
         <note />
       </trans-unit>
       <trans-unit id="SerializationManagerAlreadyInSession">
