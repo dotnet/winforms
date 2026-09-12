@@ -986,7 +986,7 @@ public partial class Binding
                 SetPropValue(controlValue);
                 _state.ChangeFlags(BindingStates.Modified, false);
             }
-            else
+            else if (ComponentCreated)
             {
                 SetPropValue(null);
             }
