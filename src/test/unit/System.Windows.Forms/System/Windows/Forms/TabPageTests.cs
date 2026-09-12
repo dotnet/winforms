@@ -8,7 +8,6 @@ using System.ComponentModel.Design;
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.Windows.Forms.TestUtilities;
-using Microsoft.DotNet.RemoteExecutor;
 using Moq;
 using Point = System.Drawing.Point;
 using Size = System.Drawing.Size;
@@ -536,24 +535,8 @@ public class TabPageTests
         Assert.Equal(Control.DefaultBackColor, control.BackColor);
     }
 
-    [WinFormsTheory(Skip = "Crash with AbandonedMutexException. See: https://github.com/dotnet/arcade/issues/5325")]
-    [BoolData]
-    public static void TabPage_BackColor_GetVisualStyles_ReturnsExpected(bool useVisualStyleBackColorParam)
-    {
-        // Run this from another thread as we call Application.EnableVisualStyles.
-        RemoteExecutor.Invoke((useVisualStyleBackColorString) =>
-        {
-            bool useVisualStyleBackColor = bool.Parse(useVisualStyleBackColorString);
-
-            Application.EnableVisualStyles();
-
-            using TabPage control = new()
-            {
-                UseVisualStyleBackColor = useVisualStyleBackColor
-            };
-            Assert.Equal(Control.DefaultBackColor, control.BackColor);
-        }, useVisualStyleBackColorParam.ToString()).Dispose();
-    }
+    // TabPage_BackColor_GetVisualStyles_ReturnsExpected moved to
+    // src/test/integration/UIIntegrationTests/TabPageTests.cs (issue #4500).
 
     [WinFormsTheory]
     [InlineData(true, TabAppearance.Buttons)]
@@ -606,41 +589,9 @@ public class TabPageTests
         }
     }
 
-    public static IEnumerable<object[]> BackColor_GetVisualStylesWithParent_TestData()
-    {
-        yield return new object[] { true, TabAppearance.Buttons, Control.DefaultBackColor };
-        yield return new object[] { true, TabAppearance.FlatButtons, Control.DefaultBackColor };
-        yield return new object[] { true, TabAppearance.Normal, Color.Transparent };
-        yield return new object[] { false, TabAppearance.Buttons, Control.DefaultBackColor };
-        yield return new object[] { false, TabAppearance.FlatButtons, Control.DefaultBackColor };
-        yield return new object[] { false, TabAppearance.Normal, Control.DefaultBackColor };
-    }
-
-    [WinFormsTheory(Skip = "Crash with AbandonedMutexException. See: https://github.com/dotnet/arcade/issues/5325")]
-    [MemberData(nameof(BackColor_GetVisualStylesWithParent_TestData))]
-    public static void TabPage_BackColor_GetVisualStylesWithParent_ReturnsExpected(bool useVisualStyleBackColorParam, TabAppearance parentAppearanceParam, Color expectedParam)
-    {
-        // Run this from another thread as we call Application.EnableVisualStyles.
-        RemoteExecutor.Invoke((useVisualStyleBackColorString, parentAppearanceString, expectedString) =>
-        {
-            bool useVisualStyleBackColor = bool.Parse(useVisualStyleBackColorString);
-            TabAppearance parentAppearance = (TabAppearance)Enum.Parse(typeof(TabAppearance), parentAppearanceString);
-            Color expected = Color.FromArgb(int.Parse(expectedString));
-
-            Application.EnableVisualStyles();
-
-            using TabControl parent = new()
-            {
-                Appearance = parentAppearance
-            };
-            using TabPage control = new()
-            {
-                UseVisualStyleBackColor = useVisualStyleBackColor,
-                Parent = parent
-            };
-            Assert.Equal(expected.ToArgb(), control.BackColor.ToArgb());
-        }, useVisualStyleBackColorParam.ToString(), parentAppearanceParam.ToString(), expectedParam.ToArgb().ToString()).Dispose();
-    }
+    // TabPage_BackColor_GetVisualStylesWithParent_ReturnsExpected and its
+    // BackColor_GetVisualStylesWithParent_TestData moved to
+    // src/test/integration/UIIntegrationTests/TabPageTests.cs (issue #4500).
 
     [WinFormsTheory]
     [CommonMemberData(typeof(CommonTestHelperEx), nameof(CommonTestHelperEx.GetBackColorTheoryData))]
