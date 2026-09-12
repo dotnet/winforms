@@ -2165,6 +2165,69 @@ public class ProgressBarTests
         Assert.True(control.IsHandleCreated);
     }
 
+    [WinFormsFact]
+    public void ProgressBar_RecreateHandle_WithAmbientBackColorInLightMode_SendsAmbientBackColor()
+    {
+        using Form parent = new()
+        {
+            BackColor = Color.OrangeRed
+        };
+        using SubProgressBar progressBar = new();
+        parent.Controls.Add(progressBar);
+
+        parent.CreateControl();
+        Assert.NotEqual(IntPtr.Zero, progressBar.Handle);
+        Assert.Equal(parent.BackColor, progressBar.BackColor);
+
+        progressBar.ResetBkColorTracking();
+        progressBar.RecreateHandle();
+
+        Assert.True(progressBar.SetBkColorMessageCount > 0);
+        Assert.Equal(ColorTranslator.ToWin32(progressBar.BackColor), progressBar.LastSetBkColorMessage);
+    }
+
+    [WinFormsFact]
+    public void ProgressBar_StyleSwitch_WithCustomBackColorInLightMode_SendsCustomBackColor()
+    {
+        using Form parent = new();
+        using SubProgressBar progressBar = new()
+        {
+            BackColor = Color.White,
+            Style = ProgressBarStyle.Blocks
+        };
+        parent.Controls.Add(progressBar);
+
+        parent.CreateControl();
+        Assert.NotEqual(IntPtr.Zero, progressBar.Handle);
+
+        progressBar.ResetColorTracking();
+        progressBar.Style = ProgressBarStyle.Continuous;
+
+        Assert.True(progressBar.SetBkColorMessageCount > 0);
+        Assert.Equal(ColorTranslator.ToWin32(progressBar.BackColor), progressBar.LastSetBkColorMessage);
+    }
+
+    [WinFormsFact]
+    public void ProgressBar_StyleSwitch_WithCustomForeColorInLightMode_SendsCustomForeColor()
+    {
+        using Form parent = new();
+        using SubProgressBar progressBar = new()
+        {
+            ForeColor = Color.LimeGreen,
+            Style = ProgressBarStyle.Blocks
+        };
+        parent.Controls.Add(progressBar);
+
+        parent.CreateControl();
+        Assert.NotEqual(IntPtr.Zero, progressBar.Handle);
+
+        progressBar.ResetColorTracking();
+        progressBar.Style = ProgressBarStyle.Continuous;
+
+        Assert.True(progressBar.SetBarColorMessageCount > 0);
+        Assert.Equal(ColorTranslator.ToWin32(progressBar.ForeColor), progressBar.LastSetBarColorMessage);
+    }
+
     [WinFormsTheory]
     [NewAndDefaultData<EventArgs>]
     public void ProgressBar_OnHandleDestroyed_Invoke_CallsHandleDestroyed(EventArgs eventArgs)
@@ -2641,6 +2704,8 @@ public class ProgressBarTests
 
         public new void CreateHandle() => base.CreateHandle();
 
+        public new void RecreateHandle() => base.RecreateHandle();
+
         public new AutoSizeMode GetAutoSizeMode() => base.GetAutoSizeMode();
 
         public new bool GetStyle(ControlStyles flag) => base.GetStyle(flag);
@@ -2674,5 +2739,42 @@ public class ProgressBarTests
         public new void OnRightToLeftLayoutChanged(EventArgs e) => base.OnRightToLeftLayoutChanged(e);
 
         public new void SetStyle(ControlStyles flag, bool value) => base.SetStyle(flag, value);
+
+        public int? LastSetBkColorMessage { get; private set; }
+
+        public int? LastSetBarColorMessage { get; private set; }
+
+        public int SetBkColorMessageCount { get; private set; }
+
+        public int SetBarColorMessageCount { get; private set; }
+
+        public void ResetColorTracking()
+        {
+            LastSetBkColorMessage = null;
+            LastSetBarColorMessage = null;
+            SetBkColorMessageCount = 0;
+            SetBarColorMessageCount = 0;
+        }
+
+        public void ResetBkColorTracking()
+        {
+            ResetColorTracking();
+        }
+
+        protected override void WndProc(ref Message m)
+        {
+            if (m.Msg == (int)PInvoke.PBM_SETBKCOLOR)
+            {
+                SetBkColorMessageCount++;
+                LastSetBkColorMessage = unchecked((int)m.LParam);
+            }
+            else if (m.Msg == (int)PInvoke.PBM_SETBARCOLOR)
+            {
+                SetBarColorMessageCount++;
+                LastSetBarColorMessage = unchecked((int)m.LParam);
+            }
+
+            base.WndProc(ref m);
+        }
     }
 }
