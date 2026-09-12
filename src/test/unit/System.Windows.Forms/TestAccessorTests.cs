@@ -178,6 +178,65 @@ public class TestAccessorTests
         Assert.Equal(42, (int)accessor.AMethod());
     }
 
+    [Fact]
+    public void TestAccessor_CanReadAndWrite_NonPublicAutoProperty()
+    {
+        AutoPropertyClass obj = new();
+        var accessor = new TestAccessor<AutoPropertyClass>(obj);
+
+        accessor.Dynamic.Count = 25;
+        int value = accessor.Dynamic.Count;
+        Assert.Equal(25, value);
+    }
+
+    [Fact]
+    public void TestAccessor_CanWrite_NonPublicReadOnlyAutoProperty_ViaBackingField()
+    {
+        // Count has no setter, so writing it can only be accomplished by falling back to the
+        // compiler-generated backing field.
+        ReadOnlyClass obj = new();
+        var accessor = new TestAccessor<ReadOnlyClass>(obj);
+
+        int initial = accessor.Dynamic.Count;
+        Assert.Equal(5, initial);
+
+        accessor.Dynamic.Count = 42;
+        int updated = accessor.Dynamic.Count;
+        Assert.Equal(42, updated);
+    }
+
+    [Fact]
+    public void TestAccessor_FindsInherited_NonPublicReadOnlyAutoPropertyBackingField()
+    {
+        DerivedClass obj = new();
+        var accessor = new TestAccessor<DerivedClass>(obj);
+
+        accessor.Dynamic.Count = 15;
+        int value = accessor.Dynamic.Count;
+        Assert.Equal(15, value);
+    }
+
+#pragma warning disable IDE0051   // unaccessed private
+    private class AutoPropertyClass
+    {
+        private int Count { get; set; }
+    }
+
+    private class ReadOnlyClass
+    {
+        private int Count { get; } = 5;
+    }
+
+    private class BaseClass
+    {
+        private int Count { get; }
+    }
+
+    private class DerivedClass : BaseClass
+    {
+    }
+#pragma warning restore IDE0051
+
     // As you can't use a ref struct as a generic parameter to Action/Func, you
     // need to use a defined delegate to access an internal method that takes
     // or returns a ref struct (such as Spans).
