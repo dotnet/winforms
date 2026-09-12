@@ -74,6 +74,7 @@ public abstract partial class CodeDomSerializerBase
         else
         {
             // create the MyGeneric`2[ part
+            typeName.Append(typeref.BaseType);
             if (!typeref.BaseType.Contains('`'))
             {
                 typeName.Append($"`{typeref.TypeArguments.Count}");
