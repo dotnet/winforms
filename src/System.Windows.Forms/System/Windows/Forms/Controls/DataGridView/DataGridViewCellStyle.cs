@@ -339,6 +339,7 @@ public class DataGridViewCellStyle : ICloneable
     ///  calculated based on the background color for optimal contrast.
     /// </summary>
     [SRCategory(nameof(SR.CatAppearance))]
+    [Browsable(false)]
     public Color SortGlyphColor
     {
         get => Properties.GetValueOrDefault<Color>(s_propSortGlyphColor);
