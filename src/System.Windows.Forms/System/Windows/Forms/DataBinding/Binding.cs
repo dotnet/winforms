@@ -212,6 +212,7 @@ public partial class Binding
             IBindableComponent? oldTarget = BindableComponent;
             BindTarget(false);
             BindableComponent = value;
+            _state.ChangeFlags(BindingStates.PreserveVisibleValue, false);
             BindTarget(true);
             try
             {
@@ -1153,7 +1154,24 @@ public partial class Binding
             && (ComponentCreated || SupportsBindingBeforeComponentCreated(BindableComponent))
             && _bindingManagerBase.IsBinding;
 
-        bool shouldDelayInitialDataPush = !IsBinding && newBound && ShouldPreserveBindableComponentVisibleValue();
+        bool preserveVisibleValue = _state.HasFlag(BindingStates.PreserveVisibleValue);
+        if (!preserveVisibleValue && !ComponentCreated && ShouldPreserveBindableComponentVisibleValue())
+        {
+            preserveVisibleValue = true;
+        }
+
+        if (ComponentCreated && preserveVisibleValue)
+        {
+            preserveVisibleValue = false;
+        }
+
+        // Preserve an explicitly set Visible value while the control is still uncreated.
+        // Rebinding can happen multiple times before creation, so keep delaying pre-create
+        // pushes until creation completes, then resume normal push semantics.
+        bool shouldDelayInitialDataPush = !IsBinding
+            && newBound
+            && !ComponentCreated
+            && preserveVisibleValue;
 
         if (IsBinding != newBound)
         {
@@ -1171,5 +1189,7 @@ public partial class Binding
                 }
             }
         }
+
+        _state.ChangeFlags(BindingStates.PreserveVisibleValue, preserveVisibleValue);
     }
 }

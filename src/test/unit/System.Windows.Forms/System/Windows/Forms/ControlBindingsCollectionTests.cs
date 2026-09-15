@@ -119,14 +119,95 @@ public class ControlBindingsCollectionTests
         };
 
         panel.DataBindings.Add(nameof(Control.Visible), viewModel, nameof(VisibleBindingViewModel.IsVisible));
+        Assert.False(panel.Visible);
 
         parent.CreateControl();
+        Assert.False(panel.Visible);
 
         viewModel.IsVisible = false;
         Assert.False(panel.Visible);
 
         viewModel.IsVisible = true;
         Assert.True(panel.Visible);
+    }
+
+    [WinFormsFact]
+    public void Add_VisibleBindingOnInitiallyHiddenControl_ResumeBinding_PushesCurrentDataSourceValue()
+    {
+        using Panel parent = new()
+        {
+            BindingContext = new BindingContext()
+        };
+
+        using Panel panel = new()
+        {
+            Visible = false
+        };
+
+        parent.Controls.Add(panel);
+
+        VisibleBindingViewModel viewModel = new()
+        {
+            IsVisible = true
+        };
+
+        panel.DataBindings.Add(nameof(Control.Visible), viewModel, nameof(VisibleBindingViewModel.IsVisible));
+        parent.CreateControl();
+        Assert.False(panel.Visible);
+
+        PropertyManager manager = Assert.IsType<PropertyManager>(parent.BindingContext[viewModel]);
+        manager.SuspendBinding();
+        manager.ResumeBinding();
+
+        Assert.True(panel.Visible);
+    }
+
+    [WinFormsFact]
+    public void Add_VisibleBindingOnInitiallyHiddenControl_FormCreateControl_PreservesLocalValue()
+    {
+        VisibleBindingViewModel viewModel = new()
+        {
+            IsVisible = true
+        };
+
+        using Form form = new();
+        using Panel panel = new()
+        {
+            Visible = false
+        };
+
+        panel.DataBindings.Add(nameof(Control.Visible), viewModel, nameof(VisibleBindingViewModel.IsVisible));
+        form.Controls.Add(panel);
+
+        Assert.False(panel.Visible);
+        form.CreateControl();
+        Assert.False(panel.Visible);
+    }
+
+    [WinFormsFact]
+    public void Add_VisibleBindingOnInitiallyHiddenControl_FormShow_PreservesLocalValue()
+    {
+        VisibleBindingViewModel viewModel = new()
+        {
+            IsVisible = true
+        };
+
+        using Form form = new()
+        {
+            ShowInTaskbar = false
+        };
+
+        using Panel panel = new()
+        {
+            Visible = false
+        };
+
+        panel.DataBindings.Add(nameof(Control.Visible), viewModel, nameof(VisibleBindingViewModel.IsVisible));
+        form.Controls.Add(panel);
+
+        Assert.False(panel.Visible);
+        form.Show();
+        Assert.False(panel.Visible);
     }
 
     [WinFormsFact]
