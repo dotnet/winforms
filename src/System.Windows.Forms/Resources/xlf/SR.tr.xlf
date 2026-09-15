@@ -917,6 +917,16 @@
         <target state="translated">Bileşenin işaretli durumda olup olmadığını gösterir. </target>
         <note />
       </trans-unit>
+      <trans-unit id="CheckBoxCheckedNotificationText">
+        <source>checked</source>
+        <target state="new">checked</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="CheckBoxIndeterminateNotificationText">
+        <source>indeterminate</source>
+        <target state="new">indeterminate</target>
+        <note />
+      </trans-unit>
       <trans-unit id="CheckBoxOnAppearanceChangedDescr">
         <source>Event raised when the value of the Appearance property is changed on CheckBox.</source>
         <target state="translated">CheckBox üzerinde Appearance özelliğinin değeri değiştiğinde harekete geçirilen olay.</target>
@@ -935,6 +945,11 @@
       <trans-unit id="CheckBoxThreeStateDescr">
         <source>Indicates whether the CheckBox will allow three check states rather than two.</source>
         <target state="translated">CheckBox'ın iki yerine üç onay durumuna izin verip vermeyeceğini gösterir.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="CheckBoxUncheckedNotificationText">
+        <source>unchecked</source>
+        <target state="new">unchecked</target>
         <note />
       </trans-unit>
       <trans-unit id="CheckedListBoxCheckOnClickDescr">
