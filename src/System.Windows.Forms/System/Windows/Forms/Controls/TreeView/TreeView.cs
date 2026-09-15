@@ -3183,6 +3183,17 @@ public partial class TreeView : Control
                 }
 
                 break;
+            case PInvokeCore.WM_CTLCOLOREDIT:
+                if (_labelEdit is not null && (HWND)m.LParamInternal == _labelEdit.HWND)
+                {
+                    m.ResultInternal = (LRESULT)(nint)InitializeDCForWmCtlColor((HDC)(nint)m.WParamInternal, m.MsgInternal);
+                }
+                else
+                {
+                    base.WndProc(ref m);
+                }
+
+                break;
             case PInvokeCore.WM_HSCROLL:
                 base.WndProc(ref m);
                 if (DrawMode == TreeViewDrawMode.OwnerDrawAll)
