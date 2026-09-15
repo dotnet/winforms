@@ -37,9 +37,13 @@ public partial class ComboBox
                     + (2 * SystemInformation.FixedFrameBorderSize.Height);
             }
 
-            return ModernControlVisualStyles.GetPreferredFieldHeight(
+            SystemVisualSettings settings = Application.SystemVisualSettings;
+
+            return ModernControlVisualStyles.GetSingleLineTextBoxPreferredHeight(
                 fontHeight: FontHeight,
-                fieldPadding: GetModernFieldPadding(),
+                borderStyle: BorderStyle.Fixed3D,
+                focusBorderMetrics: settings.FocusBorderMetrics,
+                textScaleFactor: settings.TextScaleFactor,
                 deviceDpi: DeviceDpiInternal);
         }
     }
@@ -81,6 +85,7 @@ public partial class ComboBox
         {
             IsCaptured = true,
             DeviceDpi = DeviceDpiInternal,
+            FontHeight = FontHeight,
             SelectionFieldItemHeight = selectionFieldItemHeight,
             SelectionFieldFrameHeight = Math.Max(
                 0,
@@ -169,6 +174,40 @@ public partial class ComboBox
         {
             int topInset = chromeInsets.Top + Padding.Top;
             int bottomInset = chromeInsets.Bottom + Padding.Bottom;
+            int availableTop = ClientRectangle.Top + topInset;
+            int availableBottom = ClientRectangle.Bottom - bottomInset;
+
+            if (DropDownStyle == ComboBoxStyle.DropDown)
+            {
+                // Keep the native text-safe height and center the EDIT child instead of putting
+                // all additional modern field height below its text.
+                int availableHeight = Math.Max(1, availableBottom - availableTop);
+                int nativeEditHeight = ScaleNativeBaselineValue(
+                    _nativeComboBaseline.EditBounds.Height);
+                int baselineFontHeight = ScaleNativeBaselineValue(
+                    _nativeComboBaseline.FontHeight);
+                int textSafeEditHeight = nativeEditHeight
+                    + FontHeight
+                    - baselineFontHeight;
+
+                editBounds.Height = Math.Max(
+                    1,
+                    Math.Min(textSafeEditHeight, availableHeight));
+                editBounds.Y = availableTop
+                    + ((availableHeight - editBounds.Height + 1) / 2);
+            }
+            else
+            {
+                editBounds.Y += topInset;
+
+                // A single-line EDIT control's text visibility depends on its window height.
+                // Preserve the native height so glyphs are not clipped.
+                editBounds.Height = Math.Max(
+                    1,
+                    Math.Min(
+                        editBounds.Height,
+                        availableBottom - editBounds.Top));
+            }
 
             // Inset the edit window horizontally so its rectangular corners clear the rounded
             // field arcs, and reserve the (now wider) drop-down button on the button side.
@@ -676,20 +715,19 @@ public partial class ComboBox
 
     private Padding GetModernChromeInsets()
     {
-        // Minimal modern field inset plus a small arc-clearance so the flat native edit child's
-        // rectangular corners are not painted into the rounded-corner arcs. This is chrome padding
-        // only; the caller still adds the user's Padding on top (see ComputeModernComboTargetState
-        // and GetModernFieldPadding). It deliberately excludes the classic 3D-border metrics
-        // (Fixed3DBorderPadding / InternalChromeInset) that the previous implementation inherited
-        // from the classic field model; the modern field owns a single rounded border across the
-        // full control, so those insets only produced a spurious inner margin.
-        int inset = ScaleHelper.ScaleToDpi(
+        // Keep only horizontal insets for rounded-corner arc clearance. Vertical insets stay zero
+        // so the native edit child keeps its full text height (important for descenders at 125% DPI).
+        int horizontalInset = ScaleHelper.ScaleToDpi(
             ModernControlVisualStyles.BorderThickness
                 + ModernControlVisualStyles.ComboBoxStyleInset
                 + ModernControlVisualStyles.ComboBoxFieldArcClearance,
             DeviceDpiInternal);
 
-        return new Padding(inset);
+        return new Padding(
+            left: horizontalInset,
+            top: 0,
+            right: horizontalInset,
+            bottom: 0);
     }
 
     private Rectangle GetNativeComboBaselineEditBounds()
@@ -709,24 +747,35 @@ public partial class ComboBox
 
     private Padding GetModernFieldPadding()
     {
+        Padding horizontalSource = GetModernChromeInsets();
+
+        if (DropDownStyle == ComboBoxStyle.DropDownList)
+        {
+            int verticalInset = ScaleHelper.ScaleToDpi(
+                ModernControlVisualStyles.BorderThickness,
+                DeviceDpiInternal);
+
+            return new Padding(
+                left: horizontalSource.Left + Padding.Left,
+                top: verticalInset + Padding.Top,
+                right: horizontalSource.Right + Padding.Right,
+                bottom: verticalInset + Padding.Bottom);
+        }
+
         SystemVisualSettings settings = Application.SystemVisualSettings;
 
         int styleInset = ScaleHelper.ScaleToDpi(
             ModernControlVisualStyles.ComboBoxStyleInset,
             DeviceDpiInternal);
 
-        // Vertical clearance is kept on the classic-derived field model so the modern preferred
-        // height stays aligned with TextBox (GetPreferredFieldHeight only consumes the vertical
-        // component). Horizontal clearance uses the minimal modern field inset so the field text
-        // and drop-down-list caption are not over-inset by classic 3D metrics.
+        // Editable DropDown / Simple keep the classic-derived vertical model so the native EDIT
+        // child text metrics remain stable. Horizontal clearance uses minimal modern inset.
         Padding verticalSource = ModernControlVisualStyles.GetFieldPadding(
             BorderStyle.Fixed3D,
             Padding + new Padding(styleInset),
             settings.FocusBorderMetrics,
             settings.TextScaleFactor,
             DeviceDpiInternal);
-
-        Padding horizontalSource = GetModernChromeInsets();
 
         return new Padding(
             left: horizontalSource.Left + Padding.Left,
