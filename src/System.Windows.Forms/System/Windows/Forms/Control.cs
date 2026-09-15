@@ -899,18 +899,7 @@ public unsafe partial class Control :
 
             VisualStylesMode oldEffectiveValue = EffectiveVisualStylesMode;
 
-            bool hadLocalOverride = Properties.TryGetValue(
-                s_visualStylesModeProperty,
-                out VisualStylesMode existingRawValue)
-                && existingRawValue != VisualStylesMode.Inherit;
-
-            // Inherit always clears the local override. Setting to the ambient (parent) value clears only when
-            // transitioning an existing local override back to ambient.
-            if (value == VisualStylesMode.Inherit
-                || (hadLocalOverride
-                    && existingRawValue != value
-                    && ParentInternal is { } parent
-                    && parent.ResolvedVisualStylesMode == value))
+            if (value == VisualStylesMode.Inherit)
             {
                 Properties.RemoveValue(s_visualStylesModeProperty);
             }
@@ -7456,15 +7445,7 @@ public unsafe partial class Control :
 
         if (Properties.ContainsKey(s_visualStylesModeProperty))
         {
-            if (Properties.GetValueOrDefault<VisualStylesMode>(s_visualStylesModeProperty)
-                == ParentInternal?.ResolvedVisualStylesMode)
-            {
-                // Same as the parent value, make it ambient again by removing it.
-                Properties.RemoveValue(s_visualStylesModeProperty);
-            }
-
-            // A local value isolates this subtree from parent changes. If the local value matched the
-            // parent's new value, removing it preserves the effective value while making it ambient again.
+            // A local value isolates this subtree from parent changes.
             return;
         }
 
