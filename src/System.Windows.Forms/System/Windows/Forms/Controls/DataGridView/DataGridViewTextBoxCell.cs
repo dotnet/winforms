@@ -710,7 +710,9 @@ public partial class DataGridViewTextBoxCell : DataGridViewCell
             // Draw focus rectangle
             if (PaintFocus(paintParts) && DataGridView.ShowFocusCues && DataGridView.Focused && notCollapsed)
             {
-                ControlPaint.DrawFocusRectangle(graphics, valBounds, Color.Empty, cellStyle.ForeColor);
+                Color focusForeColor = cellSelected ? cellStyle.SelectionForeColor : cellStyle.ForeColor;
+                Color focusBackColor = cellSelected ? cellStyle.SelectionBackColor : cellStyle.BackColor;
+                DrawFocusRectangle(graphics, valBounds, focusForeColor, focusBackColor);
             }
         }
 
