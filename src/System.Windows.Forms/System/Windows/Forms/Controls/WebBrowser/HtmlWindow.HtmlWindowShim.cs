@@ -26,6 +26,7 @@ public sealed partial class HtmlWindow
     {
         private AxHost.ConnectionPointCookie? _cookie;
         private HtmlWindow _htmlWindow;
+        private bool _observeWindowUnload;
 
         public HtmlWindowShim(HtmlWindow window)
         {
@@ -37,19 +38,41 @@ public sealed partial class HtmlWindow
         public IHTMLWindow2.Interface NativeHtmlWindow => (IHTMLWindow2.Interface)_htmlWindow.NativeHtmlWindow.GetManagedObject();
 
         /// Support IHtmlDocument3.AttachHandler
-        public override void AttachEventHandler(string eventName, EventHandler eventHandler)
+        protected override bool AttachEventProxy(HtmlToClrEventProxy proxy)
         {
             // IE likes to call back on an IDispatch of DISPID=0 when it has an event,
             // the HtmlToClrEventProxy helps us fake out the CLR so that we can call back on
             // our EventHandler properly.
 
-            HtmlToClrEventProxy proxy = AddEventProxy(eventName, eventHandler);
             using var htmlWindow3 = _htmlWindow.GetHtmlWindow<IHTMLWindow3>();
-            using BSTR name = new(eventName);
+            using BSTR name = new(proxy.EventName);
             using var dispatch = ComHelpers.GetComScope<IDispatch>(proxy);
             VARIANT_BOOL result;
             htmlWindow3.Value->attachEvent(name, dispatch, &result).ThrowOnFailure();
-            Debug.Assert(result, "failed to add event");
+            if (IsDisposed && result)
+            {
+                htmlWindow3.Value->detachEvent(name, dispatch).ThrowOnFailure();
+                ObjectDisposedException.ThrowIf(IsDisposed, this);
+            }
+
+            return result;
+        }
+
+        internal void EnsureWindowObservation()
+        {
+            ObjectDisposedException.ThrowIf(IsDisposed, this);
+            // The manager needs unload even when the application subscribes only to document/element
+            // events. Otherwise its dictionaries root old pages and delegates indefinitely.
+            _observeWindowUnload = true;
+            ConnectToEvents();
+        }
+
+        protected override void OnEventHandlerRemoved()
+        {
+            if (!_observeWindowUnload)
+            {
+                base.OnEventHandlerRemoved();
+            }
         }
 
         /// Support HTMLWindowEvents2
@@ -57,46 +80,60 @@ public sealed partial class HtmlWindow
         {
             if (_cookie is null || !_cookie.Connected)
             {
-                _cookie = new AxHost.ConnectionPointCookie(
+                AxHost.ConnectionPointCookie cookie = new(
                     NativeHtmlWindow,
                     new HTMLWindowEvents2(_htmlWindow),
                     typeof(DHTMLWindowEvents2),
                     throwException: false);
-                if (!_cookie.Connected)
+                if (IsDisposed)
                 {
-                    _cookie = null;
+                    cookie.Disconnect();
+                    return;
+                }
+
+                _cookie = cookie.Connected ? cookie : null;
+                if (_observeWindowUnload && _cookie is null)
+                {
+                    // Not every window exposes this connection point. Preserve the existing
+                    // nonthrowing subscription behavior; manager disposal still releases its shims.
+                    Debug.WriteLine("HTML window unload observation is unavailable; cleanup is deferred to manager disposal.");
                 }
             }
         }
 
         /// Support IHTMLWindow3.DetachHandler
-        public override void DetachEventHandler(string eventName, EventHandler eventHandler)
+        protected override void DetachEventProxy(HtmlToClrEventProxy proxy)
         {
-            HtmlToClrEventProxy? proxy = RemoveEventProxy(eventHandler);
-            if (proxy is not null)
-            {
-                using var htmlWindow3 = _htmlWindow.GetHtmlWindow<IHTMLWindow3>();
-                using BSTR name = new(eventName);
-                using var dispatch = ComHelpers.GetComScope<IDispatch>(proxy);
-                htmlWindow3.Value->detachEvent(name, dispatch).ThrowOnFailure();
-            }
+            using var htmlWindow3 = _htmlWindow.GetHtmlWindow<IHTMLWindow3>();
+            using BSTR name = new(proxy.EventName);
+            using var dispatch = ComHelpers.GetComScope<IDispatch>(proxy);
+            htmlWindow3.Value->detachEvent(name, dispatch).ThrowOnFailure();
         }
 
         public override void DisconnectFromEvents()
         {
-            _cookie?.Disconnect();
+            AxHost.ConnectionPointCookie? cookie = _cookie;
             _cookie = null;
+            cookie?.Disconnect();
         }
 
         public void OnWindowUnload() => _htmlWindow?.ShimManager.OnWindowUnloaded(_htmlWindow);
 
         protected override void Dispose(bool disposing)
         {
-            base.Dispose(disposing);
-            if (disposing)
+            try
             {
-                _htmlWindow?.NativeHtmlWindow?.Dispose();
-                _htmlWindow = null!;
+                base.Dispose(disposing);
+            }
+            finally
+            {
+                if (disposing)
+                {
+                    HtmlWindow? window = _htmlWindow;
+                    _htmlWindow = null!;
+                    _observeWindowUnload = false;
+                    window?.NativeHtmlWindow.Dispose();
+                }
             }
         }
 
