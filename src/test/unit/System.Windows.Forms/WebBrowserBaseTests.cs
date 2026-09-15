@@ -858,6 +858,182 @@ public class WebBrowserBaseTests
         Assert.Throws<NotSupportedException>(() => control.UseWaitCursor = true);
     }
 
+    [WinFormsFact]
+    public void UserControl_ProcessMnemonic_WebBrowserBeforeButton_InvokesButtonMnemonic()
+    {
+        using TestForm form = new();
+        using TestUserControl userControl = new();
+
+        TextBox textBox = new()
+        {
+            Name = "textBox1",
+            TabIndex = 0,
+            Text = "textbox on user control"
+        };
+
+        Panel panel = new()
+        {
+            Name = "panel1",
+            TabIndex = 7
+        };
+
+        WebBrowser webBrowser = new()
+        {
+            Name = "webBrowserControl",
+            TabIndex = 0,
+            Url = new Uri("about:blank"),
+            WebBrowserShortcutsEnabled = false
+        };
+
+        Button button = new()
+        {
+            Name = "button1",
+            TabIndex = 8,
+            Text = "&Button on user control"
+        };
+
+        int clickCount = 0;
+        button.Click += (_, _) => clickCount++;
+
+        panel.Controls.Add(webBrowser);
+        userControl.Controls.Add(textBox);
+        userControl.Controls.Add(panel);
+        userControl.Controls.Add(button);
+        form.Controls.Add(userControl);
+
+        form.Show();
+        textBox.Focus();
+
+        Assert.True(textBox.Focused || textBox.ContainsFocus);
+
+        bool processed = userControl.InvokeProcessMnemonic('B');
+
+        Assert.True(processed);
+        Assert.Equal(1, clickCount);
+    }
+
+    [WinFormsFact]
+    public void Form_ProcessMnemonic_WebBrowserInChildControl_DoesNotBlockFormMnemonic()
+    {
+        using TestForm form = new();
+        using TestUserControl userControl = new();
+
+        TextBox textBox = new()
+        {
+            TabIndex = 0
+        };
+
+        Panel panel = new()
+        {
+            TabIndex = 7
+        };
+
+        WebBrowser webBrowser = new()
+        {
+            TabIndex = 0,
+            Url = new Uri("about:blank"),
+            WebBrowserShortcutsEnabled = false
+        };
+
+        Button childButton = new()
+        {
+            TabIndex = 8,
+            Text = "&Button on user control"
+        };
+
+        Button okButton = new()
+        {
+            Text = "&OK"
+        };
+
+        int okClickCount = 0;
+        okButton.Click += (_, _) => okClickCount++;
+
+        panel.Controls.Add(webBrowser);
+        userControl.Controls.Add(textBox);
+        userControl.Controls.Add(panel);
+        userControl.Controls.Add(childButton);
+
+        form.Controls.Add(userControl);
+        form.Controls.Add(okButton);
+
+        form.Show();
+        textBox.Focus();
+
+        Assert.True(textBox.Focused || textBox.ContainsFocus);
+
+        bool processed = form.InvokeProcessMnemonic('O');
+
+        Assert.True(processed);
+        Assert.Equal(1, okClickCount);
+    }
+
+    [WinFormsFact]
+    public void UserControl_ProcessMnemonic_ButtonBeforeWebBrowser_StillInvokesButtonMnemonic()
+    {
+        using TestForm form = new();
+        using TestUserControl userControl = new();
+
+        TextBox textBox = new()
+        {
+            TabIndex = 0
+        };
+
+        Button button = new()
+        {
+            TabIndex = 7,
+            Text = "&Button on user control"
+        };
+
+        Panel panel = new()
+        {
+            TabIndex = 8
+        };
+
+        WebBrowser webBrowser = new()
+        {
+            TabIndex = 0,
+            Url = new Uri("about:blank"),
+            WebBrowserShortcutsEnabled = false
+        };
+
+        int clickCount = 0;
+        button.Click += (_, _) => clickCount++;
+
+        panel.Controls.Add(webBrowser);
+        userControl.Controls.Add(textBox);
+        userControl.Controls.Add(button);
+        userControl.Controls.Add(panel);
+        form.Controls.Add(userControl);
+
+        form.Show();
+        textBox.Focus();
+
+        bool processed = userControl.InvokeProcessMnemonic('B');
+
+        Assert.True(processed);
+        Assert.Equal(1, clickCount);
+    }
+
+    [WinFormsFact]
+    public void WebBrowser_ProcessMnemonic_UnrelatedMnemonic_ReturnsFalse()
+    {
+        using TestForm form = new();
+        using TestWebBrowser webBrowser = new()
+        {
+            Url = new Uri("about:blank"),
+            WebBrowserShortcutsEnabled = false
+        };
+
+        form.Controls.Add(webBrowser);
+        form.Show();
+        webBrowser.CreateControl();
+
+        bool processed = webBrowser.InvokeProcessMnemonic('B');
+
+        Assert.False(processed);
+    }
+
     private class CustomProcessControl : Control
     {
         public Func<Message, Keys, bool> ProcessCmdKeyAction { get; set; }
@@ -952,5 +1128,20 @@ public class WebBrowserBaseTests
         public new bool ProcessDialogKey(Keys keyData) => base.ProcessDialogKey(keyData);
 
         public new void SetStyle(ControlStyles flag, bool value) => base.SetStyle(flag, value);
+    }
+
+    private sealed class TestUserControl : UserControl
+    {
+        public bool InvokeProcessMnemonic(char charCode) => ProcessMnemonic(charCode);
+    }
+
+    private sealed class TestForm : Form
+    {
+        public bool InvokeProcessMnemonic(char charCode) => ProcessMnemonic(charCode);
+    }
+
+    private sealed class TestWebBrowser : WebBrowser
+    {
+        public bool InvokeProcessMnemonic(char charCode) => ProcessMnemonic(charCode);
     }
 }
