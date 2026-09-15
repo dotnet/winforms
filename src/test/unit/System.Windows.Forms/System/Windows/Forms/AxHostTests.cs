@@ -1562,6 +1562,68 @@ public class AxHostTests
         Assert.Equal(1u, remainingReferences);
     }
 
+    [WinFormsTheory]
+    [InlineData(false, false)]
+    [InlineData(true, false)]
+    [InlineData(false, true)]
+    public unsafe void AxHost_QuickActivate_ReleasesBorrowedReferences(bool failActivation, bool throwOnActivation)
+    {
+        using Font font = new("Arial", 10, FontStyle.Regular, GraphicsUnit.Point);
+        using ContainerControl parent = new() { Font = font };
+        using SubAxHost control = new(EmptyClsidString);
+        parent.Controls.Add(control);
+        object site = control.TestAccessor.Dynamic._oleSite;
+        using var siteObserver = ComHelpers.GetComScope<IUnknown>(site);
+        siteObserver.Value->AddRef();
+        uint before = siteObserver.Value->Release();
+        HRESULT activationResult = failActivation ? HRESULT.E_FAIL : HRESULT.S_OK;
+        using QuickActivateReferenceOwner activeX = new(activationResult, throwOnActivation);
+
+        control.TestAccessor.Dynamic._instance = activeX;
+        try
+        {
+            if (throwOnActivation)
+            {
+                Assert.Same(activeX.ActivationException, Assert.Throws<InvalidOperationException>(() =>
+                {
+                    control.TestAccessor.Dynamic.QuickActivate();
+                }));
+            }
+            else
+            {
+                Assert.Equal(!failActivation, (bool)control.TestAccessor.Dynamic.QuickActivate());
+            }
+        }
+        finally
+        {
+            // The fake is a managed object, not an RCW for AxHost's native-instance teardown.
+            control.TestAccessor.Dynamic._instance = null;
+        }
+
+        Assert.Equal(1, activeX.ActivationCount);
+        using BSTR fontName = activeX.Font->Name;
+        Assert.Equal(font.Name, fontName.ToString());
+        Assert.Throws<NotImplementedException>(() => activeX.ClientSite->SaveObject());
+        Assert.Equal(HRESULT.S_OK, activeX.PropertyNotifySink->OnRequestEdit(PInvokeCore.DISPID_AMBIENT_FONT));
+
+        activeX.Font->AddRef();
+        uint fontReferences = activeX.Font->Release();
+        Assert.Equal(1u, fontReferences);
+        Assert.Equal(fontReferences + 1, activeX.FontReferencesDuringActivation);
+
+        // Both site interfaces share one CCW. Only the fake's two retained references may remain;
+        // neither temporary caller reference can survive, even when the activation call throws.
+        siteObserver.Value->AddRef();
+        uint after = siteObserver.Value->Release();
+        Assert.Equal(before + 2, after);
+        Assert.Equal(after + 2, activeX.SiteReferencesDuringActivation);
+
+        activeX.Dispose();
+        siteObserver.Value->AddRef();
+        Assert.Equal(before, siteObserver.Value->Release());
+        GC.KeepAlive(control);
+    }
+
     [WinFormsFact]
     public unsafe void AxHost_Ownership_AmbientFont_BalancedControl_HasStableOwnership()
     {
@@ -3367,6 +3429,78 @@ public class AxHostTests
         public HRESULT GetContentExtent(SIZE* size) => HRESULT.E_NOTIMPL;
 
         public void Dispose() => DisposeHelper.NullAndRelease(ref _font);
+    }
+
+    /// <summary>
+    ///  Retains independent font and site references while the real AxHost quick-activation path runs.
+    /// </summary>
+    /// <remarks>
+    ///  <para>
+    ///   Keeping the references after success or failure lets the test detect premature releases as well as leaks
+    ///   without requiring an installed ActiveX control or relying on an RCW's internal reference count.
+    ///  </para>
+    /// </remarks>
+    private unsafe class QuickActivateReferenceOwner(HRESULT activationResult, bool throwOnActivation)
+        : IQuickActivate.Interface, IDisposable
+    {
+        private IFont* _font;
+        private IOleClientSite* _clientSite;
+        private IPropertyNotifySink* _propertyNotifySink;
+
+        public IFont* Font => _font;
+
+        public IOleClientSite* ClientSite => _clientSite;
+
+        public IPropertyNotifySink* PropertyNotifySink => _propertyNotifySink;
+
+        public int ActivationCount { get; private set; }
+
+        public uint FontReferencesDuringActivation { get; private set; }
+
+        public uint SiteReferencesDuringActivation { get; private set; }
+
+        public InvalidOperationException ActivationException { get; } = new("Activation failed.");
+
+        /// <inheritdoc/>
+        public HRESULT QuickActivate(QACONTAINER* container, QACONTROL* control)
+        {
+            ActivationCount++;
+            Assert.NotNull(container->pFont);
+            Assert.NotNull(container->pClientSite);
+            Assert.NotNull(container->pPropertyNotifySink);
+            _font = container->pFont;
+            _clientSite = container->pClientSite;
+            _propertyNotifySink = container->pPropertyNotifySink;
+            _font->AddRef();
+            _clientSite->AddRef();
+            _propertyNotifySink->AddRef();
+
+            _font->AddRef();
+            FontReferencesDuringActivation = _font->Release();
+            _clientSite->AddRef();
+            SiteReferencesDuringActivation = _clientSite->Release();
+
+            if (throwOnActivation)
+            {
+                throw ActivationException;
+            }
+
+            return activationResult;
+        }
+
+        /// <inheritdoc/>
+        public HRESULT SetContentExtent(SIZE* size) => HRESULT.E_NOTIMPL;
+
+        /// <inheritdoc/>
+        public HRESULT GetContentExtent(SIZE* size) => HRESULT.E_NOTIMPL;
+
+        /// <inheritdoc/>
+        public void Dispose()
+        {
+            DisposeHelper.NullAndRelease(ref _font);
+            DisposeHelper.NullAndRelease(ref _clientSite);
+            DisposeHelper.NullAndRelease(ref _propertyNotifySink);
+        }
     }
 
     private class SubComponentEditor : ComponentEditor

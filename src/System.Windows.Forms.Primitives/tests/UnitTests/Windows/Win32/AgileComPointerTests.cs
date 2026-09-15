@@ -81,6 +81,28 @@ public class AgileComPointerTests
     }
 
     [StaFact]
+    public unsafe void AgileComPointer_IsDisposed_TracksOnlyItsOwnRegistration()
+    {
+        using MemoryStream data = new();
+        ComManagedStream source = new(data);
+        using var stream = ComHelpers.GetComScope<IStream>(source);
+        using AgileComPointer<IStream> first = new(stream.Value, takeOwnership: false);
+        using AgileComPointer<IStream> second = new(stream.Value, takeOwnership: false);
+        Assert.False(first.IsDisposed);
+        Assert.False(second.IsDisposed);
+
+        first.Dispose();
+        first.Dispose();
+
+        Assert.True(first.IsDisposed);
+        Assert.False(second.IsDisposed);
+        using var retained = second.GetInterface();
+        Assert.Equal(HRESULT.S_OK, retained.Value->Commit(0));
+        second.Dispose();
+        Assert.True(second.IsDisposed);
+    }
+
+    [StaFact]
     public async Task AgileComPointer_MultiThread_COMPointerValue_ForSameObject()
     {
         using AgileComPointer<IStream> agileStream = CreateMyStreamAgileComPointer(out nint originalPtr);

@@ -103,6 +103,8 @@ internal unsafe class WebBrowserContainer : IOleContainer.Interface, IOleInPlace
             return HRESULT.S_OK;
         }
 
+        // GetClientSite returns an owned reference, whereas conversion only borrows it.
+        // Leaving that reference outstanding roots the site's managed host after browser disposal.
         using ComScope<IOleClientSite> clientSite = new(null);
         oleObject.Value->GetClientSite(clientSite);
         object clientSiteObject = ComHelpers.GetObjectForIUnknown(clientSite);

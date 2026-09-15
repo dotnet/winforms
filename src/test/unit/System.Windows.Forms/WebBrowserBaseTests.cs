@@ -38,26 +38,67 @@ public class WebBrowserBaseTests
 
         Assert.True(Marshal.IsComObject(nativeObject));
         using ComScope<IUnknown> observer = new((IUnknown*)Marshal.GetIUnknownForObject(nativeObject));
-        if (useHost)
+        try
         {
-            control.TransitionDownTo(WebBrowserHelper.AXState.Passive);
-            Assert.Null(control.ActiveXInstance);
+            // The wrapper must remain usable after its creation reference has been released.
+            ((IOleObject.Interface)nativeObject).GetMiscStatus(DVASPECT.DVASPECT_CONTENT, out _).ThrowOnFailure();
         }
-        else
+        finally
         {
-            Marshal.FinalReleaseComObject(nativeObject);
+            if (useHost)
+            {
+                control.TransitionDownTo(WebBrowserHelper.AXState.Passive);
+            }
+            else
+            {
+                Marshal.FinalReleaseComObject(nativeObject);
+            }
         }
 
+        Assert.Null(control.ActiveXInstance);
         Assert.False(control.IsHandleCreated);
+
+        // Direct creation is the control case: with the RCW gone, only this observer may own a reference.
         observer.Value->AddRef();
         uint remainingReferences = observer.Value->Release();
         Assert.Equal(1u, remainingReferences);
     }
 
+    [WinFormsFact]
+    public unsafe void WebBrowserBase_RunningToPassive_ReleasesClientSiteReference()
+    {
+        using WebBrowser control = new();
+        WebBrowserSiteBase site = control.ActiveXSite;
+        using var observer = ComHelpers.GetComScope<IOleClientSite>(site);
+        observer.Value->AddRef();
+        uint before = observer.Value->Release();
+
+        control.TransitionUpTo(WebBrowserHelper.AXState.Running);
+        Assert.Equal(WebBrowserHelper.AXState.Running, control.ActiveXState);
+        using (var oleObject = ComHelpers.GetComScope<IOleObject>(control.ActiveXInstance))
+        {
+            using ComScope<IOleClientSite> retainedSite = new(null);
+            oleObject.Value->GetClientSite(retainedSite).ThrowOnFailure();
+            Assert.False(retainedSite.IsNull);
+            Assert.Same(site, ComHelpers.GetObjectForIUnknown(retainedSite.AsUnknown));
+        }
+
+        control.TransitionDownTo(WebBrowserHelper.AXState.Passive);
+        Assert.Null(control.ActiveXInstance);
+        IOleClientSite* observedSite = observer.Value;
+        Assert.Throws<NotImplementedException>(() => observedSite->SaveObject());
+
+        // Window/native teardown is insufficient: an extra site CCW reference still roots the host.
+        // Compare the same managed site's count before activation and after every native owner is gone.
+        observer.Value->AddRef();
+        Assert.Equal(before, observer.Value->Release());
+        GC.KeepAlive(control);
+    }
+
     [WinFormsTheory]
     [InlineData(false)]
     [InlineData(true)]
-    public unsafe void WebBrowserContainer_SetActiveObject_ReleasesNativeReferences(bool useContainer)
+    public unsafe void WebBrowserContainer_SetActiveObject_ReleasesClientSiteReference(bool useContainer)
     {
         using WebBrowser control = new();
         control.TransitionUpTo(WebBrowserHelper.AXState.Loaded);
@@ -76,7 +117,7 @@ public class WebBrowserBaseTests
             if (useContainer)
             {
                 WebBrowserContainer container = new(control);
-                Assert.True(((IOleInPlaceFrame.Interface)container).SetActiveObject(activeObject, default).Succeeded);
+                Assert.Equal(HRESULT.S_OK, ((IOleInPlaceFrame.Interface)container).SetActiveObject(activeObject, default));
             }
             else
             {
@@ -85,6 +126,8 @@ public class WebBrowserBaseTests
                 Assert.Same(site, ComHelpers.GetObjectForIUnknown(returnedSite.AsUnknown));
             }
 
+            IOleClientSite* observedSite = clientSite.Value;
+            Assert.Throws<NotImplementedException>(() => observedSite->SaveObject());
             observer.Value->AddRef();
             uint after = observer.Value->Release();
             Assert.Equal(before, after);

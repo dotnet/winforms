@@ -3314,9 +3314,14 @@ public abstract unsafe partial class AxHost : Control, ISupportInitialize, ICust
             cbSize = (uint)sizeof(QACONTROL)
         };
 
-        qaContainer.pClientSite = ComHelpers.GetComPointer<IOleClientSite>(_oleSite);
-        qaContainer.pPropertyNotifySink = ComHelpers.GetComPointer<IPropertyNotifySink>(_oleSite);
+        // QuickActivate borrows these pointers; any references retained by the control are independent.
+        // Release our temporary references even if activation fails, or the site CCW can keep this host
+        // alive after the native control is destroyed and the native font will leak.
+        using var clientSite = ComHelpers.GetComScope<IOleClientSite>(_oleSite);
+        using var propertyNotifySink = ComHelpers.GetComScope<IPropertyNotifySink>(_oleSite);
         using ComScope<IFont> font = new(GetIFontPointerFromFont(GetParentContainer()._parent.Font));
+        qaContainer.pClientSite = clientSite.Value;
+        qaContainer.pPropertyNotifySink = propertyNotifySink.Value;
         qaContainer.pFont = font.Value;
         qaContainer.dwAppearance = 0;
         qaContainer.lcid = (int)PInvokeCore.GetThreadLocale();
@@ -3662,6 +3667,8 @@ public abstract unsafe partial class AxHost : Control, ISupportInitialize, ICust
         }
         finally
         {
+            // The RCW owns its own reference. Keeping the creation reference would leak the native font
+            // even after the RCW is released; conversion failure must release it as well.
             ifont->Release();
         }
 
@@ -3739,9 +3746,11 @@ public abstract unsafe partial class AxHost : Control, ISupportInitialize, ICust
         {
             FONTDESC fontdesc = GetFONTDESCFromFont(font);
             fontdesc.lpstrName = n;
-            using ComScope<IFontDisp> lplpvObj = new(null);
-            PInvoke.OleCreateFontIndirect(&fontdesc, IID.Get<IFontDisp>(), lplpvObj).ThrowOnFailure();
-            return ComHelpers.GetObjectForIUnknown(lplpvObj);
+            // Conversion gives the RCW its own reference, not ownership of OleCreateFontIndirect's reference.
+            // Release the creation reference so the font can be destroyed when the RCW is released.
+            using ComScope<IFontDisp> nativeFont = new(null);
+            PInvoke.OleCreateFontIndirect(&fontdesc, IID.Get<IFontDisp>(), nativeFont).ThrowOnFailure();
+            return ComHelpers.GetObjectForIUnknown(nativeFont);
         }
     }
 

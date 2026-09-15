@@ -832,8 +832,9 @@ public unsafe partial class WebBrowserBase : Control
             // First, create the ActiveX control
             Debug.Assert(_activeXInstance is null, "activeXInstance must be null");
 
+            // The RCW retains its own reference; leaving CoCreateInstance's reference outstanding
+            // would keep the native browser alive even after FinalReleaseComObject during disposal.
             using ComScope<IUnknown> unknown = new(null);
-
             fixed (Guid* clsid = &_clsid)
             {
                 PInvokeCore.CoCreateInstance(
@@ -896,7 +897,10 @@ public unsafe partial class WebBrowserBase : Control
             {
                 // Simply setting the site to the ActiveX control should activate it.
                 // And this will take us to the Running state.
-                _axOleObject!.SetClientSite(ComHelpers.GetComPointer<IOleClientSite>(ActiveXSite));
+                // SetClientSite borrows this reference and retains its own. Without releasing our
+                // temporary reference, the site CCW roots the managed host after native browser destruction.
+                using var clientSite = ComHelpers.GetComScope<IOleClientSite>(ActiveXSite);
+                _axOleObject!.SetClientSite(clientSite);
             }
 
             // We start receiving events now (but we do this only if we are not in DesignMode).

@@ -1513,9 +1513,9 @@ public class HtmlDocumentTests
         EventHandler attachedHandler = (sender, eventArgs) => callbackCount++;
         document.AttachEventHandler("onclick", attachedHandler);
         HtmlDocument.HtmlDocumentShim shim = document.TestAccessor.Dynamic.DocumentShim;
-        Dictionary<EventHandler, HtmlToClrEventProxy> attachedEvents = shim.TestAccessor.Dynamic._attachedEventList;
+        List<(EventHandler Handler, HtmlToClrEventProxy Proxy)> attachedEvents = shim.TestAccessor.Dynamic._attachedEventList;
         Assert.Single(attachedEvents);
-        HtmlToClrEventProxy proxy = attachedEvents[attachedHandler];
+        HtmlToClrEventProxy proxy = attachedEvents[0].Proxy;
 
         Validate();
 
@@ -1545,8 +1545,17 @@ public class HtmlDocumentTests
             Assert.True(nativeDocument.Value->fireEvent(onClick, &eventObject, &cancelled).Succeeded);
             observer.Value->AddRef();
             uint remainingReferences = observer.Value->Release();
-            uint[] remainingState = [(uint)callbackCount, (uint)attachedEvents.Count, remainingReferences];
-            Assert.Equal([1u, 0u, 1u], remainingState);
+            Assert.Equal(1, callbackCount);
+            if (disposeShim)
+            {
+                Assert.Null(shim.TestAccessor.Dynamic._attachedEventList);
+            }
+            else
+            {
+                Assert.Empty(attachedEvents);
+            }
+
+            Assert.Equal(1u, remainingReferences);
             GC.KeepAlive(proxy);
         }
     }

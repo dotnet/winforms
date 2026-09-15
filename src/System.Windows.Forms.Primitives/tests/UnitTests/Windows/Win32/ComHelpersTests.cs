@@ -19,7 +19,8 @@ public unsafe class ComHelpersTests
     [InlineData(true, true)]
     public void GetObjectForIUnknown_BorrowsInput(bool typedPointer, bool useScope)
     {
-        GlobalInterfaceTableTests.MyStream source = new();
+        using MemoryStream data = new([42]);
+        ComManagedStream source = new(data);
         using var stream = ComHelpers.GetComScope<IStream>(source);
         using var observer = stream.Query<IUnknown>();
         uint before = GetReferenceCount(observer);
@@ -34,6 +35,8 @@ public unsafe class ComHelpersTests
 
         Assert.Same(source, actual);
         Assert.Equal(before, GetReferenceCount(observer));
+        Assert.Equal(42, ((ComManagedStream)actual).GetDataStream().ReadByte());
+        Assert.Equal(HRESULT.S_OK, stream.Value->Commit(0));
     }
 
     [Theory]
@@ -43,12 +46,13 @@ public unsafe class ComHelpersTests
     [InlineData(true, true)]
     public void TryGetObjectForIUnknown_BorrowsInput(bool typedPointer, bool useScope)
     {
-        GlobalInterfaceTableTests.MyStream source = new();
+        using MemoryStream data = new([42]);
+        ComManagedStream source = new(data);
         using var stream = ComHelpers.GetComScope<IStream>(source);
         using var observer = stream.Query<IUnknown>();
         uint before = GetReferenceCount(observer);
 
-        GlobalInterfaceTableTests.MyStream? actual;
+        ComManagedStream? actual;
         bool success = (typedPointer, useScope) switch
         {
             (true, true) => ComHelpers.TryGetObjectForIUnknown(stream, out actual),
@@ -60,6 +64,8 @@ public unsafe class ComHelpersTests
         Assert.True(success);
         Assert.Same(source, actual);
         Assert.Equal(before, GetReferenceCount(observer));
+        Assert.Equal(42, actual!.GetDataStream().ReadByte());
+        Assert.Equal(HRESULT.S_OK, stream.Value->Commit(0));
     }
 
     [Theory]
@@ -69,7 +75,8 @@ public unsafe class ComHelpersTests
     [InlineData(true, true)]
     public void TryGetObjectForIUnknown_FailedCast_BorrowsInput(bool typedPointer, bool useScope)
     {
-        GlobalInterfaceTableTests.MyStream source = new();
+        using MemoryStream data = new([42]);
+        ComManagedStream source = new(data);
         using var stream = ComHelpers.GetComScope<IStream>(source);
         using var observer = stream.Query<IUnknown>();
         uint before = GetReferenceCount(observer);
@@ -86,6 +93,8 @@ public unsafe class ComHelpersTests
         Assert.False(success);
         Assert.Null(actual);
         Assert.Equal(before, GetReferenceCount(observer));
+        Assert.Equal(42, source.GetDataStream().ReadByte());
+        Assert.Equal(HRESULT.S_OK, stream.Value->Commit(0));
     }
 
     [Theory]
@@ -95,7 +104,8 @@ public unsafe class ComHelpersTests
     [InlineData(true, true)]
     public void TryGetObjectForIUnknown_ReleasesInputOnlyWhenTakingOwnership(bool takeOwnership, bool failedCast)
     {
-        GlobalInterfaceTableTests.MyStream source = new();
+        using MemoryStream data = new([42]);
+        ComManagedStream source = new(data);
         using var observer = ComHelpers.GetComScope<IUnknown>(source);
         IUnknown* input = observer.Value;
         input->AddRef();
@@ -110,11 +120,12 @@ public unsafe class ComHelpersTests
             }
             else
             {
-                Assert.True(ComHelpers.TryGetObjectForIUnknown(input, takeOwnership, out GlobalInterfaceTableTests.MyStream? actual));
+                Assert.True(ComHelpers.TryGetObjectForIUnknown(input, takeOwnership, out ComManagedStream? actual));
                 Assert.Same(source, actual);
             }
 
             Assert.Equal(takeOwnership ? before - 1 : before, GetReferenceCount(observer));
+            Assert.Equal(42, source.GetDataStream().ReadByte());
         }
         finally
         {
@@ -125,10 +136,66 @@ public unsafe class ComHelpersTests
         }
     }
 
+    [Theory]
+    [InlineData(false, false, false)]
+    [InlineData(false, true, false)]
+    [InlineData(true, false, false)]
+    [InlineData(true, true, false)]
+    [InlineData(false, true, true)]
+    [InlineData(true, true, true)]
+    public void GetObjectForIUnknown_BorrowsRuntimeCcw(bool typedPointer, bool tryGet, bool failedCast)
+    {
+        using MemoryStream data = new([42]);
+        ComManagedStream source = new(data);
+
+        // Bypass our manual ComWrappers CCW to cover the built-in interop unwrapping path.
+        using ComScope<IUnknown> observer = new((IUnknown*)Marshal.GetIUnknownForObject(source));
+        using var stream = observer.Query<IStream>();
+        uint before = GetReferenceCount(observer);
+
+        if (failedCast)
+        {
+            string? actual;
+            bool success = typedPointer
+                ? ComHelpers.TryGetObjectForIUnknown(stream.Value, out actual)
+                : ComHelpers.TryGetObjectForIUnknown(observer.Value, out actual);
+            Assert.False(success);
+            Assert.Null(actual);
+        }
+        else
+        {
+            object? actual;
+            if (tryGet)
+            {
+                bool success = typedPointer
+                    ? ComHelpers.TryGetObjectForIUnknown(stream.Value, out actual)
+                    : ComHelpers.TryGetObjectForIUnknown(observer.Value, out actual);
+                Assert.True(success);
+            }
+            else
+            {
+                actual = typedPointer
+                    ? ComHelpers.GetObjectForIUnknown(stream.Value)
+                    : ComHelpers.GetObjectForIUnknown(observer.Value);
+            }
+
+            Assert.Same(source, actual);
+            Assert.Same(data, Assert.IsType<ComManagedStream>(actual).GetDataStream());
+        }
+
+        Assert.Equal(before, GetReferenceCount(observer));
+        Assert.Equal(42, source.GetDataStream().ReadByte());
+        Assert.Equal(HRESULT.S_OK, stream.Value->Commit(0));
+    }
+
     [StaTheory]
-    [InlineData(false)]
-    [InlineData(true)]
-    public void GetObjectForIUnknown_Ownership_NativeRcw(bool useTypedHelper)
+    [InlineData(false, false, false)]
+    [InlineData(false, true, false)]
+    [InlineData(true, false, false)]
+    [InlineData(true, true, false)]
+    [InlineData(false, true, true)]
+    [InlineData(true, true, true)]
+    public void GetObjectForIUnknown_Ownership_NativeRcw(bool useTypedHelper, bool tryGet, bool failedCast)
     {
         using ComScope<IUnknown> observer = new(null);
         uint beforeRetrieval;
@@ -156,7 +223,7 @@ public unsafe class ComHelpersTests
             try
             {
                 Assert.True(Marshal.IsComObject(expected));
-                IFont.Interface nativeFont = (IFont.Interface)expected;
+                var nativeFont = (IFont.Interface)expected;
                 Assert.NotEqual(IntPtr.Zero, nativeFont.hFont);
 
                 using (ComScope<IUnknown> warmUnknown = created.Query<IUnknown>())
@@ -169,12 +236,37 @@ public unsafe class ComHelpersTests
 
                 for (int retrievalIndex = 0; retrievalIndex < afterRetrieval.Length; retrievalIndex++)
                 {
-                    object actual = useTypedHelper
-                        ? ComHelpers.GetObjectForIUnknown(created.Value)
-                        : ComHelpers.GetObjectForIUnknown(observer.Value);
+                    if (failedCast)
+                    {
+                        string? actual;
+                        bool success = useTypedHelper
+                            ? ComHelpers.TryGetObjectForIUnknown(created.Value, out actual)
+                            : ComHelpers.TryGetObjectForIUnknown(observer.Value, out actual);
+                        Assert.False(success);
+                        Assert.Null(actual);
+                    }
+                    else
+                    {
+                        object? actual;
+                        if (tryGet)
+                        {
+                            bool success = useTypedHelper
+                                ? ComHelpers.TryGetObjectForIUnknown(created.Value, out actual)
+                                : ComHelpers.TryGetObjectForIUnknown(observer.Value, out actual);
+                            Assert.True(success);
+                        }
+                        else
+                        {
+                            actual = useTypedHelper
+                                ? ComHelpers.GetObjectForIUnknown(created.Value)
+                                : ComHelpers.GetObjectForIUnknown(observer.Value);
+                        }
 
-                    Assert.Same(expected, actual);
-                    Assert.NotEqual(IntPtr.Zero, ((IFont.Interface)actual).hFont);
+                        Assert.Same(expected, actual);
+                        Assert.NotEqual(IntPtr.Zero, ((IFont.Interface)actual!).hFont);
+                    }
+
+                    Assert.NotEqual(IntPtr.Zero, nativeFont.hFont);
                     afterRetrieval[retrievalIndex] = GetReferenceCount(observer.Value);
                 }
             }

@@ -9,6 +9,7 @@ using System.Runtime.InteropServices;
 using System.Text;
 using System.Windows.Forms.TestUtilities;
 using Windows.Win32.System.Com;
+using Windows.Win32.System.Ole;
 using Point = System.Drawing.Point;
 using Size = System.Drawing.Size;
 
@@ -18,31 +19,39 @@ namespace System.Windows.Forms.Tests;
 public class WebBrowserTests
 {
     [WinFormsFact]
-    public unsafe void WebBrowser_OpenCloseView_ReleasesNativeInstance()
+    public unsafe void WebBrowser_OpenCloseView_ReleasesNativeAndSiteReferences()
     {
-        List<uint> remainingReferences = [];
         for (int iteration = 0; iteration < 3; iteration++)
         {
             using Form form = new();
             using WebBrowser browser = new() { Dock = DockStyle.Fill };
+            using var siteObserver = ComHelpers.GetComScope<IOleClientSite>(browser.ActiveXSite);
+            siteObserver.Value->AddRef();
+            uint siteReferencesBefore = siteObserver.Value->Release();
             form.Controls.Add(browser);
             form.Show();
             browser.Focus();
 
             HWND formWindow = (HWND)form.Handle;
             HWND browserWindow = (HWND)browser.Handle;
-            using var observer = ComHelpers.GetComScope<IUnknown>(browser.ActiveXInstance);
-            form.Close();
-            browser.Dispose();
-            Assert.False(PInvoke.IsWindow(formWindow));
-            Assert.False(PInvoke.IsWindow(browserWindow));
-            Assert.Null(browser.ActiveXInstance);
+            using (var observer = ComHelpers.GetComScope<IUnknown>(browser.ActiveXInstance))
+            {
+                form.Close();
+                browser.Dispose();
+                Assert.False(PInvoke.IsWindow(formWindow));
+                Assert.False(PInvoke.IsWindow(browserWindow));
+                Assert.Null(browser.ActiveXInstance);
 
-            observer.Value->AddRef();
-            remainingReferences.Add(observer.Value->Release());
+                observer.Value->AddRef();
+                Assert.Equal(1u, observer.Value->Release());
+            }
+
+            // A leaked site reference can root the disposed browser even after native browser destruction.
+            // Observe its CCW separately, without assuming anything about the live browser RCW's count.
+            siteObserver.Value->AddRef();
+            Assert.Equal(siteReferencesBefore, siteObserver.Value->Release());
+            GC.KeepAlive(browser);
         }
-
-        Assert.All(remainingReferences, count => Assert.Equal(1u, count));
     }
 
     [WinFormsFact]

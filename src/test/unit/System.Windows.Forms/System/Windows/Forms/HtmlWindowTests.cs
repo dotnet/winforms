@@ -10,7 +10,7 @@ using Windows.Win32.Web.MsHtml;
 namespace System.Windows.Forms.Tests;
 
 [Collection("Sequential")] // workaround for WebBrowser control corrupting memory when run on multiple UI threads
-public class HtmlWindowTests
+public partial class HtmlWindowTests
 {
     [WinFormsFact]
     public async Task HtmlWindow_Opener_NoneReturnsNull()
@@ -139,9 +139,9 @@ public class HtmlWindowTests
         HtmlWindow.HtmlWindowShim oldWindowShim = oldWindow.TestAccessor.Dynamic.WindowShim;
         HtmlDocument.HtmlDocumentShim oldDocumentShim = oldDocument.TestAccessor.Dynamic.DocumentShim;
         HtmlElement.HtmlElementShim oldElementShim = oldElement.TestAccessor.Dynamic.ElementShim;
-        Dictionary<EventHandler, HtmlToClrEventProxy> documentAttachedEvents = oldDocumentShim.TestAccessor.Dynamic._attachedEventList;
-        Dictionary<EventHandler, HtmlToClrEventProxy> elementAttachedEvents = oldElementShim.TestAccessor.Dynamic._attachedEventList;
-        Dictionary<EventHandler, HtmlToClrEventProxy> windowAttachedEvents = oldWindowShim.TestAccessor.Dynamic._attachedEventList;
+        List<(EventHandler Handler, HtmlToClrEventProxy Proxy)> documentAttachedEvents = oldDocumentShim.TestAccessor.Dynamic._attachedEventList;
+        List<(EventHandler Handler, HtmlToClrEventProxy Proxy)> elementAttachedEvents = oldElementShim.TestAccessor.Dynamic._attachedEventList;
+        List<(EventHandler Handler, HtmlToClrEventProxy Proxy)> windowAttachedEvents = oldWindowShim.TestAccessor.Dynamic._attachedEventList;
         Assert.Single(documentAttachedEvents);
         Assert.Single(elementAttachedEvents);
         Assert.Single(windowAttachedEvents);
@@ -284,8 +284,9 @@ public class HtmlWindowTests
         Assert.Null(oldDocumentShim.TestAccessor.Dynamic._associatedWindow);
         Assert.Null(oldElementShim.TestAccessor.Dynamic._associatedWindow);
 
-        int[] remainingAttachedHandlers = [documentAttachedEvents.Count, elementAttachedEvents.Count, windowAttachedEvents.Count];
-        Assert.Equal([0, 0, 0], remainingAttachedHandlers);
+        Assert.Null(oldDocumentShim.TestAccessor.Dynamic._attachedEventList);
+        Assert.Null(oldElementShim.TestAccessor.Dynamic._attachedEventList);
+        Assert.Null(oldWindowShim.TestAccessor.Dynamic._attachedEventList);
 
         GC.KeepAlive(oldWindowCookie);
         GC.KeepAlive(oldDocumentCookie);
