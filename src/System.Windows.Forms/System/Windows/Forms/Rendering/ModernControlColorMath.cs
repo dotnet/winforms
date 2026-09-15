@@ -28,6 +28,14 @@ internal static class ModernControlColorMath
     private static readonly Color s_lightModeDisabledForeground = Color.FromArgb(0xA0, 0xA0, 0xA0);
 
     /// <summary>
+    ///  Gets the stable border color for modern editable text controls when enabled.
+    /// </summary>
+    internal static Color TextControlBorderColor
+        => Application.IsDarkModeEnabled
+            ? SystemColors.WindowText
+            : SystemColors.WindowFrame;
+
+    /// <summary>
     ///  Gets the surface color for a disabled modern control, honoring the current color mode
     ///  and high contrast settings.
     /// </summary>

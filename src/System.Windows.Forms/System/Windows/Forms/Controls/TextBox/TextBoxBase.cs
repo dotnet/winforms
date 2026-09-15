@@ -2663,10 +2663,11 @@ public abstract partial class TextBoxBase : Control
         int borderThickness = Math.Max(focusBorderMetrics.Width, focusBorderMetrics.Height);
         int focusBandHeight = GetVisualStylesFocusBandHeight();
 
-        Color adornerColor = ForeColor;
-
         Color clientBackColor = BackColor;
         Color parentBackColor = Parent?.BackColor ?? BackColor;
+        Color adornerColor = Enabled
+            ? ModernControlColorMath.TextControlBorderColor
+            : ModernControlColorMath.GetDisabledBorderColor();
 
         using var clientBackgroundBrush = clientBackColor.GetCachedSolidBrushScope();
         using var adornerBrush = adornerColor.GetCachedSolidBrushScope();
