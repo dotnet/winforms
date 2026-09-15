@@ -190,6 +190,14 @@ public partial class Binding
     /// </summary>
     internal bool ComponentCreated => IsComponentCreated(BindableComponent);
 
+    internal bool SupportsBindingBeforeComponentCreated(IBindableComponent? component)
+        => component is Control && string.Equals(PropertyName, nameof(Control.Visible), StringComparison.OrdinalIgnoreCase);
+
+    private bool ShouldPreserveBindableComponentVisibleValue()
+        => SupportsBindingBeforeComponentCreated(BindableComponent)
+            && BindableComponent is not null
+            && _propInfo?.ShouldSerializeValue(BindableComponent) == true;
+
     private void FormLoaded(object? sender, EventArgs e)
     {
         Debug.Assert(sender == BindableComponent, "which other control can send us the Load event?");
@@ -218,8 +226,14 @@ public partial class Binding
             }
 
             // We are essentially doing to the listManager what we were doing to the
-            // BindToObject: bind only when the control is created and it has a BindingContext
-            BindingContext.UpdateBinding((BindableComponent is not null && IsComponentCreated(BindableComponent) ? BindableComponent.BindingContext : null), this);
+            // BindToObject: bind only when the control is created and it has a BindingContext.
+            // Visible is a special case: a control can be hidden before handle creation, and
+            // a Visible binding must still be able to activate and show the control later.
+            BindingContext.UpdateBinding(
+                BindableComponent is not null && (IsComponentCreated(BindableComponent) || SupportsBindingBeforeComponentCreated(BindableComponent))
+                    ? BindableComponent.BindingContext
+                    : null,
+                this);
             if (value is Form form)
             {
                 form.Load += FormLoaded;
@@ -1135,12 +1149,17 @@ public partial class Binding
 
     internal void UpdateIsBinding()
     {
-        bool newBound = IsBindable && ComponentCreated && _bindingManagerBase.IsBinding;
+        bool newBound = IsBindable
+            && (ComponentCreated || SupportsBindingBeforeComponentCreated(BindableComponent))
+            && _bindingManagerBase.IsBinding;
+
+        bool shouldDelayInitialDataPush = !IsBinding && newBound && ShouldPreserveBindableComponentVisibleValue();
+
         if (IsBinding != newBound)
         {
             IsBinding = newBound;
             BindTarget(newBound);
-            if (IsBinding)
+            if (IsBinding && !shouldDelayInitialDataPush)
             {
                 if (_controlUpdateMode == ControlUpdateMode.Never)
                 {
