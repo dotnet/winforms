@@ -24,6 +24,28 @@ public class TextBoxBaseAccessibleObjectTests
     }
 
     [WinFormsTheory]
+    [InlineData(true)]
+    [InlineData(false)]
+    public unsafe void TextBoxBaseAccessibleObject_FragmentRoot_ReturnsOwnObject(bool createControl)
+    {
+        using TextBoxBase textBoxBase = new SubTextBoxBase();
+
+        if (createControl)
+        {
+            textBoxBase.CreateControl();
+        }
+
+        AccessibleObject accessibleObject = textBoxBase.AccessibilityObject;
+
+        using ComScope<IRawElementProviderFragmentRoot> actual = new(null);
+        Assert.True(((IRawElementProviderFragment.Interface)accessibleObject).get_FragmentRoot(actual).Succeeded);
+
+        Assert.Equal(accessibleObject, ComHelpers.GetObjectForIUnknown(actual));
+        Assert.Same(accessibleObject, accessibleObject.FragmentRoot);
+        Assert.Equal(createControl, textBoxBase.IsHandleCreated);
+    }
+
+    [WinFormsTheory]
     [InlineData((int)UIA_PROPERTY_ID.UIA_IsTextPatternAvailablePropertyId)]
     [InlineData((int)UIA_PROPERTY_ID.UIA_IsTextPattern2AvailablePropertyId)]
     [InlineData((int)UIA_PROPERTY_ID.UIA_IsValuePatternAvailablePropertyId)]
