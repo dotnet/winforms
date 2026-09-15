@@ -9,7 +9,7 @@ using Windows.Win32.Web.MsHtml;
 namespace System.Windows.Forms.Tests;
 
 [Collection("Sequential")] // workaround for WebBrowser control corrupting memory when run on multiple UI threads
-public class HtmlWindowTests
+public partial class HtmlWindowTests
 {
     [WinFormsFact]
     public async Task HtmlWindow_Opener_NoneReturnsNull()
