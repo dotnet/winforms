@@ -26,6 +26,7 @@ internal static partial class LocalAppContextSwitches
     internal const string EnableMsoComponentManagerSwitchName = "Switch.System.Windows.Forms.EnableMsoComponentManager";
     internal const string TreeNodeCollectionAddRangeRespectsSortOrderSwitchName = "System.Windows.Forms.TreeNodeCollectionAddRangeRespectsSortOrder";
     internal const string MoveTreeViewTextLocationOnePixelSwitchName = "System.Windows.Forms.TreeView.MoveTreeViewTextLocationOnePixel";
+    internal const string DataGridViewDarkModeThemingSwitchName = "System.Windows.Forms.DataGridViewDarkModeTheming";
 
     private static int s_scaleTopLevelFormMinMaxSizeForDpi;
     private static int s_anchorLayoutV2;
@@ -39,6 +40,7 @@ internal static partial class LocalAppContextSwitches
     private static int s_treeNodeCollectionAddRangeRespectsSortOrder;
 
     private static int s_moveTreeViewTextLocationOnePixel;
+    private static int s_dataGridViewDarkModeTheming;
 
     private static FrameworkName? s_targetFrameworkName;
 
@@ -129,6 +131,16 @@ internal static partial class LocalAppContextSwitches
             }
 
             if (switchName == ServicePointManagerCheckCrlSwitchName)
+            {
+                return true;
+            }
+        }
+
+        if (framework.Version.Major >= 10)
+        {
+            // Behavior changes added in .NET 10
+
+            if (switchName == DataGridViewDarkModeThemingSwitchName)
             {
                 return true;
             }
@@ -230,5 +242,16 @@ internal static partial class LocalAppContextSwitches
     {
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         get => GetCachedSwitchValue(MoveTreeViewTextLocationOnePixelSwitchName, ref s_moveTreeViewTextLocationOnePixel);
+    }
+
+    /// <summary>
+    ///  Indicates whether dark mode theming is automatically applied to DataGridView
+    ///  controls when the application is running in dark mode. Defaults to <see langword="true"/>
+    ///  for .NET 10+ applications. Set to <see langword="false"/> to opt out.
+    /// </summary>
+    public static bool DataGridViewDarkModeTheming
+    {
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        get => GetCachedSwitchValue(DataGridViewDarkModeThemingSwitchName, ref s_dataGridViewDarkModeTheming);
     }
 }
