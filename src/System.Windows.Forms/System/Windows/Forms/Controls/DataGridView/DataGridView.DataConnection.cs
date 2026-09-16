@@ -599,10 +599,18 @@ public partial class DataGridView
                         }
                         else
                         {
-#if DEBUG
-                            Debug.Fail("fail in debug builds so we can catch this situation in the check in suites");
-#endif // DEBUG
-                            throw new InvalidOperationException();
+                            // The data source can add a phantom item while deleting the selected new-item row.
+                            // Recreate the rows so the data-bound rows and the currency manager are synchronized.
+                            _dataConnectionState[DATACONNECTIONSTATE_listWasReset] = true;
+                            try
+                            {
+                                _owner.RefreshRows(scrollIntoView: !_owner.InSortOperation);
+                                _owner.PushAllowUserToAddRows();
+                            }
+                            finally
+                            {
+                                _dataConnectionState[DATACONNECTIONSTATE_listWasReset] = false;
+                            }
                         }
 
                         break;
