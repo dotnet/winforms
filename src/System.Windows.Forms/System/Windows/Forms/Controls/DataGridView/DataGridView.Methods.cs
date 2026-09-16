@@ -20003,20 +20003,36 @@ public partial class DataGridView
                     int remainingSelectedRows = 0;
                     bool deleteSelectedNewRow = _selectedBandIndexes.Contains(NewRowIndex);
 
-                    if (deleteSelectedNewRow
-                        && DataConnection is { CurrencyManager.List: { } list, IsInAddNewTransaction: true }
-                        && !IsCurrentRowDirty)
-                    {
-                        // Cancel the pending AddNew item only when the new row maps to a real list item.
-                        if (NewRowIndex >= 0 && NewRowIndex < list.Count)
-                        {
-                            DataConnection.DeleteRow(NewRowIndex);
-                        }
-                    }
-
                     try
                     {
                         _selectedBandSnapshotIndexes = new DataGridViewIntLinkedList(_selectedBandIndexes);
+
+                        if (deleteSelectedNewRow
+                            && DataConnection is { CurrencyManager.List: { } list, IsInAddNewTransaction: true }
+                            && !IsCurrentRowDirty
+                            && NewRowIndex >= 0
+                            && NewRowIndex < list.Count)
+                        {
+                            DataGridViewDataErrorEventArgs? dgvdee = null;
+                            try
+                            {
+                                DataConnection.DeleteRow(NewRowIndex);
+                            }
+                            catch (Exception exception) when (!exception.IsCriticalException())
+                            {
+                                dgvdee = new(
+                                    exception,
+                                    -1,
+                                    NewRowIndex,
+                                    DataGridViewDataErrorContexts.RowDeletion);
+                                OnDataErrorInternal(dgvdee);
+                                if (dgvdee.ThrowException)
+                                {
+                                    throw dgvdee.Exception;
+                                }
+                            }
+                        }
+
                         while (_selectedBandSnapshotIndexes.Count > remainingSelectedRows)
                         {
                             int rowIndex = _selectedBandSnapshotIndexes[remainingSelectedRows];

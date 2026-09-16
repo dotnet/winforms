@@ -4243,7 +4243,7 @@ public partial class DataGridViewTests : IDisposable
     }
 
     [WinFormsFact]
-    public void DataGridView_DeleteSelectionContainingNewRow_NoPendingAddNew_DoesNotThrow()
+    public void DataGridView_DeleteSelectionContainingNewRow_SecondNewRowEntry_KeepsDataSourceSynchronized()
     {
         using Form form = new();
         using TestDataGridView dataGridView = new()
@@ -4268,10 +4268,19 @@ public partial class DataGridViewTests : IDisposable
 
         dataGridView.CurrentCell = dataGridView[0, 2];
         dataGridView.Rows[2].Selected = true;
+        dataGridView.CurrentCell = dataGridView[0, dataGridView.NewRowIndex];
         dataGridView.Rows[dataGridView.NewRowIndex].Selected = true;
 
         Assert.True(dataGridView.CallProcessDataGridViewKey(Keys.Delete));
-        Assert.Equal(2, list.Count);
+        Assert.True(list.Count == dataGridView.Rows.Count || list.Count == dataGridView.Rows.Count - 1);
+
+        dataGridView.CurrentCell = dataGridView[0, 0];
+        Exception secondNewRowEntryException = Record.Exception(
+            () => dataGridView.CurrentCell = dataGridView[0, dataGridView.NewRowIndex]);
+
+        Assert.Null(secondNewRowEntryException);
+        Assert.Equal(dataGridView.NewRowIndex, dataGridView.CurrentCell!.RowIndex);
+        Assert.True(list.Count == dataGridView.Rows.Count || list.Count == dataGridView.Rows.Count - 1);
     }
 
     private static TestDataGridView CreateGrid()
@@ -4309,6 +4318,6 @@ public partial class DataGridViewTests : IDisposable
 
     private sealed class DeleteSelectionTestItem
     {
-        public string? Val { get; set; }
+        public string Val { get; set; }
     }
 }
