@@ -4242,6 +4242,38 @@ public partial class DataGridViewTests : IDisposable
         Assert.False(dataGridView.ProcessDataGridViewKeyCalled);
     }
 
+    [WinFormsFact]
+    public void DataGridView_DeleteSelectionContainingNewRow_NoPendingAddNew_DoesNotThrow()
+    {
+        using Form form = new();
+        using TestDataGridView dataGridView = new()
+        {
+            AllowUserToAddRows = true,
+            AllowUserToDeleteRows = true,
+            SelectionMode = DataGridViewSelectionMode.FullRowSelect,
+            MultiSelect = true
+        };
+
+        BindingList<DeleteSelectionTestItem> list =
+        [
+            new() { Val = "A" },
+            new() { Val = "B" },
+            new() { Val = "C" }
+        ];
+
+        form.Controls.Add(dataGridView);
+        dataGridView.DataSource = list;
+        form.Show();
+        dataGridView.CreateControl();
+
+        dataGridView.CurrentCell = dataGridView[0, 2];
+        dataGridView.Rows[2].Selected = true;
+        dataGridView.Rows[dataGridView.NewRowIndex].Selected = true;
+
+        Assert.True(dataGridView.CallProcessDataGridViewKey(Keys.Delete));
+        Assert.Equal(2, list.Count);
+    }
+
     private static TestDataGridView CreateGrid()
     {
         TestDataGridView grid = new()
@@ -4262,6 +4294,9 @@ public partial class DataGridViewTests : IDisposable
     {
         public bool ProcessDataGridViewKeyCalled { get; private set; }
 
+        public bool CallProcessDataGridViewKey(Keys keyData)
+            => ProcessDataGridViewKey(new KeyEventArgs(keyData));
+
         public bool CallProcessKeyPreview(ref Message m)
         => ProcessKeyPreview(ref m);
 
@@ -4270,5 +4305,10 @@ public partial class DataGridViewTests : IDisposable
             ProcessDataGridViewKeyCalled = true;
             return base.ProcessDataGridViewKey(e);
         }
+    }
+
+    private sealed class DeleteSelectionTestItem
+    {
+        public string? Val { get; set; }
     }
 }

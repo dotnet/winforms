@@ -141,6 +141,9 @@ public partial class DataGridView
         public bool ProcessingMetaDataChanges =>
             _dataConnectionState[DATACONNECTIONSTATE_processingMetaDataChanges];
 
+        internal bool IsInAddNewTransaction =>
+            !_dataConnectionState[DATACONNECTIONSTATE_finishedAddNew];
+
         public bool RestoreRow
         {
             get
@@ -599,18 +602,10 @@ public partial class DataGridView
                         }
                         else
                         {
-                            // The data source can add a phantom item while deleting the selected new-item row.
-                            // Recreate the rows so the data-bound rows and the currency manager are synchronized.
-                            _dataConnectionState[DATACONNECTIONSTATE_listWasReset] = true;
-                            try
-                            {
-                                _owner.RefreshRows(scrollIntoView: !_owner.InSortOperation);
-                                _owner.PushAllowUserToAddRows();
-                            }
-                            finally
-                            {
-                                _dataConnectionState[DATACONNECTIONSTATE_listWasReset] = false;
-                            }
+#if DEBUG
+                            Debug.Fail("fail in debug builds so we can catch this situation in the check in suites");
+#endif // DEBUG
+                            throw new InvalidOperationException();
                         }
 
                         break;
@@ -1122,6 +1117,11 @@ public partial class DataGridView
 
         public string GetError(int rowIndex)
         {
+            if (CurrencyManager is null || (uint)rowIndex >= (uint)CurrencyManager.Count)
+            {
+                return string.Empty;
+            }
+
             IDataErrorInfo? errInfo = null;
             try
             {
@@ -1147,6 +1147,11 @@ public partial class DataGridView
         public string GetError(int boundColumnIndex, int columnIndex, int rowIndex)
         {
             Debug.Assert(rowIndex >= 0);
+
+            if (CurrencyManager is null || (uint)rowIndex >= (uint)CurrencyManager.Count)
+            {
+                return string.Empty;
+            }
 
             IDataErrorInfo? errInfo = null;
             try

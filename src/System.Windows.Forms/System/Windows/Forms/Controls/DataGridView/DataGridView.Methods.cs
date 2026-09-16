@@ -20001,6 +20001,19 @@ public partial class DataGridView
                 case DataGridViewSelectionMode.FullRowSelect:
                 case DataGridViewSelectionMode.RowHeaderSelect:
                     int remainingSelectedRows = 0;
+                    bool deleteSelectedNewRow = _selectedBandIndexes.Contains(NewRowIndex);
+
+                    if (deleteSelectedNewRow
+                        && DataConnection is { CurrencyManager.List: { } list, IsInAddNewTransaction: true }
+                        && !IsCurrentRowDirty)
+                    {
+                        // Cancel the pending AddNew item only when the new row maps to a real list item.
+                        if (NewRowIndex >= 0 && NewRowIndex < list.Count)
+                        {
+                            DataConnection.DeleteRow(NewRowIndex);
+                        }
+                    }
+
                     try
                     {
                         _selectedBandSnapshotIndexes = new DataGridViewIntLinkedList(_selectedBandIndexes);
