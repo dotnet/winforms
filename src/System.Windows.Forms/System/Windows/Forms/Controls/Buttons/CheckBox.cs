@@ -107,10 +107,12 @@ public partial class CheckBox : ButtonBase
             // * But then ONLY when we're rendering with FlatStyle.Standard
             //   (because that would let us usually let us draw with the VisualStyleRenderers,
             //   which cause HighDPI issues in Dark Mode).
-            ((!Application.IsDarkModeEnabled
-                || Appearance != Appearance.Button
-                || FlatStyle != FlatStyle.Standard)
-                && base.OwnerDraw);
+            (Application.IsDarkModeEnabled
+            && EffectiveVisualStylesModeInternal >= VisualStylesMode.Net11
+            && Appearance == Appearance.Button
+            && FlatStyle == FlatStyle.Standard)
+            ||
+            base.OwnerDraw;
 
     /// <summary>
     ///  Gets a value indicating whether the check box should render as the modern, animated toggle switch.
