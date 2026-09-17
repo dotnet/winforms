@@ -2623,6 +2623,24 @@ public partial class RichTextBox : TextBoxBase
         SystemEvents.UserPreferenceChanged -= UserPreferenceChangedHandler;
     }
 
+    protected override void OnDpiChangedAfterParent(EventArgs e)
+    {
+        base.OnDpiChangedAfterParent(e);
+
+        if (EffectiveVisualStylesMode < VisualStylesMode.Net11
+            || !IsHandleCreated
+            || RecreatingHandle
+            || !Multiline
+            || (ScrollBars & (RichTextBoxScrollBars.Horizontal | RichTextBoxScrollBars.Vertical)) == 0)
+        {
+            return;
+        }
+
+        // RichEdit owns non-client scrollbar layout; recreating the handle on per-monitor DPI changes
+        // ensures its native scrollbar geometry is rebuilt for the new monitor DPI.
+        RecreateHandle();
+    }
+
     /// <summary>
     ///  Fires an event when the user clicks a RichTextBox control's horizontal scroll bar.
     /// </summary>
