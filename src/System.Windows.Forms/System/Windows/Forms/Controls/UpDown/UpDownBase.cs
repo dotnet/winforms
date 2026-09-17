@@ -30,7 +30,7 @@ public abstract partial class UpDownBase : ContainerControl
     private const int ModernButtonGroupSpacingLogical = 2;
     private const int ModernFocusBandHeight = 4;
     // Thickness, in DIPs, of the modern focus edge.
-    private const int ModernFocusEdgeThickness = 3;
+    private const int ModernFocusEdgeThickness = 2;
     private const BorderStyle DefaultBorderStyle = BorderStyle.Fixed3D;
     private const LeftRightAlignment DefaultUpDownAlign = LeftRightAlignment.Right;
     private const int DefaultTimerInterval = 500;
