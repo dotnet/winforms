@@ -21,11 +21,13 @@ internal class UserControlWithObjectCollectionEditor : UserControl
     [Category("Accessibility")]
     [TypeConverter(typeof(SomeCollectionTypeConverter))]
     [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+#pragma warning disable WFO2013 // This test property intentionally exposes a fresh collection on each access.
     public IList<int> AAAAAFirstCollection
     {
         get { return new List<int>(new int[] { 1, 2, 3 }); }
         set { }
     }
+#pragma warning restore WFO2013
 }
 
 internal class SomeCollectionTypeConverter : TypeConverter
