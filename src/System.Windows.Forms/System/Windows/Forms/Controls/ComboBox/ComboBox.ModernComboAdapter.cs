@@ -92,6 +92,7 @@ public partial class ComboBox
                 graphics,
                 clientBounds);
             DrawDropDownButton(comboBox, graphics);
+            DrawSimpleEditListDivider(comboBox, graphics);
 
             switch (_flatStyle)
             {
@@ -389,6 +390,45 @@ public partial class ComboBox
                 parentColor);
         }
 
+        private static void DrawSimpleEditListDivider(
+            ComboBox comboBox,
+            Graphics graphics)
+        {
+            if (comboBox.DropDownStyle != ComboBoxStyle.Simple
+                || comboBox._childListBox is null)
+            {
+                return;
+            }
+
+            Rectangle listBounds = comboBox.GetChildBounds(comboBox._childListBox.HWND);
+            if (listBounds.IsEmpty)
+            {
+                return;
+            }
+
+            int dividerThickness = Math.Max(
+                1,
+                ScaleHelper.ScaleToDpi(
+                    ModernControlVisualStyles.BorderThickness,
+                    comboBox.DeviceDpiInternal));
+            int lineY = listBounds.Top - dividerThickness;
+            if (lineY < 0)
+            {
+                return;
+            }
+
+            Padding chromeInsets = comboBox.GetModernChromeInsets();
+            int left = chromeInsets.Left + comboBox.Padding.Left;
+            int right = comboBox.ClientRectangle.Right - chromeInsets.Right - comboBox.Padding.Right - 1;
+            if (right < left)
+            {
+                return;
+            }
+
+            using var pen = Application.SystemVisualSettings.AccentColor.GetCachedPenScope(dividerThickness);
+            graphics.DrawLine(pen, left, lineY, right, lineY);
+        }
+
         private static void DrawRoundedBorder(
             ComboBox comboBox,
             Graphics graphics,
@@ -408,6 +448,7 @@ public partial class ComboBox
             Color parentColor = comboBox.ParentInternal?.BackColor
                 ?? SystemColors.Control;
             ParentBackgroundRenderer.PaintRoundedBorderRegionMitigation(
+                comboBox,
                 graphics,
                 bounds,
                 new Size(radius, radius),
@@ -428,15 +469,11 @@ public partial class ComboBox
         }
 
         private static int GetBorderThickness(ComboBox comboBox)
-        {
-            SystemVisualSettings settings = Application.SystemVisualSettings;
-            Size borderMetrics = ModernControlVisualStyles.GetFocusBorderMetrics(
-                settings.FocusBorderMetrics,
-                settings.TextScaleFactor,
-                comboBox.DeviceDpiInternal);
-
-            return Math.Max(borderMetrics.Width, borderMetrics.Height);
-        }
+            => Math.Max(
+                1,
+                ScaleHelper.ScaleToDpi(
+                    ModernControlVisualStyles.BorderThickness,
+                    comboBox.DeviceDpiInternal));
 
         private static GraphicsPath CreateFieldPath(
             ComboBox comboBox,

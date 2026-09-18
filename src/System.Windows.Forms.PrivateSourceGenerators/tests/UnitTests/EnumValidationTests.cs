@@ -1,6 +1,7 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
+using System.Collections;
 using System.Collections.Immutable;
 using System.Reflection;
 using Microsoft.CodeAnalysis;
@@ -284,6 +285,32 @@ namespace Paint
 @"if ((intValue & 15) == intValue) return;";
 
         VerifyGeneratedMethodLines(source, "Paint.Colours", expected);
+    }
+
+    [Fact]
+    public void GetEnumValidationInfo_CancellationRequested_ThrowsOperationCanceledException()
+    {
+        SyntaxTree syntaxTree = CSharpSyntaxTree.ParseText(
+            "enum Example { Value }",
+            cancellationToken: TestContext.Current.CancellationToken);
+        CSharpCompilation compilation = CSharpCompilation.Create("original", [syntaxTree]);
+        MethodInfo method = typeof(EnumValidationGenerator).GetMethod(
+            "GetEnumValidationInfo",
+            BindingFlags.NonPublic | BindingFlags.Static)!;
+        using CancellationTokenSource cancellationTokenSource = new();
+        cancellationTokenSource.Cancel();
+
+        var validationInfos = (IEnumerable)method.Invoke(
+            null,
+            [
+                compilation,
+                ImmutableArray.Create<SyntaxNode>(syntaxTree.GetRoot(TestContext.Current.CancellationToken)),
+                cancellationTokenSource.Token
+            ])!;
+
+        IEnumerator enumerator = validationInfos.GetEnumerator();
+        OperationCanceledException exception = Assert.Throws<OperationCanceledException>(() => enumerator.MoveNext());
+        Assert.Equal(cancellationTokenSource.Token, exception.CancellationToken);
     }
 
     private static void VerifyGeneratedMethodLines(string source, string expectedEnumName, string expectedBody)
