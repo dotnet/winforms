@@ -65,7 +65,7 @@ These rules protect the generated partial declaration in `.Designer.vb` files. A
 when it contains `InitializeComponent` for a partial type derived from `Control` and that type also has
 a declaration in a non-Designer file.
 
-### [WFO2002](https://aka.ms/winforms-warnings/wfo2002): Avoid control flow in `InitializeComponent`.
+### [WFO2002](https://aka.ms/winforms-warnings/wfo2002): Avoid unsupported code in `InitializeComponent`.
 
 Move `For`, `For Each`, `While`, `Do`, `If`, `Select`, `GoTo`, `Try`, and `SyncLock` constructs to the
 user code file.
@@ -88,6 +88,33 @@ Move event and delegate declarations to the user code file.
 
 WFO2006 is C#-only because Visual Basic has no collection-expression syntax.
 
+### [WFO2007](https://aka.ms/winforms-warnings/wfo2007): Avoid `NameOf` expressions in `InitializeComponent`.
+
+Use the serialized string value instead of `NameOf`.
+
+### [WFO2008](https://aka.ms/winforms-warnings/wfo2008): Avoid conditional expressions in `InitializeComponent`.
+
+Move the three-argument `If` condition to the user code file and serialize one deterministic value.
+
+### [WFO2009](https://aka.ms/winforms-warnings/wfo2009): Avoid null-coalescing expressions in `InitializeComponent`.
+
+Resolve the two-argument `If` fallback outside generated Designer code.
+
+### [WFO2010](https://aka.ms/winforms-warnings/wfo2010): Avoid null-conditional expressions in `InitializeComponent`.
+
+Move null-dependent access to the user code file.
+
+### [WFO2011](https://aka.ms/winforms-warnings/wfo2011): Avoid interpolated strings in `InitializeComponent`.
+
+Serialize the resulting string value instead of an interpolated expression.
+
+### [WFO2012](https://aka.ms/winforms-warnings/wfo2012): Avoid anonymous functions in `InitializeComponent`.
+
+Use a named event handler in the user code file instead of a lambda.
+
+WFO2007–WFO2012 identify constructs that CodeDOM cannot represent. Their separate IDs allow tools and
+agents to apply construct-specific guidance.
+
 | Item      | Value             |
 |-----------|-------------------|
 | Category  | WinForms Designer |
@@ -95,5 +122,23 @@ WFO2006 is C#-only because Visual Basic has no collection-expression syntax.
 | Severity  | Warning           |
 | CodeFix   | False             |
 | Added in  | NET11.0           |
+
+---
+
+## `PropertyAllocatesNewInstanceAnalyzer`
+
+### [WFO2013](https://aka.ms/winforms-warnings/wfo2013): Avoid allocating a new object on every property access.
+
+A property getter that directly returns `New` creates a fresh object every time the property is read.
+Cache the instance when the property represents stable state, or replace the property with a method
+when creating a fresh value is intentional.
+
+| Item      | Value          |
+|-----------|----------------|
+| Category  | WinForms Usage |
+| Enabled   | True           |
+| Severity  | Warning        |
+| CodeFix   | False          |
+| Added in  | NET11.0        |
 
 ---

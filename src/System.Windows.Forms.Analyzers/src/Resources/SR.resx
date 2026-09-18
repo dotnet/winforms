@@ -127,7 +127,7 @@
     <value>Remove high DPI settings from {0} and configure via '{1}' property in Application Framework</value>
   </data>
   <data name="WFO2002Title" xml:space="preserve">
-    <value>Avoid control flow in InitializeComponent</value>
+    <value>Avoid unsupported code in InitializeComponent</value>
   </data>
   <data name="WFO2002Message" xml:space="preserve">
     <value>'{0}' is not supported in InitializeComponent; move the logic to the user code file</value>
@@ -155,5 +155,47 @@
   </data>
   <data name="WFO2006Message" xml:space="preserve">
     <value>Collection expressions are not supported in Designer-generated code</value>
+  </data>
+  <data name="WFO2007Title" xml:space="preserve">
+    <value>Avoid nameof expressions in InitializeComponent</value>
+  </data>
+  <data name="WFO2007Message" xml:space="preserve">
+    <value>nameof expressions cannot be represented by the CodeDOM serialization used by InitializeComponent</value>
+  </data>
+  <data name="WFO2008Title" xml:space="preserve">
+    <value>Avoid conditional expressions in InitializeComponent</value>
+  </data>
+  <data name="WFO2008Message" xml:space="preserve">
+    <value>Conditional expressions cannot be represented by the CodeDOM serialization used by InitializeComponent</value>
+  </data>
+  <data name="WFO2009Title" xml:space="preserve">
+    <value>Avoid null-coalescing expressions in InitializeComponent</value>
+  </data>
+  <data name="WFO2009Message" xml:space="preserve">
+    <value>Null-coalescing expressions cannot be represented by the CodeDOM serialization used by InitializeComponent</value>
+  </data>
+  <data name="WFO2010Title" xml:space="preserve">
+    <value>Avoid null-conditional expressions in InitializeComponent</value>
+  </data>
+  <data name="WFO2010Message" xml:space="preserve">
+    <value>Null-conditional expressions cannot be represented by the CodeDOM serialization used by InitializeComponent</value>
+  </data>
+  <data name="WFO2011Title" xml:space="preserve">
+    <value>Avoid interpolated strings in InitializeComponent</value>
+  </data>
+  <data name="WFO2011Message" xml:space="preserve">
+    <value>Interpolated strings cannot be represented by the CodeDOM serialization used by InitializeComponent</value>
+  </data>
+  <data name="WFO2012Title" xml:space="preserve">
+    <value>Avoid anonymous functions in InitializeComponent</value>
+  </data>
+  <data name="WFO2012Message" xml:space="preserve">
+    <value>Lambdas and anonymous methods cannot be represented by the CodeDOM serialization used by InitializeComponent</value>
+  </data>
+  <data name="WFO2013Title" xml:space="preserve">
+    <value>Avoid allocating a new object on every property access</value>
+  </data>
+  <data name="WFO2013Message" xml:space="preserve">
+    <value>Property '{0}' creates a new object whenever it is accessed</value>
   </data>
 </root>

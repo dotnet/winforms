@@ -114,6 +114,34 @@ End Namespace
     End Function
 
     <Fact>
+    Public Async Function InitializeComponent_CodeDomUnsupportedExpressions_ReportDiagnostics() As Task
+        Const designerSource As String = "
+Imports System
+Imports System.Windows.Forms
+
+Namespace Test
+
+    Partial Class Form1
+        Private Sub InitializeComponent()
+            Dim name As String = {|WFO2007:NameOf|}(Form1)
+            Dim text As String = {|WFO2011:$""|}{name}: {Controls.Count}""
+            Dim handler As EventHandler = {|WFO2012:Sub|}(sender, e) Text = text
+            Dim value As Object = {|WFO2009:If|}(Tag, Me)
+            Dim control As Control = {|WFO2010:Parent|}?.Parent
+            Dim count As Integer = {|WFO2008:If|}(DesignMode, 0, Controls.Count)
+        End Sub
+    End Class
+End Namespace
+"
+
+        Dim testCase As AnalyzerTestCase = CreateTestCase(designerSource)
+
+        Await AnalyzerTestFactory.CreateVisualBasicAnalyzerTest(
+            Of InitializeComponentAnalyzer)(testCase).
+            RunAsync(TestContext.Current.CancellationToken)
+    End Function
+
+    <Fact>
     Public Async Function DesignerMembers_ReportStructuralDiagnostics() As Task
         Const designerSource As String = "
 Imports System

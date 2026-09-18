@@ -19,7 +19,16 @@ public sealed class InitializeComponentAnalyzer : DiagnosticAnalyzer
 {
     /// <inheritdoc/>
     public override ImmutableArray<DiagnosticDescriptor> SupportedDiagnostics
-        => [SharedDiagnosticDescriptors.s_unsupportedInitializeComponentCode];
+        =>
+        [
+            SharedDiagnosticDescriptors.s_unsupportedInitializeComponentCode,
+            SharedDiagnosticDescriptors.s_unsupportedNameOfExpression,
+            SharedDiagnosticDescriptors.s_unsupportedConditionalExpression,
+            SharedDiagnosticDescriptors.s_unsupportedNullCoalescingExpression,
+            SharedDiagnosticDescriptors.s_unsupportedNullConditionalExpression,
+            SharedDiagnosticDescriptors.s_unsupportedInterpolatedString,
+            SharedDiagnosticDescriptors.s_unsupportedAnonymousFunction
+        ];
 
     /// <inheritdoc/>
     public override void Initialize(AnalysisContext context)
@@ -52,13 +61,17 @@ public sealed class InitializeComponentAnalyzer : DiagnosticAnalyzer
 
         foreach (SyntaxNode node in method.Body.DescendantNodes())
         {
-            if (TryGetUnsupportedConstruct(node, out SyntaxToken token, out string? construct))
+            if (TryGetUnsupportedConstruct(
+                node,
+                out SyntaxToken token,
+                out DiagnosticDescriptor descriptor,
+                out string? construct))
             {
-                context.ReportDiagnostic(
-                    Diagnostic.Create(
-                        SharedDiagnosticDescriptors.s_unsupportedInitializeComponentCode,
-                        token.GetLocation(),
-                        construct));
+                Diagnostic diagnostic = construct is null
+                    ? Diagnostic.Create(descriptor, token.GetLocation())
+                    : Diagnostic.Create(descriptor, token.GetLocation(), construct);
+
+                context.ReportDiagnostic(diagnostic);
             }
         }
     }
@@ -66,24 +79,52 @@ public sealed class InitializeComponentAnalyzer : DiagnosticAnalyzer
     private static bool TryGetUnsupportedConstruct(
         SyntaxNode node,
         out SyntaxToken token,
+        out DiagnosticDescriptor descriptor,
         out string? construct)
     {
-        (token, construct) = node switch
+        (token, descriptor, construct) = node switch
         {
-            ForStatementSyntax statement => (statement.ForKeyword, "for loop"),
-            ForEachStatementSyntax statement => (statement.ForEachKeyword, "foreach loop"),
-            WhileStatementSyntax statement => (statement.WhileKeyword, "while loop"),
-            DoStatementSyntax statement => (statement.DoKeyword, "do loop"),
-            IfStatementSyntax statement => (statement.IfKeyword, "if statement"),
-            SwitchStatementSyntax statement => (statement.SwitchKeyword, "switch statement"),
-            SwitchExpressionSyntax expression => (expression.SwitchKeyword, "switch expression"),
-            LocalFunctionStatementSyntax function => (function.Identifier, "local function"),
-            GotoStatementSyntax statement => (statement.GotoKeyword, "goto statement"),
-            TryStatementSyntax statement => (statement.TryKeyword, "try statement"),
-            LockStatementSyntax statement => (statement.LockKeyword, "lock statement"),
-            _ => (default, null)
+            ForStatementSyntax statement
+                => (statement.ForKeyword, SharedDiagnosticDescriptors.s_unsupportedInitializeComponentCode, "for loop"),
+            ForEachStatementSyntax statement
+                => (statement.ForEachKeyword, SharedDiagnosticDescriptors.s_unsupportedInitializeComponentCode, "foreach loop"),
+            WhileStatementSyntax statement
+                => (statement.WhileKeyword, SharedDiagnosticDescriptors.s_unsupportedInitializeComponentCode, "while loop"),
+            DoStatementSyntax statement
+                => (statement.DoKeyword, SharedDiagnosticDescriptors.s_unsupportedInitializeComponentCode, "do loop"),
+            IfStatementSyntax statement
+                => (statement.IfKeyword, SharedDiagnosticDescriptors.s_unsupportedInitializeComponentCode, "if statement"),
+            SwitchStatementSyntax statement
+                => (statement.SwitchKeyword, SharedDiagnosticDescriptors.s_unsupportedInitializeComponentCode, "switch statement"),
+            SwitchExpressionSyntax expression
+                => (expression.SwitchKeyword, SharedDiagnosticDescriptors.s_unsupportedInitializeComponentCode, "switch expression"),
+            LocalFunctionStatementSyntax function
+                => (function.Identifier, SharedDiagnosticDescriptors.s_unsupportedInitializeComponentCode, "local function"),
+            GotoStatementSyntax statement
+                => (statement.GotoKeyword, SharedDiagnosticDescriptors.s_unsupportedInitializeComponentCode, "goto statement"),
+            InvocationExpressionSyntax invocation
+                when invocation.Expression is IdentifierNameSyntax identifier
+                    && identifier.Identifier.Text == "nameof"
+                => (identifier.Identifier, SharedDiagnosticDescriptors.s_unsupportedNameOfExpression, null),
+            ConditionalExpressionSyntax expression
+                => (expression.QuestionToken, SharedDiagnosticDescriptors.s_unsupportedConditionalExpression, null),
+            BinaryExpressionSyntax expression when expression.IsKind(SyntaxKind.CoalesceExpression)
+                => (expression.OperatorToken, SharedDiagnosticDescriptors.s_unsupportedNullCoalescingExpression, null),
+            ConditionalAccessExpressionSyntax expression
+                => (expression.OperatorToken, SharedDiagnosticDescriptors.s_unsupportedNullConditionalExpression, null),
+            InterpolatedStringExpressionSyntax expression
+                => (expression.StringStartToken, SharedDiagnosticDescriptors.s_unsupportedInterpolatedString, null),
+            LambdaExpressionSyntax expression
+                => (expression.ArrowToken, SharedDiagnosticDescriptors.s_unsupportedAnonymousFunction, null),
+            AnonymousMethodExpressionSyntax expression
+                => (expression.DelegateKeyword, SharedDiagnosticDescriptors.s_unsupportedAnonymousFunction, null),
+            TryStatementSyntax statement
+                => (statement.TryKeyword, SharedDiagnosticDescriptors.s_unsupportedInitializeComponentCode, "try statement"),
+            LockStatementSyntax statement
+                => (statement.LockKeyword, SharedDiagnosticDescriptors.s_unsupportedInitializeComponentCode, "lock statement"),
+            _ => (default, null!, null)
         };
 
-        return construct is not null;
+        return descriptor is not null;
     }
 }

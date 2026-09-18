@@ -129,7 +129,7 @@ public class DesignerAnalyzerTests
     }
 
     [Fact]
-    public async Task InitializeComponent_PolicySyntax_NoDiagnostic()
+    public async Task InitializeComponent_CodeDomUnsupportedExpressions_ReportDiagnostics()
     {
         const string designerSource =
             """
@@ -142,12 +142,13 @@ public class DesignerAnalyzerTests
             {
                 private void InitializeComponent()
                 {
-                    string name = nameof(Form1);
-                    string text = $"{name}: {Controls.Count}";
-                    EventHandler handler = (_, _) => Text = text;
-                    object value = Tag ?? this;
-                    Control? control = Parent?.Parent;
-                    int count = DesignMode ? 0 : Controls.Count;
+                    string name = {|WFO2007:nameof|}(Form1);
+                    string text = {|WFO2011:$"|}{name}: {Controls.Count}";
+                    EventHandler handler = (_, _) {|WFO2012:=>|} Text = text;
+                    EventHandler alternate = {|WFO2012:delegate|} { };
+                    object value = Tag {|WFO2009:??|} this;
+                    Control? control = Parent{|WFO2010:?|}.Parent;
+                    int count = DesignMode {|WFO2008:?|} 0 : Controls.Count;
                 }
             }
             """;
