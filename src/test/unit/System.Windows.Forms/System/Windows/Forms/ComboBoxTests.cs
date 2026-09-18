@@ -711,21 +711,31 @@ public class ComboBoxTests
                 customForeColor,
                 channelTolerance: foreColorPixelTolerance);
             Color disabledBorderColor = ModernControlColorMath.GetDisabledBorderColor();
-            int enabledDisabledBorderPixels = CountPixels(
-                enabledBitmap,
-                disabledBorderColor,
-                channelTolerance: disabledBorderPixelTolerance);
             int disabledDisabledBorderPixels = CountPixels(
                 disabledBitmap,
                 disabledBorderColor,
+                channelTolerance: disabledBorderPixelTolerance);
+            Color enabledStrokeColor = ModernControlColorMath.GetFieldStrokeStrong(
+                control.BackColor,
+                Application.IsDarkModeEnabled);
+            int enabledStrokeInEnabled = CountPixels(
+                enabledBitmap,
+                enabledStrokeColor,
+                channelTolerance: disabledBorderPixelTolerance);
+            int enabledStrokeInDisabled = CountPixels(
+                disabledBitmap,
+                enabledStrokeColor,
                 channelTolerance: disabledBorderPixelTolerance);
 
             Assert.True(
                 disabledForeColorPixels <= enabledForeColorPixels,
                 "Disabled ComboBox must not increase ForeColor-like border pixels.");
             Assert.True(
-                disabledDisabledBorderPixels > enabledDisabledBorderPixels,
-                "Disabled ComboBox should shift border pixels toward the disabled border color.");
+                enabledStrokeInDisabled < enabledStrokeInEnabled,
+                "Disabled ComboBox must not paint the enabled field-stroke border color.");
+            Assert.True(
+                disabledDisabledBorderPixels > 0,
+                "Disabled ComboBox border should render with the disabled border color.");
         }
     }
 
