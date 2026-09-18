@@ -3,7 +3,6 @@ trigger:
   branches:
     include:
       - main
-      - integration/11.0-RC2
       - release/*
 
 pr: none
