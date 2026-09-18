@@ -23,8 +23,8 @@
         <note />
       </trans-unit>
       <trans-unit id="WFO2002Title">
-        <source>Avoid control flow in InitializeComponent</source>
-        <target state="new">Avoid control flow in InitializeComponent</target>
+        <source>Avoid unsupported code in InitializeComponent</source>
+        <target state="new">Avoid unsupported code in InitializeComponent</target>
         <note />
       </trans-unit>
       <trans-unit id="WFO2003Message">
@@ -65,6 +65,76 @@
       <trans-unit id="WFO2006Title">
         <source>Avoid collection expressions in Designer files</source>
         <target state="new">Avoid collection expressions in Designer files</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="WFO2007Message">
+        <source>nameof expressions cannot be represented by the CodeDOM serialization used by InitializeComponent</source>
+        <target state="new">nameof expressions cannot be represented by the CodeDOM serialization used by InitializeComponent</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="WFO2007Title">
+        <source>Avoid nameof expressions in InitializeComponent</source>
+        <target state="new">Avoid nameof expressions in InitializeComponent</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="WFO2008Message">
+        <source>Conditional expressions cannot be represented by the CodeDOM serialization used by InitializeComponent</source>
+        <target state="new">Conditional expressions cannot be represented by the CodeDOM serialization used by InitializeComponent</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="WFO2008Title">
+        <source>Avoid conditional expressions in InitializeComponent</source>
+        <target state="new">Avoid conditional expressions in InitializeComponent</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="WFO2009Message">
+        <source>Null-coalescing expressions cannot be represented by the CodeDOM serialization used by InitializeComponent</source>
+        <target state="new">Null-coalescing expressions cannot be represented by the CodeDOM serialization used by InitializeComponent</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="WFO2009Title">
+        <source>Avoid null-coalescing expressions in InitializeComponent</source>
+        <target state="new">Avoid null-coalescing expressions in InitializeComponent</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="WFO2010Message">
+        <source>Null-conditional expressions cannot be represented by the CodeDOM serialization used by InitializeComponent</source>
+        <target state="new">Null-conditional expressions cannot be represented by the CodeDOM serialization used by InitializeComponent</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="WFO2010Title">
+        <source>Avoid null-conditional expressions in InitializeComponent</source>
+        <target state="new">Avoid null-conditional expressions in InitializeComponent</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="WFO2011Message">
+        <source>Interpolated strings cannot be represented by the CodeDOM serialization used by InitializeComponent</source>
+        <target state="new">Interpolated strings cannot be represented by the CodeDOM serialization used by InitializeComponent</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="WFO2011Title">
+        <source>Avoid interpolated strings in InitializeComponent</source>
+        <target state="new">Avoid interpolated strings in InitializeComponent</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="WFO2012Message">
+        <source>Lambdas and anonymous methods cannot be represented by the CodeDOM serialization used by InitializeComponent</source>
+        <target state="new">Lambdas and anonymous methods cannot be represented by the CodeDOM serialization used by InitializeComponent</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="WFO2012Title">
+        <source>Avoid anonymous functions in InitializeComponent</source>
+        <target state="new">Avoid anonymous functions in InitializeComponent</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="WFO2013Message">
+        <source>Property '{0}' creates a new object whenever it is accessed</source>
+        <target state="new">Property '{0}' creates a new object whenever it is accessed</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="WFO2013Title">
+        <source>Avoid allocating a new object on every property access</source>
+        <target state="new">Avoid allocating a new object on every property access</target>
         <note />
       </trans-unit>
     </body>

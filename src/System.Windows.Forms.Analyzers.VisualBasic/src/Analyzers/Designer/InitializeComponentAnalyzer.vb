@@ -21,7 +21,14 @@ Namespace Global.System.Windows.Forms.VisualBasic.Analyzers.Designer
         ''' <inheritdoc/>
         Public Overrides ReadOnly Property SupportedDiagnostics As ImmutableArray(Of DiagnosticDescriptor)
             Get
-                Return ImmutableArray.Create(SharedDiagnosticDescriptors.s_unsupportedInitializeComponentCode)
+                Return ImmutableArray.Create(
+                    SharedDiagnosticDescriptors.s_unsupportedInitializeComponentCode,
+                    SharedDiagnosticDescriptors.s_unsupportedNameOfExpression,
+                    SharedDiagnosticDescriptors.s_unsupportedConditionalExpression,
+                    SharedDiagnosticDescriptors.s_unsupportedNullCoalescingExpression,
+                    SharedDiagnosticDescriptors.s_unsupportedNullConditionalExpression,
+                    SharedDiagnosticDescriptors.s_unsupportedInterpolatedString,
+                    SharedDiagnosticDescriptors.s_unsupportedAnonymousFunction)
             End Get
         End Property
 
@@ -57,46 +64,76 @@ Namespace Global.System.Windows.Forms.VisualBasic.Analyzers.Designer
             For Each node As SyntaxNode In method.Statements.SelectMany(
                 Function(item) item.DescendantNodesAndSelf())
                 Dim token As SyntaxToken
+                Dim descriptor As DiagnosticDescriptor = Nothing
                 Dim construct As String = Nothing
 
                 If TypeOf node Is ForBlockSyntax Then
                     token = node.GetFirstToken()
+                    descriptor = SharedDiagnosticDescriptors.s_unsupportedInitializeComponentCode
                     construct = "For loop"
                 ElseIf TypeOf node Is ForEachBlockSyntax Then
                     token = node.GetFirstToken()
+                    descriptor = SharedDiagnosticDescriptors.s_unsupportedInitializeComponentCode
                     construct = "For Each loop"
                 ElseIf TypeOf node Is WhileBlockSyntax Then
                     token = node.GetFirstToken()
+                    descriptor = SharedDiagnosticDescriptors.s_unsupportedInitializeComponentCode
                     construct = "While loop"
                 ElseIf TypeOf node Is DoLoopBlockSyntax Then
                     token = node.GetFirstToken()
+                    descriptor = SharedDiagnosticDescriptors.s_unsupportedInitializeComponentCode
                     construct = "Do loop"
                 ElseIf TypeOf node Is MultiLineIfBlockSyntax Then
                     token = node.GetFirstToken()
+                    descriptor = SharedDiagnosticDescriptors.s_unsupportedInitializeComponentCode
                     construct = "If statement"
                 ElseIf TypeOf node Is SingleLineIfStatementSyntax Then
                     token = node.GetFirstToken()
+                    descriptor = SharedDiagnosticDescriptors.s_unsupportedInitializeComponentCode
                     construct = "If statement"
                 ElseIf TypeOf node Is SelectBlockSyntax Then
                     token = node.GetFirstToken()
+                    descriptor = SharedDiagnosticDescriptors.s_unsupportedInitializeComponentCode
                     construct = "Select statement"
                 ElseIf TypeOf node Is GoToStatementSyntax Then
                     token = node.GetFirstToken()
+                    descriptor = SharedDiagnosticDescriptors.s_unsupportedInitializeComponentCode
                     construct = "GoTo statement"
+                ElseIf TypeOf node Is NameOfExpressionSyntax Then
+                    token = node.GetFirstToken()
+                    descriptor = SharedDiagnosticDescriptors.s_unsupportedNameOfExpression
+                ElseIf TypeOf node Is TernaryConditionalExpressionSyntax Then
+                    token = node.GetFirstToken()
+                    descriptor = SharedDiagnosticDescriptors.s_unsupportedConditionalExpression
+                ElseIf TypeOf node Is BinaryConditionalExpressionSyntax Then
+                    token = node.GetFirstToken()
+                    descriptor = SharedDiagnosticDescriptors.s_unsupportedNullCoalescingExpression
+                ElseIf TypeOf node Is ConditionalAccessExpressionSyntax Then
+                    token = node.GetFirstToken()
+                    descriptor = SharedDiagnosticDescriptors.s_unsupportedNullConditionalExpression
+                ElseIf TypeOf node Is InterpolatedStringExpressionSyntax Then
+                    token = node.GetFirstToken()
+                    descriptor = SharedDiagnosticDescriptors.s_unsupportedInterpolatedString
+                ElseIf TypeOf node Is LambdaExpressionSyntax Then
+                    token = node.GetFirstToken()
+                    descriptor = SharedDiagnosticDescriptors.s_unsupportedAnonymousFunction
                 ElseIf TypeOf node Is TryBlockSyntax Then
                     token = node.GetFirstToken()
+                    descriptor = SharedDiagnosticDescriptors.s_unsupportedInitializeComponentCode
                     construct = "Try statement"
                 ElseIf TypeOf node Is SyncLockBlockSyntax Then
                     token = node.GetFirstToken()
+                    descriptor = SharedDiagnosticDescriptors.s_unsupportedInitializeComponentCode
                     construct = "SyncLock statement"
                 End If
 
-                If construct IsNot Nothing Then
-                    context.ReportDiagnostic(
-                        Diagnostic.Create(
-                            SharedDiagnosticDescriptors.s_unsupportedInitializeComponentCode,
-                            token.GetLocation(),
-                            construct))
+                If descriptor IsNot Nothing Then
+                    Dim diagnostic As Diagnostic = If(
+                        construct Is Nothing,
+                        Diagnostic.Create(descriptor, token.GetLocation()),
+                        Diagnostic.Create(descriptor, token.GetLocation(), construct))
+
+                    context.ReportDiagnostic(diagnostic)
                 End If
             Next
         End Sub

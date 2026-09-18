@@ -23,6 +23,13 @@ internal static class DiagnosticIDs
     public const string DesignerFieldPlacement = "WFO2004";
     public const string DesignerEventOrDelegate = "WFO2005";
     public const string DesignerCollectionExpression = "WFO2006";
+    public const string UnsupportedNameOfExpression = "WFO2007";
+    public const string UnsupportedConditionalExpression = "WFO2008";
+    public const string UnsupportedNullCoalescingExpression = "WFO2009";
+    public const string UnsupportedNullConditionalExpression = "WFO2010";
+    public const string UnsupportedInterpolatedString = "WFO2011";
+    public const string UnsupportedAnonymousFunction = "WFO2012";
+    public const string PropertyAllocatesNewInstance = "WFO2013";
 
     // Experimental, number group 5000+
     public const string ExperimentalDarkMode = "WFO5001";
