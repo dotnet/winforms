@@ -102,8 +102,25 @@ public unsafe class ComNativeDescriptorTests
         Assert.Equal(HRESULT.S_OK, hr);
 
         ComNativeDescriptor descriptor = new();
-        object mediaPlayer = ComHelpers.GetObjectForIUnknown(mediaPlayerPtr);
-        ValidateMediaPlayerProperties(mediaPlayer, descriptor.GetProperties(mediaPlayer));
+        object mediaPlayer;
+        using (ComScope<IUnknown> created = new(mediaPlayerPtr))
+        {
+            mediaPlayer = ComHelpers.GetObjectForIUnknown(created);
+        }
+
+        using ComScope<IUnknown> observer = new((IUnknown*)Marshal.GetIUnknownForObject(mediaPlayer));
+        try
+        {
+            ValidateMediaPlayerProperties(mediaPlayer, descriptor.GetProperties(mediaPlayer));
+        }
+        finally
+        {
+            Marshal.FinalReleaseComObject(mediaPlayer);
+        }
+
+        observer.Value->AddRef();
+        uint remainingReferences = observer.Value->Release();
+        Assert.Equal(1u, remainingReferences);
     }
 
     [StaFact]
