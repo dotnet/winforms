@@ -1,7 +1,6 @@
 ﻿' Licensed to the .NET Foundation under one or more agreements.
 ' The .NET Foundation licenses this file to you under the MIT license.
 
-Imports System.Collections.Concurrent
 Imports System.Collections.Immutable
 Imports System.Windows.Forms.Analyzers
 Imports System.Windows.Forms.Analyzers.Diagnostics
@@ -37,18 +36,19 @@ Namespace Global.System.Windows.Forms.VisualBasic.Analyzers.Designer
                 GeneratedCodeAnalysisFlags.Analyze Or GeneratedCodeAnalysisFlags.ReportDiagnostics)
             context.RegisterCompilationStartAction(
                 Sub(startContext)
-                    Dim reportedFields As New ConcurrentDictionary(Of IFieldSymbol, Byte)(
-                        SymbolEqualityComparer.Default)
+                    Dim facts As New DesignerTypeFacts(startContext.Compilation)
 
-                    startContext.RegisterSyntaxNodeAction(AddressOf AnalyzeType, SyntaxKind.ClassBlock)
-                    startContext.RegisterOperationAction(
-                        Sub(operationContext) AnalyzeFieldReference(operationContext, reportedFields),
-                        OperationKind.FieldReference)
+                    startContext.RegisterSyntaxNodeAction(
+                        Sub(nodeContext) AnalyzeType(nodeContext, facts), SyntaxKind.ClassBlock)
                 End Sub)
         End Sub
 
-        Private Shared Sub AnalyzeType(context As SyntaxNodeAnalysisContext)
+        Private Shared Sub AnalyzeType(context As SyntaxNodeAnalysisContext, facts As DesignerTypeFacts)
             Dim typeBlock = DirectCast(context.Node, ClassBlockSyntax)
+            If Not DesignerTypeFacts.IsDesignerFile(typeBlock.SyntaxTree) Then
+                Return
+            End If
+
             Dim type = TryCast(
                 context.SemanticModel.GetDeclaredSymbol(
                     typeBlock.ClassStatement,
@@ -56,11 +56,11 @@ Namespace Global.System.Windows.Forms.VisualBasic.Analyzers.Designer
                 INamedTypeSymbol)
 
             If type Is Nothing _
-                OrElse Not DesignerTypeFacts.IsDesignerDeclaration(type, typeBlock.SyntaxTree) Then
+                OrElse Not facts.IsDesignerDeclaration(type, typeBlock.SyntaxTree) Then
                 Return
             End If
 
-            AnalyzeFieldPlacement(context, typeBlock)
+            AnalyzeFieldPlacement(context, typeBlock, facts)
 
             For Each member As StatementSyntax In typeBlock.Members
                 If TypeOf member Is FieldDeclarationSyntax _
@@ -68,8 +68,15 @@ Namespace Global.System.Windows.Forms.VisualBasic.Analyzers.Designer
                     Continue For
                 ElseIf TypeOf member Is MethodBlockSyntax Then
                     Dim method = DirectCast(member, MethodBlockSyntax)
-                    If Not IsAllowedMethod(method) Then
+                    Dim symbol = TryCast(context.SemanticModel.GetDeclaredSymbol(
+                        method.SubOrFunctionStatement, context.CancellationToken), IMethodSymbol)
+                    If symbol Is Nothing OrElse Not DesignerTypeFacts.IsAllowedMethod(symbol) Then
                         ReportUnexpectedMember(context, member)
+                    ElseIf DesignerTypeFacts.IsInitializeComponent(symbol) Then
+                        Dim operation As IOperation = context.SemanticModel.GetOperation(method, context.CancellationToken)
+                        If operation IsNot Nothing Then
+                            AnalyzeInitializers(context, symbol, operation, facts)
+                        End If
                     End If
                 ElseIf TypeOf member Is EventStatementSyntax _
                     OrElse TypeOf member Is EventBlockSyntax Then
@@ -82,41 +89,39 @@ Namespace Global.System.Windows.Forms.VisualBasic.Analyzers.Designer
             Next
         End Sub
 
-        Private Shared Sub AnalyzeFieldReference(
-            context As OperationAnalysisContext,
-            reportedFields As ConcurrentDictionary(Of IFieldSymbol, Byte))
-            Dim fieldReference = DirectCast(context.Operation, IFieldReferenceOperation)
-            Dim method = TryCast(context.ContainingSymbol, IMethodSymbol)
+        Private Shared Sub AnalyzeInitializers(
+            context As SyntaxNodeAnalysisContext,
+            method As IMethodSymbol,
+            body As IOperation,
+            facts As DesignerTypeFacts)
+            Dim reportedMembers As New HashSet(Of ISymbol)(SymbolEqualityComparer.Default)
+            For Each operation As IOperation In body.DescendantsAndSelf()
+                context.CancellationToken.ThrowIfCancellationRequested()
+                Dim assignment = TryCast(operation, ISimpleAssignmentOperation)
+                If assignment Is Nothing Then
+                    Continue For
+                End If
 
-            If method Is Nothing _
-                OrElse method.Name <> "InitializeComponent" _
-                OrElse method.IsStatic _
-                OrElse Not method.Parameters.IsEmpty _
-                OrElse Not method.ReturnsVoid _
-                OrElse Not DesignerTypeFacts.IsDesignerDeclaration(
-                    method.ContainingType,
-                    fieldReference.Syntax.SyntaxTree) _
-                OrElse fieldReference.Field.DeclaringSyntaxReferences.IsEmpty _
-                OrElse fieldReference.Field.DeclaringSyntaxReferences.Any(
-                    Function(declaration) DesignerTypeFacts.IsDesignerFile(declaration.SyntaxTree)) _
-                OrElse Not reportedFields.TryAdd(fieldReference.Field, 0) Then
-                Return
-            End If
+                Dim member As ISymbol = facts.GetInitializedComponent(assignment, method.ContainingType)
+                If member Is Nothing _
+                    OrElse member.DeclaringSyntaxReferences.Any(
+                        Function(declaration) DesignerTypeFacts.IsDesignerFile(declaration.SyntaxTree)) _
+                    OrElse Not reportedMembers.Add(member) Then
+                    Continue For
+                End If
 
-            Dim declarationLocation As Location = fieldReference.Field.Locations.FirstOrDefault(
-                Function(location) location.IsInSource)
-            If declarationLocation IsNot Nothing Then
-                context.ReportDiagnostic(
-                    Diagnostic.Create(
-                        SharedDiagnosticDescriptors.s_designerFieldPlacement,
-                        declarationLocation,
-                        fieldReference.Field.Name))
-            End If
+                Dim location As Location = member.Locations.FirstOrDefault(Function(item) item.IsInSource)
+                If location IsNot Nothing Then
+                    context.ReportDiagnostic(Diagnostic.Create(
+                        SharedDiagnosticDescriptors.s_designerFieldPlacement, location, member.Name))
+                End If
+            Next
         End Sub
 
         Private Shared Sub AnalyzeFieldPlacement(
             context As SyntaxNodeAnalysisContext,
-            typeBlock As ClassBlockSyntax)
+            typeBlock As ClassBlockSyntax,
+            facts As DesignerTypeFacts)
             Dim lastNonFieldIndex As Integer = -1
             For i As Integer = 0 To typeBlock.Members.Count - 1
                 If Not TypeOf typeBlock.Members(i) Is FieldDeclarationSyntax Then
@@ -132,11 +137,9 @@ Namespace Global.System.Windows.Forms.VisualBasic.Analyzers.Designer
 
                 For Each declarator As VariableDeclaratorSyntax In field.Declarators
                     For Each name As ModifiedIdentifierSyntax In declarator.Names
-                        Dim fieldSymbol = TryCast(
-                            context.SemanticModel.GetDeclaredSymbol(name, context.CancellationToken),
-                            IFieldSymbol)
+                        Dim member As ISymbol = context.SemanticModel.GetDeclaredSymbol(name, context.CancellationToken)
 
-                        If fieldSymbol IsNot Nothing AndAlso Not IsComponentsField(fieldSymbol) Then
+                        If member IsNot Nothing AndAlso Not facts.IsComponentsMember(member) Then
                             context.ReportDiagnostic(
                                 Diagnostic.Create(
                                     SharedDiagnosticDescriptors.s_designerFieldPlacement,
@@ -147,40 +150,6 @@ Namespace Global.System.Windows.Forms.VisualBasic.Analyzers.Designer
                 Next
             Next
         End Sub
-
-        Private Shared Function IsAllowedMethod(method As MethodBlockSyntax) As Boolean
-            Dim statement As MethodStatementSyntax = method.SubOrFunctionStatement
-            If statement.ImplementsClause IsNot Nothing Then
-                Return True
-            End If
-
-            Dim isInitializeComponent As Boolean =
-                statement.Identifier.ValueText = "InitializeComponent" _
-                AndAlso statement.ParameterList.Parameters.Count = 0 _
-                AndAlso statement.Kind() = SyntaxKind.SubStatement
-            Dim isDispose As Boolean =
-                statement.Identifier.ValueText = "Dispose" _
-                AndAlso statement.ParameterList.Parameters.Count = 1 _
-                AndAlso IsBooleanParameter(statement.ParameterList.Parameters(0)) _
-                AndAlso statement.Kind() = SyntaxKind.SubStatement
-
-            Return isInitializeComponent OrElse isDispose
-        End Function
-
-        Private Shared Function IsBooleanParameter(parameter As ParameterSyntax) As Boolean
-            Dim simpleAsClause = TryCast(parameter.AsClause, SimpleAsClauseSyntax)
-
-            Return simpleAsClause IsNot Nothing _
-                AndAlso TypeOf simpleAsClause.Type Is PredefinedTypeSyntax _
-                AndAlso DirectCast(simpleAsClause.Type, PredefinedTypeSyntax).
-                    Keyword.IsKind(SyntaxKind.BooleanKeyword)
-        End Function
-
-        Private Shared Function IsComponentsField(field As IFieldSymbol) As Boolean
-            Return field.Name = "components" _
-                AndAlso field.Type.Name = "IContainer" _
-                AndAlso field.Type.ContainingNamespace?.ToDisplayString() = "System.ComponentModel"
-        End Function
 
         Private Shared Sub ReportUnexpectedMember(
             context As SyntaxNodeAnalysisContext,

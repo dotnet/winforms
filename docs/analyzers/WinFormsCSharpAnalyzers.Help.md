@@ -62,13 +62,23 @@ Types should implement `ITypedDataObject` to support best practices when interac
 ## WinForms Designer guardrails
 
 These rules protect the generated partial declaration in `.Designer.cs` files. A file is analyzed only
-when it contains `InitializeComponent` for a partial type derived from `Control` and that type also has
-a declaration in a non-Designer file.
+when it contains an instance, non-generic, parameterless `void InitializeComponent` for a partial type
+derived from `System.Windows.Forms.Control` or `System.ComponentModel.Component`, and that same type
+also has a declaration in a non-Designer file. Framework symbols are resolved semantically: unrelated
+types named `Control` or `Component` do not qualify.
+
+The boundary is design-time round-tripping, not runtime equivalence. CodeDOM cannot express many
+modern language constructs, and the WinForms Designer interprets only a subset of the statements
+CodeDOM can represent. Keep initialization unrolled: explicit construction, assignments, supported
+calls, and named event hookups. Move runtime-only behavior to the user partial after
+`InitializeComponent`; do not hide designer initialization in a helper call.
 
 ### [WFO2002](https://aka.ms/winforms-warnings/wfo2002): Avoid unsupported code in `InitializeComponent`.
 
-Move loops, conditionals, switch constructs, local functions, `goto`, exception handling, and locking
-to the user code file.
+Move loops (including deconstructing `foreach`), conditionals, switch constructs, local functions,
+`goto`, exception handling, locking, `using`, and `await` out of generated initialization.
+Use a block-bodied `InitializeComponent`, not an expression-bodied method. These restrictions do not
+apply to the standard generated `Dispose` override.
 
 ### [WFO2003](https://aka.ms/winforms-warnings/wfo2003): Keep custom members out of Designer files.
 
@@ -78,9 +88,11 @@ implementations are allowed.
 
 ### [WFO2004](https://aka.ms/winforms-warnings/wfo2004): Keep generated fields at the end of the Designer file.
 
-Fields referenced by `InitializeComponent` belong at the end of the Designer partial declaration.
-The analyzer uses field-symbol identity, so similarly named locals, properties, and methods do not
-trigger this diagnostic.
+Keep fields at the end of the Designer partial, except the conventional `IContainer components`
+infrastructure. This ordering preserves the historical generated layout; it is not itself a CodeDOM
+expression restriction. Component fields constructed in `InitializeComponent` must belong to that
+partial. Merely reading a user field does not make it designer-owned, and inherited, static, or
+unrelated-type fields must not be moved into it.
 
 ### [WFO2005](https://aka.ms/winforms-warnings/wfo2005): Keep event and delegate declarations out of Designer files.
 
@@ -89,7 +101,7 @@ Move event and delegate declarations to the user code file.
 ### [WFO2006](https://aka.ms/winforms-warnings/wfo2006): Avoid collection expressions in Designer files.
 
 Use syntax supported by Designer serialization instead of C# collection expressions in generated
-Designer code.
+Designer code, for example `new Control[] { button1, button2 }` or unrolled `Add` calls.
 
 ### [WFO2007](https://aka.ms/winforms-warnings/wfo2007): Avoid `nameof` expressions in `InitializeComponent`.
 
@@ -101,7 +113,7 @@ Move the condition to the user code file and serialize one deterministic value.
 
 ### [WFO2009](https://aka.ms/winforms-warnings/wfo2009): Avoid null-coalescing expressions in `InitializeComponent`.
 
-Resolve the fallback outside generated Designer code.
+Resolve the fallback outside generated Designer code. This includes both `??` and `??=`.
 
 ### [WFO2010](https://aka.ms/winforms-warnings/wfo2010): Avoid null-conditional expressions in `InitializeComponent`.
 
@@ -130,11 +142,18 @@ agents to apply construct-specific guidance.
 
 ## `PropertyAllocatesNewInstanceAnalyzer`
 
-### [WFO2013](https://aka.ms/winforms-warnings/wfo2013): Avoid allocating a new object on every property access.
+### [WFO2013](https://aka.ms/winforms-warnings/wfo2013): Avoid constructing fresh reference instances in property getters.
 
-A property getter that directly returns `new` creates a fresh object every time the property is read.
-Cache the instance when the property represents stable state, or replace the property with a method
-when creating a fresh value is intentional.
+This is a general usage warning, not a Designer-only restriction. It identifies getter return paths
+that directly construct a reference instance, without claiming that every access takes that path.
+Value-type construction, cached and initializer-backed properties, indexers, generated code, and
+returns inside nested lambdas/local functions are excluded. User-defined conversions are not treated
+as transparent returns. The rule does not perform interprocedural factory analysis.
+
+Cache the instance only when stable identity is intended. For deliberate creation, consider a factory
+method if API compatibility permits, or document a narrow suppression. There is no automatic fix:
+caching can change ownership, disposal, and threading behavior. In particular, fresh instances from
+content-serialized properties can discard property-grid edits instead of preserving designer state.
 
 | Item      | Value          |
 |-----------|----------------|

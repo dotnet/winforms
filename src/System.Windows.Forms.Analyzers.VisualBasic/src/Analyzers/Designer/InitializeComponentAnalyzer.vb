@@ -28,7 +28,7 @@ Namespace Global.System.Windows.Forms.VisualBasic.Analyzers.Designer
                     SharedDiagnosticDescriptors.s_unsupportedNullCoalescingExpression,
                     SharedDiagnosticDescriptors.s_unsupportedNullConditionalExpression,
                     SharedDiagnosticDescriptors.s_unsupportedInterpolatedString,
-                    SharedDiagnosticDescriptors.s_unsupportedAnonymousFunction)
+                    SharedDiagnosticDescriptors.s_visualBasicUnsupportedAnonymousFunction)
             End Get
         End Property
 
@@ -37,32 +37,42 @@ Namespace Global.System.Windows.Forms.VisualBasic.Analyzers.Designer
             context.EnableConcurrentExecution()
             context.ConfigureGeneratedCodeAnalysis(
                 GeneratedCodeAnalysisFlags.Analyze Or GeneratedCodeAnalysisFlags.ReportDiagnostics)
-            context.RegisterSyntaxNodeAction(AddressOf AnalyzeInitializeComponent, SyntaxKind.SubBlock)
+            context.RegisterCompilationStartAction(
+                Sub(startContext)
+                    Dim facts As New DesignerTypeFacts(startContext.Compilation)
+                    startContext.RegisterSyntaxNodeAction(
+                        Sub(nodeContext) AnalyzeInitializeComponent(nodeContext, facts),
+                        SyntaxKind.SubBlock)
+                End Sub)
         End Sub
 
-        Private Shared Sub AnalyzeInitializeComponent(context As SyntaxNodeAnalysisContext)
+        Private Shared Sub AnalyzeInitializeComponent(context As SyntaxNodeAnalysisContext, facts As DesignerTypeFacts)
             Dim method = DirectCast(context.Node, MethodBlockSyntax)
             Dim statement As MethodStatementSyntax = method.SubOrFunctionStatement
+
+            If Not DesignerTypeFacts.IsDesignerFile(method.SyntaxTree) _
+                OrElse Not String.Equals(statement.Identifier.ValueText, "InitializeComponent", StringComparison.OrdinalIgnoreCase) Then
+                Return
+            End If
+
             Dim methodSymbol = TryCast(
                 context.SemanticModel.GetDeclaredSymbol(
                     statement,
                     context.CancellationToken),
                 IMethodSymbol)
 
-            If statement.Identifier.ValueText <> "InitializeComponent" _
-                OrElse statement.ParameterList.Parameters.Count <> 0 _
-                OrElse statement.Modifiers.Any(SyntaxKind.SharedKeyword) _
-                OrElse methodSymbol Is Nothing _
-                OrElse Not methodSymbol.ReturnsVoid _
-                OrElse methodSymbol.ContainingType Is Nothing _
-                OrElse Not DesignerTypeFacts.IsDesignerDeclaration(
+            If methodSymbol Is Nothing _
+                OrElse Not DesignerTypeFacts.IsInitializeComponent(methodSymbol) _
+                OrElse Not facts.IsDesignerDeclaration(
                     methodSymbol.ContainingType,
                     method.SyntaxTree) Then
                 Return
             End If
 
             For Each node As SyntaxNode In method.Statements.SelectMany(
-                Function(item) item.DescendantNodesAndSelf())
+                Function(item) item.DescendantNodesAndSelf(
+                    descendIntoChildren:=Function(child) Not TypeOf child Is LambdaExpressionSyntax))
+                context.CancellationToken.ThrowIfCancellationRequested()
                 Dim token As SyntaxToken
                 Dim descriptor As DiagnosticDescriptor = Nothing
                 Dim construct As String = Nothing
@@ -116,7 +126,7 @@ Namespace Global.System.Windows.Forms.VisualBasic.Analyzers.Designer
                     descriptor = SharedDiagnosticDescriptors.s_unsupportedInterpolatedString
                 ElseIf TypeOf node Is LambdaExpressionSyntax Then
                     token = node.GetFirstToken()
-                    descriptor = SharedDiagnosticDescriptors.s_unsupportedAnonymousFunction
+                    descriptor = SharedDiagnosticDescriptors.s_visualBasicUnsupportedAnonymousFunction
                 ElseIf TypeOf node Is TryBlockSyntax Then
                     token = node.GetFirstToken()
                     descriptor = SharedDiagnosticDescriptors.s_unsupportedInitializeComponentCode
@@ -125,6 +135,14 @@ Namespace Global.System.Windows.Forms.VisualBasic.Analyzers.Designer
                     token = node.GetFirstToken()
                     descriptor = SharedDiagnosticDescriptors.s_unsupportedInitializeComponentCode
                     construct = "SyncLock statement"
+                ElseIf TypeOf node Is UsingBlockSyntax Then
+                    token = node.GetFirstToken()
+                    descriptor = SharedDiagnosticDescriptors.s_unsupportedInitializeComponentCode
+                    construct = "Using statement"
+                ElseIf TypeOf node Is AwaitExpressionSyntax Then
+                    token = node.GetFirstToken()
+                    descriptor = SharedDiagnosticDescriptors.s_unsupportedInitializeComponentCode
+                    construct = "Await expression"
                 End If
 
                 If descriptor IsNot Nothing Then

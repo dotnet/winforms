@@ -17,3 +17,5 @@ WFO2010 | WinForms Designer | Warning | InitializeComponentAnalyzer (C#, Visual 
 WFO2011 | WinForms Designer | Warning | InitializeComponentAnalyzer (C#, Visual Basic), [Documentation](https://aka.ms/winforms-warnings/wfo2011)
 WFO2012 | WinForms Designer | Warning | InitializeComponentAnalyzer (C#, Visual Basic), [Documentation](https://aka.ms/winforms-warnings/wfo2012)
 WFO2013 | WinForms Usage | Warning | PropertyAllocatesNewInstanceAnalyzer (C#, Visual Basic), [Documentation](https://aka.ms/winforms-warnings/wfo2013)
+WFO2014 | WinForms Designer | Warning | DesignerEventAnalyzer (Visual Basic), [Documentation](https://aka.ms/winforms-warnings/wfo2014)
+WFO2015 | WinForms Designer | Warning | DesignerEventAnalyzer (Visual Basic), [Documentation](https://aka.ms/winforms-warnings/wfo2015)

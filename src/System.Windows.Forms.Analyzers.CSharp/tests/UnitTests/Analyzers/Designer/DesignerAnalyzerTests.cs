@@ -105,6 +105,10 @@ public class DesignerAnalyzerTests
     [InlineData("{|WFO2002:goto|} End; End:;")]
     [InlineData("{|WFO2002:try|} { } catch { }")]
     [InlineData("{|WFO2002:lock|} (this) { }")]
+    [InlineData("Tag {|WFO2009:??=|} new object();")]
+    [InlineData("{|WFO2002:foreach|} (var (x, y) in new (int, int)[] { (1, 2) }) { }")]
+    [InlineData("{|WFO2002:using|} (var component = new System.ComponentModel.Component()) { }")]
+    [InlineData("{|WFO2002:using|} var component = new System.ComponentModel.Component();")]
     public async Task InitializeComponent_UnsupportedConstruct_ReportsDiagnostic(string statement)
     {
         string designerSource =
@@ -482,4 +486,162 @@ public class DesignerAnalyzerTests
             ReferenceAssemblies.Net.Net90Windows,
             new AnalyzerTestSource("Form1.cs", MainSource),
             new AnalyzerTestSource("Form1.Designer.cs", designerSource));
+
+    [Fact]
+    public async Task InitializeComponent_ExpressionBody_ReportsDiagnostics()
+    {
+        AnalyzerTestCase testCase = CreateTestCase(
+            """
+            namespace Test;
+            partial class Form1
+            {
+                private void InitializeComponent() {|WFO2002:=>|} Tag = Tag {|WFO2009:??|} new object();
+            }
+            """);
+
+        await AnalyzerTestFactory.CreateCSharpAnalyzerTest<InitializeComponentAnalyzer>(testCase)
+            .RunAsync(TestContext.Current.CancellationToken);
+    }
+
+    [Fact]
+    public async Task InitializeComponent_NonDesignerOwnedFields_NoDiagnostic()
+    {
+        AnalyzerTestCase testCase = new(
+            ReferenceAssemblies.Net.Net90Windows,
+            new AnalyzerTestSource("Form1.cs",
+                """
+                using System.Windows.Forms;
+                namespace Test;
+                class BaseForm : Form { protected Button inherited; }
+                class External { public static Button Value; }
+                partial class Form1 : BaseForm
+                {
+                    private readonly int customValue = 42;
+                    private Button runtimeButton = new Button();
+                }
+                """),
+            new AnalyzerTestSource("Form1.Designer.cs",
+                """
+                using System.Windows.Forms;
+                namespace Test;
+                partial class Form1
+                {
+                    private void InitializeComponent()
+                    {
+                        inherited = new Button();
+                        External.Value = new Button();
+                        TabIndex = customValue;
+                        Controls.Add(runtimeButton);
+                    }
+                }
+                """));
+
+        await AnalyzerTestFactory.CreateCSharpAnalyzerTest<DesignerFileStructureAnalyzer>(testCase)
+            .RunAsync(TestContext.Current.CancellationToken);
+    }
+
+    [Theory]
+    [InlineData("System.ComponentModel.Component", true)]
+    [InlineData("ActualComponent", true)]
+    [InlineData("DerivedComponent", true)]
+    [InlineData("System.Windows.Forms.UserControl", true)]
+    [InlineData("Other.Component", false)]
+    [InlineData("Other.Control", false)]
+    public async Task DesignerType_UsesFrameworkIdentity(string baseType, bool expected)
+    {
+        string condition = expected ? "{|WFO2002:if|}" : "if";
+        AnalyzerTestCase testCase = new(
+            ReferenceAssemblies.Net.Net90Windows,
+            new AnalyzerTestSource("Form1.cs",
+                $$"""
+                using ActualComponent = System.ComponentModel.Component;
+                class DerivedComponent : ActualComponent { }
+                namespace Other { class Component { } class Control { } }
+                namespace Test { partial class Form1 : {{baseType}} { } }
+                """),
+            new AnalyzerTestSource("Form1.Designer.cs",
+                $$"""
+                namespace Test
+                {
+                    partial class Form1
+                    {
+                        private void InitializeComponent()
+                        {
+                            {{condition}} (true) { }
+                        }
+                    }
+                }
+                """));
+
+        await AnalyzerTestFactory.CreateCSharpAnalyzerTest<InitializeComponentAnalyzer>(testCase)
+            .RunAsync(TestContext.Current.CancellationToken);
+    }
+
+    [Fact]
+    public async Task InitializeComponent_MethodNamedNameof_NoDiagnostic()
+    {
+        AnalyzerTestCase testCase = CreateTestCase(
+            """
+            namespace Test;
+            partial class Form1
+            {
+                private void InitializeComponent() { Text = nameof(1); }
+            }
+            """);
+        testCase.Sources.Add(new AnalyzerTestSource("Methods.cs",
+            """
+            namespace Test;
+            partial class Form1 { private string nameof(int value) => value.ToString(); }
+            """));
+
+        await AnalyzerTestFactory.CreateCSharpAnalyzerTest<InitializeComponentAnalyzer>(testCase)
+            .RunAsync(TestContext.Current.CancellationToken);
+    }
+
+    [Fact]
+    public async Task InitializeComponent_AsyncAwait_ReportsDiagnostic()
+    {
+        AnalyzerTestCase testCase = CreateTestCase(
+            """
+            namespace Test;
+            partial class Form1
+            {
+                private async void InitializeComponent()
+                {
+                    {|WFO2002:await|} System.Threading.Tasks.Task.CompletedTask;
+                }
+            }
+            """);
+
+        await AnalyzerTestFactory.CreateCSharpAnalyzerTest<InitializeComponentAnalyzer>(testCase)
+            .RunAsync(TestContext.Current.CancellationToken);
+    }
+
+    [Fact]
+    public async Task DesignerFile_NestedCollectionExpression_ReportsOnce()
+    {
+        AnalyzerTestCase testCase = CreateTestCase(
+            """
+            namespace Test;
+            partial class Form1
+            {
+                private void InitializeComponent() { }
+                partial class {|WFO2003:Nested|}
+                {
+                    private void InitializeComponent() { int[] values = {|WFO2006:[|}1, 2]; }
+                }
+            }
+            """);
+        testCase.Sources.Add(new AnalyzerTestSource("Nested.cs",
+            """
+            namespace Test;
+            partial class Form1
+            {
+                partial class Nested : System.Windows.Forms.Form { }
+            }
+            """));
+
+        await AnalyzerTestFactory.CreateCSharpAnalyzerTest<DesignerFileStructureAnalyzer>(testCase)
+            .RunAsync(TestContext.Current.CancellationToken);
+    }
 }

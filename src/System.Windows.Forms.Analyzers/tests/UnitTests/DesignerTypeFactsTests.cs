@@ -84,8 +84,9 @@ public class DesignerTypeFactsTests
 
         INamedTypeSymbol type = compilation.GetTypeByMetadataName("Test.TestControl")!;
 
-        Assert.True(DesignerTypeFacts.IsDesignerType(type));
-        Assert.True(DesignerTypeFacts.IsDesignerDeclaration(type, compilation.SyntaxTrees.Last()));
+        DesignerTypeFacts facts = new(compilation);
+        Assert.True(facts.IsDesignerType(type));
+        Assert.True(facts.IsDesignerDeclaration(type, compilation.SyntaxTrees.Last()));
     }
 
     [Fact]
@@ -108,8 +109,9 @@ public class DesignerTypeFactsTests
 
         INamedTypeSymbol type = compilation.GetTypeByMetadataName("Test.TestControl")!;
 
-        Assert.True(DesignerTypeFacts.IsDesignerType(type));
-        Assert.True(DesignerTypeFacts.IsDesignerDeclaration(type, compilation.SyntaxTrees.Last()));
+        DesignerTypeFacts facts = new(compilation);
+        Assert.True(facts.IsDesignerType(type));
+        Assert.True(facts.IsDesignerDeclaration(type, compilation.SyntaxTrees.Last()));
     }
 
     [Theory]
@@ -146,6 +148,6 @@ public class DesignerTypeFactsTests
 
         INamedTypeSymbol type = compilation.GetTypeByMetadataName("TestControl")!;
 
-        Assert.False(DesignerTypeFacts.IsDesignerType(type));
+        Assert.False(new DesignerTypeFacts(compilation).IsDesignerType(type));
     }
 }
