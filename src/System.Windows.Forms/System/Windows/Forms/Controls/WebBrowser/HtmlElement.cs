@@ -513,7 +513,8 @@ public sealed unsafe partial class HtmlElement
 
     public void DetachEventHandler(string eventName, EventHandler eventHandler)
     {
-        ElementShim.DetachEventHandler(eventName, eventHandler);
+        // Cleanup after unload/disposal must not create a new native owner just to remove a handler.
+        ShimManager.GetElementShim(this)?.DetachEventHandler(eventName, eventHandler);
     }
 
     public void Focus()
@@ -681,103 +682,103 @@ public sealed unsafe partial class HtmlElement
     public event HtmlElementEventHandler? Click
     {
         add => ElementShim.AddHandler(s_eventClick, value);
-        remove => ElementShim.RemoveHandler(s_eventClick, value);
+        remove => ShimManager.GetElementShim(this)?.RemoveHandler(s_eventClick, value);
     }
 
     public event HtmlElementEventHandler? DoubleClick
     {
         add => ElementShim.AddHandler(s_eventDoubleClick, value);
-        remove => ElementShim.RemoveHandler(s_eventDoubleClick, value);
+        remove => ShimManager.GetElementShim(this)?.RemoveHandler(s_eventDoubleClick, value);
     }
 
     public event HtmlElementEventHandler? Drag
     {
         add => ElementShim.AddHandler(s_eventDrag, value);
-        remove => ElementShim.RemoveHandler(s_eventDrag, value);
+        remove => ShimManager.GetElementShim(this)?.RemoveHandler(s_eventDrag, value);
     }
 
     public event HtmlElementEventHandler? DragEnd
     {
         add => ElementShim.AddHandler(s_eventDragEnd, value);
-        remove => ElementShim.RemoveHandler(s_eventDragEnd, value);
+        remove => ShimManager.GetElementShim(this)?.RemoveHandler(s_eventDragEnd, value);
     }
 
     public event HtmlElementEventHandler? DragLeave
     {
         add => ElementShim.AddHandler(s_eventDragLeave, value);
-        remove => ElementShim.RemoveHandler(s_eventDragLeave, value);
+        remove => ShimManager.GetElementShim(this)?.RemoveHandler(s_eventDragLeave, value);
     }
 
     public event HtmlElementEventHandler? DragOver
     {
         add => ElementShim.AddHandler(s_eventDragOver, value);
-        remove => ElementShim.RemoveHandler(s_eventDragOver, value);
+        remove => ShimManager.GetElementShim(this)?.RemoveHandler(s_eventDragOver, value);
     }
 
     public event HtmlElementEventHandler? Focusing
     {
         add => ElementShim.AddHandler(s_eventFocusing, value);
-        remove => ElementShim.RemoveHandler(s_eventFocusing, value);
+        remove => ShimManager.GetElementShim(this)?.RemoveHandler(s_eventFocusing, value);
     }
 
     public event HtmlElementEventHandler? GotFocus
     {
         add => ElementShim.AddHandler(s_eventGotFocus, value);
-        remove => ElementShim.RemoveHandler(s_eventGotFocus, value);
+        remove => ShimManager.GetElementShim(this)?.RemoveHandler(s_eventGotFocus, value);
     }
 
     public event HtmlElementEventHandler? LosingFocus
     {
         add => ElementShim.AddHandler(s_eventLosingFocus, value);
-        remove => ElementShim.RemoveHandler(s_eventLosingFocus, value);
+        remove => ShimManager.GetElementShim(this)?.RemoveHandler(s_eventLosingFocus, value);
     }
 
     public event HtmlElementEventHandler? LostFocus
     {
         add => ElementShim.AddHandler(s_eventLostFocus, value);
-        remove => ElementShim.RemoveHandler(s_eventLostFocus, value);
+        remove => ShimManager.GetElementShim(this)?.RemoveHandler(s_eventLostFocus, value);
     }
 
     public event HtmlElementEventHandler? KeyDown
     {
         add => ElementShim.AddHandler(s_eventKeyDown, value);
-        remove => ElementShim.RemoveHandler(s_eventKeyDown, value);
+        remove => ShimManager.GetElementShim(this)?.RemoveHandler(s_eventKeyDown, value);
     }
 
     public event HtmlElementEventHandler? KeyPress
     {
         add => ElementShim.AddHandler(s_eventKeyPress, value);
-        remove => ElementShim.RemoveHandler(s_eventKeyPress, value);
+        remove => ShimManager.GetElementShim(this)?.RemoveHandler(s_eventKeyPress, value);
     }
 
     public event HtmlElementEventHandler? KeyUp
     {
         add => ElementShim.AddHandler(s_eventKeyUp, value);
-        remove => ElementShim.RemoveHandler(s_eventKeyUp, value);
+        remove => ShimManager.GetElementShim(this)?.RemoveHandler(s_eventKeyUp, value);
     }
 
     public event HtmlElementEventHandler? MouseMove
     {
         add => ElementShim.AddHandler(s_eventMouseMove, value);
-        remove => ElementShim.RemoveHandler(s_eventMouseMove, value);
+        remove => ShimManager.GetElementShim(this)?.RemoveHandler(s_eventMouseMove, value);
     }
 
     public event HtmlElementEventHandler? MouseDown
     {
         add => ElementShim.AddHandler(s_eventMouseDown, value);
-        remove => ElementShim.RemoveHandler(s_eventMouseDown, value);
+        remove => ShimManager.GetElementShim(this)?.RemoveHandler(s_eventMouseDown, value);
     }
 
     public event HtmlElementEventHandler? MouseOver
     {
         add => ElementShim.AddHandler(s_eventMouseOver, value);
-        remove => ElementShim.RemoveHandler(s_eventMouseOver, value);
+        remove => ShimManager.GetElementShim(this)?.RemoveHandler(s_eventMouseOver, value);
     }
 
     public event HtmlElementEventHandler? MouseUp
     {
         add => ElementShim.AddHandler(s_eventMouseUp, value);
-        remove => ElementShim.RemoveHandler(s_eventMouseUp, value);
+        remove => ShimManager.GetElementShim(this)?.RemoveHandler(s_eventMouseUp, value);
     }
 
     /// <summary>
@@ -786,7 +787,7 @@ public sealed unsafe partial class HtmlElement
     public event HtmlElementEventHandler? MouseEnter
     {
         add => ElementShim.AddHandler(s_eventMouseEnter, value);
-        remove => ElementShim.RemoveHandler(s_eventMouseEnter, value);
+        remove => ShimManager.GetElementShim(this)?.RemoveHandler(s_eventMouseEnter, value);
     }
 
     /// <summary>
@@ -795,7 +796,7 @@ public sealed unsafe partial class HtmlElement
     public event HtmlElementEventHandler? MouseLeave
     {
         add => ElementShim.AddHandler(s_eventMouseLeave, value);
-        remove => ElementShim.RemoveHandler(s_eventMouseLeave, value);
+        remove => ShimManager.GetElementShim(this)?.RemoveHandler(s_eventMouseLeave, value);
     }
 
     public static unsafe bool operator ==(HtmlElement? left, HtmlElement? right)
