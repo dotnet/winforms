@@ -18,8 +18,8 @@
         <note />
       </trans-unit>
       <trans-unit id="WFO2002Message">
-        <source>'{0}' is not supported in InitializeComponent; move the logic to the user code file</source>
-        <target state="new">'{0}' is not supported in InitializeComponent; move the logic to the user code file</target>
+        <source>'{0}' cannot round-trip through the WinForms Designer; keep InitializeComponent unrolled and move runtime-only logic to the user partial after InitializeComponent</source>
+        <target state="new">'{0}' cannot round-trip through the WinForms Designer; keep InitializeComponent unrolled and move runtime-only logic to the user partial after InitializeComponent</target>
         <note />
       </trans-unit>
       <trans-unit id="WFO2002Title">
@@ -28,8 +28,8 @@
         <note />
       </trans-unit>
       <trans-unit id="WFO2003Message">
-        <source>Member '{0}' should be declared in the user code file instead of the Designer file</source>
-        <target state="new">Member '{0}' should be declared in the user code file instead of the Designer file</target>
+        <source>Move custom member '{0}' to the user partial; the Designer partial is reserved for generated initialization and infrastructure</source>
+        <target state="new">Move custom member '{0}' to the user partial; the Designer partial is reserved for generated initialization and infrastructure</target>
         <note />
       </trans-unit>
       <trans-unit id="WFO2003Title">
@@ -38,8 +38,8 @@
         <note />
       </trans-unit>
       <trans-unit id="WFO2004Message">
-        <source>Field '{0}' used by InitializeComponent should be declared at the end of the Designer file</source>
-        <target state="new">Field '{0}' used by InitializeComponent should be declared at the end of the Designer file</target>
+        <source>Declare designer member '{0}' at the end of the Designer partial, after its methods, to preserve the generated layout</source>
+        <target state="new">Declare designer member '{0}' at the end of the Designer partial, after its methods, to preserve the generated layout</target>
         <note />
       </trans-unit>
       <trans-unit id="WFO2004Title">
@@ -48,8 +48,8 @@
         <note />
       </trans-unit>
       <trans-unit id="WFO2005Message">
-        <source>{0} '{1}' should be declared in the user code file instead of the Designer file</source>
-        <target state="new">{0} '{1}' should be declared in the user code file instead of the Designer file</target>
+        <source>Move {0} '{1}' to the user partial; keep its declaration out of the Designer-generated partial</source>
+        <target state="new">Move {0} '{1}' to the user partial; keep its declaration out of the Designer-generated partial</target>
         <note />
       </trans-unit>
       <trans-unit id="WFO2005Title">
@@ -58,8 +58,8 @@
         <note />
       </trans-unit>
       <trans-unit id="WFO2006Message">
-        <source>Collection expressions are not supported in Designer-generated code</source>
-        <target state="new">Collection expressions are not supported in Designer-generated code</target>
+        <source>Collection expressions cannot round-trip through the WinForms Designer; use an explicit typed array or unrolled collection Add calls</source>
+        <target state="new">Collection expressions cannot round-trip through the WinForms Designer; use an explicit typed array or unrolled collection Add calls</target>
         <note />
       </trans-unit>
       <trans-unit id="WFO2006Title">
@@ -68,8 +68,8 @@
         <note />
       </trans-unit>
       <trans-unit id="WFO2007Message">
-        <source>nameof expressions cannot be represented by the CodeDOM serialization used by InitializeComponent</source>
-        <target state="new">nameof expressions cannot be represented by the CodeDOM serialization used by InitializeComponent</target>
+        <source>CodeDOM cannot represent nameof in InitializeComponent; replace it with the serialized string literal</source>
+        <target state="new">CodeDOM cannot represent nameof in InitializeComponent; replace it with the serialized string literal</target>
         <note />
       </trans-unit>
       <trans-unit id="WFO2007Title">
@@ -78,8 +78,8 @@
         <note />
       </trans-unit>
       <trans-unit id="WFO2008Message">
-        <source>Conditional expressions cannot be represented by the CodeDOM serialization used by InitializeComponent</source>
-        <target state="new">Conditional expressions cannot be represented by the CodeDOM serialization used by InitializeComponent</target>
+        <source>CodeDOM cannot represent conditional expressions in InitializeComponent; serialize a fixed value and move runtime-only choices to the user partial</source>
+        <target state="new">CodeDOM cannot represent conditional expressions in InitializeComponent; serialize a fixed value and move runtime-only choices to the user partial</target>
         <note />
       </trans-unit>
       <trans-unit id="WFO2008Title">
@@ -88,8 +88,8 @@
         <note />
       </trans-unit>
       <trans-unit id="WFO2009Message">
-        <source>Null-coalescing expressions cannot be represented by the CodeDOM serialization used by InitializeComponent</source>
-        <target state="new">Null-coalescing expressions cannot be represented by the CodeDOM serialization used by InitializeComponent</target>
+        <source>CodeDOM cannot represent null-coalescing in InitializeComponent; use an explicit designer assignment and move runtime-only fallback logic to the user partial</source>
+        <target state="new">CodeDOM cannot represent null-coalescing in InitializeComponent; use an explicit designer assignment and move runtime-only fallback logic to the user partial</target>
         <note />
       </trans-unit>
       <trans-unit id="WFO2009Title">
@@ -98,8 +98,8 @@
         <note />
       </trans-unit>
       <trans-unit id="WFO2010Message">
-        <source>Null-conditional expressions cannot be represented by the CodeDOM serialization used by InitializeComponent</source>
-        <target state="new">Null-conditional expressions cannot be represented by the CodeDOM serialization used by InitializeComponent</target>
+        <source>CodeDOM cannot represent null-conditional access in InitializeComponent; keep designer assignments explicit and move null-dependent runtime logic to the user partial</source>
+        <target state="new">CodeDOM cannot represent null-conditional access in InitializeComponent; keep designer assignments explicit and move null-dependent runtime logic to the user partial</target>
         <note />
       </trans-unit>
       <trans-unit id="WFO2010Title">
@@ -108,8 +108,8 @@
         <note />
       </trans-unit>
       <trans-unit id="WFO2011Message">
-        <source>Interpolated strings cannot be represented by the CodeDOM serialization used by InitializeComponent</source>
-        <target state="new">Interpolated strings cannot be represented by the CodeDOM serialization used by InitializeComponent</target>
+        <source>CodeDOM cannot represent interpolated strings in InitializeComponent; use the serialized string literal or a supported resource lookup</source>
+        <target state="new">CodeDOM cannot represent interpolated strings in InitializeComponent; use the serialized string literal or a supported resource lookup</target>
         <note />
       </trans-unit>
       <trans-unit id="WFO2011Title">
@@ -118,8 +118,13 @@
         <note />
       </trans-unit>
       <trans-unit id="WFO2012Message">
-        <source>Lambdas and anonymous methods cannot be represented by the CodeDOM serialization used by InitializeComponent</source>
-        <target state="new">Lambdas and anonymous methods cannot be represented by the CodeDOM serialization used by InitializeComponent</target>
+        <source>CodeDOM cannot represent anonymous functions in InitializeComponent; use a named method in the user partial and a named-method event hookup</source>
+        <target state="new">CodeDOM cannot represent anonymous functions in InitializeComponent; use a named method in the user partial and a named-method event hookup</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="WFO2012Message_VB">
+        <source>CodeDOM cannot represent lambdas in InitializeComponent; use a named method in the user partial, with Handles for designer member events or AddressOf for local component events</source>
+        <target state="new">CodeDOM cannot represent lambdas in InitializeComponent; use a named method in the user partial, with Handles for designer member events or AddressOf for local component events</target>
         <note />
       </trans-unit>
       <trans-unit id="WFO2012Title">
@@ -128,13 +133,33 @@
         <note />
       </trans-unit>
       <trans-unit id="WFO2013Message">
-        <source>Property '{0}' creates a new object whenever it is accessed</source>
-        <target state="new">Property '{0}' creates a new object whenever it is accessed</target>
+        <source>Getter '{0}' directly returns a newly constructed reference instance on this path; cache it only if stable identity is intended, or use a factory method for intentional creation</source>
+        <target state="new">Getter '{0}' directly returns a newly constructed reference instance on this path; cache it only if stable identity is intended, or use a factory method for intentional creation</target>
         <note />
       </trans-unit>
       <trans-unit id="WFO2013Title">
-        <source>Avoid allocating a new object on every property access</source>
-        <target state="new">Avoid allocating a new object on every property access</target>
+        <source>Avoid constructing fresh reference instances in property getters</source>
+        <target state="new">Avoid constructing fresh reference instances in property getters</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="WFO2014Message">
+        <source>Designer component member '{0}' must support the VB event model; add WithEvents to its declaration and use Handles for its named event handlers in the user partial</source>
+        <target state="new">Designer component member '{0}' must support the VB event model; add WithEvents to its declaration and use Handles for its named event handlers in the user partial</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="WFO2014Title">
+        <source>Declare Designer component members WithEvents</source>
+        <target state="new">Declare Designer component members WithEvents</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="WFO2015Message">
+        <source>Use Handles {0} on a named handler in the user partial instead of AddHandler in InitializeComponent; remove the redundant hookup and keep component members WithEvents</source>
+        <target state="new">Use Handles {0} on a named handler in the user partial instead of AddHandler in InitializeComponent; remove the redundant hookup and keep component members WithEvents</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="WFO2015Title">
+        <source>Use Handles for Designer member events</source>
+        <target state="new">Use Handles for Designer member events</target>
         <note />
       </trans-unit>
     </body>

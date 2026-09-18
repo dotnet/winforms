@@ -8,6 +8,7 @@ using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Diagnostics;
+using Microsoft.CodeAnalysis.Operations;
 
 namespace System.Windows.Forms.CSharp.Analyzers.Designer;
 
@@ -36,37 +37,62 @@ public sealed class InitializeComponentAnalyzer : DiagnosticAnalyzer
         context.EnableConcurrentExecution();
         context.ConfigureGeneratedCodeAnalysis(
             GeneratedCodeAnalysisFlags.Analyze | GeneratedCodeAnalysisFlags.ReportDiagnostics);
-        context.RegisterSyntaxNodeAction(
-            AnalyzeInitializeComponent,
-            SyntaxKind.MethodDeclaration);
+        context.RegisterCompilationStartAction(startContext =>
+        {
+            DesignerTypeFacts facts = new(startContext.Compilation);
+            startContext.RegisterSyntaxNodeAction(
+                context => AnalyzeInitializeComponent(context, facts),
+                SyntaxKind.MethodDeclaration);
+        });
     }
 
-    private static void AnalyzeInitializeComponent(SyntaxNodeAnalysisContext context)
+    private static void AnalyzeInitializeComponent(SyntaxNodeAnalysisContext context, DesignerTypeFacts facts)
     {
         var method = (MethodDeclarationSyntax)context.Node;
-        if (method.Identifier.ValueText != "InitializeComponent"
+        if (!DesignerTypeFacts.IsDesignerFile(method.SyntaxTree)
+            || method.Identifier.ValueText != "InitializeComponent"
             || method.ParameterList.Parameters.Count != 0
             || method.ReturnType is not PredefinedTypeSyntax returnType
             || !returnType.Keyword.IsKind(SyntaxKind.VoidKeyword)
             || method.Modifiers.Any(SyntaxKind.StaticKeyword)
-            || method.Body is null
-            || method.Parent is not TypeDeclarationSyntax typeDeclaration
             || context.SemanticModel.GetDeclaredSymbol(
-                typeDeclaration,
-                context.CancellationToken) is not INamedTypeSymbol type
-            || !DesignerTypeFacts.IsDesignerDeclaration(type, method.SyntaxTree))
+                method,
+                context.CancellationToken) is not IMethodSymbol symbol
+            || !DesignerTypeFacts.IsInitializeComponent(symbol)
+            || !facts.IsDesignerDeclaration(symbol.ContainingType, method.SyntaxTree))
         {
             return;
         }
 
-        foreach (SyntaxNode node in method.Body.DescendantNodes())
+        if (method.ExpressionBody is { } expressionBody)
         {
+            context.ReportDiagnostic(Diagnostic.Create(
+                SharedDiagnosticDescriptors.s_unsupportedInitializeComponentCode,
+                expressionBody.ArrowToken.GetLocation(),
+                "expression-bodied method"));
+        }
+
+        SyntaxNode? body = (SyntaxNode?)method.Body ?? method.ExpressionBody;
+        if (body is null)
+        {
+            return;
+        }
+
+        foreach (SyntaxNode node in body.DescendantNodes(descendIntoChildren: node => node is not AnonymousFunctionExpressionSyntax and not LocalFunctionStatementSyntax))
+        {
+            context.CancellationToken.ThrowIfCancellationRequested();
             if (TryGetUnsupportedConstruct(
                 node,
                 out SyntaxToken token,
                 out DiagnosticDescriptor descriptor,
                 out string? construct))
             {
+                if (descriptor == SharedDiagnosticDescriptors.s_unsupportedNameOfExpression
+                    && context.SemanticModel.GetOperation(node, context.CancellationToken) is not INameOfOperation)
+                {
+                    continue;
+                }
+
                 Diagnostic diagnostic = construct is null
                     ? Diagnostic.Create(descriptor, token.GetLocation())
                     : Diagnostic.Create(descriptor, token.GetLocation(), construct);
@@ -87,6 +113,8 @@ public sealed class InitializeComponentAnalyzer : DiagnosticAnalyzer
             ForStatementSyntax statement
                 => (statement.ForKeyword, SharedDiagnosticDescriptors.s_unsupportedInitializeComponentCode, "for loop"),
             ForEachStatementSyntax statement
+                => (statement.ForEachKeyword, SharedDiagnosticDescriptors.s_unsupportedInitializeComponentCode, "foreach loop"),
+            ForEachVariableStatementSyntax statement
                 => (statement.ForEachKeyword, SharedDiagnosticDescriptors.s_unsupportedInitializeComponentCode, "foreach loop"),
             WhileStatementSyntax statement
                 => (statement.WhileKeyword, SharedDiagnosticDescriptors.s_unsupportedInitializeComponentCode, "while loop"),
@@ -110,6 +138,8 @@ public sealed class InitializeComponentAnalyzer : DiagnosticAnalyzer
                 => (expression.QuestionToken, SharedDiagnosticDescriptors.s_unsupportedConditionalExpression, null),
             BinaryExpressionSyntax expression when expression.IsKind(SyntaxKind.CoalesceExpression)
                 => (expression.OperatorToken, SharedDiagnosticDescriptors.s_unsupportedNullCoalescingExpression, null),
+            AssignmentExpressionSyntax expression when expression.IsKind(SyntaxKind.CoalesceAssignmentExpression)
+                => (expression.OperatorToken, SharedDiagnosticDescriptors.s_unsupportedNullCoalescingExpression, null),
             ConditionalAccessExpressionSyntax expression
                 => (expression.OperatorToken, SharedDiagnosticDescriptors.s_unsupportedNullConditionalExpression, null),
             InterpolatedStringExpressionSyntax expression
@@ -122,6 +152,12 @@ public sealed class InitializeComponentAnalyzer : DiagnosticAnalyzer
                 => (statement.TryKeyword, SharedDiagnosticDescriptors.s_unsupportedInitializeComponentCode, "try statement"),
             LockStatementSyntax statement
                 => (statement.LockKeyword, SharedDiagnosticDescriptors.s_unsupportedInitializeComponentCode, "lock statement"),
+            UsingStatementSyntax statement
+                => (statement.UsingKeyword, SharedDiagnosticDescriptors.s_unsupportedInitializeComponentCode, "using statement"),
+            LocalDeclarationStatementSyntax statement when !statement.UsingKeyword.IsKind(SyntaxKind.None)
+                => (statement.UsingKeyword, SharedDiagnosticDescriptors.s_unsupportedInitializeComponentCode, "using declaration"),
+            AwaitExpressionSyntax expression
+                => (expression.AwaitKeyword, SharedDiagnosticDescriptors.s_unsupportedInitializeComponentCode, "await expression"),
             _ => (default, null!, null)
         };
 

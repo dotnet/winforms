@@ -133,4 +133,31 @@ internal static partial class SharedDiagnosticDescriptors
             messageFormat: new LocalizableResourceString(nameof(SR.WFO2013Message), SR.ResourceManager, typeof(SR)),
             category: DiagnosticCategories.WinFormsUsage,
             defaultSeverity: DiagnosticSeverity.Warning);
+
+    // WFO2012 (Visual Basic)
+    internal static readonly DiagnosticDescriptor s_visualBasicUnsupportedAnonymousFunction =
+        DiagnosticDescriptorHelper.Create(
+            id: DiagnosticIDs.UnsupportedAnonymousFunction,
+            title: new LocalizableResourceString(nameof(SR.WFO2012Title), SR.ResourceManager, typeof(SR)),
+            messageFormat: new LocalizableResourceString(nameof(SR.WFO2012Message_VB), SR.ResourceManager, typeof(SR)),
+            category: DiagnosticCategories.WinFormsDesigner,
+            defaultSeverity: DiagnosticSeverity.Warning);
+
+    // WFO2014 (Visual Basic)
+    internal static readonly DiagnosticDescriptor s_designerMissingWithEvents =
+        DiagnosticDescriptorHelper.Create(
+            id: DiagnosticIDs.DesignerMissingWithEvents,
+            title: new LocalizableResourceString(nameof(SR.WFO2014Title), SR.ResourceManager, typeof(SR)),
+            messageFormat: new LocalizableResourceString(nameof(SR.WFO2014Message), SR.ResourceManager, typeof(SR)),
+            category: DiagnosticCategories.WinFormsDesigner,
+            defaultSeverity: DiagnosticSeverity.Warning);
+
+    // WFO2015 (Visual Basic)
+    internal static readonly DiagnosticDescriptor s_designerAddHandler =
+        DiagnosticDescriptorHelper.Create(
+            id: DiagnosticIDs.DesignerAddHandler,
+            title: new LocalizableResourceString(nameof(SR.WFO2015Title), SR.ResourceManager, typeof(SR)),
+            messageFormat: new LocalizableResourceString(nameof(SR.WFO2015Message), SR.ResourceManager, typeof(SR)),
+            category: DiagnosticCategories.WinFormsDesigner,
+            defaultSeverity: DiagnosticSeverity.Warning);
 }

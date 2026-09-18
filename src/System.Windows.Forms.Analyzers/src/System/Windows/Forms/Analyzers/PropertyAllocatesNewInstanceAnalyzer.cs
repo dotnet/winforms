@@ -11,7 +11,7 @@ using Microsoft.CodeAnalysis.Operations;
 namespace System.Windows.Forms.Analyzers;
 
 /// <summary>
-///  Reports properties whose getter directly creates a new object on every access.
+///  Reports getter return paths that directly construct a reference instance.
 /// </summary>
 [DiagnosticAnalyzer(LanguageNames.CSharp, LanguageNames.VisualBasic)]
 public sealed class PropertyAllocatesNewInstanceAnalyzer : DiagnosticAnalyzer
@@ -28,26 +28,33 @@ public sealed class PropertyAllocatesNewInstanceAnalyzer : DiagnosticAnalyzer
         context.RegisterCompilationStartAction(
             startContext =>
             {
-                ConcurrentDictionary<IPropertySymbol, byte> reportedProperties =
-                    new(SymbolEqualityComparer.Default);
-
+                ConcurrentDictionary<IPropertySymbol, byte> reportedProperties = new(SymbolEqualityComparer.Default);
                 startContext.RegisterOperationAction(
-                    operationContext => AnalyzeReturn(operationContext, reportedProperties),
-                    OperationKind.Return);
+                    context => AnalyzeCreation(context, reportedProperties),
+                    OperationKind.ObjectCreation);
             });
     }
 
-    private static void AnalyzeReturn(
+    private static void AnalyzeCreation(
         OperationAnalysisContext context,
         ConcurrentDictionary<IPropertySymbol, byte> reportedProperties)
     {
-        var returnOperation = (IReturnOperation)context.Operation;
         if (context.ContainingSymbol is not IMethodSymbol method
             || method.MethodKind != MethodKind.PropertyGet
-            || method.AssociatedSymbol is not IPropertySymbol property
-            || property.IsIndexer
-            || UnwrapConversion(returnOperation.ReturnedValue) is not IObjectCreationOperation
-            || !reportedProperties.TryAdd(property, 0))
+            || method.AssociatedSymbol is not IPropertySymbol { IsIndexer: false } property
+            || context.Operation.Type is not { IsReferenceType: true }
+            || DesignerTypeFacts.IsInNestedFunction(context.Operation))
+        {
+            return;
+        }
+
+        IOperation value = context.Operation;
+        while (value.Parent is IConversionOperation { OperatorMethod: null } or IParenthesizedOperation)
+        {
+            value = value.Parent;
+        }
+
+        if (value.Parent is not IReturnOperation || !reportedProperties.TryAdd(property, 0))
         {
             return;
         }
@@ -55,21 +62,10 @@ public sealed class PropertyAllocatesNewInstanceAnalyzer : DiagnosticAnalyzer
         Location? location = property.Locations.FirstOrDefault(item => item.IsInSource);
         if (location is not null)
         {
-            context.ReportDiagnostic(
-                Diagnostic.Create(
-                    SharedDiagnosticDescriptors.s_propertyAllocatesNewInstance,
-                    location,
-                    property.Name));
+            context.ReportDiagnostic(Diagnostic.Create(
+                SharedDiagnosticDescriptors.s_propertyAllocatesNewInstance,
+                location,
+                property.Name));
         }
-    }
-
-    private static IOperation? UnwrapConversion(IOperation? operation)
-    {
-        while (operation is IConversionOperation conversion)
-        {
-            operation = conversion.Operand;
-        }
-
-        return operation;
     }
 }

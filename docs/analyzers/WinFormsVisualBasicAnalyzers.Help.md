@@ -62,13 +62,22 @@ Types should implement `ITypedDataObject` to support best practices when interac
 ## WinForms Designer guardrails
 
 These rules protect the generated partial declaration in `.Designer.vb` files. A file is analyzed only
-when it contains `InitializeComponent` for a partial type derived from `Control` and that type also has
-a declaration in a non-Designer file.
+when it contains an instance, non-generic, parameterless `Sub InitializeComponent` for a partial type
+derived from `System.Windows.Forms.Control` or `System.ComponentModel.Component`, and that same type
+also has a declaration in a non-Designer file. Framework symbols are resolved semantically: unrelated
+types named `Control` or `Component` do not qualify. Identifier matching respects VB casing rules and
+optional parameter-list parentheses.
+
+The boundary is design-time round-tripping, not runtime equivalence. CodeDOM cannot express many
+modern constructs, and the WinForms Designer interprets only a subset of CodeDOM statements.
+Keep initialization unrolled and move runtime-only behavior to the user partial after
+`InitializeComponent`; do not hide designer initialization behind helper calls.
 
 ### [WFO2002](https://aka.ms/winforms-warnings/wfo2002): Avoid unsupported code in `InitializeComponent`.
 
-Move `For`, `For Each`, `While`, `Do`, `If`, `Select`, `GoTo`, `Try`, and `SyncLock` constructs to the
-user code file.
+Move `For`, `For Each`, `While`, `Do`, `If`, `Select`, `GoTo`, `Try`, `SyncLock`, `Using`, and `Await`
+out of generated initialization. The standard generated `Dispose` override is intentionally exempt:
+its `Try`/`If`/`Finally` structure is valid infrastructure.
 
 ### [WFO2003](https://aka.ms/winforms-warnings/wfo2003): Keep custom members out of Designer files.
 
@@ -78,9 +87,14 @@ method implementations are allowed.
 
 ### [WFO2004](https://aka.ms/winforms-warnings/wfo2004): Keep generated fields at the end of the Designer file.
 
-Fields referenced by `InitializeComponent` belong at the end of the Designer partial declaration.
-The analyzer uses field-symbol identity, so similarly named locals, properties, and methods do not
-trigger this diagnostic.
+Keep fields and `WithEvents` declarations at the end of the Designer partial, except the conventional
+`IContainer components` infrastructure. This preserves the historical generated layout rather than
+enforcing a modern application-code style. Component members constructed in `InitializeComponent`
+belong in that partial; merely reading a user field does not make it designer-owned. Inherited and
+unrelated-type members must not be moved.
+
+VB `WithEvents` declarations bind as property symbols. They are explicitly handled without treating
+ordinary properties as generated fields.
 
 ### [WFO2005](https://aka.ms/winforms-warnings/wfo2005): Keep event and delegate declarations out of Designer files.
 
@@ -110,10 +124,35 @@ Serialize the resulting string value instead of an interpolated expression.
 
 ### [WFO2012](https://aka.ms/winforms-warnings/wfo2012): Avoid anonymous functions in `InitializeComponent`.
 
-Use a named event handler in the user code file instead of a lambda.
+Use a named event handler in the user partial instead of a lambda. Use `Handles` for designer member
+events and `AddressOf` for supported local-component event hookups.
 
 WFO2007–WFO2012 identify constructs that CodeDOM cannot represent. Their separate IDs allow tools and
 agents to apply construct-specific guidance.
+
+### [WFO2014](https://aka.ms/winforms-warnings/wfo2014): Declare Designer component members `WithEvents`.
+
+A component member constructed by `InitializeComponent` must use the VB Designer's event model.
+For example, keep `Friend WithEvents Button1 As Button` at the end of the Designer partial and put
+`Private Sub Button1_Click(...) Handles Button1.Click` in the user partial. The rule does not apply to
+the components container, scalar/helper fields, or local variables.
+
+### [WFO2015](https://aka.ms/winforms-warnings/wfo2015): Use `Handles` for Designer member events.
+
+Replace `AddHandler Button1.Click, AddressOf Button1_Click` in `InitializeComponent` with
+`Handles Button1.Click` on the named handler in the user partial, without retaining both hookups.
+Root events use `Handles Me.EventName` or `Handles MyBase.EventName`; inherited `WithEvents` members
+also support `Handles` without redeclaring them.
+
+This is not a blanket ban on `AddHandler`. The designer's field-generation setting is named
+`GenerateMember`: when it is `False`, components can be locals, and supported
+`AddHandler local.Click, AddressOf Handler` wiring remains valid. Arbitrary properties, inherited
+plain fields, unrelated receivers, and runtime event wiring outside `InitializeComponent` are not
+rewritten into the member model. CodeDOM itself represents event attachment; the restriction protects
+VB Designer ownership and event round-tripping.
+
+WFO2014 and WFO2015 are VB-only. No automatic fix is offered because changing declarations and
+subscriptions requires preserving captures, accessibility, and existing `Handles` clauses.
 
 | Item      | Value             |
 |-----------|-------------------|
@@ -127,11 +166,17 @@ agents to apply construct-specific guidance.
 
 ## `PropertyAllocatesNewInstanceAnalyzer`
 
-### [WFO2013](https://aka.ms/winforms-warnings/wfo2013): Avoid allocating a new object on every property access.
+### [WFO2013](https://aka.ms/winforms-warnings/wfo2013): Avoid constructing fresh reference instances in property getters.
 
-A property getter that directly returns `New` creates a fresh object every time the property is read.
-Cache the instance when the property represents stable state, or replace the property with a method
-when creating a fresh value is intentional.
+This remains a general usage warning, not a Designer-only restriction. It identifies getter return
+paths that directly construct reference instances, not guaranteed allocation on every access.
+Value types, cached and initializer-backed properties, indexers, generated code, nested lambda
+returns, and user-defined conversions are excluded.
+
+Cache only when stable identity is intended. Otherwise consider a factory method when API
+compatibility permits, or document a narrow suppression. No automatic fix changes ownership,
+disposal, or threading semantics. Content-serialized properties returning fresh instances are a
+particular design-time hazard because property-grid edits can be applied to discarded instances.
 
 | Item      | Value          |
 |-----------|----------------|

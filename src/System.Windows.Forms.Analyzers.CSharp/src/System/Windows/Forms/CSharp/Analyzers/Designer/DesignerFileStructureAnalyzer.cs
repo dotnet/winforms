@@ -1,7 +1,6 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
-using System.Collections.Concurrent;
 using System.Collections.Immutable;
 using System.Windows.Forms.Analyzers;
 using System.Windows.Forms.Analyzers.Diagnostics;
@@ -38,30 +37,27 @@ public sealed class DesignerFileStructureAnalyzer : DiagnosticAnalyzer
         context.RegisterCompilationStartAction(
             startContext =>
             {
-                ConcurrentDictionary<IFieldSymbol, byte> reportedFields =
-                    new(SymbolEqualityComparer.Default);
+                DesignerTypeFacts facts = new(startContext.Compilation);
 
                 startContext.RegisterSyntaxNodeAction(
-                    AnalyzeType,
+                    context => AnalyzeType(context, facts),
                     SyntaxKind.ClassDeclaration);
-                startContext.RegisterOperationAction(
-                    operationContext => AnalyzeFieldReference(operationContext, reportedFields),
-                    OperationKind.FieldReference);
             });
     }
 
-    private static void AnalyzeType(SyntaxNodeAnalysisContext context)
+    private static void AnalyzeType(SyntaxNodeAnalysisContext context, DesignerTypeFacts facts)
     {
         var typeDeclaration = (ClassDeclarationSyntax)context.Node;
-        if (context.SemanticModel.GetDeclaredSymbol(
+        if (!DesignerTypeFacts.IsDesignerFile(typeDeclaration.SyntaxTree)
+            || context.SemanticModel.GetDeclaredSymbol(
             typeDeclaration,
             context.CancellationToken) is not INamedTypeSymbol type
-            || !DesignerTypeFacts.IsDesignerDeclaration(type, typeDeclaration.SyntaxTree))
+            || !facts.IsDesignerDeclaration(type, typeDeclaration.SyntaxTree))
         {
             return;
         }
 
-        AnalyzeFieldPlacement(context, typeDeclaration);
+        AnalyzeFieldPlacement(context, typeDeclaration, facts);
         AnalyzeCollectionExpressions(context, typeDeclaration);
 
         foreach (MemberDeclarationSyntax member in typeDeclaration.Members)
@@ -72,10 +68,15 @@ public sealed class DesignerFileStructureAnalyzer : DiagnosticAnalyzer
                 case ConstructorDeclarationSyntax:
                     break;
 
-                case MethodDeclarationSyntax method when IsAllowedMethod(method):
-                    break;
+                case MethodDeclarationSyntax method when context.SemanticModel.GetDeclaredSymbol(
+                    method, context.CancellationToken) is IMethodSymbol symbol
+                    && DesignerTypeFacts.IsAllowedMethod(symbol):
+                    if (DesignerTypeFacts.IsInitializeComponent(symbol)
+                        && context.SemanticModel.GetOperation(method, context.CancellationToken) is IOperation operation)
+                    {
+                        AnalyzeInitializers(context, symbol, operation, facts);
+                    }
 
-                case MethodDeclarationSyntax method when method.ExplicitInterfaceSpecifier is not null:
                     break;
 
                 case EventFieldDeclarationSyntax eventField:
@@ -105,36 +106,31 @@ public sealed class DesignerFileStructureAnalyzer : DiagnosticAnalyzer
         }
     }
 
-    private static void AnalyzeFieldReference(
-        OperationAnalysisContext context,
-        ConcurrentDictionary<IFieldSymbol, byte> reportedFields)
+    private static void AnalyzeInitializers(
+        SyntaxNodeAnalysisContext context,
+        IMethodSymbol method,
+        IOperation body,
+        DesignerTypeFacts facts)
     {
-        var fieldReference = (IFieldReferenceOperation)context.Operation;
-        if (context.ContainingSymbol is not IMethodSymbol method
-            || method.Name != "InitializeComponent"
-            || method.IsStatic
-            || !method.Parameters.IsEmpty
-            || !method.ReturnsVoid
-            || !DesignerTypeFacts.IsDesignerDeclaration(
-                method.ContainingType,
-                fieldReference.Syntax.SyntaxTree)
-            || fieldReference.Field.DeclaringSyntaxReferences.IsEmpty
-            || fieldReference.Field.DeclaringSyntaxReferences.Any(
-                declaration => DesignerTypeFacts.IsDesignerFile(declaration.SyntaxTree))
-            || !reportedFields.TryAdd(fieldReference.Field, 0))
+        HashSet<ISymbol> reportedMembers = new(SymbolEqualityComparer.Default);
+        foreach (IOperation operation in body.DescendantsAndSelf())
         {
-            return;
-        }
+            context.CancellationToken.ThrowIfCancellationRequested();
+            if (operation is not ISimpleAssignmentOperation assignment
+                || facts.GetInitializedComponent(assignment, method.ContainingType) is not ISymbol member
+                || member.DeclaringSyntaxReferences.Any(
+                    declaration => DesignerTypeFacts.IsDesignerFile(declaration.SyntaxTree))
+                || !reportedMembers.Add(member))
+            {
+                continue;
+            }
 
-        Location? declarationLocation = fieldReference.Field.Locations.FirstOrDefault(
-            location => location.IsInSource);
-        if (declarationLocation is not null)
-        {
-            context.ReportDiagnostic(
-                Diagnostic.Create(
-                    SharedDiagnosticDescriptors.s_designerFieldPlacement,
-                    declarationLocation,
-                    fieldReference.Field.Name));
+            Location? location = member.Locations.FirstOrDefault(location => location.IsInSource);
+            if (location is not null)
+            {
+                context.ReportDiagnostic(Diagnostic.Create(
+                    SharedDiagnosticDescriptors.s_designerFieldPlacement, location, member.Name));
+            }
         }
     }
 
@@ -143,7 +139,7 @@ public sealed class DesignerFileStructureAnalyzer : DiagnosticAnalyzer
         ClassDeclarationSyntax typeDeclaration)
     {
         foreach (CollectionExpressionSyntax expression in typeDeclaration
-            .DescendantNodes()
+            .DescendantNodes(node => node == typeDeclaration || node is not TypeDeclarationSyntax)
             .OfType<CollectionExpressionSyntax>())
         {
             context.ReportDiagnostic(
@@ -155,7 +151,8 @@ public sealed class DesignerFileStructureAnalyzer : DiagnosticAnalyzer
 
     private static void AnalyzeFieldPlacement(
         SyntaxNodeAnalysisContext context,
-        ClassDeclarationSyntax typeDeclaration)
+        ClassDeclarationSyntax typeDeclaration,
+        DesignerTypeFacts facts)
     {
         int lastNonFieldIndex = -1;
         for (int i = 0; i < typeDeclaration.Members.Count; i++)
@@ -168,14 +165,19 @@ public sealed class DesignerFileStructureAnalyzer : DiagnosticAnalyzer
 
         for (int i = 0; i < lastNonFieldIndex; i++)
         {
-            if (typeDeclaration.Members[i] is not FieldDeclarationSyntax field
-                || IsComponentsField(field, context.SemanticModel, context.CancellationToken))
+            if (typeDeclaration.Members[i] is not FieldDeclarationSyntax field)
             {
                 continue;
             }
 
             foreach (VariableDeclaratorSyntax variable in field.Declaration.Variables)
             {
+                if (context.SemanticModel.GetDeclaredSymbol(variable, context.CancellationToken) is not IFieldSymbol symbol
+                    || facts.IsComponentsMember(symbol))
+                {
+                    continue;
+                }
+
                 context.ReportDiagnostic(
                     Diagnostic.Create(
                         SharedDiagnosticDescriptors.s_designerFieldPlacement,
@@ -183,48 +185,6 @@ public sealed class DesignerFileStructureAnalyzer : DiagnosticAnalyzer
                         variable.Identifier.ValueText));
             }
         }
-    }
-
-    private static bool IsAllowedMethod(MethodDeclarationSyntax method)
-    {
-        if (method.ReturnType is not PredefinedTypeSyntax returnType
-            || !returnType.Keyword.IsKind(SyntaxKind.VoidKeyword))
-        {
-            return false;
-        }
-
-        bool isInitializeComponent = method.Identifier.ValueText == "InitializeComponent"
-            && method.ParameterList.Parameters.Count == 0;
-        bool isDispose = method.Identifier.ValueText == "Dispose"
-            && method.ParameterList.Parameters.Count == 1
-            && method.ParameterList.Parameters[0].Type is PredefinedTypeSyntax parameterType
-            && parameterType.Keyword.IsKind(SyntaxKind.BoolKeyword);
-
-        return isInitializeComponent || isDispose;
-    }
-
-    private static bool IsComponentsField(
-        FieldDeclarationSyntax field,
-        SemanticModel semanticModel,
-        CancellationToken cancellationToken)
-    {
-        if (field.Declaration.Variables.Count != 1)
-        {
-            return false;
-        }
-
-        VariableDeclaratorSyntax variable = field.Declaration.Variables[0];
-        if (variable.Identifier.ValueText != "components")
-        {
-            return false;
-        }
-
-        return semanticModel.GetDeclaredSymbol(variable, cancellationToken) is IFieldSymbol
-        {
-            Type.Name: "IContainer",
-            Type.ContainingNamespace.Name: "ComponentModel",
-            Type.ContainingNamespace.ContainingNamespace.Name: "System"
-        };
     }
 
     private static string GetMemberName(MemberDeclarationSyntax member)

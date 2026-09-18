@@ -30,6 +30,8 @@ internal static class DiagnosticIDs
     public const string UnsupportedInterpolatedString = "WFO2011";
     public const string UnsupportedAnonymousFunction = "WFO2012";
     public const string PropertyAllocatesNewInstance = "WFO2013";
+    public const string DesignerMissingWithEvents = "WFO2014";
+    public const string DesignerAddHandler = "WFO2015";
 
     // Experimental, number group 5000+
     public const string ExperimentalDarkMode = "WFO5001";

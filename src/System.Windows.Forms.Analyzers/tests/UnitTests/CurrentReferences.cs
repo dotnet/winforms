@@ -37,14 +37,14 @@ public static class CurrentReferences
     {
         if (!GetRootFolderPath(out string? rootFolderPath))
         {
-            return;
+            throw new InvalidOperationException("Could not locate the repository global.json from the analyzer test assembly.");
         }
 
         RepoRootPath = rootFolderPath;
 
         if (!TryGetNetCoreVersion(rootFolderPath, out string? tfm, out string? netCoreRefsVersion))
         {
-            return;
+            throw new InvalidOperationException("Could not resolve the configured SDK's runtime reference assemblies.");
         }
 
         Tfm = tfm;
@@ -60,10 +60,9 @@ public static class CurrentReferences
 
         // Specify absolute path to the reference assemblies because this version is not necessarily available in the nuget packages cache.
         string netCoreAppRefPath = Path.Join(RepoRootPath, ".dotnet", "packs", RefPackageName);
-        if (!Directory.Exists(Path.Join(netCoreAppRefPath, netCoreRefsVersion)))
-        {
-            netCoreRefsVersion = GetAvailableVersion(netCoreAppRefPath, $"{netCoreRefsVersion.Split('.')[0]}.");
-        }
+        netCoreRefsVersion = ResolveReferencePackVersion(
+            netCoreRefsVersion,
+            Directory.EnumerateDirectories(netCoreAppRefPath).Select(path => Path.GetFileName(path)));
 
         NetCoreRefsVersion = netCoreRefsVersion;
 
@@ -75,13 +74,28 @@ public static class CurrentReferences
                .WithNuGetConfigFilePath(Path.Join(RepoRootPath, "NuGet.Config"));
     }
 
-    private static string GetAvailableVersion(string netCoreAppRefPath, string major)
+    internal static string ResolveReferencePackVersion(string runtimeVersion, IEnumerable<string> availableVersions)
     {
-        string[] versions = Directory.GetDirectories(netCoreAppRefPath);
-        string? availableVersion = versions.FirstOrDefault(v =>
-            Path.GetFileName(v).StartsWith(major, StringComparison.InvariantCultureIgnoreCase));
+        if (!availableVersions.Contains(runtimeVersion, StringComparer.OrdinalIgnoreCase))
+        {
+            throw new InvalidOperationException(
+                $"The configured SDK requires {RefPackageName} {runtimeVersion}. Install that SDK's matching reference pack.");
+        }
 
-        return Path.GetFileName(availableVersion)!;
+        return runtimeVersion;
+    }
+
+    internal static (string Tfm, string Version) ParseRuntimeConfiguration(string configuration)
+    {
+        JsonNode? options = JsonNode.Parse(configuration)?["runtimeOptions"];
+        string? tfm = (string?)options?["tfm"];
+        string? version = (string?)options?["framework"]?["version"];
+        if (string.IsNullOrEmpty(tfm) || string.IsNullOrEmpty(version))
+        {
+            throw new InvalidOperationException("The configured SDK's dotnet.runtimeconfig.json must specify its TFM and runtime version.");
+        }
+
+        return (tfm, version);
     }
 
     private static bool TryGetNetCoreVersion(
@@ -97,13 +111,8 @@ public static class CurrentReferences
             return false;
         }
 
-        if (!Version.TryParse(version.Split('-')[0], out Version? sdkVersion))
-        {
-            return false;
-        }
-
-        tfm = $"net{sdkVersion.Major}.0";
-        netCoreRefsVersion = version;
+        string runtimeConfigPath = Path.Join(rootFolderPath, ".dotnet", "sdk", version, "dotnet.runtimeconfig.json");
+        (tfm, netCoreRefsVersion) = ParseRuntimeConfiguration(File.ReadAllText(runtimeConfigPath));
 
         return true;
     }

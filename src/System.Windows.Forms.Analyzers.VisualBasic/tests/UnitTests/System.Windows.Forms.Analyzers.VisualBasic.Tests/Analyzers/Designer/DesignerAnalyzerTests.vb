@@ -49,7 +49,7 @@ Namespace Test
             Controls.Add(Button1)
         End Sub
 
-        Private Button1 As Button
+        Private WithEvents Button1 As Button
     End Class
 End Namespace
 "
@@ -150,7 +150,7 @@ Imports System.Windows.Forms
 Namespace Test
 
     Partial Class Form1
-        Private Button1 As Button
+        Private WithEvents Button1 As Button
 
         Private Sub InitializeComponent()
             Button1 = New Button()
@@ -166,7 +166,7 @@ End Namespace
         Dim testCase As AnalyzerTestCase = CreateTestCase(designerSource)
         testCase.ExpectedDiagnostics.Add(
             New DiagnosticResult("WFO2004", Microsoft.CodeAnalysis.DiagnosticSeverity.Warning).
-                WithSpan("/0/Form1.Designer.vb", 8, 17, 8, 24).
+                WithSpan("/0/Form1.Designer.vb", 8, 28, 8, 35).
                 WithArguments("Button1"))
 
         Await AnalyzerTestFactory.CreateVisualBasicAnalyzerTest(
@@ -184,7 +184,7 @@ Namespace Test
     Partial Class Form1
         Inherits Form
 
-        Private {|WFO2004:Button1|} As Button
+        Private WithEvents {|WFO2004:Button1|} As Button
 
         Public Sub New()
             InitializeComponent()
@@ -310,5 +310,94 @@ dotnet_diagnostic.WFO2002.severity = none
             ReferenceAssemblies.Net.Net90Windows,
             New AnalyzerTestSource("Form1.vb", MainSource),
             New AnalyzerTestSource("Form1.Designer.vb", designerSource))
+    End Function
+
+    <Theory>
+    <InlineData("InitializeComponent")>
+    <InlineData("initializecomponent")>
+    <InlineData("INITIALIZECOMPONENT()")>
+    Public Async Function InitializeComponent_OptionalSyntax_ReportsControlFlow(declaration As String) As Task
+        Dim testCase As AnalyzerTestCase = CreateTestCase(
+            $"
+Namespace Test
+    Partial Class Form1
+        Private Sub {declaration}
+            {{|WFO2002:If|}} True Then
+            End If
+        End Sub
+    End Class
+End Namespace
+")
+
+        Await AnalyzerTestFactory.CreateVisualBasicAnalyzerTest(
+            Of InitializeComponentAnalyzer)(testCase).
+            RunAsync(TestContext.Current.CancellationToken)
+
+        Dim structureCase As AnalyzerTestCase = CreateTestCase(
+            testCase.Sources(1).Source.Replace("{|WFO2002:If|}", "If"))
+        Await AnalyzerTestFactory.CreateVisualBasicAnalyzerTest(
+            Of DesignerFileStructureAnalyzer)(structureCase).
+            RunAsync(TestContext.Current.CancellationToken)
+    End Function
+
+    <Theory>
+    <InlineData("System.ComponentModel.Component", True)>
+    <InlineData("ActualComponent", True)>
+    <InlineData("DerivedComponent", True)>
+    <InlineData("Other.Component", False)>
+    <InlineData("Other.Control", False)>
+    Public Async Function DesignerType_UsesFrameworkIdentity(baseType As String, expected As Boolean) As Task
+        Dim condition As String = If(expected, "{|WFO2002:If|}", "If")
+        Dim testCase As New AnalyzerTestCase(
+            ReferenceAssemblies.Net.Net90Windows,
+            New AnalyzerTestSource("Form1.vb", $"
+Imports ActualComponent = System.ComponentModel.Component
+Class DerivedComponent
+    Inherits ActualComponent
+End Class
+Namespace Other
+    Class Component
+    End Class
+    Class Control
+    End Class
+End Namespace
+Partial Class Form1
+    Inherits {baseType}
+End Class
+"),
+            New AnalyzerTestSource("Form1.Designer.vb", $"
+Partial Class Form1
+    Private Sub InitializeComponent()
+        {condition} True Then
+        End If
+    End Sub
+End Class
+"))
+        Dim test = AnalyzerTestFactory.CreateVisualBasicAnalyzerTest(Of InitializeComponentAnalyzer)(testCase)
+        test.SolutionTransforms.Add(
+            Function(solution, projectId) solution.WithProjectCompilationOptions(
+                projectId,
+                DirectCast(solution.GetProject(projectId).CompilationOptions,
+                    Microsoft.CodeAnalysis.VisualBasic.VisualBasicCompilationOptions).WithRootNamespace("TestRoot")))
+
+        Await test.RunAsync(TestContext.Current.CancellationToken)
+    End Function
+
+    <Fact>
+    Public Async Function InitializeComponent_UsingAndAwait_ReportDiagnostics() As Task
+        Dim testCase As AnalyzerTestCase = CreateTestCase(
+            "
+Namespace Test
+    Partial Class Form1
+        Private Async Sub InitializeComponent()
+            {|WFO2002:Using|} component As New System.ComponentModel.Component()
+            End Using
+            {|WFO2002:Await|} System.Threading.Tasks.Task.CompletedTask
+        End Sub
+    End Class
+End Namespace
+")
+        Await AnalyzerTestFactory.CreateVisualBasicAnalyzerTest(Of InitializeComponentAnalyzer)(testCase).
+            RunAsync(TestContext.Current.CancellationToken)
     End Function
 End Class

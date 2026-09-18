@@ -26,7 +26,11 @@ Do not add a code fix unless the transformation is safe and deterministic.
 Use inline `AnalyzerTestSource` values for focused behavior. Use named fixture files under a
 `TestData` directory when a realistic source set would obscure the assertion. For Designer rules,
 always provide both the user file and its `.Designer.cs` or `.Designer.vb` counterpart, and derive the
-partial type from `Form`, `UserControl`, or another `Control` type.
+partial type from `Form`, `UserControl`, another `Control` type, or
+`System.ComponentModel.Component`. Include negative cases with same-named types in unrelated
+namespaces. For VB, use realistic `WithEvents`/`Handles` fixtures and distinguish member events from
+`GenerateMember=False` local-variable wiring. Never modernize generated `Dispose` fixtures merely
+to match restrictions that apply only to `InitializeComponent`.
 
 Create the language-native Roslyn test through `AnalyzerTestFactory`; do not add another test base
 class or block asynchronous calls:
@@ -45,6 +49,27 @@ Use `AnalyzerConfigFiles` for `.editorconfig` or `.globalconfig` cases, `Additio
 non-source analyzer inputs, and `AdditionalReferences` for metadata paths. Tests that need the latest
 WinForms API surface should use `CurrentReferences.NetCoreAppReferences` and add
 `CurrentReferences.WinFormsRefPath`, following the existing WFO2001 tests.
+The helper reads the configured SDK's runtime metadata and requires its exact reference pack; an
+SDK version is not a runtime-pack version, and another installed preview is not a safe substitute.
+
+Designer diagnostics must include a concise supported repair in the emitted message, not only in
+the help page. Test representative rendered messages under an invariant culture as well as IDs,
+arguments, paths, spans, suppression, and absence of analyzer exceptions. Preserve separate IDs for
+independently repairable constructs.
+
+## Syntax coverage boundary
+
+The existing expression rules remain enforced because their constructs cannot round-trip through
+the designer's CodeDOM contract. WFO2002 also covers structural `using`/`Using` and `await`/`Await`,
+and the C# variants include expression-bodied initialization and deconstructing `foreach`. WFO2009
+includes coalescing assignment.
+
+Do not infer support for all C# or VB syntax from this list. Standalone patterns, tuples/deconstruction,
+implicit object creation, object/collection initializers, queries, VB `With`, XML/anonymous objects,
+and unstructured error handling are not additional rules in this change. Some require source-parser
+lowering evidence outside this repository before an accurate restriction and mitigation can be
+defined. Unlisted does not mean supported. The current Roslyn package is 4.12; syntax from newer
+compiler versions also needs explicit compatibility work rather than guessed syntax matching.
 
 ## Targeted validation
 
