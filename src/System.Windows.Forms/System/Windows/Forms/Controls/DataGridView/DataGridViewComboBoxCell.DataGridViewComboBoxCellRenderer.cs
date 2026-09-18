@@ -45,6 +45,15 @@ public partial class DataGridViewComboBoxCell
         // Post theming functions
         public static void DrawBorder(Graphics g, Rectangle bounds)
         {
+            if (Application.IsDarkModeEnabled
+                && AppContextSwitches.DataGridViewDarkModeTheming
+                && !SystemInformation.HighContrast)
+            {
+                using var pen = DarkModeButtonColors.DefaultColors.SingleBorderColor.GetCachedPenScope();
+                g.DrawRectangle(pen, bounds.X, bounds.Y, bounds.Width - 1, bounds.Height - 1);
+                return;
+            }
+
             if (t_visualStyleRenderer is null)
             {
                 t_visualStyleRenderer = new VisualStyleRenderer(s_comboBoxBorder);
@@ -57,7 +66,12 @@ public partial class DataGridViewComboBoxCell
             t_visualStyleRenderer.DrawBackground(g, bounds);
         }
 
-        public static void DrawDropDownButton(Graphics g, Rectangle bounds, ComboBoxState state, bool rightToLeft)
+        public static void DrawDropDownButton(
+            Graphics g,
+            Rectangle bounds,
+            ComboBoxState state,
+            bool rightToLeft,
+            bool integrated = false)
         {
             // Use Dark Mode element when enabled
             if (Application.IsDarkModeEnabled && AppContextSwitches.DataGridViewDarkModeTheming)
@@ -73,16 +87,33 @@ public partial class DataGridViewComboBoxCell
                 InitializeRenderer(s_comboBoxDropDownButtonRight, (int)state);
             }
 
-            t_visualStyleRenderer.DrawBackground(g, bounds);
+            if (integrated && Application.IsDarkModeEnabled && !SystemInformation.HighContrast)
+            {
+                Rectangle rendererBounds = bounds;
+                rendererBounds.Width++;
+                if (!rightToLeft)
+                {
+                    rendererBounds.X--;
+                }
+
+                using (new GraphicsStateScope(g))
+                {
+                    g.IntersectClip(bounds);
+                    t_visualStyleRenderer.DrawBackground(g, rendererBounds);
+                }
+            }
+            else
+            {
+                t_visualStyleRenderer.DrawBackground(g, bounds);
+            }
         }
 
-        public static void DrawReadOnlyButton(Graphics g, Rectangle bounds, ComboBoxState state)
+        public static void DrawReadOnlyButton(Graphics g, Rectangle bounds, ComboBoxState state, Color backColor)
         {
             // Use Dark Mode element when enabled
             if (Application.IsDarkModeEnabled && AppContextSwitches.DataGridViewDarkModeTheming)
             {
-                // Draw dark background similar to ComboBox in Dark Mode
-                using var brush = new SolidBrush(Color.FromArgb(45, 45, 45));
+                using var brush = backColor.GetCachedSolidBrushScope();
                 g.FillRectangle(brush, bounds);
 
                 // Draw border
