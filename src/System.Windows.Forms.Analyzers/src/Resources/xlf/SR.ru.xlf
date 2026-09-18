@@ -17,6 +17,56 @@
         <target state="translated">Неподдерживаемая конфигурация высокого DPI</target>
         <note />
       </trans-unit>
+      <trans-unit id="WFO2002Message">
+        <source>'{0}' is not supported in InitializeComponent; move the logic to the user code file</source>
+        <target state="new">'{0}' is not supported in InitializeComponent; move the logic to the user code file</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="WFO2002Title">
+        <source>Avoid control flow in InitializeComponent</source>
+        <target state="new">Avoid control flow in InitializeComponent</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="WFO2003Message">
+        <source>Member '{0}' should be declared in the user code file instead of the Designer file</source>
+        <target state="new">Member '{0}' should be declared in the user code file instead of the Designer file</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="WFO2003Title">
+        <source>Keep custom members out of Designer files</source>
+        <target state="new">Keep custom members out of Designer files</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="WFO2004Message">
+        <source>Field '{0}' used by InitializeComponent should be declared at the end of the Designer file</source>
+        <target state="new">Field '{0}' used by InitializeComponent should be declared at the end of the Designer file</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="WFO2004Title">
+        <source>Keep generated fields at the end of the Designer file</source>
+        <target state="new">Keep generated fields at the end of the Designer file</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="WFO2005Message">
+        <source>{0} '{1}' should be declared in the user code file instead of the Designer file</source>
+        <target state="new">{0} '{1}' should be declared in the user code file instead of the Designer file</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="WFO2005Title">
+        <source>Keep event and delegate declarations out of Designer files</source>
+        <target state="new">Keep event and delegate declarations out of Designer files</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="WFO2006Message">
+        <source>Collection expressions are not supported in Designer-generated code</source>
+        <target state="new">Collection expressions are not supported in Designer-generated code</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="WFO2006Title">
+        <source>Avoid collection expressions in Designer files</source>
+        <target state="new">Avoid collection expressions in Designer files</target>
+        <note />
+      </trans-unit>
     </body>
   </file>
 </xliff>

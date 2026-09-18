@@ -58,3 +58,46 @@ Types should implement `ITypedDataObject` to support best practices when interac
 | Added in  | NET10.0          |
 
 ---
+
+## WinForms Designer guardrails
+
+These rules protect the generated partial declaration in `.Designer.cs` files. A file is analyzed only
+when it contains `InitializeComponent` for a partial type derived from `Control` and that type also has
+a declaration in a non-Designer file.
+
+### [WFO2002](https://aka.ms/winforms-warnings/wfo2002): Avoid control flow in `InitializeComponent`.
+
+Move loops, conditionals, switch constructs, local functions, `goto`, exception handling, and locking
+to the user code file. `nameof`, interpolation, lambdas, null operators, and conditional expressions
+are not prohibited by this rule.
+
+### [WFO2003](https://aka.ms/winforms-warnings/wfo2003): Keep custom members out of Designer files.
+
+Move properties, nested types, and custom methods out of the generated partial declaration.
+Constructors, `InitializeComponent`, the standard `Dispose(bool)` override, and explicit interface
+implementations are allowed.
+
+### [WFO2004](https://aka.ms/winforms-warnings/wfo2004): Keep generated fields at the end of the Designer file.
+
+Fields referenced by `InitializeComponent` belong at the end of the Designer partial declaration.
+The analyzer uses field-symbol identity, so similarly named locals, properties, and methods do not
+trigger this diagnostic.
+
+### [WFO2005](https://aka.ms/winforms-warnings/wfo2005): Keep event and delegate declarations out of Designer files.
+
+Move event and delegate declarations to the user code file.
+
+### [WFO2006](https://aka.ms/winforms-warnings/wfo2006): Avoid collection expressions in Designer files.
+
+Use syntax supported by Designer serialization instead of C# collection expressions in generated
+Designer code.
+
+| Item      | Value             |
+|-----------|-------------------|
+| Category  | WinForms Designer |
+| Enabled   | True              |
+| Severity  | Warning           |
+| CodeFix   | False             |
+| Added in  | NET11.0           |
+
+---

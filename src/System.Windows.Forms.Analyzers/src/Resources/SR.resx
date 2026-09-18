@@ -126,4 +126,34 @@
   <data name="WFO0003Message_VB" xml:space="preserve">
     <value>Remove high DPI settings from {0} and configure via '{1}' property in Application Framework</value>
   </data>
+  <data name="WFO2002Title" xml:space="preserve">
+    <value>Avoid control flow in InitializeComponent</value>
+  </data>
+  <data name="WFO2002Message" xml:space="preserve">
+    <value>'{0}' is not supported in InitializeComponent; move the logic to the user code file</value>
+  </data>
+  <data name="WFO2003Title" xml:space="preserve">
+    <value>Keep custom members out of Designer files</value>
+  </data>
+  <data name="WFO2003Message" xml:space="preserve">
+    <value>Member '{0}' should be declared in the user code file instead of the Designer file</value>
+  </data>
+  <data name="WFO2004Title" xml:space="preserve">
+    <value>Keep generated fields at the end of the Designer file</value>
+  </data>
+  <data name="WFO2004Message" xml:space="preserve">
+    <value>Field '{0}' used by InitializeComponent should be declared at the end of the Designer file</value>
+  </data>
+  <data name="WFO2005Title" xml:space="preserve">
+    <value>Keep event and delegate declarations out of Designer files</value>
+  </data>
+  <data name="WFO2005Message" xml:space="preserve">
+    <value>{0} '{1}' should be declared in the user code file instead of the Designer file</value>
+  </data>
+  <data name="WFO2006Title" xml:space="preserve">
+    <value>Avoid collection expressions in Designer files</value>
+  </data>
+  <data name="WFO2006Message" xml:space="preserve">
+    <value>Collection expressions are not supported in Designer-generated code</value>
+  </data>
 </root>
