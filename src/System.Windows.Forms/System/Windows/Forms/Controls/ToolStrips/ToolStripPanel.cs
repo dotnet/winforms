@@ -858,7 +858,7 @@ public partial class ToolStripPanel : ContainerControl, IArrangedElement
                 if (Orientation == Orientation.Horizontal)
                 {
                     // If it's above the first row, insert at the front.
-                    index = (clientLocation.Y <= Padding.Left) ? 0 : index;
+                    index = (clientLocation.Y <= Padding.Top) ? 0 : index;
                 }
                 else
                 {
