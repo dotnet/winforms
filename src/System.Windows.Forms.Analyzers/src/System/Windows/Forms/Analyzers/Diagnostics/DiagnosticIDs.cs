@@ -18,6 +18,11 @@ internal static class DiagnosticIDs
 
     // WinForms Usage, number group 2000+
     public const string AvoidPassingFuncReturningTaskWithoutCancellationToken = "WFO2001";
+    public const string UnsupportedInitializeComponentCode = "WFO2002";
+    public const string UnexpectedDesignerMember = "WFO2003";
+    public const string DesignerFieldPlacement = "WFO2004";
+    public const string DesignerEventOrDelegate = "WFO2005";
+    public const string DesignerCollectionExpression = "WFO2006";
 
     // Experimental, number group 5000+
     public const string ExperimentalDarkMode = "WFO5001";
