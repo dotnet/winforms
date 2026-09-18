@@ -1179,6 +1179,12 @@ Press Ctrl+Enter to accept Text.</value>
   <data name="InitialDirectoryEditorLabel" xml:space="preserve">
     <value>Select the directory that will initially be opened in the dialog.</value>
   </data>
+  <data name="InitialDirectoryTitle" xml:space="preserve">
+    <value>Initial Directory</value>
+  </data>
+  <data name="SelectedPathTitle" xml:space="preserve">
+    <value>Selected Path</value>
+  </data>
   <data name="Ax_Control" xml:space="preserve">
     <value>ActiveX Control</value>
   </data>
