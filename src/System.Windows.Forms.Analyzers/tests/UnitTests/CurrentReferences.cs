@@ -81,7 +81,7 @@ public static class CurrentReferences
         string? availableVersion = versions.FirstOrDefault(v =>
             Path.GetFileName(v).StartsWith(major, StringComparison.InvariantCultureIgnoreCase));
 
-        return availableVersion!;
+        return Path.GetFileName(availableVersion)!;
     }
 
     private static bool TryGetNetCoreVersion(
@@ -97,14 +97,15 @@ public static class CurrentReferences
             return false;
         }
 
-        // First, try to use the local .NET SDK if it's there.
-        string sdkFolderPath = Path.Join(rootFolderPath, ".dotnet", "sdk", version);
-        if (!Directory.Exists(sdkFolderPath))
+        if (!Version.TryParse(version.Split('-')[0], out Version? sdkVersion))
         {
             return false;
         }
 
-        return TryGetNetCoreVersionFromJson(sdkFolderPath, out tfm, out netCoreRefsVersion);
+        tfm = $"net{sdkVersion.Major}.0";
+        netCoreRefsVersion = version;
+
+        return true;
     }
 
     private static bool GetRootFolderPath([NotNullWhen(true)] out string? root)
@@ -143,31 +144,5 @@ public static class CurrentReferences
         version = (string?)jsonObject?["sdk"]?["version"];
 
         return version is not null;
-    }
-
-    private static bool TryGetNetCoreVersionFromJson(
-        string sdkFolderPath,
-        [NotNullWhen(true)] out string? tfm,
-        [NotNullWhen(true)] out string? version)
-    {
-        string configJsonPath = Path.Join(sdkFolderPath, "dotnet.runtimeconfig.json");
-        string configJsonString = File.ReadAllText(configJsonPath);
-        JsonObject? jsonObject = JsonNode.Parse(configJsonString)?.AsObject();
-        JsonNode? runtimeOptions = jsonObject?["runtimeOptions"];
-        tfm = (string?)runtimeOptions?["tfm"];
-        if (tfm is null)
-        {
-            version = default;
-            return false;
-        }
-
-        version = (string?)runtimeOptions?["framework"]?["version"];
-        if (version is null)
-        {
-            tfm = null;
-            return false;
-        }
-
-        return true;
     }
 }
