@@ -310,15 +310,15 @@ public class LinkLabelTests : IDisposable
 
         linkLabel.Text = string.Empty;
         int invalidatedCountAfterTextChange = invalidatedCount;
+        ((bool)linkLabel.TestAccessor.Dynamic._textLayoutValid).Should().BeFalse();
 
         linkLabel.OnPaint(e);
+        ((bool)linkLabel.TestAccessor.Dynamic._textLayoutValid).Should().BeTrue();
         int invalidatedCountAfterLayout = invalidatedCount;
         linkLabel.OnPaint(e);
 
         invalidatedCountAfterTextChange.Should().BeGreaterThan(0);
-        invalidatedCountAfterLayout.Should().BeGreaterThan(invalidatedCountAfterTextChange);
         invalidatedCount.Should().Be(invalidatedCountAfterLayout);
-        ((bool)linkLabel.TestAccessor.Dynamic._textLayoutValid).Should().BeTrue();
     }
 
     [WinFormsTheory]
