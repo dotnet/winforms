@@ -11,15 +11,12 @@ public partial class FormTests
 {
 #if NET11_0_OR_GREATER
     [WinFormsFact]
-    public void Form_FormRevealMode_Default_ResolvesFromApplication()
+    public void Form_FormRevealMode_Default_ReturnsInherit()
     {
         using SubForm form = new();
 
-        Application.SetDefaultFormRevealMode(FormRevealMode.Classic);
-        Assert.Equal(FormRevealMode.Classic, form.FormRevealMode);
-
-        Application.SetDefaultFormRevealMode(FormRevealMode.Deferred);
-        Assert.Equal(FormRevealMode.Deferred, form.FormRevealMode);
+        Assert.Equal(FormRevealMode.Inherit, form.FormRevealMode);
+        Assert.False(form.IsHandleCreated);
     }
 
     [WinFormsTheory]
@@ -27,27 +24,58 @@ public partial class FormTests
     [InlineData(FormRevealMode.Deferred)]
     public void Form_FormRevealMode_SetExplicit_OverridesApplicationDefault(FormRevealMode mode)
     {
-        using SubForm form = new();
-        FormRevealMode otherMode = mode == FormRevealMode.Classic ? FormRevealMode.Deferred : FormRevealMode.Classic;
+        FormRevealMode originalDefault = Application.DefaultFormRevealMode;
 
-        Application.SetDefaultFormRevealMode(otherMode);
-        form.FormRevealMode = mode;
+        try
+        {
+            FormRevealMode otherMode = mode == FormRevealMode.Classic
+                ? FormRevealMode.Deferred
+                : FormRevealMode.Classic;
+            Application.SetDefaultFormRevealMode(otherMode);
 
-        Assert.Equal(mode, form.FormRevealMode);
+            using SubForm form = new() { FormRevealMode = mode };
+
+            Assert.Equal(mode, form.FormRevealMode);
+            Assert.Equal(mode, (FormRevealMode)form.TestAccessor.Dynamic.EffectiveFormRevealMode);
+            Assert.False(form.IsHandleCreated);
+        }
+        finally
+        {
+            Application.SetDefaultFormRevealMode(originalDefault);
+        }
     }
 
-    [WinFormsFact]
-    public void Form_FormRevealMode_SetInherit_ClearsLocalOverride()
+    [WinFormsTheory]
+    [InlineData(FormRevealMode.Classic)]
+    [InlineData(FormRevealMode.Deferred)]
+    public void Form_FormRevealMode_SetInherit_ReturnsInheritAndUsesApplicationDefault(
+        FormRevealMode applicationDefault)
     {
-        using SubForm form = new();
+        FormRevealMode originalDefault = Application.DefaultFormRevealMode;
 
-        Application.SetDefaultFormRevealMode(FormRevealMode.Deferred);
-        form.FormRevealMode = FormRevealMode.Classic;
-        Assert.Equal(FormRevealMode.Classic, form.FormRevealMode);
+        try
+        {
+            Application.SetDefaultFormRevealMode(applicationDefault);
 
-        form.FormRevealMode = FormRevealMode.Inherit;
+            using SubForm form = new()
+            {
+                FormRevealMode = applicationDefault == FormRevealMode.Classic
+                    ? FormRevealMode.Deferred
+                    : FormRevealMode.Classic
+            };
 
-        Assert.Equal(FormRevealMode.Deferred, form.FormRevealMode);
+            form.FormRevealMode = FormRevealMode.Inherit;
+
+            Assert.Equal(FormRevealMode.Inherit, form.FormRevealMode);
+            Assert.Equal(
+                applicationDefault,
+                (FormRevealMode)form.TestAccessor.Dynamic.EffectiveFormRevealMode);
+            Assert.False(form.IsHandleCreated);
+        }
+        finally
+        {
+            Application.SetDefaultFormRevealMode(originalDefault);
+        }
     }
 
     [WinFormsFact]
@@ -72,6 +100,7 @@ public partial class FormTests
         Assert.True(property.ShouldSerializeValue(form));
 
         property.ResetValue(form);
+        Assert.Equal(FormRevealMode.Inherit, form.FormRevealMode);
         Assert.False(property.ShouldSerializeValue(form));
     }
 
@@ -118,7 +147,10 @@ public partial class FormTests
             Application.SetDefaultFormRevealMode(FormRevealMode.Deferred);
 
             using SubForm form = new();
-            Assert.Equal(FormRevealMode.Deferred, form.FormRevealMode);
+            Assert.Equal(FormRevealMode.Inherit, form.FormRevealMode);
+            Assert.Equal(
+                FormRevealMode.Deferred,
+                (FormRevealMode)form.TestAccessor.Dynamic.EffectiveFormRevealMode);
 
             form.Show();
 
