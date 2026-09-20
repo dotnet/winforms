@@ -4,6 +4,7 @@
 #nullable disable
 
 using System.ComponentModel;
+using Microsoft.DotNet.RemoteExecutor;
 
 namespace System.Windows.Forms.Tests;
 
@@ -24,25 +25,20 @@ public partial class FormTests
     [InlineData(FormRevealMode.Deferred)]
     public void Form_FormRevealMode_SetExplicit_OverridesApplicationDefault(FormRevealMode mode)
     {
-        FormRevealMode originalDefault = Application.DefaultFormRevealMode;
-
-        try
+        RemoteExecutor.Invoke((modeName) =>
         {
-            FormRevealMode otherMode = mode == FormRevealMode.Classic
+            FormRevealMode parsedMode = Enum.Parse<FormRevealMode>(modeName);
+            FormRevealMode otherMode = parsedMode == FormRevealMode.Classic
                 ? FormRevealMode.Deferred
                 : FormRevealMode.Classic;
             Application.SetDefaultFormRevealMode(otherMode);
 
-            using SubForm form = new() { FormRevealMode = mode };
+            using SubForm form = new() { FormRevealMode = parsedMode };
 
-            Assert.Equal(mode, form.FormRevealMode);
-            Assert.Equal(mode, (FormRevealMode)form.TestAccessor.Dynamic.EffectiveFormRevealMode);
+            Assert.Equal(parsedMode, form.FormRevealMode);
+            Assert.Equal(parsedMode, (FormRevealMode)form.TestAccessor.Dynamic.EffectiveFormRevealMode);
             Assert.False(form.IsHandleCreated);
-        }
-        finally
-        {
-            Application.SetDefaultFormRevealMode(originalDefault);
-        }
+        }, mode.ToString()).Dispose();
     }
 
     [WinFormsTheory]
@@ -51,15 +47,14 @@ public partial class FormTests
     public void Form_FormRevealMode_SetInherit_ReturnsInheritAndUsesApplicationDefault(
         FormRevealMode applicationDefault)
     {
-        FormRevealMode originalDefault = Application.DefaultFormRevealMode;
-
-        try
+        RemoteExecutor.Invoke((applicationDefaultName) =>
         {
-            Application.SetDefaultFormRevealMode(applicationDefault);
+            FormRevealMode parsedApplicationDefault = Enum.Parse<FormRevealMode>(applicationDefaultName);
+            Application.SetDefaultFormRevealMode(parsedApplicationDefault);
 
             using SubForm form = new()
             {
-                FormRevealMode = applicationDefault == FormRevealMode.Classic
+                FormRevealMode = parsedApplicationDefault == FormRevealMode.Classic
                     ? FormRevealMode.Deferred
                     : FormRevealMode.Classic
             };
@@ -68,14 +63,10 @@ public partial class FormTests
 
             Assert.Equal(FormRevealMode.Inherit, form.FormRevealMode);
             Assert.Equal(
-                applicationDefault,
+                parsedApplicationDefault,
                 (FormRevealMode)form.TestAccessor.Dynamic.EffectiveFormRevealMode);
             Assert.False(form.IsHandleCreated);
-        }
-        finally
-        {
-            Application.SetDefaultFormRevealMode(originalDefault);
-        }
+        }, applicationDefault.ToString()).Dispose();
     }
 
     [WinFormsFact]
@@ -140,9 +131,7 @@ public partial class FormTests
     [WinFormsFact]
     public void Form_FormRevealMode_Deferred_ShowDoesNotRemainCloaked()
     {
-        FormRevealMode originalDefault = Application.DefaultFormRevealMode;
-
-        try
+        RemoteExecutor.Invoke(() =>
         {
             Application.SetDefaultFormRevealMode(FormRevealMode.Deferred);
 
@@ -162,11 +151,7 @@ public partial class FormTests
 
             Assert.True(form.Visible);
             Assert.False(form.DeferredAppearanceCloaked);
-        }
-        finally
-        {
-            Application.SetDefaultFormRevealMode(originalDefault);
-        }
+        }).Dispose();
     }
 #endif
 }
