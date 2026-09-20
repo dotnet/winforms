@@ -1,4 +1,4 @@
-﻿// Licensed to the .NET Foundation under one or more agreements.
+// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
 using System.ComponentModel;
@@ -87,6 +87,14 @@ public class ContextMenuStrip : ToolStripDropDownMenu
         if (isKeyboardActivated)
         {
             ToolStripManager.ModalMenuFilter.Instance.ShowUnderlines = true;
+
+            // Select the first item, like a submenu opened from the keyboard does
+            // (see ToolStripMenuItem.ProcessCmdKey/ShowDropDown). Without a selected item nothing gets
+            // the accessibility focus, so a screen reader has nothing to announce until an arrow is pressed.
+            if (Visible && GetSelectedItem() is null)
+            {
+                SelectNextToolStripItem(start: null, forward: true);
+            }
         }
     }
 
@@ -146,7 +154,11 @@ public class ContextMenuStrip : ToolStripDropDownMenu
         {
             AccessibilityNotifyClients(AccessibleEvents.SystemMenuPopupStart, -1);
 
-            if (IsAccessibilityObjectCreated)
+            // The accessible object of a context menu is usually not created yet the first time it opens:
+            // nothing has asked for it, because the menu has no owner item and was never part of the tree
+            // an assistive technology walked. Checking only IsAccessibilityObjectCreated left that first
+            // opening silent, so also raise the event when a UIA client is listening.
+            if (IsAccessibilityObjectCreated || PInvoke.UiaClientsAreListening())
             {
                 AccessibilityObject.RaiseAutomationEvent(UIA_EVENT_ID.UIA_MenuOpenedEventId);
             }

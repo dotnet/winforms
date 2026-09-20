@@ -843,6 +843,10 @@
   <data name="ContainerControlParentFormDescr" xml:space="preserve">
     <value>The parent form of this container control.</value>
   </data>
+  <data name="ContextMenuStripDefaultAccessibleName" xml:space="preserve">
+    <value>Context</value>
+    <comment>Default accessible name of a context menu. Screen readers announce it followed by the role, as "Context menu", the same way they do for a native Windows context menu.</comment>
+  </data>
   <data name="ContextMenuStripSourceControlDescr" xml:space="preserve">
     <value>The last control that caused this context menu strip to be displayed.</value>
   </data>
