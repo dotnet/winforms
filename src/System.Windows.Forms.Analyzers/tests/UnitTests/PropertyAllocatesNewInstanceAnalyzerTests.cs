@@ -23,8 +23,8 @@ public class PropertyAllocatesNewInstanceAnalyzerTests
                 $$"""
                 class Example
                 {
-                    public object {|WFO2013:ExpressionBodied|} => {{creation}};
-                    public object {|WFO2013:Getter|}
+                    public object {|WFO2000:ExpressionBodied|} => {{creation}};
+                    public object {|WFO2000:Getter|}
                     {
                         get
                         {
@@ -50,7 +50,7 @@ public class PropertyAllocatesNewInstanceAnalyzerTests
             new AnalyzerTestSource("Example.vb",
                 $$"""
                 Class Example
-                    Public ReadOnly Property {|WFO2013:Value|} As Object
+                    Public ReadOnly Property {|WFO2000:Value|} As Object
                         Get
                             If System.DateTime.Now.Ticks > 0 Then Return {{creation}}
                             Return CType(({{creation}}), Object)
@@ -208,9 +208,9 @@ public class PropertyAllocatesNewInstanceAnalyzerTests
             {
                 private readonly object _cached = new();
 
-                public object {|WFO2013:ExpressionBodied|} => new object();
-                public object {|WFO2013:Parenthesized|} => (new object());
-                public object {|WFO2013:ConditionalPath|}
+                public object {|WFO2000:ExpressionBodied|} => new object();
+                public object {|WFO2000:Parenthesized|} => (new object());
+                public object {|WFO2000:ConditionalPath|}
                 {
                     get
                     {
@@ -219,7 +219,7 @@ public class PropertyAllocatesNewInstanceAnalyzerTests
                     }
                 }
 
-                public object {|WFO2013:Getter|}
+                public object {|WFO2000:Getter|}
                 {
                     get
                     {
@@ -252,19 +252,19 @@ public class PropertyAllocatesNewInstanceAnalyzerTests
             Class Example
                 Private ReadOnly _cached As Object = New Object()
 
-                Public ReadOnly Property {|WFO2013:Value|} As Object
+                Public ReadOnly Property {|WFO2000:Value|} As Object
                     Get
                         Return New Object()
                     End Get
                 End Property
 
-                Public ReadOnly Property {|WFO2013:Parenthesized|} As Object
+                Public ReadOnly Property {|WFO2000:Parenthesized|} As Object
                     Get
                         Return (New Object())
                     End Get
                 End Property
 
-                Public ReadOnly Property {|WFO2013:ConditionalPath|} As Object
+                Public ReadOnly Property {|WFO2000:ConditionalPath|} As Object
                     Get
                         If DateTime.Now.Ticks > 0 Then Return New Object()
                         Return _cached

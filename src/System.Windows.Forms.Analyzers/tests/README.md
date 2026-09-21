@@ -60,8 +60,8 @@ independently repairable constructs.
 ## Syntax coverage boundary
 
 The existing expression rules remain enforced because their constructs cannot round-trip through
-the designer's CodeDOM contract. WFO2002 also covers structural `using`/`Using` and `await`/`Await`,
-and the C# variants include expression-bodied initialization and deconstructing `foreach`. WFO2009
+the designer's CodeDOM contract. WFO3000 also covers structural `using`/`Using` and `await`/`Await`,
+and the C# variants include expression-bodied initialization and deconstructing `foreach`. WFO3007
 includes coalescing assignment.
 
 Do not infer support for all C# or VB syntax from this list. Standalone patterns, tuples/deconstruction,

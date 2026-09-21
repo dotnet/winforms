@@ -24,7 +24,7 @@ End Class
 
     <Theory>
     <InlineData("Private WithEvents Button1 As Button")>
-    <InlineData("Private {|WFO2014:Button1|} As Button")>
+    <InlineData("Private {|WFO3011:Button1|} As Button")>
     Public Async Function MemberEvent_RequiresHandles(field As String) As Task
         Dim testCase As AnalyzerTestCase = CreateTestCase(
             $"
@@ -33,7 +33,7 @@ Partial Class Form1
     Private Sub InitializeComponent()
         Button1 = New Button()
         Button1 = New Button()
-        {{|WFO2015:AddHandler|}} Button1.Click, AddressOf HandleClick
+        {{|WFO3012:AddHandler|}} Button1.Click, AddressOf HandleClick
     End Sub
     {field}
 End Class
@@ -93,7 +93,7 @@ Partial Class Form1
 End Class
 ")
         testCase.ExpectedDiagnostics.Add(
-            New DiagnosticResult("WFO2015", Microsoft.CodeAnalysis.DiagnosticSeverity.Warning).
+            New DiagnosticResult("WFO3012", Microsoft.CodeAnalysis.DiagnosticSeverity.Error).
                 WithLocation(0).
                 WithArguments($"{expectedReceiver}.Click"))
 
@@ -191,7 +191,7 @@ End Class
                 "
 Partial Class Form1
     Private Sub InitializeComponent()
-        {|WFO2015:AddHandler|} InheritedButton.Click, AddressOf HandleClick
+        {|WFO3012:AddHandler|} InheritedButton.Click, AddressOf HandleClick
         AddHandler PlainButton.Click, AddressOf HandleClick
     End Sub
 End Class
@@ -209,14 +209,14 @@ Imports System.Windows.Forms
 Partial Class Form1
     Private Sub InitializeComponent()
         Button1 = New Button()
-        {|WFO2015:AddHandler|} Button1.Click, AddressOf HandleClick
+        {|WFO3012:AddHandler|} Button1.Click, AddressOf HandleClick
     End Sub
     Private Button1 As Button
 End Class
 ")
         testCase.AnalyzerConfigFiles.Add(("/.globalconfig", "
 is_global = true
-dotnet_diagnostic.WFO2014.severity = none
+dotnet_diagnostic.WFO3011.severity = none
 "))
 
         Await AnalyzerTestFactory.CreateVisualBasicAnalyzerTest(Of DesignerEventAnalyzer)(testCase).
@@ -234,8 +234,8 @@ dotnet_diagnostic.WFO2014.severity = none
     <InlineData("System.ComponentModel.Component", True)>
     <InlineData("Other.Component", False)>
     Public Async Function ComponentMember_UsesFrameworkIdentity(memberType As String, expected As Boolean) As Task
-        Dim member As String = If(expected, "{|WFO2014:component1|}", "component1")
-        Dim hookup As String = If(expected, "{|WFO2015:AddHandler|}", "AddHandler")
+        Dim member As String = If(expected, "{|WFO3011:component1|}", "component1")
+        Dim hookup As String = If(expected, "{|WFO3012:AddHandler|}", "AddHandler")
         Dim testCase As AnalyzerTestCase = CreateTestCase(
             $"
 Partial Class Form1
