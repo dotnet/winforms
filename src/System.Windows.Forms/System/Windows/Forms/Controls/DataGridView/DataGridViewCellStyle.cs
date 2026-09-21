@@ -23,6 +23,7 @@ public class DataGridViewCellStyle : ICloneable
     private static readonly int s_propPadding = PropertyStore.CreateKey();
     private static readonly int s_propSelectionBackColor = PropertyStore.CreateKey();
     private static readonly int s_propSelectionForeColor = PropertyStore.CreateKey();
+    private static readonly int s_propSortGlyphColor = PropertyStore.CreateKey();
     private static readonly int s_propTag = PropertyStore.CreateKey();
     private static readonly int s_propWrapMode = PropertyStore.CreateKey();
     private DataGridView? _dataGridView;
@@ -59,6 +60,7 @@ public class DataGridViewCellStyle : ICloneable
         WrapModeInternal = dataGridViewCellStyle.WrapMode;
         Tag = dataGridViewCellStyle.Tag;
         PaddingInternal = dataGridViewCellStyle.Padding;
+        SortGlyphColor = dataGridViewCellStyle.SortGlyphColor;
     }
 
     [SRDescription(nameof(SR.DataGridViewCellStyleAlignmentDescr))]
@@ -331,6 +333,25 @@ public class DataGridViewCellStyle : ICloneable
         }
     }
 
+    /// <summary>
+    ///  Gets or sets the color used to draw the sort glyph (arrow) in column headers.
+    ///  When set to <see cref="Color.Empty"/>, the glyph color is automatically
+    ///  calculated based on the background color for optimal contrast.
+    /// </summary>
+    [SRCategory(nameof(SR.CatAppearance))]
+    public Color SortGlyphColor
+    {
+        get => Properties.GetValueOrDefault<Color>(s_propSortGlyphColor);
+        set
+        {
+            Color previous = Properties.AddOrRemoveValue(s_propSortGlyphColor, value);
+            if (!previous.Equals(value))
+            {
+                OnPropertyChanged(DataGridViewCellStylePropertyInternal.Color);
+            }
+        }
+    }
+
     [Browsable(false)]
     [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public object? Tag
@@ -439,6 +460,11 @@ public class DataGridViewCellStyle : ICloneable
         {
             PaddingInternal = dataGridViewCellStyle.Padding;
         }
+
+        if (!dataGridViewCellStyle.SortGlyphColor.IsEmpty)
+        {
+            SortGlyphColor = dataGridViewCellStyle.SortGlyphColor;
+        }
     }
 
     public virtual DataGridViewCellStyle Clone() => new(this);
@@ -465,7 +491,8 @@ public class DataGridViewCellStyle : ICloneable
                 dgvcs.BackColor != BackColor ||
                 dgvcs.ForeColor != ForeColor ||
                 dgvcs.SelectionBackColor != SelectionBackColor ||
-                dgvcs.SelectionForeColor != SelectionForeColor);
+                dgvcs.SelectionForeColor != SelectionForeColor ||
+                dgvcs.SortGlyphColor != SortGlyphColor);
 
         if (preferredSizeAffectingPropDifferent)
         {
@@ -492,6 +519,7 @@ public class DataGridViewCellStyle : ICloneable
         hash.Add(ForeColor);
         hash.Add(SelectionBackColor);
         hash.Add(SelectionForeColor);
+        hash.Add(SortGlyphColor);
         hash.Add(Font);
         hash.Add(NullValue);
         hash.Add(DataSourceNullValue);
@@ -529,6 +557,8 @@ public class DataGridViewCellStyle : ICloneable
     private bool ShouldSerializeSelectionBackColor() => Properties.ContainsKey(s_propSelectionBackColor);
 
     private bool ShouldSerializeSelectionForeColor() => Properties.ContainsKey(s_propSelectionForeColor);
+
+    private bool ShouldSerializeSortGlyphColor() => Properties.ContainsKey(s_propSortGlyphColor);
 
     public override string ToString()
     {
