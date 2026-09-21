@@ -309,7 +309,7 @@ public class RadioButtonTests : AbstractButtonBaseTests
     [WinFormsFact]
     public void RadioButton_ModernGlyph_RightToLeftHovered_DoesNotClipAtRightEdge()
     {
-        using Panel parent = new();
+        using Panel parent = new() { BackColor = Color.Magenta };
         using RadioButton control = new()
         {
             RightToLeft = RightToLeft.Yes,
@@ -330,7 +330,7 @@ public class RadioButtonTests : AbstractButtonBaseTests
 
         for (int y = 0; y < bitmap.Height; y++)
         {
-            Assert.Equal(0, bitmap.GetPixel(bitmap.Width - 1, y).A);
+            Assert.Equal(parent.BackColor.ToArgb(), bitmap.GetPixel(bitmap.Width - 1, y).ToArgb());
         }
     }
 
