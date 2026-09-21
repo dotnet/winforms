@@ -73,33 +73,33 @@ Namespace Test
 
     Partial Class Form1
         Private Sub InitializeComponent()
-            {|WFO2002:For|} i As Integer = 0 To Controls.Count
+            {|WFO3000:For|} i As Integer = 0 To Controls.Count
             Next
 
-            {|WFO2002:For|} Each control As Control In Controls
+            {|WFO3000:For|} Each control As Control In Controls
             Next
 
-            {|WFO2002:While|} DesignMode
+            {|WFO3000:While|} DesignMode
             End While
 
-            {|WFO2002:Do|}
+            {|WFO3000:Do|}
             Loop While DesignMode
 
-            {|WFO2002:If|} DesignMode Then
+            {|WFO3000:If|} DesignMode Then
             End If
 
-            {|WFO2002:If|} DesignMode Then Text = Name
+            {|WFO3000:If|} DesignMode Then Text = Name
 
-            {|WFO2002:Select|} Case Controls.Count
+            {|WFO3000:Select|} Case Controls.Count
             End Select
 
-            {|WFO2002:GoTo|} Done
+            {|WFO3000:GoTo|} Done
 Done:
-            {|WFO2002:Try|}
+            {|WFO3000:Try|}
             Catch
             End Try
 
-            {|WFO2002:SyncLock|} Me
+            {|WFO3000:SyncLock|} Me
             End SyncLock
         End Sub
     End Class
@@ -123,12 +123,12 @@ Namespace Test
 
     Partial Class Form1
         Private Sub InitializeComponent()
-            Dim name As String = {|WFO2007:NameOf|}(Form1)
-            Dim text As String = {|WFO2011:$""|}{name}: {Controls.Count}""
-            Dim handler As EventHandler = {|WFO2012:Sub|}(sender, e) Text = text
-            Dim value As Object = {|WFO2009:If|}(Tag, Me)
-            Dim control As Control = {|WFO2010:Parent|}?.Parent
-            Dim count As Integer = {|WFO2008:If|}(DesignMode, 0, Controls.Count)
+            Dim name As String = {|WFO3005:NameOf|}(Form1)
+            Dim text As String = {|WFO3009:$""|}{name}: {Controls.Count}""
+            Dim handler As EventHandler = {|WFO3010:Sub|}(sender, e) Text = text
+            Dim value As Object = {|WFO3007:If|}(Tag, Me)
+            Dim control As Control = {|WFO3008:Parent|}?.Parent
+            Dim count As Integer = {|WFO3006:If|}(DesignMode, 0, Controls.Count)
         End Sub
     End Class
 End Namespace
@@ -156,16 +156,16 @@ Namespace Test
             Button1 = New Button()
         End Sub
 
-        Public Property {|WFO2003:Value|} As Integer
-        Public Event {|WFO2005:Changed|} As EventHandler
-        Public Delegate Sub {|WFO2005:Callback|}()
+        Public Property {|WFO3001:Value|} As Integer
+        Public Event {|WFO3003:Changed|} As EventHandler
+        Public Delegate Sub {|WFO3003:Callback|}()
     End Class
 End Namespace
 "
 
         Dim testCase As AnalyzerTestCase = CreateTestCase(designerSource)
         testCase.ExpectedDiagnostics.Add(
-            New DiagnosticResult("WFO2004", Microsoft.CodeAnalysis.DiagnosticSeverity.Warning).
+            New DiagnosticResult("WFO3002", Microsoft.CodeAnalysis.DiagnosticSeverity.Warning).
                 WithSpan("/0/Form1.Designer.vb", 8, 28, 8, 35).
                 WithArguments("Button1"))
 
@@ -184,7 +184,7 @@ Namespace Test
     Partial Class Form1
         Inherits Form
 
-        Private WithEvents {|WFO2004:Button1|} As Button
+        Private WithEvents {|WFO3002:Button1|} As Button
 
         Public Sub New()
             InitializeComponent()
@@ -226,7 +226,7 @@ Namespace Test
         Private Sub InitializeComponent()
         End Sub
 
-        Private Sub {|WFO2003:Dispose|}(disposing As Integer)
+        Private Sub {|WFO3001:Dispose|}(disposing As Integer)
         End Sub
     End Class
 End Namespace
@@ -297,7 +297,7 @@ End Namespace
                 "
 is_global = true
 
-dotnet_diagnostic.WFO2002.severity = none
+dotnet_diagnostic.WFO3000.severity = none
 "))
 
         Await AnalyzerTestFactory.CreateVisualBasicAnalyzerTest(
@@ -322,7 +322,7 @@ dotnet_diagnostic.WFO2002.severity = none
 Namespace Test
     Partial Class Form1
         Private Sub {declaration}
-            {{|WFO2002:If|}} True Then
+            {{|WFO3000:If|}} True Then
             End If
         End Sub
     End Class
@@ -334,7 +334,7 @@ End Namespace
             RunAsync(TestContext.Current.CancellationToken)
 
         Dim structureCase As AnalyzerTestCase = CreateTestCase(
-            testCase.Sources(1).Source.Replace("{|WFO2002:If|}", "If"))
+            testCase.Sources(1).Source.Replace("{|WFO3000:If|}", "If"))
         Await AnalyzerTestFactory.CreateVisualBasicAnalyzerTest(
             Of DesignerFileStructureAnalyzer)(structureCase).
             RunAsync(TestContext.Current.CancellationToken)
@@ -347,7 +347,7 @@ End Namespace
     <InlineData("Other.Component", False)>
     <InlineData("Other.Control", False)>
     Public Async Function DesignerType_UsesFrameworkIdentity(baseType As String, expected As Boolean) As Task
-        Dim condition As String = If(expected, "{|WFO2002:If|}", "If")
+        Dim condition As String = If(expected, "{|WFO3000:If|}", "If")
         Dim testCase As New AnalyzerTestCase(
             ReferenceAssemblies.Net.Net90Windows,
             New AnalyzerTestSource("Form1.vb", $"
@@ -390,9 +390,9 @@ End Class
 Namespace Test
     Partial Class Form1
         Private Async Sub InitializeComponent()
-            {|WFO2002:Using|} component As New System.ComponentModel.Component()
+            {|WFO3000:Using|} component As New System.ComponentModel.Component()
             End Using
-            {|WFO2002:Await|} System.Threading.Tasks.Task.CompletedTask
+            {|WFO3000:Await|} System.Threading.Tasks.Task.CompletedTask
         End Sub
     End Class
 End Namespace

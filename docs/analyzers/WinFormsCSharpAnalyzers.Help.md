@@ -73,20 +73,20 @@ CodeDOM can represent. Keep initialization unrolled: explicit construction, assi
 calls, and named event hookups. Move runtime-only behavior to the user partial after
 `InitializeComponent`; do not hide designer initialization in a helper call.
 
-### [WFO2002](https://aka.ms/winforms-warnings/wfo2002): Avoid unsupported code in `InitializeComponent`.
+### [WFO3000](https://aka.ms/winforms-warnings/wfo3000): Avoid unsupported code in `InitializeComponent`.
 
 Move loops (including deconstructing `foreach`), conditionals, switch constructs, local functions,
 `goto`, exception handling, locking, `using`, and `await` out of generated initialization.
 Use a block-bodied `InitializeComponent`, not an expression-bodied method. These restrictions do not
 apply to the standard generated `Dispose` override.
 
-### [WFO2003](https://aka.ms/winforms-warnings/wfo2003): Keep custom members out of Designer files.
+### [WFO3001](https://aka.ms/winforms-warnings/wfo3001): Keep custom members out of Designer files.
 
 Move properties, nested types, and custom methods out of the generated partial declaration.
 Constructors, `InitializeComponent`, the standard `Dispose(bool)` override, and explicit interface
 implementations are allowed.
 
-### [WFO2004](https://aka.ms/winforms-warnings/wfo2004): Keep generated fields at the end of the Designer file.
+### [WFO3002](https://aka.ms/winforms-warnings/wfo3002): Keep generated fields at the end of the Designer file.
 
 Keep fields at the end of the Designer partial, except the conventional `IContainer components`
 infrastructure. This ordering preserves the historical generated layout; it is not itself a CodeDOM
@@ -94,47 +94,47 @@ expression restriction. Component fields constructed in `InitializeComponent` mu
 partial. Merely reading a user field does not make it designer-owned, and inherited, static, or
 unrelated-type fields must not be moved into it.
 
-### [WFO2005](https://aka.ms/winforms-warnings/wfo2005): Keep event and delegate declarations out of Designer files.
+### [WFO3003](https://aka.ms/winforms-warnings/wfo3003): Keep event and delegate declarations out of Designer files.
 
 Move event and delegate declarations to the user code file.
 
-### [WFO2006](https://aka.ms/winforms-warnings/wfo2006): Avoid collection expressions in Designer files.
+### [WFO3004](https://aka.ms/winforms-warnings/wfo3004): Avoid collection expressions in Designer files.
 
 Use syntax supported by Designer serialization instead of C# collection expressions in generated
 Designer code, for example `new Control[] { button1, button2 }` or unrolled `Add` calls.
 
-### [WFO2007](https://aka.ms/winforms-warnings/wfo2007): Avoid `nameof` expressions in `InitializeComponent`.
+### [WFO3005](https://aka.ms/winforms-warnings/wfo3005): Avoid `nameof` expressions in `InitializeComponent`.
 
 Use the serialized string value instead of `nameof`.
 
-### [WFO2008](https://aka.ms/winforms-warnings/wfo2008): Avoid conditional expressions in `InitializeComponent`.
+### [WFO3006](https://aka.ms/winforms-warnings/wfo3006): Avoid conditional expressions in `InitializeComponent`.
 
 Move the condition to the user code file and serialize one deterministic value.
 
-### [WFO2009](https://aka.ms/winforms-warnings/wfo2009): Avoid null-coalescing expressions in `InitializeComponent`.
+### [WFO3007](https://aka.ms/winforms-warnings/wfo3007): Avoid null-coalescing expressions in `InitializeComponent`.
 
 Resolve the fallback outside generated Designer code. This includes both `??` and `??=`.
 
-### [WFO2010](https://aka.ms/winforms-warnings/wfo2010): Avoid null-conditional expressions in `InitializeComponent`.
+### [WFO3008](https://aka.ms/winforms-warnings/wfo3008): Avoid null-conditional expressions in `InitializeComponent`.
 
 Move null-dependent access to the user code file.
 
-### [WFO2011](https://aka.ms/winforms-warnings/wfo2011): Avoid interpolated strings in `InitializeComponent`.
+### [WFO3009](https://aka.ms/winforms-warnings/wfo3009): Avoid interpolated strings in `InitializeComponent`.
 
 Serialize the resulting string value instead of an interpolated expression.
 
-### [WFO2012](https://aka.ms/winforms-warnings/wfo2012): Avoid anonymous functions in `InitializeComponent`.
+### [WFO3010](https://aka.ms/winforms-warnings/wfo3010): Avoid anonymous functions in `InitializeComponent`.
 
 Use a named event handler in the user code file instead of a lambda or anonymous method.
 
-WFO2007–WFO2012 identify constructs that CodeDOM cannot represent. Their separate IDs allow tools and
+WFO3005–WFO3010 identify constructs that CodeDOM cannot represent. Their separate IDs allow tools and
 agents to apply construct-specific guidance.
 
 | Item      | Value             |
 |-----------|-------------------|
 | Category  | WinForms Designer |
 | Enabled   | True              |
-| Severity  | Warning           |
+| Severity  | Error (WFO3000, WFO3001, WFO3003, WFO3004, WFO3006–WFO3008, WFO3010); Warning (WFO3002, WFO3005, WFO3009) |
 | CodeFix   | False             |
 | Added in  | NET11.0           |
 
@@ -142,7 +142,7 @@ agents to apply construct-specific guidance.
 
 ## `PropertyAllocatesNewInstanceAnalyzer`
 
-### [WFO2013](https://aka.ms/winforms-warnings/wfo2013): Avoid constructing fresh reference instances in property getters.
+### [WFO2000](https://aka.ms/winforms-warnings/wfo2000): Avoid constructing fresh reference instances in property getters.
 
 This is a general usage warning, not a Designer-only restriction. It identifies getter return paths
 that directly construct a reference instance, without claiming that every access takes that path.

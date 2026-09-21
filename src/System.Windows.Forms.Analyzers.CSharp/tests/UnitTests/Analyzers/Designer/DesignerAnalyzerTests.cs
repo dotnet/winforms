@@ -79,7 +79,7 @@ public class DesignerAnalyzerTests
             {
                 private void InitializeComponent()
                 {
-                    {|WFO2002:if|} (true)
+                    {|WFO3000:if|} (true)
                     {
                         Controls.Add(new Button());
                     }
@@ -94,21 +94,21 @@ public class DesignerAnalyzerTests
     }
 
     [Theory]
-    [InlineData("{|WFO2002:for|} (int i = 0; i < Controls.Count; i++) { }")]
-    [InlineData("{|WFO2002:foreach|} (Control control in Controls) { }")]
-    [InlineData("{|WFO2002:while|} (DesignMode) { }")]
-    [InlineData("{|WFO2002:do|} { } while (DesignMode);")]
-    [InlineData("{|WFO2002:if|} (DesignMode) { }")]
-    [InlineData("{|WFO2002:switch|} (Controls.Count) { default: break; }")]
-    [InlineData("_ = Controls.Count {|WFO2002:switch|} { _ => 0 };")]
-    [InlineData("void {|WFO2002:Configure|}() { }")]
-    [InlineData("{|WFO2002:goto|} End; End:;")]
-    [InlineData("{|WFO2002:try|} { } catch { }")]
-    [InlineData("{|WFO2002:lock|} (this) { }")]
-    [InlineData("Tag {|WFO2009:??=|} new object();")]
-    [InlineData("{|WFO2002:foreach|} (var (x, y) in new (int, int)[] { (1, 2) }) { }")]
-    [InlineData("{|WFO2002:using|} (var component = new System.ComponentModel.Component()) { }")]
-    [InlineData("{|WFO2002:using|} var component = new System.ComponentModel.Component();")]
+    [InlineData("{|WFO3000:for|} (int i = 0; i < Controls.Count; i++) { }")]
+    [InlineData("{|WFO3000:foreach|} (Control control in Controls) { }")]
+    [InlineData("{|WFO3000:while|} (DesignMode) { }")]
+    [InlineData("{|WFO3000:do|} { } while (DesignMode);")]
+    [InlineData("{|WFO3000:if|} (DesignMode) { }")]
+    [InlineData("{|WFO3000:switch|} (Controls.Count) { default: break; }")]
+    [InlineData("_ = Controls.Count {|WFO3000:switch|} { _ => 0 };")]
+    [InlineData("void {|WFO3000:Configure|}() { }")]
+    [InlineData("{|WFO3000:goto|} End; End:;")]
+    [InlineData("{|WFO3000:try|} { } catch { }")]
+    [InlineData("{|WFO3000:lock|} (this) { }")]
+    [InlineData("Tag {|WFO3007:??=|} new object();")]
+    [InlineData("{|WFO3000:foreach|} (var (x, y) in new (int, int)[] { (1, 2) }) { }")]
+    [InlineData("{|WFO3000:using|} (var component = new System.ComponentModel.Component()) { }")]
+    [InlineData("{|WFO3000:using|} var component = new System.ComponentModel.Component();")]
     public async Task InitializeComponent_UnsupportedConstruct_ReportsDiagnostic(string statement)
     {
         string designerSource =
@@ -146,13 +146,13 @@ public class DesignerAnalyzerTests
             {
                 private void InitializeComponent()
                 {
-                    string name = {|WFO2007:nameof|}(Form1);
-                    string text = {|WFO2011:$"|}{name}: {Controls.Count}";
-                    EventHandler handler = (_, _) {|WFO2012:=>|} Text = text;
-                    EventHandler alternate = {|WFO2012:delegate|} { };
-                    object value = Tag {|WFO2009:??|} this;
-                    Control? control = Parent{|WFO2010:?|}.Parent;
-                    int count = DesignMode {|WFO2008:?|} 0 : Controls.Count;
+                    string name = {|WFO3005:nameof|}(Form1);
+                    string text = {|WFO3009:$"|}{name}: {Controls.Count}";
+                    EventHandler handler = (_, _) {|WFO3010:=>|} Text = text;
+                    EventHandler alternate = {|WFO3010:delegate|} { };
+                    object value = Tag {|WFO3007:??|} this;
+                    Control? control = Parent{|WFO3008:?|}.Parent;
+                    int count = DesignMode {|WFO3006:?|} 0 : Controls.Count;
                 }
             }
             """;
@@ -176,7 +176,7 @@ public class DesignerAnalyzerTests
             {
                 private void InitializeComponent()
                 {
-                    Control[] controls = {|WFO2006:[|}new Button()];
+                    Control[] controls = {|WFO3004:[|}new Button()];
                 }
             }
             """;
@@ -199,16 +199,16 @@ public class DesignerAnalyzerTests
 
             partial class Form1
             {
-                private Button {|WFO2004:button1|};
+                private Button {|WFO3002:button1|};
 
                 private void InitializeComponent()
                 {
                     button1 = new Button();
                 }
 
-                public int {|WFO2003:Value|} { get; set; }
-                public event EventHandler? {|WFO2005:Changed|};
-                public delegate void {|WFO2005:Callback|}();
+                public int {|WFO3001:Value|} { get; set; }
+                public event EventHandler? {|WFO3003:Changed|};
+                public delegate void {|WFO3003:Callback|}();
             }
             """;
 
@@ -229,7 +229,7 @@ public class DesignerAnalyzerTests
 
             partial class Form1 : Form
             {
-                private Button {|WFO2004:button1|};
+                private Button {|WFO3002:button1|};
 
                 public Form1()
                 {
@@ -280,7 +280,7 @@ public class DesignerAnalyzerTests
                     Controls.Add(button1);
                 }
 
-                private Button {|WFO2003:CreateButton|}()
+                private Button {|WFO3001:CreateButton|}()
                 {
                     return new Button();
                 }
@@ -327,7 +327,7 @@ public class DesignerAnalyzerTests
             {
                 private void InitializeComponent()
                 {
-                    {|WFO2002:if|} (DesignMode) { }
+                    {|WFO3000:if|} (DesignMode) { }
                 }
 
                 public partial class Nested
@@ -373,7 +373,7 @@ public class DesignerAnalyzerTests
                 {
                 }
 
-                private void {|WFO2003:Dispose|}(int disposing)
+                private void {|WFO3001:Dispose|}(int disposing)
                 {
                 }
             }
@@ -434,7 +434,7 @@ public class DesignerAnalyzerTests
             """
             is_global = true
 
-            dotnet_diagnostic.WFO2002.severity = none
+            dotnet_diagnostic.WFO3000.severity = none
             """));
 
         await AnalyzerTestFactory.CreateCSharpAnalyzerTest<InitializeComponentAnalyzer>(testCase)
@@ -495,7 +495,7 @@ public class DesignerAnalyzerTests
             namespace Test;
             partial class Form1
             {
-                private void InitializeComponent() {|WFO2002:=>|} Tag = Tag {|WFO2009:??|} new object();
+                private void InitializeComponent() {|WFO3000:=>|} Tag = Tag {|WFO3007:??|} new object();
             }
             """);
 
@@ -549,7 +549,7 @@ public class DesignerAnalyzerTests
     [InlineData("Other.Control", false)]
     public async Task DesignerType_UsesFrameworkIdentity(string baseType, bool expected)
     {
-        string condition = expected ? "{|WFO2002:if|}" : "if";
+        string condition = expected ? "{|WFO3000:if|}" : "if";
         AnalyzerTestCase testCase = new(
             ReferenceAssemblies.Net.Net90Windows,
             new AnalyzerTestSource("Form1.cs",
@@ -608,7 +608,7 @@ public class DesignerAnalyzerTests
             {
                 private async void InitializeComponent()
                 {
-                    {|WFO2002:await|} System.Threading.Tasks.Task.CompletedTask;
+                    {|WFO3000:await|} System.Threading.Tasks.Task.CompletedTask;
                 }
             }
             """);
@@ -626,9 +626,9 @@ public class DesignerAnalyzerTests
             partial class Form1
             {
                 private void InitializeComponent() { }
-                partial class {|WFO2003:Nested|}
+                partial class {|WFO3001:Nested|}
                 {
-                    private void InitializeComponent() { int[] values = {|WFO2006:[|}1, 2]; }
+                    private void InitializeComponent() { int[] values = {|WFO3004:[|}1, 2]; }
                 }
             }
             """);

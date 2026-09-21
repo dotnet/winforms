@@ -26,138 +26,138 @@ internal static partial class SharedDiagnosticDescriptors
             category: DiagnosticCategories.ApplicationConfiguration,
             defaultSeverity: DiagnosticSeverity.Warning);
 
-    // WFO2002
+    // WFO3000
     internal static readonly DiagnosticDescriptor s_unsupportedInitializeComponentCode =
         DiagnosticDescriptorHelper.Create(
             id: DiagnosticIDs.UnsupportedInitializeComponentCode,
-            title: new LocalizableResourceString(nameof(SR.WFO2002Title), SR.ResourceManager, typeof(SR)),
-            messageFormat: new LocalizableResourceString(nameof(SR.WFO2002Message), SR.ResourceManager, typeof(SR)),
+            title: new LocalizableResourceString(nameof(SR.WFO3000Title), SR.ResourceManager, typeof(SR)),
+            messageFormat: new LocalizableResourceString(nameof(SR.WFO3000Message), SR.ResourceManager, typeof(SR)),
             category: DiagnosticCategories.WinFormsDesigner,
-            defaultSeverity: DiagnosticSeverity.Warning);
+            defaultSeverity: DiagnosticSeverity.Error);
 
-    // WFO2003
+    // WFO3001
     internal static readonly DiagnosticDescriptor s_unexpectedDesignerMember =
         DiagnosticDescriptorHelper.Create(
             id: DiagnosticIDs.UnexpectedDesignerMember,
-            title: new LocalizableResourceString(nameof(SR.WFO2003Title), SR.ResourceManager, typeof(SR)),
-            messageFormat: new LocalizableResourceString(nameof(SR.WFO2003Message), SR.ResourceManager, typeof(SR)),
+            title: new LocalizableResourceString(nameof(SR.WFO3001Title), SR.ResourceManager, typeof(SR)),
+            messageFormat: new LocalizableResourceString(nameof(SR.WFO3001Message), SR.ResourceManager, typeof(SR)),
             category: DiagnosticCategories.WinFormsDesigner,
-            defaultSeverity: DiagnosticSeverity.Warning);
+            defaultSeverity: DiagnosticSeverity.Error);
 
-    // WFO2004
+    // WFO3002
     internal static readonly DiagnosticDescriptor s_designerFieldPlacement =
         DiagnosticDescriptorHelper.Create(
             id: DiagnosticIDs.DesignerFieldPlacement,
-            title: new LocalizableResourceString(nameof(SR.WFO2004Title), SR.ResourceManager, typeof(SR)),
-            messageFormat: new LocalizableResourceString(nameof(SR.WFO2004Message), SR.ResourceManager, typeof(SR)),
+            title: new LocalizableResourceString(nameof(SR.WFO3002Title), SR.ResourceManager, typeof(SR)),
+            messageFormat: new LocalizableResourceString(nameof(SR.WFO3002Message), SR.ResourceManager, typeof(SR)),
             category: DiagnosticCategories.WinFormsDesigner,
             defaultSeverity: DiagnosticSeverity.Warning);
 
-    // WFO2005
+    // WFO3003
     internal static readonly DiagnosticDescriptor s_designerEventOrDelegate =
         DiagnosticDescriptorHelper.Create(
             id: DiagnosticIDs.DesignerEventOrDelegate,
-            title: new LocalizableResourceString(nameof(SR.WFO2005Title), SR.ResourceManager, typeof(SR)),
-            messageFormat: new LocalizableResourceString(nameof(SR.WFO2005Message), SR.ResourceManager, typeof(SR)),
+            title: new LocalizableResourceString(nameof(SR.WFO3003Title), SR.ResourceManager, typeof(SR)),
+            messageFormat: new LocalizableResourceString(nameof(SR.WFO3003Message), SR.ResourceManager, typeof(SR)),
             category: DiagnosticCategories.WinFormsDesigner,
-            defaultSeverity: DiagnosticSeverity.Warning);
+            defaultSeverity: DiagnosticSeverity.Error);
 
-    // WFO2006
+    // WFO3004
     internal static readonly DiagnosticDescriptor s_designerCollectionExpression =
         DiagnosticDescriptorHelper.Create(
             id: DiagnosticIDs.DesignerCollectionExpression,
-            title: new LocalizableResourceString(nameof(SR.WFO2006Title), SR.ResourceManager, typeof(SR)),
-            messageFormat: new LocalizableResourceString(nameof(SR.WFO2006Message), SR.ResourceManager, typeof(SR)),
+            title: new LocalizableResourceString(nameof(SR.WFO3004Title), SR.ResourceManager, typeof(SR)),
+            messageFormat: new LocalizableResourceString(nameof(SR.WFO3004Message), SR.ResourceManager, typeof(SR)),
             category: DiagnosticCategories.WinFormsDesigner,
-            defaultSeverity: DiagnosticSeverity.Warning);
+            defaultSeverity: DiagnosticSeverity.Error);
 
-    // WFO2007
+    // WFO3005
     internal static readonly DiagnosticDescriptor s_unsupportedNameOfExpression =
         DiagnosticDescriptorHelper.Create(
             id: DiagnosticIDs.UnsupportedNameOfExpression,
-            title: new LocalizableResourceString(nameof(SR.WFO2007Title), SR.ResourceManager, typeof(SR)),
-            messageFormat: new LocalizableResourceString(nameof(SR.WFO2007Message), SR.ResourceManager, typeof(SR)),
+            title: new LocalizableResourceString(nameof(SR.WFO3005Title), SR.ResourceManager, typeof(SR)),
+            messageFormat: new LocalizableResourceString(nameof(SR.WFO3005Message), SR.ResourceManager, typeof(SR)),
             category: DiagnosticCategories.WinFormsDesigner,
             defaultSeverity: DiagnosticSeverity.Warning);
 
-    // WFO2008
+    // WFO3006
     internal static readonly DiagnosticDescriptor s_unsupportedConditionalExpression =
         DiagnosticDescriptorHelper.Create(
             id: DiagnosticIDs.UnsupportedConditionalExpression,
-            title: new LocalizableResourceString(nameof(SR.WFO2008Title), SR.ResourceManager, typeof(SR)),
-            messageFormat: new LocalizableResourceString(nameof(SR.WFO2008Message), SR.ResourceManager, typeof(SR)),
+            title: new LocalizableResourceString(nameof(SR.WFO3006Title), SR.ResourceManager, typeof(SR)),
+            messageFormat: new LocalizableResourceString(nameof(SR.WFO3006Message), SR.ResourceManager, typeof(SR)),
             category: DiagnosticCategories.WinFormsDesigner,
-            defaultSeverity: DiagnosticSeverity.Warning);
+            defaultSeverity: DiagnosticSeverity.Error);
 
-    // WFO2009
+    // WFO3007
     internal static readonly DiagnosticDescriptor s_unsupportedNullCoalescingExpression =
         DiagnosticDescriptorHelper.Create(
             id: DiagnosticIDs.UnsupportedNullCoalescingExpression,
-            title: new LocalizableResourceString(nameof(SR.WFO2009Title), SR.ResourceManager, typeof(SR)),
-            messageFormat: new LocalizableResourceString(nameof(SR.WFO2009Message), SR.ResourceManager, typeof(SR)),
+            title: new LocalizableResourceString(nameof(SR.WFO3007Title), SR.ResourceManager, typeof(SR)),
+            messageFormat: new LocalizableResourceString(nameof(SR.WFO3007Message), SR.ResourceManager, typeof(SR)),
             category: DiagnosticCategories.WinFormsDesigner,
-            defaultSeverity: DiagnosticSeverity.Warning);
+            defaultSeverity: DiagnosticSeverity.Error);
 
-    // WFO2010
+    // WFO3008
     internal static readonly DiagnosticDescriptor s_unsupportedNullConditionalExpression =
         DiagnosticDescriptorHelper.Create(
             id: DiagnosticIDs.UnsupportedNullConditionalExpression,
-            title: new LocalizableResourceString(nameof(SR.WFO2010Title), SR.ResourceManager, typeof(SR)),
-            messageFormat: new LocalizableResourceString(nameof(SR.WFO2010Message), SR.ResourceManager, typeof(SR)),
+            title: new LocalizableResourceString(nameof(SR.WFO3008Title), SR.ResourceManager, typeof(SR)),
+            messageFormat: new LocalizableResourceString(nameof(SR.WFO3008Message), SR.ResourceManager, typeof(SR)),
             category: DiagnosticCategories.WinFormsDesigner,
-            defaultSeverity: DiagnosticSeverity.Warning);
+            defaultSeverity: DiagnosticSeverity.Error);
 
-    // WFO2011
+    // WFO3009
     internal static readonly DiagnosticDescriptor s_unsupportedInterpolatedString =
         DiagnosticDescriptorHelper.Create(
             id: DiagnosticIDs.UnsupportedInterpolatedString,
-            title: new LocalizableResourceString(nameof(SR.WFO2011Title), SR.ResourceManager, typeof(SR)),
-            messageFormat: new LocalizableResourceString(nameof(SR.WFO2011Message), SR.ResourceManager, typeof(SR)),
+            title: new LocalizableResourceString(nameof(SR.WFO3009Title), SR.ResourceManager, typeof(SR)),
+            messageFormat: new LocalizableResourceString(nameof(SR.WFO3009Message), SR.ResourceManager, typeof(SR)),
             category: DiagnosticCategories.WinFormsDesigner,
             defaultSeverity: DiagnosticSeverity.Warning);
 
-    // WFO2012
+    // WFO3010
     internal static readonly DiagnosticDescriptor s_unsupportedAnonymousFunction =
         DiagnosticDescriptorHelper.Create(
             id: DiagnosticIDs.UnsupportedAnonymousFunction,
-            title: new LocalizableResourceString(nameof(SR.WFO2012Title), SR.ResourceManager, typeof(SR)),
-            messageFormat: new LocalizableResourceString(nameof(SR.WFO2012Message), SR.ResourceManager, typeof(SR)),
+            title: new LocalizableResourceString(nameof(SR.WFO3010Title), SR.ResourceManager, typeof(SR)),
+            messageFormat: new LocalizableResourceString(nameof(SR.WFO3010Message), SR.ResourceManager, typeof(SR)),
             category: DiagnosticCategories.WinFormsDesigner,
-            defaultSeverity: DiagnosticSeverity.Warning);
+            defaultSeverity: DiagnosticSeverity.Error);
 
-    // WFO2013
+    // WFO2000
     internal static readonly DiagnosticDescriptor s_propertyAllocatesNewInstance =
         DiagnosticDescriptorHelper.Create(
             id: DiagnosticIDs.PropertyAllocatesNewInstance,
-            title: new LocalizableResourceString(nameof(SR.WFO2013Title), SR.ResourceManager, typeof(SR)),
-            messageFormat: new LocalizableResourceString(nameof(SR.WFO2013Message), SR.ResourceManager, typeof(SR)),
+            title: new LocalizableResourceString(nameof(SR.WFO2000Title), SR.ResourceManager, typeof(SR)),
+            messageFormat: new LocalizableResourceString(nameof(SR.WFO2000Message), SR.ResourceManager, typeof(SR)),
             category: DiagnosticCategories.WinFormsUsage,
             defaultSeverity: DiagnosticSeverity.Warning);
 
-    // WFO2012 (Visual Basic)
+    // WFO3010 (Visual Basic)
     internal static readonly DiagnosticDescriptor s_visualBasicUnsupportedAnonymousFunction =
         DiagnosticDescriptorHelper.Create(
             id: DiagnosticIDs.UnsupportedAnonymousFunction,
-            title: new LocalizableResourceString(nameof(SR.WFO2012Title), SR.ResourceManager, typeof(SR)),
-            messageFormat: new LocalizableResourceString(nameof(SR.WFO2012Message_VB), SR.ResourceManager, typeof(SR)),
+            title: new LocalizableResourceString(nameof(SR.WFO3010Title), SR.ResourceManager, typeof(SR)),
+            messageFormat: new LocalizableResourceString(nameof(SR.WFO3010Message_VB), SR.ResourceManager, typeof(SR)),
             category: DiagnosticCategories.WinFormsDesigner,
-            defaultSeverity: DiagnosticSeverity.Warning);
+            defaultSeverity: DiagnosticSeverity.Error);
 
-    // WFO2014 (Visual Basic)
+    // WFO3011 (Visual Basic)
     internal static readonly DiagnosticDescriptor s_designerMissingWithEvents =
         DiagnosticDescriptorHelper.Create(
             id: DiagnosticIDs.DesignerMissingWithEvents,
-            title: new LocalizableResourceString(nameof(SR.WFO2014Title), SR.ResourceManager, typeof(SR)),
-            messageFormat: new LocalizableResourceString(nameof(SR.WFO2014Message), SR.ResourceManager, typeof(SR)),
+            title: new LocalizableResourceString(nameof(SR.WFO3011Title), SR.ResourceManager, typeof(SR)),
+            messageFormat: new LocalizableResourceString(nameof(SR.WFO3011Message), SR.ResourceManager, typeof(SR)),
             category: DiagnosticCategories.WinFormsDesigner,
-            defaultSeverity: DiagnosticSeverity.Warning);
+            defaultSeverity: DiagnosticSeverity.Error);
 
-    // WFO2015 (Visual Basic)
+    // WFO3012 (Visual Basic)
     internal static readonly DiagnosticDescriptor s_designerAddHandler =
         DiagnosticDescriptorHelper.Create(
             id: DiagnosticIDs.DesignerAddHandler,
-            title: new LocalizableResourceString(nameof(SR.WFO2015Title), SR.ResourceManager, typeof(SR)),
-            messageFormat: new LocalizableResourceString(nameof(SR.WFO2015Message), SR.ResourceManager, typeof(SR)),
+            title: new LocalizableResourceString(nameof(SR.WFO3012Title), SR.ResourceManager, typeof(SR)),
+            messageFormat: new LocalizableResourceString(nameof(SR.WFO3012Message), SR.ResourceManager, typeof(SR)),
             category: DiagnosticCategories.WinFormsDesigner,
-            defaultSeverity: DiagnosticSeverity.Warning);
+            defaultSeverity: DiagnosticSeverity.Error);
 }
