@@ -2780,9 +2780,6 @@ public abstract partial class TextBoxBase : Control
         Graphics offscreenGraphics = buffer.Graphics;
         Rectangle bufferBounds = bounds;
 
-        // We need anti-aliasing for the rounded chrome.
-        offscreenGraphics.SmoothingMode = SmoothingMode.AntiAlias;
-
         // AddRoundedRectangle receives the bounding size of each corner arc, so one corner size plus
         // the border thickness is the minimum height that avoids overlapping curves.
         bool canRenderRoundedChrome = CanRenderVisualStylesRoundedChrome(
@@ -2790,7 +2787,17 @@ public abstract partial class TextBoxBase : Control
             cornerRadius,
             borderThickness);
 
-        if (BorderStyle == BorderStyle.Fixed3D && canRenderRoundedChrome)
+        bool usesRoundedChrome =
+            BorderStyle == BorderStyle.Fixed3D
+            && canRenderRoundedChrome;
+
+        // We need anti-aliasing for the rounded chrome.
+        offscreenGraphics.SmoothingMode =
+            BorderStyle == BorderStyle.None
+                ? SmoothingMode.None
+                : SmoothingMode.AntiAlias;
+
+        if (usesRoundedChrome)
         {
             ParentBackgroundRenderer.Paint(this, offscreenGraphics, bufferBounds, parentBackColor);
         }
@@ -2804,8 +2811,7 @@ public abstract partial class TextBoxBase : Control
         {
             case BorderStyle.None:
 
-                // Just fill a rectangle.
-                offscreenGraphics.FillRectangle(clientBackgroundBrush, deflatedBounds);
+                offscreenGraphics.FillRectangle(clientBackgroundBrush, bounds);
                 break;
 
             case BorderStyle.FixedSingle:
@@ -2843,7 +2849,7 @@ public abstract partial class TextBoxBase : Control
                 break;
         }
 
-        if (BorderStyle == BorderStyle.Fixed3D && canRenderRoundedChrome)
+        if (usesRoundedChrome)
         {
             Color focusColor = GetVisualStylesFocusColor(Application.SystemVisualSettings.HighContrastEnabled);
             FocusIndicatorRenderer.DrawRoundedFocusIndicator(

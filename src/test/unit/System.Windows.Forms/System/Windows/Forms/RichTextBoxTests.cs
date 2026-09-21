@@ -10871,6 +10871,258 @@ public partial class RichTextBoxTests
         callCount.Should().Be(1);
     }
 
+    [WinFormsFact]
+    public void RichTextBox_DrawToBitmap_Net11BorderStyleNone_DoesNotRenderBorder()
+    {
+        using Form form = new()
+        {
+            ClientSize = new Size(300, 200),
+            VisualStylesMode = VisualStylesMode.Net11
+        };
+
+        using RichTextBox control = new()
+        {
+            BackColor = Color.White,
+            BorderStyle = BorderStyle.None,
+            Location = new Point(20, 20),
+            Size = new Size(200, 100),
+            VisualStylesMode = VisualStylesMode.Net11
+        };
+
+        form.Controls.Add(control);
+        form.Show();
+
+        using Bitmap bitmap = DrawToBitmapWithBackground(control);
+
+        AssertBorderless(
+            bitmap,
+            control.BackColor,
+            checkBottom: false);
+    }
+
+    [WinFormsFact]
+    public void RichTextBox_DrawToBitmap_Net11BorderStyleNoneFocused_DoesNotRenderBorder()
+    {
+        using Form form = new()
+        {
+            ClientSize = new Size(300, 200),
+            VisualStylesMode = VisualStylesMode.Net11
+        };
+
+        using RichTextBox control = new()
+        {
+            BackColor = Color.White,
+            BorderStyle = BorderStyle.None,
+            Location = new Point(20, 20),
+            Size = new Size(200, 100),
+            VisualStylesMode = VisualStylesMode.Net11
+        };
+
+        form.Controls.Add(control);
+        form.Show();
+
+        Assert.True(control.Focus());
+        Assert.True(control.Focused);
+
+        using Bitmap bitmap = DrawToBitmapWithBackground(control);
+
+        AssertBorderless(
+            bitmap,
+            control.BackColor,
+            checkBottom: true);
+    }
+
+    [WinFormsFact]
+    public void RichTextBox_DrawToBitmap_Net11BorderStyleFixedSingle_RendersAllBorderEdges()
+    {
+        using Form form = new()
+        {
+            ClientSize = new Size(300, 200),
+            VisualStylesMode = VisualStylesMode.Net11
+        };
+
+        using RichTextBox control = new()
+        {
+            BackColor = Color.White,
+            BorderStyle = BorderStyle.FixedSingle,
+            Location = new Point(20, 20),
+            Size = new Size(200, 100),
+            VisualStylesMode = VisualStylesMode.Net11
+        };
+
+        form.Controls.Add(control);
+        form.Show();
+
+        using Bitmap bitmap = DrawToBitmapWithBackground(control);
+
+        AssertContainsBorderPixel(bitmap, control.BackColor);
+    }
+
+    [WinFormsFact]
+    public void RichTextBox_DrawToBitmap_Net11BorderStyleFixedSingleFocused_RendersAllBorderEdges()
+    {
+        using Form form = new()
+        {
+            ClientSize = new Size(300, 200),
+            VisualStylesMode = VisualStylesMode.Net11
+        };
+
+        using RichTextBox control = new()
+        {
+            BackColor = Color.White,
+            BorderStyle = BorderStyle.FixedSingle,
+            Location = new Point(20, 20),
+            Size = new Size(200, 100),
+            VisualStylesMode = VisualStylesMode.Net11
+        };
+
+        form.Controls.Add(control);
+        form.Show();
+
+        Assert.True(control.Focus());
+        Assert.True(control.Focused);
+
+        using Bitmap bitmap = DrawToBitmapWithBackground(control);
+
+        AssertContainsBorderPixel(bitmap, control.BackColor);
+    }
+
+    [WinFormsFact]
+    public void RichTextBox_DrawToBitmap_Net11BorderStyleFixed3D_RendersBorder()
+    {
+        using Form form = new()
+        {
+            ClientSize = new Size(300, 200),
+            VisualStylesMode = VisualStylesMode.Net11
+        };
+
+        using RichTextBox control = new()
+        {
+            BackColor = Color.White,
+            BorderStyle = BorderStyle.Fixed3D,
+            Location = new Point(20, 20),
+            Size = new Size(200, 100),
+            VisualStylesMode = VisualStylesMode.Net11
+        };
+
+        form.Controls.Add(control);
+        form.Show();
+
+        using Bitmap bitmap = DrawToBitmapWithBackground(control);
+
+        AssertContainsBorderPixel(bitmap, control.BackColor);
+    }
+
+    [WinFormsFact]
+    public void RichTextBox_BorderStyle_SetNone_Net11_DoesNotRenderBorder()
+    {
+        using Form form = new()
+        {
+            ClientSize = new Size(300, 200),
+            VisualStylesMode = VisualStylesMode.Net11
+        };
+
+        using RichTextBox control = new()
+        {
+            BackColor = Color.White,
+            BorderStyle = BorderStyle.Fixed3D,
+            Location = new Point(20, 20),
+            Size = new Size(200, 100),
+            VisualStylesMode = VisualStylesMode.Net11
+        };
+
+        form.Controls.Add(control);
+        form.Show();
+
+        control.BorderStyle = BorderStyle.None;
+
+        Assert.Equal(BorderStyle.None, control.BorderStyle);
+        Assert.True(control.Focus());
+        Assert.True(control.Focused);
+
+        using Bitmap bitmap = DrawToBitmapWithBackground(control);
+
+        AssertBorderless(
+            bitmap,
+            control.BackColor,
+            checkBottom: true);
+    }
+
+    private static Bitmap DrawToBitmapWithBackground(Control control)
+    {
+        Bitmap bitmap = new(control.Width, control.Height);
+
+        using (Graphics graphics = Graphics.FromImage(bitmap))
+        {
+            graphics.Clear(control.BackColor);
+        }
+
+        control.DrawToBitmap(bitmap, control.ClientRectangle);
+
+        return bitmap;
+    }
+
+    private static void AssertBorderless(
+        Bitmap bitmap,
+        Color expectedColor,
+        bool checkBottom)
+    {
+        int expectedArgb = expectedColor.ToArgb();
+
+        // Validate the top edge, excluding the corners.
+        for (int x = 1; x < bitmap.Width - 1; x++)
+        {
+            Assert.Equal(
+                expectedArgb,
+                bitmap.GetPixel(x, 0).ToArgb());
+        }
+
+        // Validate the left edge, excluding the corners.
+        for (int y = 1; y < bitmap.Height - 1; y++)
+        {
+            Assert.Equal(
+                expectedArgb,
+                bitmap.GetPixel(0, y).ToArgb());
+        }
+
+        if (checkBottom)
+        {
+            int bottom = bitmap.Height - 1;
+
+            // Validate that the focused bottom indicator is not rendered.
+            for (int x = 1; x < bitmap.Width - 1; x++)
+            {
+                Assert.Equal(
+                    expectedArgb,
+                    bitmap.GetPixel(x, bottom).ToArgb());
+            }
+        }
+    }
+
+    private static void AssertContainsBorderPixel(
+        Bitmap bitmap,
+        Color clientColor)
+    {
+        int clientColorArgb = clientColor.ToArgb();
+        bool containsBorderPixel = false;
+
+        for (int x = 0; x < bitmap.Width && !containsBorderPixel; x++)
+        {
+            containsBorderPixel =
+                bitmap.GetPixel(x, 0).ToArgb() != clientColorArgb
+                || bitmap.GetPixel(x, bitmap.Height - 1).ToArgb() != clientColorArgb;
+        }
+
+        for (int y = 0; y < bitmap.Height && !containsBorderPixel; y++)
+        {
+            containsBorderPixel =
+                bitmap.GetPixel(0, y).ToArgb() != clientColorArgb
+                || bitmap.GetPixel(bitmap.Width - 1, y).ToArgb() != clientColorArgb;
+        }
+
+        Assert.True(containsBorderPixel);
+    }
+
     private class CustomGetParaFormatRichTextBox : RichTextBox
     {
         public bool MakeCustom { get; set; }
