@@ -101,7 +101,14 @@ Namespace Global.System.Windows.Forms.VisualBasic.Analyzers.Designer
                 Dim receiver As String = Nothing
                 Dim instance = TryCast(eventReference.Instance, IInstanceReferenceOperation)
                 If instance IsNot Nothing AndAlso instance.ReferenceKind = InstanceReferenceKind.ContainingTypeInstance Then
-                    receiver = If(TypeOf instance.Syntax Is MyBaseExpressionSyntax, "MyBase", "Me")
+                    Select Case instance.Syntax.Kind()
+                        Case SyntaxKind.MyBaseExpression
+                            receiver = "MyBase"
+                        Case SyntaxKind.MyClassExpression
+                            receiver = "MyClass"
+                        Case Else
+                            receiver = "Me"
+                    End Select
                 Else
                     Dim member As ISymbol = DesignerTypeFacts.GetInstanceMember(eventReference.Instance)
                     Dim propertySymbol = TryCast(member, IPropertySymbol)

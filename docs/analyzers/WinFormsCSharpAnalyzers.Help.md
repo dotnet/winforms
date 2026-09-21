@@ -146,6 +146,7 @@ agents to apply construct-specific guidance.
 
 This is a general usage warning, not a Designer-only restriction. It identifies getter return paths
 that directly construct a reference instance, without claiming that every access takes that path.
+This includes directly returned arrays and anonymous objects.
 Value-type construction, cached and initializer-backed properties, indexers, generated code, and
 returns inside nested lambdas/local functions are excluded. User-defined conversions are not treated
 as transparent returns. The rule does not perform interprocedural factory analysis.

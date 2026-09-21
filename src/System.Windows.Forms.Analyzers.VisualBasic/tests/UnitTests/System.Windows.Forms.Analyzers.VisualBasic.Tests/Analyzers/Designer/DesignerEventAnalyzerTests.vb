@@ -78,17 +78,48 @@ End Class
     End Function
 
     <Theory>
-    <InlineData("Me")>
-    <InlineData("MyBase")>
-    Public Async Function RootEvent_RequiresHandles(receiver As String) As Task
+    <InlineData("Me.", "Me")>
+    <InlineData("MyBase.", "MyBase")>
+    <InlineData("MyClass.", "MyClass")>
+    <InlineData("myclass.", "MyClass")>
+    <InlineData("", "Me")>
+    Public Async Function RootEvent_RequiresHandles(receiver As String, expectedReceiver As String) As Task
         Dim testCase As AnalyzerTestCase = CreateTestCase(
             $"
 Partial Class Form1
     Private Sub InitializeComponent()
-        {{|WFO2015:AddHandler|}} {receiver}.Click, AddressOf HandleClick
+        {{|#0:AddHandler|}} {receiver}Click, AddressOf HandleClick
     End Sub
 End Class
 ")
+        testCase.ExpectedDiagnostics.Add(
+            New DiagnosticResult("WFO2015", Microsoft.CodeAnalysis.DiagnosticSeverity.Warning).
+                WithLocation(0).
+                WithArguments($"{expectedReceiver}.Click"))
+
+        Await AnalyzerTestFactory.CreateVisualBasicAnalyzerTest(Of DesignerEventAnalyzer)(testCase).
+            RunAsync(TestContext.Current.CancellationToken)
+    End Function
+
+    <Theory>
+    <InlineData("Me")>
+    <InlineData("MyBase")>
+    <InlineData("MyClass")>
+    Public Async Function RootEvent_HandlesRepair_NoDiagnostic(receiver As String) As Task
+        Dim testCase As AnalyzerTestCase = CreateTestCase(
+            "
+Partial Class Form1
+    Private Sub InitializeComponent()
+    End Sub
+End Class
+")
+        testCase.Sources.Add(New AnalyzerTestSource("Handlers.vb",
+            $"
+Partial Class Form1
+    Private Sub RootClick(sender As Object, e As System.EventArgs) Handles {receiver}.Click
+    End Sub
+End Class
+"))
 
         Await AnalyzerTestFactory.CreateVisualBasicAnalyzerTest(Of DesignerEventAnalyzer)(testCase).
             RunAsync(TestContext.Current.CancellationToken)
