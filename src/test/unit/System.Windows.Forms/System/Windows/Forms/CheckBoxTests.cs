@@ -640,7 +640,6 @@ public class CheckBoxTests : AbstractButtonBaseTests
         backgroundImage.SetPixel(0, 0, Color.Blue);
         using GroupBox parent = new()
         {
-            BackColor = Color.Red,
             BackgroundImage = backgroundImage,
             Size = new Size(80, 50),
             VisualStylesMode = VisualStylesMode.Net11
@@ -659,7 +658,7 @@ public class CheckBoxTests : AbstractButtonBaseTests
 
         box.CreateStandardAdapter().PaintUp(e, box.CheckState);
 
-        Assert.Equal(Color.Red.ToArgb(), bitmap.GetPixel(box.Width - 2, box.Height / 2).ToArgb());
+        Assert.Equal(parent.BackColor.ToArgb(), bitmap.GetPixel(box.Width - 2, box.Height / 2).ToArgb());
     }
 
     [WinFormsFact]

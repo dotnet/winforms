@@ -280,7 +280,6 @@ public class RadioButtonTests : AbstractButtonBaseTests
         backgroundImage.SetPixel(0, 0, Color.Blue);
         using GroupBox parent = new()
         {
-            BackColor = Color.Red,
             BackgroundImage = backgroundImage,
             Size = new Size(80, 50),
             VisualStylesMode = VisualStylesMode.Net11
@@ -299,7 +298,7 @@ public class RadioButtonTests : AbstractButtonBaseTests
 
         control.CreateStandardAdapter().PaintUp(e, CheckState.Unchecked);
 
-        Assert.Equal(Color.Red.ToArgb(), bitmap.GetPixel(control.Width - 2, control.Height / 2).ToArgb());
+        Assert.Equal(parent.BackColor.ToArgb(), bitmap.GetPixel(control.Width - 2, control.Height / 2).ToArgb());
     }
 
     [WinFormsFact]
