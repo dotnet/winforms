@@ -2517,11 +2517,6 @@ public abstract partial class TextBoxBase : Control
     private protected virtual bool ReservesNativeNonClientArea => false;
 
     /// <summary>
-    ///  Gets the background color used to paint the modern Visual Styles non-client area.
-    /// </summary>
-    private protected virtual Color VisualStylesBackColor => BackColor;
-
-    /// <summary>
     ///  Handles <c>WM_NCCALCSIZE</c> by carving the modern Visual Styles padding band from the client
     ///  rectangle. The carve is floored so the client rectangle can never invert.
     /// </summary>
@@ -2751,8 +2746,17 @@ public abstract partial class TextBoxBase : Control
         Size focusBorderMetrics = GetVisualStylesFocusBorderMetrics();
         int borderThickness = ScaleVisualStylesMetric(ModernControlVisualStyles.BorderThickness);
         int focusBandHeight = GetVisualStylesFocusBandHeight();
+        Color clientBackColor = BackColor;
+        if (this is RichTextBox
+            && EffectiveVisualStylesMode >= VisualStylesMode.Net11
+            && !Enabled
+            && !ShouldSerializeBackColor())
+        {
+            clientBackColor = Application.IsDarkModeEnabled && DarkModeRequestState is true
+                ? SystemColors.ControlDark
+                : SystemColors.Control;
+        }
 
-        Color clientBackColor = VisualStylesBackColor;
         Color parentBackColor = Parent?.BackColor ?? BackColor;
         Color adornerColor = Enabled
             ? ModernControlColorMath.TextControlBorderColor

@@ -328,26 +328,6 @@ public partial class RichTextBox : TextBoxBase
     /// </summary>
     private protected override bool ReservesNativeNonClientArea => true;
 
-    private protected override Color VisualStylesBackColor
-    {
-        get
-        {
-            if (EffectiveVisualStylesMode < VisualStylesMode.Net11 || Enabled)
-            {
-                return BackColor;
-            }
-
-            if (ShouldSerializeBackColor())
-            {
-                return BackColor;
-            }
-
-            return Application.IsDarkModeEnabled
-                ? SystemColors.ControlDark
-                : SystemColors.Control;
-        }
-    }
-
     /// <summary>
     ///  RichEdit reserves the scrollbar space itself while processing <c>WM_NCCALCSIZE</c> (see
     ///  <see cref="ReservesNativeNonClientArea"/>). Return the configured reservation for preferred-size
@@ -2453,7 +2433,10 @@ public partial class RichTextBox : TextBoxBase
 
     protected override void OnBackColorChanged(EventArgs e)
     {
-        UpdateBackgroundColor();
+        if (IsHandleCreated)
+        {
+            PInvokeCore.SendMessage(this, PInvokeCore.EM_SETBKGNDCOLOR, 0, BackColor.ToWin32());
+        }
 
         base.OnBackColorChanged(e);
     }
@@ -2558,7 +2541,7 @@ public partial class RichTextBox : TextBoxBase
         bool autoWordSelection = AutoWordSelection;
         AutoWordSelection = autoWordSelection;
 
-        UpdateBackgroundColor();
+        PInvokeCore.SendMessage(this, PInvokeCore.EM_SETBKGNDCOLOR, (WPARAM)0, (LPARAM)BackColor);
         InternalSetForeColor(ForeColor);
 
         // base sets the Text property. It's important to do this *after* setting EM_AUTOUrlDETECT.
@@ -3215,16 +3198,6 @@ public partial class RichTextBox : TextBoxBase
         PInvokeCore.DragAcceptFiles(this, fAccept: false);
     }
 
-    private void UpdateBackgroundColor()
-    {
-        if (!IsHandleCreated)
-        {
-            return;
-        }
-
-        PInvokeCore.SendMessage(this, PInvokeCore.EM_SETBKGNDCOLOR, 0, VisualStylesBackColor.ToWin32());
-    }
-
     // Note: RichTextBox doesn't work like other controls as far as setting ForeColor/
     // BackColor -- you need to send messages to update the colors
     private void UserPreferenceChangedHandler(object o, UserPreferenceChangedEventArgs e)
@@ -3233,7 +3206,7 @@ public partial class RichTextBox : TextBoxBase
         {
             if (BackColor.IsSystemColor)
             {
-                UpdateBackgroundColor();
+                PInvokeCore.SendMessage(this, PInvokeCore.EM_SETBKGNDCOLOR, 0, BackColor.ToWin32());
             }
 
             if (ForeColor.IsSystemColor)
@@ -3563,7 +3536,6 @@ public partial class RichTextBox : TextBoxBase
                 base.WndProc(ref m);
 
                 bool shouldPaintDisabledModernBackColor = EffectiveVisualStylesMode >= VisualStylesMode.Net11;
-
                 if (Handle == m.HWND
                     && !Enabled
                     && (shouldPaintDisabledModernBackColor || Application.IsDarkModeEnabled))
@@ -3576,7 +3548,11 @@ public partial class RichTextBox : TextBoxBase
 
                     // Paint the background
                     Color backgroundColor = shouldPaintDisabledModernBackColor
-                        ? VisualStylesBackColor
+                        ? ShouldSerializeBackColor()
+                            ? BackColor
+                            : Application.IsDarkModeEnabled && DarkModeRequestState is true
+                                ? SystemColors.ControlDark
+                                : SystemColors.Control
                         : SystemColors.ControlDark;
                     using var backgroundBrush = backgroundColor.GetCachedSolidBrushScope();
                     g.FillRectangle(backgroundBrush, ClientRectangle);
@@ -3646,15 +3622,6 @@ public partial class RichTextBox : TextBoxBase
             case PInvokeCore.WM_GETDLGCODE:
                 base.WndProc(ref m);
                 m.ResultInternal = (LRESULT)(AcceptsTab ? m.ResultInternal | (nint)PInvoke.DLGC_WANTTAB : m.ResultInternal & ~(nint)PInvoke.DLGC_WANTTAB);
-                break;
-
-            case PInvokeCore.WM_ENABLE:
-                base.WndProc(ref m);
-                if (EffectiveVisualStylesMode >= VisualStylesMode.Net11)
-                {
-                    UpdateBackgroundColor();
-                }
-
                 break;
 
             case PInvokeCore.WM_GETOBJECT:
