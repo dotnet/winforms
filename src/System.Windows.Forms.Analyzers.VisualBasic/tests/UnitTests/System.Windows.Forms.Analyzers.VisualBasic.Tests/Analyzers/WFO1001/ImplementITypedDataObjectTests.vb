@@ -119,15 +119,17 @@ Public NotInheritable Class ImplementITypedDataObjectTests
         Assert.NotNull(CurrentReferences.NetCoreAppReferences)
         Assert.NotNull(CurrentReferences.WinFormsRefPath)
 
-        Dim context As New VisualBasicAnalyzerTest(Of ImplementITypedDataObjectInAdditionToIDataObjectAnalyzer, DefaultVerifier) With {
-            .TestCode = input,
-            .ReferenceAssemblies = CurrentReferences.NetCoreAppReferences
-        }
+        Dim testCase As New AnalyzerTestCase(
+            CurrentReferences.NetCoreAppReferences,
+            New AnalyzerTestSource("Test0.vb", input)) With
+            {
+                .OutputKind = OutputKind.DynamicallyLinkedLibrary
+            }
 
-        context.TestState.OutputKind = OutputKind.DynamicallyLinkedLibrary
-        context.TestState.AdditionalReferences.Add(CurrentReferences.WinFormsRefPath)
+        testCase.AdditionalReferences.Add(CurrentReferences.WinFormsRefPath)
 
-        Return context
+        Return AnalyzerTestFactory.CreateVisualBasicAnalyzerTest(
+            Of ImplementITypedDataObjectInAdditionToIDataObjectAnalyzer)(testCase)
     End Function
 
 End Class
