@@ -20,7 +20,7 @@ internal class DarkModeButtonColors
     ///  Gets the default accept (default) button focus indicator back color (#A0A0A0).
     /// </summary>
     public virtual Color DefaultAcceptFocusIndicatorBackColor =>
-        Color.FromArgb(0xA0, 0xA0, 0xA0);
+        Color.FromArgb(0xFF, 0x00, 0x00, 0x00);
 
     /// <summary>
     ///  Gets the default button background color (#333333).
