@@ -31,7 +31,9 @@ public sealed class PropertyAllocatesNewInstanceAnalyzer : DiagnosticAnalyzer
                 ConcurrentDictionary<IPropertySymbol, byte> reportedProperties = new(SymbolEqualityComparer.Default);
                 startContext.RegisterOperationAction(
                     context => AnalyzeCreation(context, reportedProperties),
-                    OperationKind.ObjectCreation);
+                    OperationKind.ObjectCreation,
+                    OperationKind.ArrayCreation,
+                    OperationKind.AnonymousObjectCreation);
             });
     }
 

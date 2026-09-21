@@ -141,8 +141,9 @@ the components container, scalar/helper fields, or local variables.
 
 Replace `AddHandler Button1.Click, AddressOf Button1_Click` in `InitializeComponent` with
 `Handles Button1.Click` on the named handler in the user partial, without retaining both hookups.
-Root events use `Handles Me.EventName` or `Handles MyBase.EventName`; inherited `WithEvents` members
-also support `Handles` without redeclaring them.
+Root events preserve the receiver with `Handles Me.EventName`, `Handles MyBase.EventName`, or
+`Handles MyClass.EventName`; inherited `WithEvents` members also support `Handles` without
+redeclaring them.
 
 This is not a blanket ban on `AddHandler`. The designer's field-generation setting is named
 `GenerateMember`: when it is `False`, components can be locals, and supported
@@ -170,6 +171,7 @@ subscriptions requires preserving captures, accessibility, and existing `Handles
 
 This remains a general usage warning, not a Designer-only restriction. It identifies getter return
 paths that directly construct reference instances, not guaranteed allocation on every access.
+This includes directly returned arrays and anonymous objects.
 Value types, cached and initializer-backed properties, indexers, generated code, nested lambda
 returns, and user-defined conversions are excluded.
 

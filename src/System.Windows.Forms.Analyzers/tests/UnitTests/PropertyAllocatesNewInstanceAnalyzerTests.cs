@@ -11,6 +11,141 @@ namespace System.Windows.Forms.Analyzers.Tests;
 /// </summary>
 public class PropertyAllocatesNewInstanceAnalyzerTests
 {
+    [Theory]
+    [InlineData("new object[1]")]
+    [InlineData("new[] { new object() }")]
+    [InlineData("new { Value = new object() }")]
+    public async Task CSharp_ArrayAndAnonymousObjectCreation_ReportsWarning(string creation)
+    {
+        AnalyzerTestCase testCase = new(
+            ReferenceAssemblies.Net.Net90,
+            new AnalyzerTestSource("Example.cs",
+                $$"""
+                class Example
+                {
+                    public object {|WFO2013:ExpressionBodied|} => {{creation}};
+                    public object {|WFO2013:Getter|}
+                    {
+                        get
+                        {
+                            if (System.DateTime.Now.Ticks > 0) return {{creation}};
+                            return (object)({{creation}});
+                        }
+                    }
+                }
+                """));
+
+        await AnalyzerTestFactory.CreateCSharpAnalyzerTest<PropertyAllocatesNewInstanceAnalyzer>(testCase)
+            .RunAsync(TestContext.Current.CancellationToken);
+    }
+
+    [Theory]
+    [InlineData("New Object(0) {}")]
+    [InlineData("{New Object()}")]
+    [InlineData("New With {.Value = New Object()}")]
+    public async Task VisualBasic_ArrayAndAnonymousObjectCreation_ReportsWarning(string creation)
+    {
+        AnalyzerTestCase testCase = new(
+            ReferenceAssemblies.Net.Net90,
+            new AnalyzerTestSource("Example.vb",
+                $$"""
+                Class Example
+                    Public ReadOnly Property {|WFO2013:Value|} As Object
+                        Get
+                            If System.DateTime.Now.Ticks > 0 Then Return {{creation}}
+                            Return CType(({{creation}}), Object)
+                        End Get
+                    End Property
+                End Class
+                """));
+
+        await AnalyzerTestFactory.CreateVisualBasicAnalyzerTest<PropertyAllocatesNewInstanceAnalyzer>(testCase)
+            .RunAsync(TestContext.Current.CancellationToken);
+    }
+
+    [Theory]
+    [InlineData("new object[1]")]
+    [InlineData("new[] { new object() }")]
+    [InlineData("new { Value = new object() }")]
+    public async Task CSharp_ArrayAndAnonymousObjectCreation_ExcludedContexts_NoDiagnostic(string creation)
+    {
+        AnalyzerTestCase testCase = new(
+            ReferenceAssemblies.Net.Net90,
+            new AnalyzerTestSource("Example.cs",
+                $$"""
+                class Example
+                {
+                    private readonly object _cached = {{creation}};
+                    public object Cached => _cached;
+                    public object Initialized { get; } = {{creation}};
+                    public object this[int index] => {{creation}};
+                    public System.Func<object> Factory => () => {{creation}};
+                    public object LocalFunction
+                    {
+                        get
+                        {
+                            object Create() { return {{creation}}; }
+                            return Create();
+                        }
+                    }
+                    public object Create() => {{creation}};
+                }
+                """),
+            new AnalyzerTestSource("Generated.Designer.cs",
+                $$"""class Generated { public object Value => {{creation}}; }"""));
+
+        await AnalyzerTestFactory.CreateCSharpAnalyzerTest<PropertyAllocatesNewInstanceAnalyzer>(testCase)
+            .RunAsync(TestContext.Current.CancellationToken);
+    }
+
+    [Theory]
+    [InlineData("New Object(0) {}")]
+    [InlineData("{New Object()}")]
+    [InlineData("New With {.Value = New Object()}")]
+    public async Task VisualBasic_ArrayAndAnonymousObjectCreation_ExcludedContexts_NoDiagnostic(string creation)
+    {
+        AnalyzerTestCase testCase = new(
+            ReferenceAssemblies.Net.Net90,
+            new AnalyzerTestSource("Example.vb",
+                $$"""
+                Class Example
+                    Private ReadOnly _cached As Object = {{creation}}
+                    Public ReadOnly Property Cached As Object
+                        Get
+                            Return _cached
+                        End Get
+                    End Property
+                    Public ReadOnly Property Initialized As Object = {{creation}}
+                    Default Public ReadOnly Property Item(index As Integer) As Object
+                        Get
+                            Return {{creation}}
+                        End Get
+                    End Property
+                    Public ReadOnly Property Factory As System.Func(Of Object)
+                        Get
+                            Return Function() {{creation}}
+                        End Get
+                    End Property
+                    Public Function Create() As Object
+                        Return {{creation}}
+                    End Function
+                End Class
+                """),
+            new AnalyzerTestSource("Generated.Designer.vb",
+                $$"""
+                Class Generated
+                    Public ReadOnly Property Value As Object
+                        Get
+                            Return {{creation}}
+                        End Get
+                    End Property
+                End Class
+                """));
+
+        await AnalyzerTestFactory.CreateVisualBasicAnalyzerTest<PropertyAllocatesNewInstanceAnalyzer>(testCase)
+            .RunAsync(TestContext.Current.CancellationToken);
+    }
+
     [Fact]
     public async Task CSharp_ValueTypesAndNestedReturns_NoDiagnostic()
     {
