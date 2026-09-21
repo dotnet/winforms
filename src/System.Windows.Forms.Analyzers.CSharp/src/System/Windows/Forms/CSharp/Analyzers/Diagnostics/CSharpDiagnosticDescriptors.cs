@@ -58,7 +58,7 @@ internal static class CSharpDiagnosticDescriptors
             isEnabledByDefault: true,
             description: new LocalizableResourceString(nameof(SR.WFO1001AnalyzerDescription), SR.ResourceManager, typeof(SR)));
 
-    // WFO20001
+    // WFO2001
     public static readonly DiagnosticDescriptor s_avoidPassingFuncReturningTaskWithoutCancellationToken =
         DiagnosticDescriptorHelper.Create(
             DiagnosticIDs.AvoidPassingFuncReturningTaskWithoutCancellationToken,
