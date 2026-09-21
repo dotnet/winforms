@@ -40,6 +40,7 @@ public sealed class InitializeComponentAnalyzer : DiagnosticAnalyzer
         context.RegisterCompilationStartAction(startContext =>
         {
             DesignerTypeFacts facts = new(startContext.Compilation);
+
             startContext.RegisterSyntaxNodeAction(
                 context => AnalyzeInitializeComponent(context, facts),
                 SyntaxKind.MethodDeclaration);
@@ -73,6 +74,7 @@ public sealed class InitializeComponentAnalyzer : DiagnosticAnalyzer
         }
 
         SyntaxNode? body = (SyntaxNode?)method.Body ?? method.ExpressionBody;
+
         if (body is null)
         {
             return;
@@ -81,6 +83,7 @@ public sealed class InitializeComponentAnalyzer : DiagnosticAnalyzer
         foreach (SyntaxNode node in body.DescendantNodes(descendIntoChildren: node => node is not AnonymousFunctionExpressionSyntax and not LocalFunctionStatementSyntax))
         {
             context.CancellationToken.ThrowIfCancellationRequested();
+
             if (TryGetUnsupportedConstruct(
                 node,
                 out SyntaxToken token,
@@ -112,50 +115,72 @@ public sealed class InitializeComponentAnalyzer : DiagnosticAnalyzer
         {
             ForStatementSyntax statement
                 => (statement.ForKeyword, SharedDiagnosticDescriptors.s_unsupportedInitializeComponentCode, "for loop"),
+
             ForEachStatementSyntax statement
                 => (statement.ForEachKeyword, SharedDiagnosticDescriptors.s_unsupportedInitializeComponentCode, "foreach loop"),
+
             ForEachVariableStatementSyntax statement
                 => (statement.ForEachKeyword, SharedDiagnosticDescriptors.s_unsupportedInitializeComponentCode, "foreach loop"),
+
             WhileStatementSyntax statement
                 => (statement.WhileKeyword, SharedDiagnosticDescriptors.s_unsupportedInitializeComponentCode, "while loop"),
+
             DoStatementSyntax statement
                 => (statement.DoKeyword, SharedDiagnosticDescriptors.s_unsupportedInitializeComponentCode, "do loop"),
+
             IfStatementSyntax statement
                 => (statement.IfKeyword, SharedDiagnosticDescriptors.s_unsupportedInitializeComponentCode, "if statement"),
+
             SwitchStatementSyntax statement
                 => (statement.SwitchKeyword, SharedDiagnosticDescriptors.s_unsupportedInitializeComponentCode, "switch statement"),
+
             SwitchExpressionSyntax expression
                 => (expression.SwitchKeyword, SharedDiagnosticDescriptors.s_unsupportedInitializeComponentCode, "switch expression"),
+
             LocalFunctionStatementSyntax function
                 => (function.Identifier, SharedDiagnosticDescriptors.s_unsupportedInitializeComponentCode, "local function"),
+
             GotoStatementSyntax statement
                 => (statement.GotoKeyword, SharedDiagnosticDescriptors.s_unsupportedInitializeComponentCode, "goto statement"),
+
             InvocationExpressionSyntax invocation
                 when invocation.Expression is IdentifierNameSyntax identifier
                     && identifier.Identifier.Text == "nameof"
                 => (identifier.Identifier, SharedDiagnosticDescriptors.s_unsupportedNameOfExpression, null),
+
             ConditionalExpressionSyntax expression
                 => (expression.QuestionToken, SharedDiagnosticDescriptors.s_unsupportedConditionalExpression, null),
+
             BinaryExpressionSyntax expression when expression.IsKind(SyntaxKind.CoalesceExpression)
                 => (expression.OperatorToken, SharedDiagnosticDescriptors.s_unsupportedNullCoalescingExpression, null),
+
             AssignmentExpressionSyntax expression when expression.IsKind(SyntaxKind.CoalesceAssignmentExpression)
                 => (expression.OperatorToken, SharedDiagnosticDescriptors.s_unsupportedNullCoalescingExpression, null),
+
             ConditionalAccessExpressionSyntax expression
                 => (expression.OperatorToken, SharedDiagnosticDescriptors.s_unsupportedNullConditionalExpression, null),
+
             InterpolatedStringExpressionSyntax expression
                 => (expression.StringStartToken, SharedDiagnosticDescriptors.s_unsupportedInterpolatedString, null),
+
             LambdaExpressionSyntax expression
                 => (expression.ArrowToken, SharedDiagnosticDescriptors.s_unsupportedAnonymousFunction, null),
+
             AnonymousMethodExpressionSyntax expression
                 => (expression.DelegateKeyword, SharedDiagnosticDescriptors.s_unsupportedAnonymousFunction, null),
+
             TryStatementSyntax statement
                 => (statement.TryKeyword, SharedDiagnosticDescriptors.s_unsupportedInitializeComponentCode, "try statement"),
+
             LockStatementSyntax statement
                 => (statement.LockKeyword, SharedDiagnosticDescriptors.s_unsupportedInitializeComponentCode, "lock statement"),
+
             UsingStatementSyntax statement
                 => (statement.UsingKeyword, SharedDiagnosticDescriptors.s_unsupportedInitializeComponentCode, "using statement"),
+
             LocalDeclarationStatementSyntax statement when !statement.UsingKeyword.IsKind(SyntaxKind.None)
                 => (statement.UsingKeyword, SharedDiagnosticDescriptors.s_unsupportedInitializeComponentCode, "using declaration"),
+
             AwaitExpressionSyntax expression
                 => (expression.AwaitKeyword, SharedDiagnosticDescriptors.s_unsupportedInitializeComponentCode, "await expression"),
             _ => (default, null!, null)

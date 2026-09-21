@@ -126,6 +126,7 @@ public sealed class DesignerFileStructureAnalyzer : DiagnosticAnalyzer
             }
 
             Location? location = member.Locations.FirstOrDefault(location => location.IsInSource);
+
             if (location is not null)
             {
                 context.ReportDiagnostic(Diagnostic.Create(
@@ -155,6 +156,7 @@ public sealed class DesignerFileStructureAnalyzer : DiagnosticAnalyzer
         DesignerTypeFacts facts)
     {
         int lastNonFieldIndex = -1;
+
         for (int i = 0; i < typeDeclaration.Members.Count; i++)
         {
             if (typeDeclaration.Members[i] is not FieldDeclarationSyntax)
