@@ -1191,6 +1191,132 @@ public partial class RichTextBoxTests
         Assert.Equal(expected, (int)PInvokeCore.SendMessage(control, PInvokeCore.EM_GETAUTOURLDETECT));
     }
 
+    [WinFormsFact]
+    public void RichTextBox_DisabledNet11_WithExplicitBackColor_UpdatesNativeBackground()
+    {
+        using Form form = new();
+        using BackColorTrackingRichTextBox control = new()
+        {
+            VisualStylesMode = VisualStylesMode.Net11,
+            Size = new Size(200, 100),
+            Padding = new Padding(20),
+            BackColor = Color.Red,
+            Enabled = false,
+            Text = string.Empty
+        };
+
+        form.Controls.Add(control);
+        form.Show();
+
+        Assert.True(control.IsHandleCreated);
+        Assert.True(control.ShouldSerializeBackColorPublic());
+        Assert.Equal(Color.Red, control.BackColor);
+
+        Assert.True(control.SetBackgroundColorMessageReceived);
+        Assert.False(control.UseSystemBackgroundColor);
+        Assert.Equal(
+            Color.Red.ToArgb(),
+            control.LastNativeBackgroundColor.ToArgb());
+    }
+
+    [WinFormsFact]
+    public void RichTextBox_DisabledNet11_WithoutExplicitBackColor_UsesDefaultBackgroundPath()
+    {
+        using Form form = new();
+        using BackColorTrackingRichTextBox control = new()
+        {
+            VisualStylesMode = VisualStylesMode.Net11,
+            Size = new Size(200, 100),
+            Padding = new Padding(20),
+            Enabled = false,
+            Text = string.Empty
+        };
+
+        Assert.False(control.ShouldSerializeBackColorPublic());
+
+        form.Controls.Add(control);
+        form.Show();
+
+        Assert.True(control.IsHandleCreated);
+        Assert.False(control.ShouldSerializeBackColorPublic());
+
+        control.ResetTrackedMessages();
+        control.Invalidate();
+        control.Update();
+
+        Assert.True(control.PaintMessageReceived);
+    }
+
+    [WinFormsFact]
+    public void RichTextBox_DisabledNet11_BackColorChanged_UpdatesNativeBackground()
+    {
+        using Form form = new();
+        using BackColorTrackingRichTextBox control = new()
+        {
+            VisualStylesMode = VisualStylesMode.Net11,
+            Size = new Size(200, 100),
+            Padding = new Padding(20),
+            BackColor = Color.Red,
+            Enabled = false,
+            Text = string.Empty
+        };
+
+        form.Controls.Add(control);
+        form.Show();
+
+        Assert.True(control.IsHandleCreated);
+
+        control.ResetTrackedMessages();
+
+        control.BackColor = Color.Yellow;
+
+        Assert.True(control.ShouldSerializeBackColorPublic());
+        Assert.Equal(Color.Yellow, control.BackColor);
+
+        Assert.True(control.SetBackgroundColorMessageReceived);
+        Assert.False(control.UseSystemBackgroundColor);
+        Assert.Equal(
+            Color.Yellow.ToArgb(),
+            control.LastNativeBackgroundColor.ToArgb());
+    }
+
+    [WinFormsFact]
+    public void RichTextBox_EnabledChanged_ToDisabledNet11_ProcessesEnabledAndPaintMessages()
+    {
+        using Form form = new();
+        using BackColorTrackingRichTextBox control = new()
+        {
+            VisualStylesMode = VisualStylesMode.Net11,
+            Size = new Size(200, 100),
+            Padding = new Padding(20),
+            BackColor = Color.Fuchsia,
+            Enabled = true,
+            Text = string.Empty
+        };
+
+        form.Controls.Add(control);
+        form.Show();
+
+        Assert.True(control.IsHandleCreated);
+
+        nint originalHandle = control.Handle;
+
+        control.ResetTrackedMessages();
+
+        control.Enabled = false;
+        control.Update();
+
+        Assert.False(control.Enabled);
+        Assert.Equal(originalHandle, control.Handle);
+
+        Assert.True(control.EnableMessageReceived);
+        Assert.False(control.LastEnableMessageValue);
+        Assert.True(control.PaintMessageReceived);
+
+        Assert.True(control.ShouldSerializeBackColorPublic());
+        Assert.Equal(Color.Fuchsia, control.BackColor);
+    }
+
     [WinFormsTheory]
     [BoolData]
     public void RichTextBox_EnableAutoDragDrop_Set_GetReturnsExpected(bool value)
@@ -10869,6 +10995,65 @@ public partial class RichTextBoxTests
         richTextBox1.QueryContinueDrag -= handler;
         richTextBox1.OnQueryContinueDrag(queryContinueDragEventArgs);
         callCount.Should().Be(1);
+    }
+
+    private sealed class BackColorTrackingRichTextBox : RichTextBox
+    {
+        private const int EM_SETBKGNDCOLOR = 0x0400 + 67;
+
+        public bool SetBackgroundColorMessageReceived { get; private set; }
+
+        public bool UseSystemBackgroundColor { get; private set; }
+
+        public Color LastNativeBackgroundColor { get; private set; }
+
+        public bool EnableMessageReceived { get; private set; }
+
+        public bool LastEnableMessageValue { get; private set; }
+
+        public bool PaintMessageReceived { get; private set; }
+
+        public bool ShouldSerializeBackColorPublic()
+            => ShouldSerializeBackColor();
+
+        public void ResetTrackedMessages()
+        {
+            SetBackgroundColorMessageReceived = false;
+            UseSystemBackgroundColor = false;
+            LastNativeBackgroundColor = Color.Empty;
+            EnableMessageReceived = false;
+            LastEnableMessageValue = false;
+            PaintMessageReceived = false;
+        }
+
+        protected override void WndProc(ref Message m)
+        {
+            switch (m.Msg)
+            {
+                case EM_SETBKGNDCOLOR:
+                    SetBackgroundColorMessageReceived = true;
+                    UseSystemBackgroundColor = m.WParam != 0;
+
+                    if (!UseSystemBackgroundColor)
+                    {
+                        LastNativeBackgroundColor = ColorTranslator.FromWin32(
+                            unchecked((int)m.LParam));
+                    }
+
+                    break;
+
+                case (int)PInvokeCore.WM_ENABLE:
+                    EnableMessageReceived = true;
+                    LastEnableMessageValue = m.WParam != 0;
+                    break;
+
+                case (int)PInvokeCore.WM_PAINT:
+                    PaintMessageReceived = true;
+                    break;
+            }
+
+            base.WndProc(ref m);
+        }
     }
 
     private class CustomGetParaFormatRichTextBox : RichTextBox
