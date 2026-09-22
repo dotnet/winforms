@@ -1220,12 +1220,13 @@ public partial class RichTextBoxTests
     }
 
     [WinFormsFact]
-    public void RichTextBox_DisabledNet11_WithoutExplicitBackColor_UsesDefaultBackgroundPath()
+    public void RichTextBox_DisabledNet11_WithoutExplicitBackColor_UsesUnifiedSystemBackground()
     {
         using Form form = new();
         using BackColorTrackingRichTextBox control = new()
         {
             VisualStylesMode = VisualStylesMode.Net11,
+            Location = new Point(20, 20),
             Size = new Size(200, 100),
             Padding = new Padding(20),
             Enabled = false,
@@ -1240,11 +1241,103 @@ public partial class RichTextBoxTests
         Assert.True(control.IsHandleCreated);
         Assert.False(control.ShouldSerializeBackColorPublic());
 
-        control.ResetTrackedMessages();
-        control.Invalidate();
         control.Update();
 
-        Assert.True(control.PaintMessageReceived);
+        using Bitmap bitmap = CaptureWindow(control);
+
+        Point windowOrigin = control.Parent!.PointToScreen(control.Location);
+        Point clientOrigin = control.PointToScreen(Point.Empty);
+
+        int clientOffsetX = clientOrigin.X - windowOrigin.X;
+        int clientOffsetY = clientOrigin.Y - windowOrigin.Y;
+
+        Assert.True(clientOffsetX > 2);
+        Assert.True(clientOffsetY > 2);
+
+        Point paddingPoint = new(
+            Math.Max(2, clientOffsetX / 2),
+            clientOffsetY + control.ClientSize.Height / 2);
+
+        Point clientPoint = new(
+            clientOffsetX + control.ClientSize.Width / 2,
+            clientOffsetY + control.ClientSize.Height / 2);
+
+        Assert.InRange(paddingPoint.X, 0, bitmap.Width - 1);
+        Assert.InRange(paddingPoint.Y, 0, bitmap.Height - 1);
+        Assert.InRange(clientPoint.X, 0, bitmap.Width - 1);
+        Assert.InRange(clientPoint.Y, 0, bitmap.Height - 1);
+
+        Color paddingColor = bitmap.GetPixel(
+            paddingPoint.X,
+            paddingPoint.Y);
+
+        Color clientColor = bitmap.GetPixel(
+            clientPoint.X,
+            clientPoint.Y);
+
+        // Ensure WM_PRINT rendered both sampled regions.
+        Assert.NotEqual(Color.Magenta.ToArgb(), paddingColor.ToArgb());
+        Assert.NotEqual(Color.Magenta.ToArgb(), clientColor.ToArgb());
+
+        // The managed Net11 padding and native RichEdit client must use
+        // the same effective disabled system background color.
+        Assert.Equal(clientColor.ToArgb(), paddingColor.ToArgb());
+    }
+
+    private static Bitmap CaptureWindow(Control control)
+    {
+        const uint WM_PRINT = 0x0317;
+
+        const nint PRF_CHECKVISIBLE = 0x00000001;
+        const nint PRF_NONCLIENT = 0x00000002;
+        const nint PRF_CLIENT = 0x00000004;
+        const nint PRF_ERASEBKGND = 0x00000008;
+        const nint PRF_CHILDREN = 0x00000010;
+
+        Bitmap bitmap = new(control.Width, control.Height);
+
+        using Graphics graphics = Graphics.FromImage(bitmap);
+
+        // Sentinel color prevents a false-positive when WM_PRINT fails
+        // to render one or both sampled regions.
+        graphics.Clear(Color.Magenta);
+
+        nint hdc = graphics.GetHdc();
+
+        try
+        {
+            nint flags =
+                PRF_CHECKVISIBLE
+                | PRF_NONCLIENT
+                | PRF_CLIENT
+                | PRF_ERASEBKGND
+                | PRF_CHILDREN;
+
+            NativeMethods.SendMessage(
+                control.Handle,
+                WM_PRINT,
+                hdc,
+                flags);
+        }
+        finally
+        {
+            graphics.ReleaseHdc(hdc);
+        }
+
+        return bitmap;
+    }
+
+    private static class NativeMethods
+    {
+        [DllImport(
+            "user32.dll",
+            EntryPoint = "SendMessageW",
+            ExactSpelling = true)]
+        public static extern nint SendMessage(
+            nint hWnd,
+            uint message,
+            nint wParam,
+            nint lParam);
     }
 
     [WinFormsFact]

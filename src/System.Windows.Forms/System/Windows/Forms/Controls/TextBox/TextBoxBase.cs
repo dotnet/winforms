@@ -2805,8 +2805,6 @@ public abstract partial class TextBoxBase : Control
         int cornerRadius = ScaleVisualStylesMetric(ModernControlVisualStyles.FieldCornerRadius);
         Size focusBorderMetrics = GetVisualStylesFocusBorderMetrics();
         int borderThickness = ScaleVisualStylesMetric(ModernControlVisualStyles.BorderThickness);
-        int focusBandHeight = GetVisualStylesFocusBandHeight();
-
         ModernFieldStrokeContext strokeContext = new(
             BackColor: BackColor,
             Enabled: Enabled,
