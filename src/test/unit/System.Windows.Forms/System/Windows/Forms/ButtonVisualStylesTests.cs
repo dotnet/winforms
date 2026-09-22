@@ -64,7 +64,7 @@ public class ButtonVisualStylesTests
     [WinFormsTheory]
     [InlineData(typeof(CheckBox))]
     [InlineData(typeof(RadioButton))]
-    public void ModernGlyphControl_PaintsParentBackgroundImage(Type controlType)
+    public void ModernGlyphControl_TransparentBackColor_PaintsParentBackgroundImage(Type controlType)
     {
         using Bitmap backgroundImage = CreateSolidBitmap(new Size(2, 1), Color.Red);
         backgroundImage.SetPixel(1, 0, Color.Blue);
@@ -77,6 +77,7 @@ public class ButtonVisualStylesTests
         using ButtonBase control = (ButtonBase)Activator.CreateInstance(controlType);
         control.Size = parent.Size;
         control.Text = string.Empty;
+        control.BackColor = Color.Transparent;
         control.VisualStylesMode = VisualStylesMode.Net11;
         parent.Controls.Add(control);
         parent.CreateControl();
