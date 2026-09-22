@@ -5,9 +5,11 @@
 
 using System.Drawing;
 using System.Reflection;
+using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using Accessibility;
 using Moq;
+using Windows.Win32.System.Com;
 using Windows.Win32.System.Variant;
 using UIA = Windows.Win32.UI.Accessibility;
 using UIA_PROPERTY_ID = Windows.Win32.UI.Accessibility.UIA_PROPERTY_ID;
@@ -16,6 +18,89 @@ namespace System.Windows.Forms.Tests.AccessibleObjects;
 
 public partial class AccessibleObjectTests
 {
+    [WinFormsTheory]
+    [InlineData(false)]
+    [InlineData(true)]
+    public void AccessibleObject_ToolbarNavigation_DisposedViewIsCollectible(bool useMsaaAdapter)
+    {
+        List<(WeakReference Form, WeakReference Toolbar, WeakReference Item, WeakReference AccessibleObject)> views = [];
+        for (int iteration = 0; iteration < 3; iteration++)
+        {
+            views.Add(OpenNavigateAndClose(useMsaaAdapter));
+        }
+
+        GC.Collect(GC.MaxGeneration, GCCollectionMode.Forced, blocking: true);
+
+        Assert.All(views, view =>
+        {
+            Assert.False(view.Form.IsAlive, "The closed form is still rooted.");
+            Assert.False(view.Toolbar.IsAlive, "The disposed toolbar is still rooted.");
+            Assert.False(view.Item.IsAlive, "Accessibility child navigation retained the disposed toolbar item.");
+            Assert.False(view.AccessibleObject.IsAlive, "Accessibility child navigation retained the item's accessible object.");
+        });
+
+        [MethodImpl(MethodImplOptions.NoInlining)]
+        static (WeakReference, WeakReference, WeakReference, WeakReference) OpenNavigateAndClose(bool useMsaaAdapter)
+        {
+            using Form form = new();
+            using ToolStrip toolbar = new() { GripStyle = ToolStripGripStyle.Hidden };
+            using ToolStripButton item = new("Open");
+            toolbar.Items.Add(item);
+            form.Controls.Add(toolbar);
+            form.Show();
+
+            AccessibleObject toolbarAccessibility = toolbar.AccessibilityObject;
+            AccessibleObject itemAccessibility = item.AccessibilityObject;
+            object navigatedChild = useMsaaAdapter
+                ? ((IAccessible)toolbarAccessibility).get_accChild(1)
+                : toolbarAccessibility.GetChild(0);
+            Assert.Same(itemAccessibility, navigatedChild);
+            Assert.Equal("Open", ((IAccessible)navigatedChild).get_accName(0));
+
+            form.Close();
+            return (new(form), new(toolbar), new(item), new(itemAccessibility));
+        }
+    }
+
+    [WinFormsTheory]
+    [InlineData(false, false)]
+    [InlineData(false, true)]
+    [InlineData(true, false)]
+    [InlineData(true, true)]
+    public unsafe void AccessibleObject_RelationshipConversion_ReleasesNativeReferences(bool useManagedAdapter, bool parent)
+    {
+        AccessibleObject related = new();
+        Mock<AccessibleObject> source = new(MockBehavior.Strict);
+        source.Setup(accessible => accessible.Parent).Returns(related);
+        source.Setup(accessible => accessible.GetChildCount()).Returns(1);
+        source.Setup(accessible => accessible.GetChild(0)).Returns(related);
+        using var observer = ComHelpers.GetComScope<IUnknown>(related);
+        observer.Value->AddRef();
+        uint before = observer.Value->Release();
+
+        object actual;
+        if (useManagedAdapter)
+        {
+            var accessible = (IAccessible)source.Object;
+            actual = parent ? accessible.accParent : accessible.get_accChild(1);
+        }
+        else
+        {
+            var accessible = (UIA.IAccessible.Interface)source.Object;
+            using ComScope<IDispatch> relationship = new(null);
+            HRESULT result = parent
+                ? accessible.get_accParent(relationship)
+                : accessible.get_accChild((VARIANT)1, relationship);
+            Assert.True(result.Succeeded);
+            actual = ComHelpers.GetObjectForIUnknown(relationship.AsUnknown);
+        }
+
+        Assert.Same(related, actual);
+        observer.Value->AddRef();
+        uint after = observer.Value->Release();
+        Assert.Equal(before, after);
+    }
+
     [WinFormsFact]
     public void AccessibleObject_Ctor_Default()
     {

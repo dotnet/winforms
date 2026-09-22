@@ -277,8 +277,11 @@ public sealed unsafe partial class HtmlWindow
         return confirmed;
     }
 
-    public void DetachEventHandler(string eventName, EventHandler eventHandler) =>
-        WindowShim.DetachEventHandler(eventName, eventHandler);
+    public void DetachEventHandler(string eventName, EventHandler eventHandler)
+    {
+        // A removal must not resurrect the lazy window shim during unload or browser disposal.
+        ShimManager.GetWindowShim(this)?.DetachEventHandler(eventName, eventHandler);
+    }
 
     public void Focus()
     {
@@ -417,43 +420,43 @@ public sealed unsafe partial class HtmlWindow
     public event HtmlElementErrorEventHandler? Error
     {
         add => WindowShim.AddHandler(s_eventError, value);
-        remove => WindowShim.RemoveHandler(s_eventError, value);
+        remove => ShimManager.GetWindowShim(this)?.RemoveHandler(s_eventError, value);
     }
 
     public event HtmlElementEventHandler? GotFocus
     {
         add => WindowShim.AddHandler(s_eventGotFocus, value);
-        remove => WindowShim.RemoveHandler(s_eventGotFocus, value);
+        remove => ShimManager.GetWindowShim(this)?.RemoveHandler(s_eventGotFocus, value);
     }
 
     public event HtmlElementEventHandler? Load
     {
         add => WindowShim.AddHandler(s_eventLoad, value);
-        remove => WindowShim.RemoveHandler(s_eventLoad, value);
+        remove => ShimManager.GetWindowShim(this)?.RemoveHandler(s_eventLoad, value);
     }
 
     public event HtmlElementEventHandler? LostFocus
     {
         add => WindowShim.AddHandler(s_eventLostFocus, value);
-        remove => WindowShim.RemoveHandler(s_eventLostFocus, value);
+        remove => ShimManager.GetWindowShim(this)?.RemoveHandler(s_eventLostFocus, value);
     }
 
     public event HtmlElementEventHandler? Resize
     {
         add => WindowShim.AddHandler(s_eventResize, value);
-        remove => WindowShim.RemoveHandler(s_eventResize, value);
+        remove => ShimManager.GetWindowShim(this)?.RemoveHandler(s_eventResize, value);
     }
 
     public event HtmlElementEventHandler? Scroll
     {
         add => WindowShim.AddHandler(s_eventScroll, value);
-        remove => WindowShim.RemoveHandler(s_eventScroll, value);
+        remove => ShimManager.GetWindowShim(this)?.RemoveHandler(s_eventScroll, value);
     }
 
     public event HtmlElementEventHandler? Unload
     {
         add => WindowShim.AddHandler(s_eventUnload, value);
-        remove => WindowShim.RemoveHandler(s_eventUnload, value);
+        remove => ShimManager.GetWindowShim(this)?.RemoveHandler(s_eventUnload, value);
     }
 
     public static unsafe bool operator ==(HtmlWindow? left, HtmlWindow? right)

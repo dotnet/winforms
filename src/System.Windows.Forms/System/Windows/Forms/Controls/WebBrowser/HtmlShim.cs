@@ -2,23 +2,27 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 
 using System.ComponentModel;
+using System.Runtime.ExceptionServices;
 using Windows.Win32.Web.MsHtml;
 
 namespace System.Windows.Forms;
 
-/// This is essentially a proxy object between the native
-/// html objects and our managed ones. We want the managed
-/// HtmlDocument, HtmlWindow and HtmlElement to be super-lightweight,
-/// which means that we shouldn't have things that tie up their lifetimes
-/// contained within them. The "Shim" is essentially the object that
-/// manages events coming out of the HtmlDocument, HtmlElement and HtmlWindow
-/// and serves them back up to the user.
-
+/// <summary>
+///  Owns the native event connections and managed delegates for an HTML wrapper.
+/// </summary>
+/// <remarks>
+///  <para>
+///   Connection-point events and individually attached dispatch proxies have independent lifetimes.
+///   Removing the last standard handler must not detach proxies registered through AttachEventHandler.
+///  </para>
+/// </remarks>
 internal abstract class HtmlShim : IDisposable
 {
     private EventHandlerList? _events;
     private int _eventCount;
-    private Dictionary<EventHandler, HtmlToClrEventProxy>? _attachedEventList;
+    private List<(EventHandler Handler, HtmlToClrEventProxy Proxy)>? _attachedEventList;
+
+    internal bool IsDisposed { get; private set; }
 
     protected HtmlShim()
     {
@@ -27,23 +31,83 @@ internal abstract class HtmlShim : IDisposable
     private EventHandlerList Events =>
         _events ??= new EventHandlerList();
 
-    /// Support IHtml*3.AttachHandler
-    public abstract void AttachEventHandler(string eventName, EventHandler eventHandler);
+    public void AttachEventHandler(string eventName, EventHandler eventHandler)
+    {
+        ObjectDisposedException.ThrowIf(IsDisposed, this);
+        ArgumentNullException.ThrowIfNull(eventHandler);
+
+        HtmlToClrEventProxy proxy = new(eventName, eventHandler);
+        if (!AttachEventProxy(proxy))
+        {
+            // MSHTML rejects some names (including null) with S_OK/false. Preserve the existing
+            // no-op behavior, but do not retain a proxy for a registration that never happened.
+            Debug.WriteLine("The native HTML object did not attach the event.");
+            return;
+        }
+
+        // A native call can reenter disposal. Do not leave a new connection outside the disposed owner.
+        if (IsDisposed)
+        {
+            DetachEventProxy(proxy);
+            throw new ObjectDisposedException(GetType().Name);
+        }
+
+        // Each attach creates a distinct native dispatch identity, even for the same name and delegate.
+        // Retaining only one proxy loses the information needed to detach the earlier registrations.
+        (_attachedEventList ??= []).Add((eventHandler, proxy));
+    }
+
+    protected abstract bool AttachEventProxy(HtmlToClrEventProxy proxy);
+
+    protected abstract void DetachEventProxy(HtmlToClrEventProxy proxy);
 
     public void AddHandler(object key, Delegate? value)
     {
-        _eventCount++;
+        ObjectDisposedException.ThrowIf(IsDisposed, this);
+        if (value is null)
+        {
+            return;
+        }
+
+        _eventCount += value.GetInvocationList().Length;
         Events.AddHandler(key, value);
         OnEventHandlerAdded();
     }
 
-    protected HtmlToClrEventProxy AddEventProxy(string eventName, EventHandler eventHandler)
+    public void DetachEventHandler(string eventName, EventHandler eventHandler)
     {
-        _attachedEventList ??= [];
+        if (_attachedEventList is not { } registrations)
+        {
+            return;
+        }
 
-        HtmlToClrEventProxy proxy = new(eventName, eventHandler);
-        _attachedEventList[eventHandler] = proxy;
-        return proxy;
+        for (int index = registrations.Count - 1; index >= 0; index--)
+        {
+            var registration = registrations[index];
+            if (registration.Handler != eventHandler || registration.Proxy.EventName != eventName)
+            {
+                continue;
+            }
+
+            // Remove before the COM call so a reentrant detach cannot select the same proxy.
+            registrations.RemoveAt(index);
+            try
+            {
+                DetachEventProxy(registration.Proxy);
+            }
+            catch (Exception exception) when (!exception.IsCriticalException())
+            {
+                if (!IsDisposed)
+                {
+                    // A failed detach must remain owned and retryable, not become an untracked native sink.
+                    (_attachedEventList ??= []).Insert(Math.Min(index, _attachedEventList.Count), registration);
+                }
+
+                throw;
+            }
+
+            return;
+        }
     }
 
     public abstract IHTMLWindow2.Interface? AssociatedWindow { get; }
@@ -51,31 +115,19 @@ internal abstract class HtmlShim : IDisposable
     /// create connectionpoint cookie
     public abstract void ConnectToEvents();
 
-    /// Support IHtml*3.DetachEventHandler
-    public abstract void DetachEventHandler(string eventName, EventHandler eventHandler);
-
-    /// disconnect from connectionpoint cookie
-    /// inheriting classes should override to disconnect from ConnectionPoint and call base.
-    public virtual void DisconnectFromEvents()
-    {
-        if (_attachedEventList is not null)
-        {
-            EventHandler[] events = new EventHandler[_attachedEventList.Count];
-            _attachedEventList.Keys.CopyTo(events, 0);
-
-            foreach (EventHandler eh in events)
-            {
-                HtmlToClrEventProxy proxy = _attachedEventList[eh];
-                DetachEventHandler(proxy.EventName, eh);
-            }
-        }
-    }
+    public abstract void DisconnectFromEvents();
 
     /// return the sender for events, usually the HtmlWindow, HtmlElement, HtmlDocument
     protected abstract object GetEventSender();
 
     public void Dispose()
     {
+        if (IsDisposed)
+        {
+            return;
+        }
+
+        IsDisposed = true;
         Dispose(true);
         GC.SuppressFinalize(this);
     }
@@ -84,15 +136,46 @@ internal abstract class HtmlShim : IDisposable
     {
         if (disposing)
         {
-            DisconnectFromEvents();
+            var registrations = _attachedEventList;
+            _attachedEventList = null;
             _events?.Dispose();
             _events = null;
+            _eventCount = 0;
+
+            List<Exception>? exceptions = null;
+            try
+            {
+                DisconnectFromEvents();
+            }
+            catch (Exception exception) when (!exception.IsCriticalException())
+            {
+                (exceptions ??= []).Add(exception);
+            }
+
+            if (registrations is not null)
+            {
+                foreach (var registration in registrations)
+                {
+                    try
+                    {
+                        DetachEventProxy(registration.Proxy);
+                    }
+                    catch (Exception exception) when (!exception.IsCriticalException())
+                    {
+                        (exceptions ??= []).Add(exception);
+                    }
+                }
+            }
+
+            // Attempt every independent release before reporting failures; one failed native detach
+            // must not leave unrelated event sources and their subscribers connected.
+            ThrowCleanupExceptions(exceptions);
         }
     }
 
     public void FireEvent(object key, EventArgs e)
     {
-        Delegate? delegateToInvoke = Events[key];
+        Delegate? delegateToInvoke = _events?[key];
 
         if (delegateToInvoke is not null)
         {
@@ -132,23 +215,51 @@ internal abstract class HtmlShim : IDisposable
 
     public void RemoveHandler(object key, Delegate? value)
     {
-        _eventCount--;
-        Events.RemoveHandler(key, value);
-        OnEventHandlerRemoved();
+        if (_events is null || value is null)
+        {
+            return;
+        }
+
+        int before = _events[key]?.GetInvocationList().Length ?? 0;
+        _events.RemoveHandler(key, value);
+        int removed = before - (_events[key]?.GetInvocationList().Length ?? 0);
+        if (removed > 0)
+        {
+            // Unmatched -= is a no-op. Counting it (or counting a multicast delegate as one)
+            // disconnects the native source while valid handlers are still stored in EventHandlerList.
+            _eventCount -= removed;
+            OnEventHandlerRemoved();
+        }
     }
 
-    protected HtmlToClrEventProxy? RemoveEventProxy(EventHandler eventHandler)
+    internal static void DisposeAll(IEnumerable<HtmlShim> shims)
     {
-        if (_attachedEventList is null)
+        List<Exception>? exceptions = null;
+        foreach (HtmlShim shim in shims)
         {
-            return null;
+            try
+            {
+                shim.Dispose();
+            }
+            catch (Exception exception) when (!exception.IsCriticalException())
+            {
+                (exceptions ??= []).Add(exception);
+            }
         }
 
-        if (_attachedEventList.Remove(eventHandler, out HtmlToClrEventProxy? proxy))
+        ThrowCleanupExceptions(exceptions);
+    }
+
+    private static void ThrowCleanupExceptions(List<Exception>? exceptions)
+    {
+        if (exceptions is { Count: 1 })
         {
-            return proxy;
+            ExceptionDispatchInfo.Throw(exceptions[0]);
         }
 
-        return null;
+        if (exceptions is { Count: > 1 })
+        {
+            throw new AggregateException(exceptions);
+        }
     }
 }
