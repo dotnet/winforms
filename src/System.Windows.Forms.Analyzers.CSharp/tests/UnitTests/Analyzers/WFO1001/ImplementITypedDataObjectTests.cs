@@ -145,17 +145,16 @@ public sealed class ImplementITypedDataObjectTests
         Assert.NotNull(CurrentReferences.NetCoreAppReferences);
         Assert.True(File.Exists(CurrentReferences.WinFormsRefPath));
 
-        CSharpAnalyzerTest<ImplementITypedDataObjectAnalyzer, DefaultVerifier> context = new()
+        AnalyzerTestCase testCase = new(
+            CurrentReferences.NetCoreAppReferences,
+            new AnalyzerTestSource("Test0.cs", input))
         {
-            TestCode = input,
-            TestState =
-            {
-                OutputKind = OutputKind.DynamicallyLinkedLibrary,
-                AdditionalReferences = { CurrentReferences.WinFormsRefPath }
-            },
-            ReferenceAssemblies = CurrentReferences.NetCoreAppReferences
+            OutputKind = OutputKind.DynamicallyLinkedLibrary
         };
 
-        return context;
+        testCase.AdditionalReferences.Add(CurrentReferences.WinFormsRefPath);
+
+        return AnalyzerTestFactory.CreateCSharpAnalyzerTest
+            <ImplementITypedDataObjectAnalyzer>(testCase);
     }
 }
