@@ -135,6 +135,24 @@ For example, the content of `[appname].runtimeconfig.json` generated from above 
 }
 ```
 
+#### Enabling modern rendering for composite controls
+
+`ToolStrip`, `MenuStrip`, and `DataGridView` use Classic rendering when `VisualStylesMode`
+is `Net11` or `Latest` by default. Applications can opt in to modern rendering with these
+switches:
+
+```json
+{
+  "configProperties": {
+    "System.Windows.Forms.ToolStripModernRendering": true,
+    "System.Windows.Forms.DataGridViewModernRendering": true
+  }
+}
+```
+
+`System.Windows.Forms.ToolStripModernRendering` controls both `ToolStrip` and `MenuStrip`.
+Both switches default to `false`.
+
 The target framework information added to `[appname].runtimeconfig.json` file always match with the application target framework irrespective of runtime/SDK installed on the machine or runtime used ([roll-forward scenarios](https://docs.microsoft.com/dotnet/core/versions/selection#framework-dependent-apps-roll-forward)) by the Windows Forms application.
 
 #### .NET runtime support in reading `runtimeconfig.json`

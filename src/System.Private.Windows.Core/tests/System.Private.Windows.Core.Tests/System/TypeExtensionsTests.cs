@@ -108,6 +108,12 @@ public class TypeExtensionsTests
     {
     }
 
+    /// <summary>
+    ///  Full name of the assembly that hosts these tests. Resolved at runtime so the expectations
+    ///  don't have to be updated every time the assembly version is bumped.
+    /// </summary>
+    private static string TestAssemblyName { get; } = typeof(MyClass).Assembly.FullName!;
+
     public static TheoryData<object, string[]> BinaryFormatter_BinderTypes_Data => new()
     {
         { 42, ["System.Int32, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089"] },
@@ -115,8 +121,8 @@ public class TypeExtensionsTests
         {
             new List<MyClass>(),
             [
-                "System.Collections.Generic.List`1[[System.Tests.TypeExtensionsTests+MyClass, System.Private.Windows.Core.Tests, Version=11.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089",
-                "System.Tests.TypeExtensionsTests+MyClass, System.Private.Windows.Core.Tests, Version=11.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089"
+                $"System.Collections.Generic.List`1[[System.Tests.TypeExtensionsTests+MyClass, {TestAssemblyName}]], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089",
+                $"System.Tests.TypeExtensionsTests+MyClass, {TestAssemblyName}"
             ]
         }
     };

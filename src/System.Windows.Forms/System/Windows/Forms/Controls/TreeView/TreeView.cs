@@ -2799,12 +2799,16 @@ public partial class TreeView : Control
                 if (renderinfo is not null && renderinfo.Font is not null)
                 {
                     // Mess with the DC directly...
-                    PInvokeCore.SelectObject(nmtvcd->nmcd.hdc, renderinfo.FontHandle);
+                    Debug.Assert(node._propBag is not null);
+                    if (node._propBag is not null)
+                    {
+                        PInvokeCore.SelectObject(nmtvcd->nmcd.hdc, node._propBag.FontHandle);
 
-                    // There is a problem in winctl that clips node fonts if the fontSize
-                    // is larger than the treeView font size. The behavior is much better in comctl 5 and above.
-                    m.ResultInternal = (LRESULT)(nint)PInvoke.CDRF_NEWFONT;
-                    return;
+                        // There is a problem in winctl that clips node fonts if the fontSize
+                        // is larger than the treeView font size. The behavior is much better in comctl 5 and above.
+                        m.ResultInternal = (LRESULT)(nint)PInvoke.CDRF_NEWFONT;
+                        return;
+                    }
                 }
 
                 // fall through and do the default drawing work
