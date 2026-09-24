@@ -101,7 +101,9 @@ public abstract partial class AxHost
                 : base(connectionPoint, takeOwnership: true)
             {
                 uint cookie = 0;
-                IUnknown* ccw = ComHelpers.TryGetComPointer<IUnknown>(sink, out HRESULT hr);
+                // Advise retains its own sink reference. Without releasing this temporary CCW,
+                // even Unadvise cannot collect the sink and the HTML manager/host it references.
+                using var ccw = ComHelpers.TryGetComScope<IUnknown>(sink, out HRESULT hr);
                 if (hr.Failed || connectionPoint->Advise(ccw, &cookie).Failed)
                 {
                     Dispose();
