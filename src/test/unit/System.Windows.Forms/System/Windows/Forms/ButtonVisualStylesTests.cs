@@ -387,6 +387,20 @@ public class ButtonVisualStylesTests
     }
 
     [WinFormsFact]
+    public void FlatButtonDarkModeRenderer_FocusIndicator_DoesNotPaintBlackPixels()
+    {
+        FlatButtonDarkModeRenderer renderer = new();
+        Rectangle bounds = new(0, 0, 40, 22);
+        using Bitmap bitmap = CreateSolidBitmap(bounds.Size, Color.FromArgb(0x33, 0x33, 0x33));
+        using Graphics graphics = Graphics.FromImage(bitmap);
+
+        renderer.DrawFocusIndicator(graphics, bounds, isDefault: false);
+
+        Assert.NotEqual(Rectangle.Empty, FindColorBounds(bitmap, DarkModeButtonColors.DefaultColors.FocusBorderColor));
+        Assert.Equal(Rectangle.Empty, FindColorBounds(bitmap, Color.Black));
+    }
+
+    [WinFormsFact]
     public void ModernButtonDarkModeRenderer_HighDpi_CorrectsRingAndGapWithoutChangingBodyInset()
     {
         ModernButtonDarkModeRenderer renderer = new() { DeviceDpi = 144 };
