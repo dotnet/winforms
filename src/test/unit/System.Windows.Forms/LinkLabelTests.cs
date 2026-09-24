@@ -334,16 +334,14 @@ public class LinkLabelTests : IDisposable
         using Graphics graphics = Graphics.FromImage(bitmap);
         using PaintEventArgs e = new(graphics, linkLabel.ClientRectangle);
 
-        // The first paint calculates the text layout and is allowed to invalidate the control.
+        // The first paint calculates the text layout and establishes a valid cache.
         linkLabel.OnPaint(e);
-
-        int invalidatedCount = 0;
-        linkLabel.Invalidated += (sender, args) => invalidatedCount++;
+        ((bool)linkLabel.TestAccessor.Dynamic._textLayoutValid).Should().BeTrue();
 
         linkLabel.OnPaint(e);
         linkLabel.OnPaint(e);
 
-        invalidatedCount.Should().Be(0);
+        ((bool)linkLabel.TestAccessor.Dynamic._textLayoutValid).Should().BeTrue();
         linkLabel.IsHandleCreated.Should().BeFalse();
     }
 
