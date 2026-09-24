@@ -244,12 +244,12 @@
       </trans-unit>
       <trans-unit id="Application_VisualStylesModeCanOnlyBeSetOnce">
         <source>The default visual styles mode can only be set once and cannot be changed afterwards.</source>
-        <target state="new">The default visual styles mode can only be set once and cannot be changed afterwards.</target>
+        <target state="translated">기본 비주얼 스타일 모드는 한 번만 설정할 수 있으며, 이후에는 변경할 수 없습니다.</target>
         <note />
       </trans-unit>
       <trans-unit id="Application_VisualStylesModeInheritInvalidAsDefault">
         <source>VisualStylesMode.Inherit cannot be used as the application-wide default visual styles mode because the application root has no parent to inherit from.</source>
-        <target state="new">VisualStylesMode.Inherit cannot be used as the application-wide default visual styles mode because the application root has no parent to inherit from.</target>
+        <target state="translated">애플리케이션 루트에는 상속할 부모가 없으므로 VisualStylesMode.Inherit를 애플리케이션 전체의 기본 비주얼 스타일 모드로 사용할 수 없습니다.</target>
         <note />
       </trans-unit>
       <trans-unit id="ApplyCaption">
@@ -1709,7 +1709,7 @@
       </trans-unit>
       <trans-unit id="ControlMutationExtensionsLayoutSuspensionRequiresControl">
         <source>Layout suspension requires a target derived from Control.</source>
-        <target state="new">Layout suspension requires a target derived from Control.</target>
+        <target state="translated">레이아웃 일시 중단에는 Control에서 파생된 대상을 사용해야 합니다.</target>
         <note />
       </trans-unit>
       <trans-unit id="ControlNotChild">
@@ -2044,7 +2044,7 @@
       </trans-unit>
       <trans-unit id="ControlOnSystemVisualSettingsChangedDescr">
         <source>Event raised when a Windows visual or accessibility setting changes.</source>
-        <target state="new">Event raised when a Windows visual or accessibility setting changes.</target>
+        <target state="translated">Windows의 시각적 설정 또는 접근성 설정이 변경되면 발생하는 이벤트입니다.</target>
         <note />
       </trans-unit>
       <trans-unit id="ControlOnTabIndexChangedDescr">
@@ -2194,12 +2194,12 @@
       </trans-unit>
       <trans-unit id="ControlVisualStylesModeChangedDescr">
         <source>Occurs when the value of the VisualStylesMode property changes.</source>
-        <target state="new">Occurs when the value of the VisualStylesMode property changes.</target>
+        <target state="translated">VisualStylesMode 속성 값이 변경될 때 발생합니다.</target>
         <note />
       </trans-unit>
       <trans-unit id="ControlVisualStylesModeDescr">
         <source>Determines how the control renders itself when visual styles are applied.</source>
-        <target state="new">Determines how the control renders itself when visual styles are applied.</target>
+        <target state="translated">비주얼 스타일이 적용될 때 컨트롤이 자체를 렌더링하는 방법을 결정합니다.</target>
         <note />
       </trans-unit>
       <trans-unit id="ControlWidthDescr">
@@ -4549,6 +4549,11 @@ To replace this default dialog please handle the DataError event.</source>
         <target state="translated">ListView, TreeView 또는 ToolStrip과 같은 다른 컨트롤에서 일반적으로 사용하는 이미지 컬렉션을 관리합니다.</target>
         <note />
       </trans-unit>
+      <trans-unit id="DescriptionKioskModeManager">
+        <source>Manages common fullscreen, input, cursor, and power behavior for kiosk-style WinForms applications.</source>
+        <target state="translated">키오스크 스타일 WinForms 애플리케이션의 전체 화면, 입력, 커서 및 전원 동작을 관리합니다.</target>
+        <note />
+      </trans-unit>
       <trans-unit id="DescriptionLabel">
         <source>Provides run-time information or descriptive text for a control.</source>
         <target state="translated">컨트롤에 대한 설명 텍스트나 런타임 정보를 제공합니다.</target>
@@ -5452,7 +5457,7 @@ Do you want to replace it?</source>
       </trans-unit>
       <trans-unit id="FormFormRevealModeDescr">
         <source>Indicates how the form is presented while its initial appearance is prepared. Classic never defers reveal. Deferred hides the form behind a DWM cloak until its background has painted, to reduce startup flash. Inherit resolves from the application-wide default.</source>
-        <target state="new">Indicates how the form is presented while its initial appearance is prepared. Classic never defers reveal. Deferred hides the form behind a DWM cloak until its background has painted, to reduce startup flash. Inherit resolves from the application-wide default.</target>
+        <target state="translated">초기 모양을 준비하는 동안 양식이 어떻게 표시되는지 나타냅니다. 클래식은 표시를 지연하지 않습니다. 지연은 시작 시 깜박임을 줄이기 위해 배경이 그려질 때까지 DWM 클록 뒤에 양식을 숨깁니다. 상속은 애플리케이션 전체 기본값을 따릅니다.</target>
         <note />
       </trans-unit>
       <trans-unit id="FormHelpButtonClickedDescr">
@@ -5577,7 +5582,7 @@ Do you want to replace it?</source>
       </trans-unit>
       <trans-unit id="FormOnFormRevealModeChangedDescr">
         <source>Occurs when the effective value of the FormRevealMode property changes.</source>
-        <target state="new">Occurs when the effective value of the FormRevealMode property changes.</target>
+        <target state="translated">FormRevealMode 속성의 유효 값이 변경될 때 발생합니다.</target>
         <note />
       </trans-unit>
       <trans-unit id="FormOnInputLangChangeDescr">
@@ -6142,6 +6147,51 @@ Stack trace where the illegal operation occurred was:
       <trans-unit id="KeysConverterInvalidKeyCombination">
         <source>Key combination is not valid.</source>
         <target state="translated">키 조합이 잘못되었습니다.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="KioskModeManagerAlwaysOnDescr">
+        <source>Indicates whether Windows should keep the display and system awake while this component is active.</source>
+        <target state="translated">이 구성 요소가 활성화되어 있는 동안 Windows가 디스플레이와 시스템을 깨어 있게 유지할지 여부를 나타냅니다.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="KioskModeManagerContainerControlChangedDescr">
+        <source>Occurs when the ContainerControl property value changes.</source>
+        <target state="translated">ContainerControl 속성 값이 변경될 때 발생합니다.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="KioskModeManagerContainerControlDescr">
+        <source>The container whose containing form is controlled by the kiosk mode manager.</source>
+        <target state="translated">포함된 폼이 키오스크 모드 관리자로 제어되는 컨테이너입니다.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="KioskModeManagerEscapeExitsFullScreenDescr">
+        <source>Indicates whether pressing Escape exits fullscreen mode.</source>
+        <target state="translated">Escape 키를 누르면 전체 화면 모드가 종료되는지 여부를 나타냅니다.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="KioskModeManagerFullScreenDescr">
+        <source>Gets or sets a value indicating whether the resolved form is currently fullscreen.</source>
+        <target state="translated">해결된 폼이 현재 전체 화면인지 여부를 나타내는 값을 가져오거나 설정합니다.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="KioskModeManagerFullScreenChangedDescr">
+        <source>Occurs when the fullscreen state changes.</source>
+        <target state="translated">전체 화면 상태가 바뀔 때 발생합니다.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="KioskModeManagerMousePointerAutoHideDelayDescr">
+        <source>The delay, in milliseconds, before the mouse pointer is hidden while fullscreen. A value of 0 disables automatic pointer hiding.</source>
+        <target state="translated">전체 화면일 때 마우스 포인터가 숨겨지기 전까지의 지연 시간입니다. 밀리초 단위입니다. 값이 0이면 자동 포인터 숨기기가 사용되지 않습니다.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="KioskModeManagerToggleFullScreenKeysDescr">
+        <source>The key combination that toggles between fullscreen and restored mode.</source>
+        <target state="translated">전체 화면 모드와 복원 모드를 전환하는 키 조합입니다.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="KioskModeManagerTopMostInFullScreenDescr">
+        <source>Indicates whether the form is topmost while fullscreen.</source>
+        <target state="translated">전체 화면일 때 폼이 항상 위에 표시되는지 여부를 나타냅니다.</target>
         <note />
       </trans-unit>
       <trans-unit id="LabelAutoEllipsisDescr">
@@ -8716,7 +8766,7 @@ Stack trace where the illegal operation occurred was:
       </trans-unit>
       <trans-unit id="RadioButtonAppearanceDescr">
         <source>Controls whether the RadioButton appears as normal, as a Windows PushButton, or as a toggle switch.</source>
-        <target state="new">Controls whether the RadioButton appears as normal, as a Windows PushButton, or as a toggle switch.</target>
+        <target state="translated">RadioButton이 일반 상태로 표시될지, Windows 누름 단추로 표시될지, 아니면 토글 스위치로 표시될지를 제어합니다.</target>
         <note />
       </trans-unit>
       <trans-unit id="RadioButtonAutoCheckDescr">
@@ -11059,11 +11109,6 @@ Stack trace where the illegal operation occurred was:
         <target state="translated">TreeView의 노드를 연결하는 줄의 색입니다.</target>
         <note />
       </trans-unit>
-      <trans-unit id="TreeViewNodeLeadingDescr">
-        <source>The uniform row-height leading factor applied to all nodes.</source>
-        <target state="new">The uniform row-height leading factor applied to all nodes.</target>
-        <note />
-      </trans-unit>
       <trans-unit id="TreeViewNodeMouseClickDescr">
         <source>Occurs when a node is clicked with the mouse.</source>
         <target state="translated">마우스로 노드를 클릭할 때 발생합니다.</target>
@@ -11087,11 +11132,6 @@ Stack trace where the illegal operation occurred was:
       <trans-unit id="TreeViewNodesDescr">
         <source>The root nodes in the TreeView control.</source>
         <target state="translated">TreeView 컨트롤의 루트 노드입니다.</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="TreeViewOnNodeLeadingChangedDescr">
-        <source>Occurs when the value of the NodeLeading property changes.</source>
-        <target state="new">Occurs when the value of the NodeLeading property changes.</target>
         <note />
       </trans-unit>
       <trans-unit id="TreeViewPathSeparatorDescr">

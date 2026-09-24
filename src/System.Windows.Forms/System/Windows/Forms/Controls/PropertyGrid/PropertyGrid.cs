@@ -1753,12 +1753,19 @@ public partial class PropertyGrid : ContainerControl, IComPropertyBrowser, IProp
         EventHandler eventHandler,
         bool useRadioButtonRole = false)
     {
+        // ToolStripItem/ToolStripButton bake Margin and the minimum button width from
+        // ScaleHelper.InitialSystemDpi (the process's startup DPI) at construction time. Re-apply both
+        // explicitly so a button (re)created after a runtime DPI change reflects the grid's actual current
+        // DPI; DeviceDpi routes through ToolStripButton's own existing, correct DeviceDpi setter override.
+        // See https://github.com/dotnet/winforms/issues/8268.
         PropertyGridToolStripButton button = new(this, useRadioButtonRole)
         {
             Text = toolTipText,
             AutoToolTip = true,
             DisplayStyle = ToolStripItemDisplayStyle.Image,
-            ImageIndex = imageIndex
+            ImageIndex = imageIndex,
+            Margin = ScaleHelper.ScaleToDpi(new Padding(0, 1, 0, 2), DeviceDpi),
+            DeviceDpi = DeviceDpi
         };
 
         button.Click += eventHandler;
@@ -2106,7 +2113,7 @@ public partial class PropertyGrid : ContainerControl, IComPropertyBrowser, IProp
             ImageSize = s_largeButtonSize
         };
 
-        if (ScaleHelper.IsScalingRequired)
+        if (ScaleHelper.IsScalingRequirementMet)
         {
             AddLargeImage(_alphaBitmap);
             AddLargeImage(_categoryBitmap);
@@ -2140,7 +2147,7 @@ public partial class PropertyGrid : ContainerControl, IComPropertyBrowser, IProp
         }
     }
 
-    // This method should be called only inside a if (DpiHelper.IsScalingRequired) clause.
+    // This method should be called only inside a if (ScaleHelper.IsScalingRequirementMet) clause.
     private void AddLargeImage(Bitmap? originalBitmap)
     {
         if (originalBitmap is null)
@@ -3874,7 +3881,7 @@ public partial class PropertyGrid : ContainerControl, IComPropertyBrowser, IProp
         {
             _normalButtonImages?.Dispose();
             _normalButtonImages = new ImageList();
-            if (ScaleHelper.IsScalingRequired)
+            if (ScaleHelper.IsScalingRequirementMet)
             {
                 _normalButtonImages.ImageSize = s_normalButtonSize;
             }
@@ -4012,6 +4019,9 @@ public partial class PropertyGrid : ContainerControl, IComPropertyBrowser, IProp
         }
 
         _toolStrip.ImageList = LargeButtons ? _largeButtonImages : _normalButtonImages;
+
+        // Covers LargeButtons only (_largeButtonImages isn't ready earlier); a no-op otherwise.
+        _toolStrip.ImageScalingSize = _toolStrip.ImageList!.ImageSize;
 
         using (SuspendLayoutScope scope = new(_toolStrip))
         {

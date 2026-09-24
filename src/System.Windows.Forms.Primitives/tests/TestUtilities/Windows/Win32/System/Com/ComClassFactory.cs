@@ -58,8 +58,18 @@ internal unsafe class ComClassFactory : IDisposable
     internal HRESULT CreateInstance(out object unknown)
     {
         HRESULT result = CreateInstance(out IUnknown* punk);
-        unknown = punk is null ? null : Marshal.GetObjectForIUnknown((nint)punk);
-        return result;
+        try
+        {
+            unknown = punk is null ? null : Marshal.GetObjectForIUnknown((nint)punk);
+            return result;
+        }
+        finally
+        {
+            if (punk is not null)
+            {
+                punk->Release();
+            }
+        }
     }
 
     public void Dispose()

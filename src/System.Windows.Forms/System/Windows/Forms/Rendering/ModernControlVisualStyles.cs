@@ -24,10 +24,13 @@ internal static class ModernControlVisualStyles
     internal const int ComboBoxStyleInset = 1;
 
     /// <summary>Corner radius of a modern text field's rounded frame.</summary>
-    internal const int FieldCornerRadius = 15;
+    internal const int FieldCornerRadius = 10;
 
     /// <summary>Height of the animated focus underline band drawn beneath a focused modern field.</summary>
     internal const int FocusBandHeight = 4;
+
+    /// <summary>Opacity of the Standard GroupBox body shade over a background image.</summary>
+    internal const int GroupBoxCardBodyShadeAlpha = 0x20;
 
     /// <summary>Scale factor applied to the GroupBox caption font in modern mode.</summary>
     internal const float GroupBoxCaptionFontScale = 1.15f;
@@ -53,6 +56,9 @@ internal static class ModernControlVisualStyles
     /// <summary>Horizontal padding around the GroupBox header text.</summary>
     internal const int GroupBoxHeaderHorizontalPadding = 10;
 
+    /// <summary>Opacity of the Popup GroupBox accent header over a background image.</summary>
+    internal const int GroupBoxPopupHeaderOverlayAlpha = 0x80;
+
     /// <summary>Vertical padding around the GroupBox header text.</summary>
     internal const int GroupBoxHeaderVerticalPadding = 5;
 
@@ -75,7 +81,7 @@ internal static class ModernControlVisualStyles
     internal const int NoBorderPadding = 1;
 
     /// <summary>Corner radius of the up-down control's rounded frame.</summary>
-    internal const int UpDownCornerRadius = 14;
+    internal const int UpDownCornerRadius = 10;
 
     internal static Padding GetFieldPadding(
         BorderStyle borderStyle,
@@ -166,6 +172,26 @@ internal static class ModernControlVisualStyles
             + ScaleToDpi(InternalChromeInset, deviceDpi);
 
         return Math.Max(preferredHeight, roundedChromeMinimumHeight);
+    }
+
+    internal static int GetSingleLineTextBoxPreferredHeight(
+        int fontHeight,
+        BorderStyle borderStyle,
+        Size focusBorderMetrics,
+        float textScaleFactor,
+        int deviceDpi)
+    {
+        Padding fieldPadding = GetFieldPadding(
+            borderStyle,
+            Padding.Empty,
+            focusBorderMetrics,
+            textScaleFactor,
+            deviceDpi);
+
+        return GetPreferredFieldHeight(
+            fontHeight,
+            fieldPadding,
+            deviceDpi);
     }
 
     private static int ScaleFocusMetric(

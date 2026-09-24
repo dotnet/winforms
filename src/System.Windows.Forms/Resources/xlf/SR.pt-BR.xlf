@@ -244,12 +244,12 @@
       </trans-unit>
       <trans-unit id="Application_VisualStylesModeCanOnlyBeSetOnce">
         <source>The default visual styles mode can only be set once and cannot be changed afterwards.</source>
-        <target state="new">The default visual styles mode can only be set once and cannot be changed afterwards.</target>
+        <target state="translated">O modo de estilos visuais padrão só pode ser definido uma vez e não pode ser alterado depois.</target>
         <note />
       </trans-unit>
       <trans-unit id="Application_VisualStylesModeInheritInvalidAsDefault">
         <source>VisualStylesMode.Inherit cannot be used as the application-wide default visual styles mode because the application root has no parent to inherit from.</source>
-        <target state="new">VisualStylesMode.Inherit cannot be used as the application-wide default visual styles mode because the application root has no parent to inherit from.</target>
+        <target state="translated">VisualStylesMode.Inherit não pode ser usado como o modo padrão de estilos visuais de todo o aplicativo porque a raiz do aplicativo não tem um pai do qual herdar.</target>
         <note />
       </trans-unit>
       <trans-unit id="ApplyCaption">
@@ -1709,7 +1709,7 @@
       </trans-unit>
       <trans-unit id="ControlMutationExtensionsLayoutSuspensionRequiresControl">
         <source>Layout suspension requires a target derived from Control.</source>
-        <target state="new">Layout suspension requires a target derived from Control.</target>
+        <target state="translated">A suspensão do Layout requer um destino derivado de Controle.</target>
         <note />
       </trans-unit>
       <trans-unit id="ControlNotChild">
@@ -2044,7 +2044,7 @@
       </trans-unit>
       <trans-unit id="ControlOnSystemVisualSettingsChangedDescr">
         <source>Event raised when a Windows visual or accessibility setting changes.</source>
-        <target state="new">Event raised when a Windows visual or accessibility setting changes.</target>
+        <target state="translated">Evento gerado quando uma configuração visual ou de acessibilidade do Windows é alterada.</target>
         <note />
       </trans-unit>
       <trans-unit id="ControlOnTabIndexChangedDescr">
@@ -2194,12 +2194,12 @@
       </trans-unit>
       <trans-unit id="ControlVisualStylesModeChangedDescr">
         <source>Occurs when the value of the VisualStylesMode property changes.</source>
-        <target state="new">Occurs when the value of the VisualStylesMode property changes.</target>
+        <target state="translated">Ocorre quando o valor da propriedade VisualStylesMode é alterado.</target>
         <note />
       </trans-unit>
       <trans-unit id="ControlVisualStylesModeDescr">
         <source>Determines how the control renders itself when visual styles are applied.</source>
-        <target state="new">Determines how the control renders itself when visual styles are applied.</target>
+        <target state="translated">Determina como o controle é renderizado quando estilos visuais são aplicados.</target>
         <note />
       </trans-unit>
       <trans-unit id="ControlWidthDescr">
@@ -4549,6 +4549,11 @@ Para substituir a caixa de diálogo padrão, manipule o evento DataError.</targe
         <target state="translated">Gerencia uma coleção de imagens geralmente usadas por outros controles, como ListView, TreeView ou ToolStrip.</target>
         <note />
       </trans-unit>
+      <trans-unit id="DescriptionKioskModeManager">
+        <source>Manages common fullscreen, input, cursor, and power behavior for kiosk-style WinForms applications.</source>
+        <target state="translated">Gerencia o comportamento comum de tela inteira, entrada, cursor e energia para aplicativos WinForms no estilo quiosque.</target>
+        <note />
+      </trans-unit>
       <trans-unit id="DescriptionLabel">
         <source>Provides run-time information or descriptive text for a control.</source>
         <target state="translated">Fornece informações em tempo de execução ou texto descritivo para um controle.</target>
@@ -5452,7 +5457,7 @@ Deseja substituí-lo?</target>
       </trans-unit>
       <trans-unit id="FormFormRevealModeDescr">
         <source>Indicates how the form is presented while its initial appearance is prepared. Classic never defers reveal. Deferred hides the form behind a DWM cloak until its background has painted, to reduce startup flash. Inherit resolves from the application-wide default.</source>
-        <target state="new">Indicates how the form is presented while its initial appearance is prepared. Classic never defers reveal. Deferred hides the form behind a DWM cloak until its background has painted, to reduce startup flash. Inherit resolves from the application-wide default.</target>
+        <target state="translated">Indica como o formulário é apresentado enquanto sua aparência inicial é preparada. O clássico nunca adia a exibição. Adiado oculta o formulário atrás de uma camada do DWM até que sua tela de fundo seja renderizada, para reduzir o flash de inicialização. Herdar resolve a partir do padrão de todo o aplicativo.</target>
         <note />
       </trans-unit>
       <trans-unit id="FormHelpButtonClickedDescr">
@@ -5577,7 +5582,7 @@ Deseja substituí-lo?</target>
       </trans-unit>
       <trans-unit id="FormOnFormRevealModeChangedDescr">
         <source>Occurs when the effective value of the FormRevealMode property changes.</source>
-        <target state="new">Occurs when the effective value of the FormRevealMode property changes.</target>
+        <target state="translated">Ocorre quando o valor efetivo da propriedade FormRevealMode é alterado.</target>
         <note />
       </trans-unit>
       <trans-unit id="FormOnInputLangChangeDescr">
@@ -6142,6 +6147,51 @@ O rastreamento de pilha em que a operação ilegal ocorreu foi:
       <trans-unit id="KeysConverterInvalidKeyCombination">
         <source>Key combination is not valid.</source>
         <target state="translated">A combinação de chave não é válida.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="KioskModeManagerAlwaysOnDescr">
+        <source>Indicates whether Windows should keep the display and system awake while this component is active.</source>
+        <target state="translated">Indica se o Windows deve manter a exibição e o sistema ativos enquanto esse componente está ativo.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="KioskModeManagerContainerControlChangedDescr">
+        <source>Occurs when the ContainerControl property value changes.</source>
+        <target state="translated">Ocorre quando o valor da propriedade ContainerControl é alterado.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="KioskModeManagerContainerControlDescr">
+        <source>The container whose containing form is controlled by the kiosk mode manager.</source>
+        <target state="translated">O contêiner cujo formulário recipiente é controlado pelo gerenciador de modo de quiosque.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="KioskModeManagerEscapeExitsFullScreenDescr">
+        <source>Indicates whether pressing Escape exits fullscreen mode.</source>
+        <target state="translated">Indica se pressionar Escape sai do modo de tela inteira.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="KioskModeManagerFullScreenDescr">
+        <source>Gets or sets a value indicating whether the resolved form is currently fullscreen.</source>
+        <target state="translated">Obtém ou define um valor que indica se o formulário resolvido está atualmente em tela inteira.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="KioskModeManagerFullScreenChangedDescr">
+        <source>Occurs when the fullscreen state changes.</source>
+        <target state="translated">Ocorre quando o estado de tela inteira é alterado.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="KioskModeManagerMousePointerAutoHideDelayDescr">
+        <source>The delay, in milliseconds, before the mouse pointer is hidden while fullscreen. A value of 0 disables automatic pointer hiding.</source>
+        <target state="translated">O atraso, em milissegundos, antes que o ponteiro do mouse seja oculto enquanto estiver em tela inteira. Um valor de 0 desabilita a ocultação automática de ponteiro.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="KioskModeManagerToggleFullScreenKeysDescr">
+        <source>The key combination that toggles between fullscreen and restored mode.</source>
+        <target state="translated">A combinação de teclas que alterna entre a tela inteira e o modo restaurado.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="KioskModeManagerTopMostInFullScreenDescr">
+        <source>Indicates whether the form is topmost while fullscreen.</source>
+        <target state="translated">Indica se o formulário é superior enquanto tela inteira.</target>
         <note />
       </trans-unit>
       <trans-unit id="LabelAutoEllipsisDescr">
@@ -8716,7 +8766,7 @@ O rastreamento de pilha em que a operação ilegal ocorreu foi:
       </trans-unit>
       <trans-unit id="RadioButtonAppearanceDescr">
         <source>Controls whether the RadioButton appears as normal, as a Windows PushButton, or as a toggle switch.</source>
-        <target state="new">Controls whether the RadioButton appears as normal, as a Windows PushButton, or as a toggle switch.</target>
+        <target state="translated">Controla se o RadioButton aparece como normal, como um PushButton do Windows ou como um parâmetro de botão de alternância.</target>
         <note />
       </trans-unit>
       <trans-unit id="RadioButtonAutoCheckDescr">
@@ -11059,11 +11109,6 @@ O rastreamento de pilha em que a operação ilegal ocorreu foi:
         <target state="translated">A cor das linhas que conectam os nós de TreeView.</target>
         <note />
       </trans-unit>
-      <trans-unit id="TreeViewNodeLeadingDescr">
-        <source>The uniform row-height leading factor applied to all nodes.</source>
-        <target state="new">The uniform row-height leading factor applied to all nodes.</target>
-        <note />
-      </trans-unit>
       <trans-unit id="TreeViewNodeMouseClickDescr">
         <source>Occurs when a node is clicked with the mouse.</source>
         <target state="translated">Ocorre quando o usuário clica com o mouse em um nó.</target>
@@ -11087,11 +11132,6 @@ O rastreamento de pilha em que a operação ilegal ocorreu foi:
       <trans-unit id="TreeViewNodesDescr">
         <source>The root nodes in the TreeView control.</source>
         <target state="translated">Nós raiz no controle TreeView.</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="TreeViewOnNodeLeadingChangedDescr">
-        <source>Occurs when the value of the NodeLeading property changes.</source>
-        <target state="new">Occurs when the value of the NodeLeading property changes.</target>
         <note />
       </trans-unit>
       <trans-unit id="TreeViewPathSeparatorDescr">

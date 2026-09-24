@@ -4,7 +4,7 @@
 using System.ComponentModel;
 using System.Formats.Nrbf;
 using System.Private.Windows.BinaryFormat;
-
+using System.Runtime.InteropServices;
 using Windows.Win32;
 using Windows.Win32.Foundation;
 using Windows.Win32.System.Com;
@@ -395,5 +395,35 @@ public unsafe class NativeToManagedAdapterTests
 
         // Should return null, not corrupted data
         data.Should().BeNull();
+    }
+
+    [Theory]
+    [InlineData(false)]
+    [InlineData(true)]
+    public void GetData_WhenGetDataFails_ReturnsExpected(bool enableSwitch)
+    {
+        using AppContextSwitchScope scope = new(
+            CoreAppContextSwitches.ClipboardThrowExceptionsForGetAPIsSwitchName,
+            getDefaultValue: () => false,
+            enable: enableSwitch);
+
+        using FailingGetDataNativeDataObject dataObject = new(
+            (ushort)_format.Id,
+            HRESULT.CLIPBRD_E_CANT_OPEN);
+
+        var composition = Composition.Create(ComHelpers.GetComPointer<IDataObject>(dataObject));
+
+        if (enableSwitch)
+        {
+            Action action = () => composition.GetData(nameof(NativeToManagedAdapterTests));
+            action.Should()
+                .Throw<COMException>()
+                .And.HResult.Should()
+                .Be((int)HRESULT.CLIPBRD_E_CANT_OPEN);
+        }
+        else
+        {
+            composition.GetData(nameof(NativeToManagedAdapterTests)).Should().BeNull();
+        }
     }
 }

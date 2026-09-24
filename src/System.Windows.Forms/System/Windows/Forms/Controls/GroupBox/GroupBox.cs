@@ -482,6 +482,21 @@ public partial class GroupBox : Control
         base.OnPaint(e); // raise paint event
     }
 
+    protected override void OnPaintBackground(PaintEventArgs pevent)
+    {
+        ArgumentNullException.ThrowIfNull(pevent);
+        if (!OwnerDraw
+            && EffectiveVisualStylesMode >= VisualStylesMode.Net11
+            && BackgroundImage is not null)
+        {
+            using var brush = BackColor.GetCachedSolidBrushScope();
+            pevent.Graphics.FillRectangle(brush, ClientRectangle);
+            return;
+        }
+
+        base.OnPaintBackground(pevent);
+    }
+
     private void DrawGroupBox(PaintEventArgs e)
     {
         // Offset from the left bound.

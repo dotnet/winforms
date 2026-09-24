@@ -1132,7 +1132,11 @@ public partial class TaskDialog : IWin32Window
 
                 case TASKDIALOG_NOTIFICATIONS.TDN_RADIO_BUTTON_CLICKED:
                     int radioButtonID = (int)wParam;
-                    TaskDialogRadioButton radioButton = _boundPage.GetBoundRadioButtonByID(radioButtonID)!;
+                    TaskDialogRadioButton? radioButton = _boundPage.GetBoundRadioButtonByID(radioButtonID);
+                    if (radioButton is null)
+                    {
+                        break;
+                    }
 
                     checked
                     {

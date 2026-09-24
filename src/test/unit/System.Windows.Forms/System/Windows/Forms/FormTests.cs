@@ -6,6 +6,7 @@
 using System.ComponentModel;
 using System.Drawing;
 using Moq;
+using Windows.Win32.Graphics.Dwm;
 
 namespace System.Windows.Forms.Tests;
 
@@ -1884,6 +1885,124 @@ public partial class FormTests
 
         Assert.Equal(expectedDialogResult, form.ShowDialog());
         Assert.Equal(expectedDialogResult, form.DialogResult);
+    }
+
+    [WinFormsFact]
+    public void Form_RecreateHandle_ReappliesImmersiveDarkModeTitleBar()
+    {
+        // Regression for https://github.com/dotnet/winforms/issues/12582
+        // Avoid Application.SetColorMode — can hang in NotifySystemEventsOfColorChange
+        // after a form has created the SystemEvents broadcast window.
+
+        if (SystemInformation.HighContrast)
+        {
+            return;
+        }
+
+        var applicationAccessor = typeof(Application).TestAccessor.Dynamic;
+        SystemColorMode? previousColorMode = applicationAccessor.s_colorMode;
+
+        try
+        {
+            applicationAccessor.s_colorMode = SystemColorMode.Dark;
+            Assert.True(Application.ColorModeSet);
+            Assert.True(Application.IsDarkModeEnabled);
+
+            using Form form = new();
+            form.TestAccessor.Dynamic.DarkModeRequestState = true;
+
+            form.Show();
+            Assert.True(form.IsHandleCreated);
+
+            Assert.True(
+                TryGetUseImmersiveDarkMode(form.HWND, out bool darkBefore) && darkBefore,
+                "Expected immersive dark mode when the form is first shown.");
+
+            IntPtr handleBefore = form.Handle;
+
+            form.RightToLeft = RightToLeft.Yes;
+
+            Assert.True(form.IsHandleCreated);
+            Assert.NotEqual(handleBefore, form.Handle);
+
+            Assert.True(
+                TryGetUseImmersiveDarkMode(form.HWND, out bool darkAfter) && darkAfter,
+                "Expected immersive dark mode restored after handle recreation.");
+
+            form.Close();
+        }
+        finally
+        {
+            applicationAccessor.s_colorMode = previousColorMode;
+        }
+    }
+
+    [WinFormsFact]
+    public void Form_ShowInTaskbar_Change_ReappliesImmersiveDarkModeTitleBar()
+    {
+        // Regression for https://github.com/dotnet/winforms/issues/12992
+        // Same root cause as #12582: handle recreation must re-apply
+        // DWMWA_USE_IMMERSIVE_DARK_MODE via Form.SetFormTitleProperties.
+        // Avoid Application.SetColorMode — can hang in NotifySystemEventsOfColorChange.
+
+        if (SystemInformation.HighContrast)
+        {
+            return;
+        }
+
+        var applicationAccessor = typeof(Application).TestAccessor.Dynamic;
+        SystemColorMode? previousColorMode = applicationAccessor.s_colorMode;
+
+        try
+        {
+            applicationAccessor.s_colorMode = SystemColorMode.Dark;
+            Assert.True(Application.ColorModeSet);
+            Assert.True(Application.IsDarkModeEnabled);
+
+            using Form form = new()
+            {
+                ShowInTaskbar = true,
+            };
+            form.TestAccessor.Dynamic.DarkModeRequestState = true;
+
+            form.Show();
+            Assert.True(form.IsHandleCreated);
+
+            Assert.True(
+                TryGetUseImmersiveDarkMode(form.HWND, out bool darkBefore) && darkBefore,
+                "Expected immersive dark mode when the form is first shown.");
+
+            IntPtr handleBefore = form.Handle;
+
+            // Repro path from #12992 (toggle force recreate, same as product UI).
+            form.ShowInTaskbar = false;
+
+            Assert.True(form.IsHandleCreated);
+            Assert.NotEqual(handleBefore, form.Handle);
+
+            Assert.True(
+                TryGetUseImmersiveDarkMode(form.HWND, out bool darkAfter) && darkAfter,
+                "Expected immersive dark mode restored after ShowInTaskbar forces handle recreation.");
+
+            form.Close();
+        }
+        finally
+        {
+            applicationAccessor.s_colorMode = previousColorMode;
+        }
+    }
+
+    private static unsafe bool TryGetUseImmersiveDarkMode(HWND hwnd, out bool isDark)
+    {
+        BOOL value = false;
+        HRESULT hr = PInvoke.DwmGetWindowAttribute(
+            hwnd,
+            DWMWINDOWATTRIBUTE.DWMWA_USE_IMMERSIVE_DARK_MODE,
+            &value,
+            (uint)sizeof(BOOL));
+
+        isDark = value;
+        return hr.Succeeded;
     }
 
     public static IEnumerable<object[]> Visible_Set_TestData()

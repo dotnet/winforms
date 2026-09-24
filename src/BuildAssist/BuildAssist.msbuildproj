@@ -41,7 +41,7 @@
 
     <!-- Work out VS installation path, so we can find MSBuild.exe -->
     <Exec
-      Command="vswhere.exe -latest -prerelease -property installationPath -requires Microsoft.Component.MSBuild"
+      Command='"$(VSWherePath)\vswhere.exe" -latest -prerelease -property installationPath -requires Microsoft.Component.MSBuild'
       WorkingDirectory="$(VSWherePath)"
       EchoOff="true"
       ConsoleToMsBuild="true"
