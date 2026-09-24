@@ -64,6 +64,26 @@ public class ClipboardTests
         action.Should().Throw<InvalidEnumArgumentException>().WithParameterName("format");
     }
 
+    [WinFormsTheory]
+    [InlineData(TextDataFormat.Text, TextDataFormat.UnicodeText)]
+    [InlineData(TextDataFormat.UnicodeText, TextDataFormat.Text)]
+    public void GetText_AutoConvertibleFormat_DoesNotAutoConvert(
+        TextDataFormat sourceFormat,
+        TextDataFormat requestedFormat)
+    {
+        const string text = "Hello, World!";
+        string sourceDataFormat = ClipboardUtilities.ConvertToDataFormats(sourceFormat);
+        string requestedDataFormat = ClipboardUtilities.ConvertToDataFormats(requestedFormat);
+        DataObject dataObject = new();
+        dataObject.SetData(sourceDataFormat, autoConvert: true, text);
+
+        dataObject.GetData(requestedDataFormat, autoConvert: true).Should().Be(text);
+        dataObject.GetData(requestedDataFormat, autoConvert: false).Should().BeNull();
+
+        Clipboard.SetDataObject(dataObject);
+        Clipboard.GetText(requestedFormat).Should().BeEmpty();
+    }
+
     [WinFormsFact]
     public void SetAudio_InvokeByteArray_GetReturnsExpected()
     {
@@ -1153,9 +1173,9 @@ public class ClipboardTests
         formats = dataObject.GetFormats(autoConvert: false);
         formats.Should().BeEquivalentTo(["System.String", "UnicodeText", "Text"]);
 
-        Clipboard.GetText().Should().Be(expected);
-        Clipboard.GetText(TextDataFormat.Text).Should().Be(expected);
-        Clipboard.GetText(TextDataFormat.UnicodeText).Should().Be(expected);
+        Clipboard.GetText().Should().Be(string.Empty);
+        Clipboard.GetText(TextDataFormat.Text).Should().Be(string.Empty);
+        Clipboard.GetText(TextDataFormat.UnicodeText).Should().Be(string.Empty);
 
         Clipboard.GetData("System.String").Should().Be(expected);
 

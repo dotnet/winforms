@@ -224,6 +224,39 @@ public class UpDownBase_UpDownButtons_UpDownButtonsAccessibleObject
         Assert.False(domainUpDown.IsHandleCreated);
     }
 
+    [WinFormsFact]
+    public void UpDownButtonsAccessibleObject_ModernLayout_HitTestsAndInvokesDirection()
+    {
+        using NumericUpDown numericUpDown = new()
+        {
+            VisualStylesMode = VisualStylesMode.Net11,
+            AutoSize = true,
+            Size = new Size(160, 40)
+        };
+        numericUpDown.CreateControl();
+
+        if (!numericUpDown.UseSideBySideButtons)
+        {
+            return;
+        }
+
+        UpDownButtonsAccessibleObject accessibleObject =
+            (UpDownButtonsAccessibleObject)numericUpDown.UpDownButtonsInternal.AccessibilityObject;
+        AccessibleObject upButton = accessibleObject.GetChild(0);
+        AccessibleObject downButton = accessibleObject.GetChild(1);
+        Rectangle upBounds = upButton.Bounds;
+        Rectangle downBounds = downButton.Bounds;
+
+        Assert.NotEqual(Rectangle.Empty, upBounds);
+        Assert.NotEqual(Rectangle.Empty, downBounds);
+        Assert.False(upBounds.IntersectsWith(downBounds));
+        Assert.Same(upButton, accessibleObject.HitTest(upBounds.X + (upBounds.Width / 2), upBounds.Y + (upBounds.Height / 2)));
+
+        decimal value = numericUpDown.Value;
+        upButton.DoDefaultAction();
+        Assert.Equal(value + 1, numericUpDown.Value);
+    }
+
     private class SubUpDownBase : UpDownBase
     {
         protected override void UpdateEditText() => throw new NotImplementedException();

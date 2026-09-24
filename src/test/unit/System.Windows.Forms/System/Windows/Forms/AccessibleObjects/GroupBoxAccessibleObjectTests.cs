@@ -131,4 +131,42 @@ public class GroupBoxAccessibleObjectTests
         Assert.Equal(expected, actual);
         Assert.False(ownerControl.IsHandleCreated);
     }
+
+    [WinFormsFact]
+    public void GroupBoxAccessibleObject_HeadingLevel_ModernVisualStyles_ReturnsLevel2()
+    {
+        using SystemVisualSettingsTestScope settingsScope = new(
+            clientAreaAnimationEnabled: false,
+            highContrastEnabled: false);
+        using GroupBox groupBox = new()
+        {
+            FlatStyle = FlatStyle.Standard,
+            VisualStylesMode = VisualStylesMode.Net11
+        };
+
+        VARIANT actual = groupBox.AccessibilityObject.GetPropertyValue(
+            UIA_PROPERTY_ID.UIA_HeadingLevelPropertyId);
+
+        Assert.Equal(80052, (int)actual);
+        Assert.False(groupBox.IsHandleCreated);
+    }
+
+    [WinFormsFact]
+    public void GroupBoxAccessibleObject_HeadingLevel_HighContrast_ReturnsEmpty()
+    {
+        using SystemVisualSettingsTestScope settingsScope = new(
+            clientAreaAnimationEnabled: false,
+            highContrastEnabled: true);
+        using GroupBox groupBox = new()
+        {
+            FlatStyle = FlatStyle.Standard,
+            VisualStylesMode = VisualStylesMode.Net11
+        };
+
+        VARIANT actual = groupBox.AccessibilityObject.GetPropertyValue(
+            UIA_PROPERTY_ID.UIA_HeadingLevelPropertyId);
+
+        Assert.Equal(VARIANT.Empty, actual);
+        Assert.False(groupBox.IsHandleCreated);
+    }
 }

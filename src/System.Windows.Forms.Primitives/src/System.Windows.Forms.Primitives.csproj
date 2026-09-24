@@ -15,8 +15,9 @@
     <NoWarn>$(NoWarn);CS8981;CS3016</NoWarn>
     <!--
       We don't care about CLS compliance since everything here is internal and we want to match native types.
+      CS3019: CsWin32-generated COM structs carry [CLSCompliant] attributes on internal (non-visible) types.
     -->
-    <NoWarn>$(NoWarn);CS3016</NoWarn>
+    <NoWarn>$(NoWarn);CS3016;CS3019</NoWarn>
     <!--
       IL Trim warnings which should be removed in order to make WinForms trimmable
       See https://github.com/dotnet/winforms/issues/4649

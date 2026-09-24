@@ -309,7 +309,9 @@ public partial class RichTextBox : TextBoxBase
 
             // Remove the WS_BORDER style from the control, if we're trying to set it,
             // to prevent the control from displaying the single point rectangle around the 3D border
-            if (BorderStyle == BorderStyle.FixedSingle && ((cp.Style & (int)WINDOW_STYLE.WS_BORDER) != 0))
+            if (EffectiveVisualStylesMode < VisualStylesMode.Net11
+                && BorderStyle == BorderStyle.FixedSingle
+                && ((cp.Style & (int)WINDOW_STYLE.WS_BORDER) != 0))
             {
                 cp.Style &= ~(int)WINDOW_STYLE.WS_BORDER;
                 cp.ExStyle |= (int)WINDOW_EX_STYLE.WS_EX_CLIENTEDGE;
@@ -319,7 +321,34 @@ public partial class RichTextBox : TextBoxBase
         }
     }
 
-    // public bool CanUndo {}; <-- inherited from TextBoxBase
+    /// <summary>
+    ///  RichEdit (<c>MSFTEDIT</c>) reserves its own border and scrollbar space during
+    ///  <c>WM_NCCALCSIZE</c>, so the modern Visual Styles padding band is carved on top of the client
+    ///  rectangle the native handler produces.
+    /// </summary>
+    private protected override bool ReservesNativeNonClientArea => true;
+
+    /// <summary>
+    ///  RichEdit reserves the scrollbar space itself while processing <c>WM_NCCALCSIZE</c> (see
+    ///  <see cref="ReservesNativeNonClientArea"/>). Return the configured reservation for preferred-size
+    ///  measurement; the native client-area calculation explicitly excludes it.
+    /// </summary>
+    private protected override Padding GetScrollBarPadding()
+    {
+        Padding padding = Padding.Empty;
+
+        if (Multiline && !WordWrap && (ScrollBars & RichTextBoxScrollBars.Horizontal) != 0)
+        {
+            padding.Bottom = SystemInformation.GetHorizontalScrollBarHeightForDpi(DeviceDpiInternal);
+        }
+
+        if (Multiline && (ScrollBars & RichTextBoxScrollBars.Vertical) != 0)
+        {
+            padding.Right = SystemInformation.GetVerticalScrollBarWidthForDpi(DeviceDpiInternal);
+        }
+
+        return padding;
+    }
 
     /// <summary>
     ///  Controls whether or not the rich edit control will automatically highlight URLs.
@@ -425,6 +454,12 @@ public partial class RichTextBox : TextBoxBase
 
     internal override Size GetPreferredSizeCore(Size proposedConstraints)
     {
+        if (EffectiveVisualStylesMode >= VisualStylesMode.Net11)
+        {
+            // TextBoxBase owns the modern inset, user Padding, and scrollbar geometry.
+            return base.GetPreferredSizeCore(proposedConstraints);
+        }
+
         Size scrollBarPadding = Size.Empty;
 
         // If the RTB is multiline, we won't have a horizontal scrollbar.
@@ -645,6 +680,7 @@ public partial class RichTextBox : TextBoxBase
                 using (LayoutTransaction.CreateTransactionIf(AutoSize, ParentInternal, this, PropertyNames.ScrollBars))
                 {
                     _richTextBoxFlags[s_scrollBarsSection] = (int)value;
+                    CommonProperties.xClearPreferredSizeCache(this);
                     RecreateHandle();
                 }
             }
@@ -2247,6 +2283,68 @@ public partial class RichTextBox : TextBoxBase
         => (int)PInvokeCore.SendMessage(this, PInvokeCore.EM_EXLINEFROMCHAR, 0, index);
 
     /// <summary>
+    ///  Scrolls the caret into view, showing as much of the surrounding text as possible. This overrides
+    ///  the base edit-control behavior so the RichEdit-specific handling lives with the RichTextBox.
+    /// </summary>
+    private protected override unsafe void ScrollToCaretCore()
+    {
+        using ComScope<IRichEditOle> richEdit = new(null);
+
+        if (PInvokeCore.SendMessage(
+            hWnd: this,
+            Msg: PInvokeCore.EM_GETOLEINTERFACE,
+            wParam: 0,
+            lParam: (void**)richEdit) == 0)
+        {
+            // No OLE interface available; fall back to the plain edit behavior.
+            base.ScrollToCaretCore();
+            return;
+        }
+
+        using var textDocument = richEdit.TryQuery<ITextDocument>(out HRESULT hr);
+
+        if (hr.Succeeded)
+        {
+            // When the user calls RichTextBox::ScrollToCaret we want the RichTextBox to show as much text as
+            // possible. Here is how we do that:
+            //
+            //  1. We scroll the RichTextBox all the way to the bottom so the last line of text is the last visible line.
+            //  2. We get the first visible line.
+            //  3. If the first visible line is smaller than the start of the selection, then we are done:
+            //      The selection fits inside the RichTextBox display rectangle.
+            //  4. Otherwise, scroll the selection to the top of the RichTextBox.
+
+            GetSelectionStartAndLength(out int selStart, out int selLength);
+            int selStartLine = GetLineFromCharIndex(selStart);
+
+            using ComScope<ITextRange> windowTextRange = new(null);
+            textDocument.Value->Range(WindowText.Length - 1, WindowText.Length - 1, windowTextRange).ThrowOnFailure();
+
+            // 1. Scroll the RichTextBox all the way to the bottom
+            windowTextRange.Value->ScrollIntoView((int)tomConstants.tomEnd).ThrowOnFailure();
+
+            // 2. Get the first visible line.
+            int firstVisibleLine = (int)PInvokeCore.SendMessage(this, PInvokeCore.EM_GETFIRSTVISIBLELINE);
+
+            // 3. If the first visible line is smaller than the start of the selection, we are done.
+            if (firstVisibleLine <= selStartLine)
+            {
+                return;
+            }
+            else
+            {
+                // 4. Scroll the selection to the top of the RichTextBox.
+                using ComScope<ITextRange> selectionTextRange = new(null);
+                textDocument.Value->Range(selStart, selStart + selLength, selectionTextRange).ThrowOnFailure();
+                selectionTextRange.Value->ScrollIntoView((int)tomConstants.tomStart).ThrowOnFailure();
+                return;
+            }
+        }
+
+        base.ScrollToCaretCore();
+    }
+
+    /// <summary>
     ///  Returns the location of the character at the given index.
     /// </summary>
     public override unsafe Point GetPositionFromCharIndex(int index)
@@ -2499,6 +2597,11 @@ public partial class RichTextBox : TextBoxBase
         ClearUndo();
 
         SendZoomFactor(_zoomMultiplier);
+
+        // RichEdit does not send the WM_CTLCOLOR messages that a plain EDIT control uses to lazily trigger
+        // the modern Visual Styles client-area carve, so provoke it explicitly once the handle exists.
+        // This is a no-op unless EffectiveVisualStylesMode is Net11 or above.
+        RecalculateVisualStylesClientArea();
 
         SystemEvents.UserPreferenceChanged += UserPreferenceChangedHandler;
     }

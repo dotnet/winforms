@@ -148,7 +148,34 @@ System.Windows.Forms.MyEnum.Value2 = 1 -> System.Windows.Forms.MyEnum
 **Nullable annotations:** `?` = nullable reference, `!` = non-nullable
 reference. Value types do not carry these markers unless `Nullable<T>`.
 
-### 2.4 Publicly accessible interfaces
+### 2.4 New `override` members must be tracked too
+
+The PublicAPI analyzer (RS0016) treats a **newly introduced `override`** of a public or
+protected member as new API surface — even though the base member is already public. Whenever
+you **add an `override` that did not previously exist on that type**, add a line for it to
+`PublicAPI.Unshipped.txt` with the `override` prefix. This is easy to miss for paint/lifecycle
+overrides added to support a feature. Examples:
+
+```text
+override System.Windows.Forms.CheckBox.OnPaint(System.Windows.Forms.PaintEventArgs! pevent) -> void
+override System.Windows.Forms.CheckBox.Dispose(bool disposing) -> void
+override System.Windows.Forms.ButtonBase.OnVisualStylesModeChanged(System.EventArgs! e) -> void
+```
+
+> **CI catches this, a plain `dotnet build` may not.** RS0016 is enforced as an **error** under
+> the CI/Arcade build (`build.cmd`); a single-project `dotnet build` can report it as 0 warnings.
+> Always re-verify API tracking with `build.cmd` (see the `building-code` skill's build tenet).
+
+### 2.5 Related pitfalls when adding members to a control
+
+* **Hiding an inherited member (CS0114):** if your new member intentionally hides an inherited
+  one (e.g. a `private new bool ShouldSerializePadding()` shadowing `Control.ShouldSerializePadding()`),
+  you **must** use the `new` keyword, or the CI build fails.
+* **`cref` to internal types in another assembly (CS1574):** XML-doc `<see cref="..."/>` cannot
+  resolve a type that is `internal` in a *different* assembly (even via `InternalsVisibleTo`). Use
+  `<c>TypeName</c>` (plain code font) instead of a `cref` for such references.
+
+### 2.6 Publicly accessible interfaces
 
 If a new **public or protected interface** is introduced (or an existing one
 gains new members), every member that is publicly accessible must also appear
@@ -468,50 +495,72 @@ protected virtual void OnMyPropertyChanged(EventArgs e)
 
 ---
 
-## 7. .NET Version Guard — Mandatory
+## 7. API Stability: Experimental vs. Stable — and Version Guards
 
-All new public APIs **must** be guarded with a preprocessor directive for the
-target .NET version. Currently, new APIs target at least **.NET 11**:
+### 7.1 New APIs are STABLE by default — do NOT mark them `[Experimental]`
+
+New public APIs ship as **normal, stable APIs by default**. Do **not** add the
+`[Experimental(...)]` attribute, a `WFO5xxx` diagnostic ID, or `[WFO5xxx]`
+PublicAPI prefixes unless the work item **explicitly** asks for an experimental
+API.
+
+> **Never make an API experimental implicitly.** Experimental status is a
+> deliberate, requested decision (it changes the customer contract and requires a
+> diagnostic ID + suppression to consume). If the context does not explicitly call
+> for it, the API is stable.
+
+### 7.2 When an experimental API *is* explicitly requested
+
+Only when the task explicitly requests an experimental API:
+
+1. Add (or reuse) a diagnostic ID in the `WFO500x` group in
+   `src\System.Windows.Forms.Analyzers\src\System\Windows\Forms\Analyzers\Diagnostics\DiagnosticIDs.cs`
+   (e.g. `ExperimentalDarkMode = "WFO5001"`, `ExperimentalAsync = "WFO5002"`,
+   `ExperimentalAsyncDropTarget = "WFO5003"`). New IDs continue the sequence.
+2. Decorate the API:
+   ```csharp
+   [Experimental(DiagnosticIDs.ExperimentalXxx, UrlFormat = DiagnosticIDs.UrlFormat)]
+   ```
+3. Prefix every PublicAPI entry for that API with the diagnostic ID, e.g.
+   `[WFO5001]System.Windows.Forms.SomeNewApi.get -> ...`.
+4. Add a row to **both** `docs\analyzers\Experimental.Help.md` and
+   `docs\list-of-diagnostics.md`.
+5. Suppress the diagnostic where the framework itself consumes the API
+   (`#pragma warning disable WFOxxxx` / `#Disable Warning WFOxxxx` in VB).
+
+When the API later **graduates to stable** (typically the next release), reverse
+all five steps: remove the attribute, the `[WFOxxxx]` PublicAPI prefixes, the
+suppressions, the docs rows, and the unused diagnostic ID.
+
+### 7.3 Version guards
+
+This repository **single-targets the current in-development .NET** (see
+`TargetFramework` / `NetCurrent`), so source is **not** wrapped in
+`#if NETxx_0_OR_GREATER` guards — there are none in `System.Windows.Forms`. Do
+**not** add `#if NET11_0_OR_GREATER` blocks around new APIs. Add the member
+directly:
 
 ```csharp
-#if NET11_0_OR_GREATER
-    /// <summary>
-    ///  Gets or sets the corner radius for the control's border.
-    /// </summary>
-    public int CornerRadius
+/// <summary>
+///  Gets or sets the corner radius for the control's border.
+/// </summary>
+public int CornerRadius
+{
+    get => Properties.GetValueOrDefault(s_cornerRadiusProperty, 0);
+    set
     {
-        get => Properties.GetValueOrDefault(s_cornerRadiusProperty, 0);
-        set
-        {
-            ArgumentOutOfRangeException.ThrowIfNegative(value);
+        ArgumentOutOfRangeException.ThrowIfNegative(value);
 
-            if (Properties.GetValueOrDefault(s_cornerRadiusProperty, 0) != value)
-            {
-                Properties.AddOrRemoveValue(s_cornerRadiusProperty, value, defaultValue: 0);
-                OnCornerRadiusChanged(EventArgs.Empty);
-            }
+        if (Properties.GetValueOrDefault(s_cornerRadiusProperty, 0) != value)
+        {
+            Properties.AddOrRemoveValue(s_cornerRadiusProperty, value, defaultValue: 0);
+            OnCornerRadiusChanged(EventArgs.Empty);
         }
     }
-#endif
+}
 ```
 
-> **Why?** Version guards ensure new APIs are only available on the .NET version
-> they were approved for, preventing accidental use on older runtimes. The guard
-> applies to the entire API surface: property, event, `On` method, and any
-> associated types.
-
-The matching tests must use the **same** preprocessor guard:
-
-```csharp
-#if NET11_0_OR_GREATER
-    [WinFormsFact]
-    public void MyControl_CornerRadius_Set_GetReturnsExpected()
-    {
-        using MyControl control = new() { CornerRadius = 5 };
-        Assert.Equal(5, control.CornerRadius);
-    }
-#endif
-```
+Tests do not need a version guard either.
 
 ---
 
@@ -521,7 +570,8 @@ Before considering the implementation complete, verify:
 
 * [ ] API proposal issue exists (upstream or fork) with full proposal format
 * [ ] All new public/protected members are in `PublicAPI.Unshipped.txt`
-* [ ] New APIs guarded with `#if NET11_0_OR_GREATER` (or appropriate version)
+* [ ] API is **stable** (no `[Experimental]`/`WFO5xxx`) unless experimental was
+      explicitly requested; no `#if NETxx_0_OR_GREATER` guards
 * [ ] Property values stored via `PropertyStore` (not backing fields)
 * [ ] Every property has a CodeDOM serialization strategy
 * [ ] Every property has `On[Property]Changed` + `[Property]Changed` event
@@ -533,7 +583,7 @@ Before considering the implementation complete, verify:
 * [ ] XML documentation on every new public/protected member
 * [ ] Naming follows precedent on the control and its base classes
 * [ ] Publicly accessible interface members are tracked in PublicAPI files
-* [ ] Unit tests cover the new API surface (with matching version guard)
+* [ ] Unit tests cover the new API surface
 
 ### 8.1 API issue checklist
 

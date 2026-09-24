@@ -9,7 +9,7 @@ internal static partial class PInvoke
     public static unsafe IShellItem* SHCreateShellItem(string path)
     {
         IShellItem* ppsi = default;
-        if (SHParseDisplayName(path, pbc: null, out ITEMIDLIST* ppidl, sfgaoIn: 0, psfgaoOut: null).Succeeded)
+        if (SHParseDisplayName(path, pbc: null, out ITEMIDLIST* ppidl, sfgaoIn: 0).Succeeded)
         {
             // No parent specified
             SHCreateShellItem(pidlParent: null, psfParent: null, ppidl, &ppsi);

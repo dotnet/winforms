@@ -30,6 +30,12 @@ internal static partial class ScaleHelper
     private static bool s_processPerMonitorAware;
     private static Size? s_logicalSmallSystemIconSize;
 
+    private const string AccessibilityRegistryKeyPath = "Software\\Microsoft\\Accessibility";
+    private const string TextScaleFactorValueName = "TextScaleFactor";
+    private const int MinSystemTextScalePercent = 100;
+    private const int MaxSystemTextScalePercent = 225;
+    private const double DefaultSystemTextScaleFactor = 1.0;
+
     /// <summary>
     ///  The initial primary monitor DPI (logical pixels per inch) for the process.
     /// </summary>
@@ -227,20 +233,59 @@ internal static partial class ScaleHelper
             return null;
         }
 
-        // The default(100) and max(225) text scale factor is value what Settings display text scale
-        // applies and also clamps the text scale factor value between 100 and 225 value.
-        // See https://docs.microsoft.com/windows/uwp/design/input/text-scaling.
-        const int MinTextScaleValue = 100;
-        const int MaxTextScaleValue = 225;
+        if (!TryGetSystemTextScaleFactor(out double textScaleFactor)
+            || textScaleFactor == DefaultSystemTextScaleFactor)
+        {
+            return null;
+        }
+
+        return font.WithSize(font.Size * (float)textScaleFactor);
+    }
+
+    /// <summary>
+    ///  Gets the current Windows Accessibility text-scale factor as a multiplier.
+    /// </summary>
+    /// <remarks>
+    ///  <para>
+    ///   Returns <c>1.0</c> when text scaling is unsupported or when the setting cannot be read.
+    ///  </para>
+    /// </remarks>
+    internal static double GetSystemTextScaleFactor()
+        => TryGetSystemTextScaleFactor(out double textScaleFactor)
+            ? textScaleFactor
+            : DefaultSystemTextScaleFactor;
+
+    /// <summary>
+    ///  Attempts to get the current Windows Accessibility text-scale factor as a multiplier.
+    /// </summary>
+    /// <param name="textScaleFactor">The current text-scale factor.</param>
+    /// <returns>
+    ///  <see langword="true"/> if the value was read successfully; otherwise, <see langword="false"/>.
+    /// </returns>
+    internal static bool TryGetSystemTextScaleFactor(
+        out double textScaleFactor)
+    {
+        textScaleFactor = DefaultSystemTextScaleFactor;
+
+        if (!OsVersion.IsWindows10_1507OrGreater())
+        {
+            return false;
+        }
 
         try
         {
-            // Retrieve the text scale factor, which is set via Settings > Display > Make Text Bigger.
-            using RegistryKey? key = Registry.CurrentUser.OpenSubKey("Software\\Microsoft\\Accessibility");
-            if (key is not null && key.GetValue("TextScaleFactor") is int textScale)
+            // Retrieve the text scale factor, which is set via Settings > Accessibility > Text size.
+            using RegistryKey? key = Registry.CurrentUser.OpenSubKey(
+                AccessibilityRegistryKeyPath);
+            if (key is not null
+                && key.GetValue(TextScaleFactorValueName) is int textScale)
             {
-                textScale = Math.Clamp(textScale, MinTextScaleValue, MaxTextScaleValue);
-                return textScale == 100 ? null : font.WithSize(font.Size * (textScale / 100.0f));
+                textScale = Math.Clamp(
+                    textScale,
+                    MinSystemTextScalePercent,
+                    MaxSystemTextScalePercent);
+                textScaleFactor = textScale / 100.0;
+                return true;
             }
         }
         catch
@@ -251,7 +296,7 @@ internal static partial class ScaleHelper
 #endif
         }
 
-        return null;
+        return false;
     }
 
     /// <summary>

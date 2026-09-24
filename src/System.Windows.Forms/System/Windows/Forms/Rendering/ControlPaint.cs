@@ -1401,7 +1401,7 @@ public static unsafe partial class ControlPaint
                 {
                     g2.Clear(Color.Transparent);
                     using DeviceContextHdcScope dc = new(g2, applyGraphicsState: false);
-                    PInvoke.DrawFrameControl(dc, ref rcCheck, DFC_TYPE.DFC_MENU, DFCS_STATE.DFCS_MENUCHECK);
+                    PInvoke.DrawFrameControl(dc, ref rcCheck, (uint)DFC_TYPE.DFC_MENU, (uint)DFCS_STATE.DFCS_MENUCHECK);
                 }
 
                 bitmap.MakeTransparent();
@@ -1473,7 +1473,7 @@ public static unsafe partial class ControlPaint
         using (DeviceContextHdcScope hdc = new(g2, applyGraphicsState: false))
         {
             // Get Win32 dc with Graphics properties applied to it.
-            PInvoke.DrawFrameControl(hdc, ref rcFrame, kind, state);
+            PInvoke.DrawFrameControl(hdc, ref rcFrame, (uint)kind, (uint)state);
         }
 
         if (foreColor == Color.Empty || backColor == Color.Empty)

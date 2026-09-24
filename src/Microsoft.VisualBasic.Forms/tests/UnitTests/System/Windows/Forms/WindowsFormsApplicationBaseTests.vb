@@ -21,6 +21,8 @@ Namespace Microsoft.VisualBasic.Forms.Tests
             ColorMode = SystemColorMode.Dark
             ColorMode.Should.Be(SystemColorMode.Dark)
 
+            VisualStylesMode.Should.Be(VisualStylesMode.Classic)
+
             EnableVisualStyles.Should.Be(False)
             EnableVisualStyles = True
             EnableVisualStyles.Should.Be(True)
@@ -114,6 +116,31 @@ Namespace Microsoft.VisualBasic.Forms.Tests
         End Sub
 
         <Fact>
+        Public Sub OnInitialize_ApplyApplicationDefaults_VisualStylesModeFlowsToApplication()
+            If RemoteExecutor.IsSupported Then
+                Dim test As Action =
+                    Sub()
+                        Dim appModel As New SubWindowsFormsApplicationBase() With
+                        {
+                            .EnableVisualStylesCore = True
+                        }
+
+                        AddHandler appModel.ApplyApplicationDefaults,
+                            Sub(sender, e)
+                                e.VisualStylesMode = VisualStylesMode.Latest
+                            End Sub
+
+                        appModel.CallOnInitialize(Array.Empty(Of String)()).Should.BeTrue()
+                        System.Windows.Forms.Application.DefaultVisualStylesMode.Should.Be(VisualStylesMode.Latest)
+                    End Sub
+
+                Using handle As RemoteInvokeHandle = RemoteExecutor.Invoke(test)
+                    handle.ExitCode.Should.Be(RemoteExecutor.SuccessExitCode)
+                End Using
+            End If
+        End Sub
+
+        <Fact>
         Public Sub ShowHideSplashScreenSuccess()
             Dim testCode As Action
             Using form1 As New Form
@@ -157,6 +184,20 @@ Namespace Microsoft.VisualBasic.Forms.Tests
                 testCode.Should.NotThrow()
             End If
         End Sub
+
+        Private NotInheritable Class SubWindowsFormsApplicationBase
+            Inherits WindowsFormsApplicationBase
+
+            Public Function CallOnInitialize(commandLineArgs As String()) As Boolean
+                Return MyBase.OnInitialize(Array.AsReadOnly(commandLineArgs))
+            End Function
+
+            Public WriteOnly Property EnableVisualStylesCore As Boolean
+                Set(value As Boolean)
+                    EnableVisualStyles = value
+                End Set
+            End Property
+        End Class
 
     End Class
 End Namespace

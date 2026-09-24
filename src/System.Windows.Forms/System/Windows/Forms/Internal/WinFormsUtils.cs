@@ -66,6 +66,37 @@ internal sealed partial class WindowsFormsUtils
     }
 
     /// <summary>
+    ///  Constrains <paramref name="bounds"/> to the region that auxiliary windows owned by
+    ///  <paramref name="owner"/> may occupy.
+    /// </summary>
+    internal static Rectangle ConstrainToScreenWorkingAreaBounds(Rectangle bounds, Control? owner)
+    {
+        return ConstrainToBounds(GetAvailableScreenBounds(bounds, owner), bounds);
+    }
+
+    /// <summary>
+    ///  Gets the region on the screen that displays <paramref name="bounds"/> which auxiliary
+    ///  windows, such as drop-downs, may occupy.
+    /// </summary>
+    /// <remarks>
+    ///  <para>
+    ///   This is the working area of that screen, unless <paramref name="owner"/> belongs to a
+    ///   borderless top-level window that already covers the complete screen. Such a window - a
+    ///   kiosk-style fullscreen form, for example - also covers the taskbar, so constraining to
+    ///   the working area would detach drop-downs from the items that own them.
+    ///  </para>
+    /// </remarks>
+    internal static Rectangle GetAvailableScreenBounds(Rectangle bounds, Control? owner)
+    {
+        Screen screen = Screen.FromRectangle(bounds);
+
+        return owner?.TopLevelControl is Form { FormBorderStyle: FormBorderStyle.None } form
+            && form.Bounds.Contains(screen.Bounds)
+                ? screen.Bounds
+                : screen.WorkingArea;
+    }
+
+    /// <summary>
     ///  Given a rectangle, constrain it to fit onto the current screen.
     /// </summary>
     internal static Rectangle ConstrainToScreenBounds(Rectangle bounds)
