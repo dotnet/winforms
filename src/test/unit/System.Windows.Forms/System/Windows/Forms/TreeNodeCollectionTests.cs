@@ -111,6 +111,46 @@ public class TreeNodeCollectionTests
     }
 
     [WinFormsFact]
+    public void TreeNodeCollection_Item_SetExistentTreeNodeDifferentIndex_DetachedOwner_Sorts()
+    {
+        TreeNode parent = new();
+        TreeNodeCollection collection = parent.Nodes;
+        collection.Add("3");
+        collection.Add("2");
+        collection.Add("1");
+
+        for (int i = 0; i < collection.Count; i++)
+        {
+            for (int j = i + 1; j < collection.Count; j++)
+            {
+                if (StringComparer.Ordinal.Compare(collection[i].Text, collection[j].Text) > 0)
+                {
+                    (collection[j], collection[i]) = (collection[i], collection[j]);
+                }
+            }
+        }
+
+        Assert.Null(parent.TreeView);
+        Assert.Equal(["1", "2", "3"], collection.Cast<TreeNode>().Select(node => node.Text));
+        Assert.All(collection.Cast<TreeNode>(), node => Assert.Same(parent, node.Parent));
+    }
+
+    [WinFormsFact]
+    public void TreeNodeCollection_Item_SetTreeNodeCreatesCircularReference_DetachedOwner_ThrowsArgumentException()
+    {
+        TreeNode parent = new("parent");
+        TreeNode child = parent.Nodes.Add("child");
+        TreeNode originalNode = child.Nodes.Add("original");
+
+        Assert.Throws<ArgumentException>(() => child.Nodes[0] = parent);
+
+        Assert.Null(parent.Parent);
+        Assert.Same(child, parent.Nodes[0]);
+        Assert.Same(originalNode, child.Nodes[0]);
+        Assert.Same(child, originalNode.Parent);
+    }
+
+    [WinFormsFact]
     public void TreeNodeCollection_Item_SetTreeNodeBoundToAnotherTreeView_ThrowsArgumentException()
     {
         using TreeView anotherTreeView = new();
@@ -121,6 +161,20 @@ public class TreeNodeCollectionTests
         collection.Add("Node 1");
         TreeNode nodeOfAnotherTreeView = anotherTreeView.Nodes[0];
         Assert.Throws<ArgumentException>(() => collection[0] = nodeOfAnotherTreeView);
+    }
+
+    [WinFormsFact]
+    public void TreeNodeCollection_Item_SetTreeNodeBoundToTreeView_DetachedOwner_ThrowsArgumentException()
+    {
+        TreeNode parent = new();
+        parent.Nodes.Add("Detached node");
+
+        using TreeView treeView = new();
+        TreeNode attachedNode = treeView.Nodes.Add("Attached node");
+
+        Assert.Throws<ArgumentException>(() => parent.Nodes[0] = attachedNode);
+        Assert.Same(treeView, attachedNode.TreeView);
+        Assert.Equal("Detached node", parent.Nodes[0].Text);
     }
 
     [WinFormsFact]

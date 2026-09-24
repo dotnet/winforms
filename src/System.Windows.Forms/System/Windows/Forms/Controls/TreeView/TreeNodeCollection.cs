@@ -42,13 +42,26 @@ public class TreeNodeCollection : IList
             ArgumentOutOfRangeException.ThrowIfGreaterThanOrEqual(index, _owner._childCount);
             ArgumentNullException.ThrowIfNull(value);
 
-            TreeView tv = _owner._treeView!;
-            TreeNode actual = _owner._children[index];
+            TreeView? tv = _owner.TreeView;
+            TreeView? valueTreeView = value.TreeView;
 
-            if (value._treeView is not null && value._treeView.Handle != tv.Handle)
+            if (valueTreeView is not null && (tv is null || valueTreeView.Handle != tv.Handle))
             {
                 throw new ArgumentException(string.Format(SR.TreeNodeBoundToAnotherTreeView), nameof(value));
             }
+
+            if (tv is null)
+            {
+                _owner.CheckParentingCycle(value);
+
+                value._parent = _owner;
+                value._index = index;
+                _owner._children[index] = value;
+                value.Realize(false);
+                return;
+            }
+
+            TreeNode actual = _owner._children[index];
 
             if (tv._nodesByHandle.ContainsKey(value.Handle) && value._index != index)
             {
