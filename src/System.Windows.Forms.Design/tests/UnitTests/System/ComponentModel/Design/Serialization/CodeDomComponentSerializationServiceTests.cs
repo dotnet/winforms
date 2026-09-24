@@ -1947,6 +1947,7 @@ public class CodeDomComponentSerializationServiceTests
 
         Assert.Equal(99, deserializedObject.IntValue);
         Assert.Equal("ContainerTest", deserializedObject.StringValue);
+        Assert.Same(deserializedObject, container.Components["containerObject"]);
     }
 
     [Fact]
@@ -1983,6 +1984,8 @@ public class CodeDomComponentSerializationServiceTests
         Assert.Equal("Container1", deserializedObjects[0].StringValue);
         Assert.Equal(222, deserializedObjects[1].IntValue);
         Assert.Equal("Container2", deserializedObjects[1].StringValue);
+        Assert.Same(deserializedObjects[0], container.Components["cObj1"]);
+        Assert.Same(deserializedObjects[1], container.Components["cObj2"]);
     }
 
     [Fact]
@@ -2044,15 +2047,12 @@ public class CodeDomComponentSerializationServiceTests
         DataClass targetObject = new();
         targetContainer.Add(targetObject, "existingObj");
 
-        // Store the original values
-        int originalIntValue = targetObject.IntValue;
-        string originalStringValue = targetObject.StringValue;
-
         // Deserialize to the existing object
         service.DeserializeTo(store, targetContainer, false, false);
 
-        // The targetObject should have received the state from the serialized object
-        // Note: This depends on the internal implementation of DeserializeTo
+        Assert.Equal(777, targetObject.IntValue);
+        Assert.Equal("ExistingUpdate", targetObject.StringValue);
+        Assert.Same(targetObject, targetContainer.Components["existingObj"]);
     }
 
     [Fact]
@@ -2078,6 +2078,10 @@ public class CodeDomComponentSerializationServiceTests
 
         // Should not throw when types match and validateRecycledTypes is true
         service.DeserializeTo(store, container, validateRecycledTypes: true, applyDefaults: false);
+
+        Assert.Equal(555, targetObject.IntValue);
+        Assert.Equal("ValidType", targetObject.StringValue);
+        Assert.Same(targetObject, container.Components["validTypeObj"]);
     }
 
     [Fact]
@@ -2092,18 +2096,23 @@ public class CodeDomComponentSerializationServiceTests
         {
             IntValue = 0,
             StringValue = null,
-            DefaultStringValue = null,
+            DefaultStringValue = "Default",
             Site = mockSite.Object
         };
 
         service.Serialize(store, originalObject);
         store.Close();
 
-        DataClass targetObject = new();
+        DataClass targetObject = new()
+        {
+            DefaultStringValue = "Changed"
+        };
         container.Add(targetObject, "defaultsObj");
 
-        // Should apply default values when applyDefaults is true
         service.DeserializeTo(store, container, validateRecycledTypes: false, applyDefaults: true);
+
+        Assert.Equal("Default", targetObject.DefaultStringValue);
+        Assert.Same(targetObject, container.Components["defaultsObj"]);
     }
 
     [Fact]
@@ -2118,17 +2127,23 @@ public class CodeDomComponentSerializationServiceTests
         {
             IntValue = 0,
             StringValue = null,
+            DefaultStringValue = "Default",
             Site = mockSite.Object
         };
 
         service.Serialize(store, originalObject);
         store.Close();
 
-        DataClass targetObject = new();
+        DataClass targetObject = new()
+        {
+            DefaultStringValue = "Changed"
+        };
         container.Add(targetObject, "noDefaultsObj");
 
-        // Should not apply default values when applyDefaults is false
         service.DeserializeTo(store, container, validateRecycledTypes: false, applyDefaults: false);
+
+        Assert.Equal("Changed", targetObject.DefaultStringValue);
+        Assert.Same(targetObject, container.Components["noDefaultsObj"]);
     }
 
     [Fact]
@@ -2199,7 +2214,7 @@ public class CodeDomComponentSerializationServiceTests
     }
 
     [Fact]
-    public void Deserialize_SerializeMember_RoundTrip()
+    public void DeserializeTo_SerializeMember_AppliesSelectedMember()
     {
         CodeDomComponentSerializationService service = new();
         SerializationStore store = service.CreateStore();
@@ -2212,18 +2227,23 @@ public class CodeDomComponentSerializationServiceTests
             Site = mockSite.Object
         };
 
-        // First serialize the object completely
-        service.Serialize(store, originalObject);
+        MemberDescriptor member = TypeDescriptor.GetProperties(typeof(DataClass))[nameof(DataClass.IntValue)];
+        service.SerializeMember(store, originalObject, member);
 
         store.Close();
 
-        ICollection deserializedCollection = service.Deserialize(store);
-        DataClass deserializedObject = Assert.IsType<DataClass>(Assert.Single(deserializedCollection.Cast<object>()));
+        using Container container = new();
+        DataClass deserializedObject = new()
+        {
+            StringValue = "ExistingValue"
+        };
+        container.Add(deserializedObject, "memberObj");
 
-        // Verify the object and its member values were serialized and deserialized correctly
-        Assert.NotNull(deserializedObject);
+        service.DeserializeTo(store, container, validateRecycledTypes: true, applyDefaults: false);
+
         Assert.Equal(789, deserializedObject.IntValue);
-        Assert.Equal("MemberTest", deserializedObject.StringValue);
+        Assert.Equal("ExistingValue", deserializedObject.StringValue);
+        Assert.Same(deserializedObject, container.Components["memberObj"]);
     }
 
     private class DataClass : Component
@@ -2232,6 +2252,7 @@ public class CodeDomComponentSerializationServiceTests
 
         public string StringValue { get; set; }
 
+        [DefaultValue("Default")]
         public string DefaultStringValue { get; set; }
 
         public event EventHandler Event
