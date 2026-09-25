@@ -1,0 +1,1 @@
+virtual System.Windows.Forms.Design.FolderNameEditor.InitializeDialog(System.Windows.Forms.FolderBrowserDialog! folderBrowserDialog) -> void
