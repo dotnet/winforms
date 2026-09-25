@@ -1354,6 +1354,7 @@ public class Control_ControlAccessibleObjectTests
         // MonthCalendar has "Month" view by default and returns current date as AccessibleName
         var typeDefaultValues = new Dictionary<Type, string>
         {
+            { typeof(ContextMenuStrip), SR.ContextMenuStripDefaultAccessibleName },
             { typeof(DataGridViewTextBoxEditingControl), SR.DataGridView_AccEditingControlAccName },
             { typeof(DateTimePicker), string.Empty },
             { typeof(PrintPreviewDialog), SR.PrintPreviewDialog_PrintPreview },
