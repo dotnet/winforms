@@ -423,7 +423,7 @@ public abstract unsafe class Image : MarshalByRefObject, IImage, IDisposable, IC
     /// <summary>
     ///  Gets the width of this <see cref='Image'/>.
     /// </summary>
-    [DefaultValue(false)]
+    [DefaultValue(0)]
     [Browsable(false)]
     [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public int Width
@@ -440,7 +440,7 @@ public abstract unsafe class Image : MarshalByRefObject, IImage, IDisposable, IC
     /// <summary>
     ///  Gets the height of this <see cref='Image'/>.
     /// </summary>
-    [DefaultValue(false)]
+    [DefaultValue(0)]
     [Browsable(false)]
     [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public int Height
