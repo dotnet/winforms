@@ -1203,12 +1203,21 @@ public partial class DataGridViewRowCollection : ICollection, IList
     /// </summary>
     internal int GetVisibleIndex(DataGridViewRow row)
     {
-        for (int i = 0; i < Count; i++)
+        int visibleIndex = -1;
+
+        for (int rowIndex = 0; rowIndex < Count; rowIndex++)
         {
-            int index = DisplayIndexToRowIndex(i);
-            if (index != -1 && _items[index] == row)
+            if ((GetRowState(rowIndex) & DataGridViewElementStates.Visible)
+                != DataGridViewElementStates.Visible)
             {
-                return i;
+                continue;
+            }
+
+            visibleIndex++;
+
+            if (_items[rowIndex] == row)
+            {
+                return visibleIndex;
             }
         }
 
