@@ -7,6 +7,9 @@ using Windows.Win32.UI.WindowsAndMessaging;
 
 namespace System.Windows.Forms.UITests;
 
+/// <summary>
+///  Activates a test form and verifies its foreground state before sending input.
+/// </summary>
 public class SendInput
 {
     private readonly Func<Task> _waitForIdleAsync;
@@ -72,7 +75,24 @@ public class SendInput
         ArgumentNullException.ThrowIfNull(actions);
 
         SetForegroundWindow(window);
-        await Task.Run(() => actions(new InputSimulator()));
+        HWND requestedWindow = (HWND)window.Handle;
+        await Task.Run(() =>
+        {
+            // Check after the thread switch, just before starting the input sequence.
+            HWND foregroundWindow = PInvokeCore.GetForegroundWindow();
+            if (PInvokeCore.GetWindowThreadProcessId(requestedWindow, out uint requestedProcessId) == 0)
+            {
+                requestedProcessId = 0;
+            }
+
+            if (PInvokeCore.GetWindowThreadProcessId(foregroundWindow, out uint foregroundProcessId) == 0)
+            {
+                foregroundProcessId = 0;
+            }
+
+            VerifyForegroundWindow(requestedWindow, requestedProcessId, foregroundWindow, foregroundProcessId);
+            actions(new InputSimulator());
+        });
 
         await _waitForIdleAsync();
     }
@@ -82,16 +102,8 @@ public class SendInput
         // Make the window a top-most window so it will appear above any existing top-most windows
         PInvoke.SetWindowPos(window, HWND.HWND_TOPMOST, 0, 0, 0, 0, SET_WINDOW_POS_FLAGS.SWP_NOSIZE | SET_WINDOW_POS_FLAGS.SWP_NOMOVE);
 
-        // Move the window into the foreground as it may not have been achieved by the 'SetWindowPos' call
-        if (!PInvoke.SetForegroundWindow(window))
-        {
-            string windowTitle = PInvokeCore.GetWindowText(window);
-            if (PInvokeCore.GetWindowThreadProcessId(window, out uint processId) == 0 || processId != Environment.ProcessId)
-            {
-                string message = $"ForegroundWindow doesn't belong the test process! The current window HWND: {window}, title:{windowTitle}.";
-                throw new InvalidOperationException(message);
-            }
-        }
+        // Request foreground activation; the actual foreground window is checked before sending input.
+        PInvoke.SetForegroundWindow(window);
 
         // Ensure the window is 'Active' as it may not have been achieved by 'SetForegroundWindow'
         PInvoke.SetActiveWindow(window);
@@ -101,5 +113,24 @@ public class SendInput
 
         // Remove the 'Top-Most' qualification from the window
         PInvoke.SetWindowPos(window, HWND.HWND_NOTOPMOST, 0, 0, 0, 0, SET_WINDOW_POS_FLAGS.SWP_NOSIZE | SET_WINDOW_POS_FLAGS.SWP_NOMOVE);
+    }
+
+    internal static void VerifyForegroundWindow(
+        HWND requestedWindow,
+        uint requestedProcessId,
+        HWND foregroundWindow,
+        uint foregroundProcessId)
+    {
+        if (!requestedWindow.IsNull
+            && requestedWindow == foregroundWindow
+            && requestedProcessId == Environment.ProcessId
+            && foregroundProcessId == Environment.ProcessId)
+        {
+            return;
+        }
+
+        throw new InvalidOperationException(
+            $"Cannot send input: requested HWND: {requestedWindow}, PID: {requestedProcessId}; "
+            + $"actual foreground HWND: {foregroundWindow}, PID: {foregroundProcessId}; test PID: {Environment.ProcessId}.");
     }
 }

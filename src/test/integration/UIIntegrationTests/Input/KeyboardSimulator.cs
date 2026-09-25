@@ -1,7 +1,6 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
-using System.Runtime.InteropServices;
 using Windows.Win32.UI.Input.KeyboardAndMouse;
 
 namespace System.Windows.Forms.UITests.Input;
@@ -24,7 +23,7 @@ internal class KeyboardSimulator
             InputBuilder.KeyDown(key),
         ];
 
-        PInvoke.SendInput(inputs, Marshal.SizeOf<INPUT>());
+        InputSimulator.Send(inputs);
         return this;
     }
 
@@ -35,7 +34,7 @@ internal class KeyboardSimulator
             InputBuilder.KeyUp(key),
         ];
 
-        PInvoke.SendInput(inputs, Marshal.SizeOf<INPUT>());
+        InputSimulator.Send(inputs);
         return this;
     }
 
@@ -47,7 +46,7 @@ internal class KeyboardSimulator
             InputBuilder.KeyUp(key),
         ];
 
-        PInvoke.SendInput(inputs, Marshal.SizeOf<INPUT>());
+        InputSimulator.Send(inputs);
         return this;
     }
 
@@ -59,7 +58,7 @@ internal class KeyboardSimulator
             InputBuilder.CharacterUp(character),
         ];
 
-        PInvoke.SendInput(inputs, Marshal.SizeOf<INPUT>());
+        InputSimulator.Send(inputs);
         return this;
     }
 
@@ -77,7 +76,7 @@ internal class KeyboardSimulator
             inputs[i * 2 + 1] = InputBuilder.CharacterUp(text[i]);
         }
 
-        PInvoke.SendInput(inputs, Marshal.SizeOf<INPUT>());
+        InputSimulator.Send(inputs);
         return this;
     }
 
@@ -108,7 +107,7 @@ internal class KeyboardSimulator
             inputs[modifierArray.Length + i + 1] = InputBuilder.KeyUp(keyArray[i]);
         }
 
-        PInvoke.SendInput(inputs, Marshal.SizeOf<INPUT>());
+        InputSimulator.Send(inputs);
         return this;
     }
 
