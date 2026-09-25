@@ -12,8 +12,8 @@ public enum FormRevealMode
 {
     /// <summary>
     ///  The form inherits its effective reveal behavior from <see cref="Application.DefaultFormRevealMode"/>.
-    ///  This is the ambient default and is never returned by <see cref="Form.FormRevealMode"/> after
-    ///  resolution.
+    ///  This is the ambient default returned by <see cref="Form.FormRevealMode"/> when no local override
+    ///  is set.
     /// </summary>
     /// <remarks>
     ///  <para>
