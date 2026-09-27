@@ -1288,8 +1288,75 @@ public class CheckBoxTests : AbstractButtonBaseTests
         checkBox.Checked = true;
 
         Assert.Equal(1, accessibleObject.RaiseAutomationEventCallsCount);
-        Assert.Equal(1, accessibleObject.RaiseAutomationPropertyChangedEventCallsCount);
+        Assert.Equal(2, accessibleObject.RaiseAutomationPropertyChangedEventCallsCount);
         Assert.False(checkBox.IsHandleCreated);
+    }
+
+    [WinFormsTheory]
+    [InlineData(CheckState.Unchecked, CheckState.Checked, (int)ToggleState.ToggleState_Off, (int)ToggleState.ToggleState_On)]
+    [InlineData(CheckState.Checked, CheckState.Unchecked, (int)ToggleState.ToggleState_On, (int)ToggleState.ToggleState_Off)]
+    [InlineData(CheckState.Unchecked, CheckState.Indeterminate, (int)ToggleState.ToggleState_Off, (int)ToggleState.ToggleState_Indeterminate)]
+    [InlineData(CheckState.Indeterminate, CheckState.Unchecked, (int)ToggleState.ToggleState_Indeterminate, (int)ToggleState.ToggleState_Off)]
+    [InlineData(CheckState.Checked, CheckState.Indeterminate, (int)ToggleState.ToggleState_On, (int)ToggleState.ToggleState_Indeterminate)]
+    [InlineData(CheckState.Indeterminate, CheckState.Checked, (int)ToggleState.ToggleState_Indeterminate, (int)ToggleState.ToggleState_On)]
+    public void CheckBox_CheckState_Set_RaisesToggleStatePropertyChangedEvent(
+        CheckState oldCheckState,
+        CheckState newCheckState,
+        int expectedOldToggleState,
+        int expectedNewToggleState)
+    {
+        using TestCheckBox checkBox = new() { ThreeState = true, CheckState = oldCheckState };
+        var accessibleObject = (SubCheckBoxAccessibleObject)checkBox.AccessibilityObject;
+
+        checkBox.CheckState = newCheckState;
+
+        accessibleObject.ToggleStateChanges.Should().Equal(
+            ((ToggleState)expectedOldToggleState, (ToggleState)expectedNewToggleState));
+        checkBox.IsHandleCreated.Should().BeFalse();
+    }
+
+    [WinFormsTheory]
+    [InlineData(CheckState.Unchecked)]
+    [InlineData(CheckState.Checked)]
+    [InlineData(CheckState.Indeterminate)]
+    public void CheckBox_CheckState_SetSameValue_DoesNotRaiseToggleStatePropertyChangedEvent(CheckState checkState)
+    {
+        using TestCheckBox checkBox = new() { ThreeState = true, CheckState = checkState };
+        var accessibleObject = (SubCheckBoxAccessibleObject)checkBox.AccessibilityObject;
+
+        checkBox.CheckState = checkState;
+
+        accessibleObject.ToggleStateChanges.Should().BeEmpty();
+    }
+
+    [WinFormsFact]
+    public void CheckBox_CheckState_SetWithHandle_RaisesToggleStatePropertyChangedEvent()
+    {
+        using TestCheckBox checkBox = new();
+        checkBox.Handle.Should().NotBe(IntPtr.Zero);
+        var accessibleObject = (SubCheckBoxAccessibleObject)checkBox.AccessibilityObject;
+
+        checkBox.Checked = true;
+        checkBox.Checked = false;
+
+        accessibleObject.ToggleStateChanges.Should().Equal(
+            (ToggleState.ToggleState_Off, ToggleState.ToggleState_On),
+            (ToggleState.ToggleState_On, ToggleState.ToggleState_Off));
+        checkBox.IsHandleCreated.Should().BeTrue();
+    }
+
+    [WinFormsFact]
+    public void CheckBox_AccessibilityObjectToggle_RaisesToggleStatePropertyChangedEvent()
+    {
+        using TestCheckBox checkBox = new();
+        var accessibleObject = (SubCheckBoxAccessibleObject)checkBox.AccessibilityObject;
+
+        accessibleObject.Toggle();
+        accessibleObject.Toggle();
+
+        accessibleObject.ToggleStateChanges.Should().Equal(
+            (ToggleState.ToggleState_Off, ToggleState.ToggleState_On),
+            (ToggleState.ToggleState_On, ToggleState.ToggleState_Off));
     }
 
     [WinFormsTheory]
@@ -1481,6 +1548,8 @@ public class CheckBoxTests : AbstractButtonBaseTests
 
         public int RaiseAutomationPropertyChangedEventCallsCount { get; private set; }
 
+        public List<(ToggleState OldValue, ToggleState NewValue)> ToggleStateChanges { get; } = [];
+
         internal override bool RaiseAutomationEvent(UIA_EVENT_ID eventId)
         {
             RaiseAutomationEventCallsCount++;
@@ -1490,6 +1559,11 @@ public class CheckBoxTests : AbstractButtonBaseTests
         internal override bool RaiseAutomationPropertyChangedEvent(UIA_PROPERTY_ID propertyId, VARIANT oldValue, VARIANT newValue)
         {
             RaiseAutomationPropertyChangedEventCallsCount++;
+            if (propertyId == UIA_PROPERTY_ID.UIA_ToggleToggleStatePropertyId)
+            {
+                ToggleStateChanges.Add(((ToggleState)(int)oldValue, (ToggleState)(int)newValue));
+            }
+
             return base.RaiseAutomationPropertyChangedEvent(propertyId, oldValue, newValue);
         }
     }

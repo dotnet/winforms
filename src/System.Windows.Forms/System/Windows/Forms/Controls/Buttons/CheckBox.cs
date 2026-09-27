@@ -27,6 +27,7 @@ public partial class CheckBox : ButtonBase
 
     private ContentAlignment _checkAlign = ContentAlignment.MiddleLeft;
     private CheckState _checkState;
+    private CheckState _previousCheckState;
     private Appearance _appearance;
     private bool _threeState;
 
@@ -258,6 +259,7 @@ public partial class CheckBox : ButtonBase
 
             bool oldChecked = Checked;
 
+            _previousCheckState = _checkState;
             _checkState = value;
 
             if (IsHandleCreated)
@@ -547,6 +549,11 @@ public partial class CheckBox : ButtonBase
         // UIA events:
         if (IsAccessibilityObjectCreated)
         {
+            if (AccessibilityObject is CheckBoxAccessibleObject accessibleObject)
+            {
+                accessibleObject.OnCheckStateChanged(_previousCheckState, _checkState);
+            }
+
             using var nameVariant = (VARIANT)Name;
             AccessibilityObject.RaiseAutomationPropertyChangedEvent(UIA_PROPERTY_ID.UIA_NamePropertyId, nameVariant, nameVariant);
             AccessibilityObject.RaiseAutomationEvent(UIA_EVENT_ID.UIA_AutomationPropertyChangedEventId);

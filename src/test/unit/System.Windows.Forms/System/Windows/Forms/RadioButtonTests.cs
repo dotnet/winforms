@@ -2003,9 +2003,60 @@ public class RadioButtonTests : AbstractButtonBaseTests
 
         radioButton.PerformClick();
 
-        Assert.Equal(1, accessibleObject.RaiseAutomationEventCallsCount);
+        Assert.Equal(2, accessibleObject.RaiseAutomationEventCallsCount);
         Assert.Equal(1, accessibleObject.RaiseAutomationPropertyChangedEventCallsCount);
         Assert.False(radioButton.IsHandleCreated);
+    }
+
+    [WinFormsFact]
+    public void RadioButton_Checked_Set_RaisesSelectionItemEvents()
+    {
+        using TestRadioButton radioButton = new();
+        var accessibleObject = (SubRadioButtonAccessibleObject)radioButton.AccessibilityObject;
+
+        radioButton.Checked = true;
+        radioButton.Checked = true;
+        radioButton.Checked = false;
+
+        accessibleObject.SelectionItemEvents.Should().Equal(
+            UIA_EVENT_ID.UIA_SelectionItem_ElementSelectedEventId,
+            UIA_EVENT_ID.UIA_SelectionItem_ElementRemovedFromSelectionEventId);
+        radioButton.IsHandleCreated.Should().BeFalse();
+    }
+
+    [WinFormsFact]
+    public void RadioButton_Checked_SetWithHandle_RaisesSelectionItemEvents()
+    {
+        using TestRadioButton radioButton = new();
+        radioButton.Handle.Should().NotBe(IntPtr.Zero);
+        var accessibleObject = (SubRadioButtonAccessibleObject)radioButton.AccessibilityObject;
+
+        radioButton.Checked = true;
+        radioButton.Checked = false;
+
+        accessibleObject.SelectionItemEvents.Should().Equal(
+            UIA_EVENT_ID.UIA_SelectionItem_ElementSelectedEventId,
+            UIA_EVENT_ID.UIA_SelectionItem_ElementRemovedFromSelectionEventId);
+        radioButton.IsHandleCreated.Should().BeTrue();
+    }
+
+    [WinFormsFact]
+    public void RadioButton_Checked_SetOnSibling_RaisesElementRemovedFromSelectionEvent()
+    {
+        using TestRadioButton first = new() { Checked = true };
+        using TestRadioButton second = new();
+        using Panel panel = new();
+        panel.Controls.AddRange(first, second);
+        var firstAccessibleObject = (SubRadioButtonAccessibleObject)first.AccessibilityObject;
+        var secondAccessibleObject = (SubRadioButtonAccessibleObject)second.AccessibilityObject;
+
+        second.Checked = true;
+
+        first.Checked.Should().BeFalse();
+        firstAccessibleObject.SelectionItemEvents.Should().Equal(
+            UIA_EVENT_ID.UIA_SelectionItem_ElementRemovedFromSelectionEventId);
+        secondAccessibleObject.SelectionItemEvents.Should().Equal(
+            UIA_EVENT_ID.UIA_SelectionItem_ElementSelectedEventId);
     }
 
     [WinFormsTheory]
@@ -2157,9 +2208,17 @@ public class RadioButtonTests : AbstractButtonBaseTests
 
         public int RaiseAutomationPropertyChangedEventCallsCount { get; private set; }
 
+        public List<UIA_EVENT_ID> SelectionItemEvents { get; } = [];
+
         internal override bool RaiseAutomationEvent(UIA_EVENT_ID eventId)
         {
             RaiseAutomationEventCallsCount++;
+            if (eventId is UIA_EVENT_ID.UIA_SelectionItem_ElementSelectedEventId
+                or UIA_EVENT_ID.UIA_SelectionItem_ElementRemovedFromSelectionEventId)
+            {
+                SelectionItemEvents.Add(eventId);
+            }
+
             return base.RaiseAutomationEvent(eventId);
         }
 

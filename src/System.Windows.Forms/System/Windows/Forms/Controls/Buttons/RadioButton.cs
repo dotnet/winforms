@@ -452,6 +452,15 @@ public partial class RadioButton : ButtonBase
         // UIA events:
         if (IsAccessibilityObjectCreated)
         {
+            if (AccessibilityObject.IsPatternSupported(UIA_PATTERN_ID.UIA_SelectionItemPatternId))
+            {
+                UIA_EVENT_ID selectionEventId = Checked
+                    ? UIA_EVENT_ID.UIA_SelectionItem_ElementSelectedEventId
+                    : UIA_EVENT_ID.UIA_SelectionItem_ElementRemovedFromSelectionEventId;
+
+                AccessibilityObject.RaiseAutomationEvent(selectionEventId);
+            }
+
             using var nameVariant = (VARIANT)Name;
             AccessibilityObject.RaiseAutomationPropertyChangedEvent(UIA_PROPERTY_ID.UIA_NamePropertyId, nameVariant, nameVariant);
             AccessibilityObject.RaiseAutomationEvent(UIA_EVENT_ID.UIA_AutomationPropertyChangedEventId);
