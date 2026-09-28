@@ -5,8 +5,6 @@ using System.ComponentModel;
 using System.Drawing;
 using System.Windows.Forms.ButtonInternal;
 using System.Windows.Forms.Layout;
-using Windows.Win32.System.Variant;
-using Windows.Win32.UI.Accessibility;
 
 namespace System.Windows.Forms;
 
@@ -537,6 +535,10 @@ public partial class CheckBox : ButtonBase
 
     private void NotifyAccessibilityStateChanged()
     {
+        // Take the states before the MSAA notifications, which run synchronously.
+        CheckState oldCheckState = _previousCheckState;
+        CheckState newCheckState = _checkState;
+
         if (FlatStyle == FlatStyle.System)
         {
             AccessibilityNotifyClients(AccessibleEvents.SystemCaptureStart, -1);
@@ -547,16 +549,9 @@ public partial class CheckBox : ButtonBase
         AccessibilityNotifyClients(AccessibleEvents.NameChange, -1);
 
         // UIA events:
-        if (IsAccessibilityObjectCreated)
+        if (IsAccessibilityObjectCreated && AccessibilityObject is CheckBoxAccessibleObject accessibleObject)
         {
-            if (AccessibilityObject is CheckBoxAccessibleObject accessibleObject)
-            {
-                accessibleObject.OnCheckStateChanged(_previousCheckState, _checkState);
-            }
-
-            using var nameVariant = (VARIANT)Name;
-            AccessibilityObject.RaiseAutomationPropertyChangedEvent(UIA_PROPERTY_ID.UIA_NamePropertyId, nameVariant, nameVariant);
-            AccessibilityObject.RaiseAutomationEvent(UIA_EVENT_ID.UIA_AutomationPropertyChangedEventId);
+            accessibleObject.OnCheckStateChanged(oldCheckState, newCheckState);
         }
 
         if (FlatStyle == FlatStyle.System)

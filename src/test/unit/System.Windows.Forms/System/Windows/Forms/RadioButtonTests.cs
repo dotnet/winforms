@@ -2003,8 +2003,8 @@ public class RadioButtonTests : AbstractButtonBaseTests
 
         radioButton.PerformClick();
 
-        Assert.Equal(2, accessibleObject.RaiseAutomationEventCallsCount);
-        Assert.Equal(1, accessibleObject.RaiseAutomationPropertyChangedEventCallsCount);
+        Assert.Equal(1, accessibleObject.RaiseAutomationEventCallsCount);
+        Assert.Equal(0, accessibleObject.RaiseAutomationPropertyChangedEventCallsCount);
         Assert.False(radioButton.IsHandleCreated);
     }
 
@@ -2057,6 +2057,18 @@ public class RadioButtonTests : AbstractButtonBaseTests
             UIA_EVENT_ID.UIA_SelectionItem_ElementRemovedFromSelectionEventId);
         secondAccessibleObject.SelectionItemEvents.Should().Equal(
             UIA_EVENT_ID.UIA_SelectionItem_ElementSelectedEventId);
+    }
+
+    [WinFormsFact]
+    public void RadioButton_Checked_SetWithCustomAccessibleObject_DoesNotRaiseSelectionItemEvents()
+    {
+        using CustomAccessibleObjectRadioButton radioButton = new();
+        var accessibleObject = (EventRecordingControlAccessibleObject)radioButton.AccessibilityObject;
+
+        radioButton.Checked = true;
+        radioButton.Checked = false;
+
+        accessibleObject.RaisedEvents.Should().BeEmpty();
     }
 
     [WinFormsTheory]
@@ -2193,6 +2205,29 @@ public class RadioButtonTests : AbstractButtonBaseTests
         protected override AccessibleObject CreateAccessibilityInstance()
         {
             return new SubRadioButtonAccessibleObject(this);
+        }
+    }
+
+    /// <summary>
+    ///  A radio button whose accessible object does not support the SelectionItem pattern.
+    /// </summary>
+    private class CustomAccessibleObjectRadioButton : RadioButton
+    {
+        protected override AccessibleObject CreateAccessibilityInstance()
+            => new EventRecordingControlAccessibleObject(this);
+    }
+
+    /// <summary>
+    ///  A plain control accessible object that records the UIA events raised on it.
+    /// </summary>
+    private class EventRecordingControlAccessibleObject(Control owner) : Control.ControlAccessibleObject(owner)
+    {
+        public List<UIA_EVENT_ID> RaisedEvents { get; } = [];
+
+        internal override bool RaiseAutomationEvent(UIA_EVENT_ID eventId)
+        {
+            RaisedEvents.Add(eventId);
+            return base.RaiseAutomationEvent(eventId);
         }
     }
 

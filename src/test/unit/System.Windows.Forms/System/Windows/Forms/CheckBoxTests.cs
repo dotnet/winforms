@@ -1287,8 +1287,8 @@ public class CheckBoxTests : AbstractButtonBaseTests
 
         checkBox.Checked = true;
 
-        Assert.Equal(1, accessibleObject.RaiseAutomationEventCallsCount);
-        Assert.Equal(2, accessibleObject.RaiseAutomationPropertyChangedEventCallsCount);
+        Assert.Equal(0, accessibleObject.RaiseAutomationEventCallsCount);
+        Assert.Equal(1, accessibleObject.RaiseAutomationPropertyChangedEventCallsCount);
         Assert.False(checkBox.IsHandleCreated);
     }
 
