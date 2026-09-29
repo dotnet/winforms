@@ -53,6 +53,14 @@ public class TreeNodeCollection : IList
             if (tv is null)
             {
                 _owner.CheckParentingCycle(value);
+                TreeNode replacedNode = _owner._children[index];
+
+                if (ReferenceEquals(replacedNode, value))
+                {
+                    return;
+                }
+
+                replacedNode._parent = null;
 
                 value._parent = _owner;
                 value._index = index;

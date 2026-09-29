@@ -132,7 +132,11 @@ public class TreeNodeCollectionTests
 
         Assert.Null(parent.TreeView);
         Assert.Equal(["1", "2", "3"], collection.Cast<TreeNode>().Select(node => node.Text));
-        Assert.All(collection.Cast<TreeNode>(), node => Assert.Same(parent, node.Parent));
+
+        using TreeView treeView = new();
+        treeView.Nodes.Add(parent);
+        Assert.Same(treeView, parent.TreeView);
+        Assert.Equal(["1", "2", "3"], parent.Nodes.Cast<TreeNode>().Select(node => node.Text));
     }
 
     [WinFormsFact]
@@ -148,6 +152,22 @@ public class TreeNodeCollectionTests
         Assert.Same(child, parent.Nodes[0]);
         Assert.Same(originalNode, child.Nodes[0]);
         Assert.Same(child, originalNode.Parent);
+    }
+
+    [WinFormsFact]
+    public void TreeNodeCollection_Item_SetTreeNodeReplacesExistingNode_DetachedOwner_ClearsReplacedParent()
+    {
+        TreeNode parent = new("parent");
+        parent.Nodes.Add("other");
+        TreeNode replacedNode = parent.Nodes.Add("replaced");
+        TreeNode newNode = new("new");
+
+        parent.Nodes[1] = newNode;
+
+        Assert.Same(newNode, parent.Nodes[1]);
+        Assert.Same(parent, newNode.Parent);
+        Assert.Null(replacedNode.Parent);
+        Assert.Same(parent, parent.Nodes[0].Parent);
     }
 
     [WinFormsFact]
