@@ -1,5 +1,6 @@
 #nullable enable
 override System.Windows.Forms.GroupBox.OnPaintBackground(System.Windows.Forms.PaintEventArgs! pevent) -> void
+override System.Windows.Forms.UpDownBase.OnParentFontChanged(System.EventArgs! e) -> void
 static System.Windows.Forms.Application.SystemVisualSettings.get -> System.Windows.Forms.SystemVisualSettings!
 static System.Windows.Forms.Application.SystemVisualSettingsChanged -> System.Windows.Forms.SystemVisualSettingsChangedEventHandler?
 System.Windows.Forms.PropertyGrid.VisualStylesModeChanged -> System.EventHandler?
