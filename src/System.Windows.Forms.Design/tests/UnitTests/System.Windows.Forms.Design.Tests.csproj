@@ -21,6 +21,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\..\BuildAssist\BuildAssist.msbuildproj" ReferenceOutputAssembly="false" />
     <ProjectReference Include="..\..\..\System.Windows.Forms\tests\TestUtilities\System.Windows.Forms.TestUtilities.csproj" />
     <ProjectReference Include="..\..\src\System.Windows.Forms.Design.csproj" />
     <ProjectReference Include="..\..\..\System.Design\src\System.Design.Facade.csproj" />
