@@ -1,4 +1,4 @@
-// Licensed to the .NET Foundation under one or more agreements.
+﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
 using System.ComponentModel;
@@ -18,6 +18,7 @@ public class UpDownBaseDesignerTests : IDisposable
         _numericUpDown = new();
         _designer = new();
         Mock<ISite> site = new();
+        site.Setup(s => s.DesignMode).Returns(true);
         site.Setup(s => s.GetService(typeof(IDesignerHost))).Returns(new Mock<IDesignerHost>().Object);
         _numericUpDown.Site = site.Object;
     }
@@ -41,6 +42,19 @@ public class UpDownBaseDesignerTests : IDisposable
         SelectionRules rules = _designer.SelectionRules;
         _designer.AutoResizeHandles.Should().BeTrue();
         rules.Should().NotHaveFlag(SelectionRules.TopSizeable | SelectionRules.BottomSizeable);
+    }
+
+    [WinFormsTheory]
+    [InlineData(VisualStylesMode.Net11)]
+    [InlineData(VisualStylesMode.Latest)]
+    public void Height_SetWithModernVisualStylesMode_ReturnsPreferredHeight(VisualStylesMode visualStylesMode)
+    {
+        InitializeDesigner(BorderStyle.Fixed3D);
+        _numericUpDown.VisualStylesMode = visualStylesMode;
+
+        _numericUpDown.Height = _numericUpDown.PreferredHeight + 10;
+
+        _numericUpDown.Height.Should().Be(_numericUpDown.PreferredHeight);
     }
 
     [WinFormsTheory]
