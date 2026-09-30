@@ -4226,7 +4226,7 @@ public unsafe partial class Control :
     [EditorBrowsable(EditorBrowsableState.Advanced)]
     protected void AccessibilityNotifyClients(AccessibleEvents accEvent, int objectID, int childID)
     {
-        if (IsHandleCreated && AppContextSwitches.NoClientNotifications)
+        if (IsHandleCreated && !AppContextSwitches.NoClientNotifications)
         {
             PInvoke.NotifyWinEvent((uint)accEvent, this, objectID, childID + 1);
         }
