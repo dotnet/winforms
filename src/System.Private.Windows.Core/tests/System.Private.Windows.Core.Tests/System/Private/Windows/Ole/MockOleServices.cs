@@ -15,6 +15,16 @@ internal unsafe class MockOleServices<TTestClass> : IOleServices
 {
     private static DataObjectProxy? s_dataObjectProxy;
 
+    /// <summary>
+    ///  The value returned from <see cref="IOleServices.AllowedTymeds"/>. Defaults to the media types WinForms supports.
+    /// </summary>
+    internal static TYMED SupportedTymeds { get; set; } = TYMED.TYMED_HGLOBAL | TYMED.TYMED_ISTREAM | TYMED.TYMED_GDI;
+
+#if NET
+    static
+#endif
+    TYMED IOleServices.AllowedTymeds => SupportedTymeds;
+
 #if NET
     static
 #endif
