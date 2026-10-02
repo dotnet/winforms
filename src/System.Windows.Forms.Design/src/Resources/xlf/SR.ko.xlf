@@ -351,7 +351,7 @@
       </trans-unit>
       <trans-unit id="CodeDomDesignerLoaderNoTypeResolution">
         <source>The designer loader did not supply a type resolution service, which is a requirement for CodeDom serialization.</source>
-        <target state="translated">디자이너 로더가 CodeDom serialization에 필요한 형식 확인 서비스를 제공하지 않았습니다.</target>
+        <target state="translated">디자이너 로더가 CodeDom serialization에 필요한 형식 해결 서비스를 제공하지 않았습니다.</target>
         <note />
       </trans-unit>
       <trans-unit id="CodeDomDesignerLoaderPropGenerateMember">
