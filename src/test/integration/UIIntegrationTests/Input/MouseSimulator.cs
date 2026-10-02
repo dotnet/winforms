@@ -2,7 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 
 using System.Drawing;
-using System.Runtime.InteropServices;
 using Windows.Win32.UI.Input.KeyboardAndMouse;
 
 namespace System.Windows.Forms.UITests.Input;
@@ -85,7 +84,7 @@ internal class MouseSimulator
             InputBuilder.MouseButtonDown(button),
         ];
 
-        PInvoke.SendInput(inputs, Marshal.SizeOf<INPUT>());
+        InputSimulator.Send(inputs);
         return this;
     }
 
@@ -96,7 +95,7 @@ internal class MouseSimulator
             InputBuilder.MouseButtonUp(button),
         ];
 
-        PInvoke.SendInput(inputs, Marshal.SizeOf<INPUT>());
+        InputSimulator.Send(inputs);
         return this;
     }
 
@@ -108,7 +107,7 @@ internal class MouseSimulator
             InputBuilder.MouseButtonUp(button),
         ];
 
-        PInvoke.SendInput(inputs, Marshal.SizeOf<INPUT>());
+        InputSimulator.Send(inputs);
         return this;
     }
 
@@ -122,7 +121,7 @@ internal class MouseSimulator
             InputBuilder.MouseButtonUp(button),
         ];
 
-        PInvoke.SendInput(inputs, Marshal.SizeOf<INPUT>());
+        InputSimulator.Send(inputs);
         return this;
     }
 
@@ -142,7 +141,7 @@ internal class MouseSimulator
             InputBuilder.RelativeMouseMovement(x, y),
         ];
 
-        PInvoke.SendInput(inputs, Marshal.SizeOf<INPUT>());
+        InputSimulator.Send(inputs);
         return this;
     }
 
@@ -153,7 +152,7 @@ internal class MouseSimulator
             InputBuilder.AbsoluteMouseMovement((int)absoluteX, (int)absoluteY),
         ];
 
-        PInvoke.SendInput(inputs, Marshal.SizeOf<INPUT>());
+        InputSimulator.Send(inputs);
         return this;
     }
 
@@ -164,7 +163,7 @@ internal class MouseSimulator
             InputBuilder.AbsoluteMouseMovementOnVirtualDesktop((int)absoluteX, (int)absoluteY),
         ];
 
-        PInvoke.SendInput(inputs, Marshal.SizeOf<INPUT>());
+        InputSimulator.Send(inputs);
         return this;
     }
 
