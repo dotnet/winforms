@@ -19,147 +19,147 @@
       </trans-unit>
       <trans-unit id="WFO2000Message">
         <source>Getter '{0}' directly returns a newly constructed reference instance on this path; cache it only if stable identity is intended, or use a factory method for intentional creation</source>
-        <target state="new">Getter '{0}' directly returns a newly constructed reference instance on this path; cache it only if stable identity is intended, or use a factory method for intentional creation</target>
+        <target state="translated">El captador "{0}" devuelve directamente una instancia de referencia recién construida en esta ruta de acceso; almacenarla en caché solo si la identidad estable está prevista o usar un método de generador para la creación intencionada</target>
         <note />
       </trans-unit>
       <trans-unit id="WFO2000Title">
         <source>Avoid constructing fresh reference instances in property getters</source>
-        <target state="new">Avoid constructing fresh reference instances in property getters</target>
+        <target state="translated">Evitar la construcción de nuevas instancias de referencia en captadores de propiedades</target>
         <note />
       </trans-unit>
       <trans-unit id="WFO3000Message">
         <source>'{0}' cannot round-trip through the WinForms Designer; keep InitializeComponent unrolled and move runtime-only logic to the user partial after InitializeComponent</source>
-        <target state="new">'{0}' cannot round-trip through the WinForms Designer; keep InitializeComponent unrolled and move runtime-only logic to the user partial after InitializeComponent</target>
+        <target state="translated">'{0}' puede realizar un recorrido de ida y vuelta a través de WinForms Designer; mantenga InitializeComponent desenrollado y mueva la lógica de solo tiempo de ejecución al usuario parcialmente después de InitializeComponent</target>
         <note />
       </trans-unit>
       <trans-unit id="WFO3000Title">
         <source>Avoid unsupported code in InitializeComponent</source>
-        <target state="new">Avoid unsupported code in InitializeComponent</target>
+        <target state="translated">Evitar código no admitido en InitializeComponent</target>
         <note />
       </trans-unit>
       <trans-unit id="WFO3001Message">
         <source>Move custom member '{0}' to the user partial; the Designer partial is reserved for generated initialization and infrastructure</source>
-        <target state="new">Move custom member '{0}' to the user partial; the Designer partial is reserved for generated initialization and infrastructure</target>
+        <target state="translated">Mover '{0}' de miembro personalizado al usuario parcialmente; el parcial de Designer está reservado para la inicialización y la infraestructura generadas</target>
         <note />
       </trans-unit>
       <trans-unit id="WFO3001Title">
         <source>Keep custom members out of Designer files</source>
-        <target state="new">Keep custom members out of Designer files</target>
+        <target state="translated">Mantener miembros personalizados fuera de los archivos del Diseñador</target>
         <note />
       </trans-unit>
       <trans-unit id="WFO3002Message">
         <source>Declare designer member '{0}' at the end of the Designer partial, after its methods, to preserve the generated layout</source>
-        <target state="new">Declare designer member '{0}' at the end of the Designer partial, after its methods, to preserve the generated layout</target>
+        <target state="translated">Declare el miembro del diseñador '{0}' al final del Designer parcial, después de sus métodos, para conservar el diseño generado</target>
         <note />
       </trans-unit>
       <trans-unit id="WFO3002Title">
         <source>Keep generated fields at the end of the Designer file</source>
-        <target state="new">Keep generated fields at the end of the Designer file</target>
+        <target state="translated">Mantenga los campos generados al final del archivo del Diseñador</target>
         <note />
       </trans-unit>
       <trans-unit id="WFO3003Message">
         <source>Move {0} '{1}' to the user partial; keep its declaration out of the Designer-generated partial</source>
-        <target state="new">Move {0} '{1}' to the user partial; keep its declaration out of the Designer-generated partial</target>
+        <target state="translated">Mover {0} '{1}' al usuario parcial; mantener su declaración fuera del parcial generado por Designer</target>
         <note />
       </trans-unit>
       <trans-unit id="WFO3003Title">
         <source>Keep event and delegate declarations out of Designer files</source>
-        <target state="new">Keep event and delegate declarations out of Designer files</target>
+        <target state="translated">Mantenga las declaraciones de eventos y delegados fuera de los archivos del Diseñador</target>
         <note />
       </trans-unit>
       <trans-unit id="WFO3004Message">
         <source>Collection expressions cannot round-trip through the WinForms Designer; use an explicit typed array or unrolled collection Add calls</source>
-        <target state="new">Collection expressions cannot round-trip through the WinForms Designer; use an explicit typed array or unrolled collection Add calls</target>
+        <target state="translated">Las expresiones de colección no pueden realizar recorridos de ida y vuelta a través del Diseñador WinForms; usar una matriz con tipo explícita o llamadas Add de colección no enrolladas</target>
         <note />
       </trans-unit>
       <trans-unit id="WFO3004Title">
         <source>Avoid collection expressions in Designer files</source>
-        <target state="new">Avoid collection expressions in Designer files</target>
+        <target state="translated">Evite las expresiones de colección en los archivos del Diseñador</target>
         <note />
       </trans-unit>
       <trans-unit id="WFO3005Message">
         <source>CodeDOM cannot represent nameof in InitializeComponent; replace it with the serialized string literal</source>
-        <target state="new">CodeDOM cannot represent nameof in InitializeComponent; replace it with the serialized string literal</target>
+        <target state="translated">CodeDOM no puede representar nameof en InitializeComponent; reemplácelo por el literal de cadena serializado</target>
         <note />
       </trans-unit>
       <trans-unit id="WFO3005Title">
         <source>Avoid nameof expressions in InitializeComponent</source>
-        <target state="new">Avoid nameof expressions in InitializeComponent</target>
+        <target state="translated">Evitar expresiones nameof en InitializeComponent</target>
         <note />
       </trans-unit>
       <trans-unit id="WFO3006Message">
         <source>CodeDOM cannot represent conditional expressions in InitializeComponent; serialize a fixed value and move runtime-only choices to the user partial</source>
-        <target state="new">CodeDOM cannot represent conditional expressions in InitializeComponent; serialize a fixed value and move runtime-only choices to the user partial</target>
+        <target state="translated">CodeDOM no puede representar expresiones condicionales en InitializeComponent; serializar un valor fijo y mover opciones solo en tiempo de ejecución al usuario parcialmente</target>
         <note />
       </trans-unit>
       <trans-unit id="WFO3006Title">
         <source>Avoid conditional expressions in InitializeComponent</source>
-        <target state="new">Avoid conditional expressions in InitializeComponent</target>
+        <target state="translated">Evitar expresiones condicionales en InitializeComponent</target>
         <note />
       </trans-unit>
       <trans-unit id="WFO3007Message">
         <source>CodeDOM cannot represent null-coalescing in InitializeComponent; use an explicit designer assignment and move runtime-only fallback logic to the user partial</source>
-        <target state="new">CodeDOM cannot represent null-coalescing in InitializeComponent; use an explicit designer assignment and move runtime-only fallback logic to the user partial</target>
+        <target state="translated">CodeDOM no puede representar la fusión de valores NULL en InitializeComponent; usar una asignación de diseñador explícita y mover la lógica de reserva solo en tiempo de ejecución al usuario parcial</target>
         <note />
       </trans-unit>
       <trans-unit id="WFO3007Title">
         <source>Avoid null-coalescing expressions in InitializeComponent</source>
-        <target state="new">Avoid null-coalescing expressions in InitializeComponent</target>
+        <target state="translated">Evite las expresiones de combinación de NULL en InitializeComponent</target>
         <note />
       </trans-unit>
       <trans-unit id="WFO3008Message">
         <source>CodeDOM cannot represent null-conditional access in InitializeComponent; keep designer assignments explicit and move null-dependent runtime logic to the user partial</source>
-        <target state="new">CodeDOM cannot represent null-conditional access in InitializeComponent; keep designer assignments explicit and move null-dependent runtime logic to the user partial</target>
+        <target state="translated">CodeDOM no puede representar el acceso condicional null en InitializeComponent; mantener explícitas las asignaciones de diseñador y mover la lógica en tiempo de ejecución dependiente de null al usuario parcialmente</target>
         <note />
       </trans-unit>
       <trans-unit id="WFO3008Title">
         <source>Avoid null-conditional expressions in InitializeComponent</source>
-        <target state="new">Avoid null-conditional expressions in InitializeComponent</target>
+        <target state="translated">Evite las expresiones condicionales de NULL en InitializeComponent</target>
         <note />
       </trans-unit>
       <trans-unit id="WFO3009Message">
         <source>CodeDOM cannot represent interpolated strings in InitializeComponent; use the serialized string literal or a supported resource lookup</source>
-        <target state="new">CodeDOM cannot represent interpolated strings in InitializeComponent; use the serialized string literal or a supported resource lookup</target>
+        <target state="translated">CodeDOM no puede representar cadenas interpoladas en InitializeComponent; usar el literal de cadena serializado o una búsqueda de recursos admitida</target>
         <note />
       </trans-unit>
       <trans-unit id="WFO3009Title">
         <source>Avoid interpolated strings in InitializeComponent</source>
-        <target state="new">Avoid interpolated strings in InitializeComponent</target>
+        <target state="translated">Evitar cadenas interpoladas en InitializeComponent</target>
         <note />
       </trans-unit>
       <trans-unit id="WFO3010Message">
         <source>CodeDOM cannot represent anonymous functions in InitializeComponent; use a named method in the user partial and a named-method event hookup</source>
-        <target state="new">CodeDOM cannot represent anonymous functions in InitializeComponent; use a named method in the user partial and a named-method event hookup</target>
+        <target state="translated">CodeDOM no puede representar funciones anónimas en InitializeComponent; use un método con nombre en la clase parcial del usuario y una conexión de eventos mediante un método con nombre</target>
         <note />
       </trans-unit>
       <trans-unit id="WFO3010Message_VB">
         <source>CodeDOM cannot represent lambdas in InitializeComponent; use a named method in the user partial, with Handles for designer member events or AddressOf for local component events</source>
-        <target state="new">CodeDOM cannot represent lambdas in InitializeComponent; use a named method in the user partial, with Handles for designer member events or AddressOf for local component events</target>
+        <target state="translated">CodeDOM no puede representar lambdas en InitializeComponent; use un método con nombre en la clase parcial del usuario, con Handles para los eventos de miembros del diseñador o AddressOf para los eventos de componentes locales</target>
         <note />
       </trans-unit>
       <trans-unit id="WFO3010Title">
         <source>Avoid anonymous functions in InitializeComponent</source>
-        <target state="new">Avoid anonymous functions in InitializeComponent</target>
+        <target state="translated">Evitar funciones anónimas en InitializeComponent</target>
         <note />
       </trans-unit>
       <trans-unit id="WFO3011Message">
         <source>Designer component member '{0}' must support the VB event model; add WithEvents to its declaration and use Handles for its named event handlers in the user partial</source>
-        <target state="new">Designer component member '{0}' must support the VB event model; add WithEvents to its declaration and use Handles for its named event handlers in the user partial</target>
+        <target state="translated">Designer '{0}' de miembro de componente debe admitir el modelo de eventos VB; agregue WithEvents a su declaración y use Handles para sus controladores de eventos con nombre en el modelo parcial de</target>
         <note />
       </trans-unit>
       <trans-unit id="WFO3011Title">
         <source>Declare Designer component members WithEvents</source>
-        <target state="new">Declare Designer component members WithEvents</target>
+        <target state="translated">Declara los miembros de los componentes del Diseñador con WithEvents</target>
         <note />
       </trans-unit>
       <trans-unit id="WFO3012Message">
         <source>Use Handles {0} on a named handler in the user partial instead of AddHandler in InitializeComponent; remove the redundant hookup and keep component members WithEvents</source>
-        <target state="new">Use Handles {0} on a named handler in the user partial instead of AddHandler in InitializeComponent; remove the redundant hookup and keep component members WithEvents</target>
+        <target state="translated">Use Handles {0} en un controlador con nombre de la clase parcial del usuario en lugar de AddHandler en InitializeComponent; quite la conexión redundante y mantenga los miembros de los componentes con WithEvents</target>
         <note />
       </trans-unit>
       <trans-unit id="WFO3012Title">
         <source>Use Handles for Designer member events</source>
-        <target state="new">Use Handles for Designer member events</target>
+        <target state="translated">Usar identificadores para eventos de miembro del Diseñador</target>
         <note />
       </trans-unit>
     </body>
