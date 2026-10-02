@@ -39,7 +39,12 @@ internal sealed unsafe partial class Composition<TOleServices, TNrbfSerializer, 
     private static readonly TOleServices s_oleServices = new();
 #endif
 
-    private const TYMED AllowedTymeds = TYMED.TYMED_HGLOBAL | TYMED.TYMED_ISTREAM | TYMED.TYMED_GDI;
+    private static TYMED AllowedTymeds =>
+#if NET
+        TOleServices.AllowedTymeds;
+#else
+        s_oleServices.AllowedTymeds;
+#endif
 
     // We use this to identify that a stream is actually a serialized object. On read, we don't know if the contents
     // of a stream were saved "raw" or if the stream is really pointing to a serialized object. If we saved an object,
