@@ -2,6 +2,7 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 
 using System.Drawing;
+using System.Drawing.Drawing2D;
 
 namespace System.Windows.Forms.Design;
 
@@ -252,6 +253,26 @@ public sealed partial class AnchorEditor
                 }
             }
 
+            private static void DrawHighContrastFocusRectangle(Graphics graphics, Rectangle bounds)
+            {
+                bounds.Width--;
+                bounds.Height--;
+
+                using Pen darkPen = new(SystemColors.WindowText)
+                {
+                    DashStyle = DashStyle.Dot
+                };
+
+                using Pen lightPen = new(SystemColors.Window)
+                {
+                    DashStyle = DashStyle.Dot,
+                    DashOffset = 1
+                };
+
+                graphics.DrawRectangle(darkPen, bounds);
+                graphics.DrawRectangle(lightPen, bounds);
+            }
+
             protected override void OnGotFocus(EventArgs e)
             {
                 if (!_focused)
@@ -286,8 +307,12 @@ public sealed partial class AnchorEditor
 
                 if (_solid)
                 {
-                    e.Graphics.FillRectangle(SystemBrushes.ControlDark, rc);
-                    e.Graphics.DrawRectangle(SystemPens.WindowFrame, rc.X, rc.Y, rc.Width - 1, rc.Height - 1);
+                    e.Graphics.FillRectangle(SystemBrushes.Highlight, rc);
+                    e.Graphics.DrawRectangle(
+                        Application.IsDarkModeEnabled
+                            ? SystemPens.GrayText
+                            : SystemPens.WindowFrame,
+                        rc.X, rc.Y, rc.Width - 1, rc.Height - 1);
                 }
                 else
                 {
@@ -297,7 +322,14 @@ public sealed partial class AnchorEditor
                 if (_focused)
                 {
                     rc.Inflate(-2, -2);
-                    ControlPaint.DrawFocusRectangle(e.Graphics, rc);
+                    if (SystemInformation.HighContrast)
+                    {
+                        DrawHighContrastFocusRectangle(e.Graphics, rc);
+                    }
+                    else
+                    {
+                        ControlPaint.DrawFocusRectangle(e.Graphics, rc);
+                    }
                 }
             }
 
