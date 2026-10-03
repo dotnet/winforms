@@ -10594,26 +10594,21 @@ public partial class RichTextBoxTests
 
     [WinFormsTheory]
     [NewAndDefaultData<EventArgs>]
-    public void RichTextBox_OnGotFocus_RaisesAutomationNotification_WithText(EventArgs eventArgs)
+    public void RichTextBox_OnGotFocus_DoesNotRaiseAutomationNotification(EventArgs eventArgs)
     {
+        // NVDA and JAWS already announce the focused line via native MSAA on focus; an additional
+        // UIA automation notification caused the line to be read twice. The correct behavior is
+        // to let the native accessibility infrastructure handle the announcement.
         Mock<Control> mockParent = new() { CallBase = true };
         Mock<Control.ControlAccessibleObject> mockAccessibleObject = new(MockBehavior.Strict, mockParent.Object);
-        mockAccessibleObject
-            .Setup(a => a.InternalRaiseAutomationNotification(
-                It.IsAny<AutomationNotificationKind>(),
-                It.IsAny<AutomationNotificationProcessing>(),
-                It.IsAny<string>()))
-            .Returns(true)
-            .Verifiable();
         mockParent.Protected().Setup<AccessibleObject>("CreateAccessibilityInstance")
             .Returns(mockAccessibleObject.Object);
 
         using Control parent = mockParent.Object;
-        string richTextBoxContent = "RichTextBox";
         using SubRichTextBox control = new()
         {
             Parent = parent,
-            Text = richTextBoxContent,
+            Text = "RichTextBox",
         };
 
         // Enforce accessible object creation
@@ -10622,10 +10617,10 @@ public partial class RichTextBoxTests
         control.OnGotFocus(eventArgs);
 
         mockAccessibleObject.Verify(a => a.InternalRaiseAutomationNotification(
-            AutomationNotificationKind.Other,
-            AutomationNotificationProcessing.MostRecent,
-            richTextBoxContent),
-            Times.Once);
+            It.IsAny<AutomationNotificationKind>(),
+            It.IsAny<AutomationNotificationProcessing>(),
+            It.IsAny<string>()),
+            Times.Never);
     }
 
     [WinFormsTheory]
