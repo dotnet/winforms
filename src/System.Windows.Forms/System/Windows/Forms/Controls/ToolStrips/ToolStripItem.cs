@@ -3173,8 +3173,9 @@ public abstract partial class ToolStripItem :
                 // In this case, to be able to notify Accessibility of focus event right now
                 // we determine Accessibility status by checking if parent AO instance is created.
                 // If so, then we can force child AO creation.
-                (IsOnDropDown
-                    ? OwnerItem?.IsAccessibilityObjectCreated ?? false
+                // A drop-down without an owner item (a ContextMenuStrip) has nobody else to ask but its parent.
+                (IsOnDropDown && OwnerItem is not null
+                    ? OwnerItem.IsAccessibilityObjectCreated
                     : IsParentAccessibilityObjectCreated);
 
             if (accessibilityIsOn && AccessibilityObject is ToolStripItemAccessibleObject accessibleObject)

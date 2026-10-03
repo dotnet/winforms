@@ -76,4 +76,64 @@ public class ToolStripDropDown_ToolStripDropDownAccessibleObjectTests
         Assert.Equal(expected, actual);
         Assert.False(toolStripDropDown.IsHandleCreated);
     }
+
+    [WinFormsFact]
+    public void ToolStripDropDownAccessibleObject_Name_ContextMenuStrip_HasDefaultName()
+    {
+        // A context menu has no owner item to take the name from.
+        using ContextMenuStrip contextMenuStrip = new();
+
+        AccessibleObject accessibleObject = contextMenuStrip.AccessibilityObject;
+
+        Assert.Equal(SR.ContextMenuStripDefaultAccessibleName, accessibleObject.Name);
+        Assert.Equal(
+            SR.ContextMenuStripDefaultAccessibleName,
+            ((BSTR)accessibleObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_NamePropertyId)).ToStringAndFree());
+        Assert.False(contextMenuStrip.IsHandleCreated);
+    }
+
+    [WinFormsTheory]
+    [InlineData("Custom name")]
+    [InlineData("")]
+    public void ToolStripDropDownAccessibleObject_Name_ContextMenuStrip_AccessibleNameWins(string accessibleName)
+    {
+        // Even an empty string: it is the only way to force the accessible name to be blank.
+        using ContextMenuStrip contextMenuStrip = new() { AccessibleName = accessibleName };
+
+        Assert.Equal(accessibleName, contextMenuStrip.AccessibilityObject.Name);
+        Assert.False(contextMenuStrip.IsHandleCreated);
+    }
+
+    [WinFormsFact]
+    public void ToolStripDropDownAccessibleObject_Name_DropDownOfAnItem_IsTheNameOfTheItem()
+    {
+        using ToolStripMenuItem ownerItem = new("Owner item");
+        ToolStripDropDown dropDown = ownerItem.DropDown;
+
+        Assert.Equal(ownerItem.AccessibilityObject.Name, dropDown.AccessibilityObject.Name);
+        Assert.False(dropDown.IsHandleCreated);
+    }
+
+    [WinFormsFact]
+    public void ToolStripDropDownAccessibleObject_Name_ContextMenuStripWithOwnerItem_IsTheNameOfTheItem()
+    {
+        // A ContextMenuStrip assigned to ToolStripDropDownItem.DropDown gets its OwnerItem while it is shown.
+        using ToolStripMenuItem ownerItem = new("Owner item");
+        using ContextMenuStrip contextMenuStrip = new() { OwnerItem = ownerItem };
+
+        Assert.Equal(ownerItem.AccessibilityObject.Name, contextMenuStrip.AccessibilityObject.Name);
+
+        contextMenuStrip.OwnerItem = null;
+
+        Assert.Equal(SR.ContextMenuStripDefaultAccessibleName, contextMenuStrip.AccessibilityObject.Name);
+    }
+
+    [WinFormsFact]
+    public void ToolStripDropDownAccessibleObject_Name_PlainDropDownWithoutOwnerItem_IsNull()
+    {
+        using ToolStripDropDown toolStripDropDown = new();
+
+        Assert.Null(toolStripDropDown.AccessibilityObject.Name);
+        Assert.False(toolStripDropDown.IsHandleCreated);
+    }
 }
