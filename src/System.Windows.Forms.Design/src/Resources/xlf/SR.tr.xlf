@@ -1380,6 +1380,11 @@
         <target state="translated">Başlangıçta iletişim kutusunda açılacak olan dizini seçin.</target>
         <note />
       </trans-unit>
+      <trans-unit id="InitialDirectoryTitle">
+        <source>Initial Directory</source>
+        <target state="new">Initial Directory</target>
+        <note />
+      </trans-unit>
       <trans-unit id="InvalidArgument">
         <source>'{1}' is not a valid value for '{0}'.</source>
         <target state="translated">'{1}' değeri '{0}' öğesi için geçerli değil.</target>
@@ -1715,6 +1720,11 @@ Metni kabul etmek için Ctrl+Enter tuşlarına basın.</target>
       <trans-unit id="SelectedPathEditorLabel">
         <source>Select the path to the folder that will initially be selected in the FolderBrowserDialog.</source>
         <target state="translated">FolderBrowserDialog iletişim kutusunda başlangıçta seçili olacak klasörün yolunu seçin.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="SelectedPathTitle">
+        <source>Selected Path</source>
+        <target state="new">Selected Path</target>
         <note />
       </trans-unit>
       <trans-unit id="SerializationManagerAlreadyInSession">
