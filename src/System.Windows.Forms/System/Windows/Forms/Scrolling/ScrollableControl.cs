@@ -727,6 +727,7 @@ public partial class ScrollableControl : Control, IArrangedElement
         Rectangle display = GetDisplayRectInternal();
         ApplyScrollbarChanges(display);
         SetDisplayRectLocation(x, y);
+        SyncScrollbars(true);
     }
 
     /// <summary>
