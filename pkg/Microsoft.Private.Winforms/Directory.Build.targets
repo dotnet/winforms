@@ -8,7 +8,7 @@
     <_ManifestFile>$(MSBuildProjectDirectory)\sdk\dotnet-windowsdesktop\System.Windows.Forms.FileClassification.props</_ManifestFile>
     <_GenerateManifest>false</_GenerateManifest>
     <_IsServicingRelease>false</_IsServicingRelease>
-    <_IsServicingRelease Condition="'$(PreReleaseVersionLabel)' == 'servicing'">true</_IsServicingRelease>
+    <_IsServicingRelease Condition="'$(PreReleaseVersionLabel)' == 'servicing' or '$(PreReleaseVersionLabel)' == 'hotfix'">true</_IsServicingRelease>
   </PropertyGroup>
 
   <!-- 
