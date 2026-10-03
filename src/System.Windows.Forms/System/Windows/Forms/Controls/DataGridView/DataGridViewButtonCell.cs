@@ -662,10 +662,31 @@ public partial class DataGridViewButtonCell : DataGridViewCell
         Rectangle resultBounds;
         string? formattedString = formattedValue as string;
 
-        Color backBrushColor = PaintSelectionBackground(paintParts) && cellSelected
+        bool useDarkModeRenderer = Application.IsDarkModeEnabled
+            && AppContextSwitches.DataGridViewDarkModeTheming
+            && !SystemInformation.HighContrast
+            && DataGridView.ApplyVisualStylesToInnerCells
+            && FlatStyle is FlatStyle.Standard or FlatStyle.System;
+        Color backBrushColor = (PaintSelectionBackground(paintParts) && cellSelected)
             ? cellStyle.SelectionBackColor
             : cellStyle.BackColor;
         Color foreBrushColor = cellSelected ? cellStyle.SelectionForeColor : cellStyle.ForeColor;
+        Color renderedTextColor = Color.Empty;
+        PushButtonState pushButtonState = PushButtonState.Normal;
+        if ((ButtonState & (ButtonState.Pushed | ButtonState.Checked)) != 0)
+        {
+            pushButtonState = PushButtonState.Pressed;
+        }
+        else if (DataGridView.MouseEnteredCellAddress.Y == rowIndex &&
+            DataGridView.MouseEnteredCellAddress.X == ColumnIndex && s_mouseInContentBounds)
+        {
+            pushButtonState = PushButtonState.Hot;
+        }
+
+        bool isDefault = PaintFocus(paintParts)
+            && cellCurrent
+            && DataGridView.ShowFocusCues
+            && DataGridView.Focused;
 
         if (paint && PaintBorder(paintParts))
         {
@@ -717,27 +738,25 @@ public partial class DataGridViewButtonCell : DataGridViewCell
                     {
                         if (paint && PaintContentBackground(paintParts))
                         {
-                            PushButtonState pbState = PushButtonState.Normal;
-                            if ((ButtonState & (ButtonState.Pushed | ButtonState.Checked)) != 0)
-                            {
-                                pbState = PushButtonState.Pressed;
-                            }
-                            else if (DataGridView.MouseEnteredCellAddress.Y == rowIndex &&
-                                DataGridView.MouseEnteredCellAddress.X == ColumnIndex && s_mouseInContentBounds)
-                            {
-                                pbState = PushButtonState.Hot;
-                            }
-
-                            if (PaintFocus(paintParts) && cellCurrent && DataGridView.ShowFocusCues && DataGridView.Focused)
-                            {
-                                pbState |= PushButtonState.Default;
-                            }
-
-                            DataGridViewButtonCellRenderer.DrawButton(g, valBounds, (int)pbState);
+                            Rectangle buttonBounds = valBounds;
+                            (valBounds, renderedTextColor) = DrawButton(
+                                g,
+                                valBounds,
+                                pushButtonState,
+                                isDefault,
+                                FlatStyle,
+                                DataGridView.DeviceDpi);
+                            resultBounds = buttonBounds;
                         }
-
-                        resultBounds = valBounds;
-                        valBounds = DataGridViewButtonCellRenderer.DataGridViewButtonRenderer.GetBackgroundContentRectangle(g, valBounds);
+                        else
+                        {
+                            resultBounds = valBounds;
+                            valBounds = GetButtonContentBounds(
+                                g,
+                                valBounds,
+                                FlatStyle,
+                                DataGridView.DeviceDpi);
+                        }
                     }
                     else
                     {
@@ -884,7 +903,20 @@ public partial class DataGridViewButtonCell : DataGridViewCell
             // Draw focus rectangle
             if (FlatStyle is FlatStyle.System or FlatStyle.Standard)
             {
-                ControlPaint.DrawFocusRectangle(g, Rectangle.Inflate(valBounds, -1, -1), Color.Empty, cellStyle.ForeColor);
+                Color focusBackColor = useDarkModeRenderer
+                    ? DataGridViewButtonCellRenderer.GetDarkModeBackgroundColor(
+                        pushButtonState,
+                        isDefault,
+                        FlatStyle)
+                    : cellStyle.ForeColor;
+                Rectangle focusBounds = useDarkModeRenderer
+                    ? Rectangle.Inflate(resultBounds, -2, -2)
+                    : Rectangle.Inflate(valBounds, -1, -1);
+                DrawFocusRectangle(
+                    g,
+                    focusBounds,
+                    cellStyle.ForeColor,
+                    focusBackColor);
             }
             else if (FlatStyle == FlatStyle.Flat)
             {
@@ -944,11 +976,11 @@ public partial class DataGridViewButtonCell : DataGridViewCell
                     options.DotNetOneButtonCompat = false;
                     ButtonBaseAdapter.LayoutData layout = options.Layout();
 
-                    ControlPaint.DrawFocusRectangle(
+                    DrawFocusRectangle(
                         g,
                         layout.Focus,
-                        Color.Empty,
-                        cellStyle.ForeColor);
+                        foreBrushColor,
+                        cellSelected ? cellStyle.SelectionBackColor : cellStyle.BackColor);
                 }
             }
         }
@@ -971,7 +1003,18 @@ public partial class DataGridViewButtonCell : DataGridViewCell
             if (valBounds.Width > 0 && valBounds.Height > 0)
             {
                 Color textColor;
-                if (DataGridView.ApplyVisualStylesToInnerCells &&
+                if (useDarkModeRenderer && !renderedTextColor.IsEmpty)
+                {
+                    textColor = renderedTextColor;
+                }
+                else if (useDarkModeRenderer)
+                {
+                    textColor = DataGridViewButtonCellRenderer.GetDarkModeTextColor(
+                        pushButtonState,
+                        isDefault,
+                        FlatStyle);
+                }
+                else if (DataGridView.ApplyVisualStylesToInnerCells &&
                     (FlatStyle == FlatStyle.System || FlatStyle == FlatStyle.Standard))
                 {
                     textColor = DataGridViewButtonCellRenderer.DataGridViewButtonRenderer.GetColor(ColorProperty.TextColor);
