@@ -793,7 +793,7 @@ public partial class TrackBar : Control, ISupportInitialize
         }
 
         PInvokeCore.SendMessage(this, PInvoke.TBM_CLEARTICS, (WPARAM)1, (LPARAM)0);
-        for (int i = _minimum + drawnTickFrequency; i < _maximum - drawnTickFrequency; i += drawnTickFrequency)
+        for (int i = _minimum + drawnTickFrequency; i <= _maximum - drawnTickFrequency; i += drawnTickFrequency)
         {
             LRESULT lresult = PInvokeCore.SendMessage(this, PInvoke.TBM_SETTIC, lParam: (IntPtr)i);
             Debug.Assert((bool)(BOOL)lresult);
@@ -997,6 +997,27 @@ public partial class TrackBar : Control, ISupportInitialize
     {
         base.OnSystemColorsChanged(e);
         RedrawControl();
+    }
+
+    protected override void OnSizeChanged(EventArgs e)
+    {
+        base.OnSizeChanged(e);
+
+        if (!IsHandleCreated)
+        {
+            return;
+        }
+
+        bool recreateHandle = ShouldRecreateHandle();
+        if (recreateHandle)
+        {
+            RecreateHandle();
+        }
+        else if (!_autoDrawTicks)
+        {
+            DrawTicksManually();
+            Invalidate();
+        }
     }
 
     /// <summary>
