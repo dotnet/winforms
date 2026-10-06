@@ -1,10 +1,11 @@
 // Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
-using Microsoft.Extensions.WinForms;
-using Microsoft.Extensions.Hosting;
-using System.Runtime.ExceptionServices;
 using System.Reflection;
+using System.Runtime.ExceptionServices;
+
+using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.WinForms;
 
 namespace System.Windows.Forms.Tests;
 
@@ -362,6 +363,258 @@ public class WinFormsApplicationBuilderTests
         });
     }
 
+    [Fact]
+    public void Run_HostStartupFailure_StopsHostAndRaisesStopped()
+    {
+        RunOnStaThread(() =>
+        {
+            List<string> events = [];
+            TestHost host = new(
+                events,
+                startAsync: _ => Task.FromException(new InvalidOperationException("Host startup failed.")));
+            using WinFormsApplication application = WinFormsApplication.CreateBuilder()
+                .UseStartupForm<TestForm>()
+                .UseHost(host)
+                .Build();
+            application.Lifetime.ApplicationStopping += (_, _) => events.Add("ApplicationStopping");
+            application.Lifetime.ApplicationStopped += (_, _) => events.Add("ApplicationStopped");
+
+            InvalidOperationException exception = Assert.Throws<InvalidOperationException>(application.Run);
+
+            Assert.Equal("Host startup failed.", exception.Message);
+            Assert.Equal(
+                ["HostStarted", "HostStopping", "ApplicationStopping", "ApplicationStopped"],
+                events);
+            Assert.Equal(1, host.StartCount);
+            Assert.Equal(1, host.StopCount);
+        });
+    }
+
+    [Fact]
+    public void Run_StartedHandlerFailure_StopsHostAndRaisesStopped()
+    {
+        RunOnStaThread(() =>
+        {
+            TestHost host = new();
+            using WinFormsApplication application = WinFormsApplication.CreateBuilder()
+                .UseStartupForm<TestForm>()
+                .UseHost(host)
+                .Build();
+            List<string> events = [];
+            application.Lifetime.ApplicationStarted += (_, _) =>
+                throw new InvalidOperationException("Started handler failed.");
+            application.Lifetime.ApplicationStopping += (_, _) => events.Add("Stopping");
+            application.Lifetime.ApplicationStopped += (_, _) => events.Add("Stopped");
+
+            InvalidOperationException exception = Assert.Throws<InvalidOperationException>(application.Run);
+
+            Assert.Equal("Started handler failed.", exception.Message);
+            Assert.Equal(["Stopping", "Stopped"], events);
+            Assert.Equal(1, host.StopCount);
+        });
+    }
+
+    [Fact]
+    public void StopAsync_CanceledHostStop_ExitsLoopAndRaisesStopped()
+    {
+        RunOnStaThread(() =>
+        {
+            using CancellationTokenSource cancellation = new();
+            TestHost host = new(stopAsync: token => Task.FromCanceled(token));
+            using Form form = new();
+            using WinFormsApplication application = WinFormsApplication.CreateBuilder()
+                .UseStartupForm(form)
+                .UseHost(host)
+                .Build();
+            List<string> events = [];
+            application.Lifetime.ApplicationStopping += (_, _) => events.Add("Stopping");
+            application.Lifetime.ApplicationStopped += (_, _) => events.Add("Stopped");
+            Task? stopTask = null;
+            form.Shown += (_, _) =>
+            {
+                cancellation.Cancel();
+                stopTask = application.StopAsync(cancellation.Token);
+            };
+
+            Assert.ThrowsAny<OperationCanceledException>(application.Run);
+
+            Assert.NotNull(stopTask);
+            Assert.True(stopTask.IsCanceled);
+            Assert.Equal(["Stopping", "Stopped"], events);
+            Assert.Equal(1, host.StopCount);
+        });
+    }
+
+    [Fact]
+    public void StopAsync_HostStopFailure_ExitsLoopAndSurfacesFailureAfterCleanup()
+    {
+        RunOnStaThread(() =>
+        {
+            TestHost host = new(
+                stopAsync: _ => Task.FromException(new InvalidOperationException("Host shutdown failed.")));
+            using Form form = new();
+            using WinFormsApplication application = WinFormsApplication.CreateBuilder()
+                .UseStartupForm(form)
+                .UseHost(host)
+                .Build();
+            List<string> events = [];
+            application.Lifetime.ApplicationStopping += (_, _) => events.Add("Stopping");
+            application.Lifetime.ApplicationStopped += (_, _) => events.Add("Stopped");
+            Task? stopTask = null;
+            form.Shown += (_, _) => stopTask = application.StopAsync();
+
+            InvalidOperationException exception = Assert.Throws<InvalidOperationException>(application.Run);
+
+            Assert.Equal("Host shutdown failed.", exception.Message);
+            Assert.NotNull(stopTask);
+            Assert.Throws<InvalidOperationException>(() => stopTask.GetAwaiter().GetResult());
+            Assert.Equal(["Stopping", "Stopped"], events);
+            Assert.Equal(1, host.StopCount);
+        });
+    }
+
+    [Fact]
+    public void StopAsync_RepeatedRequests_UseSingleHostStop()
+    {
+        RunOnStaThread(() =>
+        {
+            TestHost host = new();
+            using Form form = new();
+            using WinFormsApplication application = WinFormsApplication.CreateBuilder()
+                .UseStartupForm(form)
+                .UseHost(host)
+                .Build();
+            Task? firstStop = null;
+            Task? secondStop = null;
+            form.Shown += (_, _) =>
+            {
+                firstStop = application.StopAsync();
+                secondStop = application.StopAsync();
+            };
+
+            application.Run();
+
+            Assert.NotNull(firstStop);
+            Assert.Same(firstStop, secondStop);
+            Assert.Equal(1, host.StopCount);
+        });
+    }
+
+    [Fact]
+    public void StopAsync_IsTerminalWhenFormClosingIsCanceled()
+    {
+        RunOnStaThread(() =>
+        {
+            TestHost host = new();
+            using Form form = new();
+            form.FormClosing += (_, e) => e.Cancel = true;
+            using WinFormsApplication application = WinFormsApplication.CreateBuilder()
+                .UseStartupForm(form)
+                .UseHost(host)
+                .Build();
+            form.Shown += (_, _) => _ = application.StopAsync();
+
+            application.Run();
+
+            Assert.True(form.IsDisposed);
+            Assert.Equal(1, host.StopCount);
+        });
+    }
+
+    [Fact]
+    public void Dispose_WhileRunning_StopsAndDisposesHost()
+    {
+        RunOnStaThread(() =>
+        {
+            TestHost host = new();
+            using Form form = new();
+            WinFormsApplication application = WinFormsApplication.CreateBuilder()
+                .UseStartupForm(form)
+                .UseHost(host)
+                .Build();
+            form.Shown += (_, _) => application.Dispose();
+
+            application.Run();
+
+            Assert.Equal(1, host.StopCount);
+            Assert.Equal(1, host.DisposeCount);
+            application.Dispose();
+        });
+    }
+
+    [Fact]
+    public void Run_CanBeRepeatedForDistinctApplicationsOnSameUiThread()
+    {
+        RunOnStaThread(() =>
+        {
+            for (int iteration = 0; iteration < 10; iteration++)
+            {
+                TestHost host = new();
+                using WinFormsApplication application = WinFormsApplication.CreateBuilder()
+                    .UseStartupForm<CloseOnShownForm>()
+                    .UseHost(host)
+                    .Build();
+
+                application.Run();
+
+                Assert.Equal(1, host.StartCount);
+                Assert.Equal(1, host.StopCount);
+            }
+        });
+    }
+
+    [Fact]
+    public void Run_CannotBeRepeatedForTheSameApplication()
+    {
+        RunOnStaThread(() =>
+        {
+            using WinFormsApplication application = WinFormsApplication.CreateBuilder()
+                .UseStartupForm<CloseOnShownForm>()
+                .Build();
+
+            application.Run();
+
+            Assert.Throws<InvalidOperationException>(application.Run);
+        });
+    }
+
+    [Fact]
+    public void Run_InstallsSynchronizationContextBeforeActivatingSuppliedFormAndRestoresSettings()
+    {
+        RunOnStaThread(() =>
+        {
+            bool originalAutoInstall = WindowsFormsSynchronizationContext.AutoInstall;
+            SynchronizationContext? originalContext = SynchronizationContext.Current;
+
+            try
+            {
+                WindowsFormsSynchronizationContext.AutoInstall = false;
+                using Form form = new();
+                Assert.Same(originalContext, SynchronizationContext.Current);
+
+                SynchronizationContext? activeContext = null;
+                form.Shown += (_, _) =>
+                {
+                    activeContext = SynchronizationContext.Current;
+                    form.Close();
+                };
+                using WinFormsApplication application = WinFormsApplication.CreateBuilder()
+                    .UseStartupForm(form)
+                    .Build();
+
+                application.Run();
+
+                Assert.IsType<WindowsFormsSynchronizationContext>(activeContext);
+                Assert.Same(originalContext, SynchronizationContext.Current);
+                Assert.False(WindowsFormsSynchronizationContext.AutoInstall);
+            }
+            finally
+            {
+                WindowsFormsSynchronizationContext.AutoInstall = originalAutoInstall;
+            }
+        });
+    }
+
     private static void RunOnStaThread(Action action)
     {
         Exception? failure = null;
@@ -416,10 +669,17 @@ public class WinFormsApplicationBuilderTests
     private sealed class TestHost : IHost
     {
         private readonly List<string>? _events;
+        private readonly Func<CancellationToken, Task>? _startAsync;
+        private readonly Func<CancellationToken, Task>? _stopAsync;
 
-        internal TestHost(List<string>? events = null)
+        internal TestHost(
+            List<string>? events = null,
+            Func<CancellationToken, Task>? startAsync = null,
+            Func<CancellationToken, Task>? stopAsync = null)
         {
             _events = events;
+            _startAsync = startAsync;
+            _stopAsync = stopAsync;
             Lifetime = new TestHostApplicationLifetime();
         }
 
@@ -429,12 +689,20 @@ public class WinFormsApplicationBuilderTests
 
         internal int StopCount { get; private set; }
 
+        internal int DisposeCount { get; private set; }
+
         public IServiceProvider Services => new TestServiceProvider(Lifetime);
 
         public Task StartAsync(CancellationToken cancellationToken = default)
         {
             StartCount++;
             _events?.Add("HostStarted");
+
+            if (_startAsync is not null)
+            {
+                return _startAsync(cancellationToken);
+            }
+
             Lifetime.NotifyStarted();
 
             return Task.CompletedTask;
@@ -445,6 +713,12 @@ public class WinFormsApplicationBuilderTests
             StopCount++;
             _events?.Add("HostStopping");
             Lifetime.NotifyStopping();
+
+            if (_stopAsync is not null)
+            {
+                return _stopAsync(cancellationToken);
+            }
+
             Lifetime.NotifyStopped();
 
             return Task.CompletedTask;
@@ -452,6 +726,7 @@ public class WinFormsApplicationBuilderTests
 
         public void Dispose()
         {
+            DisposeCount++;
         }
 
         public ValueTask DisposeAsync()
