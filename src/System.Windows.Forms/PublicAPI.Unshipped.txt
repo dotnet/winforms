@@ -1,4 +1,19 @@
 #nullable enable
+Microsoft.Extensions.WinForms.WinFormsApplication
+Microsoft.Extensions.WinForms.WinFormsApplication.Dispose() -> void
+Microsoft.Extensions.WinForms.WinFormsApplication.Lifetime.get -> Microsoft.Extensions.WinForms.WinFormsApplicationLifetime!
+static Microsoft.Extensions.WinForms.WinFormsApplication.CreateBuilder() -> Microsoft.Extensions.WinForms.WinFormsApplicationBuilder!
+Microsoft.Extensions.WinForms.WinFormsApplicationBuilder
+Microsoft.Extensions.WinForms.WinFormsApplicationBuilder.Build() -> Microsoft.Extensions.WinForms.WinFormsApplication!
+static Microsoft.Extensions.WinForms.WinFormsApplicationBuilder.CreateBuilder() -> Microsoft.Extensions.WinForms.WinFormsApplicationBuilder!
+Microsoft.Extensions.WinForms.WinFormsApplicationBuilder.UseApplicationContext() -> Microsoft.Extensions.WinForms.WinFormsApplicationBuilder!
+Microsoft.Extensions.WinForms.WinFormsApplicationBuilder.UseApplicationContext(System.Windows.Forms.ApplicationContext! applicationContext) -> Microsoft.Extensions.WinForms.WinFormsApplicationBuilder!
+Microsoft.Extensions.WinForms.WinFormsApplicationBuilder.UseStartupForm<TForm>() -> Microsoft.Extensions.WinForms.WinFormsApplicationBuilder!
+Microsoft.Extensions.WinForms.WinFormsApplicationBuilder.UseStartupForm(System.Windows.Forms.Form! startupForm) -> Microsoft.Extensions.WinForms.WinFormsApplicationBuilder!
+Microsoft.Extensions.WinForms.WinFormsApplicationLifetime
+Microsoft.Extensions.WinForms.WinFormsApplicationLifetime.ApplicationStarted -> System.EventHandler?
+Microsoft.Extensions.WinForms.WinFormsApplicationLifetime.ApplicationStopped -> System.EventHandler?
+Microsoft.Extensions.WinForms.WinFormsApplicationLifetime.ApplicationStopping -> System.EventHandler?
 override System.Windows.Forms.GroupBox.OnPaintBackground(System.Windows.Forms.PaintEventArgs! pevent) -> void
 static System.Windows.Forms.Application.SystemVisualSettings.get -> System.Windows.Forms.SystemVisualSettings!
 static System.Windows.Forms.Application.SystemVisualSettingsChanged -> System.Windows.Forms.SystemVisualSettingsChangedEventHandler?
