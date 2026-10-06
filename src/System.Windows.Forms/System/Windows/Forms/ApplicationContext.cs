@@ -15,6 +15,7 @@ namespace System.Windows.Forms;
 public class ApplicationContext : IDisposable
 {
     private Form? _mainForm;
+    private Func<ApplicationContext, bool>? _exitThreadHandler;
 
     /// <summary>
     ///  Creates a new ApplicationContext with no mainForm.
@@ -112,10 +113,24 @@ public class ApplicationContext : IDisposable
     /// </summary>
     public void ExitThread() => ExitThreadCore();
 
+    internal Func<ApplicationContext, bool>? ExitThreadHandler
+    {
+        get => _exitThreadHandler;
+        set => _exitThreadHandler = value;
+    }
+
     /// <summary>
     ///  Causes the thread's message loop to be terminated.
     /// </summary>
-    protected virtual void ExitThreadCore() => ThreadExit?.Invoke(this, EventArgs.Empty);
+    protected virtual void ExitThreadCore()
+    {
+        if (_exitThreadHandler is not null && !_exitThreadHandler(this))
+        {
+            return;
+        }
+
+        ThreadExit?.Invoke(this, EventArgs.Empty);
+    }
 
     /// <summary>
     ///  Called when the mainForm is closed. The default implementation

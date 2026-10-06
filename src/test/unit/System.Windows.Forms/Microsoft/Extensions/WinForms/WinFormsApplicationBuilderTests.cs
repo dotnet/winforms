@@ -2,6 +2,9 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 
 using Microsoft.Extensions.WinForms;
+using Microsoft.Extensions.Hosting;
+using System.Runtime.ExceptionServices;
+using System.Reflection;
 
 namespace System.Windows.Forms.Tests;
 
@@ -229,6 +232,160 @@ public class WinFormsApplicationBuilderTests
             events);
     }
 
+    [Fact]
+    public void Run_StartupFormClose_RaisesLifetimeInOrder()
+    {
+        RunOnStaThread(() =>
+        {
+            List<string> events = [];
+            using WinFormsApplication application = WinFormsApplication.CreateBuilder()
+                .UseStartupForm<CloseOnShownForm>()
+                .Build();
+            application.Lifetime.ApplicationStarted += (_, _) => events.Add("Started");
+            application.Lifetime.ApplicationStopping += (_, _) => events.Add("Stopping");
+            application.Lifetime.ApplicationStopped += (_, _) => events.Add("Stopped");
+
+            application.Run();
+
+            Assert.Equal(["Started", "Stopping", "Stopped"], events);
+        });
+    }
+
+    [Fact]
+    public void Run_StartsHostBeforeStartedAndStopsHostWhenContextExits()
+    {
+        RunOnStaThread(() =>
+        {
+            List<string> events = [];
+            TestHost host = new(events);
+            using Form form = new();
+            form.Shown += (_, _) => form.Close();
+            using WinFormsApplication application = WinFormsApplication.CreateBuilder()
+                .UseStartupForm(form)
+                .UseHost(host)
+                .Build();
+            application.Lifetime.ApplicationStarted += (_, _) => events.Add("ApplicationStarted");
+            application.Lifetime.ApplicationStopping += (_, _) => events.Add("ApplicationStopping");
+            application.Lifetime.ApplicationStopped += (_, _) => events.Add("ApplicationStopped");
+
+            application.Run();
+
+            Assert.Equal(
+                ["HostStarted", "ApplicationStarted", "ApplicationStopping", "HostStopping", "ApplicationStopped"],
+                events);
+            Assert.Equal(1, host.StopCount);
+        });
+    }
+
+    [Fact]
+    public void StopAsync_StopsHostAndExitsTheMessageLoop()
+    {
+        RunOnStaThread(() =>
+        {
+            TestHost host = new();
+            using Form form = new();
+            using WinFormsApplication application = WinFormsApplication.CreateBuilder()
+                .UseStartupForm(form)
+                .UseHost(host)
+                .Build();
+            form.Shown += (_, _) => _ = application.StopAsync();
+
+            application.Run();
+
+            Assert.Equal(1, host.StopCount);
+            Assert.True(host.Lifetime.ApplicationStopped.IsCancellationRequested);
+        });
+    }
+
+    [Fact]
+    public void Run_ExternalHostStop_ExitsTheMessageLoop()
+    {
+        RunOnStaThread(() =>
+        {
+            TestHost host = new();
+            using Form form = new();
+            using WinFormsApplication application = WinFormsApplication.CreateBuilder()
+                .UseStartupForm(form)
+                .UseHost(host)
+                .Build();
+            form.Shown += (_, _) => _ = Task.Run(() => host.StopAsync());
+
+            application.Run();
+
+            Assert.Equal(1, host.StopCount);
+            Assert.True(host.Lifetime.ApplicationStopped.IsCancellationRequested);
+        });
+    }
+
+    [Fact]
+    public void Run_ApplicationContextExit_IsDeferredUntilHostStops()
+    {
+        RunOnStaThread(() =>
+        {
+            TestHost host = new();
+            using Form form = new();
+            using ApplicationContext context = new(form);
+            form.Shown += (_, _) => context.ExitThread();
+            using WinFormsApplication application = WinFormsApplication.CreateBuilder()
+                .UseApplicationContext(context)
+                .UseHost(host)
+                .Build();
+
+            application.Run();
+
+            Assert.Equal(1, host.StopCount);
+            Assert.True(host.Lifetime.ApplicationStopped.IsCancellationRequested);
+        });
+    }
+
+    [Fact]
+    public void Run_StartupFormFailureRaisesStoppingAndStoppedWithoutStartingHost()
+    {
+        RunOnStaThread(() =>
+        {
+            List<string> events = [];
+            TestHost host = new(events);
+            using WinFormsApplication application = WinFormsApplication.CreateBuilder()
+                .UseStartupForm<ThrowingForm>()
+                .UseHost(host)
+                .Build();
+            application.Lifetime.ApplicationStarted += (_, _) => events.Add("ApplicationStarted");
+            application.Lifetime.ApplicationStopping += (_, _) => events.Add("ApplicationStopping");
+            application.Lifetime.ApplicationStopped += (_, _) => events.Add("ApplicationStopped");
+
+            TargetInvocationException exception = Assert.Throws<TargetInvocationException>(application.Run);
+
+            Assert.IsType<InvalidOperationException>(exception.InnerException);
+            Assert.Equal(["ApplicationStopping", "ApplicationStopped"], events);
+            Assert.Equal(0, host.StartCount);
+            Assert.Equal(0, host.StopCount);
+        });
+    }
+
+    private static void RunOnStaThread(Action action)
+    {
+        Exception? failure = null;
+        Thread thread = new(() =>
+        {
+            try
+            {
+                action();
+            }
+            catch (Exception exception)
+            {
+                failure = exception;
+            }
+        });
+        thread.SetApartmentState(ApartmentState.STA);
+        thread.Start();
+        thread.Join();
+
+        if (failure is not null)
+        {
+            ExceptionDispatchInfo.Capture(failure).Throw();
+        }
+    }
+
     private sealed class TestForm : Form
     {
         internal static int s_constructionCount;
@@ -237,5 +394,97 @@ public class WinFormsApplicationBuilderTests
         {
             s_constructionCount++;
         }
+    }
+
+    private sealed class CloseOnShownForm : Form
+    {
+        protected override void OnShown(EventArgs e)
+        {
+            base.OnShown(e);
+            Close();
+        }
+    }
+
+    private sealed class ThrowingForm : Form
+    {
+        public ThrowingForm()
+        {
+            throw new InvalidOperationException("Startup form construction failed.");
+        }
+    }
+
+    private sealed class TestHost : IHost
+    {
+        private readonly List<string>? _events;
+
+        internal TestHost(List<string>? events = null)
+        {
+            _events = events;
+            Lifetime = new TestHostApplicationLifetime();
+        }
+
+        internal TestHostApplicationLifetime Lifetime { get; }
+
+        internal int StartCount { get; private set; }
+
+        internal int StopCount { get; private set; }
+
+        public IServiceProvider Services => new TestServiceProvider(Lifetime);
+
+        public Task StartAsync(CancellationToken cancellationToken = default)
+        {
+            StartCount++;
+            _events?.Add("HostStarted");
+            Lifetime.NotifyStarted();
+
+            return Task.CompletedTask;
+        }
+
+        public Task StopAsync(CancellationToken cancellationToken = default)
+        {
+            StopCount++;
+            _events?.Add("HostStopping");
+            Lifetime.NotifyStopping();
+            Lifetime.NotifyStopped();
+
+            return Task.CompletedTask;
+        }
+
+        public void Dispose()
+        {
+        }
+
+        public ValueTask DisposeAsync()
+        {
+            Dispose();
+            return ValueTask.CompletedTask;
+        }
+    }
+
+    private sealed class TestHostApplicationLifetime : IHostApplicationLifetime
+    {
+        private readonly CancellationTokenSource _started = new();
+        private readonly CancellationTokenSource _stopping = new();
+        private readonly CancellationTokenSource _stopped = new();
+
+        public CancellationToken ApplicationStarted => _started.Token;
+
+        public CancellationToken ApplicationStopping => _stopping.Token;
+
+        public CancellationToken ApplicationStopped => _stopped.Token;
+
+        public void StopApplication() => NotifyStopping();
+
+        internal void NotifyStarted() => _started.Cancel();
+
+        internal void NotifyStopping() => _stopping.Cancel();
+
+        internal void NotifyStopped() => _stopped.Cancel();
+    }
+
+    private sealed class TestServiceProvider(IHostApplicationLifetime lifetime) : IServiceProvider
+    {
+        public object? GetService(Type serviceType)
+            => serviceType == typeof(IHostApplicationLifetime) ? lifetime : null;
     }
 }

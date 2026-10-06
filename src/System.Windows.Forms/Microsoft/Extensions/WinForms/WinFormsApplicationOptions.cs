@@ -2,6 +2,7 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 
 using System.Windows.Forms;
+using Microsoft.Extensions.Hosting;
 
 namespace Microsoft.Extensions.WinForms;
 
@@ -31,6 +32,16 @@ internal sealed class WinFormsApplicationOptions
     internal ApplicationContext? ApplicationContext { get; set; }
 
     /// <summary>
+    ///  Gets or sets the thread that configured a caller-supplied startup object.
+    /// </summary>
+    internal Thread? StartupObjectThread { get; set; }
+
+    /// <summary>
+    ///  Gets or sets the generic host coordinated by the application.
+    /// </summary>
+    internal IHost? Host { get; set; }
+
+    /// <summary>
     ///  Creates a copy of these options.
     /// </summary>
     /// <returns>A new options instance with the same configured startup target.</returns>
@@ -40,6 +51,8 @@ internal sealed class WinFormsApplicationOptions
             StartupFormFactory = StartupFormFactory,
             StartupForm = StartupForm,
             ApplicationContextFactory = ApplicationContextFactory,
-            ApplicationContext = ApplicationContext
+            ApplicationContext = ApplicationContext,
+            StartupObjectThread = StartupObjectThread,
+            Host = Host
         };
 }

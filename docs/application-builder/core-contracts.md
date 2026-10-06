@@ -9,9 +9,10 @@
 The prototype places `WinFormsApplicationBuilder`, `WinFormsApplication`,
 `WinFormsApplicationLifetime`, and the internal `WinFormsApplicationOptions`
 in the `Microsoft.Extensions.WinForms` namespace in `System.Windows.Forms.dll`.
-This follows the proposal's single-assembly option and avoids adding a package
-or dependency on Generic Host, dependency injection, configuration, or logging
-before those capabilities are designed.
+This follows the proposal's single-assembly option. Runtime coordination uses
+`Microsoft.Extensions.Hosting.Abstractions` only to accept and coordinate an
+existing `IHost`; the application builder does not create a host or add
+dependency-injection, configuration, or logging APIs.
 
 The builder supports selecting a form by type or instance, or selecting a
 default or supplied `ApplicationContext`. The last startup-selection call wins.
@@ -36,18 +37,25 @@ and failure semantics when it is implemented.
 
 ## Deferred to issue #14943
 
-This issue does not implement `Run`, `RunAsync`, `StartAsync`, or `StopAsync`,
-does not create the WinForms synchronization context, and does not start or
-coordinate a message loop. It also does not decide disposal ownership for
-caller-supplied forms or contexts. Those behaviors require UI-thread and
-message-loop coordination and belong to #14943; the implementation must follow
-the lifetime architecture decision record.
+The runtime added by #14943 runs on the calling UI thread, installs the
+WinForms synchronization context before creating a deferred startup form, and
+uses the existing `Application.Run(ApplicationContext)` message loop. A
+configured `IHost` is started before the WinForms started notification and is
+stopped before an intercepted thread exit is allowed to unwind the loop. The
+application owns and disposes a host passed to `UseHost`. Host-originated
+stopping notifications are marshalled to the UI thread while the coordinator
+is active.
 
-The proposal's `IHost`/`IHostApplicationBuilder` compatibility is not added to
-these types yet. Doing so would introduce hosting abstractions and startup or
-shutdown semantics outside this contracts-only issue. Generic Host
-integration, including ownership of lifetime tokens and stop coordination, is
-left for the runtime design.
+Application-context exit deferral is an internal hook used to keep the message
+pump responsive while asynchronous host stop callbacks finish. Ordinary
+WinForms contexts without a configured host retain their existing synchronous
+exit behavior. A host stop is terminal: after the host has begun stopping, an
+application shutdown request is not canceled by a form-close veto.
+
+The current bridge accepts an already-created `IHost`; it does not create the
+host or expose `IServiceCollection`, configuration, logging, hosted-service
+registration, or an options pattern. The full builder integration and examples
+remain outside these issues.
 
 ## Alternatives considered
 

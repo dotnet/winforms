@@ -2,6 +2,8 @@
 Microsoft.Extensions.WinForms.WinFormsApplication
 Microsoft.Extensions.WinForms.WinFormsApplication.Dispose() -> void
 Microsoft.Extensions.WinForms.WinFormsApplication.Lifetime.get -> Microsoft.Extensions.WinForms.WinFormsApplicationLifetime!
+Microsoft.Extensions.WinForms.WinFormsApplication.Run() -> void
+Microsoft.Extensions.WinForms.WinFormsApplication.StopAsync(System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken)) -> System.Threading.Tasks.Task!
 static Microsoft.Extensions.WinForms.WinFormsApplication.CreateBuilder() -> Microsoft.Extensions.WinForms.WinFormsApplicationBuilder!
 Microsoft.Extensions.WinForms.WinFormsApplicationBuilder
 Microsoft.Extensions.WinForms.WinFormsApplicationBuilder.Build() -> Microsoft.Extensions.WinForms.WinFormsApplication!
@@ -10,6 +12,7 @@ Microsoft.Extensions.WinForms.WinFormsApplicationBuilder.UseApplicationContext()
 Microsoft.Extensions.WinForms.WinFormsApplicationBuilder.UseApplicationContext(System.Windows.Forms.ApplicationContext! applicationContext) -> Microsoft.Extensions.WinForms.WinFormsApplicationBuilder!
 Microsoft.Extensions.WinForms.WinFormsApplicationBuilder.UseStartupForm<TForm>() -> Microsoft.Extensions.WinForms.WinFormsApplicationBuilder!
 Microsoft.Extensions.WinForms.WinFormsApplicationBuilder.UseStartupForm(System.Windows.Forms.Form! startupForm) -> Microsoft.Extensions.WinForms.WinFormsApplicationBuilder!
+Microsoft.Extensions.WinForms.WinFormsApplicationBuilder.UseHost(Microsoft.Extensions.Hosting.IHost! host) -> Microsoft.Extensions.WinForms.WinFormsApplicationBuilder!
 Microsoft.Extensions.WinForms.WinFormsApplicationLifetime
 Microsoft.Extensions.WinForms.WinFormsApplicationLifetime.ApplicationStarted -> System.EventHandler?
 Microsoft.Extensions.WinForms.WinFormsApplicationLifetime.ApplicationStopped -> System.EventHandler?

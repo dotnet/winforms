@@ -30,6 +30,7 @@ public sealed class WinFormsApplicationLifetime
     }
 
     private LifecycleState _state;
+    private readonly Lock _stateLock = new();
 
     internal WinFormsApplicationLifetime()
     {
@@ -52,36 +53,49 @@ public sealed class WinFormsApplicationLifetime
 
     internal void NotifyApplicationStarted()
     {
-        if (_state != LifecycleState.NotStarted)
+        lock (_stateLock)
         {
-            return;
-        }
+            if (_state != LifecycleState.NotStarted)
+            {
+                return;
+            }
 
-        _state = LifecycleState.Started;
-        ApplicationStarted?.Invoke(this, EventArgs.Empty);
+            _state = LifecycleState.Started;
+            ApplicationStarted?.Invoke(this, EventArgs.Empty);
+        }
     }
 
     internal void NotifyApplicationStopping()
     {
-        if (_state is LifecycleState.Stopping or LifecycleState.Stopped)
+        lock (_stateLock)
         {
-            return;
-        }
+            if (_state is LifecycleState.Stopping or LifecycleState.Stopped)
+            {
+                return;
+            }
 
-        _state = LifecycleState.Stopping;
-        ApplicationStopping?.Invoke(this, EventArgs.Empty);
+            _state = LifecycleState.Stopping;
+            ApplicationStopping?.Invoke(this, EventArgs.Empty);
+        }
     }
 
     internal void NotifyApplicationStopped()
     {
-        NotifyApplicationStopping();
-
-        if (_state == LifecycleState.Stopped)
+        lock (_stateLock)
         {
-            return;
-        }
+            if (_state is not LifecycleState.Stopping and not LifecycleState.Stopped)
+            {
+                _state = LifecycleState.Stopping;
+                ApplicationStopping?.Invoke(this, EventArgs.Empty);
+            }
 
-        _state = LifecycleState.Stopped;
-        ApplicationStopped?.Invoke(this, EventArgs.Empty);
+            if (_state == LifecycleState.Stopped)
+            {
+                return;
+            }
+
+            _state = LifecycleState.Stopped;
+            ApplicationStopped?.Invoke(this, EventArgs.Empty);
+        }
     }
 }

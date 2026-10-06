@@ -2,6 +2,7 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 
 using System.Windows.Forms;
+using Microsoft.Extensions.Hosting;
 
 namespace Microsoft.Extensions.WinForms;
 
@@ -45,6 +46,7 @@ public sealed class WinFormsApplicationBuilder
         _options.StartupForm = null;
         _options.ApplicationContextFactory = null;
         _options.ApplicationContext = null;
+        _options.StartupObjectThread = null;
 
         return this;
     }
@@ -62,6 +64,7 @@ public sealed class WinFormsApplicationBuilder
         _options.StartupForm = startupForm;
         _options.ApplicationContextFactory = null;
         _options.ApplicationContext = null;
+        _options.StartupObjectThread = Thread.CurrentThread;
 
         return this;
     }
@@ -76,6 +79,7 @@ public sealed class WinFormsApplicationBuilder
         _options.StartupForm = null;
         _options.ApplicationContextFactory = static () => new();
         _options.ApplicationContext = null;
+        _options.StartupObjectThread = null;
 
         return this;
     }
@@ -93,6 +97,27 @@ public sealed class WinFormsApplicationBuilder
         _options.StartupForm = null;
         _options.ApplicationContextFactory = null;
         _options.ApplicationContext = applicationContext;
+        _options.StartupObjectThread = Thread.CurrentThread;
+
+        return this;
+    }
+
+    /// <summary>
+    ///  Associates a Generic Host with the application.
+    /// </summary>
+    /// <param name="host">The host to start and stop with the application.</param>
+    /// <returns>This builder.</returns>
+    /// <remarks>
+    ///  <para>
+    ///   The application takes ownership of the host and disposes it when the
+    ///   application is disposed.
+    ///  </para>
+    /// </remarks>
+    public WinFormsApplicationBuilder UseHost(IHost host)
+    {
+        ArgumentNullException.ThrowIfNull(host);
+
+        _options.Host = host;
 
         return this;
     }
