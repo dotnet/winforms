@@ -22,6 +22,17 @@ internal static unsafe class ClipboardCore<TOleServices>
     /// </summary>
     private const int OleRetryDelay = 100;
 
+#if NET9_0_OR_GREATER
+    private static readonly Lock s_currentDataObjectLock = new();
+#else
+    private static readonly object s_currentDataObjectLock = new();
+#endif
+    // Keep the managed owner alive for delayed OLE rendering. This is a bounded, single-owner cache; the shared layer
+    // has no clipboard-change notification, so external replacement is detected and released on the next operation.
+    // The agile pointer preserves the exact COM identity needed for that ownership check.
+    private static IComVisibleDataObject? s_currentDataObject;
+    private static AgileComPointer<IDataObject>? s_currentDataObjectPointer;
+
     /// <summary>
     ///  Removes all data from the Clipboard.
     /// </summary>
@@ -43,6 +54,11 @@ internal static unsafe class ClipboardCore<TOleServices>
             }
 
             Thread.Sleep(millisecondsTimeout: retryDelay);
+        }
+
+        if (result.Succeeded)
+        {
+            ClearCurrentDataObject();
         }
 
         return result;
@@ -69,6 +85,11 @@ internal static unsafe class ClipboardCore<TOleServices>
             }
 
             Thread.Sleep(millisecondsTimeout: retryDelay);
+        }
+
+        if (result.Succeeded)
+        {
+            ClearCurrentDataObject();
         }
 
         return result;
@@ -107,6 +128,8 @@ internal static unsafe class ClipboardCore<TOleServices>
             Thread.Sleep(millisecondsTimeout: retryDelay);
         }
 
+        SetCurrentDataObject(dataObject, iDataObject.Value);
+
         if (copy)
         {
             retryCount = retryTimes;
@@ -119,6 +142,8 @@ internal static unsafe class ClipboardCore<TOleServices>
 
                 Thread.Sleep(millisecondsTimeout: retryDelay);
             }
+
+            ClearCurrentDataObject();
         }
 
         return result;
@@ -208,14 +233,30 @@ internal static unsafe class ClipboardCore<TOleServices>
     /// <summary>
     ///  Returns the data that is currently on the clipboard as the platform specified <typeparamref name="TIDataObject"/>.
     /// </summary>
+    /// <param name="unwrapUserDataObject">
+    ///  <see langword="true"/> to return the original managed data object when possible; <see langword="false"/> to
+    ///  always return a wrapper around the OLE proxy. WinForms preserves managed object identity, while WPF uses the
+    ///  proxy to preserve its legacy Windows format-conversion behavior.
+    /// </param>
     internal static HRESULT GetDataObject<TDataObject, TIDataObject>(
         out TIDataObject? dataObject,
         int retryTimes = OleRetryCount,
-        int retryDelay = OleRetryDelay)
+        int retryDelay = OleRetryDelay,
+        bool unwrapUserDataObject = true)
         where TDataObject : class, IDataObjectInternal<TDataObject, TIDataObject>, TIDataObject
         where TIDataObject : class
     {
+        TOleServices.EnsureThreadState();
+
         dataObject = default;
+
+        if (TryGetCurrentDataObject<TDataObject, TIDataObject>(
+            unwrapUserDataObject,
+            out TIDataObject? currentDataObject))
+        {
+            dataObject = currentDataObject;
+            return HRESULT.S_OK;
+        }
 
         HRESULT result = TryGetData(
             out ComScope<IDataObject> proxyDataObject,
@@ -232,7 +273,8 @@ internal static unsafe class ClipboardCore<TOleServices>
                 return result;
             }
 
-            if (originalObject is TDataObject dataObjectInternal
+            if (unwrapUserDataObject
+                && originalObject is TDataObject dataObjectInternal
                 && dataObjectInternal.TryUnwrapUserDataObject(out TIDataObject? userObject))
             {
                 // We have an original user object that we want to return.
@@ -246,6 +288,91 @@ internal static unsafe class ClipboardCore<TOleServices>
         }
 
         return result;
+    }
+
+    private static bool TryGetCurrentDataObject<TDataObject, TIDataObject>(
+        bool unwrapUserDataObject,
+        [NotNullWhen(true)] out TIDataObject? dataObject)
+        where TDataObject : class, IDataObjectInternal<TDataObject, TIDataObject>, TIDataObject
+        where TIDataObject : class
+    {
+        lock (s_currentDataObjectLock)
+        {
+            if (s_currentDataObject is not TDataObject dataObjectInternal
+                || s_currentDataObjectPointer is null)
+            {
+                dataObject = null;
+                return false;
+            }
+
+            using ComScope<IDataObject> iDataObject = s_currentDataObjectPointer.GetInterface();
+
+            // Clipboard ownership can change outside this process, so never return a stale managed object.
+            if (TOleServices.OleIsCurrentClipboard(iDataObject) != HRESULT.S_OK)
+            {
+                ClearCurrentDataObjectNoLock();
+                dataObject = null;
+                return false;
+            }
+
+            if (unwrapUserDataObject)
+            {
+                return dataObjectInternal.TryUnwrapUserDataObject(out dataObject);
+            }
+
+            dataObject = null;
+            return false;
+        }
+    }
+
+    private static void SetCurrentDataObject(IComVisibleDataObject dataObject, IDataObject* iDataObject)
+    {
+        AgileComPointer<IDataObject> dataObjectPointer = new(iDataObject, takeOwnership: false);
+
+        lock (s_currentDataObjectLock)
+        {
+            ClearCurrentDataObjectNoLock();
+            s_currentDataObject = dataObject;
+            s_currentDataObjectPointer = dataObjectPointer;
+        }
+    }
+
+    private static void ClearCurrentDataObject()
+    {
+        lock (s_currentDataObjectLock)
+        {
+            ClearCurrentDataObjectNoLock();
+        }
+    }
+
+    private static void ClearCurrentDataObjectNoLock()
+    {
+        s_currentDataObjectPointer?.Dispose();
+        s_currentDataObject = null;
+        s_currentDataObjectPointer = null;
+    }
+
+    /// <summary>
+    ///  Returns whether data in the specified native clipboard format is available or can be synthesized by Windows.
+    /// </summary>
+    /// <remarks>
+    ///  <para>This is consumed by WPF's <c>Clipboard.Contains*</c> APIs through the PresentationCore friend assembly.
+    ///  Keeping the P/Invoke here avoids duplicating native clipboard declarations in WPF.</para>
+    /// </remarks>
+    internal static bool IsClipboardFormatAvailable(uint format) =>
+        PInvokeCore.IsClipboardFormatAvailable(format).Value != 0;
+
+    /// <summary>
+    ///  Adds shared and platform-specific synonyms for the specified data format.
+    /// </summary>
+    /// <remarks>
+    ///  <para>Platform-specific mappings are kept separate so WPF can restore aliases such as <c>BitmapSource</c> without
+    ///  exposing WPF-only formats from WinForms data objects.</para>
+    /// </remarks>
+    internal static void AddMappedFormats(string format, ICollection<string> formats)
+    {
+        DataFormatNames.AddMappedFormats(format, formats);
+        TOleServices.AddMappedFormats(format, formats);
     }
 
     /// <summary>

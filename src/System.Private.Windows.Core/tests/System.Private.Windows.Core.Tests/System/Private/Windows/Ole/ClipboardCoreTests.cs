@@ -131,6 +131,73 @@ public unsafe class ClipboardCoreTests
     }
 
     [Fact]
+    public void GetDataObject_UnwrapUserDataObjectFalse_ReturnsOleProxy()
+    {
+        // WPF relies on this mode so format queries pass through OLE instead of the original managed object.
+        using ClipboardScope scope = new();
+        DataObject dataObject = new();
+        dataObject.SetData(DataFormatNames.Text, autoConvert: false, "Hello, World!");
+        ClipboardCore.SetData(dataObject, copy: false, retryTimes: 1, retryDelay: 0).Should().Be(HRESULT.S_OK);
+
+        ClipboardCore.GetDataObject<DataObject, ITestDataObject>(
+            out ITestDataObject? data,
+            retryTimes: 1,
+            retryDelay: 0,
+            unwrapUserDataObject: false).Should().Be(HRESULT.S_OK);
+
+        data.Should().NotBeNull().And.NotBeSameAs(dataObject);
+        data.GetDataPresent(DataFormatNames.Text, autoConvert: false).Should().BeTrue();
+        data.GetData(DataFormatNames.Text, autoConvert: false).Should().Be("Hello, World!");
+    }
+
+    [Fact]
+    public void GetDataObject_ProxyReadAfterClipboardOwnerChanged_ClearsCachedManagedObject()
+    {
+        // Restore the mock clipboard and ClipboardCore cache when the test completes.
+        using ClipboardScope scope = new();
+
+        // This object becomes the managed owner cached by ClipboardCore.
+        DataObject original = new();
+
+        // This object represents clipboard contents supplied later by another process.
+        DataObject external = new();
+
+        // Publish the original object without flushing it so ClipboardCore retains its managed-owner cache entry.
+        ClipboardCore.SetData(original, copy: false, retryTimes: 1, retryDelay: 0).Should().Be(HRESULT.S_OK);
+
+        // Replace only the mock OLE clipboard, leaving ClipboardCore's cached original object intentionally stale.
+        MockOleServices<ClipboardCoreTests>.SimulateExternalClipboardChange(external);
+
+        // Count ownership checks performed after the simulated external replacement.
+        MockOleServices<ClipboardCoreTests>.ResetOleIsCurrentClipboardCallCount();
+
+        // Proxy mode must still validate and clear the stale cache, but it must return an OLE-backed wrapper.
+        ClipboardCore.GetDataObject<DataObject, ITestDataObject>(
+            out ITestDataObject? first,
+            retryTimes: 1,
+            retryDelay: 0,
+            unwrapUserDataObject: false).Should().Be(HRESULT.S_OK);
+
+        // This assertion proves the proxy-mode read, rather than the later normal read, performed the ownership check.
+        MockOleServices<ClipboardCoreTests>.OleIsCurrentClipboardCallCount.Should().Be(1);
+
+        // A normal read should now bypass cache validation because the proxy-mode read already cleared the stale entry.
+        ClipboardCore.GetDataObject<DataObject, ITestDataObject>(
+            out ITestDataObject? second,
+            retryTimes: 1,
+            retryDelay: 0).Should().Be(HRESULT.S_OK);
+
+        // Proxy mode returns a wrapper around the current OLE clipboard object, not the original managed instance.
+        first.Should().NotBeSameAs(external);
+
+        // Normal mode unwraps the in-process OLE object and returns the exact externally supplied managed instance.
+        second.Should().BeSameAs(external);
+
+        // No second ownership check means the stale cache was removed during the first read.
+        MockOleServices<ClipboardCoreTests>.OleIsCurrentClipboardCallCount.Should().Be(1);
+    }
+
+    [Fact]
     public void DerivedDataObject_DataPresent()
     {
         // https://github.com/dotnet/winforms/issues/12789

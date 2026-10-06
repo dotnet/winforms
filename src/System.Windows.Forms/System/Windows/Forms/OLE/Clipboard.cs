@@ -40,6 +40,12 @@ public static class Clipboard
     /// </remarks>
     public static unsafe void SetDataObject(object data, bool copy, int retryTimes, int retryDelay)
     {
+        // Preserve the .NET 9 validation order: the apartment state is checked before argument validation.
+        if (Application.OleRequired() != ApartmentState.STA)
+        {
+            throw new ThreadStateException(SR.ThreadMustBeSTA);
+        }
+
         ArgumentNullException.ThrowIfNull(data);
 
         // Wrap if we're not already a DataObject
@@ -57,6 +63,13 @@ public static class Clipboard
     /// </summary>
     public static unsafe IDataObject? GetDataObject()
     {
+        if (Application.OleRequired() != ApartmentState.STA)
+        {
+            // Preserve the historical neutral result for background and finalizer threads, while still
+            // rejecting clipboard access from an MTA thread that is running a WinForms message loop.
+            return Application.MessageLoop ? throw new ThreadStateException(SR.ThreadMustBeSTA) : null;
+        }
+
         HRESULT result = ClipboardCore.GetDataObject<DataObject, IDataObject>(out IDataObject? dataObject);
         if (result.Failed)
         {
@@ -119,12 +132,8 @@ public static class Clipboard
     {
         SourceGenerated.EnumValidator.Validate(format, nameof(format));
 
-        // Historically we didn't pass true for autoConvert, but it effectively was always
-        // true because getting the DataObject would always give us an IDataObject RCW which
-        // would call back through the format enumerator which defaults to true.
-        //
-        // We now unwrap original objects when we can, so we need to emulate the old behavior.
-        return ContainsData(ClipboardUtilities.ConvertToDataFormats(format), autoConvert: true);
+        // A typed text query is exact; auto-conversion would also match Text, UnicodeText, and System.String aliases.
+        return ContainsData(ClipboardUtilities.ConvertToDataFormats(format), autoConvert: false);
     }
 
     /// <summary>
@@ -435,10 +444,12 @@ public static class Clipboard
     public static void SetData(string format, object data)
     {
         ArgumentException.ThrowIfNullOrWhiteSpace(format);
-        ArgumentNullException.ThrowIfNull(data);
 
-        // Note: We delegate argument checking to IDataObject.SetData, if it wants to do so.
-        SetDataObject(new DataObject(format, data), copy: true);
+        // A null value is valid for a custom format. The convenience DataObject constructor rejects it before the
+        // IDataObject implementation can store it, so populate an empty object explicitly.
+        DataObject dataObject = new();
+        dataObject.SetData(format, data);
+        SetDataObject(dataObject, copy: true);
     }
 
     /// <inheritdoc cref="DataObject.SetDataAsJson{T}(string, T)"/>

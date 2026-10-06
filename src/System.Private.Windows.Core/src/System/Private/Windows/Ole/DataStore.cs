@@ -33,7 +33,7 @@ internal sealed partial class DataStore<TOleServices> : IDataObjectInternal wher
         }
 
         List<string> mappedFormats = [];
-        DataFormatNames.AddMappedFormats(format, mappedFormats);
+        ClipboardCore<TOleServices>.AddMappedFormats(format, mappedFormats);
 
         foreach (string mappedFormat in mappedFormats)
         {
@@ -157,7 +157,7 @@ internal sealed partial class DataStore<TOleServices> : IDataObjectInternal wher
                 if (_mappedData[current].AutoConvert)
                 {
                     distinctFormats.Add(current);
-                    DataFormatNames.AddMappedFormats(current, distinctFormats);
+                    ClipboardCore<TOleServices>.AddMappedFormats(current, distinctFormats);
                 }
                 else
                 {

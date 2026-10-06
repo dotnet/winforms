@@ -24,7 +24,7 @@ namespace System.Windows.Forms.Tests;
 [Collection("Sequential")]
 // Try up to 3 times before failing.
 [UISettings(MaxAttempts = 4)]
-public class ClipboardTests
+public partial class ClipboardTests : IDisposable
 {
 #pragma warning disable WFDEV005 // Type or member is obsolete
 
@@ -47,13 +47,27 @@ public class ClipboardTests
     [WinFormsTheory]
     [InlineData(null)]
     [InlineData("")]
+    [InlineData(" ")]
     [InlineData("\t")]
-    public void GetData_NullOrEmptyFormat_Returns_Null(string? format)
+    [InlineData("\r\n")]
+    public void Clipboard_GetData_InvalidOrWhitespaceFormat_ReturnsNull(string? format)
     {
-        object? result = Clipboard.GetData(format!);
-        result.Should().BeNull();
-        result = Clipboard.GetData(format!);
-        result.Should().BeNull();
+        Clipboard.SetData("WinForms.ClipboardTests.ValidFormat", 42);
+
+        Clipboard.GetData(format!).Should().BeNull();
+    }
+
+    [WinFormsTheory]
+    [InlineData(null)]
+    [InlineData("")]
+    [InlineData(" ")]
+    [InlineData("\t")]
+    [InlineData("\r\n")]
+    public void Clipboard_ContainsData_InvalidOrWhitespaceFormat_ReturnsFalse(string? format)
+    {
+        Clipboard.SetData("WinForms.ClipboardTests.ValidFormat", 42);
+
+        Clipboard.ContainsData(format).Should().BeFalse();
     }
 
     [WinFormsTheory]
@@ -148,10 +162,12 @@ public class ClipboardTests
     }
 
     [WinFormsFact]
-    public void SetData_NullData_ThrowsArgumentNullException()
+    public void SetData_NullData_RoundTrips()
     {
-        Action action = () => Clipboard.SetData("MyData", data: null!);
-        action.Should().Throw<ArgumentNullException>().WithParameterName("data");
+        Clipboard.SetData("MyData", data: null!);
+
+        Clipboard.ContainsData("MyData").Should().BeTrue();
+        Clipboard.GetData("MyData").Should().BeNull();
     }
 
     [WinFormsFact]
@@ -174,17 +190,16 @@ public class ClipboardTests
     }
 
     [WinFormsFact]
-    public void SetData_Null_ThrowsArgumentNullException()
+    public void SetData_Null_RoundTrips()
     {
         try
         {
-            Action action = () => Clipboard.SetData("MyData", data: null!);
-            action.Should().Throw<ArgumentNullException>().WithParameterName("data");
-            // Clipboard flushes format only, content is not stored.
-            // GetData will hit "Data on clipboard is invalid (0x800401D3 (CLIPBRD_E_BAD_DATA))"
-            Clipboard.ContainsData("MyData").Should().BeFalse();
+            Clipboard.SetData("MyData", data: null!);
+
+            Clipboard.ContainsData("MyData").Should().BeTrue();
             Clipboard.GetData("MyData").Should().BeNull();
             Clipboard.TryGetData("MyData", out string? data).Should().BeFalse();
+            data.Should().BeNull();
         }
         finally
         {
@@ -351,16 +366,22 @@ public class ClipboardTests
     }
 
     [WinFormsTheory]
+    [InlineData(null)]
     [InlineData("")]
     [InlineData("\0")]
-    public void SetFileDropList_InvalidFileInPaths_ThrowsArgumentException(string filePath)
+    public void Clipboard_SetFileDropList_InvalidFileInPaths_ThrowsAndPreservesClipboard(string? filePath)
     {
+        const string seedFormat = "WinForms.ClipboardTests.InvalidFileDropSeed";
+        Clipboard.SetData(seedFormat, 42);
         StringCollection filePaths =
         [
-            filePath
+            filePath!
         ];
+
         Action action = () => Clipboard.SetFileDropList(filePaths);
         action.Should().Throw<ArgumentException>();
+        Clipboard.ContainsData(seedFormat).Should().BeTrue();
+        Clipboard.GetData(seedFormat).Should().Be(42);
     }
 
     [WinFormsFact]
@@ -1183,7 +1204,7 @@ public class ClipboardTests
         formats.Should().BeEquivalentTo(["System.String", "UnicodeText", "Text"]);
 
         formats = dataObject.GetFormats(autoConvert: false);
-        formats.Should().BeEquivalentTo(["System.String", "UnicodeText", "Text"]);
+        formats.Should().BeEquivalentTo(["Text"]);
 
         // CLIPBRD_E_BAD_DATA returned when trying to get clipboard data.
         Clipboard.GetText().Should().BeEmpty();
@@ -1246,8 +1267,7 @@ public class ClipboardTests
 
         Clipboard.GetData("System.String").Should().Be(expected);
 
-        string result = Clipboard.GetData("TEXT").Should().BeOfType<string>().Subject;
-        result.Should().Be(expected);
+        Clipboard.GetData("TEXT").Should().BeNull();
     }
 
     [WinFormsFact]

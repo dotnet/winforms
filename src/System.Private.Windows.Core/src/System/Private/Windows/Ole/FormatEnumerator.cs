@@ -24,7 +24,10 @@ internal unsafe class FormatEnumerator : ComTypes.IEnumFORMATETC, IEnumFORMATETC
         _formats.AddRange(source._formats);
     }
 
-    public FormatEnumerator(IDataObjectInternal dataObject, Func<string, int> getFormatId)
+    public FormatEnumerator(
+        IDataObjectInternal dataObject,
+        Func<string, int> getFormatId,
+        Func<string, bool>? supportsEnhMetafile = null)
     {
         _dataObject = dataObject;
         if (dataObject.GetFormats() is not string[] formats)
@@ -37,6 +40,8 @@ internal unsafe class FormatEnumerator : ComTypes.IEnumFORMATETC, IEnumFORMATETC
         for (int i = 0; i < formats.Length; i++)
         {
             string format = formats[i];
+
+            // Native handle formats must advertise the medium that GetData will actually return.
             ComTypes.FORMATETC temp = new()
             {
                 cfFormat = (short)(ushort)getFormatId(format),
@@ -45,7 +50,9 @@ internal unsafe class FormatEnumerator : ComTypes.IEnumFORMATETC, IEnumFORMATETC
                 lindex = -1,
                 tymed = format == DataFormatNames.Bitmap
                     ? ComTypes.TYMED.TYMED_GDI
-                    : format == DataFormatNames.Emf ? ComTypes.TYMED.TYMED_ENHMF : ComTypes.TYMED.TYMED_HGLOBAL
+                    : supportsEnhMetafile?.Invoke(format) == true
+                        ? ComTypes.TYMED.TYMED_ENHMF
+                        : ComTypes.TYMED.TYMED_HGLOBAL
             };
 
             _formats.Add(temp);

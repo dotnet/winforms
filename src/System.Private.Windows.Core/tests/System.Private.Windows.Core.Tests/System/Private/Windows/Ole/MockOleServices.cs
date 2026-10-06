@@ -2,6 +2,7 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 
 using System.Diagnostics.CodeAnalysis;
+using Windows.Win32;
 using Windows.Win32.Foundation;
 using Windows.Win32.System.Com;
 
@@ -14,6 +15,16 @@ namespace System.Private.Windows.Ole;
 internal class MockOleServices<TTestClass> : IOleServices
 {
     private static DataObjectProxy? s_dataObjectProxy;
+
+    public static int OleIsCurrentClipboardCallCount { get; private set; }
+
+    public static unsafe void SimulateExternalClipboardChange(IComVisibleDataObject dataObject)
+    {
+        using ComScope<IDataObject> iDataObject = ComHelpers.GetComScope<IDataObject>(dataObject);
+        SetClipboard(iDataObject.Value).Should().Be(HRESULT.S_OK);
+    }
+
+    public static void ResetOleIsCurrentClipboardCallCount() => OleIsCurrentClipboardCallCount = 0;
 
     static bool IOleServices.AllowTypeWithoutResolver<T>() => true;
     static void IOleServices.EnsureThreadState() { }
@@ -54,7 +65,9 @@ internal class MockOleServices<TTestClass> : IOleServices
         return HRESULT.S_OK;
     }
 
-    static unsafe HRESULT IOleServices.OleSetClipboard(IDataObject* dataObject)
+    static unsafe HRESULT IOleServices.OleSetClipboard(IDataObject* dataObject) => SetClipboard(dataObject);
+
+    private static unsafe HRESULT SetClipboard(IDataObject* dataObject)
     {
         if (dataObject is null)
         {
@@ -71,6 +84,15 @@ internal class MockOleServices<TTestClass> : IOleServices
         s_dataObjectProxy = new DataObjectProxy(dataObject);
 
         return HRESULT.S_OK;
+    }
+
+    public static unsafe HRESULT OleIsCurrentClipboard(IDataObject* dataObject)
+    {
+        OleIsCurrentClipboardCallCount++;
+
+        return s_dataObjectProxy is not null && s_dataObjectProxy.IsOriginal(dataObject)
+            ? HRESULT.S_OK
+            : HRESULT.S_FALSE;
     }
 
     static IComVisibleDataObject IOleServices.CreateDataObject() => new TestDataObject<MockOleServices<TTestClass>>();

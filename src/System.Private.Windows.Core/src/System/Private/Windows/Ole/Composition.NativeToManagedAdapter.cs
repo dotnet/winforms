@@ -566,7 +566,7 @@ internal unsafe partial class Composition<TOleServices, TNrbfSerializer, TDataFo
             }
 
             List<string> mappedFormats = [];
-            DataFormatNames.AddMappedFormats(request.Format, mappedFormats);
+            ClipboardCore<TOleServices>.AddMappedFormats(request.Format, mappedFormats);
 
             // Try to find a mapped format that works better.
             foreach (string mappedFormat in mappedFormats)
@@ -634,7 +634,7 @@ internal unsafe partial class Composition<TOleServices, TNrbfSerializer, TDataFo
             }
 
             List<string> mappedFormats = [];
-            DataFormatNames.AddMappedFormats(format, mappedFormats);
+            ClipboardCore<TOleServices>.AddMappedFormats(format, mappedFormats);
 
             foreach (string mappedFormat in mappedFormats)
             {
@@ -676,7 +676,7 @@ internal unsafe partial class Composition<TOleServices, TNrbfSerializer, TDataFo
 
                 if (autoConvert)
                 {
-                    DataFormatNames.AddMappedFormats(name, distinctFormats);
+                    ClipboardCore<TOleServices>.AddMappedFormats(name, distinctFormats);
                 }
 
                 formatEtc = default;
@@ -741,12 +741,21 @@ internal unsafe partial class Composition<TOleServices, TNrbfSerializer, TDataFo
 
         private bool GetDataPresentInner(string format)
         {
+            TDataFormat dataFormat = DataFormatsCore<TDataFormat>.GetOrAddFormat(format);
+            string canonicalFormat = dataFormat.Name;
+            Com.TYMED tymed = (Com.TYMED)AllowedTymeds;
+            if (TOleServices.IsNativeTymedSupported(canonicalFormat, Com.TYMED.TYMED_ENHMF))
+            {
+                // EMF providers commonly expose only a native enhanced-metafile handle, not an HGLOBAL fallback.
+                tymed |= Com.TYMED.TYMED_ENHMF;
+            }
+
             Com.FORMATETC formatEtc = new()
             {
-                cfFormat = (ushort)(DataFormatsCore<TDataFormat>.GetOrAddFormat(format).Id),
+                cfFormat = (ushort)dataFormat.Id,
                 dwAspect = (uint)Com.DVASPECT.DVASPECT_CONTENT,
                 lindex = -1,
-                tymed = (uint)AllowedTymeds
+                tymed = (uint)tymed
             };
 
             using var nativeDataObject = _nativeDataObject.GetInterface();
