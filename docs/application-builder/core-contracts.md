@@ -54,8 +54,8 @@ application shutdown request is not canceled by a form-close veto.
 
 The current bridge accepts an already-created `IHost`; it does not create the
 host or expose `IServiceCollection`, configuration, logging, hosted-service
-registration, or an options pattern. The full builder integration and examples
-remain outside these issues.
+registration, or an options pattern. Runnable C# and Visual Basic examples
+using an externally built host are in [samples](samples/README.md).
 
 ## Alternatives considered
 
