@@ -8,6 +8,8 @@ using System.Runtime.ExceptionServices;
 
 namespace System.Windows.Forms.Tests;
 
+#pragma warning disable WFDEV005 // Legacy APIs are intentionally exercised for compatibility.
+
 public partial class ClipboardTests
 {
     private const string EmptyClipboardCustomFormat = "WinForms.ClipboardTests.Empty";
@@ -281,3 +283,5 @@ public partial class ClipboardTests
         }
     }
 }
+
+#pragma warning restore WFDEV005

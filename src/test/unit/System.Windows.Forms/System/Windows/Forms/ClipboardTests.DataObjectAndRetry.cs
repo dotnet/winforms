@@ -7,6 +7,8 @@ using System.Collections.Specialized;
 
 namespace System.Windows.Forms.Tests;
 
+#pragma warning disable WFDEV005 // Legacy APIs are intentionally exercised for compatibility.
+
 public partial class ClipboardTests
 {
     private const string DataObjectSemanticsFormat = "WinForms.ClipboardTests.DataObjectSemantics";
@@ -37,6 +39,39 @@ public partial class ClipboardTests
         Assert.NotSame(original, first);
         Assert.NotSame(first, second);
         Assert.Contains(DataObjectSemanticsFormat, first.GetFormats(autoConvert: false));
+    }
+
+    // Verifies that an exited delayed-rendering owner produces neutral reads and does not block later replacement.
+    [WinFormsFact]
+    public void Clipboard_SetDataObject_CopyFalse_AfterOwnerStaExits_ReturnsNeutralReadsAndCanBeReplaced()
+    {
+        Exception? firstException = RunOnStaThread(() =>
+        {
+            Clipboard.SetDataObject(new DataObject(DataFormats.UnicodeText, "text"), copy: false);
+        });
+
+        Assert.Null(firstException);
+
+        Exception? readException = RunOnStaThread(() =>
+        {
+            Assert.NotNull(Clipboard.GetDataObject());
+            Assert.False(Clipboard.ContainsText());
+            Assert.Equal(string.Empty, Clipboard.GetText());
+        });
+
+        Assert.Null(readException);
+
+        Exception? secondException = RunOnStaThread(() =>
+        {
+            DataObject replacement = new(DataObjectSemanticsFormat, 43);
+            Clipboard.SetDataObject(replacement, copy: false);
+
+            Assert.Same(replacement, Clipboard.GetDataObject());
+            Assert.Equal(43, replacement.GetData(DataObjectSemanticsFormat, autoConvert: false));
+            Clipboard.Clear();
+        });
+
+        Assert.Null(secondException);
     }
 
     public static TheoryData<Action> SetDataObjectInvalidArgumentsOnMtaTheoryData => new()
@@ -83,4 +118,16 @@ public partial class ClipboardTests
         Assert.Equal(expectedExceptionType, exception.GetType());
         Assert.Equal(expectedParameterName, exception.ParamName);
     }
+
+    private static Exception? RunOnStaThread(Action action)
+    {
+        Exception? exception = null;
+        Thread thread = new(() => exception = Record.Exception(action));
+        thread.SetApartmentState(ApartmentState.STA);
+        thread.Start();
+        thread.Join();
+        return exception;
+    }
 }
+
+#pragma warning restore WFDEV005

@@ -305,10 +305,12 @@ internal static unsafe class ClipboardCore<TOleServices>
                 return false;
             }
 
-            using ComScope<IDataObject> iDataObject = s_currentDataObjectPointer.GetInterface();
+            using ComScope<IDataObject> iDataObject =
+                s_currentDataObjectPointer.TryGetInterface(out HRESULT interfaceResult);
 
-            // Clipboard ownership can change outside this process, so never return a stale managed object.
-            if (TOleServices.OleIsCurrentClipboard(iDataObject) != HRESULT.S_OK)
+            // The originating apartment may have exited, or clipboard ownership may have changed externally.
+            // In either case discard the stale cache and fall back to the current OLE clipboard proxy.
+            if (interfaceResult.Failed || TOleServices.OleIsCurrentClipboard(iDataObject) != HRESULT.S_OK)
             {
                 ClearCurrentDataObjectNoLock();
                 dataObject = null;
@@ -327,13 +329,22 @@ internal static unsafe class ClipboardCore<TOleServices>
 
     private static void SetCurrentDataObject(IComVisibleDataObject dataObject, IDataObject* iDataObject)
     {
-        AgileComPointer<IDataObject> dataObjectPointer = new(iDataObject, takeOwnership: false);
+        AgileComPointer<IDataObject>? dataObjectPointer = new(iDataObject, takeOwnership: false);
 
-        lock (s_currentDataObjectLock)
+        try
         {
-            ClearCurrentDataObjectNoLock();
-            s_currentDataObject = dataObject;
-            s_currentDataObjectPointer = dataObjectPointer;
+            lock (s_currentDataObjectLock)
+            {
+                ClearCurrentDataObjectNoLock();
+                s_currentDataObject = dataObject;
+                s_currentDataObjectPointer = dataObjectPointer;
+                dataObjectPointer = null;
+            }
+        }
+        finally
+        {
+            // If replacing the previous cache entry fails, do not leak the newly registered GIT cookie.
+            dataObjectPointer?.Dispose();
         }
     }
 
@@ -347,9 +358,11 @@ internal static unsafe class ClipboardCore<TOleServices>
 
     private static void ClearCurrentDataObjectNoLock()
     {
-        s_currentDataObjectPointer?.Dispose();
-        s_currentDataObject = null;
+        // Clear the shared state before releasing COM resources because revocation can invoke re-entrant callbacks.
+        AgileComPointer<IDataObject>? dataObjectPointer = s_currentDataObjectPointer;
         s_currentDataObjectPointer = null;
+        s_currentDataObject = null;
+        dataObjectPointer?.Dispose();
     }
 
     /// <summary>

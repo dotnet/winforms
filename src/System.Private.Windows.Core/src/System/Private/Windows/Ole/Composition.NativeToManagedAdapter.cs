@@ -390,13 +390,13 @@ internal unsafe partial class Composition<TOleServices, TNrbfSerializer, TDataFo
                 tymed = (uint)Com.TYMED.TYMED_HGLOBAL
             };
 
-            HRESULT hr = dataObject->QueryGetData(formatetc);
+            HRESULT hr = ClipboardRetry.QueryGetData(dataObject, formatetc);
             if (hr.Failed)
             {
                 return HandleFailedHResult(hr);
             }
 
-            hr = dataObject->GetData(formatetc, out Com.STGMEDIUM medium);
+            hr = ClipboardRetry.GetData(dataObject, formatetc, out Com.STGMEDIUM medium);
 
             // One of the ways this can happen is when we attempt to put binary formatted data onto the
             // clipboard, which will succeed as Windows ignores all errors when putting data on the clipboard.
@@ -458,13 +458,13 @@ internal unsafe partial class Composition<TOleServices, TNrbfSerializer, TDataFo
                 tymed = (uint)Com.TYMED.TYMED_ISTREAM
             };
 
-            HRESULT hr = dataObject->QueryGetData(formatEtc);
+            HRESULT hr = ClipboardRetry.QueryGetData(dataObject, formatEtc);
             if (hr.Failed)
             {
                 return HandleFailedHResult(hr);
             }
 
-            hr = dataObject->GetData(formatEtc, out Com.STGMEDIUM medium);
+            hr = ClipboardRetry.GetData(dataObject, formatEtc, out Com.STGMEDIUM medium);
             if (hr.Failed)
             {
                 return HandleFailedHResult(hr);
@@ -759,7 +759,7 @@ internal unsafe partial class Composition<TOleServices, TNrbfSerializer, TDataFo
             };
 
             using var nativeDataObject = _nativeDataObject.GetInterface();
-            HRESULT hr = nativeDataObject.Value->QueryGetData(formatEtc);
+            HRESULT hr = ClipboardRetry.QueryGetData(nativeDataObject, formatEtc);
 
             // APIs will return S_FALSE, which is "success"
             return hr == HRESULT.S_OK;

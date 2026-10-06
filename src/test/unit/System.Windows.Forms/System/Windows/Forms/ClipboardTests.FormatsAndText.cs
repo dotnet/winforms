@@ -7,6 +7,8 @@ using System.ComponentModel;
 
 namespace System.Windows.Forms.Tests;
 
+#pragma warning disable WFDEV005 // Legacy APIs are intentionally exercised for compatibility.
+
 public partial class ClipboardTests
 {
     public static TheoryData<string, string> ConvertibleTextFormatsTheoryData => new()
@@ -129,3 +131,5 @@ public partial class ClipboardTests
         action.Should().Throw<InvalidEnumArgumentException>().WithParameterName("format");
     }
 }
+
+#pragma warning restore WFDEV005

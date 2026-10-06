@@ -50,6 +50,42 @@ public unsafe class NativeToManagedAdapterTests
         result.ToArray().Should().Equal(0xBE, 0xAD);
     }
 
+    // Verifies transient clipboard contention during format probing is retried before reading HGLOBAL data.
+    [Fact]
+    public void GetData_HGlobal_QueryGetDataClipboardBusy_Retries()
+    {
+        MemoryStream stream = new([0xBE, 0xAD]);
+        using RetryingHGlobalNativeDataObject dataObject = new(
+            stream,
+            (ushort)_format.Id,
+            queryFailures: 2,
+            getFailures: 0);
+
+        var composition = Composition.Create(ComHelpers.GetComPointer<IDataObject>(dataObject));
+
+        MemoryStream result = composition.GetData(nameof(NativeToManagedAdapterTests))
+            .Should().BeOfType<MemoryStream>().Subject;
+        result.ToArray().Should().Equal(0xBE, 0xAD);
+    }
+
+    // Verifies transient clipboard contention during HGLOBAL retrieval is retried without changing the payload.
+    [Fact]
+    public void GetData_HGlobal_GetDataClipboardBusy_Retries()
+    {
+        MemoryStream stream = new([0xBE, 0xAD]);
+        using RetryingHGlobalNativeDataObject dataObject = new(
+            stream,
+            (ushort)_format.Id,
+            queryFailures: 0,
+            getFailures: 2);
+
+        var composition = Composition.Create(ComHelpers.GetComPointer<IDataObject>(dataObject));
+
+        MemoryStream result = composition.GetData(nameof(NativeToManagedAdapterTests))
+            .Should().BeOfType<MemoryStream>().Subject;
+        result.ToArray().Should().Equal(0xBE, 0xAD);
+    }
+
     [Fact]
     public void GetData_CustomType_RawData_WithPrefix()
     {
@@ -263,6 +299,36 @@ public unsafe class NativeToManagedAdapterTests
 
         MemoryStream result = (MemoryStream)data!;
         result.ToArray().Should().Equal(0xBE, 0xAD, 0xCA, 0xFE);
+    }
+
+    private sealed class RetryingHGlobalNativeDataObject(
+        Stream stream,
+        ushort format,
+        int queryFailures,
+        int getFailures) : HGlobalNativeDataObject(stream, format)
+    {
+        private int _queryFailures = queryFailures;
+        private int _getFailures = getFailures;
+
+        public override HRESULT QueryGetData(FORMATETC* pformatetc)
+        {
+            if (_queryFailures-- > 0)
+            {
+                return HRESULT.CLIPBRD_E_CANT_OPEN;
+            }
+
+            return base.QueryGetData(pformatetc);
+        }
+
+        public override HRESULT GetData(FORMATETC* pformatetcIn, STGMEDIUM* pmedium)
+        {
+            if (_getFailures-- > 0)
+            {
+                return HRESULT.CLIPBRD_E_CANT_OPEN;
+            }
+
+            return base.GetData(pformatetcIn, pmedium);
+        }
     }
 
     [Fact]

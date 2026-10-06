@@ -8,6 +8,8 @@ using System.Drawing;
 
 namespace System.Windows.Forms.Tests;
 
+#pragma warning disable WFDEV005 // Legacy APIs are intentionally exercised for compatibility.
+
 public partial class ClipboardTests
 {
     // Verifies that SetAudio snapshots the supplied bytes without mutating or retaining the caller's array.
@@ -179,3 +181,5 @@ public partial class ClipboardTests
         return copy.ToArray();
     }
 }
+
+#pragma warning restore WFDEV005
