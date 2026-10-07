@@ -40,7 +40,10 @@ public class ImageListTests : ControlTestBase
         uint endGdiHandleCount = GetGdiHandles();
         TestOutputHelper.WriteLine($"GDI handles after: {endGdiHandleCount}");
 
-        Assert.Equal(startGdiHandleCount, endGdiHandleCount);
+        // Delayed finalizers can release unrelated GDI handles during the test, so only an increase indicates a leak.
+        Assert.True(
+            endGdiHandleCount <= startGdiHandleCount,
+            $"Expected the GDI handle count not to increase from {startGdiHandleCount}, but found {endGdiHandleCount}.");
 
         [MethodImpl(MethodImplOptions.NoInlining)]
         static uint GetGdiHandles()
