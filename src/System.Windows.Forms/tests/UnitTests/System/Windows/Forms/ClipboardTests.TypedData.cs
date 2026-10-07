@@ -33,11 +33,12 @@ public partial class ClipboardTests
     public void Clipboard_SetAudio_Stream_UsesEntireStreamAndLeavesStreamOpen()
     {
         byte[] expected = [1, 2, 3, 4];
-        using MemoryStream audioStream = new(expected);
+        using ChunkedReadStream audioStream = new(expected, maxBytesPerRead: 1);
         audioStream.Position = 2;
 
         Clipboard.SetAudio(audioStream);
 
+        Assert.True(audioStream.ReadCallCount > 1);
         Assert.True(audioStream.CanRead);
         Assert.Equal(audioStream.Length, audioStream.Position);
         audioStream.Position = 0;
@@ -177,5 +178,59 @@ public partial class ClipboardTests
         using MemoryStream copy = new();
         stream.CopyTo(copy);
         return copy.ToArray();
+    }
+
+    private sealed class ChunkedReadStream(byte[] buffer, int maxBytesPerRead) : Stream
+    {
+        private readonly MemoryStream _innerStream = new(buffer);
+
+        public int ReadCallCount { get; private set; }
+
+        public override bool CanRead => _innerStream.CanRead;
+
+        public override bool CanSeek => _innerStream.CanSeek;
+
+        public override bool CanWrite => _innerStream.CanWrite;
+
+        public override long Length => _innerStream.Length;
+
+        public override long Position
+        {
+            get => _innerStream.Position;
+            set => _innerStream.Position = value;
+        }
+
+        public override void Flush() => _innerStream.Flush();
+
+        public override int Read(byte[] buffer, int offset, int count)
+        {
+            ReadCallCount++;
+
+            return _innerStream.Read(buffer, offset, Math.Min(count, maxBytesPerRead));
+        }
+
+        public override int Read(Span<byte> buffer)
+        {
+            ReadCallCount++;
+
+            return _innerStream.Read(buffer[..Math.Min(buffer.Length, maxBytesPerRead)]);
+        }
+
+        public override long Seek(long offset, SeekOrigin origin) => _innerStream.Seek(offset, origin);
+
+        public override void SetLength(long value) => _innerStream.SetLength(value);
+
+        public override void Write(byte[] buffer, int offset, int count) =>
+            _innerStream.Write(buffer, offset, count);
+
+        protected override void Dispose(bool disposing)
+        {
+            if (disposing)
+            {
+                _innerStream.Dispose();
+            }
+
+            base.Dispose(disposing);
+        }
     }
 }
