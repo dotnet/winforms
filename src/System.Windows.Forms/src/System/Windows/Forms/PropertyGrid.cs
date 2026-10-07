@@ -3424,7 +3424,7 @@ public partial class PropertyGrid : ContainerControl, IComPropertyBrowser, IProp
         {
             foreach (IComponent component in components)
             {
-                if (TypeDescriptorHelper.TryGetAttribute(components.GetType(), out PropertyTabAttribute tabAttribute))
+                if (TypeDescriptorHelper.TryGetAttribute(component.GetType(), out PropertyTabAttribute tabAttribute))
                 {
                     for (int i = 0; i < tabAttribute.TabClasses.Length; i++)
                     {
