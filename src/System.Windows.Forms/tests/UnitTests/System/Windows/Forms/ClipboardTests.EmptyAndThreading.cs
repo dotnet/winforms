@@ -200,6 +200,10 @@ public partial class ClipboardTests
     // Exercise a callback only after a real WinForms message loop is active on an MTA thread.
     private static void RunMtaMessageLoop(Action action)
     {
+        const int StartupPending = 0;
+        const int StartupStarted = 1;
+        const int StartupCancelled = 2;
+
         ArgumentNullException.ThrowIfNull(action);
 
         Exception? exception = null;
@@ -207,6 +211,7 @@ public partial class ClipboardTests
         Control? dispatcher = null;
         ManualResetEventSlim dispatcherReady = new();
         ManualResetEventSlim loopActive = new();
+        int startupState = StartupPending;
 
         Thread thread = new(() =>
         {
@@ -218,10 +223,26 @@ public partial class ClipboardTests
                 _ = threadDispatcher.Handle;
                 dispatcher = threadDispatcher;
                 dispatcherReady.Set();
+
+                if (Volatile.Read(ref startupState) == StartupCancelled)
+                {
+                    return;
+                }
+
                 using Timer timer = new() { Interval = 1 };
                 timer.Tick += (_, _) =>
                 {
                     timer.Stop();
+
+                    if (Interlocked.CompareExchange(
+                        ref startupState,
+                        StartupStarted,
+                        StartupPending) != StartupPending)
+                    {
+                        threadContext.ExitThread();
+                        return;
+                    }
+
                     loopActive.Set();
 
                     try
@@ -259,9 +280,24 @@ public partial class ClipboardTests
         bool started = loopActive.Wait(s_messageLoopTimeout);
         if (!started)
         {
-            if (dispatcherReady.Wait(TimeSpan.Zero) && dispatcher is { IsHandleCreated: true })
+            int previousState = Interlocked.CompareExchange(
+                ref startupState,
+                StartupCancelled,
+                StartupPending);
+            started = previousState == StartupStarted;
+
+            if (!started
+                && dispatcherReady.Wait(TimeSpan.Zero)
+                && dispatcher is { IsHandleCreated: true })
             {
-                dispatcher.BeginInvoke(context!.ExitThread);
+                try
+                {
+                    dispatcher.BeginInvoke(context!.ExitThread);
+                }
+                catch (InvalidOperationException)
+                {
+                    // The worker observed cancellation and disposed the dispatcher before this request arrived.
+                }
             }
         }
 
