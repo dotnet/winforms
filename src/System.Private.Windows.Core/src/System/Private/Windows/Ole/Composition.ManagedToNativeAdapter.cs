@@ -143,7 +143,9 @@ internal unsafe partial class Composition<TOleServices, TNrbfSerializer, TDataFo
                 return HRESULT.DV_E_TYMED;
             }
 
-            if (!GetTymedUsable(format, (TYMED)pformatetc->tymed)
+            TYMED requestedTymed = (TYMED)pformatetc->tymed;
+            if (!requestedTymed.HasFlag(pmedium->tymed)
+                || !GetTymedUsable(format, requestedTymed)
                 || !GetTymedUsable(format, pmedium->tymed))
             {
                 return HRESULT.DV_E_TYMED;

@@ -330,12 +330,13 @@ internal static unsafe class ClipboardCore<TOleServices>
     private static void SetCurrentDataObject(IComVisibleDataObject dataObject, IDataObject* iDataObject)
     {
         AgileComPointer<IDataObject>? dataObjectPointer = new(iDataObject, takeOwnership: false);
+        AgileComPointer<IDataObject>? previousDataObjectPointer = null;
 
         try
         {
             lock (s_currentDataObjectLock)
             {
-                ClearCurrentDataObjectNoLock();
+                previousDataObjectPointer = s_currentDataObjectPointer;
                 s_currentDataObject = dataObject;
                 s_currentDataObjectPointer = dataObjectPointer;
                 dataObjectPointer = null;
@@ -345,6 +346,10 @@ internal static unsafe class ClipboardCore<TOleServices>
         {
             // If replacing the previous cache entry fails, do not leak the newly registered GIT cookie.
             dataObjectPointer?.Dispose();
+
+            // Revoking the previous pointer can re-enter SetData. Dispose it only after publishing the replacement so
+            // a re-entrant update cannot be overwritten by this call.
+            previousDataObjectPointer?.Dispose();
         }
     }
 

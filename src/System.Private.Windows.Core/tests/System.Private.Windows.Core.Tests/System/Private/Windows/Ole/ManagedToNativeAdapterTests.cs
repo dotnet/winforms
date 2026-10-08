@@ -4,6 +4,7 @@
 using Windows.Win32;
 using Windows.Win32.Foundation;
 using Windows.Win32.System.Com;
+using Windows.Win32.System.Memory;
 using Windows.Win32.System.Ole;
 using ComTypes = System.Runtime.InteropServices.ComTypes;
 
@@ -88,6 +89,37 @@ public unsafe class ManagedToNativeAdapterTests
         ((nint)medium.hGlobal).Should().Be(callerStorage.Handle);
         EmfNativeMethods.IsValid(callerStorage.Handle).Should().BeTrue();
         EmfTestOleServices<ManagedToNativeAdapterTests>.ManagedHandles.Should().BeEmpty();
+    }
+
+    [Fact]
+    public void GetDataHere_EnhancedMetafileOnlyRequestWithHGlobalStorage_ReturnsDvETymed()
+    {
+        EmfTestOleServices<ManagedToNativeAdapterTests>.Reset();
+        using MemoryStream source = new([0x45, 0x4D, 0x46]);
+        TestDataObject<EmfTestOleServices<ManagedToNativeAdapterTests>> dataObject =
+            new(DataFormatNames.Emf, source);
+        FORMATETC formatEtc = CreateEmfFormatEtc();
+        HGLOBAL callerStorage = PInvokeCore.GlobalAlloc(
+            GLOBAL_ALLOC_FLAGS.GMEM_MOVEABLE | GLOBAL_ALLOC_FLAGS.GMEM_ZEROINIT,
+            3);
+        callerStorage.IsNull.Should().BeFalse();
+        STGMEDIUM medium = new()
+        {
+            tymed = TYMED.TYMED_HGLOBAL,
+            hGlobal = callerStorage
+        };
+
+        try
+        {
+            dataObject.GetDataHere(&formatEtc, &medium).Should().Be(HRESULT.DV_E_TYMED);
+
+            medium.tymed.Should().Be(TYMED.TYMED_HGLOBAL);
+            medium.hGlobal.Should().Be(callerStorage);
+        }
+        finally
+        {
+            PInvokeCore.GlobalFree(medium.hGlobal);
+        }
     }
 
     [Fact]
