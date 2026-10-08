@@ -83,12 +83,16 @@ internal static unsafe class ClipboardCore<TOleServices>
     {
         TOleServices.EnsureThreadState();
 
+        CurrentDataObjectEntry? entry;
         HRESULT result;
         int retryCount = retryTimes;
 
-        while ((result = TOleServices.OleSetClipboard(null)).Failed)
+        while (true)
         {
-            if (--retryCount < 0)
+            entry = Volatile.Read(ref s_currentDataObject);
+            result = TOleServices.OleSetClipboard(null);
+
+            if (result.Succeeded || --retryCount < 0)
             {
                 break;
             }
@@ -98,7 +102,7 @@ internal static unsafe class ClipboardCore<TOleServices>
 
         if (result.Succeeded)
         {
-            ClearCurrentDataObject();
+            ClearCurrentDataObject(entry);
         }
 
         return result;
@@ -114,12 +118,16 @@ internal static unsafe class ClipboardCore<TOleServices>
     {
         TOleServices.EnsureThreadState();
 
+        CurrentDataObjectEntry? entry;
         HRESULT result;
         int retryCount = retryTimes;
 
-        while ((result = TOleServices.OleFlushClipboard()).Failed)
+        while (true)
         {
-            if (--retryCount < 0)
+            entry = Volatile.Read(ref s_currentDataObject);
+            result = TOleServices.OleFlushClipboard();
+
+            if (result.Succeeded || --retryCount < 0)
             {
                 break;
             }
@@ -129,7 +137,7 @@ internal static unsafe class ClipboardCore<TOleServices>
 
         if (result.Succeeded)
         {
-            ClearCurrentDataObject();
+            ClearCurrentDataObject(entry);
         }
 
         return result;
@@ -172,18 +180,26 @@ internal static unsafe class ClipboardCore<TOleServices>
 
         if (copy)
         {
+            CurrentDataObjectEntry? entry;
             retryCount = retryTimes;
-            while ((result = TOleServices.OleFlushClipboard()).Failed)
+
+            while (true)
             {
-                if (--retryCount < 0)
+                entry = Volatile.Read(ref s_currentDataObject);
+                result = TOleServices.OleFlushClipboard();
+
+                if (result.Succeeded || --retryCount < 0)
                 {
-                    return result;
+                    break;
                 }
 
                 Thread.Sleep(millisecondsTimeout: retryDelay);
             }
 
-            ClearCurrentDataObject();
+            if (result.Succeeded)
+            {
+                ClearCurrentDataObject(entry);
+            }
         }
 
         return result;
@@ -438,11 +454,20 @@ internal static unsafe class ClipboardCore<TOleServices>
         }
     }
 
-    private static void ClearCurrentDataObject()
+    private static void ClearCurrentDataObject(CurrentDataObjectEntry? entry)
     {
-        // Detach the entry before releasing the cache reference because revoking its GIT cookie can re-enter this type.
-        CurrentDataObjectEntry? entry = Interlocked.Exchange(ref s_currentDataObject, null);
-        entry?.ReleaseReference();
+        // Clear only the entry associated with the completed operation. A concurrent SetData may have already published
+        // a newer owner, which must retain its cache reference.
+        if (entry is null
+            || !ReferenceEquals(
+                Interlocked.CompareExchange(ref s_currentDataObject, null, entry),
+                entry))
+        {
+            return;
+        }
+
+        // Release after detaching because revoking the GIT cookie can re-enter this type.
+        entry.ReleaseReference();
     }
 
     /// <summary>

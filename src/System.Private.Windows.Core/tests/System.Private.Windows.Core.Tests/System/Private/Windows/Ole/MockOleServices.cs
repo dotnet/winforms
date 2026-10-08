@@ -16,7 +16,11 @@ internal class MockOleServices<TTestClass> : IOleServices
 {
     private static DataObjectProxy? s_dataObjectProxy;
 
+    public static Action? AfterOleFlushClipboard { get; set; }
+    public static Action<bool>? AfterOleSetClipboard { get; set; }
     public static Action? BeforeOleIsCurrentClipboard { get; set; }
+    public static HRESULT? NextOleFlushClipboardResult { get; set; }
+    public static HRESULT? NextOleSetClipboardResult { get; set; }
     public static int OleIsCurrentClipboardCallCount { get; private set; }
 
     public static unsafe void SimulateExternalClipboardChange(IComVisibleDataObject dataObject)
@@ -44,8 +48,11 @@ internal class MockOleServices<TTestClass> : IOleServices
 
     static HRESULT IOleServices.OleFlushClipboard()
     {
-        // Would need to implement copying the raw TYMED data into a new object to mimic the real behavior.
-        throw new NotImplementedException();
+        HRESULT result = NextOleFlushClipboardResult ?? HRESULT.S_OK;
+        NextOleFlushClipboardResult = null;
+        AfterOleFlushClipboard?.Invoke();
+
+        return result;
     }
 
     static unsafe HRESULT IOleServices.OleGetClipboard(IDataObject** dataObject)
@@ -66,7 +73,14 @@ internal class MockOleServices<TTestClass> : IOleServices
         return HRESULT.S_OK;
     }
 
-    static unsafe HRESULT IOleServices.OleSetClipboard(IDataObject* dataObject) => SetClipboard(dataObject);
+    static unsafe HRESULT IOleServices.OleSetClipboard(IDataObject* dataObject)
+    {
+        HRESULT result = NextOleSetClipboardResult ?? SetClipboard(dataObject);
+        NextOleSetClipboardResult = null;
+        AfterOleSetClipboard?.Invoke(dataObject is null);
+
+        return result;
+    }
 
     private static unsafe HRESULT SetClipboard(IDataObject* dataObject)
     {
