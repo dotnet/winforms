@@ -22,24 +22,55 @@ internal static unsafe class ClipboardCore<TOleServices>
     /// </summary>
     private const int OleRetryDelay = 100;
 
-#if NET9_0_OR_GREATER
-    private static readonly Lock s_currentDataObjectLock = new();
-#else
-    private static readonly object s_currentDataObjectLock = new();
-#endif
     // Keep the managed owner alive for delayed OLE rendering. This is a bounded, single-owner cache; the shared layer
     // has no clipboard-change notification, so external replacement is detected and released on the next operation.
-    // Readers lease an entry so its agile pointer remains valid while COM operations run outside the cache lock.
+    // Readers add a reference so its agile pointer remains valid while COM operations run outside synchronization.
     private static CurrentDataObjectEntry? s_currentDataObject;
 
     private sealed class CurrentDataObjectEntry(
         IComVisibleDataObject dataObject,
         AgileComPointer<IDataObject> dataObjectPointer)
     {
+        // The initial reference is owned by s_currentDataObject. Readers acquire additional references so replacing
+        // the cache entry cannot revoke its GIT cookie while they are using it.
+        private int _referenceCount = 1;
+
         public IComVisibleDataObject DataObject { get; } = dataObject;
         public AgileComPointer<IDataObject> DataObjectPointer { get; } = dataObjectPointer;
-        public int ActiveReaders { get; set; }
-        public bool IsDetached { get; set; }
+
+        public bool TryAddReference()
+        {
+            int referenceCount = Volatile.Read(ref _referenceCount);
+
+            // Do not increment from zero: the final release may already be disposing the agile pointer.
+            while (referenceCount > 0)
+            {
+                int observedReferenceCount = Interlocked.CompareExchange(
+                    ref _referenceCount,
+                    referenceCount + 1,
+                    referenceCount);
+
+                if (observedReferenceCount == referenceCount)
+                {
+                    return true;
+                }
+
+                referenceCount = observedReferenceCount;
+            }
+
+            return false;
+        }
+
+        public void ReleaseReference()
+        {
+            int referenceCount = Interlocked.Decrement(ref _referenceCount);
+            Debug.Assert(referenceCount >= 0);
+
+            if (referenceCount == 0)
+            {
+                DataObjectPointer.Dispose();
+            }
+        }
     }
 
     /// <summary>
@@ -308,17 +339,31 @@ internal static unsafe class ClipboardCore<TOleServices>
         CurrentDataObjectEntry entry;
         TDataObject dataObjectInternal;
 
-        lock (s_currentDataObjectLock)
+        while (true)
         {
-            if (s_currentDataObject is not { DataObject: TDataObject currentDataObject } currentEntry)
+            CurrentDataObjectEntry? currentEntry = Volatile.Read(ref s_currentDataObject);
+            if (currentEntry?.DataObject is not TDataObject currentDataObject)
             {
                 dataObject = null;
                 return false;
             }
 
+            if (!currentEntry.TryAddReference())
+            {
+                continue;
+            }
+
+            // The entry may have been replaced between reading the cache and acquiring the reference. Keep the
+            // reference only when this is still the published entry, otherwise retry with the replacement.
+            if (!ReferenceEquals(Volatile.Read(ref s_currentDataObject), currentEntry))
+            {
+                currentEntry.ReleaseReference();
+                continue;
+            }
+
             entry = currentEntry;
             dataObjectInternal = currentDataObject;
-            entry.ActiveReaders++;
+            break;
         }
 
         try
@@ -334,109 +379,70 @@ internal static unsafe class ClipboardCore<TOleServices>
                 }
             }
 
-            lock (s_currentDataObjectLock)
+            if (!ReferenceEquals(Volatile.Read(ref s_currentDataObject), entry))
             {
-                if (!ReferenceEquals(s_currentDataObject, entry))
-                {
-                    dataObject = null;
-                    return false;
-                }
+                dataObject = null;
+                return false;
+            }
 
-                // The originating apartment may have exited, or clipboard ownership may have changed externally.
-                // In either case discard the stale cache and fall back to the current OLE clipboard proxy.
-                if (interfaceResult.Failed || ownershipResult != HRESULT.S_OK)
+            // The originating apartment may have exited, or clipboard ownership may have changed externally.
+            // In either case discard the stale cache and fall back to the current OLE clipboard proxy.
+            if (interfaceResult.Failed || ownershipResult != HRESULT.S_OK)
+            {
+                // Clear only the entry that was checked. A concurrent SetData may already have published a valid
+                // replacement, in which case that thread owns releasing this entry's cache reference.
+                if (ReferenceEquals(
+                    Interlocked.CompareExchange(ref s_currentDataObject, null, entry),
+                    entry))
                 {
-                    s_currentDataObject = null;
-                    entry.IsDetached = true;
-                    dataObject = null;
-                    return false;
-                }
-
-                if (unwrapUserDataObject)
-                {
-                    return dataObjectInternal.TryUnwrapUserDataObject(out dataObject);
+                    // Release the reference previously owned by s_currentDataObject.
+                    entry.ReleaseReference();
                 }
 
                 dataObject = null;
                 return false;
             }
+
+            if (unwrapUserDataObject)
+            {
+                return dataObjectInternal.TryUnwrapUserDataObject(out dataObject);
+            }
+
+            dataObject = null;
+            return false;
         }
         finally
         {
-            ReleaseCurrentDataObjectEntry(entry);
+            entry.ReleaseReference();
         }
     }
 
     private static void SetCurrentDataObject(IComVisibleDataObject dataObject, IDataObject* iDataObject)
     {
         AgileComPointer<IDataObject>? dataObjectPointer = new(iDataObject, takeOwnership: false);
-        AgileComPointer<IDataObject>? previousDataObjectPointer = null;
 
         try
         {
             CurrentDataObjectEntry entry = new(dataObject, dataObjectPointer);
 
-            lock (s_currentDataObjectLock)
-            {
-                previousDataObjectPointer = DetachCurrentDataObjectNoLock();
-                s_currentDataObject = entry;
-                dataObjectPointer = null;
-            }
+            // Publish the replacement before releasing the previous cache reference. Its final release can revoke a
+            // GIT cookie and re-enter SetData; publishing first ensures a reentrant replacement remains authoritative.
+            CurrentDataObjectEntry? previousEntry = Interlocked.Exchange(ref s_currentDataObject, entry);
+            dataObjectPointer = null;
+            previousEntry?.ReleaseReference();
         }
         finally
         {
             // If replacing the previous cache entry fails, do not leak the newly registered GIT cookie.
             dataObjectPointer?.Dispose();
-
-            // Revoking the previous pointer can re-enter SetData. Dispose it only after publishing the replacement so
-            // a re-entrant update cannot be overwritten by this call.
-            previousDataObjectPointer?.Dispose();
         }
     }
 
     private static void ClearCurrentDataObject()
     {
-        AgileComPointer<IDataObject>? dataObjectPointer;
-
-        lock (s_currentDataObjectLock)
-        {
-            dataObjectPointer = DetachCurrentDataObjectNoLock();
-        }
-
-        dataObjectPointer?.Dispose();
-    }
-
-    private static AgileComPointer<IDataObject>? DetachCurrentDataObjectNoLock()
-    {
-        CurrentDataObjectEntry? entry = s_currentDataObject;
-        s_currentDataObject = null;
-
-        if (entry is null)
-        {
-            return null;
-        }
-
-        entry.IsDetached = true;
-
-        return entry.ActiveReaders == 0 ? entry.DataObjectPointer : null;
-    }
-
-    private static void ReleaseCurrentDataObjectEntry(CurrentDataObjectEntry entry)
-    {
-        AgileComPointer<IDataObject>? dataObjectPointer = null;
-
-        lock (s_currentDataObjectLock)
-        {
-            Debug.Assert(entry.ActiveReaders > 0);
-            entry.ActiveReaders--;
-
-            if (entry.IsDetached && entry.ActiveReaders == 0)
-            {
-                dataObjectPointer = entry.DataObjectPointer;
-            }
-        }
-
-        dataObjectPointer?.Dispose();
+        // Detach the entry before releasing the cache reference because revoking its GIT cookie can re-enter this type.
+        CurrentDataObjectEntry? entry = Interlocked.Exchange(ref s_currentDataObject, null);
+        entry?.ReleaseReference();
     }
 
     /// <summary>
