@@ -25,7 +25,7 @@ namespace System.Windows.Forms;
 /// </summary>
 /// <remarks>
 ///  <para>
-///   Do not add instance variables to Control absolutely necessary. Every control on a form has the overhead of
+///   Do not add instance variables to Control unless absolutely necessary. Every control on a form has the overhead of
 ///   all of these variables.
 ///  </para>
 /// </remarks>
