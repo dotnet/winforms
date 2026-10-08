@@ -13,6 +13,44 @@ Follow the prerequisites listed at [Developer Guide](developer-guide.md).
 
 Note that this does **not** build using your machine-wide installed version of the dotnet sdk. It builds using the repo-local .NET SDK specified in the global.json in the repository root.
 
+### Windows x64 and ARM64 builds
+
+Run `.\build.cmd` or `.\Restore.cmd` normally on either machine architecture. A fresh SDK
+installation uses the OS architecture, even from an emulated shell. Existing installations
+retain the architecture of their actual `dotnet.exe`; an x64 SDK running under emulation on
+ARM64 is not replaced or stripped of its x64 runtimes.
+If a checkout containing an ARM64 SDK is reused on x64, restore preserves that SDK and
+bootstraps an executable x64 SDK in its `x64` subdirectory instead.
+
+The target is independent of the SDK architecture. Builds default applications and tests to
+the OS architecture. Use `.\build.cmd -platform arm64`, `-platform x64`, or `-platform x86`
+to select a target explicitly. Source generators and analyzers retain the solution's
+Any CPU mappings. Cross-compiling does not make ARM64 executables runnable on an x64 machine.
+
+Restore installs the SDK architecture's runtime alongside the SDK. Other architectures go
+into the active installation's `arm64`, `x64`, or `x86` subdirectories. The runtime cache checks
+the architecture and presence of the host, resolver, and runtime, not just a version directory.
+Incomplete entries are preserved and reinstalled rather than silently skipped.
+
+For a separate SDK installation, set `DOTNET_GLOBAL_INSTALL_DIR` before running the build or
+restore scripts. `global.json` prefers the SDK muxer's own installation before falling back
+to `.dotnet`, so an external x64 SDK does not load ARM64 SDK binaries (or vice versa).
+`start-vs.cmd` and `start-code.cmd` also honor this root and expose architecture-specific
+runtime roots for launched applications.
+
+Older mixed-architecture installations are repaired relative to their **SDK muxer**, not the
+OS. Incompatible version directories are preserved under the installation's `legacy-runtimes`
+directory. Repair checks both `hostfxr.dll` and `coreclr.dll`, and refuses to move any files
+if that would leave the muxer without a compatible resolver.
+
+The changes use repository-owned scripts, `eng\configure-toolset.ps1`, and `eng\Tools.props`;
+the synchronized `eng\common` files are unchanged. PR build jobs run these regression checks:
+
+```powershell
+powershell -NoProfile -ExecutionPolicy Bypass -File .\eng\tests\BuildScript.Tests.ps1
+powershell -NoProfile -ExecutionPolicy Bypass -File .\eng\tests\DotNetArchitecture.Tests.ps1
+```
+
 ### Building from Visual Studio
 
 1. .NET 6.0 and above branches need VisualStudio 2022 to build.

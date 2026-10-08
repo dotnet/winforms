@@ -18,6 +18,8 @@
     <GenerateDocumentationFile>True</GenerateDocumentationFile>
     <PublishWindowsPdb>false</PublishWindowsPdb>
 
+    <TargetArchitecture Condition="'$(TargetArchitecture)' == '' and ('$(Platform)' == 'arm64' or '$(Platform)' == 'x64' or '$(Platform)' == 'x86')">$(Platform)</TargetArchitecture>
+    <TargetArchitecture Condition="'$(TargetArchitecture)' == '' and '$(OS)' == 'Windows_NT' and $([System.Runtime.InteropServices.RuntimeInformation]::OSArchitecture) == 'Arm64'">arm64</TargetArchitecture>
     <DefaultAppHostRuntimeIdentifier Condition="'$(TargetArchitecture)'!=''">win-$(TargetArchitecture)</DefaultAppHostRuntimeIdentifier>
   </PropertyGroup>
 
