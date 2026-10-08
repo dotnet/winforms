@@ -162,30 +162,40 @@ public class ToolTipTests
     }
 
     [WinFormsFact]
-    public void ToolTip_CreateParams_AssociatedControlMirrored_SetsLayoutRtlExStyle_EvenWhenFormIsNotMirrored()
+    public void ToolTip_CreateHandle_AssociatedControlMirrored_SetsLayoutRtlExStyle()
     {
-        // Regression test: a control such as TrackBar/TabControl/DateTimePicker declares its own
-        // RightToLeftLayout independently of its containing Form. The tooltip must still mirror
-        // when the associated control itself is mirrored, even though the Form is not.
-        using SubToolTip toolTip = new();
         using Form form = new();
         using TrackBar trackBar = new()
         {
             RightToLeft = RightToLeft.Yes,
             RightToLeftLayout = true
         };
-        form.Controls.Add(trackBar);
-        form.CreateControl();
-        trackBar.CreateControl();
+        using SubToolTip toolTip = new()
+        {
+            IsBalloon = true,
+            ToolTipTitle = "Hi"
+        };
 
-        toolTip.SetToolTip(trackBar, "Hello");
+        form.Controls.Add(trackBar);
+        form.Show();
 
         Assert.True(trackBar.IsMirrored);
         Assert.False(form.IsMirrored);
 
-        CreateParams createParams = toolTip.CreateParams;
-        int expectedExStyle = (int)(WINDOW_EX_STYLE.WS_EX_LAYOUTRTL | WINDOW_EX_STYLE.WS_EX_NOINHERITLAYOUT);
-        Assert.Equal(expectedExStyle, createParams.ExStyle);
+        toolTip.SetToolTip(trackBar, "Tooltip text");
+
+        Assert.True(toolTip.GetHandleCreated());
+
+        WINDOW_EX_STYLE actualExStyle = unchecked(
+           (WINDOW_EX_STYLE)(long)PInvokeCore.GetWindowLong(
+                toolTip,
+               WINDOW_LONG_PTR_INDEX.GWL_EXSTYLE));
+
+        WINDOW_EX_STYLE expectedExStyle =
+            WINDOW_EX_STYLE.WS_EX_LAYOUTRTL |
+            WINDOW_EX_STYLE.WS_EX_NOINHERITLAYOUT;
+
+        Assert.Equal(expectedExStyle, actualExStyle & expectedExStyle);
     }
 
     [WinFormsFact]
