@@ -29,7 +29,7 @@ public class ListBoxSelectedIndexCollectionTests
         using ListBox owner = new();
         ICollection collection = new ListBox.SelectedIndexCollection(owner);
         Assert.Empty(collection);
-        Assert.True(collection.IsSynchronized);
+        Assert.False(collection.IsSynchronized);
         Assert.Same(collection, collection.SyncRoot);
     }
 
@@ -41,7 +41,7 @@ public class ListBoxSelectedIndexCollectionTests
         Assert.Empty(collection);
         Assert.True(collection.IsFixedSize);
         Assert.True(collection.IsReadOnly);
-        Assert.True(collection.IsSynchronized);
+        Assert.False(collection.IsSynchronized);
         Assert.Same(collection, collection.SyncRoot);
     }
 

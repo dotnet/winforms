@@ -22,7 +22,8 @@ public static unsafe partial class ControlPaint
         Rectangle bounds,
         ModernControlButtonStyle button,
         ModernControlButtonState state,
-        bool isDarkMode)
+        bool isDarkMode,
+        double contentScaleOverride = 1.0)
     {
         ArgumentNullException.ThrowIfNull(graphics);
 
@@ -136,7 +137,13 @@ public static unsafe partial class ControlPaint
                     | ModernControlButtonStyle.RoundedBorder);
 
             bool isPressed = state == ModernControlButtonState.Pressed;
-            DrawButtonContent(graphics, bounds, contentType, arrowColor, isPressed);
+            DrawButtonContent(
+                graphics,
+                bounds,
+                contentType,
+                arrowColor,
+                isPressed,
+                contentScaleOverride);
         }
         finally
         {
@@ -152,7 +159,8 @@ public static unsafe partial class ControlPaint
         Rectangle bounds,
         ModernControlButtonStyle buttonType,
         Color contentColor,
-        bool isPressed)
+        bool isPressed,
+        double contentScaleOverride)
     {
         // Calculate center point
         int centerX = bounds.X + bounds.Width / 2;
@@ -174,35 +182,35 @@ public static unsafe partial class ControlPaint
                 break;
 
             case ModernControlButtonStyle.Up:
-                DrawUpArrow(graphics, contentBrush, centerX, centerY, ScaleSymbolSize(bounds));
+                DrawUpArrow(graphics, contentBrush, centerX, centerY, ScaleSymbolSize(bounds, contentScaleOverride));
                 break;
 
             case ModernControlButtonStyle.Down:
-                DrawDownArrow(graphics, contentBrush, centerX, centerY, ScaleSymbolSize(bounds));
+                DrawDownArrow(graphics, contentBrush, centerX, centerY, ScaleSymbolSize(bounds, contentScaleOverride));
                 break;
 
             case ModernControlButtonStyle.UpDown:
-                DrawUpDownArrows(graphics, contentBrush, centerX, centerY, bounds);
+                DrawUpDownArrows(graphics, contentBrush, centerX, centerY, bounds, contentScaleOverride);
                 break;
 
             case ModernControlButtonStyle.Left:
-                DrawLeftArrow(graphics, contentBrush, centerX, centerY, ScaleSymbolSize(bounds));
+                DrawLeftArrow(graphics, contentBrush, centerX, centerY, ScaleSymbolSize(bounds, contentScaleOverride));
                 break;
 
             case ModernControlButtonStyle.Right:
-                DrawRightArrow(graphics, contentBrush, centerX, centerY, ScaleSymbolSize(bounds));
+                DrawRightArrow(graphics, contentBrush, centerX, centerY, ScaleSymbolSize(bounds, contentScaleOverride));
                 break;
 
             case ModernControlButtonStyle.RightLeft:
-                DrawLeftRightArrows(graphics, contentBrush, centerX, centerY, bounds);
+                DrawLeftRightArrows(graphics, contentBrush, centerX, centerY, bounds, contentScaleOverride);
                 break;
 
             case ModernControlButtonStyle.Ellipse:
-                DrawEllipseSymbol(graphics, contentBrush, centerX, centerY, bounds);
+                DrawEllipseSymbol(graphics, contentBrush, centerX, centerY, bounds, contentScaleOverride);
                 break;
 
             case ModernControlButtonStyle.OpenDropDown:
-                DrawOpenDropDownChevron(graphics, contentBrush, centerX, centerY, ScaleSymbolSize(bounds));
+                DrawOpenDropDownChevron(graphics, contentBrush, centerX, centerY, ScaleSymbolSize(bounds, contentScaleOverride));
                 break;
         }
     }
@@ -210,7 +218,7 @@ public static unsafe partial class ControlPaint
     /// <summary>
     ///  Calculates the arrow size based on button bounds and DPI scaling.
     /// </summary>
-    private static int ScaleSymbolSize(Rectangle bounds)
+    private static int ScaleSymbolSize(Rectangle bounds, double contentScaleOverride)
     {
         // Base size is calculated as a fraction of the smaller dimension
         int minDimension = Math.Min(bounds.Width, bounds.Height);
@@ -220,7 +228,7 @@ public static unsafe partial class ControlPaint
         const double baseSymbolRatio = 0.4;
 
         // Calculate the symbol size with scaling factor applied
-        int symbolSize = (int)(minDimension * baseSymbolRatio * ContentScaleFactor);
+        int symbolSize = (int)(minDimension * baseSymbolRatio * ContentScaleFactor * contentScaleOverride);
 
         // Ensure we always have at least a 1-pixel symbol
         return Math.Max(1, symbolSize);
@@ -229,10 +237,10 @@ public static unsafe partial class ControlPaint
     /// <summary>
     ///  Draws combined up/down arrows with proportional spacing.
     /// </summary>
-    private static void DrawUpDownArrows(Graphics graphics, Brush brush, int centerX, int centerY, Rectangle bounds)
+    private static void DrawUpDownArrows(Graphics graphics, Brush brush, int centerX, int centerY, Rectangle bounds, double contentScaleOverride)
     {
         // Get the base symbol size
-        int baseArrowSize = ScaleSymbolSize(bounds);
+        int baseArrowSize = ScaleSymbolSize(bounds, contentScaleOverride);
 
         // For combined arrows, reduce size slightly to fit both with spacing
         int arrowSize = (int)(baseArrowSize * 0.7);
@@ -257,10 +265,10 @@ public static unsafe partial class ControlPaint
     /// <summary>
     ///  Draws combined left/right arrows with proportional spacing.
     /// </summary>
-    private static void DrawLeftRightArrows(Graphics graphics, Brush brush, int centerX, int centerY, Rectangle bounds)
+    private static void DrawLeftRightArrows(Graphics graphics, Brush brush, int centerX, int centerY, Rectangle bounds, double contentScaleOverride)
     {
         // Get the base symbol size
-        int baseArrowSize = ScaleSymbolSize(bounds);
+        int baseArrowSize = ScaleSymbolSize(bounds, contentScaleOverride);
 
         // For combined arrows, reduce size slightly to fit both with spacing
         int arrowSize = (int)(baseArrowSize * 0.7);
@@ -285,11 +293,11 @@ public static unsafe partial class ControlPaint
     /// <summary>
     ///  Draws an ellipse symbol (...) with DPI-aware sizing.
     /// </summary>
-    private static void DrawEllipseSymbol(Graphics graphics, Brush brush, int centerX, int centerY, Rectangle bounds)
+    private static void DrawEllipseSymbol(Graphics graphics, Brush brush, int centerX, int centerY, Rectangle bounds, double contentScaleOverride)
     {
         // Calculate dot size as a proportion of button height
         int minDimension = Math.Min(bounds.Width, bounds.Height);
-        int dotSize = Math.Max(1, (int)(minDimension * 0.1 * ContentScaleFactor));
+        int dotSize = Math.Max(1, (int)(minDimension * 0.1 * ContentScaleFactor * contentScaleOverride));
 
         // Calculate proportional spacing
         int spacing = Math.Max(1, dotSize / 2);

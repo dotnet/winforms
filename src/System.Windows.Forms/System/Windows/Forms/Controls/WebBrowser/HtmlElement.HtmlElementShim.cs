@@ -43,7 +43,7 @@ public sealed partial class HtmlElement
             typeof(Interop.Mshtml.DHTMLScriptEvents2)
         ];
 
-        private readonly AgileComPointer<IHTMLWindow2>? _associatedWindow;
+        private AgileComPointer<IHTMLWindow2>? _associatedWindow;
         private AxHost.ConnectionPointCookie? _cookie;   // To hook up events from the native HtmlElement
         private HtmlElement _htmlElement;
 
@@ -70,18 +70,24 @@ public sealed partial class HtmlElement
         internal HtmlElement Element => _htmlElement;
 
         /// Support IHTMLElement2.AttachEventHandler
-        public override void AttachEventHandler(string eventName, EventHandler eventHandler)
+        protected override bool AttachEventProxy(HtmlToClrEventProxy proxy)
         {
             // IE likes to call back on an IDispatch of DISPID=0 when it has an event,
             // the HtmlToClrEventProxy helps us fake out the CLR so that we can call back on
             // our EventHandler properly.
 
-            HtmlToClrEventProxy proxy = AddEventProxy(eventName, eventHandler);
             using var htmlElement2 = _htmlElement.GetHtmlElement<IHTMLElement2>();
-            using BSTR name = new(eventName);
+            using BSTR name = new(proxy.EventName);
             using var dispatch = ComHelpers.GetComScope<IDispatch>(proxy);
             VARIANT_BOOL result;
             htmlElement2.Value->attachEvent(name, dispatch, &result).ThrowOnFailure();
+            if (IsDisposed && result)
+            {
+                htmlElement2.Value->detachEvent(name, dispatch).ThrowOnFailure();
+                ObjectDisposedException.ThrowIf(IsDisposed, this);
+            }
+
+            return result;
         }
 
         public override void ConnectToEvents()
@@ -90,45 +96,60 @@ public sealed partial class HtmlElement
             {
                 for (int i = 0; i < s_dispInterfaceTypes.Length && _cookie is null; i++)
                 {
-                    _cookie = new AxHost.ConnectionPointCookie(
+                    AxHost.ConnectionPointCookie cookie = new(
                         NativeHtmlElement,
                         new HTMLElementEvents2(_htmlElement),
                         s_dispInterfaceTypes[i],
                         throwException: false);
-                    if (!_cookie.Connected)
+                    if (IsDisposed)
                     {
-                        _cookie = null;
+                        cookie.Disconnect();
+                        return;
                     }
+
+                    _cookie = cookie.Connected ? cookie : null;
                 }
             }
         }
 
         /// Support IHTMLElement2.DetachHandler
-        public override void DetachEventHandler(string eventName, EventHandler eventHandler)
+        protected override void DetachEventProxy(HtmlToClrEventProxy proxy)
         {
-            HtmlToClrEventProxy? proxy = RemoveEventProxy(eventHandler);
-            if (proxy is not null)
-            {
-                using var htmlElement2 = _htmlElement.GetHtmlElement<IHTMLElement2>();
-                using BSTR name = new(eventName);
-                using var dispatch = ComHelpers.GetComScope<IDispatch>(proxy);
-                htmlElement2.Value->detachEvent(name, dispatch).ThrowOnFailure();
-            }
+            using var htmlElement2 = _htmlElement.GetHtmlElement<IHTMLElement2>();
+            using BSTR name = new(proxy.EventName);
+            using var dispatch = ComHelpers.GetComScope<IDispatch>(proxy);
+            htmlElement2.Value->detachEvent(name, dispatch).ThrowOnFailure();
         }
 
         public override void DisconnectFromEvents()
         {
-            _cookie?.Disconnect();
+            AxHost.ConnectionPointCookie? cookie = _cookie;
             _cookie = null;
+            cookie?.Disconnect();
         }
 
         protected override void Dispose(bool disposing)
         {
-            base.Dispose(disposing);
-            if (disposing)
+            try
             {
-                _htmlElement?.NativeHtmlElement?.Dispose();
-                _htmlElement = null!;
+                base.Dispose(disposing);
+            }
+            finally
+            {
+                if (disposing)
+                {
+                    HtmlElement? element = _htmlElement;
+                    _htmlElement = null!;
+                    try
+                    {
+                        element?.NativeHtmlElement.Dispose();
+                    }
+                    finally
+                    {
+                        // Unadvising does not release the separate registration used to identify the owning window.
+                        DisposeHelper.NullAndDispose(ref _associatedWindow);
+                    }
+                }
             }
         }
 

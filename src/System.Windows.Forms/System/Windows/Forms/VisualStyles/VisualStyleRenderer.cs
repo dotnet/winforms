@@ -287,7 +287,7 @@ public sealed class VisualStyleRenderer : IHandle<HTHEME>
             bounds,
             (DRAWEDGE_FLAGS)style,
             (DRAW_EDGE_FLAGS)edges | (DRAW_EDGE_FLAGS)effects | DRAW_EDGE_FLAGS.BF_ADJUST,
-            &contentRect);
+            out contentRect);
 
         return contentRect;
     }
@@ -454,7 +454,7 @@ public sealed class VisualStyleRenderer : IHandle<HTHEME>
 
         using DeviceContextHdcScope hdc = dc.ToHdcScope();
         HRGN hrgn;
-        _lastHResult = PInvoke.GetThemeBackgroundRegion(HTHEME, hdc, Part, State, bounds, &hrgn);
+        _lastHResult = PInvoke.GetThemeBackgroundRegion(HTHEME, hdc, Part, State, bounds, out hrgn);
 
         // GetThemeBackgroundRegion returns a null hRegion if it fails to create one, it could be because the bounding
         // box is too big. For more info see code in %xpsrc%\shell\themes\uxtheme\imagefile.cpp if you have an enlistment to it.

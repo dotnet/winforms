@@ -33,17 +33,11 @@ public abstract partial class UpDownBase
                             return Rectangle.Empty;
                         }
 
-                        // Get button bounds
-                        Rectangle bounds = owner.Bounds;
-                        bounds.Height /= 2;
+                        // Get button bounds (client-relative), honoring the stacked vs side-by-side layout.
+                        Rectangle bounds = owner.GetButtonRectangle(_up ? ButtonID.Up : ButtonID.Down);
 
-                        if (!_up)
-                        {
-                            bounds.Y += bounds.Height;
-                        }
-
-                        // Convert to screen coords
-                        return owner.ParentInternal?.RectangleToScreen(bounds) ?? Rectangle.Empty;
+                        // Convert from the buttons' client coordinates to screen coordinates.
+                        return owner.RectangleToScreen(bounds);
                     }
                 }
 

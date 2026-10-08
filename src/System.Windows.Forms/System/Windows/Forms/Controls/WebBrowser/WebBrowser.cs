@@ -1108,15 +1108,33 @@ public unsafe partial class WebBrowser : WebBrowserBase
 
     protected override void Dispose(bool disposing)
     {
-        if (disposing)
+        try
         {
-            _htmlShimManager?.Dispose();
-
-            DetachSink();
-            ActiveXSite.Dispose();
+            if (disposing)
+            {
+                try
+                {
+                    _htmlShimManager?.Dispose();
+                }
+                finally
+                {
+                    // A failed HTML detach must not prevent the browser's own event/site and
+                    // native instance from being released. The original error still propagates.
+                    try
+                    {
+                        DetachSink();
+                    }
+                    finally
+                    {
+                        ActiveXSite.Dispose();
+                    }
+                }
+            }
         }
-
-        base.Dispose(disposing);
+        finally
+        {
+            base.Dispose(disposing);
+        }
     }
 
     /// <summary>

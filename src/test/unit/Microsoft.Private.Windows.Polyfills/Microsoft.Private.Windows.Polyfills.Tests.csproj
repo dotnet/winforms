@@ -14,6 +14,9 @@
       doesn't properly recognize this on .NET Framework.
     -->
     <NoWarn>$(NoWarn);CA1822</NoWarn>
+
+    <!-- Keep RuntimeIdentifier inference and the test host architecture consistent with the requested architecture. -->
+    <PlatformTarget>$(TargetArchitecture)</PlatformTarget>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(TargetFramework)' == '$(NetCurrent)'">

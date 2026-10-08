@@ -114,10 +114,13 @@ public class FlatButtonAppearance
     [SRCategory(nameof(SR.CatAppearance))]
     [SRDescription(nameof(SR.ButtonMouseDownBackColorDescr))]
     [EditorBrowsable(EditorBrowsableState.Always)]
-    [DefaultValue(typeof(Color), "")]
     public Color MouseDownBackColor
     {
-        get => _mouseDownBackColor;
+        get => _mouseDownBackColor.IsEmpty
+            && _owner.FlatStyle != FlatStyle.Popup
+            && _owner.EffectiveVisualStylesModeInternal >= VisualStylesMode.Net11
+            ? ModernButtonColorMath.GetMouseDownColor()
+            : _mouseDownBackColor;
         set
         {
             if (_mouseDownBackColor != value)
@@ -138,10 +141,13 @@ public class FlatButtonAppearance
     [SRCategory(nameof(SR.CatAppearance))]
     [SRDescription(nameof(SR.ButtonMouseOverBackColorDescr))]
     [EditorBrowsable(EditorBrowsableState.Always)]
-    [DefaultValue(typeof(Color), "")]
     public Color MouseOverBackColor
     {
-        get => _mouseOverBackColor;
+        get => _mouseOverBackColor.IsEmpty
+            && _owner.FlatStyle != FlatStyle.Popup
+            && _owner.EffectiveVisualStylesModeInternal >= VisualStylesMode.Net11
+            ? ModernButtonColorMath.GetMouseOverColor(_owner, this)
+            : _mouseOverBackColor;
         set
         {
             if (_mouseOverBackColor != value)
@@ -151,4 +157,16 @@ public class FlatButtonAppearance
             }
         }
     }
+
+    internal Color MouseDownBackColorCore => _mouseDownBackColor;
+
+    internal Color MouseOverBackColorCore => _mouseOverBackColor;
+
+    private void ResetMouseDownBackColor() => MouseDownBackColor = Color.Empty;
+
+    private bool ShouldSerializeMouseDownBackColor() => !_mouseDownBackColor.IsEmpty;
+
+    private void ResetMouseOverBackColor() => MouseOverBackColor = Color.Empty;
+
+    private bool ShouldSerializeMouseOverBackColor() => !_mouseOverBackColor.IsEmpty;
 }

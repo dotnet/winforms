@@ -324,7 +324,7 @@ public unsafe class PageSettings : ICloneable
             {
                 int result = PInvoke.DocumentProperties(
                     HWND.Null,
-                    HANDLE.Null,
+                    global::Windows.Win32.Graphics.Printing.PRINTER_HANDLE.Null,
                     n,
                     devmode,
                     devmode,

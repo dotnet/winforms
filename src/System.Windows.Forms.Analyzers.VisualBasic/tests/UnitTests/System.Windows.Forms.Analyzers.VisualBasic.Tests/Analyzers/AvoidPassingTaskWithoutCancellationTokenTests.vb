@@ -7,7 +7,6 @@ Imports System.Windows.Forms.Analyzers.Diagnostics
 Imports System.Windows.Forms.VisualBasic.Analyzers.AvoidPassingTaskWithoutCancellationToken
 Imports Microsoft.CodeAnalysis
 Imports Microsoft.CodeAnalysis.Testing
-Imports Microsoft.CodeAnalysis.VisualBasic.Testing
 Imports Xunit
 
 <ForceGC()>
@@ -107,14 +106,14 @@ End Namespace
 
         Dim diagnosticId As String = DiagnosticIDs.AvoidPassingFuncReturningTaskWithoutCancellationToken
 
-        Dim context As New VisualBasicAnalyzerTest(Of AvoidPassingTaskWithoutCancellationTokenAnalyzer, DefaultVerifier) With
+        Dim testCase As New AnalyzerTestCase(
+            referenceAssemblies,
+            New AnalyzerTestSource("Test0.vb", TestCode)) With
             {
-                .TestCode = TestCode,
-                .ReferenceAssemblies = referenceAssemblies
+                .OutputKind = OutputKind.WindowsApplication
             }
 
-        context.TestState.OutputKind = OutputKind.WindowsApplication
-        context.TestState.ExpectedDiagnostics.AddRange(
+        testCase.ExpectedDiagnostics.AddRange(
             {
                 DiagnosticResult.CompilerWarning(diagnosticId).WithSpan(40, 25, 40, 101),
                 DiagnosticResult.CompilerWarning(diagnosticId).WithSpan(43, 25, 43, 101),
@@ -122,8 +121,11 @@ End Namespace
             })
 
         If pathToWinFormsAssembly <> "" Then
-            context.TestState.AdditionalReferences.Add(pathToWinFormsAssembly)
+            testCase.AdditionalReferences.Add(pathToWinFormsAssembly)
         End If
+
+        Dim context = AnalyzerTestFactory.CreateVisualBasicAnalyzerTest(
+            Of AvoidPassingTaskWithoutCancellationTokenAnalyzer)(testCase)
 
         Await context.RunAsync().ConfigureAwait(continueOnCapturedContext:=True)
     End Function
