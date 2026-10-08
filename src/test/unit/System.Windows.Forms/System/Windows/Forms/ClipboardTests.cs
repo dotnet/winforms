@@ -164,7 +164,7 @@ public partial class ClipboardTests : IDisposable
     [WinFormsFact]
     public void SetData_NullData_RoundTrips()
     {
-        Clipboard.SetData("MyData", data: null);
+        Clipboard.SetData("MyData", data: null!);
 
         Clipboard.ContainsData("MyData").Should().BeTrue();
         Clipboard.GetData("MyData").Should().BeNull();
@@ -194,7 +194,7 @@ public partial class ClipboardTests : IDisposable
     {
         try
         {
-            Clipboard.SetData("MyData", data: null);
+            Clipboard.SetData("MyData", data: null!);
 
             Clipboard.ContainsData("MyData").Should().BeTrue();
             Clipboard.GetData("MyData").Should().BeNull();
