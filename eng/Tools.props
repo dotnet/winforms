@@ -1,0 +1,20 @@
+<Project>
+  <!-- Bypass Arcade's directory-only cache checks and x86-only runtime isolation.
+       The repository installer uses the SDK muxer architecture, not the OS or target. -->
+  <Target Name="InstallWinFormsRuntimes"
+          BeforeTargets="InstallDotNetCore"
+          Condition="'$(OS)' == 'Windows_NT' and '$(DotNetBuildSourceOnly)' != 'true' and '$(SkipRuntimesInstall)' != 'true'">
+    <PropertyGroup>
+      <SkipRuntimesInstall>true</SkipRuntimesInstall>
+      <_WinFormsRuntimeRoot>$(DotNetRoot)</_WinFormsRuntimeRoot>
+      <_WinFormsRuntimeRoot Condition="'$(DOTNET_GLOBAL_INSTALL_DIR)' != ''">$(DOTNET_GLOBAL_INSTALL_DIR)</_WinFormsRuntimeRoot>
+      <_WinFormsRuntimeRootArgument>$(_WinFormsRuntimeRoot)</_WinFormsRuntimeRootArgument>
+      <_WinFormsRuntimeRootArgument Condition="$(_WinFormsRuntimeRoot.EndsWith('\'))">$(_WinFormsRuntimeRoot)\</_WinFormsRuntimeRootArgument>
+      <_WinFormsRuntimeSourceOptions Condition="'$(DotNetRuntimeSourceFeed)' != ''">-RuntimeSourceFeed "$(DotNetRuntimeSourceFeed)"</_WinFormsRuntimeSourceOptions>
+      <_WinFormsRuntimeSourceOptions Condition="'$(DotNetRuntimeSourceFeed)' != '' and '$(DotNetRuntimeSourceFeedKey)' != ''">$(_WinFormsRuntimeSourceOptions) -RuntimeSourceFeedKey "$(DotNetRuntimeSourceFeedKey)"</_WinFormsRuntimeSourceOptions>
+      <_WinFormsTargetArchitectureOptions Condition="'$(TargetArchitecture)' != ''">-TargetArchitecture "$(TargetArchitecture)"</_WinFormsTargetArchitectureOptions>
+    </PropertyGroup>
+
+    <Exec Command="powershell -NoProfile -ExecutionPolicy Bypass -File &quot;$(RepositoryEngineeringDir)install-runtimes.ps1&quot; -SdkRoot &quot;$(_WinFormsRuntimeRootArgument)&quot; -RuntimeVersion &quot;$(MicrosoftNETCoreAppRefPackageVersion)&quot; $(_WinFormsTargetArchitectureOptions) $(_WinFormsRuntimeSourceOptions)" />
+  </Target>
+</Project>
