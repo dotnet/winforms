@@ -441,7 +441,7 @@ public static class Clipboard
     ///   See remarks for <see cref="DataObject(object)"/> for recommendations on how to implement custom <paramref name="data"/>.
     ///  </para>
     /// </remarks>
-    public static void SetData(string format, object data)
+    public static void SetData(string format, object? data)
     {
         ArgumentException.ThrowIfNullOrWhiteSpace(format);
 

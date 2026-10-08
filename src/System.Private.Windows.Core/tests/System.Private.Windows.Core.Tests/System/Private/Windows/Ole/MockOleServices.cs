@@ -16,6 +16,7 @@ internal class MockOleServices<TTestClass> : IOleServices
 {
     private static DataObjectProxy? s_dataObjectProxy;
 
+    public static Action? BeforeOleIsCurrentClipboard { get; set; }
     public static int OleIsCurrentClipboardCallCount { get; private set; }
 
     public static unsafe void SimulateExternalClipboardChange(IComVisibleDataObject dataObject)
@@ -89,6 +90,7 @@ internal class MockOleServices<TTestClass> : IOleServices
     public static unsafe HRESULT OleIsCurrentClipboard(IDataObject* dataObject)
     {
         OleIsCurrentClipboardCallCount++;
+        BeforeOleIsCurrentClipboard?.Invoke();
 
         return s_dataObjectProxy is not null && s_dataObjectProxy.IsOriginal(dataObject)
             ? HRESULT.S_OK

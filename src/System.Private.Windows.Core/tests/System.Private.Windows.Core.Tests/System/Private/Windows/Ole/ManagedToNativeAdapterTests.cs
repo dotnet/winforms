@@ -153,7 +153,7 @@ public unsafe class ManagedToNativeAdapterTests
     }
 
     [Fact]
-    public void GetData_EnhancedMetafile_NativeFailureWithHGlobalOffered_FallsBackToHGlobal()
+    public void GetData_EnhancedMetafile_EnumeratedNativeFailure_FallsBackToHGlobal()
     {
         EmfTestOleServices<ManagedToNativeAdapterTests>.Reset();
         EmfTestOleServices<ManagedToNativeAdapterTests>.ManagedGetDataResult = HRESULT.DV_E_TYMED;
@@ -161,8 +161,19 @@ public unsafe class ManagedToNativeAdapterTests
         using MemoryStream source = new([0x45, 0x4D, 0x46]);
         TestDataObject<EmfTestOleServices<ManagedToNativeAdapterTests>> dataObject =
             new(DataFormatNames.Emf, source);
-        FORMATETC formatEtc = CreateEmfFormatEtc();
-        formatEtc.tymed = (uint)(TYMED.TYMED_ENHMF | TYMED.TYMED_HGLOBAL);
+        FormatEnumerator enumerator = new(
+            dataObject,
+            format => DataFormatsCore<TestFormat>.GetOrAddFormat(format).Id,
+            _ => true);
+        ComTypes.FORMATETC[] formats = new ComTypes.FORMATETC[1];
+        enumerator.Next(1, formats, pceltFetched: null).Should().Be((int)HRESULT.S_OK);
+        FORMATETC formatEtc = new()
+        {
+            cfFormat = (ushort)formats[0].cfFormat,
+            dwAspect = (uint)formats[0].dwAspect,
+            lindex = formats[0].lindex,
+            tymed = (uint)formats[0].tymed
+        };
         STGMEDIUM medium = default;
 
         try
@@ -185,8 +196,14 @@ public unsafe class ManagedToNativeAdapterTests
 
     [Theory]
     [InlineData(DataFormatNames.Emf, false, ComTypes.TYMED.TYMED_HGLOBAL)]
-    [InlineData(DataFormatNames.Emf, true, ComTypes.TYMED.TYMED_ENHMF)]
-    [InlineData(DataFormatNames.BinaryFormatMetafile, true, ComTypes.TYMED.TYMED_ENHMF)]
+    [InlineData(
+        DataFormatNames.Emf,
+        true,
+        ComTypes.TYMED.TYMED_ENHMF | ComTypes.TYMED.TYMED_HGLOBAL)]
+    [InlineData(
+        DataFormatNames.BinaryFormatMetafile,
+        true,
+        ComTypes.TYMED.TYMED_ENHMF | ComTypes.TYMED.TYMED_HGLOBAL)]
     public void FormatEnumerator_EnhancedMetafile_AdvertisesPlatformSupportedMedium(
         string format,
         bool supportsEnhMetafile,

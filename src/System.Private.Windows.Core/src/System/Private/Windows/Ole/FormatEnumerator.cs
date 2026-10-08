@@ -51,7 +51,7 @@ internal unsafe class FormatEnumerator : ComTypes.IEnumFORMATETC, IEnumFORMATETC
                 tymed = format == DataFormatNames.Bitmap
                     ? ComTypes.TYMED.TYMED_GDI
                     : supportsEnhMetafile?.Invoke(format) == true
-                        ? ComTypes.TYMED.TYMED_ENHMF
+                        ? ComTypes.TYMED.TYMED_ENHMF | ComTypes.TYMED.TYMED_HGLOBAL
                         : ComTypes.TYMED.TYMED_HGLOBAL
             };
 

@@ -29,9 +29,18 @@ internal static unsafe class ClipboardCore<TOleServices>
 #endif
     // Keep the managed owner alive for delayed OLE rendering. This is a bounded, single-owner cache; the shared layer
     // has no clipboard-change notification, so external replacement is detected and released on the next operation.
-    // The agile pointer preserves the exact COM identity needed for that ownership check.
-    private static IComVisibleDataObject? s_currentDataObject;
-    private static AgileComPointer<IDataObject>? s_currentDataObjectPointer;
+    // Readers lease an entry so its agile pointer remains valid while COM operations run outside the cache lock.
+    private static CurrentDataObjectEntry? s_currentDataObject;
+
+    private sealed class CurrentDataObjectEntry(
+        IComVisibleDataObject dataObject,
+        AgileComPointer<IDataObject> dataObjectPointer)
+    {
+        public IComVisibleDataObject DataObject { get; } = dataObject;
+        public AgileComPointer<IDataObject> DataObjectPointer { get; } = dataObjectPointer;
+        public int ActiveReaders { get; set; }
+        public bool IsDetached { get; set; }
+    }
 
     /// <summary>
     ///  Removes all data from the Clipboard.
@@ -296,34 +305,65 @@ internal static unsafe class ClipboardCore<TOleServices>
         where TDataObject : class, IDataObjectInternal<TDataObject, TIDataObject>, TIDataObject
         where TIDataObject : class
     {
+        CurrentDataObjectEntry entry;
+        TDataObject dataObjectInternal;
+
         lock (s_currentDataObjectLock)
         {
-            if (s_currentDataObject is not TDataObject dataObjectInternal
-                || s_currentDataObjectPointer is null)
+            if (s_currentDataObject is not { DataObject: TDataObject currentDataObject } currentEntry)
             {
                 dataObject = null;
                 return false;
             }
 
-            using ComScope<IDataObject> iDataObject =
-                s_currentDataObjectPointer.TryGetInterface(out HRESULT interfaceResult);
+            entry = currentEntry;
+            dataObjectInternal = currentDataObject;
+            entry.ActiveReaders++;
+        }
 
-            // The originating apartment may have exited, or clipboard ownership may have changed externally.
-            // In either case discard the stale cache and fall back to the current OLE clipboard proxy.
-            if (interfaceResult.Failed || TOleServices.OleIsCurrentClipboard(iDataObject) != HRESULT.S_OK)
+        try
+        {
+            HRESULT interfaceResult;
+            HRESULT ownershipResult = HRESULT.E_FAIL;
+
+            using (ComScope<IDataObject> iDataObject = entry.DataObjectPointer.TryGetInterface(out interfaceResult))
             {
-                ClearCurrentDataObjectNoLock();
+                if (interfaceResult.Succeeded)
+                {
+                    ownershipResult = TOleServices.OleIsCurrentClipboard(iDataObject);
+                }
+            }
+
+            lock (s_currentDataObjectLock)
+            {
+                if (!ReferenceEquals(s_currentDataObject, entry))
+                {
+                    dataObject = null;
+                    return false;
+                }
+
+                // The originating apartment may have exited, or clipboard ownership may have changed externally.
+                // In either case discard the stale cache and fall back to the current OLE clipboard proxy.
+                if (interfaceResult.Failed || ownershipResult != HRESULT.S_OK)
+                {
+                    s_currentDataObject = null;
+                    entry.IsDetached = true;
+                    dataObject = null;
+                    return false;
+                }
+
+                if (unwrapUserDataObject)
+                {
+                    return dataObjectInternal.TryUnwrapUserDataObject(out dataObject);
+                }
+
                 dataObject = null;
                 return false;
             }
-
-            if (unwrapUserDataObject)
-            {
-                return dataObjectInternal.TryUnwrapUserDataObject(out dataObject);
-            }
-
-            dataObject = null;
-            return false;
+        }
+        finally
+        {
+            ReleaseCurrentDataObjectEntry(entry);
         }
     }
 
@@ -334,11 +374,12 @@ internal static unsafe class ClipboardCore<TOleServices>
 
         try
         {
+            CurrentDataObjectEntry entry = new(dataObject, dataObjectPointer);
+
             lock (s_currentDataObjectLock)
             {
-                previousDataObjectPointer = s_currentDataObjectPointer;
-                s_currentDataObject = dataObject;
-                s_currentDataObjectPointer = dataObjectPointer;
+                previousDataObjectPointer = DetachCurrentDataObjectNoLock();
+                s_currentDataObject = entry;
                 dataObjectPointer = null;
             }
         }
@@ -355,18 +396,46 @@ internal static unsafe class ClipboardCore<TOleServices>
 
     private static void ClearCurrentDataObject()
     {
+        AgileComPointer<IDataObject>? dataObjectPointer;
+
         lock (s_currentDataObjectLock)
         {
-            ClearCurrentDataObjectNoLock();
+            dataObjectPointer = DetachCurrentDataObjectNoLock();
         }
+
+        dataObjectPointer?.Dispose();
     }
 
-    private static void ClearCurrentDataObjectNoLock()
+    private static AgileComPointer<IDataObject>? DetachCurrentDataObjectNoLock()
     {
-        // Clear the shared state before releasing COM resources because revocation can invoke re-entrant callbacks.
-        AgileComPointer<IDataObject>? dataObjectPointer = s_currentDataObjectPointer;
-        s_currentDataObjectPointer = null;
+        CurrentDataObjectEntry? entry = s_currentDataObject;
         s_currentDataObject = null;
+
+        if (entry is null)
+        {
+            return null;
+        }
+
+        entry.IsDetached = true;
+
+        return entry.ActiveReaders == 0 ? entry.DataObjectPointer : null;
+    }
+
+    private static void ReleaseCurrentDataObjectEntry(CurrentDataObjectEntry entry)
+    {
+        AgileComPointer<IDataObject>? dataObjectPointer = null;
+
+        lock (s_currentDataObjectLock)
+        {
+            Debug.Assert(entry.ActiveReaders > 0);
+            entry.ActiveReaders--;
+
+            if (entry.IsDetached && entry.ActiveReaders == 0)
+            {
+                dataObjectPointer = entry.DataObjectPointer;
+            }
+        }
+
         dataObjectPointer?.Dispose();
     }
 

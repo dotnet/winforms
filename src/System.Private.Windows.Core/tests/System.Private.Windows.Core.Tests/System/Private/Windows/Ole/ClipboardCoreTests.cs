@@ -198,6 +198,125 @@ public unsafe class ClipboardCoreTests
     }
 
     [Fact]
+    public void GetDataObject_ConcurrentReadAndReplacement_DoesNotBlockOrClearReplacement()
+    {
+        using ClipboardScope scope = new();
+        using ManualResetEventSlim ownershipCheckEntered = new();
+        using ManualResetEventSlim continueOwnershipCheck = new();
+        using ManualResetEventSlim replacementCompleted = new();
+        using ManualResetEventSlim replacementCanExit = new();
+        TimeSpan timeout = TimeSpan.FromSeconds(10);
+        DataObject original = new();
+        DataObject replacement = new();
+        replacement.SetData(nameof(replacement), "replacement");
+        Exception? readException = null;
+        Exception? replacementException = null;
+        HRESULT readResult = HRESULT.E_FAIL;
+        HRESULT replacementResult = HRESULT.E_FAIL;
+        HRESULT currentResult = HRESULT.E_FAIL;
+        ITestDataObject? readData = null;
+        ITestDataObject? current = null;
+
+        ClipboardCore.SetData(original, copy: false, retryTimes: 1, retryDelay: 0).Should().Be(HRESULT.S_OK);
+        MockOleServices<ClipboardCoreTests>.BeforeOleIsCurrentClipboard = () =>
+        {
+            ownershipCheckEntered.Set();
+            if (!continueOwnershipCheck.Wait(timeout))
+            {
+                throw new TimeoutException("Timed out waiting to continue the Clipboard ownership check.");
+            }
+        };
+
+        Thread readThread = new(() =>
+        {
+            try
+            {
+                readResult = ClipboardCore.GetDataObject<DataObject, ITestDataObject>(
+                    out readData,
+                    retryTimes: 1,
+                    retryDelay: 0);
+            }
+            catch (Exception exception)
+            {
+                readException = exception;
+            }
+        });
+        readThread.SetApartmentState(ApartmentState.STA);
+
+        Thread replacementThread = new(() =>
+        {
+            try
+            {
+                replacementResult = ClipboardCore.SetData(
+                    replacement,
+                    copy: false,
+                    retryTimes: 1,
+                    retryDelay: 0);
+            }
+            catch (Exception exception)
+            {
+                replacementException = exception;
+            }
+            finally
+            {
+                replacementCompleted.Set();
+
+                if (!replacementCanExit.Wait(timeout))
+                {
+                    replacementException ??= new TimeoutException(
+                        "Timed out waiting for the concurrent Clipboard read to complete.");
+                }
+            }
+        });
+        replacementThread.SetApartmentState(ApartmentState.STA);
+
+        try
+        {
+            readThread.Start();
+            ownershipCheckEntered.Wait(timeout, TestContext.Current.CancellationToken).Should().BeTrue();
+
+            replacementThread.Start();
+            replacementCompleted.Wait(timeout, TestContext.Current.CancellationToken).Should().BeTrue();
+
+            continueOwnershipCheck.Set();
+            readThread.Join(timeout).Should().BeTrue();
+
+            currentResult = ClipboardCore.GetDataObject<DataObject, ITestDataObject>(
+                out current,
+                retryTimes: 1,
+                retryDelay: 0);
+        }
+        finally
+        {
+            continueOwnershipCheck.Set();
+
+            if (readThread.ThreadState != ThreadState.Unstarted)
+            {
+                readThread.Join(timeout).Should().BeTrue();
+            }
+
+            replacementCanExit.Set();
+
+            if (replacementThread.ThreadState != ThreadState.Unstarted)
+            {
+                replacementThread.Join(timeout).Should().BeTrue();
+            }
+
+            MockOleServices<ClipboardCoreTests>.BeforeOleIsCurrentClipboard = null;
+        }
+
+        readException.Should().BeNull();
+        replacementException.Should().BeNull();
+        replacementResult.Should().Be(HRESULT.S_OK);
+        readResult.Should().Be(HRESULT.S_OK);
+        readData.Should().NotBeSameAs(original);
+        readData!.GetData(nameof(replacement)).Should().Be("replacement");
+
+        currentResult.Should().Be(HRESULT.S_OK);
+        current.Should().BeSameAs(replacement);
+    }
+
+    [Fact]
     public void DerivedDataObject_DataPresent()
     {
         // https://github.com/dotnet/winforms/issues/12789
