@@ -78,6 +78,51 @@ public unsafe class ClipboardCoreTests
     }
 
     [Fact]
+    public void SetData_ReentrantSetData_DoesNotOverwriteNestedOwner()
+    {
+        using ClipboardScope scope = new();
+        DataObject outer = new();
+        DataObject nested = new();
+        HRESULT nestedResult = HRESULT.E_FAIL;
+
+        MockOleServices<ClipboardCoreTests>.AfterOleSetClipboard = isClear =>
+        {
+            if (isClear)
+            {
+                return;
+            }
+
+            MockOleServices<ClipboardCoreTests>.AfterOleSetClipboard = null;
+            nestedResult = ClipboardCore.SetData(nested, copy: false, retryTimes: 1, retryDelay: 0);
+        };
+
+        try
+        {
+            ClipboardCore.SetData(outer, copy: false, retryTimes: 1, retryDelay: 0).Should().Be(HRESULT.S_OK);
+        }
+        finally
+        {
+            MockOleServices<ClipboardCoreTests>.AfterOleSetClipboard = null;
+        }
+
+        nestedResult.Should().Be(HRESULT.S_OK);
+        MockOleServices<ClipboardCoreTests>.ResetOleIsCurrentClipboardCallCount();
+
+        ClipboardCore.GetDataObject<DataObject, ITestDataObject>(
+            out ITestDataObject? first,
+            retryTimes: 1,
+            retryDelay: 0).Should().Be(HRESULT.S_OK);
+        ClipboardCore.GetDataObject<DataObject, ITestDataObject>(
+            out ITestDataObject? second,
+            retryTimes: 1,
+            retryDelay: 0).Should().Be(HRESULT.S_OK);
+
+        first.Should().BeSameAs(nested);
+        second.Should().BeSameAs(nested);
+        MockOleServices<ClipboardCoreTests>.OleIsCurrentClipboardCallCount.Should().Be(2);
+    }
+
+    [Fact]
     public void Clear_ClearsClipboard()
     {
         HRESULT result;

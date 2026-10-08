@@ -126,19 +126,29 @@ internal static unsafe class ClipboardCore<TOleServices>
 
         using var iDataObject = ComHelpers.GetComScope<IDataObject>(dataObject);
 
+        CurrentDataObjectEntry? entry;
         HRESULT result;
         int retryCount = retryTimes;
-        while ((result = TOleServices.OleSetClipboard(iDataObject)).Failed)
+
+        while (true)
         {
-            if (--retryCount < 0)
+            entry = Volatile.Read(ref s_currentDataObject);
+            result = TOleServices.OleSetClipboard(iDataObject);
+
+            if (result.Succeeded || --retryCount < 0)
             {
-                return result;
+                break;
             }
 
             Thread.Sleep(millisecondsTimeout: retryDelay);
         }
 
-        SetCurrentDataObject(dataObject, iDataObject.Value);
+        if (result.Failed)
+        {
+            return result;
+        }
+
+        SetCurrentDataObject(dataObject, iDataObject.Value, entry);
 
         return copy
             ? PerformClipboardCleanup(ClipboardCleanupOperation.Flush, retryTimes, retryDelay)
@@ -373,7 +383,10 @@ internal static unsafe class ClipboardCore<TOleServices>
         }
     }
 
-    private static void SetCurrentDataObject(IComVisibleDataObject dataObject, IDataObject* iDataObject)
+    private static void SetCurrentDataObject(
+        IComVisibleDataObject dataObject,
+        IDataObject* iDataObject,
+        CurrentDataObjectEntry? expectedEntry)
     {
         AgileComPointer<IDataObject>? dataObjectPointer = new(iDataObject, takeOwnership: false);
 
@@ -381,11 +394,17 @@ internal static unsafe class ClipboardCore<TOleServices>
         {
             CurrentDataObjectEntry entry = new(dataObject, dataObjectPointer);
 
-            // Publish the replacement before releasing the previous cache reference. Its final release can revoke a
-            // GIT cookie and re-enter SetData; publishing first ensures a reentrant replacement remains authoritative.
-            CurrentDataObjectEntry? previousEntry = Interlocked.Exchange(ref s_currentDataObject, entry);
+            // Publish only if no reentrant or concurrent SetData replaced the entry observed before OleSetClipboard.
+            // Releasing the displaced reference afterward ensures any reentrant replacement remains authoritative.
+            if (!ReferenceEquals(
+                Interlocked.CompareExchange(ref s_currentDataObject, entry, expectedEntry),
+                expectedEntry))
+            {
+                return;
+            }
+
             dataObjectPointer = null;
-            previousEntry?.ReleaseReference();
+            expectedEntry?.ReleaseReference();
         }
         finally
         {
