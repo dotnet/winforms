@@ -22,6 +22,12 @@ internal static unsafe class ClipboardCore<TOleServices>
     /// </summary>
     private const int OleRetryDelay = 100;
 
+    private enum ClipboardCleanupOperation
+    {
+        Clear,
+        Flush
+    }
+
     // Keep the managed owner alive for delayed OLE rendering. This is a bounded, single-owner cache; the shared layer
     // has no clipboard-change notification, so external replacement is detected and released on the next operation.
     // Readers add a reference so its agile pointer remains valid while COM operations run outside synchronization.
@@ -83,29 +89,7 @@ internal static unsafe class ClipboardCore<TOleServices>
     {
         TOleServices.EnsureThreadState();
 
-        CurrentDataObjectEntry? entry;
-        HRESULT result;
-        int retryCount = retryTimes;
-
-        while (true)
-        {
-            entry = Volatile.Read(ref s_currentDataObject);
-            result = TOleServices.OleSetClipboard(null);
-
-            if (result.Succeeded || --retryCount < 0)
-            {
-                break;
-            }
-
-            Thread.Sleep(millisecondsTimeout: retryDelay);
-        }
-
-        if (result.Succeeded)
-        {
-            ClearCurrentDataObject(entry);
-        }
-
-        return result;
+        return PerformClipboardCleanup(ClipboardCleanupOperation.Clear, retryTimes, retryDelay);
     }
 
     /// <summary>
@@ -118,29 +102,7 @@ internal static unsafe class ClipboardCore<TOleServices>
     {
         TOleServices.EnsureThreadState();
 
-        CurrentDataObjectEntry? entry;
-        HRESULT result;
-        int retryCount = retryTimes;
-
-        while (true)
-        {
-            entry = Volatile.Read(ref s_currentDataObject);
-            result = TOleServices.OleFlushClipboard();
-
-            if (result.Succeeded || --retryCount < 0)
-            {
-                break;
-            }
-
-            Thread.Sleep(millisecondsTimeout: retryDelay);
-        }
-
-        if (result.Succeeded)
-        {
-            ClearCurrentDataObject(entry);
-        }
-
-        return result;
+        return PerformClipboardCleanup(ClipboardCleanupOperation.Flush, retryTimes, retryDelay);
     }
 
     /// <summary>
@@ -178,31 +140,9 @@ internal static unsafe class ClipboardCore<TOleServices>
 
         SetCurrentDataObject(dataObject, iDataObject.Value);
 
-        if (copy)
-        {
-            CurrentDataObjectEntry? entry;
-            retryCount = retryTimes;
-
-            while (true)
-            {
-                entry = Volatile.Read(ref s_currentDataObject);
-                result = TOleServices.OleFlushClipboard();
-
-                if (result.Succeeded || --retryCount < 0)
-                {
-                    break;
-                }
-
-                Thread.Sleep(millisecondsTimeout: retryDelay);
-            }
-
-            if (result.Succeeded)
-            {
-                ClearCurrentDataObject(entry);
-            }
-        }
-
-        return result;
+        return copy
+            ? PerformClipboardCleanup(ClipboardCleanupOperation.Flush, retryTimes, retryDelay)
+            : result;
     }
 
     /// <summary>
@@ -468,6 +408,41 @@ internal static unsafe class ClipboardCore<TOleServices>
 
         // Release after detaching because revoking the GIT cookie can re-enter this type.
         entry.ReleaseReference();
+    }
+
+    private static HRESULT PerformClipboardCleanup(
+        ClipboardCleanupOperation operation,
+        int retryTimes,
+        int retryDelay)
+    {
+        CurrentDataObjectEntry? entry;
+        HRESULT result;
+        int retryCount = retryTimes;
+
+        while (true)
+        {
+            entry = Volatile.Read(ref s_currentDataObject);
+            result = operation switch
+            {
+                ClipboardCleanupOperation.Clear => TOleServices.OleSetClipboard(null),
+                ClipboardCleanupOperation.Flush => TOleServices.OleFlushClipboard(),
+                _ => throw new InvalidOperationException()
+            };
+
+            if (result.Succeeded || --retryCount < 0)
+            {
+                break;
+            }
+
+            Thread.Sleep(millisecondsTimeout: retryDelay);
+        }
+
+        if (result.Succeeded)
+        {
+            ClearCurrentDataObject(entry);
+        }
+
+        return result;
     }
 
     /// <summary>
