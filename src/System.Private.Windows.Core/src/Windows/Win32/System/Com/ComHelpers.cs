@@ -193,7 +193,9 @@ internal static unsafe partial class ComHelpers
             return false;
         }
 
-        return TryGetObjectForIUnknown(unknown, out @object);
+        // The input is borrowed, but QueryInterface gave us a separate reference that must be released
+        // even when the managed cast fails. Leaking it can root a CCW's target after the caller releases its input.
+        return TryGetObjectForIUnknown(unknown, takeOwnership: true, out @object);
     }
 
     /// <inheritdoc cref="TryGetObjectForIUnknown{TObject}(ComUnknown*, bool, out TObject)"/>
@@ -285,8 +287,10 @@ internal static unsafe partial class ComHelpers
             return GetObjectForIUnknown(unknown);
         }
 
-        unknown->QueryInterface(IID.Get<ComUnknown>(), (void**)&unknown).ThrowOnFailure();
-        return GetObjectForIUnknown(unknown);
+        // Borrow the caller's pointer and scope only our QueryInterface reference.
+        using ComScope<ComUnknown> queriedUnknown = new(null);
+        unknown->QueryInterface(IID.Get<ComUnknown>(), queriedUnknown).ThrowOnFailure();
+        return GetObjectForIUnknown(queriedUnknown.Value);
     }
 
     /// <inheritdoc cref="GetObjectForIUnknown(ComUnknown*)"/>
@@ -296,6 +300,12 @@ internal static unsafe partial class ComHelpers
     /// <summary>
     ///  Gets a runtime callable wrapper for the given IUnknown. Will attempt to unwrap ComWrapper RCWs if available.
     /// </summary>
+    /// <remarks>
+    ///  <para>
+    ///   The input is borrowed. Creating or retrieving a managed wrapper does not release a reference acquired
+    ///   by the caller; the caller must still release it, even when this returns the original managed object.
+    ///  </para>
+    /// </remarks>
     /// <exception cref="ArgumentNullException"><paramref name="unknown"/> is <see langword="null"/>.</exception>
     internal static object GetObjectForIUnknown(ComUnknown* unknown)
     {

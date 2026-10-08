@@ -623,7 +623,15 @@ public partial class TabPage : Panel
                 inflateRect.Width + 8,
                 inflateRect.Height + 6);
 
-            TabRenderer.DrawTabPage(e, rectWithBorder);
+            if (Application.IsDarkModeEnabled)
+            {
+                using SolidBrush brush = new(bkColor);
+                e.Graphics.FillRectangle(brush, rectWithBorder);
+            }
+            else
+            {
+                TabRenderer.DrawTabPage(e, rectWithBorder);
+            }
 
             // TabRenderer does not support painting the background image on the panel, so
             // draw it ourselves.

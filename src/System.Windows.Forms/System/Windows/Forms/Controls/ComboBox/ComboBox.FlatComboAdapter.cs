@@ -55,7 +55,7 @@ public partial class ComboBox
             }
         }
 
-        public bool IsValid(ComboBox combo)
+        public virtual bool IsValid(ComboBox combo)
         {
             return (combo.ClientRectangle == _clientRect && combo.RightToLeft == _origRightToLeft);
         }

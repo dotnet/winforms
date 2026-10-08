@@ -242,6 +242,16 @@
         <target state="translated">Impossible de modifier le mode d'exceptions du thread une fois que des Controls ont été créés sur le thread.</target>
         <note />
       </trans-unit>
+      <trans-unit id="Application_VisualStylesModeCanOnlyBeSetOnce">
+        <source>The default visual styles mode can only be set once and cannot be changed afterwards.</source>
+        <target state="translated">Le mode de styles visuels par défaut ne peut être défini qu’une seule fois et ne peut pas être modifié par la suite.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="Application_VisualStylesModeInheritInvalidAsDefault">
+        <source>VisualStylesMode.Inherit cannot be used as the application-wide default visual styles mode because the application root has no parent to inherit from.</source>
+        <target state="translated">VisualStylesMode.Inherit ne peut pas être utilisé comme mode de styles visuels par défaut à l’échelle de l’application, car la racine de l’application n’a pas de parent dont hériter.</target>
+        <note />
+      </trans-unit>
       <trans-unit id="ApplyCaption">
         <source>&amp;Apply</source>
         <target state="translated">&amp;Appliquer</target>
@@ -1697,6 +1707,11 @@
         <target state="translated">Indique la taille minimale du contrôle.</target>
         <note />
       </trans-unit>
+      <trans-unit id="ControlMutationExtensionsLayoutSuspensionRequiresControl">
+        <source>Layout suspension requires a target derived from Control.</source>
+        <target state="translated">La suspension de la disposition nécessite une cible dérivée de Control.</target>
+        <note />
+      </trans-unit>
       <trans-unit id="ControlNotChild">
         <source>'child' is not a child control of this parent.</source>
         <target state="translated">'child' n'est pas un contrôle enfant de ce parent.</target>
@@ -2027,6 +2042,11 @@
         <target state="translated">Événement déclenché lorsque les couleurs système changent.</target>
         <note />
       </trans-unit>
+      <trans-unit id="ControlOnSystemVisualSettingsChangedDescr">
+        <source>Event raised when a Windows visual or accessibility setting changes.</source>
+        <target state="translated">Événement déclenché lorsqu’un paramètre visuel ou d’accessibilité Windows change.</target>
+        <note />
+      </trans-unit>
       <trans-unit id="ControlOnTabIndexChangedDescr">
         <source>Event raised when the value of the TabIndex property is changed.</source>
         <target state="translated">Événement déclenché lorsque la valeur de la propriété TabIndex change.</target>
@@ -2170,6 +2190,16 @@
       <trans-unit id="ControlVisibleDescr">
         <source>Determines whether the control is visible or hidden.</source>
         <target state="translated">Détermine si le contrôle est visible ou masqué.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ControlVisualStylesModeChangedDescr">
+        <source>Occurs when the value of the VisualStylesMode property changes.</source>
+        <target state="translated">Se produit lorsque la valeur de la propriété VisualStylesMode change.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ControlVisualStylesModeDescr">
+        <source>Determines how the control renders itself when visual styles are applied.</source>
+        <target state="translated">Détermine comment le contrôle se rend lorsque les styles visuels sont appliqués.</target>
         <note />
       </trans-unit>
       <trans-unit id="ControlWidthDescr">
@@ -4519,6 +4549,11 @@ Pour remplacer cette boîte de dialogue par défaut, traitez l'événement DataE
         <target state="translated">Gère une collection d'images qui sont généralement utilisées par d'autres contrôles tels que ListView, TreeView et ToolStrip.</target>
         <note />
       </trans-unit>
+      <trans-unit id="DescriptionKioskModeManager">
+        <source>Manages common fullscreen, input, cursor, and power behavior for kiosk-style WinForms applications.</source>
+        <target state="translated">Gère le comportement du plein écran, de la saisie, du curseur et de l’alimentation pour les applications WinForms de type kiosque.</target>
+        <note />
+      </trans-unit>
       <trans-unit id="DescriptionLabel">
         <source>Provides run-time information or descriptive text for a control.</source>
         <target state="translated">Fournit des informations d'exécution ou un texte descriptif pour un contrôle.</target>
@@ -5420,6 +5455,11 @@ Voulez-vous le remplacer ?</target>
         <target state="translated">La valeur que ce formulaire retourne s'il est affiché en tant que boîte de dialogue.</target>
         <note />
       </trans-unit>
+      <trans-unit id="FormFormRevealModeDescr">
+        <source>Indicates how the form is presented while its initial appearance is prepared. Classic never defers reveal. Deferred hides the form behind a DWM cloak until its background has painted, to reduce startup flash. Inherit resolves from the application-wide default.</source>
+        <target state="translated">Indique comment le formulaire est présenté pendant la préparation de son affichage initial. Classique ne différera jamais l’affichage. Différé masque le formulaire derrière un masquage DWM jusqu’à ce que son arrière-plan soit rendu, afin de réduire le clignotement au démarrage. Hérité est résolu à partir de la valeur par défaut à l’échelle de l’application.</target>
+        <note />
+      </trans-unit>
       <trans-unit id="FormHelpButtonClickedDescr">
         <source>Event raised when the help button is clicked.</source>
         <target state="translated">Événement qui est déclenché à la suite d'un clic sur le bouton d'aide.</target>
@@ -5538,6 +5578,11 @@ Voulez-vous le remplacer ?</target>
       <trans-unit id="FormOnFormClosingDescr">
         <source>Occurs whenever the user closes the form, before the form has been closed and specifies the close reason.</source>
         <target state="translated">Se produit lorsque l'utilisateur ferme le formulaire, avant la fermeture du formulaire et donne la raison de cette fermeture.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="FormOnFormRevealModeChangedDescr">
+        <source>Occurs when the effective value of the FormRevealMode property changes.</source>
+        <target state="translated">Se produit lorsque la valeur effective de la propriété FormRevealMode change.</target>
         <note />
       </trans-unit>
       <trans-unit id="FormOnInputLangChangeDescr">
@@ -6102,6 +6147,51 @@ Cette opération non conforme s'est produite sur la trace de la pile :
       <trans-unit id="KeysConverterInvalidKeyCombination">
         <source>Key combination is not valid.</source>
         <target state="translated">La combinaison de touches n'est pas valide.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="KioskModeManagerAlwaysOnDescr">
+        <source>Indicates whether Windows should keep the display and system awake while this component is active.</source>
+        <target state="translated">Indique si Windows doit maintenir l’affichage et le système actifs pendant que ce composant est actif.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="KioskModeManagerContainerControlChangedDescr">
+        <source>Occurs when the ContainerControl property value changes.</source>
+        <target state="translated">Se produit lorsque la valeur de la propriété ContainerControl change.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="KioskModeManagerContainerControlDescr">
+        <source>The container whose containing form is controlled by the kiosk mode manager.</source>
+        <target state="translated">Conteneur dont le formulaire parent est contrôlé par le gestionnaire du mode kiosque.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="KioskModeManagerEscapeExitsFullScreenDescr">
+        <source>Indicates whether pressing Escape exits fullscreen mode.</source>
+        <target state="translated">Indique si l’appui sur Échap quitte le mode plein écran.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="KioskModeManagerFullScreenDescr">
+        <source>Gets or sets a value indicating whether the resolved form is currently fullscreen.</source>
+        <target state="translated">Obtient ou définit une valeur indiquant si le formulaire résolu est actuellement en plein écran.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="KioskModeManagerFullScreenChangedDescr">
+        <source>Occurs when the fullscreen state changes.</source>
+        <target state="translated">Se produit lorsque l’état du mode plein écran change.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="KioskModeManagerMousePointerAutoHideDelayDescr">
+        <source>The delay, in milliseconds, before the mouse pointer is hidden while fullscreen. A value of 0 disables automatic pointer hiding.</source>
+        <target state="translated">Délai, en millisecondes, avant que le pointeur de souris soit masqué en mode plein écran. La valeur 0 désactive le masquage automatique du pointeur.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="KioskModeManagerToggleFullScreenKeysDescr">
+        <source>The key combination that toggles between fullscreen and restored mode.</source>
+        <target state="translated">Combinaison de touches qui bascule entre le mode plein écran et le mode restauré.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="KioskModeManagerTopMostInFullScreenDescr">
+        <source>Indicates whether the form is topmost while fullscreen.</source>
+        <target state="translated">Indique si le formulaire est au premier plan en mode plein écran.</target>
         <note />
       </trans-unit>
       <trans-unit id="LabelAutoEllipsisDescr">
@@ -8675,8 +8765,8 @@ Cette opération non conforme s'est produite sur la trace de la pile :
         <note />
       </trans-unit>
       <trans-unit id="RadioButtonAppearanceDescr">
-        <source>Controls whether the RadioButton appears as normal or as a Windows PushButton.</source>
-        <target state="translated">Contrôle si le RadioButton s'affiche sous la forme normale ou sous la forme d'un PushButton Windows.</target>
+        <source>Controls whether the RadioButton appears as normal, as a Windows PushButton, or as a toggle switch.</source>
+        <target state="translated">Contrôle si le RadioButton s'affiche sous la forme normale, sous la forme d'un PushButton Windows ou en tant que bouton bascule.</target>
         <note />
       </trans-unit>
       <trans-unit id="RadioButtonAutoCheckDescr">

@@ -428,13 +428,14 @@ public partial class ControlTests
         using IDisposable dpiScope = ScaleHelper.EnterDpiAwarenessScope(DPI_AWARENESS_CONTEXT.DPI_AWARENESS_CONTEXT_PER_MONITOR_AWARE_V2);
         using DpiRescaleTrackingControl control = new();
         Assert.NotEqual(IntPtr.Zero, control.Handle);
+        int initialRescaleCallCount = control.RescaleConstantsForDpiCallCount;
 
         int newDpi = control.DeviceDpi == 96 ? 120 : 96;
         Message message = Message.Create((HWND)control.Handle, PInvokeCore.WM_DPICHANGED_BEFOREPARENT, (WPARAM)newDpi, (LPARAM)0);
 
         control.WndProc(ref message);
 
-        Assert.Equal(1, control.RescaleConstantsForDpiCallCount);
+        Assert.Equal(initialRescaleCallCount + 1, control.RescaleConstantsForDpiCallCount);
         Assert.Equal(newDpi, control.DeviceDpiNew);
         Assert.NotEqual(control.DeviceDpiOld, control.DeviceDpiNew);
     }

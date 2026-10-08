@@ -1050,7 +1050,7 @@ public partial class PictureBox : Control, ISupportInitialize
         }
 
         // Handle should be created, before calling the BeginInvoke.
-        if (InvokeRequired && IsHandleCreated)
+        if (IsHandleCreated && InvokeRequired)
         {
             lock (_internalSyncObject)
             {

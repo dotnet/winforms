@@ -31,6 +31,16 @@ internal unsafe class AgileComPointer<TInterface> :
     private readonly uint _memoryPressure;
 
     /// <summary>
+    ///  Gets whether this owner's registration has been revoked.
+    /// </summary>
+    /// <remarks>
+    ///  <para>
+    ///   This is a state snapshot, not synchronization with concurrent disposal or a test of the native object's lifetime.
+    ///  </para>
+    /// </remarks>
+    public bool IsDisposed => Volatile.Read(ref _cookie) == 0;
+
+    /// <summary>
     ///  Creates an <see cref="AgileComPointer{TInterface}"/> for the given <paramref name="interface"/>.
     /// </summary>
     /// <param name="interface">The COM interface pointer.</param>

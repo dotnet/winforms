@@ -7,6 +7,17 @@ namespace System.Windows.Forms.Tests;
 
 public class SendKeysTests
 {
+    [WinFormsTheory]
+    [InlineData("^a^c")]
+    [InlineData("+a+c")]
+    [InlineData("%f%t")]
+    public void SendKeys_ParseKeys_SequentialImmediateModifiers_DoesNotThrow(string keys)
+    {
+        dynamic accessor = typeof(SendKeys).TestAccessor.Dynamic;
+        Exception exception = Record.Exception(() => accessor.ParseKeys(keys, default(HWND)));
+        Assert.Null(exception);
+    }
+
     [WinFormsFact(Skip = "This test depends on focus and should be run manually.")]
     public void SendKeysGrouping()
     {

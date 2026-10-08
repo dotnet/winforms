@@ -10,6 +10,8 @@ public partial class GroupBox
 {
     internal class GroupBoxAccessibleObject : ControlAccessibleObject
     {
+        private const int HeadingLevel2 = 80052;
+
         internal GroupBoxAccessibleObject(GroupBox owner) : base(owner)
         {
         }
@@ -20,6 +22,10 @@ public partial class GroupBox
             => propertyID switch
             {
                 UIA_PROPERTY_ID.UIA_IsKeyboardFocusablePropertyId => VARIANT.True,
+                UIA_PROPERTY_ID.UIA_HeadingLevelPropertyId
+                    when this.TryGetOwnerAs(out GroupBox? owner)
+                        && owner.UsesModernRenderer
+                    => (VARIANT)HeadingLevel2,
                 _ => base.GetPropertyValue(propertyID)
             };
     }

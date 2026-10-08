@@ -73,8 +73,9 @@ internal sealed partial class KeyboardToolTipStateMachine
             (SmState.ReadyForReshow, SmEvent.LeftTool) => StartWaitingForRefocus(tool),
             (SmState.ReadyForReshow, SmEvent.ReshowDelayTimerExpired) => ShowToolTip(tool, tooltip),
 
-            // This is what we would have thrown historically
-            (_, _) => throw new KeyNotFoundException()
+            // Reentrant focus changes can yield event/state combinations outside the normal transition table.
+            // Resetting avoids surfacing framework exceptions to application code.
+            (_, _) => FullFsmReset()
         };
 
     public void ResetStateMachine(ToolTip toolTip)
@@ -247,11 +248,17 @@ internal sealed partial class KeyboardToolTipStateMachine
         return wrapper;
     }
 
-    private void Transit(SmEvent @event, IKeyboardToolTip source)
+    private void Transit(SmEvent @event, IKeyboardToolTip? source)
     {
         bool fullFsmResetRequired = false;
         try
         {
+            if (source is null)
+            {
+                fullFsmResetRequired = true;
+                return;
+            }
+
             ToolTip? toolTip = _toolToTip[source];
             if ((_currentTool is null || _currentTool.CanShowToolTipsNow()) && toolTip is not null)
             {

@@ -1,6 +1,7 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
+using System.Drawing;
 using Windows.Win32.UI.Accessibility;
 
 namespace System.Windows.Forms;
@@ -17,6 +18,18 @@ public abstract partial class UpDownBase
             SetStyle(ControlStyles.FixedHeight | ControlStyles.FixedWidth, true);
 
             _parent = parent;
+        }
+
+        public override VisualStylesMode VisualStylesMode
+        {
+            get => VisualStylesMode.Classic;
+            set
+            {
+            }
+        }
+
+        private protected override void OnNcPaint(Graphics graphics, HDC windowHdc)
+        {
         }
 
         [AllowNull]
@@ -113,7 +126,9 @@ public abstract partial class UpDownBase
         protected override void OnGotFocus(EventArgs e)
         {
             _parent.SetActiveControl(this);
+            _parent.SetModernFocusState(focused: true);
             _parent.InvokeGotFocus(_parent, e);
+            _parent.Invalidate();
 
             if (IsAccessibilityObjectCreated)
             {
@@ -122,6 +137,10 @@ public abstract partial class UpDownBase
         }
 
         protected override void OnLostFocus(EventArgs e)
-            => _parent.InvokeLostFocus(_parent, e);
+        {
+            _parent.SetModernFocusState(focused: false);
+            _parent.InvokeLostFocus(_parent, e);
+            _parent.Invalidate();
+        }
     }
 }

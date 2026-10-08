@@ -16,6 +16,11 @@ namespace System.Windows.Forms;
 [SRDescription(nameof(SR.DescriptionDataGridView))]
 public partial class DataGridView : Control, ISupportInitialize
 {
+    private protected override VisualStylesMode GetSupportedVisualStylesMode(VisualStylesMode mode)
+        => mode < VisualStylesMode.Net11 || AppContextSwitches.DataGridViewModernRendering
+            ? mode
+            : VisualStylesMode.Classic;
+
     private static readonly object s_allowUserToAddRowsChangedEvent = new();
     private static readonly object s_allowUserToDeleteRowsChangedEvent = new();
     private static readonly object s_allowUserToOrderColumnsChangedEvent = new();

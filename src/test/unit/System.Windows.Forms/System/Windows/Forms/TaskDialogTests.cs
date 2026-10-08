@@ -4,6 +4,7 @@
 #nullable disable
 
 using Microsoft.DotNet.RemoteExecutor;
+using System.Reflection;
 
 namespace System.Windows.Forms.Tests;
 
@@ -57,5 +58,52 @@ public class TaskDialogTests
 
         // verify the remote process succeeded
         Assert.Equal(RemoteExecutor.SuccessExitCode, invokerHandle.ExitCode);
+    }
+
+    [WinFormsFact]
+    public void TaskDialogPage_GetBoundButtonByID_CustomRangeOutOfBounds_ReturnsNull()
+    {
+        TaskDialogPage page = new();
+        PrepareBoundLikeState(page);
+        dynamic access = page.TestAccessor.Dynamic;
+        access._boundCustomButtons = Array.Empty<TaskDialogButton>();
+        access._boundStandardButtonsByID = new Dictionary<int, TaskDialogButton>();
+
+        TaskDialogButton button = page.GetBoundButtonByID(buttonID: 100);
+
+        Assert.Null(button);
+    }
+
+    [WinFormsFact]
+    public void TaskDialogPage_GetBoundRadioButtonByID_OutOfBounds_ReturnsNull()
+    {
+        TaskDialogPage page = new();
+        PrepareBoundLikeState(page);
+
+        TaskDialogRadioButton radioButton = page.GetBoundRadioButtonByID(buttonID: 1);
+
+        Assert.Null(radioButton);
+    }
+
+    private static void PrepareBoundLikeState(TaskDialogPage page)
+    {
+        ConstructorInfo constructor = typeof(TaskDialog).GetConstructor(
+            BindingFlags.Instance | BindingFlags.NonPublic,
+            binder: null,
+            Type.EmptyTypes,
+            modifiers: null);
+        Assert.NotNull(constructor);
+
+        TaskDialog dialog = (TaskDialog)constructor.Invoke(null);
+        SetPrivateField(page, "<BoundDialog>k__BackingField", dialog);
+    }
+
+    private static void SetPrivateField(object instance, string fieldName, object value)
+    {
+        FieldInfo field = instance.GetType().GetField(
+            fieldName,
+            BindingFlags.Instance | BindingFlags.NonPublic);
+        Assert.NotNull(field);
+        field.SetValue(instance, value);
     }
 }

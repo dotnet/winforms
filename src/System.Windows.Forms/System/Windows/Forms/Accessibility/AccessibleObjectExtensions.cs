@@ -264,7 +264,7 @@ internal static unsafe class AccessibleObjectExtensions
         }
 
         BSTR file = default;
-        result = accessible.Value->get_accHelpTopic(&file, child, out int topicId);
+        result = accessible.Value->get_accHelpTopic(out file, child, out int topicId);
         Debug.Assert(
             result.Succeeded || result == HRESULT.DISP_E_MEMBERNOTFOUND,
             $"{nameof(TryGetHelpTopic)}: put_accValue call failed with {result}");
