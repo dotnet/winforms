@@ -40,6 +40,27 @@ public class NumericUpDownTests
     }
 
     [WinFormsFact]
+    public void NumericUpDown_ModernVisualStylesMode_PreferredHeightMatchesSingleLineTextBox()
+    {
+        using TextBox textBox = new()
+        {
+            VisualStylesMode = VisualStylesMode.Net11
+        };
+        using NumericUpDown nud = new()
+        {
+            VisualStylesMode = VisualStylesMode.Net11
+        };
+
+        if (!nud.UseSideBySideButtons)
+        {
+            return;
+        }
+
+        Assert.Equal(textBox.PreferredHeight, nud.PreferredHeight);
+        Assert.Equal(textBox.PreferredHeight, nud.Height);
+    }
+
+    [WinFormsFact]
     public void NumericUpDown_VisualStyles_off_BasicRendering_ControlEnabled()
     {
         if (Application.RenderWithVisualStyles)

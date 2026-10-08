@@ -4551,7 +4551,7 @@ Chcete-li nahradit toto výchozí dialogové okno, nastavte popisovač události
       </trans-unit>
       <trans-unit id="DescriptionKioskModeManager">
         <source>Manages common fullscreen, input, cursor, and power behavior for kiosk-style WinForms applications.</source>
-        <target state="new">Manages common fullscreen, input, cursor, and power behavior for kiosk-style WinForms applications.</target>
+        <target state="translated">Spravuje běžné chování celoobrazovkového režimu, vstupu, kurzoru a napájení pro aplikace WinForms ve stylu celoobrazovkového režimu.</target>
         <note />
       </trans-unit>
       <trans-unit id="DescriptionLabel">
@@ -6151,47 +6151,47 @@ Trasování zásobníku, kde došlo k neplatné operaci:
       </trans-unit>
       <trans-unit id="KioskModeManagerAlwaysOnDescr">
         <source>Indicates whether Windows should keep the display and system awake while this component is active.</source>
-        <target state="new">Indicates whether Windows should keep the display and system awake while this component is active.</target>
+        <target state="translated">Určuje, jestli má systém Windows ponechat displej a systém aktivní, když je tato komponenta aktivní.</target>
         <note />
       </trans-unit>
       <trans-unit id="KioskModeManagerContainerControlChangedDescr">
         <source>Occurs when the ContainerControl property value changes.</source>
-        <target state="new">Occurs when the ContainerControl property value changes.</target>
+        <target state="translated">Nastane při změně hodnoty vlastnosti ContainerControl.</target>
         <note />
       </trans-unit>
       <trans-unit id="KioskModeManagerContainerControlDescr">
         <source>The container whose containing form is controlled by the kiosk mode manager.</source>
-        <target state="new">The container whose containing form is controlled by the kiosk mode manager.</target>
+        <target state="translated">Kontejner, jehož nadřazený formulář řídí správce celoobrazovkového režimu</target>
         <note />
       </trans-unit>
       <trans-unit id="KioskModeManagerEscapeExitsFullScreenDescr">
         <source>Indicates whether pressing Escape exits fullscreen mode.</source>
-        <target state="new">Indicates whether pressing Escape exits fullscreen mode.</target>
+        <target state="translated">Určuje, jestli se stisknutím klávesy Escape ukončí celoobrazovkový režim.</target>
         <note />
       </trans-unit>
       <trans-unit id="KioskModeManagerFullScreenDescr">
         <source>Gets or sets a value indicating whether the resolved form is currently fullscreen.</source>
-        <target state="new">Gets or sets a value indicating whether the resolved form is currently fullscreen.</target>
+        <target state="translated">Získá nebo nastaví hodnotu určující, jestli je přeložený formulář aktuálně v celoobrazovkovém režimu.</target>
         <note />
       </trans-unit>
       <trans-unit id="KioskModeManagerFullScreenChangedDescr">
         <source>Occurs when the fullscreen state changes.</source>
-        <target state="new">Occurs when the fullscreen state changes.</target>
+        <target state="translated">Nastane při změně stavu celoobrazovkového režimu.</target>
         <note />
       </trans-unit>
       <trans-unit id="KioskModeManagerMousePointerAutoHideDelayDescr">
         <source>The delay, in milliseconds, before the mouse pointer is hidden while fullscreen. A value of 0 disables automatic pointer hiding.</source>
-        <target state="new">The delay, in milliseconds, before the mouse pointer is hidden while fullscreen. A value of 0 disables automatic pointer hiding.</target>
+        <target state="translated">Prodleva v milisekundách před skrytím ukazatele myši v celoobrazovkovém režimu Hodnota 0 zakáže automatické skrývání ukazatele.</target>
         <note />
       </trans-unit>
       <trans-unit id="KioskModeManagerToggleFullScreenKeysDescr">
         <source>The key combination that toggles between fullscreen and restored mode.</source>
-        <target state="new">The key combination that toggles between fullscreen and restored mode.</target>
+        <target state="translated">Kombinace kláves, která přepíná mezi celoobrazovkovým a obnoveným režimem.</target>
         <note />
       </trans-unit>
       <trans-unit id="KioskModeManagerTopMostInFullScreenDescr">
         <source>Indicates whether the form is topmost while fullscreen.</source>
-        <target state="new">Indicates whether the form is topmost while fullscreen.</target>
+        <target state="translated">Určuje, jestli je formulář v celoobrazovkovém režimu zobrazený vždy nahoře.</target>
         <note />
       </trans-unit>
       <trans-unit id="LabelAutoEllipsisDescr">

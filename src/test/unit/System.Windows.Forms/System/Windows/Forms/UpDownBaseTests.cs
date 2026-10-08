@@ -3277,6 +3277,27 @@ public class UpDownBaseTests
         upDownBase.Height.Should().Be(upDownBase.PreferredHeight + upDownBase.Padding.Vertical);
     }
 
+    [WinFormsFact]
+    public void UpDownBase_ModernVisualStylesMode_PreferredHeightMatchesSingleLineTextBox()
+    {
+        using TextBox textBox = new()
+        {
+            VisualStylesMode = VisualStylesMode.Net11
+        };
+        using SubUpDownBase upDownBase = new()
+        {
+            VisualStylesMode = VisualStylesMode.Net11
+        };
+
+        if (!upDownBase.UseSideBySideButtons)
+        {
+            return;
+        }
+
+        upDownBase.PreferredHeight.Should().Be(textBox.PreferredHeight);
+        upDownBase.Height.Should().Be(textBox.PreferredHeight);
+    }
+
     [WinFormsTheory]
     [InlineData(96)]
     [InlineData(144)]
@@ -3329,12 +3350,13 @@ public class UpDownBaseTests
             return;
         }
 
-        int minimumHeight = upDownBase.LogicalToDeviceUnits(14)
-            + upDownBase.LogicalToDeviceUnits(1)
-            + upDownBase.LogicalToDeviceUnits(2);
-        int contentHeight = upDownBase.Font.Height + (upDownBase.LogicalToDeviceUnits(4) * 2);
+        using TextBox textBox = new()
+        {
+            VisualStylesMode = VisualStylesMode.Net11,
+            Font = new Font(Control.DefaultFont.FontFamily, fontSize)
+        };
 
-        upDownBase.PreferredHeight.Should().Be(Math.Max(contentHeight, minimumHeight));
+        upDownBase.PreferredHeight.Should().Be(textBox.PreferredHeight);
     }
 
     [WinFormsFact]

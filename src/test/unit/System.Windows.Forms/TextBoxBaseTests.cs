@@ -575,6 +575,54 @@ public partial class TextBoxBaseTests
     }
 
     [WinFormsFact]
+    public void TextBox_ModernVisualStylesMode_MultilineHeightMatchesSingleLineHeight()
+    {
+        using TextBox singleLineTextBox = new()
+        {
+            VisualStylesMode = VisualStylesMode.Net11
+        };
+        using TextBox multilineTextBox = new()
+        {
+            VisualStylesMode = VisualStylesMode.Net11,
+            Multiline = true
+        };
+
+        Assert.Equal(singleLineTextBox.PreferredHeight, multilineTextBox.Height);
+
+        singleLineTextBox.CreateControl();
+        multilineTextBox.CreateControl();
+
+        Assert.Equal(singleLineTextBox.PreferredHeight, multilineTextBox.Height);
+    }
+
+    [WinFormsFact]
+    public void TextBox_ModernVisualStylesMode_HighDpiClientHeight_PreservesSingleLineTextMetrics()
+    {
+        using IDisposable dpiScope = ScaleHelper.EnterDpiAwarenessScope(DPI_AWARENESS_CONTEXT.DPI_AWARENESS_CONTEXT_PER_MONITOR_AWARE_V2);
+
+        if (!ScaleHelper.IsThreadPerMonitorV2Aware)
+        {
+            return;
+        }
+
+        using TextBox control = new()
+        {
+            AutoSize = false,
+            VisualStylesMode = VisualStylesMode.Net11,
+            BorderStyle = BorderStyle.Fixed3D,
+            DeviceDpiInternal = 168
+        };
+
+        control.Size = new Size(control.Width, control.PreferredHeight);
+        control.CreateControl();
+
+        PInvokeCore.GetClientRect(control, out RECT clientRect);
+        int minimumSingleLineClientHeight = control.Font.Height + ScaleHelper.ScaleToDpi(3, control.DeviceDpi);
+
+        Assert.True(clientRect.Height >= minimumSingleLineClientHeight);
+    }
+
+    [WinFormsFact]
     public void RichTextBox_ModernGeometry_UsesInternalInsetAndNativeScrollbars()
     {
         using SubRichTextBox control = new()

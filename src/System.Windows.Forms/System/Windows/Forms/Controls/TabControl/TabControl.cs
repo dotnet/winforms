@@ -1796,8 +1796,15 @@ public partial class TabControl : Control
             return true;
         }
 
-        HRESULT hr = PInvoke.SetWindowTheme(handle, $"{DarkModeIdentifier}_{ExplorerThemeIdentifier}", null);
-        Debug.Assert(hr.Succeeded);
+        // Only apply theme to direct children (TabPages), not to controls within TabPages.
+        // Controls like ComboBox need their own specific dark mode themes.
+        HWND parent = PInvoke.GetParent(handle);
+        if (parent == HWND)
+        {
+            return PInvoke.SetWindowTheme(handle, $"{DarkModeIdentifier}_{ExplorerThemeIdentifier}", null)
+                .Succeeded;
+        }
+
         return true;
     }
 
