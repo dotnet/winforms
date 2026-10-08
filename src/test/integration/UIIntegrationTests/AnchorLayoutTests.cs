@@ -294,60 +294,6 @@ public class AnchorLayoutTests : ControlTestBase
         }
     }
 
-    [WinFormsFact]
-    public void Maximized_FontChanged_AnchoredControl_KeepsDistanceFromEdges()
-    {
-        // Regression test for https://github.com/dotnet/winforms/issues/12481
-        // Anchors Right/Bottom were ignored (i.e. the anchored control was incorrectly moved and
-        // resized) when the Form's Font changed while the Form was Maximized. ScaleControl scaled
-        // the control's raw bounds by the font ratio even though the maximized Form's ClientSize
-        // does not change in that state (see Form.ScaleCore), and, because DefaultLayout in V1
-        // recomputes each control's stored anchor distances from its current bounds, that
-        // incorrect change then persisted.
-        using Form form = new()
-        {
-            AutoScaleMode = AutoScaleMode.Font,
-            ClientSize = new Size(800, 600)
-        };
-        using Button button = new()
-        {
-            Anchor = AnchorStyles.Right | AnchorStyles.Bottom,
-            Location = new Point(600, 400),
-            Size = new Size(100, 30)
-        };
-
-        form.Controls.Add(button);
-
-        int distanceRightBefore = 0;
-        int distanceBottomBefore = 0;
-        int distanceRightAfter = 0;
-        int distanceBottomAfter = 0;
-
-        form.WindowState = FormWindowState.Maximized;
-        form.Shown += OnFormShown;
-        form.ShowDialog();
-
-        Assert.Equal(distanceRightBefore, distanceRightAfter);
-        Assert.Equal(distanceBottomBefore, distanceBottomAfter);
-
-        return;
-
-        void OnFormShown(object? sender, EventArgs e)
-        {
-            Rectangle clientRectBeforeFontChange = form.ClientRectangle;
-            distanceRightBefore = clientRectBeforeFontChange.Width - button.Bounds.Right;
-            distanceBottomBefore = clientRectBeforeFontChange.Height - button.Bounds.Bottom;
-
-            form.Font = new Font(form.Font.FontFamily, form.Font.Size * 2f);
-
-            Rectangle clientRectAfterFontChange = form.ClientRectangle;
-            distanceRightAfter = clientRectAfterFontChange.Width - button.Bounds.Right;
-            distanceBottomAfter = clientRectAfterFontChange.Height - button.Bounds.Bottom;
-
-            form.Close();
-        }
-    }
-
     private static void LaunchFormAndVerify(AnchorStyles anchors, int expectedX, int expectedY, int expectedWidth, int expectedHeight)
     {
         (Form form, Button button) = GetFormWithAnchoredButton(anchors);

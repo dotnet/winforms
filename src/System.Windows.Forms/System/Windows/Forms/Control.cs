@@ -10535,23 +10535,6 @@ public unsafe partial class Control :
         MinimumSize = Size.Empty;
         MaximumSize = Size.Empty;
 
-        // Whether this control is laid out by the default layout engine (i.e., positioned relative
-        // to its parent using anchors), and that parent's own size will not change as a result of
-        // this scaling operation because it is a maximized or minimized top-level Form
-        // (Form.ScaleCore only resizes the ClientSize while WindowState is Normal). In that case,
-        // scaling the control's raw bounds would move/resize it even though the container didn't
-        // actually change size, and (because anchor distances are recomputed from the control's
-        // current bounds) that incorrect change would persist. So we leave the control's bounds
-        // untouched here, consistent with Form itself not resizing in this state.
-        // See https://github.com/dotnet/winforms/issues/12481.
-        bool parentUsesDefaultLayout = ParentInternal is { } parent && parent.LayoutEngine == DefaultLayout.Instance;
-        bool skipAnchorRescale = parentUsesDefaultLayout && FindForm() is { WindowState: not FormWindowState.Normal };
-
-        if (skipAnchorRescale)
-        {
-            specified = BoundsSpecified.None;
-        }
-
         // This is raw because Min/Max size have been cleared at this point.
         Rectangle rawScaledBounds = GetScaledBounds(Bounds, factor, specified);
 
@@ -10617,7 +10600,9 @@ public unsafe partial class Control :
         Size scaledSize = LayoutUtils.IntersectSizes(rawScaledBounds.Size, maximumSize);
         scaledSize = LayoutUtils.UnionSizes(scaledSize, minSize);
 
-        if (ScaleHelper.IsScalingRequirementMet && parentUsesDefaultLayout && !skipAnchorRescale)
+        if (ScaleHelper.IsScalingRequirementMet
+            && ParentInternal is { } parent
+            && (parent.LayoutEngine == DefaultLayout.Instance))
         {
             // We need to scale AnchorInfo to update distances to container edges
             DefaultLayout.ScaleAnchorInfo(this, factor);
