@@ -16,6 +16,9 @@ namespace System.Windows.Forms.Tests;
 [UseDefaultXunitCulture]
 public class MonthCalendarTests
 {
+    // Keep theory data and the initial selection independent of the day the control is constructed.
+    private static readonly DateTime s_initialSelectionDate = new(2020, 1, 15);
+
     [WinFormsFact]
     public void MonthCalendar_Ctor_Default()
     {
@@ -1312,19 +1315,19 @@ public class MonthCalendarTests
     {
         yield return new object[] { new DateTime(1753, 1, 1), new DateTime(1753, 1, 1), new DateTime(1753, 1, 1) };
         yield return new object[] { new DateTime(2019, 1, 29), new DateTime(2019, 1, 29), new DateTime(2019, 1, 29) };
-        yield return new object[] { new DateTime(9998, 12, 31), new DateTime(9998, 12, 31), DateTime.Now.Date };
-        yield return new object[] { new DateTime(9999, 1, 1), new DateTime(9998, 12, 31), DateTime.Now.Date };
-        yield return new object[] { DateTime.MaxValue, new DateTime(9998, 12, 31), DateTime.Now.Date };
+        yield return new object[] { new DateTime(9998, 12, 31), new DateTime(9998, 12, 31), s_initialSelectionDate };
+        yield return new object[] { new DateTime(9999, 1, 1), new DateTime(9998, 12, 31), s_initialSelectionDate };
+        yield return new object[] { DateTime.MaxValue, new DateTime(9998, 12, 31), s_initialSelectionDate };
     }
 
     [WinFormsTheory]
     [MemberData(nameof(MaxDate_Set_TestData))]
     public void MonthCalendar_MaxDate_Set_GetReturnsExpected(DateTime value, DateTime expected, DateTime expectedSelection)
     {
-        using MonthCalendar calendar = new()
-        {
-            MaxDate = value
-        };
+        using MonthCalendar calendar = new();
+        calendar.SetDate(s_initialSelectionDate);
+
+        calendar.MaxDate = value;
         Assert.Equal(expected, calendar.MaxDate);
         Assert.Equal(expectedSelection, calendar.SelectionStart);
         Assert.Equal(expectedSelection, calendar.SelectionEnd);
@@ -1343,6 +1346,7 @@ public class MonthCalendarTests
     public void MonthCalendar_MaxDate_SetWithHandle_GetReturnsExpected(DateTime value, DateTime expected, DateTime expectedSelection)
     {
         using MonthCalendar calendar = new();
+        calendar.SetDate(s_initialSelectionDate);
         Assert.NotEqual(IntPtr.Zero, calendar.Handle);
         int invalidatedCallCount = 0;
         calendar.Invalidated += (sender, e) => invalidatedCallCount++;
@@ -1444,9 +1448,9 @@ public class MonthCalendarTests
 
     public static IEnumerable<object[]> MinDate_Set_TestData()
     {
-        yield return new object[] { DateTime.MinValue, new DateTime(1753, 1, 1), DateTime.Now.Date };
-        yield return new object[] { new DateTime(1753, 1, 1), new DateTime(1753, 1, 1), DateTime.Now.Date };
-        yield return new object[] { new DateTime(2019, 1, 29), new DateTime(2019, 1, 29), DateTime.Now.Date };
+        yield return new object[] { DateTime.MinValue, new DateTime(1753, 1, 1), s_initialSelectionDate };
+        yield return new object[] { new DateTime(1753, 1, 1), new DateTime(1753, 1, 1), s_initialSelectionDate };
+        yield return new object[] { new DateTime(2019, 1, 29), new DateTime(2019, 1, 29), s_initialSelectionDate };
         yield return new object[] { new DateTime(9998, 12, 31), new DateTime(9998, 12, 31), new DateTime(9998, 12, 31) };
     }
 
@@ -1454,10 +1458,10 @@ public class MonthCalendarTests
     [MemberData(nameof(MinDate_Set_TestData))]
     public void MonthCalendar_MinDate_Set_GetReturnsExpected(DateTime value, DateTime expected, DateTime expectedSelection)
     {
-        using MonthCalendar calendar = new()
-        {
-            MinDate = value
-        };
+        using MonthCalendar calendar = new();
+        calendar.SetDate(s_initialSelectionDate);
+
+        calendar.MinDate = value;
         Assert.Equal(expected, calendar.MinDate);
         Assert.Equal(expectedSelection, calendar.SelectionStart);
         Assert.Equal(expectedSelection, calendar.SelectionEnd);
@@ -1476,6 +1480,7 @@ public class MonthCalendarTests
     public void MonthCalendar_MinDate_SetWithHandle_GetReturnsExpected(DateTime value, DateTime expected, DateTime expectedSelection)
     {
         using MonthCalendar calendar = new();
+        calendar.SetDate(s_initialSelectionDate);
         Assert.NotEqual(IntPtr.Zero, calendar.Handle);
         int invalidatedCallCount = 0;
         calendar.Invalidated += (sender, e) => invalidatedCallCount++;
@@ -1946,8 +1951,8 @@ public class MonthCalendarTests
         yield return new object[] { new DateTime(1753, 1, 1), new DateTime(1753, 1, 7) };
         yield return new object[] { new DateTime(1753, 1, 1).AddHours(1), new DateTime(1753, 1, 7).AddHours(1) };
         yield return new object[] { new DateTime(2019, 1, 29), new DateTime(2019, 2, 4) };
-        yield return new object[] { DateTime.Now.Date.AddDays(-1), DateTime.Now.Date };
-        yield return new object[] { DateTime.Now.Date, DateTime.Now.Date };
+        yield return new object[] { s_initialSelectionDate.AddDays(-1), s_initialSelectionDate };
+        yield return new object[] { s_initialSelectionDate, s_initialSelectionDate };
         yield return new object[] { new DateTime(9998, 12, 31), new DateTime(9998, 12, 31) };
         yield return new object[] { DateTime.MaxValue, DateTime.MaxValue };
     }
@@ -1956,10 +1961,10 @@ public class MonthCalendarTests
     [MemberData(nameof(SelectionStart_Set_TestData))]
     public void MonthCalendar_SelectionStart_Set_GetReturnsExpected(DateTime value, DateTime expectedSelectionEnd)
     {
-        using MonthCalendar calendar = new()
-        {
-            SelectionStart = value
-        };
+        using MonthCalendar calendar = new();
+        calendar.SetDate(s_initialSelectionDate);
+
+        calendar.SelectionStart = value;
         Assert.Equal(value, calendar.SelectionStart);
         Assert.Equal(expectedSelectionEnd, calendar.SelectionEnd);
         Assert.False(calendar.IsHandleCreated);
@@ -1976,6 +1981,7 @@ public class MonthCalendarTests
     public void MonthCalendar_SelectionStart_SetWithHandle_GetReturnsExpected(DateTime value, DateTime expectedSelectionEnd)
     {
         using MonthCalendar calendar = new();
+        calendar.SetDate(s_initialSelectionDate);
         Assert.NotEqual(IntPtr.Zero, calendar.Handle);
         int invalidatedCallCount = 0;
         calendar.Invalidated += (sender, e) => invalidatedCallCount++;
@@ -2029,8 +2035,8 @@ public class MonthCalendarTests
         yield return new object[] { new DateTime(1753, 1, 1), new DateTime(1753, 1, 1) };
         yield return new object[] { new DateTime(1753, 1, 1).AddHours(1), new DateTime(1753, 1, 1).AddHours(1) };
         yield return new object[] { new DateTime(2019, 1, 29), new DateTime(2019, 1, 29) };
-        yield return new object[] { DateTime.Now.Date.AddDays(1), DateTime.Now.Date };
-        yield return new object[] { DateTime.Now.Date, DateTime.Now.Date };
+        yield return new object[] { s_initialSelectionDate.AddDays(1), s_initialSelectionDate };
+        yield return new object[] { s_initialSelectionDate, s_initialSelectionDate };
         yield return new object[] { new DateTime(9998, 12, 31), new DateTime(9998, 12, 25) };
     }
 
@@ -2038,10 +2044,10 @@ public class MonthCalendarTests
     [MemberData(nameof(SelectionEnd_Set_TestData))]
     public void MonthCalendar_SelectionEnd_Set_GetReturnsExpected(DateTime value, DateTime expectedSelectionStart)
     {
-        using MonthCalendar calendar = new()
-        {
-            SelectionEnd = value
-        };
+        using MonthCalendar calendar = new();
+        calendar.SetDate(s_initialSelectionDate);
+
+        calendar.SelectionEnd = value;
         Assert.Equal(value, calendar.SelectionEnd);
         Assert.Equal(expectedSelectionStart, calendar.SelectionStart);
         Assert.False(calendar.IsHandleCreated);
@@ -2058,6 +2064,7 @@ public class MonthCalendarTests
     public void MonthCalendar_SelectionEnd_SetWithHandle_GetReturnsExpected(DateTime value, DateTime expectedSelectionStart)
     {
         using MonthCalendar calendar = new();
+        calendar.SetDate(s_initialSelectionDate);
         Assert.NotEqual(IntPtr.Zero, calendar.Handle);
         int invalidatedCallCount = 0;
         calendar.Invalidated += (sender, e) => invalidatedCallCount++;
@@ -2118,12 +2125,12 @@ public class MonthCalendarTests
         yield return new object[] { new SelectionRange(new DateTime(2019, 9, 1), new DateTime(2019, 9, 7)), new DateTime(2019, 9, 1), new DateTime(2019, 9, 7) };
         yield return new object[] { new SelectionRange(new DateTime(2019, 9, 1), new DateTime(2019, 9, 8)), new DateTime(2019, 9, 1), new DateTime(2019, 9, 7) };
 
-        yield return new object[] { new SelectionRange(DateTime.Now.Date, DateTime.Now.Date), DateTime.Now.Date, DateTime.Now.Date };
-        yield return new object[] { new SelectionRange(DateTime.Now.Date, DateTime.Now.Date.AddDays(1)), DateTime.Now.Date, DateTime.Now.Date.AddDays(1) };
-        yield return new object[] { new SelectionRange(DateTime.Now.Date.AddHours(1), DateTime.Now.Date.AddHours(1)), DateTime.Now.Date, DateTime.Now.Date };
-        yield return new object[] { new SelectionRange(DateTime.Now.Date.AddDays(1), DateTime.Now.Date), DateTime.Now.Date, DateTime.Now.Date.AddDays(1) };
-        yield return new object[] { new SelectionRange(DateTime.Now.Date, DateTime.Now.Date.AddDays(6)), DateTime.Now.Date, DateTime.Now.Date.AddDays(6) };
-        yield return new object[] { new SelectionRange(DateTime.Now.Date, DateTime.Now.Date.AddDays(7)), DateTime.Now.Date.AddDays(1), DateTime.Now.Date.AddDays(7) };
+        yield return new object[] { new SelectionRange(s_initialSelectionDate, s_initialSelectionDate), s_initialSelectionDate, s_initialSelectionDate };
+        yield return new object[] { new SelectionRange(s_initialSelectionDate, s_initialSelectionDate.AddDays(1)), s_initialSelectionDate, s_initialSelectionDate.AddDays(1) };
+        yield return new object[] { new SelectionRange(s_initialSelectionDate.AddHours(1), s_initialSelectionDate.AddHours(1)), s_initialSelectionDate, s_initialSelectionDate };
+        yield return new object[] { new SelectionRange(s_initialSelectionDate.AddDays(1), s_initialSelectionDate), s_initialSelectionDate, s_initialSelectionDate.AddDays(1) };
+        yield return new object[] { new SelectionRange(s_initialSelectionDate, s_initialSelectionDate.AddDays(6)), s_initialSelectionDate, s_initialSelectionDate.AddDays(6) };
+        yield return new object[] { new SelectionRange(s_initialSelectionDate, s_initialSelectionDate.AddDays(7)), s_initialSelectionDate.AddDays(1), s_initialSelectionDate.AddDays(7) };
 
         yield return new object[] { new SelectionRange(new DateTime(9998, 12, 30), new DateTime(9998, 12, 31)), new DateTime(9998, 12, 30), new DateTime(9998, 12, 31) };
         yield return new object[] { new SelectionRange(new DateTime(9998, 12, 31), new DateTime(9998, 12, 31)), new DateTime(9998, 12, 31), new DateTime(9998, 12, 31) };
@@ -2135,10 +2142,10 @@ public class MonthCalendarTests
     [MemberData(nameof(SelectionRange_Set_TestData))]
     public void MonthCalendar_SelectionRange_Set_GetReturnsExpected(SelectionRange value, DateTime expectedSelectionStart, DateTime expectedSelectionEnd)
     {
-        using MonthCalendar calendar = new()
-        {
-            SelectionRange = value
-        };
+        using MonthCalendar calendar = new();
+        calendar.SetDate(s_initialSelectionDate);
+
+        calendar.SelectionRange = value;
         Assert.Equal(expectedSelectionStart, calendar.SelectionRange.Start);
         Assert.Equal(expectedSelectionEnd, calendar.SelectionRange.End);
         Assert.Equal(expectedSelectionStart, calendar.SelectionStart);
@@ -2161,6 +2168,7 @@ public class MonthCalendarTests
     public void MonthCalendar_SelectionRange_SetWithHandle_GetReturnsExpected(SelectionRange value, DateTime expectedSelectionStart, DateTime expectedSelectionEnd)
     {
         using MonthCalendar calendar = new();
+        calendar.SetDate(s_initialSelectionDate);
         Assert.NotEqual(IntPtr.Zero, calendar.Handle);
         int invalidatedCallCount = 0;
         calendar.Invalidated += (sender, e) => invalidatedCallCount++;
@@ -4055,12 +4063,12 @@ public class MonthCalendarTests
         yield return new object[] { new DateTime(2019, 9, 1), new DateTime(2019, 9, 7), new DateTime(2019, 9, 1), new DateTime(2019, 9, 7) };
         yield return new object[] { new DateTime(2019, 9, 1), new DateTime(2019, 9, 8), new DateTime(2019, 9, 1), new DateTime(2019, 9, 7) };
 
-        yield return new object[] { DateTime.Now.Date, DateTime.Now.Date, DateTime.Now.Date, DateTime.Now.Date };
-        yield return new object[] { DateTime.Now.Date, DateTime.Now.Date.AddDays(1), DateTime.Now.Date, DateTime.Now.Date.AddDays(1) };
-        yield return new object[] { DateTime.Now.Date.AddHours(1), DateTime.Now.Date.AddHours(1), DateTime.Now.Date.AddHours(1), DateTime.Now.Date.AddHours(1) };
-        yield return new object[] { DateTime.Now.Date.AddDays(1), DateTime.Now.Date, DateTime.Now.Date.AddDays(1), DateTime.Now.Date.AddDays(1) };
-        yield return new object[] { DateTime.Now.Date, DateTime.Now.Date.AddDays(6), DateTime.Now.Date, DateTime.Now.Date.AddDays(6) };
-        yield return new object[] { DateTime.Now.Date, DateTime.Now.Date.AddDays(7), DateTime.Now.Date.AddDays(1), DateTime.Now.Date.AddDays(7) };
+        yield return new object[] { s_initialSelectionDate, s_initialSelectionDate, s_initialSelectionDate, s_initialSelectionDate };
+        yield return new object[] { s_initialSelectionDate, s_initialSelectionDate.AddDays(1), s_initialSelectionDate, s_initialSelectionDate.AddDays(1) };
+        yield return new object[] { s_initialSelectionDate.AddHours(1), s_initialSelectionDate.AddHours(1), s_initialSelectionDate.AddHours(1), s_initialSelectionDate.AddHours(1) };
+        yield return new object[] { s_initialSelectionDate.AddDays(1), s_initialSelectionDate, s_initialSelectionDate.AddDays(1), s_initialSelectionDate.AddDays(1) };
+        yield return new object[] { s_initialSelectionDate, s_initialSelectionDate.AddDays(6), s_initialSelectionDate, s_initialSelectionDate.AddDays(6) };
+        yield return new object[] { s_initialSelectionDate, s_initialSelectionDate.AddDays(7), s_initialSelectionDate.AddDays(1), s_initialSelectionDate.AddDays(7) };
 
         yield return new object[] { new DateTime(9998, 12, 30), new DateTime(9998, 12, 31), new DateTime(9998, 12, 30), new DateTime(9998, 12, 31) };
         yield return new object[] { new DateTime(9998, 12, 31), new DateTime(9998, 12, 31), new DateTime(9998, 12, 31), new DateTime(9998, 12, 31) };
@@ -4073,6 +4081,8 @@ public class MonthCalendarTests
     public void MonthCalendar_SetSelectionRange_Invoke_GetReturnsExpected(DateTime date1, DateTime date2, DateTime expectedSelectionStart, DateTime expectedSelectionEnd)
     {
         using MonthCalendar calendar = new();
+        calendar.SetDate(s_initialSelectionDate);
+
         calendar.SetSelectionRange(date1, date2);
         Assert.Equal(expectedSelectionStart.Date, calendar.SelectionRange.Start);
         Assert.Equal(expectedSelectionEnd.Date, calendar.SelectionRange.End);
@@ -4094,6 +4104,7 @@ public class MonthCalendarTests
     public void MonthCalendar_SetSelectionRange_InvokeWithHandle_GetReturnsExpected(DateTime date1, DateTime date2, DateTime expectedSelectionStart, DateTime expectedSelectionEnd)
     {
         using MonthCalendar calendar = new();
+        calendar.SetDate(s_initialSelectionDate);
         Assert.NotEqual(IntPtr.Zero, calendar.Handle);
         int invalidatedCallCount = 0;
         calendar.Invalidated += (sender, e) => invalidatedCallCount++;
@@ -4122,6 +4133,29 @@ public class MonthCalendarTests
         Assert.Equal(0, invalidatedCallCount);
         Assert.Equal(0, styleChangedCallCount);
         Assert.Equal(0, createdCallCount);
+    }
+
+    [WinFormsTheory]
+    [InlineData(false, 0, 1, 7)]
+    [InlineData(false, 1, 0, 6)]
+    [InlineData(true, 0, 1, 7)]
+    [InlineData(true, 1, 0, 6)]
+    public void MonthCalendar_SetSelectionRange_ExceedsMaxSelectionCount_UsesInitialSelection(
+        bool createHandle, int initialSelectionOffset, int expectedStartOffset, int expectedEndOffset)
+    {
+        using MonthCalendar calendar = new();
+        // Model construction on the data's day or the next day without relying on the clock.
+        calendar.SetDate(s_initialSelectionDate.AddDays(initialSelectionOffset));
+        if (createHandle)
+        {
+            Assert.NotEqual(IntPtr.Zero, calendar.Handle);
+        }
+
+        calendar.SetSelectionRange(s_initialSelectionDate, s_initialSelectionDate.AddDays(7));
+
+        Assert.Equal(s_initialSelectionDate.AddDays(expectedStartOffset), calendar.SelectionStart);
+        Assert.Equal(s_initialSelectionDate.AddDays(expectedEndOffset), calendar.SelectionEnd);
+        Assert.Equal(createHandle, calendar.IsHandleCreated);
     }
 
     [WinFormsFact]
