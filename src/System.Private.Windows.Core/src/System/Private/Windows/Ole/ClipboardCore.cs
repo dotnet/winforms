@@ -22,6 +22,63 @@ internal static unsafe class ClipboardCore<TOleServices>
     /// </summary>
     private const int OleRetryDelay = 100;
 
+    private enum ClipboardCleanupOperation
+    {
+        Clear,
+        Flush
+    }
+
+    // Keep the managed owner alive for delayed OLE rendering. This is a bounded, single-owner cache; the shared layer
+    // has no clipboard-change notification, so external replacement is detected and released on the next operation.
+    // Readers add a reference so its agile pointer remains valid while COM operations run outside synchronization.
+    private static CurrentDataObjectEntry? s_currentDataObject;
+
+    private sealed class CurrentDataObjectEntry(
+        IComVisibleDataObject dataObject,
+        AgileComPointer<IDataObject> dataObjectPointer)
+    {
+        // The initial reference is owned by s_currentDataObject. Readers acquire additional references so replacing
+        // the cache entry cannot revoke its GIT cookie while they are using it.
+        private int _referenceCount = 1;
+
+        public IComVisibleDataObject DataObject { get; } = dataObject;
+        public AgileComPointer<IDataObject> DataObjectPointer { get; } = dataObjectPointer;
+
+        public bool TryAddReference()
+        {
+            int referenceCount = Volatile.Read(ref _referenceCount);
+
+            // Do not increment from zero: the final release may already be disposing the agile pointer.
+            while (referenceCount > 0)
+            {
+                int observedReferenceCount = Interlocked.CompareExchange(
+                    ref _referenceCount,
+                    referenceCount + 1,
+                    referenceCount);
+
+                if (observedReferenceCount == referenceCount)
+                {
+                    return true;
+                }
+
+                referenceCount = observedReferenceCount;
+            }
+
+            return false;
+        }
+
+        public void ReleaseReference()
+        {
+            int referenceCount = Interlocked.Decrement(ref _referenceCount);
+            Debug.Assert(referenceCount >= 0);
+
+            if (referenceCount == 0)
+            {
+                DataObjectPointer.Dispose();
+            }
+        }
+    }
+
     /// <summary>
     ///  Removes all data from the Clipboard.
     /// </summary>
@@ -32,20 +89,7 @@ internal static unsafe class ClipboardCore<TOleServices>
     {
         TOleServices.EnsureThreadState();
 
-        HRESULT result;
-        int retryCount = retryTimes;
-
-        while ((result = TOleServices.OleSetClipboard(null)).Failed)
-        {
-            if (--retryCount < 0)
-            {
-                break;
-            }
-
-            Thread.Sleep(millisecondsTimeout: retryDelay);
-        }
-
-        return result;
+        return PerformClipboardCleanup(ClipboardCleanupOperation.Clear, retryTimes, retryDelay);
     }
 
     /// <summary>
@@ -58,20 +102,7 @@ internal static unsafe class ClipboardCore<TOleServices>
     {
         TOleServices.EnsureThreadState();
 
-        HRESULT result;
-        int retryCount = retryTimes;
-
-        while ((result = TOleServices.OleFlushClipboard()).Failed)
-        {
-            if (--retryCount < 0)
-            {
-                break;
-            }
-
-            Thread.Sleep(millisecondsTimeout: retryDelay);
-        }
-
-        return result;
+        return PerformClipboardCleanup(ClipboardCleanupOperation.Flush, retryTimes, retryDelay);
     }
 
     /// <summary>
@@ -95,33 +126,33 @@ internal static unsafe class ClipboardCore<TOleServices>
 
         using var iDataObject = ComHelpers.GetComScope<IDataObject>(dataObject);
 
+        CurrentDataObjectEntry? entry;
         HRESULT result;
         int retryCount = retryTimes;
-        while ((result = TOleServices.OleSetClipboard(iDataObject)).Failed)
+
+        while (true)
         {
-            if (--retryCount < 0)
+            entry = Volatile.Read(ref s_currentDataObject);
+            result = TOleServices.OleSetClipboard(iDataObject);
+
+            if (result.Succeeded || --retryCount < 0)
             {
-                return result;
+                break;
             }
 
             Thread.Sleep(millisecondsTimeout: retryDelay);
         }
 
-        if (copy)
+        if (result.Failed)
         {
-            retryCount = retryTimes;
-            while ((result = TOleServices.OleFlushClipboard()).Failed)
-            {
-                if (--retryCount < 0)
-                {
-                    return result;
-                }
-
-                Thread.Sleep(millisecondsTimeout: retryDelay);
-            }
+            return result;
         }
 
-        return result;
+        SetCurrentDataObject(dataObject, iDataObject.Value, entry);
+
+        return copy
+            ? PerformClipboardCleanup(ClipboardCleanupOperation.Flush, retryTimes, retryDelay)
+            : result;
     }
 
     /// <summary>
@@ -208,14 +239,30 @@ internal static unsafe class ClipboardCore<TOleServices>
     /// <summary>
     ///  Returns the data that is currently on the clipboard as the platform specified <typeparamref name="TIDataObject"/>.
     /// </summary>
+    /// <param name="unwrapUserDataObject">
+    ///  <see langword="true"/> to return the original managed data object when possible; <see langword="false"/> to
+    ///  always return a wrapper around the OLE proxy. WinForms preserves managed object identity, while WPF uses the
+    ///  proxy to preserve its legacy Windows format-conversion behavior.
+    /// </param>
     internal static HRESULT GetDataObject<TDataObject, TIDataObject>(
         out TIDataObject? dataObject,
         int retryTimes = OleRetryCount,
-        int retryDelay = OleRetryDelay)
+        int retryDelay = OleRetryDelay,
+        bool unwrapUserDataObject = true)
         where TDataObject : class, IDataObjectInternal<TDataObject, TIDataObject>, TIDataObject
         where TIDataObject : class
     {
+        TOleServices.EnsureThreadState();
+
         dataObject = default;
+
+        if (TryGetCurrentDataObject<TDataObject, TIDataObject>(
+            unwrapUserDataObject,
+            out TIDataObject? currentDataObject))
+        {
+            dataObject = currentDataObject;
+            return HRESULT.S_OK;
+        }
 
         HRESULT result = TryGetData(
             out ComScope<IDataObject> proxyDataObject,
@@ -232,7 +279,8 @@ internal static unsafe class ClipboardCore<TOleServices>
                 return result;
             }
 
-            if (originalObject is TDataObject dataObjectInternal
+            if (unwrapUserDataObject
+                && originalObject is TDataObject dataObjectInternal
                 && dataObjectInternal.TryUnwrapUserDataObject(out TIDataObject? userObject))
             {
                 // We have an original user object that we want to return.
@@ -246,6 +294,197 @@ internal static unsafe class ClipboardCore<TOleServices>
         }
 
         return result;
+    }
+
+    private static bool TryGetCurrentDataObject<TDataObject, TIDataObject>(
+        bool unwrapUserDataObject,
+        [NotNullWhen(true)] out TIDataObject? dataObject)
+        where TDataObject : class, IDataObjectInternal<TDataObject, TIDataObject>, TIDataObject
+        where TIDataObject : class
+    {
+        CurrentDataObjectEntry entry;
+        TDataObject dataObjectInternal;
+
+        while (true)
+        {
+            CurrentDataObjectEntry? currentEntry = Volatile.Read(ref s_currentDataObject);
+            if (currentEntry?.DataObject is not TDataObject currentDataObject)
+            {
+                dataObject = null;
+                return false;
+            }
+
+            if (!currentEntry.TryAddReference())
+            {
+                continue;
+            }
+
+            // The entry may have been replaced between reading the cache and acquiring the reference. Keep the
+            // reference only when this is still the published entry, otherwise retry with the replacement.
+            if (!ReferenceEquals(Volatile.Read(ref s_currentDataObject), currentEntry))
+            {
+                currentEntry.ReleaseReference();
+                continue;
+            }
+
+            entry = currentEntry;
+            dataObjectInternal = currentDataObject;
+            break;
+        }
+
+        try
+        {
+            HRESULT interfaceResult;
+            HRESULT ownershipResult = HRESULT.E_FAIL;
+
+            using (ComScope<IDataObject> iDataObject = entry.DataObjectPointer.TryGetInterface(out interfaceResult))
+            {
+                if (interfaceResult.Succeeded)
+                {
+                    ownershipResult = TOleServices.OleIsCurrentClipboard(iDataObject);
+                }
+            }
+
+            if (!ReferenceEquals(Volatile.Read(ref s_currentDataObject), entry))
+            {
+                dataObject = null;
+                return false;
+            }
+
+            // The originating apartment may have exited, or clipboard ownership may have changed externally.
+            // In either case discard the stale cache and fall back to the current OLE clipboard proxy.
+            if (interfaceResult.Failed || ownershipResult != HRESULT.S_OK)
+            {
+                // Clear only the entry that was checked. A concurrent SetData may already have published a valid
+                // replacement, in which case that thread owns releasing this entry's cache reference.
+                if (ReferenceEquals(
+                    Interlocked.CompareExchange(ref s_currentDataObject, null, entry),
+                    entry))
+                {
+                    // Release the reference previously owned by s_currentDataObject.
+                    entry.ReleaseReference();
+                }
+
+                dataObject = null;
+                return false;
+            }
+
+            if (unwrapUserDataObject)
+            {
+                return dataObjectInternal.TryUnwrapUserDataObject(out dataObject);
+            }
+
+            dataObject = null;
+            return false;
+        }
+        finally
+        {
+            entry.ReleaseReference();
+        }
+    }
+
+    private static void SetCurrentDataObject(
+        IComVisibleDataObject dataObject,
+        IDataObject* iDataObject,
+        CurrentDataObjectEntry? expectedEntry)
+    {
+        AgileComPointer<IDataObject>? dataObjectPointer = new(iDataObject, takeOwnership: false);
+
+        try
+        {
+            CurrentDataObjectEntry entry = new(dataObject, dataObjectPointer);
+
+            // Publish only if no reentrant or concurrent SetData replaced the entry observed before OleSetClipboard.
+            // Releasing the displaced reference afterward ensures any reentrant replacement remains authoritative.
+            if (!ReferenceEquals(
+                Interlocked.CompareExchange(ref s_currentDataObject, entry, expectedEntry),
+                expectedEntry))
+            {
+                return;
+            }
+
+            dataObjectPointer = null;
+            expectedEntry?.ReleaseReference();
+        }
+        finally
+        {
+            // If replacing the previous cache entry fails, do not leak the newly registered GIT cookie.
+            dataObjectPointer?.Dispose();
+        }
+    }
+
+    private static void ClearCurrentDataObject(CurrentDataObjectEntry? entry)
+    {
+        // Clear only the entry associated with the completed operation. A concurrent SetData may have already published
+        // a newer owner, which must retain its cache reference.
+        if (entry is null
+            || !ReferenceEquals(
+                Interlocked.CompareExchange(ref s_currentDataObject, null, entry),
+                entry))
+        {
+            return;
+        }
+
+        // Release after detaching because revoking the GIT cookie can re-enter this type.
+        entry.ReleaseReference();
+    }
+
+    private static HRESULT PerformClipboardCleanup(
+        ClipboardCleanupOperation operation,
+        int retryTimes,
+        int retryDelay)
+    {
+        CurrentDataObjectEntry? entry;
+        HRESULT result;
+        int retryCount = retryTimes;
+
+        while (true)
+        {
+            entry = Volatile.Read(ref s_currentDataObject);
+            result = operation switch
+            {
+                ClipboardCleanupOperation.Clear => TOleServices.OleSetClipboard(null),
+                ClipboardCleanupOperation.Flush => TOleServices.OleFlushClipboard(),
+                _ => throw new InvalidOperationException()
+            };
+
+            if (result.Succeeded || --retryCount < 0)
+            {
+                break;
+            }
+
+            Thread.Sleep(millisecondsTimeout: retryDelay);
+        }
+
+        if (result.Succeeded)
+        {
+            ClearCurrentDataObject(entry);
+        }
+
+        return result;
+    }
+
+    /// <summary>
+    ///  Returns whether data in the specified native clipboard format is available or can be synthesized by Windows.
+    /// </summary>
+    /// <remarks>
+    ///  <para>This is consumed by WPF's <c>Clipboard.Contains*</c> APIs through the PresentationCore friend assembly.
+    ///  Keeping the P/Invoke here avoids duplicating native clipboard declarations in WPF.</para>
+    /// </remarks>
+    internal static bool IsClipboardFormatAvailable(uint format) =>
+        PInvokeCore.IsClipboardFormatAvailable(format).Value != 0;
+
+    /// <summary>
+    ///  Adds shared and platform-specific synonyms for the specified data format.
+    /// </summary>
+    /// <remarks>
+    ///  <para>Platform-specific mappings are kept separate so WPF can restore aliases such as <c>BitmapSource</c> without
+    ///  exposing WPF-only formats from WinForms data objects.</para>
+    /// </remarks>
+    internal static void AddMappedFormats(string format, ICollection<string> formats)
+    {
+        DataFormatNames.AddMappedFormats(format, formats);
+        TOleServices.AddMappedFormats(format, formats);
     }
 
     /// <summary>

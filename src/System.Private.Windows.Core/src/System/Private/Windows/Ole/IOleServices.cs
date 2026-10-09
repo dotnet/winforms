@@ -18,7 +18,8 @@ internal unsafe interface IOleServices
     static abstract void EnsureThreadState();
 
     /// <summary>
-    ///  Called after unsuccessfully performing clipboard <see cref="TYMED.TYMED_HGLOBAL"/> serialization.
+    ///  Renders clipboard data into a platform-specific native medium, or acts as a fallback when
+    ///  <see cref="TYMED.TYMED_HGLOBAL"/> serialization is not applicable.
     /// </summary>
     /// <remarks>
     ///  <para>
@@ -28,6 +29,17 @@ internal unsafe interface IOleServices
     /// <param name="format">The data format that is being serialized.</param>
     /// <inheritdoc cref="IDataObject.GetDataHere(FORMATETC*, STGMEDIUM*)"/>
     static abstract HRESULT GetDataHere(string format, object data, FORMATETC* pformatetc, STGMEDIUM* pmedium);
+
+    /// <summary>
+    ///  Returns whether the platform can render the specified format using one of the requested native media.
+    /// </summary>
+    /// <remarks>
+    ///  <para>
+    ///   Platform-specific media are excluded by default. This prevents <c>QueryGetData</c> from advertising a
+    ///   medium that the platform hook cannot actually render.
+    ///  </para>
+    /// </remarks>
+    static virtual bool IsNativeTymedSupported(string format, TYMED tymed) => false;
 
     /// <summary>
     ///  If the <typeparamref name="T"/> is a the requested format this method will attempt to extract it
@@ -61,6 +73,17 @@ internal unsafe interface IOleServices
     static abstract bool AllowTypeWithoutResolver<T>();
 
     /// <summary>
+    ///  Adds platform-specific synonyms for the specified data format.
+    /// </summary>
+    /// <remarks>
+    ///  <para>The default is intentionally empty. Platforms opt in only to mappings that are meaningful to their object
+    ///  model; for example, WPF adds its <c>BitmapSource</c> format while WinForms retains the shared mappings.</para>
+    /// </remarks>
+    static virtual void AddMappedFormats(string format, ICollection<string> formats)
+    {
+    }
+
+    /// <summary>
     ///  Allows custom validation or adapting of <see cref="DataStore{TOleServices}"/> data and formats.
     /// </summary>
     /// <param name="format">
@@ -80,6 +103,10 @@ internal unsafe interface IOleServices
 
     /// <inheritdoc cref="PInvokeCore.OleSetClipboard(IDataObject*)"/>
     static abstract HRESULT OleSetClipboard(IDataObject* dataObject);
+
+    /// <inheritdoc cref="PInvokeCore.OleIsCurrentClipboard(IDataObject*)"/>
+    static virtual HRESULT OleIsCurrentClipboard(IDataObject* dataObject) =>
+        PInvokeCore.OleIsCurrentClipboard(dataObject);
 
     /// <inheritdoc cref="PInvokeCore.OleFlushClipboard"/>
     static abstract HRESULT OleFlushClipboard();

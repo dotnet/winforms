@@ -15,6 +15,10 @@ using Composition = System.Private.Windows.Ole.Composition<
     System.Private.Windows.Ole.MockOleServices<System.Private.Windows.Ole.NativeToManagedAdapterTests>,
     System.Private.Windows.Nrbf.CoreNrbfSerializer,
     System.Private.Windows.Ole.TestFormat>;
+using EmfComposition = System.Private.Windows.Ole.Composition<
+    System.Private.Windows.Ole.EmfTestOleServices<System.Private.Windows.Ole.NativeToManagedAdapterTests>,
+    System.Private.Windows.Nrbf.CoreNrbfSerializer,
+    System.Private.Windows.Ole.TestFormat>;
 using DataFormats = System.Private.Windows.Ole.DataFormatsCore<System.Private.Windows.Ole.TestFormat>;
 using System.Text;
 
@@ -43,6 +47,42 @@ public unsafe class NativeToManagedAdapterTests
         var composition = Composition.Create(ComHelpers.GetComPointer<IDataObject>(dataObject));
         object? data = composition.GetData(nameof(NativeToManagedAdapterTests));
         MemoryStream result = data.Should().BeOfType<MemoryStream>().Subject;
+        result.ToArray().Should().Equal(0xBE, 0xAD);
+    }
+
+    // Verifies transient clipboard contention during format probing is retried before reading HGLOBAL data.
+    [Fact]
+    public void GetData_HGlobal_QueryGetDataClipboardBusy_Retries()
+    {
+        MemoryStream stream = new([0xBE, 0xAD]);
+        using RetryingHGlobalNativeDataObject dataObject = new(
+            stream,
+            (ushort)_format.Id,
+            queryFailures: 2,
+            getFailures: 0);
+
+        var composition = Composition.Create(ComHelpers.GetComPointer<IDataObject>(dataObject));
+
+        MemoryStream result = composition.GetData(nameof(NativeToManagedAdapterTests))
+            .Should().BeOfType<MemoryStream>().Subject;
+        result.ToArray().Should().Equal(0xBE, 0xAD);
+    }
+
+    // Verifies transient clipboard contention during HGLOBAL retrieval is retried without changing the payload.
+    [Fact]
+    public void GetData_HGlobal_GetDataClipboardBusy_Retries()
+    {
+        MemoryStream stream = new([0xBE, 0xAD]);
+        using RetryingHGlobalNativeDataObject dataObject = new(
+            stream,
+            (ushort)_format.Id,
+            queryFailures: 0,
+            getFailures: 2);
+
+        var composition = Composition.Create(ComHelpers.GetComPointer<IDataObject>(dataObject));
+
+        MemoryStream result = composition.GetData(nameof(NativeToManagedAdapterTests))
+            .Should().BeOfType<MemoryStream>().Subject;
         result.ToArray().Should().Equal(0xBE, 0xAD);
     }
 
@@ -261,6 +301,36 @@ public unsafe class NativeToManagedAdapterTests
         result.ToArray().Should().Equal(0xBE, 0xAD, 0xCA, 0xFE);
     }
 
+    private sealed class RetryingHGlobalNativeDataObject(
+        Stream stream,
+        ushort format,
+        int queryFailures,
+        int getFailures) : HGlobalNativeDataObject(stream, format)
+    {
+        private int _queryFailures = queryFailures;
+        private int _getFailures = getFailures;
+
+        public override HRESULT QueryGetData(FORMATETC* pformatetc)
+        {
+            if (_queryFailures-- > 0)
+            {
+                return HRESULT.CLIPBRD_E_CANT_OPEN;
+            }
+
+            return base.QueryGetData(pformatetc);
+        }
+
+        public override HRESULT GetData(FORMATETC* pformatetcIn, STGMEDIUM* pmedium)
+        {
+            if (_getFailures-- > 0)
+            {
+                return HRESULT.CLIPBRD_E_CANT_OPEN;
+            }
+
+            return base.GetData(pformatetcIn, pmedium);
+        }
+    }
+
     [Fact]
     public void GetData_WhenGetDataFails_ReturnsNullInsteadOfCorruptedData()
     {
@@ -315,5 +385,125 @@ public unsafe class NativeToManagedAdapterTests
         {
             composition.GetData(nameof(NativeToManagedAdapterTests)).Should().BeNull();
         }
+    }
+
+    [Fact]
+    public void TryGetData_EnhancedMetafile_PlatformHookRunsBeforeHGlobalAndIStream()
+    {
+        EmfTestOleServices<NativeToManagedAdapterTests>.Reset();
+        using EnhMetafileNativeDataObject dataObject = new();
+        var composition = EmfComposition.Create(ComHelpers.GetComPointer<IDataObject>(dataObject));
+
+        composition.TryGetData(DataFormatNames.Emf, autoConvert: false, out EmfPayload? payload).Should().BeTrue();
+
+        payload.Should().NotBeNull();
+        payload!.RecordCount.Should().BeGreaterThan(2);
+        EmfTestOleServices<NativeToManagedAdapterTests>.PlatformRequests.Should()
+            .Equal((DataFormatNames.Emf, TYMED.TYMED_ENHMF));
+        dataObject.QueryRequests.Should().Equal((DataFormatNames.Emf, TYMED.TYMED_ENHMF));
+    }
+
+    [Fact]
+    public void TryGetData_MappedMetafileFormat_RespectsAutoConvert()
+    {
+        EmfTestOleServices<NativeToManagedAdapterTests>.Reset();
+        using EnhMetafileNativeDataObject dataObject = new();
+        var composition = EmfComposition.Create(ComHelpers.GetComPointer<IDataObject>(dataObject));
+
+        composition.TryGetData(
+            DataFormatNames.BinaryFormatMetafile,
+            autoConvert: false,
+            out EmfPayload? noConversion).Should().BeFalse();
+
+        noConversion.Should().BeNull();
+        EmfTestOleServices<NativeToManagedAdapterTests>.PlatformRequests.Select(request => request.Format)
+            .Should().Equal(DataFormatNames.BinaryFormatMetafile);
+        dataObject.GetDataCallCount.Should().Be(0);
+
+        EmfTestOleServices<NativeToManagedAdapterTests>.Reset();
+        dataObject.QueryRequests.Clear();
+
+        composition.TryGetData(
+            DataFormatNames.BinaryFormatMetafile,
+            autoConvert: true,
+            out EmfPayload? converted).Should().BeTrue();
+
+        converted.Should().NotBeNull();
+        EmfTestOleServices<NativeToManagedAdapterTests>.PlatformRequests.Select(request => request.Format)
+            .Should().Equal(DataFormatNames.BinaryFormatMetafile, DataFormatNames.Emf);
+        dataObject.QueryRequests.Select(request => request.Format).Should().Equal(
+            DataFormatNames.BinaryFormatMetafile,
+            DataFormatNames.BinaryFormatMetafile,
+            DataFormatNames.BinaryFormatMetafile,
+            DataFormatNames.Emf);
+        dataObject.GetDataCallCount.Should().Be(1);
+    }
+
+    [Fact]
+    public void TryGetData_EnhancedMetafile_Success_ReleasesMediumExactlyOnce()
+    {
+        EmfTestOleServices<NativeToManagedAdapterTests>.Reset();
+        using EnhMetafileNativeDataObject dataObject = new();
+        var composition = EmfComposition.Create(ComHelpers.GetComPointer<IDataObject>(dataObject));
+
+        composition.TryGetData(DataFormatNames.Emf, autoConvert: false, out EmfPayload? payload).Should().BeTrue();
+
+        EmfTestOleServices<NativeToManagedAdapterTests>.ConversionCount.Should().Be(1);
+        EmfTestOleServices<NativeToManagedAdapterTests>.ReleaseCount.Should().Be(1);
+        dataObject.ReturnedHandles.Should().ContainSingle();
+        EmfNativeMethods.IsValid(dataObject.ReturnedHandles[0]).Should().BeFalse();
+        payload!.Bits.Should().NotBeEmpty();
+        payload.RecordCount.Should().BeGreaterThan(2);
+    }
+
+    [Fact]
+    public void TryGetData_EnhancedMetafile_WrongType_ReleasesMediumExactlyOnce()
+    {
+        EmfTestOleServices<NativeToManagedAdapterTests>.Reset();
+        using EnhMetafileNativeDataObject dataObject = new();
+        var composition = EmfComposition.Create(ComHelpers.GetComPointer<IDataObject>(dataObject));
+
+        composition.TryGetData(DataFormatNames.Emf, autoConvert: false, out string? payload).Should().BeFalse();
+
+        payload.Should().BeNull();
+        EmfTestOleServices<NativeToManagedAdapterTests>.ConversionCount.Should().Be(1);
+        EmfTestOleServices<NativeToManagedAdapterTests>.ReleaseCount.Should().Be(1);
+        dataObject.ReturnedHandles.Should().ContainSingle();
+        EmfNativeMethods.IsValid(dataObject.ReturnedHandles[0]).Should().BeFalse();
+    }
+
+    [Fact]
+    public void TryGetData_EnhancedMetafile_GetDataFailure_DoesNotReadOrReleaseMedium()
+    {
+        EmfTestOleServices<NativeToManagedAdapterTests>.Reset();
+        using EnhMetafileNativeDataObject dataObject = new(HRESULT.E_FAIL);
+        var composition = EmfComposition.Create(ComHelpers.GetComPointer<IDataObject>(dataObject));
+
+        composition.TryGetData(
+            DataFormatNames.Emf,
+            autoConvert: false,
+            out EmfPayload? payload).Should().BeFalse();
+
+        payload.Should().BeNull();
+        dataObject.GetDataCallCount.Should().Be(1);
+        dataObject.ReturnedHandles.Should().BeEmpty();
+        EmfTestOleServices<NativeToManagedAdapterTests>.ConversionCount.Should().Be(0);
+        EmfTestOleServices<NativeToManagedAdapterTests>.ReleaseCount.Should().Be(0);
+    }
+
+    [Theory]
+    [InlineData("EnhancedMetafile")]
+    [InlineData("ENHANCEDMETAFILE")]
+    public void GetDataPresent_EnhancedMetafile_QueriesTymedEnhMetafile(string format)
+    {
+        EmfTestOleServices<NativeToManagedAdapterTests>.Reset();
+        using EnhMetafileNativeDataObject dataObject = new();
+        var composition = EmfComposition.Create(ComHelpers.GetComPointer<IDataObject>(dataObject));
+
+        composition.GetDataPresent(format, autoConvert: false).Should().BeTrue();
+
+        dataObject.QueryRequests.Should().ContainSingle();
+        dataObject.QueryRequests[0].Format.Should().Be(DataFormatNames.Emf);
+        (dataObject.QueryRequests[0].Tymed & TYMED.TYMED_ENHMF).Should().Be(TYMED.TYMED_ENHMF);
     }
 }

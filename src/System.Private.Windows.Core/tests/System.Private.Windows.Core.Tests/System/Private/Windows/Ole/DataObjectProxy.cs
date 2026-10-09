@@ -45,14 +45,24 @@ internal unsafe class DataObjectProxy : IDataObject.Interface, IDisposable
     }
 
     public HRESULT GetData(FORMATETC* pformatetcIn, STGMEDIUM* pmedium) => _original->GetData(pformatetcIn, pmedium);
+
     public HRESULT GetDataHere(FORMATETC* pformatetc, STGMEDIUM* pmedium) => _original->GetDataHere(pformatetc, pmedium);
+
     public HRESULT QueryGetData(FORMATETC* pformatetc) => _original->QueryGetData(pformatetc);
+
     public HRESULT GetCanonicalFormatEtc(FORMATETC* pformatectIn, FORMATETC* pformatetcOut) => _original->GetCanonicalFormatEtc(pformatectIn, pformatetcOut);
+
     public HRESULT SetData(FORMATETC* pformatetc, STGMEDIUM* pmedium, BOOL fRelease) => _original->SetData(pformatetc, pmedium, fRelease);
+
     public HRESULT EnumFormatEtc(uint dwDirection, IEnumFORMATETC** ppenumFormatEtc) => _original->EnumFormatEtc(dwDirection, ppenumFormatEtc);
+
     public HRESULT DAdvise(FORMATETC* pformatetc, uint advf, IAdviseSink* pAdvSink, uint* pdwConnection) => _original->DAdvise(pformatetc, advf, pAdvSink, pdwConnection);
+
     public HRESULT DUnadvise(uint dwConnection) => _original->DUnadvise(dwConnection);
+
     public HRESULT EnumDAdvise(IEnumSTATDATA** ppenumAdvise) => _original->EnumDAdvise(ppenumAdvise);
+
+    public bool IsOriginal(IDataObject* dataObject) => _original == dataObject;
 
     public void Dispose()
     {

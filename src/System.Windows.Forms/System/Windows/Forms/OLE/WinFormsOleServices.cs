@@ -85,14 +85,14 @@ internal sealed class WinFormsOleServices : IOleServices
                 tymed = (uint)TYMED.TYMED_GDI
             };
 
-            HRESULT result = dataObject->QueryGetData(formatEtc);
+            HRESULT result = ClipboardRetry.QueryGetData(dataObject, formatEtc);
 
             if (result.Failed)
             {
                 return HandleFailedHResult(result);
             }
 
-            result = dataObject->GetData(formatEtc, out STGMEDIUM medium);
+            result = ClipboardRetry.GetData(dataObject, formatEtc, out STGMEDIUM medium);
 
             // One of the ways this can happen is when we attempt to put binary formatted data onto the
             // clipboard, which will succeed as Windows ignores all errors when putting data on the clipboard.
