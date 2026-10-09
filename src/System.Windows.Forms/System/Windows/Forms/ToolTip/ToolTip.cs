@@ -225,10 +225,38 @@ public partial class ToolTip : Component, IExtenderProvider, IHandle<HWND>
             }
 
             cp.ExStyle = 0;
+
+            if (ShouldMirrorToolTipLayout())
+            {
+                cp.ExStyle |= (int)(WINDOW_EX_STYLE.WS_EX_LAYOUTRTL | WINDOW_EX_STYLE.WS_EX_NOINHERITLAYOUT);
+                cp.ExStyle &= ~(int)(WINDOW_EX_STYLE.WS_EX_RTLREADING | WINDOW_EX_STYLE.WS_EX_RIGHT | WINDOW_EX_STYLE.WS_EX_LEFTSCROLLBAR);
+            }
+
             cp.Caption = null;
 
             return cp;
         }
+    }
+
+    /// <summary>
+    ///  Determines if any associated control has mirrored
+    /// </summary>
+    private bool ShouldMirrorToolTipLayout()
+    {
+        if (TopLevelControl is { IsDisposed: false } topLevelControl && topLevelControl.IsMirrored)
+        {
+            return true;
+        }
+
+        foreach (Control control in _tools.Keys)
+        {
+            if (control is { IsDisposed: false } && control.IsMirrored)
+            {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     /// <summary>

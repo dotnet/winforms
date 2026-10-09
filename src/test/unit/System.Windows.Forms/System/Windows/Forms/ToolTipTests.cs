@@ -97,6 +97,127 @@ public class ToolTipTests
         Assert.NotSame(createParams, toolTip.CreateParams);
     }
 
+    [WinFormsFact]
+    public void ToolTip_CreateParams_TopLevelFormRightToLeftYesAndRightToLeftLayoutTrue_SetsLayoutRtlExStyle()
+    {
+        using SubToolTip toolTip = new();
+        using Form form = new()
+        {
+            RightToLeft = RightToLeft.Yes,
+            RightToLeftLayout = true
+        };
+        using Control control = new();
+        form.Controls.Add(control);
+        form.CreateControl();
+        control.CreateControl();
+
+        toolTip.SetToolTip(control, "caption");
+
+        CreateParams createParams = toolTip.CreateParams;
+        int expectedExStyle = (int)(WINDOW_EX_STYLE.WS_EX_LAYOUTRTL | WINDOW_EX_STYLE.WS_EX_NOINHERITLAYOUT);
+        Assert.Equal(expectedExStyle, createParams.ExStyle);
+    }
+
+    [WinFormsFact]
+    public void ToolTip_CreateParams_TopLevelFormRightToLeftYesOnly_DoesNotSetLayoutRtlExStyle()
+    {
+        // RightToLeft.Yes alone (without RightToLeftLayout) only affects reading order,
+        // not full window mirroring, so WS_EX_LAYOUTRTL should not be applied.
+        using SubToolTip toolTip = new();
+        using Form form = new()
+        {
+            RightToLeft = RightToLeft.Yes,
+            RightToLeftLayout = false
+        };
+        using Control control = new();
+        form.Controls.Add(control);
+        form.CreateControl();
+        control.CreateControl();
+
+        toolTip.SetToolTip(control, "caption");
+
+        CreateParams createParams = toolTip.CreateParams;
+        Assert.Equal(0, createParams.ExStyle);
+    }
+
+    [WinFormsFact]
+    public void ToolTip_CreateParams_TopLevelFormRightToLeftLayoutTrueOnly_DoesNotSetLayoutRtlExStyle()
+    {
+        // RightToLeftLayout without RightToLeft.Yes should not trigger mirroring.
+        using SubToolTip toolTip = new();
+        using Form form = new()
+        {
+            RightToLeft = RightToLeft.No,
+            RightToLeftLayout = true
+        };
+        using Control control = new();
+        form.Controls.Add(control);
+        form.CreateControl();
+        control.CreateControl();
+
+        toolTip.SetToolTip(control, "caption");
+
+        CreateParams createParams = toolTip.CreateParams;
+        Assert.Equal(0, createParams.ExStyle);
+    }
+
+    [WinFormsFact]
+    public void ToolTip_CreateHandle_AssociatedControlMirrored_SetsLayoutRtlExStyle()
+    {
+        using Form form = new();
+        using TrackBar trackBar = new()
+        {
+            RightToLeft = RightToLeft.Yes,
+            RightToLeftLayout = true
+        };
+        using SubToolTip toolTip = new()
+        {
+            IsBalloon = true,
+            ToolTipTitle = "Hi"
+        };
+
+        form.Controls.Add(trackBar);
+        form.Show();
+
+        Assert.True(trackBar.IsMirrored);
+        Assert.False(form.IsMirrored);
+
+        toolTip.SetToolTip(trackBar, "Tooltip text");
+
+        Assert.True(toolTip.GetHandleCreated());
+
+        WINDOW_EX_STYLE actualExStyle = unchecked(
+           (WINDOW_EX_STYLE)(long)PInvokeCore.GetWindowLong(
+                toolTip,
+               WINDOW_LONG_PTR_INDEX.GWL_EXSTYLE));
+
+        WINDOW_EX_STYLE expectedExStyle =
+            WINDOW_EX_STYLE.WS_EX_LAYOUTRTL |
+            WINDOW_EX_STYLE.WS_EX_NOINHERITLAYOUT;
+
+        Assert.Equal(expectedExStyle, actualExStyle & expectedExStyle);
+    }
+
+    [WinFormsFact]
+    public void ToolTip_CreateParams_AssociatedControlRightToLeftYesOnly_DoesNotSetLayoutRtlExStyle()
+    {
+        using SubToolTip toolTip = new();
+        using Form form = new();
+        using TrackBar trackBar = new()
+        {
+            RightToLeft = RightToLeft.Yes,
+            RightToLeftLayout = false
+        };
+        form.Controls.Add(trackBar);
+        form.CreateControl();
+        trackBar.CreateControl();
+
+        toolTip.SetToolTip(trackBar, "Hello");
+
+        CreateParams createParams = toolTip.CreateParams;
+        Assert.Equal(0, createParams.ExStyle);
+    }
+
     [WinFormsTheory]
     [BoolData]
     public void ToolTip_Active_Set_GetReturnsExpected(bool value)
