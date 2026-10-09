@@ -5447,8 +5447,8 @@ public unsafe partial class Control :
     /// <summary>
     ///  Returns the control that is currently associated with handle.
     ///  This method will search up the HWND parent chain until it finds some
-    ///  handle that is associated with with a control. This method is more
-    ///  robust that fromHandle because it will correctly return controls
+    ///  handle that is associated with a control. This method is more
+    ///  robust than fromHandle because it will correctly return controls
     ///  that own more than one handle.
     /// </summary>
     [EditorBrowsable(EditorBrowsableState.Advanced)]
@@ -10997,7 +10997,7 @@ public unsafe partial class Control :
             if (ParentInternal is not null)
             {
                 // Some layout engines (DefaultLayout) base their PreferredSize on
-                // the bounds of their children. If we change change the child bounds, we
+                // the bounds of their children. If we change the child bounds, we
                 // need to clear their PreferredSize cache. The semantics of SetBoundsCore
                 // is that it does not cause a layout, so we just clear.
                 CommonProperties.xClearPreferredSizeCache(ParentInternal);
