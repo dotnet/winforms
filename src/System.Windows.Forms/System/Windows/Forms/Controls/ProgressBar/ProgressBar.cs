@@ -27,6 +27,10 @@ public partial class ProgressBar : Control
 
     private static readonly Color s_defaultForeColor = SystemColors.Highlight;
 
+    // Fixed Dark Mode background color; a user-set BackColor must never visually leak through
+    // (matches Classic Mode, where Visual Styles ignore BackColor).
+    private static readonly Color s_darkModeBackColor = SystemColors.ControlDarkDark;
+
     private ProgressBarStyle _style = ProgressBarStyle.Blocks;
 
     private EventHandler? _onRightToLeftLayoutChanged;
@@ -81,11 +85,6 @@ public partial class ProgressBar : Control
 
         if (Application.IsDarkModeEnabled)
         {
-            if (!ShouldSerializeBackColor())
-            {
-                BackColor = SystemColors.ControlDarkDark;
-            }
-
             if (!ShouldSerializeForeColor())
             {
                 ForeColor = SystemColors.Highlight;
@@ -93,6 +92,10 @@ public partial class ProgressBar : Control
 
             // Disables Visual Styles for the ProgressBar.
             PInvoke.SetWindowTheme(HWND, " ", " ");
+
+            // Explicitly re-apply the fixed dark mode background color, bypassing BackColor so it
+            // can't leak through.
+            PInvokeCore.SendMessage(this, PInvoke.PBM_SETBKCOLOR, (WPARAM)0, (LPARAM)s_darkModeBackColor);
         }
     }
 
@@ -347,7 +350,9 @@ public partial class ProgressBar : Control
     protected override void OnBackColorChanged(EventArgs e)
     {
         base.OnBackColorChanged(e);
-        if (IsHandleCreated)
+
+        // Skip in Dark Mode: the background color is fixed (see s_darkModeBackColor).
+        if (IsHandleCreated && !Application.IsDarkModeEnabled)
         {
             PInvokeCore.SendMessage(this, PInvoke.PBM_SETBKCOLOR, 0, BackColor.ToWin32());
         }
@@ -608,7 +613,10 @@ public partial class ProgressBar : Control
             PInvokeCore.SendMessage(this, PInvoke.PBM_SETRANGE32, (WPARAM)_minimum, (LPARAM)_maximum);
             PInvokeCore.SendMessage(this, PInvoke.PBM_SETSTEP, (WPARAM)_step);
             PInvokeCore.SendMessage(this, PInvoke.PBM_SETPOS, (WPARAM)_value);
-            PInvokeCore.SendMessage(this, PInvoke.PBM_SETBKCOLOR, (WPARAM)0, (LPARAM)BackColor);
+
+            // In Dark Mode, use the fixed background color instead of BackColor (see s_darkModeBackColor).
+            Color backColor = Application.IsDarkModeEnabled ? s_darkModeBackColor : BackColor;
+            PInvokeCore.SendMessage(this, PInvoke.PBM_SETBKCOLOR, (WPARAM)0, (LPARAM)backColor);
             PInvokeCore.SendMessage(this, PInvoke.PBM_SETBARCOLOR, (WPARAM)0, (LPARAM)ForeColor);
         }
 
@@ -703,8 +711,10 @@ public partial class ProgressBar : Control
     {
         if (IsHandleCreated)
         {
+            // In Dark Mode, use the fixed background color instead of BackColor (see s_darkModeBackColor).
+            Color backColor = Application.IsDarkModeEnabled ? s_darkModeBackColor : BackColor;
             PInvokeCore.SendMessage(this, PInvoke.PBM_SETBARCOLOR, 0, ForeColor.ToWin32());
-            PInvokeCore.SendMessage(this, PInvoke.PBM_SETBKCOLOR, 0, BackColor.ToWin32());
+            PInvokeCore.SendMessage(this, PInvoke.PBM_SETBKCOLOR, 0, backColor.ToWin32());
         }
     }
 

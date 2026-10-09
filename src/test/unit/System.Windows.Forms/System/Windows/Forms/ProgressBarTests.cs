@@ -1970,6 +1970,47 @@ public class ProgressBarTests
         Assert.True(control.IsHandleCreated);
     }
 
+    [WinFormsFact]
+    public void ProgressBar_DarkMode_CustomBackColor_DoesNotLeakThroughVisually()
+    {
+        // Regression test for https://github.com/dotnet/winforms/issues/11938.
+        if (SystemInformation.HighContrast)
+        {
+            return;
+        }
+
+        try
+        {
+            Application.SetColorMode(SystemColorMode.Dark);
+            using ProgressBar control = new()
+            {
+                BackColor = Color.Red
+            };
+
+            // Force handle creation (OnCreateControl/OnHandleCreated).
+            Assert.NotEqual(IntPtr.Zero, control.Handle);
+
+            // BackColor property still reflects the user's value.
+            Assert.Equal(Color.Red, control.BackColor);
+
+            // PBM_SETBKCOLOR returns the previous native color; query it (then restore it) to
+            // confirm it was never set to the user's custom color.
+            int previousNativeBackColor = (int)PInvokeCore.SendMessage(
+                control,
+                PInvoke.PBM_SETBKCOLOR,
+                (WPARAM)0,
+                (LPARAM)ColorTranslator.ToWin32(Color.Red));
+            PInvokeCore.SendMessage(control, PInvoke.PBM_SETBKCOLOR, (WPARAM)0, (LPARAM)previousNativeBackColor);
+
+            Assert.NotEqual(ColorTranslator.ToWin32(Color.Red), previousNativeBackColor);
+            Assert.Equal(ColorTranslator.ToWin32(SystemColors.ControlDarkDark), previousNativeBackColor);
+        }
+        finally
+        {
+            Application.SetColorMode(SystemColorMode.Classic);
+        }
+    }
+
     [WinFormsTheory]
     [NewAndDefaultData<EventArgs>]
     public void MonthControl_OnDoubleClick_Invoke_CallsDoubleClick(EventArgs eventArgs)
