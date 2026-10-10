@@ -1778,9 +1778,14 @@ public abstract partial class TextBoxBase : Control
         bool oldUsesModernMetrics = oldMode >= VisualStylesMode.Net11;
         bool newUsesModernMetrics = newMode >= VisualStylesMode.Net11;
 
-        return oldUsesModernMetrics != newUsesModernMetrics
-            ? VisualStylesModeChangeImpact.Metrics
-            : VisualStylesModeChangeImpact.Repaint;
+        if (oldUsesModernMetrics == newUsesModernMetrics)
+        {
+            return VisualStylesModeChangeImpact.Repaint;
+        }
+
+        return BorderStyle == BorderStyle.FixedSingle
+            ? VisualStylesModeChangeImpact.Recreate
+            : VisualStylesModeChangeImpact.Metrics;
     }
 
     /// <summary>
