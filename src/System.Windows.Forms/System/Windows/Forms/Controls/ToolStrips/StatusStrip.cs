@@ -20,7 +20,7 @@ public partial class StatusStrip : ToolStrip
     private static readonly int s_stateSizingGrip = BitVector32.CreateMask();
     private static readonly int s_stateCalledSpringTableLayout = BitVector32.CreateMask(s_stateSizingGrip);
 
-    private const int GripWidth = 12;
+    private const int GripWidth = 15;
     private const int GripHeight = 22;
 
     private RightToLeftLayoutGrip? _rtlLayoutGrip;
@@ -72,14 +72,22 @@ public partial class StatusStrip : ToolStrip
         {
             if (Orientation == Orientation.Horizontal)
             {
-                return RightToLeft == RightToLeft.No ? new Padding(1, 0, 14, 0) : new Padding(14, 0, 1, 0);
+                int gripPaddingWidth = SizeGripBounds.Width < GripWidth + 2
+                    ? GripWidth + 2
+                    : SizeGripBounds.Width;
+                return RightToLeft == RightToLeft.No
+                    ? new Padding(1, 0, gripPaddingWidth, 0)
+                    : new Padding(gripPaddingWidth, 0, 1, 0);
             }
             else
             {
                 // vertical
                 // the difference in symmetry here is that the grip does not actually rotate, it remains the same height it
                 // was before, so the DisplayRectangle needs to shrink up by its height.
-                return new Padding(1, 3, 1, DefaultSize.Height);
+                int gripPaddingHeight = SizeGripBounds.Height < DefaultSize.Height
+                    ? DefaultSize.Height
+                    : SizeGripBounds.Height;
+                return new Padding(1, 3, 1, gripPaddingHeight);
             }
         }
     }
