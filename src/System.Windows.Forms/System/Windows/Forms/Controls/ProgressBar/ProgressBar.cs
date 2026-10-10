@@ -26,6 +26,7 @@ public partial class ProgressBar : Control
     private int _marqueeAnimationSpeed = 100;
 
     private static readonly Color s_defaultForeColor = SystemColors.Highlight;
+    private static readonly Color s_defaultDarkModeBackColor = SystemColors.ControlText;
 
     private ProgressBarStyle _style = ProgressBarStyle.Blocks;
 
@@ -71,31 +72,6 @@ public partial class ProgressBar : Control
         }
     }
 
-    protected override void OnCreateControl()
-    {
-        base.OnCreateControl();
-
-        // If SystemColorMode is enabled, we need to disable the Visual Styles
-        // so Windows allows setting Fore- and Background color.
-        // There are more ideal ways imaginable, but this does the trick for now.
-
-        if (Application.IsDarkModeEnabled)
-        {
-            if (!ShouldSerializeBackColor())
-            {
-                BackColor = SystemColors.ControlDarkDark;
-            }
-
-            if (!ShouldSerializeForeColor())
-            {
-                ForeColor = SystemColors.Highlight;
-            }
-
-            // Disables Visual Styles for the ProgressBar.
-            PInvoke.SetWindowTheme(HWND, " ", " ");
-        }
-    }
-
     [Browsable(false)]
     [EditorBrowsable(EditorBrowsableState.Never)]
     public override bool AllowDrop
@@ -133,6 +109,8 @@ public partial class ProgressBar : Control
                 if (IsHandleCreated)
                 {
                     RecreateHandle();
+                    // Re-apply theming after handle recreation
+                    ApplyTheming();
                 }
 
                 if (_style == ProgressBarStyle.Marquee)
@@ -349,7 +327,7 @@ public partial class ProgressBar : Control
         base.OnBackColorChanged(e);
         if (IsHandleCreated)
         {
-            PInvokeCore.SendMessage(this, PInvoke.PBM_SETBKCOLOR, 0, BackColor.ToWin32());
+            PInvokeCore.SendMessage(this, PInvoke.PBM_SETBKCOLOR, 0, GetEffectiveBackColor().ToWin32());
         }
     }
 
@@ -358,7 +336,7 @@ public partial class ProgressBar : Control
         base.OnForeColorChanged(e);
         if (IsHandleCreated)
         {
-            PInvokeCore.SendMessage(this, PInvoke.PBM_SETBARCOLOR, 0, ForeColor.ToWin32());
+            PInvokeCore.SendMessage(this, PInvoke.PBM_SETBARCOLOR, 0, GetEffectiveForeColor().ToWin32());
         }
     }
 
@@ -603,13 +581,17 @@ public partial class ProgressBar : Control
     protected override void OnHandleCreated(EventArgs e)
     {
         base.OnHandleCreated(e);
+
+        ApplyTheming();
+
         if (IsHandleCreated)
         {
             PInvokeCore.SendMessage(this, PInvoke.PBM_SETRANGE32, (WPARAM)_minimum, (LPARAM)_maximum);
             PInvokeCore.SendMessage(this, PInvoke.PBM_SETSTEP, (WPARAM)_step);
             PInvokeCore.SendMessage(this, PInvoke.PBM_SETPOS, (WPARAM)_value);
-            PInvokeCore.SendMessage(this, PInvoke.PBM_SETBKCOLOR, (WPARAM)0, (LPARAM)BackColor);
-            PInvokeCore.SendMessage(this, PInvoke.PBM_SETBARCOLOR, (WPARAM)0, (LPARAM)ForeColor);
+
+            PInvokeCore.SendMessage(this, PInvoke.PBM_SETBKCOLOR, 0, GetEffectiveBackColor().ToWin32());
+            PInvokeCore.SendMessage(this, PInvoke.PBM_SETBARCOLOR, 0, GetEffectiveForeColor().ToWin32());
         }
 
         StartMarquee();
@@ -701,10 +683,56 @@ public partial class ProgressBar : Control
     /// </remarks>
     private void UserPreferenceChangedHandler(object o, UserPreferenceChangedEventArgs e)
     {
-        if (IsHandleCreated)
+        if (!IsHandleCreated)
         {
-            PInvokeCore.SendMessage(this, PInvoke.PBM_SETBARCOLOR, 0, ForeColor.ToWin32());
-            PInvokeCore.SendMessage(this, PInvoke.PBM_SETBKCOLOR, 0, BackColor.ToWin32());
+            return;
+        }
+
+        // Only react to changes that can affect colors or theme changes.
+        if (e.Category is not UserPreferenceCategory.Color and not UserPreferenceCategory.General)
+        {
+            return;
+        }
+
+        ApplyTheming();
+
+        PInvokeCore.SendMessage(this, PInvoke.PBM_SETBARCOLOR, 0, GetEffectiveForeColor().ToWin32());
+        PInvokeCore.SendMessage(this, PInvoke.PBM_SETBKCOLOR, 0, GetEffectiveBackColor().ToWin32());
+    }
+
+    private Color GetEffectiveBackColor()
+    {
+        if (ShouldSerializeBackColor())
+        {
+            return BackColor;
+        }
+
+        return Application.IsDarkModeEnabled ? s_defaultDarkModeBackColor : BackColor;
+    }
+
+    private Color GetEffectiveForeColor()
+    {
+        return ShouldSerializeForeColor() ? ForeColor : s_defaultForeColor;
+    }
+
+    private void ApplyTheming()
+    {
+        if (!IsHandleCreated)
+        {
+            return;
+        }
+
+        if (Application.IsDarkModeEnabled)
+        {
+            // In dark mode on newer Windows builds, style switching can produce mixed rendering
+            // across Blocks/Continuous/Marquee. Disable visual styles and drive colors via PBM_SET*COLOR
+            // for consistent appearance.
+            PInvoke.SetWindowTheme(HWND, " ", " ");
+        }
+        else
+        {
+            // Restore default theming when dark mode and custom colors are no longer active.
+            PInvoke.SetWindowTheme(HWND, (PCWSTR)null, (PCWSTR)null);
         }
     }
 
