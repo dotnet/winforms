@@ -2,6 +2,7 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 
 using System.Drawing;
+using System.Drawing.Drawing2D;
 using System.Windows.Forms.VisualStyles;
 
 namespace System.Windows.Forms;
@@ -97,6 +98,25 @@ internal abstract partial class ButtonDarkModeRendererBase : IButtonRenderer
         ArgumentNullException.ThrowIfNull(graphics);
 
         graphics.Clear(parentBackgroundColor);
+    }
+
+    private protected static void DrawDottedFocusRectangle(Graphics graphics, Rectangle bounds, Color focusColor)
+    {
+        if (bounds.Width <= 0 || bounds.Height <= 0)
+        {
+            return;
+        }
+
+        using GraphicsStateScope graphicsStateScope = new(graphics);
+        graphics.SmoothingMode = SmoothingMode.None;
+
+        using Pen focusPen = new(focusColor)
+        {
+            DashStyle = DashStyle.Dot,
+            Alignment = PenAlignment.Inset
+        };
+
+        graphics.DrawRectangle(focusPen, bounds);
     }
 
     /// <summary>

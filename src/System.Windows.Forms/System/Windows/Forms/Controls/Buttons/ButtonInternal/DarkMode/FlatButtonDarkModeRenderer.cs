@@ -44,16 +44,7 @@ internal sealed class FlatButtonDarkModeRenderer : ButtonDarkModeRendererBase
     public override void DrawFocusIndicator(Graphics g, Rectangle contentBounds, bool isDefault)
     {
         Rectangle focus = Rectangle.Inflate(contentBounds, FocusIndicatorInflate, FocusIndicatorInflate);
-
-        Color focusBackColor = isDefault
-            ? DefaultColors.AcceptFocusIndicatorBackColor
-            : DefaultColors.FocusIndicatorBackColor;
-
-        ControlPaint.DrawFocusRectangle(
-            g,
-            focus,
-            DefaultColors.FocusBorderColor,
-            focusBackColor);
+        DrawDottedFocusRectangle(g, focus, DefaultColors.FocusBorderColor);
     }
 
     public override Color GetTextColor(PushButtonState state, bool isDefault, Color backColor) =>
