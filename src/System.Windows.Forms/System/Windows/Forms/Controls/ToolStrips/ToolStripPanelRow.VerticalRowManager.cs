@@ -452,8 +452,7 @@ public partial class ToolStripPanelRow
 
                         if (index == 0)
                         {
-                            // make sure we account for the left side
-                            requiredSpace += locationToDrag.Y;
+                            requiredSpace += Math.Max(0, locationToDrag.Y - Row.Margin.Top - ToolStripPanel.Padding.Top);
                         }
 
                         int freedSpace = 0;
@@ -544,7 +543,7 @@ public partial class ToolStripPanelRow
                             if (cell is not null)
                             {
                                 Padding cellMargin = cell.Margin;
-                                cellMargin.Top = Math.Max(0, locationToDrag.Y - Row.Margin.Top);
+                                cellMargin.Top = Math.Max(0, locationToDrag.Y - Row.Margin.Top - ToolStripPanel.Padding.Top);
                                 cell.Margin = cellMargin;
                             }
                         }
