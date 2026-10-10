@@ -57,6 +57,8 @@ internal sealed class WinFormsOleServices : IOleServices
         return HRESULT.DV_E_TYMED;
     }
 
+    static TYMED IOleServices.AllowedTymeds => TYMED.TYMED_HGLOBAL | TYMED.TYMED_ISTREAM | TYMED.TYMED_GDI;
+
     static unsafe bool IOleServices.TryGetObjectFromDataObject<T>(
         Com.IDataObject* dataObject,
         string requestedFormat,
