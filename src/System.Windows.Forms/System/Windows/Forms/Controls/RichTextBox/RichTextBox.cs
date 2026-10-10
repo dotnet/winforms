@@ -4,6 +4,7 @@
 using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Drawing;
+using System.Drawing.Drawing2D;
 using System.Runtime.InteropServices;
 using System.Text;
 using System.Windows.Forms.Layout;
@@ -3525,6 +3526,31 @@ public partial class RichTextBox : TextBoxBase
         InternalSetForeColor(ForeColor);
     }
 
+    internal static void DrawDisabledText(Graphics graphics, string text, Font font, Rectangle bounds)
+    {
+        GraphicsState state = graphics.Save();
+        try
+        {
+            graphics.SetClip(bounds);
+            TextRenderer.DrawText(
+                graphics,
+                text,
+                font,
+                bounds,
+                SystemColors.GrayText,
+                TextFormatFlags.Left
+                | TextFormatFlags.Top
+                | TextFormatFlags.WordBreak
+                | TextFormatFlags.TextBoxControl
+                | TextFormatFlags.NoClipping
+                | TextFormatFlags.PreserveGraphicsClipping);
+        }
+        finally
+        {
+            graphics.Restore(state);
+        }
+    }
+
     protected override unsafe void WndProc(ref Message m)
     {
         switch (m.MsgInternal)
@@ -3554,17 +3580,9 @@ public partial class RichTextBox : TextBoxBase
                     PInvokeCore.SendMessage(this, PInvokeCore.EM_GETRECT, (WPARAM)0, ref textRect);
                     Rectangle textBounds = textRect;
 
-                    // Paint the text
-                    TextRenderer.DrawText(
-                        g,
-                        Text,
-                        Font,
-                        textBounds,
-                        SystemColors.GrayText,
-                        TextFormatFlags.Left
-                        | TextFormatFlags.Top
-                        | TextFormatFlags.WordBreak
-                        | TextFormatFlags.TextBoxControl);
+                    // Let DrawText lay out all lines without vertical clipping, then clip through
+                    // Graphics so long words wrap and partially visible lines remain visible.
+                    DrawDisabledText(g, Text, Font, textBounds);
 
                     return;
                 }
