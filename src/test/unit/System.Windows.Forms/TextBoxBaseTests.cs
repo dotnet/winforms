@@ -65,6 +65,43 @@ public partial class TextBoxBaseTests
         Assert.Equal(6, control.SelectionLength);
     }
 
+
+    [WinFormsFact]
+    public void TextBoxBase_ParentVisualStylesModeChanged_FixedSingle_RecreatesHandleWithoutNativeBorder()
+    {
+        if (SystemInformation.HighContrast)
+        {
+            return;
+        }
+
+        using Form parent = new()
+        {
+            VisualStylesMode = VisualStylesMode.Classic
+        };
+        using TextBox control = new()
+        {
+            BorderStyle = BorderStyle.FixedSingle,
+            Text = "Visual styles mode refresh",
+            SelectionStart = 8,
+            SelectionLength = 6
+        };
+        parent.Controls.Add(control);
+        parent.CreateControl();
+        control.CreateControl();
+
+        IntPtr classicHandle = control.Handle;
+
+        parent.VisualStylesMode = VisualStylesMode.Net11;
+
+        WINDOW_STYLE modernStyle = (WINDOW_STYLE)PInvokeCore.GetWindowLong(
+            control,
+            WINDOW_LONG_PTR_INDEX.GWL_STYLE);
+        Assert.NotEqual(classicHandle, control.Handle);
+        Assert.Equal((WINDOW_STYLE)0, modernStyle & WINDOW_STYLE.WS_BORDER);
+        Assert.Equal(8, control.SelectionStart);
+        Assert.Equal(6, control.SelectionLength);
+    }
+
     [WinFormsFact]
     public void TextBoxBase_VisualStylesMode_MetricsImpact_ClearsPreferredSizeCache()
     {
@@ -8589,9 +8626,9 @@ public partial class TextBoxBaseTests
             set => base.FontHeight = value;
         }
 
-        public Padding GetVisualStylesPaddingCore(bool includeScrollbars) => base.GetVisualStylesPadding(includeScrollbars);
+        public Padding GetVisualStylesPaddingCore(bool includeScrollbars) => GetVisualStylesPadding(includeScrollbars);
 
-        public Padding GetScrollBarPaddingCore() => base.GetScrollBarPadding();
+        public Padding GetScrollBarPaddingCore() => GetScrollBarPadding();
 
         public new ImeMode ImeModeBase
         {
@@ -8703,10 +8740,10 @@ public partial class TextBoxBaseTests
         public new CreateParams CreateParams => base.CreateParams;
 
         public Padding GetVisualStylesPaddingCore(bool includeScrollbars)
-            => base.GetVisualStylesPadding(includeScrollbars);
+            => GetVisualStylesPadding(includeScrollbars);
 
         public Padding GetScrollBarPaddingCore()
-            => base.GetScrollBarPadding();
+            => GetScrollBarPadding();
     }
 
     private class SubMaskedTextBox : MaskedTextBox
