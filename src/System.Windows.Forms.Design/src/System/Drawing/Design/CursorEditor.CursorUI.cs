@@ -41,7 +41,7 @@ public partial class CursorEditor
                 }
             }
 
-            _cursorWidth = GetCursorWidthForDpi(Cursors.Default, DeviceDpi);
+            RecalculateCursorWidth(DeviceDpi);
         }
 
         public object? Value { get; private set; }
@@ -50,7 +50,17 @@ public partial class CursorEditor
         {
             _editorService = null;
             Value = null;
-            _cursorWidthCache.Clear();
+            ClearCursorCaches();
+        }
+
+        protected override void OnVisibleChanged(EventArgs e)
+        {
+            base.OnVisibleChanged(e);
+
+            if (Visible && IsHandleCreated)
+            {
+                BeginInvoke((MethodInvoker)ForceRedrawVisibleItems);
+            }
         }
 
         protected override void OnClick(EventArgs e)
@@ -75,7 +85,17 @@ public partial class CursorEditor
                 e.Graphics.FillRectangle(SystemBrushes.Control, new Rectangle(e.Bounds.X + 2, e.Bounds.Y + 2, _cursorWidth, e.Bounds.Height - 4));
                 e.Graphics.DrawRectangle(SystemPens.WindowText, new Rectangle(e.Bounds.X + 2, e.Bounds.Y + 2, _cursorWidth - 1, e.Bounds.Height - 4 - 1));
 
-                cursor.DrawStretched(e.Graphics, new Rectangle(e.Bounds.X + 2, e.Bounds.Y + 2, _cursorWidth, e.Bounds.Height - 4));
+                using (DeviceContextHdcScope dc = new(e, applyGraphicsState: false))
+                {
+                    PInvokeCore.DrawIconEx(
+                        (HDC)dc,
+                        e.Bounds.X + 2,
+                        e.Bounds.Y + 2,
+                        cursor,
+                        _cursorWidth,
+                        e.Bounds.Height - 4);
+                }
+
                 e.Graphics.DrawString(text, font, brushText, e.Bounds.X + _cursorWidth + 4, e.Bounds.Y + (e.Bounds.Height - font.Height) / 2);
             }
         }
@@ -113,6 +133,9 @@ public partial class CursorEditor
             _editorService = editorService;
             Value = value;
 
+            // Rebuild width/cache for every drop-down session so owner-draw rows are ready on first paint.
+            RecalculateCursorWidth(DeviceDpi);
+
             // Select the current cursor
             if (value is not null)
             {
@@ -125,14 +148,46 @@ public partial class CursorEditor
                     }
                 }
             }
+
+            Invalidate();
+            Update();
+        }
+
+        private void ForceRedrawVisibleItems()
+        {
+            if (!IsDisposed && IsHandleCreated && Visible)
+            {
+                Invalidate();
+                Update();
+            }
+        }
+
+        private void ClearCursorCaches()
+        {
+            _cursorWidthCache.Clear();
+        }
+
+        private void RecalculateCursorWidth(int dpi)
+        {
+            int cursorWidth = GetCursorWidthForDpi(Cursors.Default, dpi);
+
+            foreach (object item in Items)
+            {
+                if (item is Cursor cursor)
+                {
+                    cursorWidth = Math.Max(cursorWidth, GetCursorWidthForDpi(cursor, dpi));
+                }
+            }
+
+            _cursorWidth = cursorWidth;
         }
 
         protected override void RescaleConstantsForDpi(int deviceDpiOld, int deviceDpiNew)
         {
             base.RescaleConstantsForDpi(deviceDpiOld, deviceDpiNew);
 
-            // Recalculate the representative width using the new DPI; all rows continue to share it to avoid the layout issues seen in #14167.
-            _cursorWidth = GetCursorWidthForDpi(Cursors.Default, deviceDpiNew);
+            // Recalculate the shared column width using the new DPI and the widest standard cursor.
+            RecalculateCursorWidth(deviceDpiNew);
             Invalidate();
         }
     }
