@@ -2,6 +2,7 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 
 using System.Drawing;
+using System.Drawing.Drawing2D;
 
 namespace System.Windows.Forms.Tests;
 
@@ -316,6 +317,52 @@ public class DataGridViewButtonCellTests : IDisposable
     }
 
     [WinFormsTheory]
+    [InlineData(VisualStyles.PushButtonState.Normal)]
+    [InlineData(VisualStyles.PushButtonState.Hot)]
+    [InlineData(VisualStyles.PushButtonState.Pressed)]
+    public void GetDarkModeTextColor_MatchesDrawButtonTextColor(VisualStyles.PushButtonState state)
+    {
+        if (SystemInformation.HighContrast)
+        {
+            return;
+        }
+
+        var applicationAccessor = typeof(Application).TestAccessor.Dynamic;
+        SystemColorMode? previousColorMode = applicationAccessor.s_colorMode;
+
+        try
+        {
+            applicationAccessor.s_colorMode = SystemColorMode.Dark;
+            using AppContextSwitchScope scope = new(
+                "System.Windows.Forms.DataGridViewDarkModeTheming",
+                enable: true);
+            using Bitmap bitmap = new(20, 20);
+            using Graphics graphics = Graphics.FromImage(bitmap);
+            Type rendererType = typeof(DataGridViewButtonCell).GetNestedType(
+                "DataGridViewButtonCellRenderer",
+                Reflection.BindingFlags.NonPublic)!;
+            Reflection.MethodInfo drawButton = rendererType.GetMethod(
+                "DrawButton",
+                Reflection.BindingFlags.Public | Reflection.BindingFlags.Static)!;
+            Reflection.MethodInfo getTextColor = rendererType.GetMethod(
+                "GetDarkModeTextColor",
+                Reflection.BindingFlags.Public | Reflection.BindingFlags.Static)!;
+
+            object? drawResult = drawButton.Invoke(
+                null,
+                [graphics, new Rectangle(0, 0, 20, 20), state, false, FlatStyle.Standard, 96]);
+            Color result = (Color)getTextColor.Invoke(null, [state, false, FlatStyle.Standard])!;
+            (Rectangle ContentBounds, Color TextColor) renderedButton = ((Rectangle, Color))drawResult!;
+
+            renderedButton.TextColor.Should().Be(result);
+        }
+        finally
+        {
+            applicationAccessor.s_colorMode = previousColorMode;
+        }
+    }
+
+    [WinFormsTheory]
     [InlineData(ButtonState.Pushed, true)]
     [InlineData(ButtonState.Normal, false)]
     [InlineData(ButtonState.Checked, false)]
@@ -479,6 +526,188 @@ public class DataGridViewButtonCellTests : IDisposable
 
         _dataGridViewButtonCell.DataGridView.Should().BeSameAs(dataGridView);
         dataGridViewCellStyle.Font.Should().Be(SystemFonts.DefaultFont);
+    }
+
+    [WinFormsFact]
+    public void DrawButton_DarkMode_RestoresGraphicsState()
+    {
+        if (SystemInformation.HighContrast)
+        {
+            return;
+        }
+
+        var applicationAccessor = typeof(Application).TestAccessor.Dynamic;
+        SystemColorMode? previousColorMode = applicationAccessor.s_colorMode;
+
+        try
+        {
+            applicationAccessor.s_colorMode = SystemColorMode.Dark;
+            using AppContextSwitchScope scope = new(
+                "System.Windows.Forms.DataGridViewDarkModeTheming",
+                enable: true);
+            using Bitmap bitmap = new(20, 20);
+            using Graphics graphics = Graphics.FromImage(bitmap);
+            graphics.Clear(Color.Red);
+            graphics.SmoothingMode = SmoothingMode.None;
+            graphics.SmoothingMode.Should().Be(SmoothingMode.None);
+
+            Type rendererType = typeof(DataGridViewButtonCell).GetNestedType(
+                "DataGridViewButtonCellRenderer",
+                Reflection.BindingFlags.NonPublic)!;
+            Reflection.MethodInfo drawButton = rendererType.GetMethod(
+                "DrawButton",
+                Reflection.BindingFlags.Public | Reflection.BindingFlags.Static)!;
+            object? result = drawButton.Invoke(
+                null,
+                [
+                    graphics,
+                    new Rectangle(0, 0, 20, 20),
+                    VisualStyles.PushButtonState.Normal,
+                    false,
+                    FlatStyle.Standard,
+                    96
+                ]);
+
+            graphics.SmoothingMode.Should().Be(SmoothingMode.None);
+            (Rectangle ContentBounds, Color TextColor) renderResult = ((Rectangle, Color))result!;
+            renderResult.TextColor.Should().NotBe(Color.Green);
+            bitmap.GetPixel(10, 10).Should().NotBe(Color.Red);
+        }
+        finally
+        {
+            applicationAccessor.s_colorMode = previousColorMode;
+        }
+    }
+
+    [WinFormsFact]
+    public void DrawButton_DarkMode_SystemStyle_UsesStandardContentBoundsAndReadableDefaultTextColor()
+    {
+        if (SystemInformation.HighContrast)
+        {
+            return;
+        }
+
+        var applicationAccessor = typeof(Application).TestAccessor.Dynamic;
+        SystemColorMode? previousColorMode = applicationAccessor.s_colorMode;
+
+        try
+        {
+            applicationAccessor.s_colorMode = SystemColorMode.Dark;
+            using AppContextSwitchScope scope = new(
+                "System.Windows.Forms.DataGridViewDarkModeTheming",
+                enable: true);
+            using Bitmap bitmap = new(30, 30);
+            using Graphics graphics = Graphics.FromImage(bitmap);
+            Type rendererType = typeof(DataGridViewButtonCell).GetNestedType(
+                "DataGridViewButtonCellRenderer",
+                Reflection.BindingFlags.NonPublic)!;
+            Reflection.MethodInfo drawButton = rendererType.GetMethod(
+                "DrawButton",
+                Reflection.BindingFlags.Public | Reflection.BindingFlags.Static)!;
+            Reflection.MethodInfo getContentBounds = rendererType.GetMethod(
+                "GetContentBounds",
+                Reflection.BindingFlags.Public | Reflection.BindingFlags.Static)!;
+
+            object? systemResult = drawButton.Invoke(
+                null,
+                [
+                    graphics,
+                    new Rectangle(0, 0, 30, 30),
+                    VisualStyles.PushButtonState.Normal,
+                    true,
+                    FlatStyle.System,
+                    96
+                ]);
+            object? standardResult = drawButton.Invoke(
+                null,
+                [
+                    graphics,
+                    new Rectangle(0, 0, 30, 30),
+                    VisualStyles.PushButtonState.Normal,
+                    true,
+                    FlatStyle.Standard,
+                    96
+                ]);
+
+            (Rectangle ContentBounds, Color TextColor) systemRenderResult = ((Rectangle, Color))systemResult!;
+            (Rectangle ContentBounds, Color TextColor) standardRenderResult = ((Rectangle, Color))standardResult!;
+            Rectangle foregroundOnlyBounds = (Rectangle)getContentBounds.Invoke(
+                null,
+                [graphics, new Rectangle(0, 0, 30, 30), FlatStyle.System, 96])!;
+            systemRenderResult.ContentBounds.Should().Be(standardRenderResult.ContentBounds);
+            foregroundOnlyBounds.Should().Be(systemRenderResult.ContentBounds);
+            systemRenderResult.TextColor.GetBrightness().Should().BeGreaterThan(0.5f);
+        }
+        finally
+        {
+            applicationAccessor.s_colorMode = previousColorMode;
+        }
+    }
+
+    [WinFormsTheory]
+    [InlineData(false, KnownColor.Red)]
+    [InlineData(true, KnownColor.Blue)]
+    public void Paint_DarkMode_UsesStyleColorOnlyForCellBackground(
+        bool selected,
+        KnownColor expectedBackColor)
+    {
+        if (SystemInformation.HighContrast)
+        {
+            return;
+        }
+
+        var applicationAccessor = typeof(Application).TestAccessor.Dynamic;
+        SystemColorMode? previousColorMode = applicationAccessor.s_colorMode;
+
+        try
+        {
+            applicationAccessor.s_colorMode = SystemColorMode.Dark;
+            using AppContextSwitchScope scope = new(
+                "System.Windows.Forms.DataGridViewDarkModeTheming",
+                enable: true);
+            using DataGridView dataGridView = new();
+            using DataGridViewButtonColumn column = new();
+            column.DefaultCellStyle.BackColor = Color.Red;
+            column.DefaultCellStyle.ForeColor = Color.Green;
+            column.DefaultCellStyle.SelectionBackColor = Color.Blue;
+            column.DefaultCellStyle.SelectionForeColor = Color.Yellow;
+            column.DefaultCellStyle.Padding = new Padding(2);
+            dataGridView.Columns.Add(column);
+            dataGridView.Rows.Add();
+
+            DataGridViewButtonCell cell = (DataGridViewButtonCell)dataGridView[0, 0];
+            DataGridViewCellStyle inheritedStyle = cell.InheritedStyle;
+            Color expectedBack = Color.FromKnownColor(expectedBackColor);
+            inheritedStyle.BackColor.Should().Be(Color.Red);
+            inheritedStyle.ForeColor.Should().Be(Color.Green);
+            inheritedStyle.SelectionBackColor.Should().Be(Color.Blue);
+            inheritedStyle.SelectionForeColor.Should().Be(Color.Yellow);
+
+            using Bitmap bitmap = new(30, 20);
+            using Graphics graphics = Graphics.FromImage(bitmap);
+            DataGridViewAdvancedBorderStyle borderStyle = new();
+            cell.TestAccessor.Dynamic.Paint(
+                graphics,
+                new Rectangle(0, 0, 30, 20),
+                new Rectangle(0, 0, 30, 20),
+                0,
+                selected ? DataGridViewElementStates.Selected : DataGridViewElementStates.None,
+                null,
+                null,
+                null,
+                inheritedStyle,
+                borderStyle,
+                DataGridViewPaintParts.Background
+                    | DataGridViewPaintParts.ContentBackground
+                    | DataGridViewPaintParts.SelectionBackground);
+
+            bitmap.GetPixel(0, 0).ToArgb().Should().Be(expectedBack.ToArgb());
+            bitmap.GetPixel(15, 10).Should().NotBe(expectedBack);
+        }
+        finally
+        {
+            applicationAccessor.s_colorMode = previousColorMode;
+        }
     }
 
     [Fact]
