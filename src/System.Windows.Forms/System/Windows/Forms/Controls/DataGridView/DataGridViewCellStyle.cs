@@ -338,7 +338,8 @@ public class DataGridViewCellStyle : ICloneable
     ///  When set to <see cref="Color.Empty"/>, the glyph color is automatically
     ///  calculated based on the background color for optimal contrast.
     /// </summary>
-    [SRCategory(nameof(SR.CatAppearance))]
+    [Browsable(false)]
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public Color SortGlyphColor
     {
         get => Properties.GetValueOrDefault<Color>(s_propSortGlyphColor);
@@ -557,8 +558,6 @@ public class DataGridViewCellStyle : ICloneable
     private bool ShouldSerializeSelectionBackColor() => Properties.ContainsKey(s_propSelectionBackColor);
 
     private bool ShouldSerializeSelectionForeColor() => Properties.ContainsKey(s_propSelectionForeColor);
-
-    private bool ShouldSerializeSortGlyphColor() => Properties.ContainsKey(s_propSortGlyphColor);
 
     public override string ToString()
     {
