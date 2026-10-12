@@ -44,7 +44,7 @@ public static class CurrentReferences
 
         if (!TryGetNetCoreVersion(rootFolderPath, out string? tfm, out string? netCoreRefsVersion))
         {
-            throw new InvalidOperationException("Could not resolve the configured SDK's runtime reference assemblies.");
+            throw new InvalidOperationException("Could not resolve the analyzer test runtime reference assemblies.");
         }
 
         Tfm = tfm;
@@ -106,13 +106,25 @@ public static class CurrentReferences
         tfm = default;
         netCoreRefsVersion = default;
 
-        if (!TryGetSdkVersion(rootFolderPath, out string? version))
+        string testRuntimeConfigPath = Path.ChangeExtension(
+            typeof(CurrentReferences).Assembly.Location,
+            ".runtimeconfig.json");
+
+        if (!File.Exists(testRuntimeConfigPath)
+            || !TryGetSdkVersion(rootFolderPath, out string? sdkVersion))
         {
             return false;
         }
 
-        string runtimeConfigPath = Path.Join(rootFolderPath, ".dotnet", "sdk", version, "dotnet.runtimeconfig.json");
-        (tfm, netCoreRefsVersion) = ParseRuntimeConfiguration(File.ReadAllText(runtimeConfigPath));
+        string sdkRuntimeConfigPath = Path.Join(
+            rootFolderPath,
+            ".dotnet",
+            "sdk",
+            sdkVersion,
+            "dotnet.runtimeconfig.json");
+
+        (tfm, _) = ParseRuntimeConfiguration(File.ReadAllText(testRuntimeConfigPath));
+        (_, netCoreRefsVersion) = ParseRuntimeConfiguration(File.ReadAllText(sdkRuntimeConfigPath));
 
         return true;
     }
