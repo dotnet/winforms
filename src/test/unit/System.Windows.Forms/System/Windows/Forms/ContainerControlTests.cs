@@ -570,6 +570,31 @@ public class ContainerControlTests
         control.PerformAutoScale();
     }
 
+    // Regression test for https://github.com/dotnet/winforms/issues/10958
+    [WinFormsFact]
+    public void ContainerControl_ScaleContainerForDpi_UpdatesBoundsBeforeScalingAnchoredChild()
+    {
+        using IDisposable dpiScope = ScaleHelper.EnterDpiAwarenessScope(DPI_AWARENESS_CONTEXT.DPI_AWARENESS_CONTEXT_PER_MONITOR_AWARE_V2);
+        using Control child = new()
+        {
+            Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right,
+            Bounds = new Rectangle(0, 0, 300, 300)
+        };
+        using DpiScaleTrackingContainerControl control = new()
+        {
+            AutoScaleMode = AutoScaleMode.Dpi,
+            Bounds = new Rectangle(100, 100, 300, 300)
+        };
+        control.Controls.Add(child);
+        control.CreateControl();
+
+        Rectangle suggestedRectangle = new(100, 100, 450, 450);
+        control.ScaleContainerForDpi(144, 96, suggestedRectangle);
+
+        Assert.Equal(suggestedRectangle, control.Bounds);
+        Assert.Equal(suggestedRectangle, control.BoundsDuringFontChanged);
+    }
+
     [WinFormsFact]
     public void ContainerControl_CreateContainerControl_Invoke_CallsBindingContextChanged()
     {
@@ -1398,6 +1423,20 @@ public class ContainerControlTests
         public new void SetStyle(ControlStyles flag, bool value) => base.SetStyle(flag, value);
     }
 
+    private sealed class DpiScaleTrackingContainerControl : ContainerControl
+    {
+        public Rectangle BoundsDuringFontChanged { get; private set; }
+
+        public new void ScaleContainerForDpi(int deviceDpiNew, int deviceDpiOld, Rectangle suggestedRectangle) =>
+            base.ScaleContainerForDpi(deviceDpiNew, deviceDpiOld, suggestedRectangle);
+
+        protected override void OnFontChanged(EventArgs e)
+        {
+            BoundsDuringFontChanged = Bounds;
+            base.OnFontChanged(e);
+        }
+    }
+
     public class SubContainerControl : ContainerControl
     {
         public new const int ScrollStateAutoScrolling = ScrollableControl.ScrollStateAutoScrolling;
@@ -1493,6 +1532,9 @@ public class ContainerControlTests
         public new void OnCreateControl() => base.OnCreateControl();
 
         public new void OnFontChanged(EventArgs e) => base.OnFontChanged(e);
+
+        public new void ScaleContainerForDpi(int deviceDpiNew, int deviceDpiOld, Rectangle suggestedRectangle) =>
+            base.ScaleContainerForDpi(deviceDpiNew, deviceDpiOld, suggestedRectangle);
 
         public new void OnLayout(LayoutEventArgs e) => base.OnLayout(e);
 
