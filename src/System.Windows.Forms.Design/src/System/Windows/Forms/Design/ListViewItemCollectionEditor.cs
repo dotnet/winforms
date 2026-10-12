@@ -52,23 +52,43 @@ internal class ListViewItemCollectionEditor : CollectionEditor
 
     protected override object SetItems(object editValue, object[] value)
     {
-        ListViewGroup[] groups = new ListViewGroup[value.Length];
+        // The base implementation clears the collection and re-adds the items. Clearing unhosts each item
+        // from the ListView, which removes it from its group when the ListView isn't in design mode
+        // (e.g., a ListView shown in a PropertyGrid at run-time). Remember the groups to restore them.
 
-        for (int i = 0; i < value.Length; i++)
+        ListViewGroup[] groups = null;
+
+        if (value is not null)
         {
-            if (value[i] is ListViewItem item)
+            groups = new ListViewGroup[value.Length];
+            for (int i = 0; i < value.Length; i++)
             {
-                groups[i] = item.Group;
+                if (value[i] is ListViewItem item)
+                {
+                    groups[i] = item.Group;
+                }
             }
         }
 
         object result = base.SetItems(editValue, value);
 
-        for (int i = 0; i < value.Length; i++)
+        if (groups is not null)
         {
-            if (groups[i] is not null && value[i] is ListViewItem item)
+            for (int i = 0; i < value.Length; i++)
             {
-                item.Group = groups[i];
+                if (groups[i] is { } group
+                    && value[i] is ListViewItem item
+                    && item.Group != group
+                    && item.ListView == group.ListView)
+                {
+                    // With a created handle the item may be left in the group's list even though its Group is null.
+                    if (group.Items.Contains(item))
+                    {
+                        group.Items.Remove(item);
+                    }
+
+                    item.Group = group;
+                }
             }
         }
 
