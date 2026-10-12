@@ -33,6 +33,10 @@ public class ImageTests
         static long NativeMemory() =>
             Process.GetCurrentProcess().PrivateMemorySize64 - GC.GetGCMemoryInfo().TotalCommittedBytes;
 
+        GC.Collect();
+        GC.WaitForPendingFinalizers();
+        GC.Collect();
+
         long before = NativeMemory();
 
         for (int i = 0; i < iterationCount; i++)
