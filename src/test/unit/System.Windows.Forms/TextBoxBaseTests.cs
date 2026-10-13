@@ -65,7 +65,6 @@ public partial class TextBoxBaseTests
         Assert.Equal(6, control.SelectionLength);
     }
 
-
     [WinFormsFact]
     public void TextBoxBase_ParentVisualStylesModeChanged_FixedSingle_RecreatesHandleWithoutNativeBorder()
     {
