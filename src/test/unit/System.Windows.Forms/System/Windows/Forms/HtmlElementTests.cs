@@ -6,6 +6,7 @@
 using System.Drawing;
 using System.Runtime.InteropServices;
 using System.Text;
+using Windows.Win32.System.Com;
 using Windows.Win32.System.Variant;
 using Windows.Win32.Web.MsHtml;
 
@@ -2579,6 +2580,187 @@ public class HtmlElementTests
         }
     }
 
+    [WinFormsTheory]
+    [InlineData(false)]
+    [InlineData(true)]
+    public async Task HtmlElement_Click_ConnectDisconnect_Ownership_DomEvents_Element(bool useStandardEventApi)
+    {
+        using Control parent = new();
+        using WebBrowser control = new()
+        {
+            Parent = parent
+        };
+
+        const string Html = "<html><head><title>C6 Element Events</title></head>"
+            + "<body><div id=\"eventTarget\">Element Click</div></body></html>";
+        HtmlDocument document = await GetDocument(control, Html, TimeSpan.FromSeconds(15));
+        HtmlWindow associatedWindow = document.Window;
+        HtmlElement element = document.GetElementById("eventTarget");
+        object nativeDocument = document.DomDocument;
+        object nativeWindow = associatedWindow.DomWindow;
+        object nativeElement = element.DomElement;
+
+        validate();
+
+        unsafe void validate()
+        {
+            using var retainedElement = element.NativeHtmlElement.GetInterface();
+            using var observer = retainedElement.Query<IUnknown>();
+            using var element3 = retainedElement.Query<IHTMLElement3>();
+            using BSTR onClick = new("onclick");
+
+            Assert.Same(nativeElement, ComHelpers.GetObjectForIUnknown(retainedElement.AsUnknown));
+            Assert.Equal("Element Click", element.InnerText);
+
+            HtmlElement.HtmlElementShim elementShim = element.TestAccessor.Dynamic.ElementShim;
+            int callbackCount = 0;
+            object callbackSender = null;
+            EventArgs callbackEventArgs = null;
+            HtmlElementEventHandler handler = (sender, eventArgs) =>
+            {
+                callbackCount++;
+                callbackSender = sender;
+                callbackEventArgs = eventArgs;
+            };
+
+            element.Click += handler;
+            AxHost.ConnectionPointCookie warmCookie = elementShim.TestAccessor.Dynamic._cookie;
+            Assert.NotNull(warmCookie);
+            Assert.True(warmCookie.Connected);
+            fireClick(element3.Value, onClick);
+            Assert.Equal(1, callbackCount);
+            Assert.Same(element, callbackSender);
+            Assert.IsType<HtmlElementEventArgs>(callbackEventArgs);
+
+            element.Click -= handler;
+            Assert.Null(elementShim.TestAccessor.Dynamic._cookie);
+            Assert.False(warmCookie.Connected);
+            callbackSender = null;
+            callbackEventArgs = null;
+            fireClick(element3.Value, onClick);
+            Assert.Equal(1, callbackCount);
+            Assert.Null(callbackSender);
+            Assert.Null(callbackEventArgs);
+
+            callbackCount = 0;
+            AxHost.ConnectionPointCookie registrationCookie = null;
+            if (!useStandardEventApi)
+            {
+                element.Click += handler;
+                registrationCookie = elementShim.TestAccessor.Dynamic._cookie;
+                Assert.NotNull(registrationCookie);
+                Assert.True(registrationCookie.Connected);
+                elementShim.DisconnectFromEvents();
+                Assert.Null(elementShim.TestAccessor.Dynamic._cookie);
+                Assert.False(registrationCookie.Connected);
+            }
+
+            Type eventSinkType = typeof(HtmlElement).GetNestedType(
+                "HTMLElementEvents2",
+                global::System.Reflection.BindingFlags.NonPublic);
+            Assert.NotNull(eventSinkType);
+            Type eventInterfaceType = typeof(Interop.Mshtml.DHTMLElementEvents2);
+
+            uint baseline = getReferenceCount(observer.Value);
+            long[] deltas = new long[3];
+            object[] eventSources = new object[deltas.Length];
+            object[] eventSinks = new object[deltas.Length];
+            AxHost.ConnectionPointCookie[] disconnectedCookies = new AxHost.ConnectionPointCookie[deltas.Length];
+
+            for (int eventCycle = 0; eventCycle < deltas.Length; eventCycle++)
+            {
+                callbackSender = null;
+                callbackEventArgs = null;
+
+                AxHost.ConnectionPointCookie cookie;
+                if (useStandardEventApi)
+                {
+                    element.Click += handler;
+                    cookie = elementShim.TestAccessor.Dynamic._cookie;
+                }
+                else
+                {
+                    eventSources[eventCycle] = ComHelpers.GetObjectForIUnknown(retainedElement.AsUnknown);
+                    Assert.Same(nativeElement, eventSources[eventCycle]);
+
+                    eventSinks[eventCycle] = Activator.CreateInstance(eventSinkType, element);
+                    Assert.Equal(eventSinkType, eventSinks[eventCycle].GetType());
+                    Assert.True(eventInterfaceType.IsInstanceOfType(eventSinks[eventCycle]));
+
+                    cookie = new AxHost.ConnectionPointCookie(
+                        eventSources[eventCycle],
+                        eventSinks[eventCycle],
+                        eventInterfaceType,
+                        throwException: false);
+                }
+
+                Assert.NotNull(cookie);
+                Assert.True(cookie.Connected);
+                fireClick(element3.Value, onClick);
+
+                int expectedCallbackCount = eventCycle + 1;
+                Assert.Equal(expectedCallbackCount, callbackCount);
+                Assert.Same(element, callbackSender);
+                Assert.IsType<HtmlElementEventArgs>(callbackEventArgs);
+
+                if (useStandardEventApi)
+                {
+                    element.Click -= handler;
+                }
+                else
+                {
+                    cookie.Disconnect();
+                }
+
+                Assert.Null(elementShim.TestAccessor.Dynamic._cookie);
+                Assert.False(cookie.Connected);
+
+                callbackSender = null;
+                callbackEventArgs = null;
+                fireClick(element3.Value, onClick);
+                Assert.Equal(expectedCallbackCount, callbackCount);
+                Assert.Null(callbackSender);
+                Assert.Null(callbackEventArgs);
+
+                disconnectedCookies[eventCycle] = cookie;
+                deltas[eventCycle] = (long)getReferenceCount(observer.Value) - baseline;
+            }
+
+            if (!useStandardEventApi)
+            {
+                element.Click -= handler;
+            }
+
+            Assert.Null(elementShim.TestAccessor.Dynamic._cookie);
+            Assert.Equal([0L, 0L, 0L], deltas);
+
+            GC.KeepAlive(disconnectedCookies);
+            GC.KeepAlive(eventSinks);
+            GC.KeepAlive(eventSources);
+            GC.KeepAlive(registrationCookie);
+            GC.KeepAlive(warmCookie);
+            GC.KeepAlive(nativeElement);
+            GC.KeepAlive(nativeWindow);
+            GC.KeepAlive(nativeDocument);
+            GC.KeepAlive(associatedWindow);
+            GC.KeepAlive(document);
+
+            static void fireClick(IHTMLElement3* nativeElement3, BSTR eventName)
+            {
+                VARIANT eventObject = default;
+                VARIANT_BOOL cancelled = default;
+                Assert.True(nativeElement3->fireEvent(eventName, &eventObject, &cancelled).Succeeded);
+                Assert.True(cancelled);
+            }
+
+            static uint getReferenceCount(IUnknown* unknown)
+            {
+                unknown->AddRef();
+                return unknown->Release();
+            }
+        }
+    }
+
     [WinFormsFact]
     public async Task HtmlElement_DoubleClick_InvokeEvent_Success()
     {
@@ -3317,14 +3499,14 @@ public class HtmlElementTests
         }
     }
 
-    private static async Task<HtmlDocument> GetDocument(WebBrowser control, string html)
+    private static async Task<HtmlDocument> GetDocument(WebBrowser control, string html, TimeSpan? timeout = null)
     {
         TaskCompletionSource<bool> source = new();
         control.DocumentCompleted += (sender, e) => source.SetResult(true);
 
         using var file = CreateTempFile(html);
         await Task.Run(() => control.Navigate(file.Path));
-        Assert.True(await source.Task);
+        Assert.True(await (timeout.HasValue ? source.Task.WaitAsync(timeout.Value) : source.Task));
 
         return control.Document;
     }

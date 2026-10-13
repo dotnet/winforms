@@ -145,6 +145,9 @@ internal class ButtonPopupAdapter : ButtonBaseAdapter
         return layout;
     }
 
+    internal override Size GetPreferredSizeCore(Size proposedSize)
+        => GetPopupPreferredSizeCore(PaintPopupLayout(up: false, 0), proposedSize);
+
     internal static LayoutOptions PaintPopupLayout(
         bool up,
         int paintedBorder,

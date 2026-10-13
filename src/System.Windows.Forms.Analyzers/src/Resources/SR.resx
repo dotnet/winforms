@@ -126,4 +126,91 @@
   <data name="WFO0003Message_VB" xml:space="preserve">
     <value>Remove high DPI settings from {0} and configure via '{1}' property in Application Framework</value>
   </data>
+  <data name="WFO3000Title" xml:space="preserve">
+    <value>Avoid unsupported code in InitializeComponent</value>
+  </data>
+  <data name="WFO3000Message" xml:space="preserve">
+    <value>'{0}' cannot round-trip through the WinForms Designer; keep InitializeComponent unrolled and move runtime-only logic to the user partial after InitializeComponent</value>
+  </data>
+  <data name="WFO3001Title" xml:space="preserve">
+    <value>Keep custom members out of Designer files</value>
+  </data>
+  <data name="WFO3001Message" xml:space="preserve">
+    <value>Move custom member '{0}' to the user partial; the Designer partial is reserved for generated initialization and infrastructure</value>
+  </data>
+  <data name="WFO3002Title" xml:space="preserve">
+    <value>Keep generated fields at the end of the Designer file</value>
+  </data>
+  <data name="WFO3002Message" xml:space="preserve">
+    <value>Declare designer member '{0}' at the end of the Designer partial, after its methods, to preserve the generated layout</value>
+  </data>
+  <data name="WFO3003Title" xml:space="preserve">
+    <value>Keep event and delegate declarations out of Designer files</value>
+  </data>
+  <data name="WFO3003Message" xml:space="preserve">
+    <value>Move {0} '{1}' to the user partial; keep its declaration out of the Designer-generated partial</value>
+  </data>
+  <data name="WFO3004Title" xml:space="preserve">
+    <value>Avoid collection expressions in Designer files</value>
+  </data>
+  <data name="WFO3004Message" xml:space="preserve">
+    <value>Collection expressions cannot round-trip through the WinForms Designer; use an explicit typed array or unrolled collection Add calls</value>
+  </data>
+  <data name="WFO3005Title" xml:space="preserve">
+    <value>Avoid nameof expressions in InitializeComponent</value>
+  </data>
+  <data name="WFO3005Message" xml:space="preserve">
+    <value>CodeDOM cannot represent nameof in InitializeComponent; replace it with the serialized string literal</value>
+  </data>
+  <data name="WFO3006Title" xml:space="preserve">
+    <value>Avoid conditional expressions in InitializeComponent</value>
+  </data>
+  <data name="WFO3006Message" xml:space="preserve">
+    <value>CodeDOM cannot represent conditional expressions in InitializeComponent; serialize a fixed value and move runtime-only choices to the user partial</value>
+  </data>
+  <data name="WFO3007Title" xml:space="preserve">
+    <value>Avoid null-coalescing expressions in InitializeComponent</value>
+  </data>
+  <data name="WFO3007Message" xml:space="preserve">
+    <value>CodeDOM cannot represent null-coalescing in InitializeComponent; use an explicit designer assignment and move runtime-only fallback logic to the user partial</value>
+  </data>
+  <data name="WFO3008Title" xml:space="preserve">
+    <value>Avoid null-conditional expressions in InitializeComponent</value>
+  </data>
+  <data name="WFO3008Message" xml:space="preserve">
+    <value>CodeDOM cannot represent null-conditional access in InitializeComponent; keep designer assignments explicit and move null-dependent runtime logic to the user partial</value>
+  </data>
+  <data name="WFO3009Title" xml:space="preserve">
+    <value>Avoid interpolated strings in InitializeComponent</value>
+  </data>
+  <data name="WFO3009Message" xml:space="preserve">
+    <value>CodeDOM cannot represent interpolated strings in InitializeComponent; use the serialized string literal or a supported resource lookup</value>
+  </data>
+  <data name="WFO3010Title" xml:space="preserve">
+    <value>Avoid anonymous functions in InitializeComponent</value>
+  </data>
+  <data name="WFO3010Message" xml:space="preserve">
+    <value>CodeDOM cannot represent anonymous functions in InitializeComponent; use a named method in the user partial and a named-method event hookup</value>
+  </data>
+  <data name="WFO2000Title" xml:space="preserve">
+    <value>Avoid constructing fresh reference instances in property getters</value>
+  </data>
+  <data name="WFO2000Message" xml:space="preserve">
+    <value>Getter '{0}' directly returns a newly constructed reference instance on this path; cache it only if stable identity is intended, or use a factory method for intentional creation</value>
+  </data>
+  <data name="WFO3010Message_VB" xml:space="preserve">
+    <value>CodeDOM cannot represent lambdas in InitializeComponent; use a named method in the user partial, with Handles for designer member events or AddressOf for local component events</value>
+  </data>
+  <data name="WFO3011Title" xml:space="preserve">
+    <value>Declare Designer component members WithEvents</value>
+  </data>
+  <data name="WFO3011Message" xml:space="preserve">
+    <value>Designer component member '{0}' must support the VB event model; add WithEvents to its declaration and use Handles for its named event handlers in the user partial</value>
+  </data>
+  <data name="WFO3012Title" xml:space="preserve">
+    <value>Use Handles for Designer member events</value>
+  </data>
+  <data name="WFO3012Message" xml:space="preserve">
+    <value>Use Handles {0} on a named handler in the user partial instead of AddHandler in InitializeComponent; remove the redundant hookup and keep component members WithEvents</value>
+  </data>
 </root>

@@ -148,51 +148,23 @@ public partial class Button : ButtonBase, IButtonControl
         }
     }
 
-    /// <summary>
-    ///  Defines, whether the control is owner-drawn. Based on this,
-    ///  the UserPaint flags get set, which in turn makes it later
-    ///  a Win32 controls, which we wrap (OwnerDraw == false) or not, and then
-    ///  we draw ourselves. If the user wants to opt out of DarkMode, we can no
-    ///  longer force (wrapping) System-Painting for FlatStyle.Standard, and we
-    ///  need this then also here and now, before CreateParams is called.
-    /// </summary>
-    private protected override bool OwnerDraw
-    {
-        get
-        {
-            if (Application.IsDarkModeEnabled
-
-                // The SystemRenderer cannot render images. So, we flip to our
-                // own DarkMode renderer, if we need to render images, except if...
-                && Image is null
-                // ...or a BackgroundImage, except if...
-                && BackgroundImage is null
-                // ...the user wants to opt out of implicit DarkMode rendering.
-                && DarkModeRequestState is true
-
-                // And all of this only counts for FlatStyle.Standard. For the
-                // rest, we're using specific renderers anyway, which check
-                // themselves on demand, if they need to apply Light- or DarkMode.
-                && FlatStyle == FlatStyle.Standard)
-            {
-                return false;
-            }
-
-            return base.OwnerDraw;
-        }
-    }
-
     internal override bool SupportsUiaProviders => true;
 
     /// <summary>
     ///  Raises the <see cref="Control.OnMouseEnter"/> event.
     /// </summary>
-    protected override void OnMouseEnter(EventArgs e) => base.OnMouseEnter(e);
+    protected override void OnMouseEnter(EventArgs e)
+    {
+        base.OnMouseEnter(e);
+    }
 
     /// <summary>
     ///  Raises the <see cref="Control.OnMouseLeave"/> event.
     /// </summary>
-    protected override void OnMouseLeave(EventArgs e) => base.OnMouseLeave(e);
+    protected override void OnMouseLeave(EventArgs e)
+    {
+        base.OnMouseLeave(e);
+    }
 
     /// <hideinheritance/>
     [Browsable(false)]

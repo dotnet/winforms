@@ -52,6 +52,10 @@ public partial class DataGridViewLinkCell : DataGridViewCell
             {
                 return HighContrastLinkColor;
             }
+            else if (Application.IsDarkModeEnabled && AppContextSwitches.DataGridViewDarkModeTheming)
+            {
+                return Selected ? SystemColors.HighlightText : LinkUtilities.DarkModeActiveLinkColor;
+            }
             else
             {
                 // Return the default IE Color if cell is not not selected.
@@ -159,6 +163,10 @@ public partial class DataGridViewLinkCell : DataGridViewCell
             else if (SystemInformation.HighContrast)
             {
                 return HighContrastLinkColor;
+            }
+            else if (Application.IsDarkModeEnabled && AppContextSwitches.DataGridViewDarkModeTheming)
+            {
+                return DarkModeLinkColor;
             }
             else
             {
@@ -297,6 +305,10 @@ public partial class DataGridViewLinkCell : DataGridViewCell
             {
                 return Selected ? SystemColors.HighlightText : LinkUtilities.GetVisitedLinkColor();
             }
+            else if (Application.IsDarkModeEnabled && AppContextSwitches.DataGridViewDarkModeTheming)
+            {
+                return DarkModeVisitedLinkColor;
+            }
             else
             {
                 // Return the default IE Color if cell is not not selected
@@ -355,6 +367,24 @@ public partial class DataGridViewLinkCell : DataGridViewCell
             // SystemColors.HighlightText is supposed to be in contrast with SystemColors.Highlight.
             return Selected ? SystemColors.HighlightText : SystemColors.HotTrack;
         }
+    }
+
+    /// <summary>
+    ///  Gets a link color with sufficient contrast for dark mode backgrounds.
+    /// </summary>
+    private Color DarkModeLinkColor
+    {
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        get => Selected ? SystemColors.HighlightText : LinkUtilities.DarkModeLinkColor;
+    }
+
+    /// <summary>
+    ///  Gets a visited link color with sufficient contrast for dark mode backgrounds.
+    /// </summary>
+    private Color DarkModeVisitedLinkColor
+    {
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        get => Selected ? SystemColors.HighlightText : LinkUtilities.DarkModeVisitedLinkColor;
     }
 
     public override Type ValueType => base.ValueType ?? s_defaultValueType;
@@ -1012,6 +1042,16 @@ public partial class DataGridViewLinkCell : DataGridViewCell
                     else
                     {
                         linkColor = LinkColor;
+                    }
+
+                    // In dark mode, when the cell is painted as selected, force
+                    // the link text to use SelectionForeColor so it contrasts
+                    // with the custom selection background.
+                    if (cellSelected
+                        && Application.IsDarkModeEnabled
+                        && AppContextSwitches.DataGridViewDarkModeTheming)
+                    {
+                        linkColor = cellStyle.SelectionForeColor;
                     }
 
                     if (PaintContentForeground(paintParts))
