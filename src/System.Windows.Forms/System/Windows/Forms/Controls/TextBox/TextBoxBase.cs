@@ -1768,7 +1768,8 @@ public abstract partial class TextBoxBase : Control
     ///   <see cref="PreferredHeightCore"/> and the modern non-client padding table are shared by
     ///   <see cref="VisualStylesMode.Net11"/> and <see cref="VisualStylesMode.Latest"/>. Consequently, switching
     ///   between those modes only repaints. Crossing the classic or disabled boundary changes both the preferred
-    ///   height selection and the non-client padding model, so it requires a metrics update.
+    ///   height selection and the non-client padding model. Such a crossing requires a metrics update, except
+    ///   for <see cref="BorderStyle.FixedSingle"/>, which requires handle recreation instead.
     ///  </para>
     /// </remarks>
     protected override VisualStylesModeChangeImpact GetVisualStylesModeChangeImpact(
