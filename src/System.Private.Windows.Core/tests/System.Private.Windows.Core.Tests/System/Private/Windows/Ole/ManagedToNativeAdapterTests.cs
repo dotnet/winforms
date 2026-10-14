@@ -206,7 +206,7 @@ public unsafe class ManagedToNativeAdapterTests
         DataFormatNames.BinaryFormatMetafile,
         true,
         ComTypes.TYMED.TYMED_HGLOBAL)]
-    public void FormatEnumerator_EnhancedMetafile_AdvertisesPlatformSupportedMedium(
+    public void FormatEnumerator_EnhancedMetafile_NumericIdGuardRequiresExplicitOptIn(
         string format,
         bool supportsEnhMetafile,
         ComTypes.TYMED expected)
@@ -214,6 +214,7 @@ public unsafe class ManagedToNativeAdapterTests
         using EnhMetafileScope source = EnhMetafileScope.Create();
         TestDataObject<MockOleServices<ManagedToNativeAdapterTests>> dataObject =
             new(format, source.CreatePayload());
+        // A constant predicate isolates the numeric-ID guard and explicit opt-in, not platform casing policy.
         FormatEnumerator enumerator = new(
             dataObject,
             format => DataFormatsCore<TestFormat>.GetOrAddFormat(format).Id,
@@ -224,6 +225,46 @@ public unsafe class ManagedToNativeAdapterTests
 
         formats[0].cfFormat.Should().Be((short)DataFormatsCore<TestFormat>.GetOrAddFormat(format).Id);
         formats[0].tymed.Should().Be(expected);
+    }
+
+    [Theory]
+    [InlineData(DataFormatNames.Emf, ComTypes.TYMED.TYMED_ENHMF)]
+    [InlineData("enhancedmetafile", ComTypes.TYMED.TYMED_HGLOBAL)]
+    [InlineData("ENHANCEDMETAFILE", ComTypes.TYMED.TYMED_HGLOBAL)]
+    [InlineData(DataFormatNames.BinaryFormatMetafile, ComTypes.TYMED.TYMED_HGLOBAL)]
+    public void EnumFormatEtc_EnhancedMetafile_PlatformHookUsesOriginalFormatName(
+        string format,
+        ComTypes.TYMED expected)
+    {
+        EmfTestOleServices<ManagedToNativeAdapterTests>.Reset();
+        // Enumeration depends on the source format, not the payload; no native EMF handle is needed.
+        using MemoryStream source = new([0x45, 0x4D, 0x46]);
+        TestDataObject<EmfTestOleServices<ManagedToNativeAdapterTests>> dataObject =
+            new(format, autoConvert: false, source);
+        using ComScope<IDataObject> nativeDataObject = ComHelpers.GetComScope<IDataObject>(dataObject);
+        using ComScope<IEnumFORMATETC> enumerator = new(null);
+
+        nativeDataObject.Value->EnumFormatEtc((uint)ComTypes.DATADIR.DATADIR_GET, enumerator)
+            .Should().Be(HRESULT.S_OK);
+        enumerator.IsNull.Should().BeFalse();
+
+        FORMATETC entry = default;
+        uint fetched = 0;
+        enumerator.Value->Next(1, &entry, &fetched).Should().Be(HRESULT.S_OK);
+        fetched.Should().Be(1);
+        ushort expectedFormatId = format == DataFormatNames.BinaryFormatMetafile
+            ? (ushort)DataFormatsCore<TestFormat>.GetOrAddFormat(DataFormatNames.BinaryFormatMetafile).Id
+            : (ushort)CLIPBOARD_FORMAT.CF_ENHMETAFILE;
+        entry.cfFormat.Should().Be(expectedFormatId);
+        entry.tymed.Should().Be((uint)expected);
+        entry.dwAspect.Should().Be((uint)DVASPECT.DVASPECT_CONTENT);
+        entry.lindex.Should().Be(-1);
+        ((nint)entry.ptd).Should().Be(0);
+
+        enumerator.Value->Next(1, &entry, &fetched).Should().Be(HRESULT.S_FALSE);
+        fetched.Should().Be(0);
+        dataObject.GetFormats(autoConvert: false).Should().Equal(format);
+        EmfTestOleServices<ManagedToNativeAdapterTests>.ManagedHandles.Should().BeEmpty();
     }
 
     [Fact]

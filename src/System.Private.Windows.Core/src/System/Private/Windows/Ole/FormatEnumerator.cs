@@ -43,7 +43,9 @@ internal unsafe class FormatEnumerator : ComTypes.IEnumFORMATETC, IEnumFORMATETC
             string format = formats[i];
             int formatId = getFormatId(format);
 
-            // Only the standard EMF format uses a native handle; registered aliases retain HGLOBAL data.
+            // Only the standard EMF ID can use a native handle; registered aliases retain HGLOBAL data.
+            // Pass the original spelling to the platform hook: WPF preserves .NET 9's ordinal name checks,
+            // so a case-variant EMF name resolving to this ID does not by itself opt into native rendering.
             ComTypes.FORMATETC temp = new()
             {
                 cfFormat = (short)(ushort)formatId,
