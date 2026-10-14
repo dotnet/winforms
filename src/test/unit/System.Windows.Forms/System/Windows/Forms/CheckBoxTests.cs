@@ -634,6 +634,30 @@ public class CheckBoxTests : AbstractButtonBaseTests
     }
 
     [WinFormsFact]
+    public void CheckBox_ModernGlyph_ImageDoesNotCoverGlyph()
+    {
+        using Bitmap image = new(80, 24);
+        using (Graphics imageGraphics = Graphics.FromImage(image))
+        {
+            imageGraphics.Clear(Color.Magenta);
+        }
+
+        using CheckBox box = new()
+        {
+            Image = image,
+            Size = new Size(40, 24),
+            VisualStylesMode = VisualStylesMode.Net11
+        };
+        using Bitmap bitmap = new(box.Width, box.Height);
+        using Graphics graphics = Graphics.FromImage(bitmap);
+        PaintEventArgs e = new(graphics, box.ClientRectangle);
+
+        box.CreateStandardAdapter().PaintUp(e, CheckState.Unchecked);
+
+        Assert.NotEqual(Color.Magenta.ToArgb(), bitmap.GetPixel(6, box.Height / 2).ToArgb());
+    }
+
+    [WinFormsFact]
     public void CheckBox_ModernGlyph_InheritedOpaqueBackColor_DoesNotPaintParentBackgroundImage()
     {
         using Bitmap backgroundImage = new(1, 1);
@@ -978,6 +1002,34 @@ public class CheckBoxTests : AbstractButtonBaseTests
             metrics);
 
         Assert.InRange(textBounds.Width, 0, 1);
+    }
+
+    [WinFormsFact]
+    public void CheckBox_ToggleSwitch_Image_IsRenderedAndIncludedInPreferredSize()
+    {
+        using Bitmap image = new(80, 22);
+        using (Graphics imageGraphics = Graphics.FromImage(image))
+        {
+            imageGraphics.Clear(Color.Magenta);
+        }
+
+        using CheckBox box = new()
+        {
+            Appearance = Appearance.ToggleSwitch,
+            Image = image,
+            Size = new Size(120, 30),
+            Text = "checkBox4",
+            VisualStylesMode = VisualStylesMode.Net11
+        };
+        using Bitmap bitmap = new(box.Width, box.Height);
+
+        box.DrawToBitmap(bitmap, box.ClientRectangle);
+
+        Rendering.CheckBox.ToggleSwitchMetrics metrics = Rendering.CheckBox.ToggleSwitchMetrics.Create(box);
+        Assert.True(CountPixels(bitmap, Color.Magenta) > 0);
+        Size preferredSize = box.GetPreferredSize(Size.Empty);
+        Assert.True(preferredSize.Width >= metrics.SwitchWidth + metrics.TextGap + image.Width);
+        Assert.True(preferredSize.Height >= Math.Max(metrics.SwitchHeight, image.Height));
     }
 
     [WinFormsTheory]

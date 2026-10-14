@@ -68,6 +68,34 @@ public class RadioButtonTests : AbstractButtonBaseTests
     }
 
     [WinFormsFact]
+    public void RadioButton_ToggleSwitch_Image_IsRenderedAndIncludedInPreferredSize()
+    {
+        using Bitmap image = new(80, 22);
+        using (Graphics imageGraphics = Graphics.FromImage(image))
+        {
+            imageGraphics.Clear(Color.Magenta);
+        }
+
+        using RadioButton control = new()
+        {
+            Appearance = Appearance.ToggleSwitch,
+            Image = image,
+            Size = new Size(120, 30),
+            Text = "radioButton4",
+            VisualStylesMode = VisualStylesMode.Net11
+        };
+        using Bitmap bitmap = new(control.Width, control.Height);
+
+        control.DrawToBitmap(bitmap, control.ClientRectangle);
+
+        Rendering.CheckBox.ToggleSwitchMetrics metrics = Rendering.CheckBox.ToggleSwitchMetrics.Create(control);
+        Assert.True(CountPixels(bitmap, Color.Magenta) > 0);
+        Size preferredSize = control.GetPreferredSize(Size.Empty);
+        Assert.True(preferredSize.Width >= metrics.SwitchWidth + metrics.TextGap + image.Width);
+        Assert.True(preferredSize.Height >= Math.Max(metrics.SwitchHeight, image.Height));
+    }
+
+    [WinFormsFact]
     public void RadioButton_ToggleSwitch_RetainsMutualExclusion()
     {
         using Panel parent = new();
@@ -271,6 +299,30 @@ public class RadioButtonTests : AbstractButtonBaseTests
 
         Color backgroundPixel = bitmap.GetPixel(control.Width - 2, control.Height / 2);
         Assert.Equal(Color.Aqua.ToArgb(), backgroundPixel.ToArgb());
+    }
+
+    [WinFormsFact]
+    public void RadioButton_ModernGlyph_ImageDoesNotCoverGlyph()
+    {
+        using Bitmap image = new(80, 24);
+        using (Graphics imageGraphics = Graphics.FromImage(image))
+        {
+            imageGraphics.Clear(Color.Magenta);
+        }
+
+        using RadioButton control = new()
+        {
+            Image = image,
+            Size = new Size(40, 24),
+            VisualStylesMode = VisualStylesMode.Net11
+        };
+        using Bitmap bitmap = new(control.Width, control.Height);
+        using Graphics graphics = Graphics.FromImage(bitmap);
+        PaintEventArgs e = new(graphics, control.ClientRectangle);
+
+        control.CreateStandardAdapter().PaintUp(e, CheckState.Unchecked);
+
+        Assert.NotEqual(Color.Magenta.ToArgb(), bitmap.GetPixel(6, control.Height / 2).ToArgb());
     }
 
     [WinFormsFact]
