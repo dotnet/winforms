@@ -13,4 +13,13 @@ internal static class TypeDescriptorHelper
         attribute = TypeDescriptor.GetAttributes(component)[typeof(T)] as T;
         return attribute is not null;
     }
+
+    public static bool TryGetAttribute
+        <[DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicParameterlessConstructor | DynamicallyAccessedMemberTypes.PublicFields)] T>(
+        [DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.All)] Type componentType,
+        [NotNullWhen(true)] out T? attribute) where T : Attribute
+    {
+        attribute = TypeDescriptor.GetAttributes(componentType)[typeof(T)] as T;
+        return attribute is not null;
+    }
 }
