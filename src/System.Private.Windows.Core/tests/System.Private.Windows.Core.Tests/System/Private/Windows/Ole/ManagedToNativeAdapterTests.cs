@@ -153,7 +153,7 @@ public unsafe class ManagedToNativeAdapterTests
     }
 
     [Fact]
-    public void GetData_EnhancedMetafile_EnumeratedNativeFailure_FallsBackToHGlobal()
+    public void GetData_EnhancedMetafile_EnumeratedNativeFailure_ReturnsFailure()
     {
         EmfTestOleServices<ManagedToNativeAdapterTests>.Reset();
         EmfTestOleServices<ManagedToNativeAdapterTests>.ManagedGetDataResult = HRESULT.DV_E_TYMED;
@@ -178,11 +178,9 @@ public unsafe class ManagedToNativeAdapterTests
 
         try
         {
-            dataObject.GetData(&formatEtc, &medium).Should().Be(HRESULT.S_OK);
-
-            medium.tymed.Should().Be(TYMED.TYMED_HGLOBAL);
-            medium.hGlobal.IsNull.Should().BeFalse();
-            PInvokeCore.GlobalSize(medium.hGlobal).Should().BeGreaterThan(0);
+            dataObject.GetData(&formatEtc, &medium).Should().Be(HRESULT.DV_E_TYMED);
+            medium.tymed.Should().Be(TYMED.TYMED_NULL);
+            medium.hGlobal.IsNull.Should().BeTrue();
         }
         finally
         {
@@ -199,11 +197,19 @@ public unsafe class ManagedToNativeAdapterTests
     [InlineData(
         DataFormatNames.Emf,
         true,
-        ComTypes.TYMED.TYMED_ENHMF | ComTypes.TYMED.TYMED_HGLOBAL)]
+        ComTypes.TYMED.TYMED_ENHMF)]
+    [InlineData(
+        "ENHANCEDMETAFILE",
+        true,
+        ComTypes.TYMED.TYMED_ENHMF)]
     [InlineData(
         DataFormatNames.BinaryFormatMetafile,
         true,
-        ComTypes.TYMED.TYMED_ENHMF | ComTypes.TYMED.TYMED_HGLOBAL)]
+        ComTypes.TYMED.TYMED_HGLOBAL)]
+    [InlineData(
+        "system.drawing.imaging.metafile",
+        true,
+        ComTypes.TYMED.TYMED_HGLOBAL)]
     public void FormatEnumerator_EnhancedMetafile_AdvertisesPlatformSupportedMedium(
         string format,
         bool supportsEnhMetafile,

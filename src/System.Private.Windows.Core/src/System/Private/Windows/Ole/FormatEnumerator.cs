@@ -3,6 +3,7 @@
 
 using System.Runtime.CompilerServices;
 using Windows.Win32.System.Com;
+using Windows.Win32.System.Ole;
 using ComTypes = System.Runtime.InteropServices.ComTypes;
 
 namespace System.Private.Windows.Ole;
@@ -40,19 +41,22 @@ internal unsafe class FormatEnumerator : ComTypes.IEnumFORMATETC, IEnumFORMATETC
         for (int i = 0; i < formats.Length; i++)
         {
             string format = formats[i];
+            int formatId = getFormatId(format);
 
-            // Native handle formats must advertise the medium that GetData will actually return.
+            // Only the standard EMF format uses a native handle; registered aliases retain HGLOBAL data.
             ComTypes.FORMATETC temp = new()
             {
-                cfFormat = (short)(ushort)getFormatId(format),
+                cfFormat = (short)(ushort)formatId,
                 dwAspect = ComTypes.DVASPECT.DVASPECT_CONTENT,
                 ptd = 0,
                 lindex = -1,
-                tymed = format == DataFormatNames.Bitmap
-                    ? ComTypes.TYMED.TYMED_GDI
-                    : supportsEnhMetafile?.Invoke(format) == true
-                        ? ComTypes.TYMED.TYMED_ENHMF | ComTypes.TYMED.TYMED_HGLOBAL
-                        : ComTypes.TYMED.TYMED_HGLOBAL
+                tymed = format switch
+                {
+                    DataFormatNames.Bitmap => ComTypes.TYMED.TYMED_GDI,
+                    _ when formatId == (int)CLIPBOARD_FORMAT.CF_ENHMETAFILE
+                        && supportsEnhMetafile?.Invoke(format) == true => ComTypes.TYMED.TYMED_ENHMF,
+                    _ => ComTypes.TYMED.TYMED_HGLOBAL
+                }
             };
 
             _formats.Add(temp);
