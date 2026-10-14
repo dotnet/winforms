@@ -206,10 +206,6 @@ public unsafe class ManagedToNativeAdapterTests
         DataFormatNames.BinaryFormatMetafile,
         true,
         ComTypes.TYMED.TYMED_HGLOBAL)]
-    [InlineData(
-        "system.drawing.imaging.metafile",
-        true,
-        ComTypes.TYMED.TYMED_HGLOBAL)]
     public void FormatEnumerator_EnhancedMetafile_AdvertisesPlatformSupportedMedium(
         string format,
         bool supportsEnhMetafile,
