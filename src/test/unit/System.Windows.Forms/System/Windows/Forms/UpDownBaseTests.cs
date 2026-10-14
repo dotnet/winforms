@@ -2421,6 +2421,53 @@ public class UpDownBaseTests
         Assert.Throws<ArgumentNullException>(() => control.OnPaint(null));
     }
 
+    [WinFormsTheory]
+    [NewAndDefaultData<EventArgs>]
+    public void UpDownBase_OnParentFontChanged_Invoke_UpdatesDefaultButtonsWidthAndHeightAndCallsFontChanged(EventArgs eventArgs)
+    {
+        using SubUpDownBase control = new();
+        control._defaultButtonsWidth = -1;
+        control.Height = control.PreferredHeight + 10;
+
+        int fontChangedCallCount = 0;
+        control.FontChanged += (sender, e) =>
+        {
+            Assert.Same(control, sender);
+            Assert.Same(eventArgs, e);
+            fontChangedCallCount++;
+        };
+
+        control.OnParentFontChanged(eventArgs);
+
+        Assert.Equal(ScaleHelper.ScaleToDpi(16, control.DeviceDpi), control._defaultButtonsWidth);
+        Assert.Equal(control.PreferredHeight, control.Height);
+        Assert.Equal(1, fontChangedCallCount);
+        Assert.False(control.IsHandleCreated);
+    }
+
+    [WinFormsTheory]
+    [NewAndDefaultData<EventArgs>]
+    public void UpDownBase_OnParentFontChanged_InvokeWithLocalFont_UpdatesDefaultButtonsWidthAndHeight(EventArgs eventArgs)
+    {
+        using SubUpDownBase control = new()
+        {
+            Font = SystemFonts.MenuFont
+        };
+
+        control._defaultButtonsWidth = -1;
+        control.Height = control.PreferredHeight + 10;
+
+        int fontChangedCallCount = 0;
+        control.FontChanged += (sender, e) => fontChangedCallCount++;
+
+        control.OnParentFontChanged(eventArgs);
+
+        Assert.Equal(ScaleHelper.ScaleToDpi(16, control.DeviceDpi), control._defaultButtonsWidth);
+        Assert.Equal(control.PreferredHeight, control.Height);
+        Assert.Equal(0, fontChangedCallCount);
+        Assert.False(control.IsHandleCreated);
+    }
+
     public static IEnumerable<object[]> OnTextBoxKeyDown_TestData()
     {
         foreach (object source in new object[] { null, new() })
@@ -3548,6 +3595,8 @@ public class UpDownBaseTests
         public new void OnMouseWheel(MouseEventArgs e) => base.OnMouseWheel(e);
 
         public new void OnPaint(PaintEventArgs e) => base.OnPaint(e);
+
+        public new void OnParentFontChanged(EventArgs e) => base.OnParentFontChanged(e);
 
         public new void OnTextBoxKeyDown(object source, KeyEventArgs e) => base.OnTextBoxKeyDown(source, e);
 
