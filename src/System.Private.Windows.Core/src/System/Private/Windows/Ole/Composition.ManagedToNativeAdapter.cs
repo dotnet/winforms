@@ -71,8 +71,10 @@ internal unsafe partial class Composition<TOleServices, TNrbfSerializer, TDataFo
                 return HRESULT.DV_E_TYMED;
             }
 
-            // Prefer a platform-specific native medium over generic serialization when both are offered.
+            // WPF preserves .NET 9's HGLOBAL-first EMF behavior even if HGLOBAL rendering will fail.
+            // Other platforms that opt into native EMF retain the shared adapter's native-first behavior.
             if (requestedTymed.HasFlag(TYMED.TYMED_ENHMF)
+                && (!TOleServices.PreferHGlobalOverEnhMf || !requestedTymed.HasFlag(TYMED.TYMED_HGLOBAL))
                 && TOleServices.IsNativeTymedSupported(format, TYMED.TYMED_ENHMF))
             {
                 pmedium->tymed = TYMED.TYMED_ENHMF;
@@ -331,6 +333,10 @@ internal unsafe partial class Composition<TOleServices, TNrbfSerializer, TDataFo
                     => SaveDbcsToHGLOBAL(medium.hGlobal, ((string[])data)[0]),
                 DataFormatNames.FileNameUnicode
                     => SaveUtf16ToHGLOBAL(medium.hGlobal, ((string[])data)[0]),
+                // Run the platform veto after raw-data conversions, but before serialization can turn a
+                // rejected object into a successful serialized exception payload.
+                _ when !TOleServices.AllowHGlobalSerialization(format, data)
+                    => HRESULT.DV_E_TYMED,
 #pragma warning disable SYSLIB0050 // Type or member is obsolete
                 _ when format == DataFormatNames.Serializable || data is ISerializable || data.GetType().IsSerializable
 #pragma warning restore

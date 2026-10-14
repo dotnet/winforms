@@ -42,6 +42,33 @@ internal unsafe interface IOleServices
     static virtual bool IsNativeTymedSupported(string format, TYMED tymed) => false;
 
     /// <summary>
+    ///  Returns whether HGLOBAL takes precedence over the native enhanced-metafile medium when both are requested.
+    /// </summary>
+    /// <remarks>
+    ///  <para>
+    ///   WPF opts in to preserve .NET 9's HGLOBAL-first EMF behavior, including requests that fail HGLOBAL rendering.
+    ///   The default retains the shared adapter's native-first behavior for platforms that opt into native EMF.
+    ///   Other native media are unaffected.
+    ///  </para>
+    /// </remarks>
+    static virtual bool PreferHGlobalOverEnhMf => false;
+
+    /// <summary>
+    ///  Returns whether an object can enter HGLOBAL serialization after stream and standard-format rendering.
+    /// </summary>
+    /// <remarks>
+    ///  <para>
+    ///   This is a general object-serialization veto, not an EMF-only check. WPF uses it to reject metafile
+    ///   serialization as in .NET 9; the default leaves WinForms serialization unchanged.
+    ///  </para>
+    ///  <para>
+    ///   Returning false rejects the request with DV_E_TYMED without serializing an error payload.
+    ///   Raw streams and standard-format conversions have already been handled and are not subject to this veto.
+    ///  </para>
+    /// </remarks>
+    static virtual bool AllowHGlobalSerialization(string format, object data) => true;
+
+    /// <summary>
     ///  If the <typeparamref name="T"/> is a the requested format this method will attempt to extract it
     ///  from the <paramref name="dataObject"/>.
     /// </summary>
