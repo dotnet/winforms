@@ -5081,7 +5081,23 @@ public class ComboBoxTests
 
     private class Issue9272DataModel : INotifyPropertyChanged
     {
-        public bool IsChecked { get; set; }
+        private bool _isChecked;
+
+        public bool IsChecked
+        {
+            get => _isChecked;
+            set
+            {
+                if (_isChecked == value)
+                {
+                    return;
+                }
+
+                _isChecked = value;
+                OnPropertyChanged(nameof(IsChecked));
+                OnPropertyChanged(nameof(DisableText));
+            }
+        }
 
         public bool DisableText => !IsChecked;
 
