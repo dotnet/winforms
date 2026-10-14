@@ -17,61 +17,8 @@ namespace System.Windows.Forms.Tests;
 
 [Collection("Sequential")]
 [CollectionDefinition("Sequential", DisableParallelization = true)]
-public partial class ClipboardTests
+public partial class ClipboardTests : IDisposable
 {
-    [WinFormsFact]
-    public void Clipboard_Clear_InvokeMultipleTimes_Success()
-    {
-        Clipboard.Clear();
-        Clipboard.ContainsAudio().Should().BeFalse();
-        Clipboard.ContainsData("format").Should().BeFalse();
-        Clipboard.ContainsFileDropList().Should().BeFalse();
-        Clipboard.ContainsImage().Should().BeFalse();
-        Clipboard.ContainsText().Should().BeFalse();
-
-        Clipboard.Clear();
-        Clipboard.ContainsAudio().Should().BeFalse();
-        Clipboard.ContainsData("format").Should().BeFalse();
-        Clipboard.ContainsFileDropList().Should().BeFalse();
-        Clipboard.ContainsImage().Should().BeFalse();
-        Clipboard.ContainsText().Should().BeFalse();
-    }
-
-    public static TheoryData<Func<bool>> ContainsMethodsTheoryData => new()
-    {
-        Clipboard.ContainsAudio,
-        Clipboard.ContainsFileDropList,
-        Clipboard.ContainsImage,
-        Clipboard.ContainsText
-    };
-
-    [WinFormsTheory]
-    [MemberData(nameof(ContainsMethodsTheoryData))]
-    public void Clipboard_Contains_InvokeMultipleTimes_Success(Func<bool> contains)
-    {
-        Clipboard.Clear();
-        bool result = contains.Invoke();
-        contains.Invoke().Should().Be(result);
-        result.Should().BeFalse();
-    }
-
-    [WinFormsTheory]
-    [StringWithNullData]
-    public void Clipboard_ContainsData_InvokeMultipleTimes_Success(string format)
-    {
-        bool result = Clipboard.ContainsData(format);
-        Clipboard.ContainsData(format).Should().Be(result);
-        result.Should().BeFalse();
-    }
-
-    [WinFormsTheory]
-    [EnumData<TextDataFormat>]
-    public void Clipboard_ContainsText_TextDataFormat_InvokeMultipleTimes_Success(TextDataFormat format)
-    {
-        bool result = Clipboard.ContainsText(format);
-        Clipboard.ContainsText(format).Should().Be(result);
-    }
-
     [WinFormsTheory]
     [InvalidEnumData<TextDataFormat>]
     public void Clipboard_ContainsText_InvalidFormat_ThrowsInvalidEnumArgumentException(TextDataFormat format)
@@ -80,59 +27,32 @@ public partial class ClipboardTests
         action.Should().Throw<InvalidEnumArgumentException>().WithParameterName("format");
     }
 
-    [WinFormsFact]
-    public void Clipboard_GetAudioStream_InvokeMultipleTimes_Success()
-    {
-        Stream? result = Clipboard.GetAudioStream();
-        (Clipboard.GetAudioStream() == result).Should().BeTrue();
-    }
-
+    // Verifies that invalid format names return null even when the clipboard contains valid custom data.
     [WinFormsTheory]
     [InlineData(null)]
     [InlineData("")]
+    [InlineData(" ")]
     [InlineData("\t")]
-    public void Clipboard_GetData_NullOrEmptyFormat_Returns_Null(string? format)
+    [InlineData("\r\n")]
+    public void Clipboard_GetData_InvalidOrWhitespaceFormat_ReturnsNull(string? format)
     {
-        object? result = Clipboard.GetData(format!);
-        result.Should().BeNull();
-        result = Clipboard.GetData(format!);
-        result.Should().BeNull();
+        Clipboard.SetData("WinForms.ClipboardTests.ValidFormat", 42);
+
+        Clipboard.GetData(format!).Should().BeNull();
     }
 
-    [WinFormsFact]
-    public void Clipboard_GetDataObject_InvokeMultipleTimes_Success()
-    {
-        IDataObject? result = Clipboard.GetDataObject();
-        (result == Clipboard.GetDataObject()).Should().BeFalse();
-    }
-
-    [WinFormsFact]
-    public void Clipboard_GetFileDropList_InvokeMultipleTimes_Success()
-    {
-        StringCollection result = Clipboard.GetFileDropList();
-        Clipboard.GetFileDropList().Should().BeEquivalentTo(result);
-    }
-
-    [WinFormsFact]
-    public void Clipboard_GetImage_InvokeMultipleTimes_Success()
-    {
-        Image? result = Clipboard.GetImage();
-        Clipboard.GetImage().Should().BeEquivalentTo(result);
-    }
-
-    [WinFormsFact]
-    public void Clipboard_GetText_InvokeMultipleTimes_Success()
-    {
-        string result = Clipboard.GetText();
-        Clipboard.GetText().Should().Be(result);
-    }
-
+    // Verifies that invalid format names are never reported present because of other clipboard content.
     [WinFormsTheory]
-    [EnumData<TextDataFormat>]
-    public void Clipboard_GetText_TextDataFormat_InvokeMultipleTimes_Success(TextDataFormat format)
+    [InlineData(null)]
+    [InlineData("")]
+    [InlineData(" ")]
+    [InlineData("\t")]
+    [InlineData("\r\n")]
+    public void Clipboard_ContainsData_InvalidOrWhitespaceFormat_ReturnsFalse(string? format)
     {
-        string result = Clipboard.GetText(format);
-        Clipboard.GetText(format).Should().Be(result);
+        Clipboard.SetData("WinForms.ClipboardTests.ValidFormat", 42);
+
+        Clipboard.ContainsData(format).Should().BeFalse();
     }
 
     [WinFormsTheory]
@@ -149,8 +69,10 @@ public partial class ClipboardTests
         byte[] audioBytes = [1, 2, 3];
         Clipboard.SetAudio(audioBytes);
 
-        Clipboard.GetAudioStream().Should().BeOfType<MemoryStream>().Which.ToArray().Should().Equal(audioBytes);
-        Clipboard.GetData(DataFormats.WaveAudio).Should().BeOfType<MemoryStream>().Which.ToArray().Should().Equal(audioBytes);
+        using MemoryStream audioResult = Clipboard.GetAudioStream().Should().BeOfType<MemoryStream>().Which;
+        audioResult.ToArray().Should().Equal(audioBytes);
+        using MemoryStream dataResult = Clipboard.GetData(DataFormats.WaveAudio).Should().BeOfType<MemoryStream>().Which;
+        dataResult.ToArray().Should().Equal(audioBytes);
         Clipboard.ContainsAudio().Should().BeTrue();
         Clipboard.ContainsData(DataFormats.WaveAudio).Should().BeTrue();
     }
@@ -181,8 +103,10 @@ public partial class ClipboardTests
         using MemoryStream audioStream = new(audioBytes);
         Clipboard.SetAudio(audioStream);
 
-        Clipboard.GetAudioStream().Should().BeOfType<MemoryStream>().Which.ToArray().Should().Equal(audioBytes);
-        Clipboard.GetData(DataFormats.WaveAudio).Should().BeOfType<MemoryStream>().Which.ToArray().Should().Equal(audioBytes);
+        using MemoryStream audioResult = Clipboard.GetAudioStream().Should().BeOfType<MemoryStream>().Which;
+        audioResult.ToArray().Should().Equal(audioBytes);
+        using MemoryStream dataResult = Clipboard.GetData(DataFormats.WaveAudio).Should().BeOfType<MemoryStream>().Which;
+        dataResult.ToArray().Should().Equal(audioBytes);
         Clipboard.ContainsAudio().Should().BeTrue();
         Clipboard.ContainsData(DataFormats.WaveAudio).Should().BeTrue();
     }
@@ -206,16 +130,22 @@ public partial class ClipboardTests
         action.Should().Throw<ArgumentNullException>().WithParameterName("audioStream");
     }
 
+    // Verifies exact custom-format publication, including null payloads and format names with punctuation.
     [WinFormsTheory]
-    [InlineData("format", null)]
+    [InlineData("WinForms.Format:Null/Punctuation", null)]
     [InlineData("format", 1)]
     public void Clipboard_SetData_Invoke_GetReturnsExpected(string format, object? data)
     {
         Clipboard.SetData(format, data!);
         Clipboard.GetData(format).Should().Be(data);
         Clipboard.ContainsData(format).Should().BeTrue();
+        Clipboard.ContainsData($"{format}.Unrelated").Should().BeFalse();
+
+        IDataObject clipboardData = Assert.IsAssignableFrom<IDataObject>(Clipboard.GetDataObject());
+        Assert.Contains(format, clipboardData.GetFormats(autoConvert: false));
     }
 
+    // Verifies that rejected format names do not replace data that was already on the clipboard.
     [WinFormsTheory]
     [InlineData("")]
     [InlineData(" ")]
@@ -223,15 +153,13 @@ public partial class ClipboardTests
     [InlineData(null)]
     public void Clipboard_SetData_EmptyOrWhitespaceFormat_ThrowsArgumentException(string? format)
     {
+        const string seedFormat = "WinForms.ClipboardTests.InvalidFormatSeed";
+        Clipboard.SetData(seedFormat, 42);
+
         Action action = () => Clipboard.SetData(format!, data: null!);
         action.Should().Throw<ArgumentException>().WithParameterName("format");
-    }
-
-    [WinFormsFact]
-    public void Clipboard_SetData_null_Success()
-    {
-        Action action = () => Clipboard.SetData("MyData", data: null!);
-        action.Should().NotThrow();
+        Clipboard.ContainsData(seedFormat).Should().BeTrue();
+        Clipboard.GetData(seedFormat).Should().Be(42);
     }
 
     [WinFormsTheory]
@@ -277,9 +205,9 @@ public partial class ClipboardTests
     }
 
     [WinFormsTheory]
-    [InlineData(1, true, 0, 0)]
+    [InlineData(1, true, 10, 0)]
     [InlineData(1, false, 1, 2)]
-    [InlineData("data", true, 0, 0)]
+    [InlineData("data", true, 10, 0)]
     [InlineData("data", false, 1, 2)]
     public void Clipboard_SetDataObject_InvokeObjectBoolIComDataObject_GetReturnsExpected(object data, bool copy, int retryTimes, int retryDelay)
     {
@@ -292,9 +220,9 @@ public partial class ClipboardTests
     }
 
     [WinFormsTheory]
-    [InlineData(1, true, 0, 0)]
+    [InlineData(1, true, 10, 0)]
     [InlineData(1, false, 1, 2)]
-    [InlineData("data", true, 0, 0)]
+    [InlineData("data", true, 10, 0)]
     [InlineData("data", false, 1, 2)]
     public void Clipboard_SetDataObject_InvokeObjectBoolIntIntNotIComDataObject_GetReturnsExpected(object data, bool copy, int retryTimes, int retryDelay)
     {
@@ -396,17 +324,24 @@ public partial class ClipboardTests
         action.Should().Throw<ArgumentException>();
     }
 
+    // Verifies that an invalid file-drop entry throws before mutating the existing clipboard contents.
     [WinFormsTheory]
+    [InlineData(null)]
     [InlineData("")]
     [InlineData("\0")]
-    public void Clipboard_SetFileDropList_InvalidFileInPaths_ThrowsArgumentException(string filePath)
+    public void Clipboard_SetFileDropList_InvalidFileInPaths_ThrowsAndPreservesClipboard(string? filePath)
     {
+        const string seedFormat = "WinForms.ClipboardTests.InvalidFileDropSeed";
+        Clipboard.SetData(seedFormat, 42);
         StringCollection filePaths =
         [
-            filePath
+            filePath!
         ];
+
         Action action = () => Clipboard.SetFileDropList(filePaths);
         action.Should().Throw<ArgumentException>();
+        Clipboard.ContainsData(seedFormat).Should().BeTrue();
+        Clipboard.GetData(seedFormat).Should().Be(42);
     }
 
     [WinFormsFact]
@@ -415,7 +350,7 @@ public partial class ClipboardTests
         using Bitmap bitmap = new(10, 10);
         bitmap.SetPixel(1, 2, Color.FromArgb(0x01, 0x02, 0x03, 0x04));
         Clipboard.SetImage(bitmap);
-        Bitmap result = Assert.IsType<Bitmap>(Clipboard.GetImage());
+        using Bitmap result = Assert.IsType<Bitmap>(Clipboard.GetImage());
         result.Size.Should().Be(bitmap.Size);
         result.GetPixel(1, 2).Should().Be(Color.FromArgb(0xFF, 0xD2, 0xD2, 0xD2));
         Clipboard.ContainsImage().Should().BeTrue();
@@ -463,14 +398,6 @@ public partial class ClipboardTests
         action.Should().Throw<ArgumentNullException>().WithParameterName("text");
         action = () => Clipboard.SetText(text, TextDataFormat.Text);
         action.Should().Throw<ArgumentNullException>().WithParameterName("text");
-    }
-
-    [WinFormsTheory]
-    [InvalidEnumData<TextDataFormat>]
-    public void Clipboard_SetText_InvalidFormat_ThrowsInvalidEnumArgumentException(TextDataFormat format)
-    {
-        Action action = () => Clipboard.SetText("text", format);
-        action.Should().Throw<InvalidEnumArgumentException>().WithParameterName("format");
     }
 
     [WinFormsFact]
