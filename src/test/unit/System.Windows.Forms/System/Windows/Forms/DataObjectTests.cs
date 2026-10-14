@@ -2158,7 +2158,8 @@ public partial class DataObjectTests
         { DataFormats.CommaSeparatedValue, TYMED.TYMED_HGLOBAL },
         { DataFormats.Dib, TYMED.TYMED_HGLOBAL },
         { DataFormats.Dif, TYMED.TYMED_HGLOBAL },
-        { DataFormats.EnhancedMetafile, TYMED.TYMED_ENHMF },
+        // WinForms does not opt into native EMF rendering, so it advertises the serialized HGLOBAL medium.
+        { DataFormats.EnhancedMetafile, TYMED.TYMED_HGLOBAL },
         { DataFormats.FileDrop, TYMED.TYMED_HGLOBAL },
         { "FileName", TYMED.TYMED_HGLOBAL },
         { "FileNameW", TYMED.TYMED_HGLOBAL },

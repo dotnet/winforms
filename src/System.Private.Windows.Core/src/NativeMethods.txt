@@ -169,6 +169,7 @@ ImageLockMode
 INK_SERIALIZED_FORMAT
 INPLACE_E_NOTOOLSPACE
 IntersectClipRect
+IsClipboardFormatAvailable
 IPicture
 IPictureDisp
 IStream
@@ -211,6 +212,7 @@ OleDuplicateData
 OleFlushClipboard
 OleGetClipboard
 OleInitialize
+OleIsCurrentClipboard
 OleSetClipboard
 OleUninitialize
 PeekMessage
@@ -255,6 +257,7 @@ SelectPalette
 SendMessage
 SetBkColor
 SetBkMode
+SetEnhMetaFileBits
 SetMapMode
 SetROP2
 SetTextAlign

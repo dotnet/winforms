@@ -3,6 +3,7 @@
 
 using System.Runtime.CompilerServices;
 using Windows.Win32.System.Com;
+using Windows.Win32.System.Ole;
 using ComTypes = System.Runtime.InteropServices.ComTypes;
 
 namespace System.Private.Windows.Ole;
@@ -24,7 +25,10 @@ internal unsafe class FormatEnumerator : ComTypes.IEnumFORMATETC, IEnumFORMATETC
         _formats.AddRange(source._formats);
     }
 
-    public FormatEnumerator(IDataObjectInternal dataObject, Func<string, int> getFormatId)
+    public FormatEnumerator(
+        IDataObjectInternal dataObject,
+        Func<string, int> getFormatId,
+        Func<string, bool>? supportsEnhMetafile = null)
     {
         _dataObject = dataObject;
         if (dataObject.GetFormats() is not string[] formats)
@@ -37,15 +41,24 @@ internal unsafe class FormatEnumerator : ComTypes.IEnumFORMATETC, IEnumFORMATETC
         for (int i = 0; i < formats.Length; i++)
         {
             string format = formats[i];
+            int formatId = getFormatId(format);
+
+            // Only the standard EMF ID can use a native handle; registered aliases retain HGLOBAL data.
+            // Pass the original spelling to the platform hook: WPF preserves .NET 9's ordinal name checks,
+            // so a case-variant EMF name resolving to this ID does not by itself opt into native rendering.
             ComTypes.FORMATETC temp = new()
             {
-                cfFormat = (short)(ushort)getFormatId(format),
+                cfFormat = (short)(ushort)formatId,
                 dwAspect = ComTypes.DVASPECT.DVASPECT_CONTENT,
                 ptd = 0,
                 lindex = -1,
-                tymed = format == DataFormatNames.Bitmap
-                    ? ComTypes.TYMED.TYMED_GDI
-                    : format == DataFormatNames.Emf ? ComTypes.TYMED.TYMED_ENHMF : ComTypes.TYMED.TYMED_HGLOBAL
+                tymed = format switch
+                {
+                    DataFormatNames.Bitmap => ComTypes.TYMED.TYMED_GDI,
+                    _ when formatId == (int)CLIPBOARD_FORMAT.CF_ENHMETAFILE
+                        && supportsEnhMetafile?.Invoke(format) == true => ComTypes.TYMED.TYMED_ENHMF,
+                    _ => ComTypes.TYMED.TYMED_HGLOBAL
+                }
             };
 
             _formats.Add(temp);

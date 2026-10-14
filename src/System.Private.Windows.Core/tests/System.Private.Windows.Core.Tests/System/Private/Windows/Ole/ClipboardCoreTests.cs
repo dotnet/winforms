@@ -78,6 +78,51 @@ public unsafe class ClipboardCoreTests
     }
 
     [Fact]
+    public void SetData_ReentrantSetData_DoesNotOverwriteNestedOwner()
+    {
+        using ClipboardScope scope = new();
+        DataObject outer = new();
+        DataObject nested = new();
+        HRESULT nestedResult = HRESULT.E_FAIL;
+
+        MockOleServices<ClipboardCoreTests>.AfterOleSetClipboard = isClear =>
+        {
+            if (isClear)
+            {
+                return;
+            }
+
+            MockOleServices<ClipboardCoreTests>.AfterOleSetClipboard = null;
+            nestedResult = ClipboardCore.SetData(nested, copy: false, retryTimes: 1, retryDelay: 0);
+        };
+
+        try
+        {
+            ClipboardCore.SetData(outer, copy: false, retryTimes: 1, retryDelay: 0).Should().Be(HRESULT.S_OK);
+        }
+        finally
+        {
+            MockOleServices<ClipboardCoreTests>.AfterOleSetClipboard = null;
+        }
+
+        nestedResult.Should().Be(HRESULT.S_OK);
+        MockOleServices<ClipboardCoreTests>.ResetOleIsCurrentClipboardCallCount();
+
+        ClipboardCore.GetDataObject<DataObject, ITestDataObject>(
+            out ITestDataObject? first,
+            retryTimes: 1,
+            retryDelay: 0).Should().Be(HRESULT.S_OK);
+        ClipboardCore.GetDataObject<DataObject, ITestDataObject>(
+            out ITestDataObject? second,
+            retryTimes: 1,
+            retryDelay: 0).Should().Be(HRESULT.S_OK);
+
+        first.Should().BeSameAs(nested);
+        second.Should().BeSameAs(nested);
+        MockOleServices<ClipboardCoreTests>.OleIsCurrentClipboardCallCount.Should().Be(2);
+    }
+
+    [Fact]
     public void Clear_ClearsClipboard()
     {
         HRESULT result;
@@ -128,6 +173,355 @@ public unsafe class ClipboardCoreTests
         text.Should().Be("Hello, World!");
         iDataObject.TryGetData(DataFormatNames.UnicodeText, autoConvert: false, out text).Should().BeFalse();
         text.Should().BeNull();
+    }
+
+    [Fact]
+    public void GetDataObject_UnwrapUserDataObjectFalse_ReturnsOleProxy()
+    {
+        // WPF relies on this mode so format queries pass through OLE instead of the original managed object.
+        using ClipboardScope scope = new();
+        DataObject dataObject = new();
+        dataObject.SetData(DataFormatNames.Text, autoConvert: false, "Hello, World!");
+        ClipboardCore.SetData(dataObject, copy: false, retryTimes: 1, retryDelay: 0).Should().Be(HRESULT.S_OK);
+
+        ClipboardCore.GetDataObject<DataObject, ITestDataObject>(
+            out ITestDataObject? data,
+            retryTimes: 1,
+            retryDelay: 0,
+            unwrapUserDataObject: false).Should().Be(HRESULT.S_OK);
+
+        data.Should().NotBeNull().And.NotBeSameAs(dataObject);
+        data.GetDataPresent(DataFormatNames.Text, autoConvert: false).Should().BeTrue();
+        data.GetData(DataFormatNames.Text, autoConvert: false).Should().Be("Hello, World!");
+    }
+
+    [Fact]
+    public void GetDataObject_ProxyReadAfterClipboardOwnerChanged_ClearsCachedManagedObject()
+    {
+        // Restore the mock clipboard and ClipboardCore cache when the test completes.
+        using ClipboardScope scope = new();
+
+        // This object becomes the managed owner cached by ClipboardCore.
+        DataObject original = new();
+
+        // This object represents clipboard contents supplied later by another process.
+        DataObject external = new();
+
+        // Publish the original object without flushing it so ClipboardCore retains its managed-owner cache entry.
+        ClipboardCore.SetData(original, copy: false, retryTimes: 1, retryDelay: 0).Should().Be(HRESULT.S_OK);
+
+        // Replace only the mock OLE clipboard, leaving ClipboardCore's cached original object intentionally stale.
+        MockOleServices<ClipboardCoreTests>.SimulateExternalClipboardChange(external);
+
+        // Count ownership checks performed after the simulated external replacement.
+        MockOleServices<ClipboardCoreTests>.ResetOleIsCurrentClipboardCallCount();
+
+        // Proxy mode must still validate and clear the stale cache, but it must return an OLE-backed wrapper.
+        ClipboardCore.GetDataObject<DataObject, ITestDataObject>(
+            out ITestDataObject? first,
+            retryTimes: 1,
+            retryDelay: 0,
+            unwrapUserDataObject: false).Should().Be(HRESULT.S_OK);
+
+        // This assertion proves the proxy-mode read, rather than the later normal read, performed the ownership check.
+        MockOleServices<ClipboardCoreTests>.OleIsCurrentClipboardCallCount.Should().Be(1);
+
+        // A normal read should now bypass cache validation because the proxy-mode read already cleared the stale entry.
+        ClipboardCore.GetDataObject<DataObject, ITestDataObject>(
+            out ITestDataObject? second,
+            retryTimes: 1,
+            retryDelay: 0).Should().Be(HRESULT.S_OK);
+
+        // Proxy mode returns a wrapper around the current OLE clipboard object, not the original managed instance.
+        first.Should().NotBeSameAs(external);
+
+        // Normal mode unwraps the in-process OLE object and returns the exact externally supplied managed instance.
+        second.Should().BeSameAs(external);
+
+        // No second ownership check means the stale cache was removed during the first read.
+        MockOleServices<ClipboardCoreTests>.OleIsCurrentClipboardCallCount.Should().Be(1);
+    }
+
+    [Fact]
+    public void GetDataObject_ConcurrentReadAndReplacement_DoesNotBlockOrClearReplacement()
+    {
+        using ClipboardScope scope = new();
+        using ManualResetEventSlim ownershipCheckEntered = new();
+        using ManualResetEventSlim continueOwnershipCheck = new();
+        using ManualResetEventSlim replacementCompleted = new();
+        using ManualResetEventSlim replacementCanExit = new();
+        TimeSpan timeout = TimeSpan.FromSeconds(10);
+        DataObject original = new();
+        DataObject replacement = new();
+        replacement.SetData(nameof(replacement), "replacement");
+        Exception? readException = null;
+        Exception? replacementException = null;
+        HRESULT readResult = HRESULT.E_FAIL;
+        HRESULT replacementResult = HRESULT.E_FAIL;
+        HRESULT currentResult = HRESULT.E_FAIL;
+        ITestDataObject? readData = null;
+        ITestDataObject? current = null;
+
+        ClipboardCore.SetData(original, copy: false, retryTimes: 1, retryDelay: 0).Should().Be(HRESULT.S_OK);
+        MockOleServices<ClipboardCoreTests>.BeforeOleIsCurrentClipboard = () =>
+        {
+            ownershipCheckEntered.Set();
+            if (!continueOwnershipCheck.Wait(timeout))
+            {
+                throw new TimeoutException("Timed out waiting to continue the Clipboard ownership check.");
+            }
+        };
+
+        Thread readThread = new(() =>
+        {
+            try
+            {
+                readResult = ClipboardCore.GetDataObject<DataObject, ITestDataObject>(
+                    out readData,
+                    retryTimes: 1,
+                    retryDelay: 0);
+            }
+            catch (Exception exception)
+            {
+                readException = exception;
+            }
+        });
+        readThread.SetApartmentState(ApartmentState.STA);
+
+        Thread replacementThread = new(() =>
+        {
+            try
+            {
+                replacementResult = ClipboardCore.SetData(
+                    replacement,
+                    copy: false,
+                    retryTimes: 1,
+                    retryDelay: 0);
+            }
+            catch (Exception exception)
+            {
+                replacementException = exception;
+            }
+            finally
+            {
+                replacementCompleted.Set();
+
+                if (!replacementCanExit.Wait(timeout))
+                {
+                    replacementException ??= new TimeoutException(
+                        "Timed out waiting for the concurrent Clipboard read to complete.");
+                }
+            }
+        });
+        replacementThread.SetApartmentState(ApartmentState.STA);
+
+        try
+        {
+            readThread.Start();
+            ownershipCheckEntered.Wait(timeout, TestContext.Current.CancellationToken).Should().BeTrue();
+
+            replacementThread.Start();
+            replacementCompleted.Wait(timeout, TestContext.Current.CancellationToken).Should().BeTrue();
+
+            continueOwnershipCheck.Set();
+            readThread.Join(timeout).Should().BeTrue();
+
+            currentResult = ClipboardCore.GetDataObject<DataObject, ITestDataObject>(
+                out current,
+                retryTimes: 1,
+                retryDelay: 0);
+        }
+        finally
+        {
+            continueOwnershipCheck.Set();
+
+            if (readThread.ThreadState != ThreadState.Unstarted)
+            {
+                readThread.Join(timeout).Should().BeTrue();
+            }
+
+            replacementCanExit.Set();
+
+            if (replacementThread.ThreadState != ThreadState.Unstarted)
+            {
+                replacementThread.Join(timeout).Should().BeTrue();
+            }
+
+            MockOleServices<ClipboardCoreTests>.BeforeOleIsCurrentClipboard = null;
+        }
+
+        readException.Should().BeNull();
+        replacementException.Should().BeNull();
+        replacementResult.Should().Be(HRESULT.S_OK);
+        readResult.Should().Be(HRESULT.S_OK);
+        readData.Should().NotBeSameAs(original);
+        readData!.GetData(nameof(replacement)).Should().Be("replacement");
+
+        currentResult.Should().Be(HRESULT.S_OK);
+        current.Should().BeSameAs(replacement);
+    }
+
+    public static TheoryData<ClipboardCleanupOperation, bool> ClipboardCleanupOperations => new()
+    {
+        { ClipboardCleanupOperation.Clear, false },
+        { ClipboardCleanupOperation.Flush, false },
+        { ClipboardCleanupOperation.Copy, false },
+        { ClipboardCleanupOperation.Clear, true },
+        { ClipboardCleanupOperation.Flush, true },
+        { ClipboardCleanupOperation.Copy, true }
+    };
+
+    [Theory]
+    [MemberData(nameof(ClipboardCleanupOperations))]
+    public void Cleanup_ConcurrentReplacement_TracksSuccessfulAttempt(
+        ClipboardCleanupOperation operation,
+        bool firstAttemptFails)
+    {
+        using ClipboardScope scope = new();
+        using ManualResetEventSlim replacementRequested = new();
+        using ManualResetEventSlim replacementCompleted = new();
+        using ManualResetEventSlim replacementCanExit = new();
+        TimeSpan timeout = TimeSpan.FromSeconds(10);
+        DataObject original = new();
+        DataObject replacement = new();
+        Exception? replacementException = null;
+        HRESULT replacementResult = HRESULT.E_FAIL;
+
+        replacement.SetData(nameof(replacement), "replacement");
+        ClipboardCore.SetData(original, copy: false, retryTimes: 1, retryDelay: 0).Should().Be(HRESULT.S_OK);
+
+        Thread replacementThread = new(() =>
+        {
+            try
+            {
+                if (!replacementRequested.Wait(timeout))
+                {
+                    throw new TimeoutException("Timed out waiting to replace the Clipboard contents.");
+                }
+
+                replacementResult = ClipboardCore.SetData(
+                    replacement,
+                    copy: false,
+                    retryTimes: 1,
+                    retryDelay: 0);
+            }
+            catch (Exception exception)
+            {
+                replacementException = exception;
+            }
+            finally
+            {
+                replacementCompleted.Set();
+
+                if (!replacementCanExit.Wait(timeout))
+                {
+                    replacementException ??= new TimeoutException(
+                        "Timed out waiting for the Clipboard cleanup verification.");
+                }
+            }
+        });
+        replacementThread.SetApartmentState(ApartmentState.STA);
+
+        void ReplaceClipboard()
+        {
+            MockOleServices<ClipboardCoreTests>.AfterOleFlushClipboard = null;
+            MockOleServices<ClipboardCoreTests>.AfterOleSetClipboard = null;
+            replacementRequested.Set();
+            replacementCompleted.Wait(timeout, TestContext.Current.CancellationToken).Should().BeTrue();
+        }
+
+        switch (operation)
+        {
+            case ClipboardCleanupOperation.Clear:
+                MockOleServices<ClipboardCoreTests>.AfterOleSetClipboard = isClear =>
+                {
+                    if (isClear)
+                    {
+                        ReplaceClipboard();
+                    }
+                };
+                break;
+
+            case ClipboardCleanupOperation.Flush:
+            case ClipboardCleanupOperation.Copy:
+                MockOleServices<ClipboardCoreTests>.AfterOleFlushClipboard = ReplaceClipboard;
+                break;
+        }
+
+        if (firstAttemptFails)
+        {
+            if (operation == ClipboardCleanupOperation.Clear)
+            {
+                MockOleServices<ClipboardCoreTests>.NextOleSetClipboardResult = HRESULT.E_FAIL;
+            }
+            else
+            {
+                MockOleServices<ClipboardCoreTests>.NextOleFlushClipboardResult = HRESULT.E_FAIL;
+            }
+        }
+
+        try
+        {
+            replacementThread.Start();
+
+            HRESULT cleanupResult = operation switch
+            {
+                ClipboardCleanupOperation.Clear => ClipboardCore.Clear(retryTimes: 1, retryDelay: 0),
+                ClipboardCleanupOperation.Flush => ClipboardCore.Flush(retryTimes: 1, retryDelay: 0),
+                ClipboardCleanupOperation.Copy => ClipboardCore.SetData(
+                    original,
+                    copy: true,
+                    retryTimes: 1,
+                    retryDelay: 0),
+                _ => throw new InvalidOperationException()
+            };
+
+            cleanupResult.Should().Be(HRESULT.S_OK);
+            replacementCompleted.Wait(timeout, TestContext.Current.CancellationToken).Should().BeTrue();
+            replacementException.Should().BeNull();
+            replacementResult.Should().Be(HRESULT.S_OK);
+
+            MockOleServices<ClipboardCoreTests>.ResetOleIsCurrentClipboardCallCount();
+            HRESULT currentResult = ClipboardCore.GetDataObject<DataObject, ITestDataObject>(
+                out ITestDataObject? current,
+                retryTimes: 1,
+                retryDelay: 0);
+
+            if (firstAttemptFails && operation == ClipboardCleanupOperation.Clear)
+            {
+                currentResult.Should().Be(HRESULT.CLIPBRD_E_BAD_DATA);
+                current.Should().BeNull();
+            }
+            else
+            {
+                currentResult.Should().Be(HRESULT.S_OK);
+                current.Should().BeSameAs(replacement);
+            }
+
+            MockOleServices<ClipboardCoreTests>.OleIsCurrentClipboardCallCount.Should().Be(
+                firstAttemptFails ? 0 : 1);
+        }
+        finally
+        {
+            MockOleServices<ClipboardCoreTests>.AfterOleFlushClipboard = null;
+            MockOleServices<ClipboardCoreTests>.AfterOleSetClipboard = null;
+            MockOleServices<ClipboardCoreTests>.NextOleFlushClipboardResult = null;
+            MockOleServices<ClipboardCoreTests>.NextOleSetClipboardResult = null;
+            replacementRequested.Set();
+            replacementCanExit.Set();
+
+            if (replacementThread.ThreadState != ThreadState.Unstarted)
+            {
+                replacementThread.Join(timeout).Should().BeTrue();
+            }
+        }
+    }
+
+    public enum ClipboardCleanupOperation
+    {
+        Clear,
+        Flush,
+        Copy
     }
 
     [Fact]

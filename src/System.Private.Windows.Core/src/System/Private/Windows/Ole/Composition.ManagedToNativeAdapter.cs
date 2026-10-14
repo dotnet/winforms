@@ -30,7 +30,8 @@ internal unsafe partial class Composition<TOleServices, TNrbfSerializer, TDataFo
         /// <summary>
         ///  Returns true if the tymed is usable.
         /// </summary>
-        private static bool GetTymedUsable(TYMED tymed) => (tymed & AllowedTymeds) != 0;
+        private static bool GetTymedUsable(string format, TYMED tymed) =>
+            (tymed & AllowedTymeds) != 0 || TOleServices.IsNativeTymedSupported(format, tymed);
 
         #region  Com.IDataObject.Interface
         public HRESULT GetData(FORMATETC* pformatetcIn, STGMEDIUM* pmedium)
@@ -63,14 +64,45 @@ internal unsafe partial class Composition<TOleServices, TNrbfSerializer, TDataFo
 
             *pmedium = default;
 
-            if (!GetTymedUsable((TYMED)pformatetcIn->tymed))
+            string format = DataFormatsCore<TDataFormat>.GetOrAddFormat(pformatetcIn->cfFormat).Name;
+            TYMED requestedTymed = (TYMED)pformatetcIn->tymed;
+            if (!GetTymedUsable(format, requestedTymed))
             {
                 return HRESULT.DV_E_TYMED;
             }
 
-            if (!((TYMED)pformatetcIn->tymed).HasFlag(TYMED.TYMED_HGLOBAL))
+            // WPF preserves .NET 9's HGLOBAL-first EMF behavior even if HGLOBAL rendering will fail.
+            // Other platforms that opt into native EMF retain the shared adapter's native-first behavior.
+            if (requestedTymed.HasFlag(TYMED.TYMED_ENHMF)
+                && (!TOleServices.PreferHGlobalOverEnhMf || !requestedTymed.HasFlag(TYMED.TYMED_HGLOBAL))
+                && TOleServices.IsNativeTymedSupported(format, TYMED.TYMED_ENHMF))
             {
-                pmedium->tymed = (TYMED)pformatetcIn->tymed;
+                pmedium->tymed = TYMED.TYMED_ENHMF;
+                HRESULT nativeResult = RenderDataHere(format, pformatetcIn, pmedium);
+                if (nativeResult.Succeeded)
+                {
+                    return nativeResult;
+                }
+
+                if (!pmedium->hGlobal.IsNull)
+                {
+                    // The platform renderer may have allocated a medium before failing. Release it before returning
+                    // or falling back to HGLOBAL serialization so ownership does not leak across rendering attempts.
+                    PInvokeCore.ReleaseStgMedium(ref *pmedium);
+                }
+
+                *pmedium = default;
+
+                if (!requestedTymed.HasFlag(TYMED.TYMED_HGLOBAL))
+                {
+                    return nativeResult;
+                }
+            }
+
+            if (!requestedTymed.HasFlag(TYMED.TYMED_HGLOBAL))
+            {
+                // STGMEDIUM identifies one concrete union member, even when FORMATETC offered several.
+                pmedium->tymed = requestedTymed;
                 return GetDataHere(pformatetcIn, pmedium);
             }
 
@@ -82,7 +114,7 @@ internal unsafe partial class Composition<TOleServices, TNrbfSerializer, TDataFo
                 return HRESULT.E_OUTOFMEMORY;
             }
 
-            HRESULT result = GetDataHere(pformatetcIn, pmedium);
+            HRESULT result = RenderDataHere(format, pformatetcIn, pmedium);
             if (result.Failed)
             {
                 PInvokeCore.GlobalFree(pmedium->hGlobal);
@@ -104,13 +136,28 @@ internal unsafe partial class Composition<TOleServices, TNrbfSerializer, TDataFo
                 return HRESULT.E_POINTER;
             }
 
-            if (!GetTymedUsable((TYMED)pformatetc->tymed) || !GetTymedUsable(pmedium->tymed))
+            string format = DataFormatsCore<TDataFormat>.GetOrAddFormat(pformatetc->cfFormat).Name;
+
+            // IDataObject::GetDataHere does not support caller-provided GDI metafile handles. Native EMF handles are
+            // allocated only by GetData, where ownership can be transferred through the returned STGMEDIUM.
+            if (pmedium->tymed == TYMED.TYMED_ENHMF)
             {
                 return HRESULT.DV_E_TYMED;
             }
 
-            string format = DataFormatsCore<TDataFormat>.GetOrAddFormat(pformatetc->cfFormat).Name;
+            TYMED requestedTymed = (TYMED)pformatetc->tymed;
+            if (!requestedTymed.HasFlag(pmedium->tymed)
+                || !GetTymedUsable(format, requestedTymed)
+                || !GetTymedUsable(format, pmedium->tymed))
+            {
+                return HRESULT.DV_E_TYMED;
+            }
 
+            return RenderDataHere(format, pformatetc, pmedium);
+        }
+
+        private HRESULT RenderDataHere(string format, FORMATETC* pformatetc, STGMEDIUM* pmedium)
+        {
             if (!_dataObject.GetDataPresent(format))
             {
                 return HRESULT.DV_E_FORMATETC;
@@ -121,7 +168,7 @@ internal unsafe partial class Composition<TOleServices, TNrbfSerializer, TDataFo
                 return HRESULT.E_UNEXPECTED;
             }
 
-            if (((TYMED)pformatetc->tymed).HasFlag(TYMED.TYMED_HGLOBAL))
+            if (pmedium->tymed == TYMED.TYMED_HGLOBAL)
             {
                 try
                 {
@@ -162,17 +209,18 @@ internal unsafe partial class Composition<TOleServices, TNrbfSerializer, TDataFo
                 return HRESULT.DV_E_DVASPECT;
             }
 
-            if (!GetTymedUsable((TYMED)pformatetc->tymed))
-            {
-                return HRESULT.DV_E_TYMED;
-            }
-
             if (pformatetc->cfFormat == 0)
             {
                 return HRESULT.S_FALSE;
             }
 
-            if (!_dataObject.GetDataPresent(DataFormatsCore<TDataFormat>.GetOrAddFormat(pformatetc->cfFormat).Name))
+            string format = DataFormatsCore<TDataFormat>.GetOrAddFormat(pformatetc->cfFormat).Name;
+            if (!GetTymedUsable(format, (TYMED)pformatetc->tymed))
+            {
+                return HRESULT.DV_E_TYMED;
+            }
+
+            if (!_dataObject.GetDataPresent(format))
             {
                 return HRESULT.DV_E_FORMATETC;
             }
@@ -233,7 +281,8 @@ internal unsafe partial class Composition<TOleServices, TNrbfSerializer, TDataFo
             {
                 *ppenumFormatEtc = ComHelpers.GetComPointer<IEnumFORMATETC>(new FormatEnumerator(
                     _dataObject,
-                    (format) => DataFormatsCore<TDataFormat>.GetOrAddFormat(format).Id));
+                    (format) => DataFormatsCore<TDataFormat>.GetOrAddFormat(format).Id,
+                    (format) => TOleServices.IsNativeTymedSupported(format, TYMED.TYMED_ENHMF)));
 
                 return HRESULT.S_OK;
             }
@@ -284,6 +333,10 @@ internal unsafe partial class Composition<TOleServices, TNrbfSerializer, TDataFo
                     => SaveDbcsToHGLOBAL(medium.hGlobal, ((string[])data)[0]),
                 DataFormatNames.FileNameUnicode
                     => SaveUtf16ToHGLOBAL(medium.hGlobal, ((string[])data)[0]),
+                // Run the platform veto after raw-data conversions, but before serialization can turn a
+                // rejected object into a successful serialized exception payload.
+                _ when !TOleServices.AllowHGlobalSerialization(format, data)
+                    => HRESULT.DV_E_TYMED,
 #pragma warning disable SYSLIB0050 // Type or member is obsolete
                 _ when format == DataFormatNames.Serializable || data is ISerializable || data.GetType().IsSerializable
 #pragma warning restore

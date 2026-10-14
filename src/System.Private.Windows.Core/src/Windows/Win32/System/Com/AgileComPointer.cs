@@ -46,7 +46,7 @@ internal unsafe class AgileComPointer<TInterface> :
     ///  <para>
     ///   Setting <paramref name="takeOwnership"/> to `<see langword="true"/>` will ensure that this object takes
     ///   responsibility for releasing the COM interface when it is no longer needed. This is done by calling
-    ///   <see cref="IUnknown.Release"/> after the GIT adds a ref to the interface.
+    ///   <see cref="IUnknown.Release"/> after the Global Interface Table adds a ref to the interface.
     ///  </para>
     /// </remarks>
     /// <devdoc>
@@ -84,7 +84,8 @@ internal unsafe class AgileComPointer<TInterface> :
         {
             if (takeOwnership)
             {
-                // The GIT will add a ref to the given interface, release to effectively give ownership to the GIT.
+                // The Global Interface Table will add a ref to the given interface. Release to effectively give
+                // ownership to the Global Interface Table.
                 uint count = ((IUnknown*)@interface)->Release();
                 Debug.Assert(count >= 0);
             }
@@ -97,9 +98,9 @@ internal unsafe class AgileComPointer<TInterface> :
     /// </summary>
     public bool IsSameNativeObject(AgileComPointer<TInterface> other)
     {
-        // There is a chance that this AgileComPointer or the other has a proxy registered to the GIT.
+        // There is a chance that this AgileComPointer or the other has a proxy registered to the Global Interface Table.
         // A proxy's value can differ depending on the thread. In order to determine identity between two COM pointers,
-        // both must be registered in GIT (this is already done when initializing an AgileComPointer),
+        // both must be registered in the Global Interface Table (this is already done when initializing an AgileComPointer),
         // queried for their IUnknowns on the same thread, and then have their values compared.
         // If two proxies refer to the same native object, querying them for IUnknown
         // on the same thread will always give the same value.
@@ -170,8 +171,15 @@ internal unsafe class AgileComPointer<TInterface> :
 
     public void Dispose()
     {
-        Dispose(disposing: true);
-        GC.SuppressFinalize(this);
+        try
+        {
+            Dispose(disposing: true);
+        }
+        finally
+        {
+            // Disposal tracking must not report a second failure if explicit disposal throws.
+            GC.SuppressFinalize(this);
+        }
     }
 
     protected virtual void Dispose(bool disposing)
@@ -194,7 +202,11 @@ internal unsafe class AgileComPointer<TInterface> :
         if (disposing)
         {
             // Don't assert from the finalizer thread.
-            Debug.Assert(hr.Succeeded);
+            // Revoke can report E_INVALIDARG after the apartment that supplied the interface has exited. The cookie
+            // is no longer usable in that case, so there is nothing left to revoke.
+            Debug.Assert(
+                hr.Succeeded || hr == HRESULT.E_INVALIDARG,
+                $"Failed to revoke the Global Interface Table cookie: {hr}.");
         }
     }
 }
