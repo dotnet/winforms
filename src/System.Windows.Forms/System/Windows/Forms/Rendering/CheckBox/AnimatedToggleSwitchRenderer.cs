@@ -16,6 +16,7 @@ namespace System.Windows.Forms.Rendering.CheckBox;
 internal sealed class AnimatedToggleSwitchRenderer : AnimatedControlRenderer
 {
     private const int AnimationDuration = 300;
+    private const int FocusedCornerRadiusLogical = 6;
 
     private readonly ModernCheckBoxStyle _switchStyle;
     private float _focusCurrent;
@@ -115,11 +116,14 @@ internal sealed class AnimatedToggleSwitchRenderer : AnimatedControlRenderer
             return;
         }
 
-        Color focusColor = TextBoxBase.GetVisualStylesFocusColor(
-            Application.SystemVisualSettings.HighContrastEnabled);
+        Color focusColor = PopupButtonColorMath.GetReadableForeColor(Control.BackColor);
+
         using var focusPen = focusColor.GetCachedPenScope(metrics.FocusBorderThickness);
         using GraphicsPath focusPath = new();
-        int cornerSize = Math.Max(1, Math.Min(focusBounds.Width, focusBounds.Height));
+        int cornerSize = Math.Clamp(
+            Control.LogicalToDeviceUnits(FocusedCornerRadiusLogical),
+            1,
+            Math.Min(focusBounds.Width, focusBounds.Height));
 
         focusPath.AddRoundedRectangle(
             focusBounds,

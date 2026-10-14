@@ -1092,20 +1092,26 @@ public class CheckBoxTests : AbstractButtonBaseTests
         Assert.Equal(preferredSize, box.GetPreferredSize(Size.Empty));
     }
 
-    [WinFormsFact]
-    public void CheckBox_ToggleSwitch_FocusedPaintsRoundedSolidFocusBorderAndReservesMargin()
+    [WinFormsTheory]
+    [InlineData(KnownColor.White, KnownColor.Black)]
+    [InlineData(KnownColor.Black, KnownColor.White)]
+    public void CheckBox_ToggleSwitch_FocusedPaintsContrastingRoundedFocusBorderAndReservesMargin(
+        KnownColor backgroundKnownColor,
+        KnownColor expectedFocusKnownColor)
     {
         using SystemVisualSettingsTestScope settingsScope = new(
             clientAreaAnimationEnabled: false,
             highContrastEnabled: false,
             accentColor: Color.Red);
+        Color backgroundColor = Color.FromKnownColor(backgroundKnownColor);
+        Color expectedFocusColor = Color.FromKnownColor(expectedFocusKnownColor);
         using CheckBox box = new()
         {
             Appearance = Appearance.ToggleSwitch,
-            BackColor = Color.White,
+            BackColor = backgroundColor,
             ForeColor = Color.Black,
-            Size = new Size(140, 36),
-            Text = "Toggle",
+            Size = new Size(180, 120),
+            Text = "Toggle\r\n11111\r\n2222222222\r\n33333\r\n555555555555555",
             VisualStylesMode = VisualStylesMode.Net11
         };
 
@@ -1131,9 +1137,17 @@ public class CheckBoxTests : AbstractButtonBaseTests
 
         renderer.TestAccessor.Dynamic.RenderFocusBorder(graphics, metrics);
 
-        Assert.True(CountPixels(bitmap, Color.Red) > 0);
-        Assert.NotEqual(Color.Red.ToArgb(), bitmap.GetPixel(focusBounds.Left, focusBounds.Top).ToArgb());
-        Assert.Equal(0, CountPixelsInColumn(bitmap, box.ClientRectangle.Right - 1, Color.Red));
+        Rectangle lowerLeftBorderBounds = Rectangle.FromLTRB(
+            focusBounds.Left + box.LogicalToDeviceUnits(6),
+            focusBounds.Bottom - metrics.FocusBorderThickness,
+            focusBounds.Left + box.LogicalToDeviceUnits(12),
+            focusBounds.Bottom + 1);
+
+        Assert.True(CountPixels(bitmap, expectedFocusColor) > 0);
+        Assert.True(CountPixels(bitmap, lowerLeftBorderBounds, expectedFocusColor) > 0);
+        Assert.Equal(0, CountPixels(bitmap, Color.Red));
+        Assert.NotEqual(expectedFocusColor.ToArgb(), bitmap.GetPixel(focusBounds.Left, focusBounds.Top).ToArgb());
+        Assert.Equal(0, CountPixelsInColumn(bitmap, box.ClientRectangle.Right - 1, expectedFocusColor));
     }
 
     [WinFormsFact]
@@ -1245,6 +1259,9 @@ public class CheckBoxTests : AbstractButtonBaseTests
     }
 
     private static int CountPixels(Bitmap bitmap, Color color)
+      => CountPixels(bitmap, new Rectangle(Point.Empty, bitmap.Size), color);
+
+    private static int CountPixels(Bitmap bitmap, Rectangle bounds, Color color)
     {
         int argb = color.ToArgb();
         int count = 0;
