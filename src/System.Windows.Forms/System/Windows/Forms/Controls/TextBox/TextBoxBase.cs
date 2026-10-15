@@ -53,6 +53,8 @@ public abstract partial class TextBoxBase : Control
     /// </summary>
     private BorderStyle _borderStyle = BorderStyle.Fixed3D;
     private AnimatedFocusIndicatorRenderer? _focusIndicatorRenderer;
+    // Tracks pointer presence for Net11 visual-styles stroke selection.
+    private bool _hovered;
 
     private const OBJECT_IDENTIFIER HorizontalScrollBarObjectId = (OBJECT_IDENTIFIER)(-6);
     private const OBJECT_IDENTIFIER VerticalScrollBarObjectId = (OBJECT_IDENTIFIER)(-5);
@@ -774,6 +776,7 @@ public abstract partial class TextBoxBase : Control
 
                 RecreateHandle();
                 AdjustHeight(false);
+                EnsureModernMultilineAutoSizeHeight();
                 OnMultilineChanged(EventArgs.Empty);
             }
         }
@@ -1506,6 +1509,26 @@ public abstract partial class TextBoxBase : Control
         }
     }
 
+    private void EnsureModernMultilineAutoSizeHeight()
+    {
+        if (!_textBoxFlags[s_autoSize]
+            || !_textBoxFlags[s_multiline]
+            || EffectiveVisualStylesMode < VisualStylesMode.Net11)
+        {
+            return;
+        }
+
+        int singleLineHeight = PreferredHeight;
+
+        if (Height >= singleLineHeight)
+        {
+            return;
+        }
+
+        Height = singleLineHeight;
+        _requestedHeight = singleLineHeight;
+    }
+
     /// <summary>
     ///  Append text to the current text of text box.
     /// </summary>
@@ -1711,6 +1734,7 @@ public abstract partial class TextBoxBase : Control
         _triggerNewClientSizeRequest = false;
         base.OnVisualStylesModeChanged(e);
         AdjustHeight(false);
+        EnsureModernMultilineAutoSizeHeight();
         _focusIndicatorRenderer?.Synchronize(Focused, invalidate: false);
 
         RecalculateVisualStylesClientArea();
@@ -1729,6 +1753,7 @@ public abstract partial class TextBoxBase : Control
 
         CommonProperties.xClearPreferredSizeCache(this);
         AdjustHeight(false);
+        EnsureModernMultilineAutoSizeHeight();
         RecalculateVisualStylesClientArea();
 
         if (ParentInternal is { } parent)
@@ -1841,6 +1866,29 @@ public abstract partial class TextBoxBase : Control
         }
 
         base.OnLostFocus(e);
+    }
+
+    protected override void OnMouseEnter(EventArgs e)
+    {
+        // Refresh the Net11 frame when hover changes so the state-specific border is repainted.
+        if (EffectiveVisualStylesMode >= VisualStylesMode.Net11)
+        {
+            _hovered = true;
+            InvalidateVisualStylesFrame();
+        }
+
+        base.OnMouseEnter(e);
+    }
+
+    protected override void OnMouseLeave(EventArgs e)
+    {
+        if (EffectiveVisualStylesMode >= VisualStylesMode.Net11)
+        {
+            _hovered = false;
+            InvalidateVisualStylesFrame();
+        }
+
+        base.OnMouseLeave(e);
     }
 
     protected override unsafe void OnSizeChanged(EventArgs e)
@@ -2510,6 +2558,57 @@ public abstract partial class TextBoxBase : Control
 
                 ref RECT clientRect = ref ncCalcSizeParams->rgrc._0;
 
+                if (!Multiline)
+                {
+                    // Keep enough single-line client height for native edit text metrics when the modern
+                    // chrome carve would otherwise leave too little room at higher DPI scales.
+                    int clientHeight = clientRect.bottom - clientRect.top;
+                    int minimumSingleLineClientHeight = FontHeight + ScaleVisualStylesMetric(3);
+                    int maxVerticalCarve = Math.Max(0, clientHeight - minimumSingleLineClientHeight);
+
+                    if (padding.Vertical > maxVerticalCarve)
+                    {
+                        int overflow = padding.Vertical - maxVerticalCarve;
+                        int minimumTopPadding = BorderStyle switch
+                        {
+                            BorderStyle.None => 0,
+                            BorderStyle.FixedSingle => ScaleVisualStylesMetric(ModernControlVisualStyles.BorderThickness),
+                            _ => ScaleVisualStylesMetric(ModernControlVisualStyles.InternalChromeInset + ModernControlVisualStyles.BorderThickness)
+                        };
+                        int minimumBottomPadding = BorderStyle == BorderStyle.None
+                            ? 0
+                            : ScaleVisualStylesMetric(ModernControlVisualStyles.BorderThickness);
+
+                        // Bias the recovery toward the bottom inset first so baseline-driven single-line
+                        // text sits slightly lower, while still preserving the minimum client height.
+                        int availableBottomReduction = Math.Max(0, padding.Bottom - minimumBottomPadding);
+                        int bottomReduction = Math.Min(overflow, availableBottomReduction);
+                        padding.Bottom -= bottomReduction;
+                        overflow -= bottomReduction;
+
+                        int availableTopReduction = Math.Max(0, padding.Top - minimumTopPadding);
+                        int topReduction = Math.Min(overflow, availableTopReduction);
+                        padding.Top -= topReduction;
+                        overflow -= topReduction;
+
+                        if (overflow > 0)
+                        {
+                            int minimumVisibleVerticalPadding = BorderStyle == BorderStyle.None
+                                ? 0
+                                : ScaleVisualStylesMetric(ModernControlVisualStyles.BorderThickness);
+
+                            int availableBottomVisualReduction = Math.Max(0, padding.Bottom - minimumVisibleVerticalPadding);
+                            bottomReduction = Math.Min(overflow, availableBottomVisualReduction);
+                            padding.Bottom -= bottomReduction;
+                            overflow -= bottomReduction;
+
+                            int availableTopVisualReduction = Math.Max(0, padding.Top - minimumVisibleVerticalPadding);
+                            topReduction = Math.Min(overflow, availableTopVisualReduction);
+                            padding.Top -= topReduction;
+                        }
+                    }
+                }
+
                 // Never-invert clamp: a large Padding plus the live scrollbar allowance can drive the
                 // carved client rect to zero or inverted. A 0-1px client area is acceptable and intended
                 // (shipping multiline TextBox already collapses this way); we only prevent underflow past
@@ -2653,6 +2752,41 @@ public abstract partial class TextBoxBase : Control
     }
 
     /// <summary>
+    ///  Creates the tapered geometry used to paint the lower edge without covering the rounded corners.
+    /// </summary>
+    internal static GraphicsPath CreateVisualStylesBottomEdgePath(
+        Rectangle bounds,
+        int cornerSize,
+        int indicatorThickness)
+    {
+        float cornerRadius = cornerSize / 2f;
+        float upperHeight = indicatorThickness / 2f;
+        float lowerHeight = indicatorThickness - upperHeight;
+        float upperCornerInset = cornerRadius / 4f;
+        float lowerCornerInset = cornerRadius;
+
+        GraphicsPath path = new();
+        path.StartFigure();
+        path.AddLine(
+            bounds.Left + upperCornerInset,
+            bounds.Bottom - upperHeight,
+            bounds.Right - upperCornerInset,
+            bounds.Bottom - upperHeight);
+        path.AddLine(
+            bounds.Right - upperCornerInset,
+            bounds.Bottom - upperHeight,
+            bounds.Right - lowerCornerInset,
+            bounds.Bottom + lowerHeight);
+        path.AddLine(
+            bounds.Right - lowerCornerInset,
+            bounds.Bottom + lowerHeight,
+            bounds.Left + lowerCornerInset,
+            bounds.Bottom + lowerHeight);
+        path.CloseFigure();
+        return path;
+    }
+
+    /// <summary>
     ///  Paints the modern Visual Styles non-client chrome (border, rounded <see cref="BorderStyle.Fixed3D"/>
     ///  lozenge, focus indicator) into a shared offscreen buffer and blits it to the supplied window DC.
     /// </summary>
@@ -2660,13 +2794,24 @@ public abstract partial class TextBoxBase : Control
     {
         int cornerRadius = ScaleVisualStylesMetric(ModernControlVisualStyles.FieldCornerRadius);
         Size focusBorderMetrics = GetVisualStylesFocusBorderMetrics();
-        int borderThickness = Math.Max(focusBorderMetrics.Width, focusBorderMetrics.Height);
-        int focusBandHeight = GetVisualStylesFocusBandHeight();
+        int borderThickness = ScaleVisualStylesMetric(ModernControlVisualStyles.BorderThickness);
 
-        Color adornerColor = ForeColor;
+        ModernFieldStrokeContext strokeContext = new(
+            BackColor: BackColor,
+            Enabled: Enabled,
+            ReadOnly: ReadOnly,
+            Focused: false,
+            Hovered: _hovered,
+            DarkMode: Application.IsDarkModeEnabled,
+            AccentColor: Application.SystemVisualSettings.AccentColor,
+            DeviceDpi: DeviceDpi);
+        ModernFieldStroke stroke = ModernFieldStrokeResolver.GetStroke(strokeContext);
 
         Color clientBackColor = BackColor;
         Color parentBackColor = Parent?.BackColor ?? BackColor;
+        // Resolve side colors and lower-edge width from the current field state.
+        Color adornerColor = stroke.SideTopColor;
+        int bottomEdgeThickness = Math.Max(1, (int)MathF.Round(stroke.BottomThicknessDip * DeviceDpi / 96f));
 
         using var clientBackgroundBrush = clientBackColor.GetCachedSolidBrushScope();
         using var adornerBrush = adornerColor.GetCachedSolidBrushScope();
@@ -2705,8 +2850,10 @@ public abstract partial class TextBoxBase : Control
         Graphics offscreenGraphics = buffer.Graphics;
         Rectangle bufferBounds = bounds;
 
-        // We need anti-aliasing for the rounded chrome.
-        offscreenGraphics.SmoothingMode = SmoothingMode.AntiAlias;
+        // Smooth only rounded Fixed3D chrome; straight border styles stay crisp.
+        offscreenGraphics.SmoothingMode = BorderStyle == BorderStyle.Fixed3D
+            ? SmoothingMode.AntiAlias
+            : SmoothingMode.None;
 
         // AddRoundedRectangle receives the bounding size of each corner arc, so one corner size plus
         // the border thickness is the minimum height that avoids overlapping curves.
@@ -2751,6 +2898,7 @@ public abstract partial class TextBoxBase : Control
                     // The rounded chrome is clipped with a non-antialiased region; blend the resulting
                     // corner artifacts into the parent by tracing the parent color just outside the border.
                     ParentBackgroundRenderer.PaintRoundedBorderRegionMitigation(
+                        this,
                         offscreenGraphics,
                         deflatedBounds,
                         new Size(cornerRadius, cornerRadius),
@@ -2767,19 +2915,63 @@ public abstract partial class TextBoxBase : Control
                 break;
         }
 
+        // Render the lower edge according to the border style, keeping straight styles to one pixel.
         if (BorderStyle == BorderStyle.Fixed3D && canRenderRoundedChrome)
         {
-            Color focusColor = GetVisualStylesFocusColor(Application.SystemVisualSettings.HighContrastEnabled);
-            FocusIndicatorRenderer.DrawRoundedFocusIndicator(
-                offscreenGraphics,
+            using GraphicsPath bottomEdgePath = CreateVisualStylesBottomEdgePath(
                 deflatedBounds,
                 cornerRadius,
-                borderThickness,
-                focusBandHeight,
-                adornerColor,
-                focusColor);
+                bottomEdgeThickness);
+            using var bottomEdgeBrush = stroke.BottomColor.GetCachedSolidBrushScope();
+            GraphicsState bottomEdgeState = offscreenGraphics.Save();
+            offscreenGraphics.SetClip(bounds, CombineMode.Replace);
+            offscreenGraphics.FillPath(bottomEdgeBrush, bottomEdgePath);
+            offscreenGraphics.Restore(bottomEdgeState);
         }
-        else if (Focused)
+        else if (BorderStyle == BorderStyle.FixedSingle)
+        {
+            Color edgeColor = Focused
+                ? GetVisualStylesFocusColor(Application.SystemVisualSettings.HighContrastEnabled)
+                : stroke.BottomColor;
+            using var bottomPen = edgeColor.GetCachedPenScope(borderThickness);
+            offscreenGraphics.DrawLine(
+                bottomPen,
+                deflatedBounds.Left,
+                deflatedBounds.Bottom,
+                deflatedBounds.Right,
+                deflatedBounds.Bottom);
+        }
+        else if (BorderStyle == BorderStyle.None && Focused)
+        {
+            Color edgeColor = GetVisualStylesFocusColor(Application.SystemVisualSettings.HighContrastEnabled);
+            using var bottomPen = edgeColor.GetCachedPenScope(borderThickness);
+            offscreenGraphics.DrawLine(
+                bottomPen,
+                deflatedBounds.Left,
+                deflatedBounds.Bottom,
+                deflatedBounds.Right,
+                deflatedBounds.Bottom);
+        }
+
+        if (BorderStyle == BorderStyle.Fixed3D && canRenderRoundedChrome)
+        {
+            if (FocusIndicatorRenderer.FocusAmount > 0f)
+            {
+                // Blend the animated focus accent into the lower-edge shape so it stays clear of the rounded corners.
+                Color focusColor = GetVisualStylesFocusColor(Application.SystemVisualSettings.HighContrastEnabled);
+                Color focusEdgeColor = FocusIndicatorRenderer.GetCurrentColor(stroke.BottomColor, focusColor);
+                using GraphicsPath focusEdgePath = CreateVisualStylesBottomEdgePath(
+                    deflatedBounds,
+                    cornerRadius,
+                    bottomEdgeThickness);
+                using var focusEdgeBrush = focusEdgeColor.GetCachedSolidBrushScope();
+                GraphicsState focusEdgeState = offscreenGraphics.Save();
+                offscreenGraphics.SetClip(bounds, CombineMode.Replace);
+                offscreenGraphics.FillPath(focusEdgeBrush, focusEdgePath);
+                offscreenGraphics.Restore(focusEdgeState);
+            }
+        }
+        else if (Focused && BorderStyle == BorderStyle.Fixed3D)
         {
             Color focusColor = GetVisualStylesFocusColor(Application.SystemVisualSettings.HighContrastEnabled);
             using var focusPen = focusColor.GetCachedPenScope(borderThickness);

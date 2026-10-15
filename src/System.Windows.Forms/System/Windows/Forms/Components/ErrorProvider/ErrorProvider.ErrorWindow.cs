@@ -118,6 +118,14 @@ public partial class ErrorProvider
             _tipWindow = new NativeWindow();
             _tipWindow.CreateHandle(cparams);
 
+            if (!SystemInformation.HighContrast && Application.IsDarkModeEnabled)
+            {
+                PInvoke.SetWindowTheme(
+                    _tipWindow.HWND,
+                    $"{Control.DarkModeIdentifier}_{Control.ExplorerThemeIdentifier}",
+                    null);
+            }
+
             PInvokeCore.SendMessage(
                 _tipWindow,
                 PInvoke.TTM_SETMAXTIPWIDTH,
