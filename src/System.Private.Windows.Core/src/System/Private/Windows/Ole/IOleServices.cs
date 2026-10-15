@@ -21,7 +21,8 @@ internal unsafe interface IOleServices
     void EnsureThreadState();
 
     /// <summary>
-    ///  Called after unsuccessfully performing clipboard <see cref="TYMED.TYMED_HGLOBAL"/> serialization.
+    ///  Renders clipboard data into a platform-specific native medium, or acts as a fallback when
+    ///  <see cref="TYMED.TYMED_HGLOBAL"/> serialization is not applicable.
     /// </summary>
     /// <remarks>
     ///  <para>
@@ -34,6 +35,56 @@ internal unsafe interface IOleServices
     static abstract
 #endif
     HRESULT GetDataHere(string format, object data, FORMATETC* pformatetc, STGMEDIUM* pmedium);
+
+    /// <summary>
+    ///  Returns whether the platform can render the specified format using one of the requested native media.
+    /// </summary>
+    /// <remarks>
+    ///  <para>
+    ///   Platform-specific media are excluded by default. This prevents <c>QueryGetData</c> from advertising a
+    ///   medium that the platform hook cannot actually render.
+    ///  </para>
+    /// </remarks>
+#if NET
+    static virtual bool IsNativeTymedSupported(string format, TYMED tymed) => false;
+#else
+    bool IsNativeTymedSupported(string format, TYMED tymed);
+#endif
+
+    /// <summary>
+    ///  Returns whether HGLOBAL takes precedence over the native enhanced-metafile medium when both are requested.
+    /// </summary>
+    /// <remarks>
+    ///  <para>
+    ///   WPF opts in to preserve .NET 9's HGLOBAL-first EMF behavior, including requests that fail HGLOBAL rendering.
+    ///   The default retains the shared adapter's native-first behavior for platforms that opt into native EMF.
+    ///   Other native media are unaffected.
+    ///  </para>
+    /// </remarks>
+#if NET
+    static virtual bool PreferHGlobalOverEnhMf => false;
+#else
+    bool PreferHGlobalOverEnhMf { get; }
+#endif
+
+    /// <summary>
+    ///  Returns whether an object can enter HGLOBAL serialization after stream and standard-format rendering.
+    /// </summary>
+    /// <remarks>
+    ///  <para>
+    ///   This is a general object-serialization veto, not an EMF-only check. WPF uses it to reject metafile
+    ///   serialization as in .NET 9; the default leaves WinForms serialization unchanged.
+    ///  </para>
+    ///  <para>
+    ///   Returning false rejects the request with DV_E_TYMED without serializing an error payload.
+    ///   Raw streams and standard-format conversions have already been handled and are not subject to this veto.
+    ///  </para>
+    /// </remarks>
+#if NET
+    static virtual bool AllowHGlobalSerialization(string format, object data) => true;
+#else
+    bool AllowHGlobalSerialization(string format, object data);
+#endif
 
     /// <summary>
     ///  If the <typeparamref name="T"/> is a the requested format this method will attempt to extract it
@@ -76,6 +127,21 @@ internal unsafe interface IOleServices
     bool AllowTypeWithoutResolver<T>();
 
     /// <summary>
+    ///  Adds platform-specific synonyms for the specified data format.
+    /// </summary>
+    /// <remarks>
+    ///  <para>The default is intentionally empty. Platforms opt in only to mappings that are meaningful to their object
+    ///  model; for example, WPF adds its <c>BitmapSource</c> format while WinForms retains the shared mappings.</para>
+    /// </remarks>
+#if NET
+    static virtual void AddMappedFormats(string format, ICollection<string> formats)
+    {
+    }
+#else
+    void AddMappedFormats(string format, ICollection<string> formats);
+#endif
+
+    /// <summary>
     ///  Allows custom validation or adapting of <see cref="DataStore{TOleServices}"/> data and formats.
     /// </summary>
     /// <param name="format">
@@ -107,6 +173,14 @@ internal unsafe interface IOleServices
     static abstract
 #endif
     HRESULT OleSetClipboard(IDataObject* dataObject);
+
+    /// <inheritdoc cref="PInvokeCore.OleIsCurrentClipboard(IDataObject*)"/>
+#if NET
+    static virtual HRESULT OleIsCurrentClipboard(IDataObject* dataObject) =>
+        PInvokeCore.OleIsCurrentClipboard(dataObject);
+#else
+    HRESULT OleIsCurrentClipboard(IDataObject* dataObject);
+#endif
 
     /// <inheritdoc cref="PInvokeCore.OleFlushClipboard"/>
 #if NET
