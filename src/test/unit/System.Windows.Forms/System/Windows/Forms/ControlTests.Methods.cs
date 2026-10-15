@@ -13260,6 +13260,47 @@ public partial class ControlTests
         }
     }
 
+    [WinFormsFact]
+    public void Control_OnHandleCreated_HiddenControlFontChangedUpdatesText_DpiScaleDoesNotRestoreStaleText()
+    {
+        using IDisposable dpiScope = ScaleHelper.EnterDpiAwarenessScope(
+            DPI_AWARENESS_CONTEXT.DPI_AWARENESS_CONTEXT_PER_MONITOR_AWARE_V2);
+        using Form form = new();
+        Assert.NotEqual(IntPtr.Zero, form.Handle);
+
+        int currentDpi = form.DeviceDpi;
+        int alternateDpi = currentDpi == 96 ? 120 : 96;
+
+        using Label control = new()
+        {
+            Visible = false,
+            DeviceDpiInternal = alternateDpi
+        };
+
+        form.Controls.Add(control);
+
+        int fontChangedCallCount = 0;
+        control.FontChanged += (_, _) =>
+        {
+            fontChangedCallCount++;
+            control.Text = control.Font.ToString();
+        };
+
+        using Font font = new("Segoe UI", 12f);
+        control.Font = font;
+
+        Assert.Equal(control.Font.ToString(), control.Text);
+        Assert.False(control.IsHandleCreated);
+
+        control.Visible = true;
+        Assert.NotEqual(IntPtr.Zero, control.Handle);
+
+        Assert.True(control.IsHandleCreated);
+        Assert.NotEqual(alternateDpi, control.DeviceDpi);
+        Assert.True(fontChangedCallCount >= 2);
+        Assert.Equal(control.Font.ToString(), control.Text);
+    }
+
     public static IEnumerable<object[]> WndProc_EraseBkgndWithoutHandleWithoutWParam_TestData()
     {
         foreach (bool opaque in new bool[] { true, false })
