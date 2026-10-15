@@ -36,6 +36,7 @@ public unsafe class ClipboardCoreTests
     private class InvalidThreadOleServices() : IOleServices
     {
 #if NET
+        static TYMED IOleServices.AllowedTymeds => throw new NotImplementedException();
         static bool IOleServices.AllowTypeWithoutResolver<T>() => throw new NotImplementedException();
         static IComVisibleDataObject IOleServices.CreateDataObject() => throw new NotImplementedException();
         static void IOleServices.EnsureThreadState() => throw new ThreadStateException();
@@ -47,6 +48,7 @@ public unsafe class ClipboardCoreTests
         static bool IOleServices.TryGetObjectFromDataObject<T>(IDataObject* dataObject, string requestedFormat, [NotNullWhen(true)] out T data) => throw new NotImplementedException();
         static void IOleServices.ValidateDataStoreData(ref string format, bool autoConvert, object? data) => throw new NotImplementedException();
 #else
+        TYMED IOleServices.AllowedTymeds => throw new NotImplementedException();
         bool IOleServices.AllowTypeWithoutResolver<T>() => throw new NotImplementedException();
         IComVisibleDataObject IOleServices.CreateDataObject() => throw new NotImplementedException();
         void IOleServices.EnsureThreadState() => throw new ThreadStateException();
