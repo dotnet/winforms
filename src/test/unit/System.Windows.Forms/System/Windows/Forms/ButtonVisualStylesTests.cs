@@ -64,7 +64,7 @@ public class ButtonVisualStylesTests
     [WinFormsTheory]
     [InlineData(typeof(CheckBox))]
     [InlineData(typeof(RadioButton))]
-    public void ModernGlyphControl_PaintsParentBackgroundImage(Type controlType)
+    public void ModernGlyphControl_TransparentBackColor_PaintsParentBackgroundImage(Type controlType)
     {
         using Bitmap backgroundImage = CreateSolidBitmap(new Size(2, 1), Color.Red);
         backgroundImage.SetPixel(1, 0, Color.Blue);
@@ -77,6 +77,7 @@ public class ButtonVisualStylesTests
         using ButtonBase control = (ButtonBase)Activator.CreateInstance(controlType);
         control.Size = parent.Size;
         control.Text = string.Empty;
+        control.BackColor = Color.Transparent;
         control.VisualStylesMode = VisualStylesMode.Net11;
         parent.Controls.Add(control);
         parent.CreateControl();
@@ -814,6 +815,32 @@ public class ButtonVisualStylesTests
         Assert.True(animator.IsRunning);
     }
 
+    [WinFormsFact]
+    public void ButtonDarkModeAdapter_InheritedBackColor_UsesThemeStateColorInNet11()
+    {
+        using Panel parent = new() { BackColor = Color.Red };
+        using Button button = new()
+        {
+            FlatStyle = FlatStyle.Standard,
+            VisualStylesMode = VisualStylesMode.Net11
+        };
+        parent.Controls.Add(button);
+        ButtonInternal.ButtonDarkModeAdapter adapter = new(button);
+        dynamic accessor = adapter.TestAccessor.Dynamic;
+        ModernButtonDarkModeRenderer neutralRenderer = new()
+        {
+            DeviceDpi = button.DeviceDpi,
+            FlatAppearance = button.FlatAppearance
+        };
+
+        Color actual = (Color)accessor.GetButtonBackColor(VisualStyles.PushButtonState.Normal);
+
+        Assert.Equal(
+            neutralRenderer.GetBackgroundColor(VisualStyles.PushButtonState.Normal, isDefault: false),
+            actual);
+        Assert.False(button.ShouldSerializeBackColor());
+    }
+
     public static TheoryData<Type, FlatStyle, ContentAlignment, TextImageRelation> ModernImageLayoutData
     {
         get
@@ -1276,7 +1303,7 @@ public class ButtonVisualStylesTests
     }
 
     [WinFormsFact]
-    public void ButtonDarkModeAdapter_InheritedForeColor_UsesAutomaticContrast()
+    public void ButtonDarkModeAdapter_InheritedForeColor_IsPreservedInNet11()
     {
         using Panel parent = new() { ForeColor = Color.Red };
         using Button button = new()
@@ -1295,7 +1322,7 @@ public class ButtonVisualStylesTests
             VisualStyles.PushButtonState.Normal,
             Color.White);
 
-        Assert.Equal(Color.Black, actual);
+        Assert.Equal(Color.Red, actual);
         Assert.False(button.ShouldSerializeForeColor());
     }
 
