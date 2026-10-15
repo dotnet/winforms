@@ -56,7 +56,7 @@ internal unsafe class AgileComPointer<TInterface> :
     ///  <para>
     ///   Setting <paramref name="takeOwnership"/> to `<see langword="true"/>` will ensure that this object takes
     ///   responsibility for releasing the COM interface when it is no longer needed. This is done by calling
-    ///   <see cref="IUnknown.Release"/> after the Global Interface Table adds a ref to the interface.
+    ///   <c>IUnknown::Release</c> after the Global Interface Table adds a ref to the interface.
     ///  </para>
     /// </remarks>
     /// <devdoc>
