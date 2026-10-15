@@ -239,13 +239,18 @@ public partial class ToolTip : Component, IExtenderProvider, IHandle<HWND>
     }
 
     /// <summary>
-    ///  Determines if any associated control has mirrored
+    ///  Determines whether the current control, or any associated control during creation, requires mirrored layout.
     /// </summary>
-    private bool ShouldMirrorToolTipLayout()
+    private bool ShouldMirrorToolTipLayout(Control? currentControl = null)
     {
         if (TopLevelControl is { IsDisposed: false } topLevelControl && topLevelControl.IsMirrored)
         {
             return true;
+        }
+
+        if (currentControl is not null)
+        {
+            return !currentControl.IsDisposed && currentControl.IsMirrored;
         }
 
         foreach (Control control in _tools.Keys)
@@ -257,6 +262,29 @@ public partial class ToolTip : Component, IExtenderProvider, IHandle<HWND>
         }
 
         return false;
+    }
+
+    private void UpdateToolTipLayout(Control? control)
+    {
+        WINDOW_EX_STYLE exStyle = (WINDOW_EX_STYLE)PInvokeCore.GetWindowLong(this, WINDOW_LONG_PTR_INDEX.GWL_EXSTYLE);
+        WINDOW_EX_STYLE layoutStyles = WINDOW_EX_STYLE.WS_EX_LAYOUTRTL | WINDOW_EX_STYLE.WS_EX_NOINHERITLAYOUT;
+        WINDOW_EX_STYLE updatedExStyle = ShouldMirrorToolTipLayout(control)
+            ? (exStyle | layoutStyles) & ~(WINDOW_EX_STYLE.WS_EX_RTLREADING | WINDOW_EX_STYLE.WS_EX_RIGHT | WINDOW_EX_STYLE.WS_EX_LEFTSCROLLBAR)
+            : exStyle & ~layoutStyles;
+
+        if (updatedExStyle != exStyle)
+        {
+            PInvokeCore.SetWindowLong(this, WINDOW_LONG_PTR_INDEX.GWL_EXSTYLE, (nint)updatedExStyle);
+            PInvoke.SetWindowPos(
+                this,
+                HWND.Null,
+                0, 0, 0, 0,
+                SET_WINDOW_POS_FLAGS.SWP_FRAMECHANGED
+                    | SET_WINDOW_POS_FLAGS.SWP_NOACTIVATE
+                    | SET_WINDOW_POS_FLAGS.SWP_NOMOVE
+                    | SET_WINDOW_POS_FLAGS.SWP_NOSIZE
+                    | SET_WINDOW_POS_FLAGS.SWP_NOZORDER);
+        }
     }
 
     /// <summary>
@@ -2063,10 +2091,11 @@ public partial class ToolTip : Component, IExtenderProvider, IHandle<HWND>
             return;
         }
 
+        Control? toolControl = window as Control;
+        UpdateToolTipLayout(toolControl);
+
         // Get the bounds.
         PInvokeCore.GetWindowRect(this, out var rect);
-
-        Control? toolControl = window as Control;
 
         Size currentTooltipSize = rect.Size;
         PopupEventArgs e = new(window, toolControl, IsBalloon, currentTooltipSize);

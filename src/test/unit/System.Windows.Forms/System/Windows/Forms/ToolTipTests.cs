@@ -219,6 +219,72 @@ public class ToolTipTests
     }
 
     [WinFormsTheory]
+    [InlineData(false, false)]
+    [InlineData(false, true)]
+    [InlineData(true, false)]
+    [InlineData(true, true)]
+    public void ToolTip_Show_MixedControlLayouts_UsesCurrentControlLayout(bool mirroredFirst, bool isBalloon)
+    {
+        using Form form = new();
+        using Button button = new();
+        using TrackBar trackBar = new()
+        {
+            RightToLeft = RightToLeft.Yes,
+            RightToLeftLayout = true,
+            Top = button.Bottom
+        };
+        using ToolTip toolTip = new()
+        {
+            IsBalloon = isBalloon,
+            ShowAlways = true,
+            ToolTipTitle = "Tooltip title",
+            UseAnimation = false,
+            UseFading = false
+        };
+        form.Controls.AddRange([button, trackBar]);
+        form.Show();
+
+        Control firstControl = mirroredFirst ? trackBar : button;
+        Control secondControl = mirroredFirst ? button : trackBar;
+        toolTip.SetToolTip(firstControl, "First tooltip");
+        Assert.True(toolTip.GetHandleCreated());
+        IntPtr handle = toolTip.Handle;
+        toolTip.SetToolTip(secondControl, "Second tooltip");
+
+        List<(Control Control, WINDOW_EX_STYLE ExStyle)> popups = [];
+        toolTip.Popup += (_, e) =>
+        {
+            WINDOW_EX_STYLE actualExStyle = (WINDOW_EX_STYLE)PInvokeCore.GetWindowLong(
+                toolTip, WINDOW_LONG_PTR_INDEX.GWL_EXSTYLE);
+            popups.Add((e.AssociatedControl, actualExStyle));
+        };
+
+        // Activate native tracking tooltips to exercise TTN_SHOW without mouse timing or foreground focus.
+        foreach (Control control in new[] { firstControl, secondControl, firstControl })
+        {
+            ToolInfoWrapper<Control> toolInfo = new(control);
+            Assert.NotEqual(IntPtr.Zero, toolInfo.SendMessage(toolTip, PInvoke.TTM_GETTOOLINFOW));
+            toolInfo.Info.uFlags |= TOOLTIP_FLAGS.TTF_TRACK | TOOLTIP_FLAGS.TTF_ABSOLUTE;
+            toolInfo.Text = toolTip.GetToolTip(control);
+            toolInfo.SendMessage(toolTip, PInvoke.TTM_SETTOOLINFOW);
+            toolInfo.SendMessage(toolTip, PInvoke.TTM_TRACKACTIVATE, true);
+
+            Assert.Equal(handle, toolTip.Handle);
+            Assert.True(PInvoke.IsWindowVisible(toolTip));
+
+            toolInfo.SendMessage(toolTip, PInvoke.TTM_TRACKACTIVATE, false);
+        }
+
+        Assert.Equal(3, popups.Count);
+        WINDOW_EX_STYLE layoutStyles =
+            WINDOW_EX_STYLE.WS_EX_LAYOUTRTL | WINDOW_EX_STYLE.WS_EX_NOINHERITLAYOUT;
+        foreach ((Control control, WINDOW_EX_STYLE exStyle) in popups)
+        {
+            Assert.Equal(control.IsMirrored ? layoutStyles : 0, exStyle & layoutStyles);
+        }
+    }
+
+    [WinFormsTheory]
     [BoolData]
     public void ToolTip_Active_Set_GetReturnsExpected(bool value)
     {
