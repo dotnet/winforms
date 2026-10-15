@@ -516,7 +516,6 @@ public partial class DataGridViewCheckBoxCell : DataGridViewCell, IDataGridViewE
             return Rectangle.Empty;
         }
 
-
         ComputeBorderStyleCellStateAndCellBounds(
             rowIndex,
             out DataGridViewAdvancedBorderStyle dgvabsEffective,
