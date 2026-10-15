@@ -41,6 +41,36 @@ internal sealed unsafe partial class Composition<TOleServices, TNrbfSerializer, 
 
     private const TYMED AllowedTymeds = TYMED.TYMED_HGLOBAL | TYMED.TYMED_ISTREAM | TYMED.TYMED_GDI;
 
+    private static bool IsNativeTymedSupported(string format, TYMED tymed)
+    {
+#if NET
+        return TOleServices.IsNativeTymedSupported(format, tymed);
+#else
+        return s_oleServices.IsNativeTymedSupported(format, tymed);
+#endif
+    }
+
+    private static bool PreferHGlobalOverEnhMf
+    {
+        get
+        {
+#if NET
+            return TOleServices.PreferHGlobalOverEnhMf;
+#else
+            return s_oleServices.PreferHGlobalOverEnhMf;
+#endif
+        }
+    }
+
+    private static bool AllowHGlobalSerialization(string format, object data)
+    {
+#if NET
+        return TOleServices.AllowHGlobalSerialization(format, data);
+#else
+        return s_oleServices.AllowHGlobalSerialization(format, data);
+#endif
+    }
+
     // We use this to identify that a stream is actually a serialized object. On read, we don't know if the contents
     // of a stream were saved "raw" or if the stream is really pointing to a serialized object. If we saved an object,
     // we prefix it with this guid.

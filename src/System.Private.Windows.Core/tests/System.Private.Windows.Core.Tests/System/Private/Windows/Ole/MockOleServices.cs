@@ -2,6 +2,7 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 
 using System.Diagnostics.CodeAnalysis;
+using Windows.Win32;
 using Windows.Win32.Foundation;
 using Windows.Win32.System.Com;
 
@@ -14,6 +15,28 @@ namespace System.Private.Windows.Ole;
 internal unsafe class MockOleServices<TTestClass> : IOleServices
 {
     private static DataObjectProxy? s_dataObjectProxy;
+
+    public static Action? AfterOleFlushClipboard { get; set; }
+    public static Action<bool>? AfterOleSetClipboard { get; set; }
+    public static Action? BeforeOleIsCurrentClipboard { get; set; }
+    public static HRESULT? NextOleFlushClipboardResult { get; set; }
+    public static HRESULT? NextOleSetClipboardResult { get; set; }
+    public static int OleIsCurrentClipboardCallCount { get; private set; }
+
+    public static unsafe void SimulateExternalClipboardChange(IComVisibleDataObject dataObject)
+    {
+        using ComScope<IDataObject> iDataObject = ComHelpers.GetComScope<IDataObject>(dataObject);
+        SetClipboard(iDataObject.Value).Should().Be(HRESULT.S_OK);
+    }
+
+    public static void ResetOleIsCurrentClipboardCallCount() => OleIsCurrentClipboardCallCount = 0;
+
+#if !NET
+    bool IOleServices.IsNativeTymedSupported(string format, TYMED tymed) => false;
+    bool IOleServices.PreferHGlobalOverEnhMf => false;
+    bool IOleServices.AllowHGlobalSerialization(string format, object data) => true;
+    void IOleServices.AddMappedFormats(string format, ICollection<string> formats) { }
+#endif
 
 #if NET
     static
@@ -59,8 +82,11 @@ internal unsafe class MockOleServices<TTestClass> : IOleServices
 #endif
     HRESULT IOleServices.OleFlushClipboard()
     {
-        // Would need to implement copying the raw TYMED data into a new object to mimic the real behavior.
-        throw new NotImplementedException();
+        HRESULT result = NextOleFlushClipboardResult ?? HRESULT.S_OK;
+        NextOleFlushClipboardResult = null;
+        AfterOleFlushClipboard?.Invoke();
+
+        return result;
     }
 
 #if NET
@@ -89,6 +115,15 @@ internal unsafe class MockOleServices<TTestClass> : IOleServices
 #endif
     HRESULT IOleServices.OleSetClipboard(IDataObject* dataObject)
     {
+        HRESULT result = NextOleSetClipboardResult ?? SetClipboard(dataObject);
+        NextOleSetClipboardResult = null;
+        AfterOleSetClipboard?.Invoke(dataObject is null);
+
+        return result;
+    }
+
+    private static unsafe HRESULT SetClipboard(IDataObject* dataObject)
+    {
         if (dataObject is null)
         {
             // Clears the clipboard
@@ -104,6 +139,20 @@ internal unsafe class MockOleServices<TTestClass> : IOleServices
         s_dataObjectProxy = new DataObjectProxy(dataObject);
 
         return HRESULT.S_OK;
+    }
+
+#if NET
+    public static unsafe HRESULT OleIsCurrentClipboard(IDataObject* dataObject)
+#else
+    unsafe HRESULT IOleServices.OleIsCurrentClipboard(IDataObject* dataObject)
+#endif
+    {
+        OleIsCurrentClipboardCallCount++;
+        BeforeOleIsCurrentClipboard?.Invoke();
+
+        return s_dataObjectProxy is not null && s_dataObjectProxy.IsOriginal(dataObject)
+            ? HRESULT.S_OK
+            : HRESULT.S_FALSE;
     }
 
 #if NET
