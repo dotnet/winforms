@@ -330,11 +330,13 @@ public unsafe class NativeToManagedAdapterTests
         uint refCountBeforeGetData;
         uint refCountAfterGetData;
 
-        // Scope the Composition so we can observe ref count changes.
+        Composition composition;
+
+        // Scope the ref count checks so we can observe ref count changes.
         {
             // Composition.Create calls AddRef twice (once for NativeToManagedAdapter, once for NativeToRuntimeAdapter)
             // and takes ownership of the original ref from GetComPointer.
-            var composition = Composition.Create(pDataObject);
+            composition = Composition.Create(pDataObject);
 
             // After Create: original(1) + our AddRef(1) + Composition's two AddRefs(2) = 4
             refCountBeforeGetData = pDataObject->AddRef();
@@ -366,6 +368,7 @@ public unsafe class NativeToManagedAdapterTests
         // We should still have refs from Composition's adapters (they're not disposed yet).
         // The important thing is that GetData didn't corrupt the ref count.
         finalRefCount.Should().BeGreaterThan(0);
+        GC.KeepAlive(composition);
 
         MemoryStream result = (MemoryStream)data!;
         result.ToArray().Should().Equal(0xBE, 0xAD, 0xCA, 0xFE);

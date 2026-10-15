@@ -73,14 +73,23 @@ public sealed partial class HtmlWindow
 
         public void onunload(IHTMLEventObj evtObj)
         {
+            HtmlWindowShim? shim = _parent.ShimManager.GetWindowShim(_parent);
             HtmlElementEventArgs e = new(_parent.ShimManager, evtObj);
-            FireEvent(s_eventUnload, e);
-            _parent?.WindowShim.OnWindowUnload();
+            try
+            {
+                shim?.FireEvent(s_eventUnload, e);
+            }
+            finally
+            {
+                // User handlers may dispose the browser or throw. Retain the original shim rather
+                // than looking up the lazy WindowShim property and recreating an owner during teardown.
+                shim?.OnWindowUnload();
+            }
         }
 
         private void FireEvent(object key, EventArgs e)
         {
-            _parent?.WindowShim.FireEvent(key, e);
+            _parent.ShimManager.GetWindowShim(_parent)?.FireEvent(key, e);
         }
     }
 }

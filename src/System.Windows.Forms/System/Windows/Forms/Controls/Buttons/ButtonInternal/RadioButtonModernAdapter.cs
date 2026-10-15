@@ -80,28 +80,7 @@ internal sealed class RadioButtonModernAdapter : RadioButtonBaseAdapter
     private void PaintCore(PaintEventArgs e)
     {
         Graphics graphics = e.GraphicsInternal;
-        bool useExplicitBackColor = Control.ShouldSerializeBackColor() || !Control.UseVisualStyleBackColor;
-        bool hasTransparentBackColor = Control.BackColor.HasTransparency();
-
-        if (useExplicitBackColor && !hasTransparentBackColor)
-        {
-            using var backBrush = Control.BackColor.GetCachedSolidBrushScope();
-            graphics.FillRectangle(backBrush, Control.ClientRectangle);
-        }
-        else
-        {
-            ParentBackgroundRenderer.Paint(
-                Control,
-                graphics,
-                Control.ClientRectangle,
-                Control.BackColor);
-
-            if (useExplicitBackColor && hasTransparentBackColor && Control.BackColor.A > 0)
-            {
-                using var backBrush = Control.BackColor.GetCachedSolidBrushScope();
-                graphics.FillRectangle(backBrush, Control.ClientRectangle);
-            }
-        }
+        PaintModernBackground(e);
 
         LayoutData layout = Layout(e).Layout();
         AdjustFocusRectangle(layout);
@@ -124,10 +103,10 @@ internal sealed class RadioButtonModernAdapter : RadioButtonBaseAdapter
 
         PaintImage(e, layout);
 
-        Color preferredTextColor = Control.ShouldSerializeForeColor()
+        Color preferredTextColor = Control.ShouldSerializeForeColor() || Control.ForeColor != Forms.Control.DefaultForeColor
             ? Control.ForeColor
             : Application.IsDarkModeEnabled
-                ? Color.FromArgb(0xF0, 0xF0, 0xF0)
+                ? DarkModeButtonColors.DefaultColors.AcceptButtonTextColor // Use the default accept button text color in dark mode for radio buttons.
                 : SystemColors.WindowText;
         Color disabledTextBackColor = Control.ShouldSerializeBackColor()
             && Control.BackColor.A == byte.MaxValue
