@@ -25,7 +25,7 @@ namespace System.Windows.Forms;
 /// </summary>
 /// <remarks>
 ///  <para>
-///   Do not add instance variables to Control absolutely necessary. Every control on a form has the overhead of
+///   Do not add instance variables to Control unless absolutely necessary. Every control on a form has the overhead of
 ///   all of these variables.
 ///  </para>
 /// </remarks>
@@ -1555,7 +1555,7 @@ public unsafe partial class Control :
 
     /// <summary>
     ///  Returns the CreateParams used to create the handle for this control.
-    ///  Inheriting classes should call base.CreateParams in the manor
+    ///  Inheriting classes should call base.CreateParams in the manner described
     ///  below:
     /// </summary>
     protected virtual CreateParams CreateParams
@@ -2657,7 +2657,7 @@ public unsafe partial class Control :
     }
 
     /// <summary>
-    ///  Specifies whether the control is willing to process mnemonics when hosted in an container ActiveX (Ax Sourcing).
+    ///  Specifies whether the control is willing to process mnemonics when hosted in a container ActiveX (Ax Sourcing).
     /// </summary>
     internal virtual bool IsMnemonicsListenerAxSourced => false;
 
@@ -5447,8 +5447,8 @@ public unsafe partial class Control :
     /// <summary>
     ///  Returns the control that is currently associated with handle.
     ///  This method will search up the HWND parent chain until it finds some
-    ///  handle that is associated with with a control. This method is more
-    ///  robust that fromHandle because it will correctly return controls
+    ///  handle that is associated with a control. This method is more
+    ///  robust than fromHandle because it will correctly return controls
     ///  that own more than one handle.
     /// </summary>
     [EditorBrowsable(EditorBrowsableState.Advanced)]
@@ -5507,7 +5507,7 @@ public unsafe partial class Control :
     internal virtual Rectangle ApplyBoundsConstraints(int suggestedX, int suggestedY, int proposedWidth, int proposedHeight)
     {
         // COMPAT: in Everett we would allow you to set negative values in pre-handle mode
-        // in Whidbey, if you've set Min/Max size we will constrain you to 0,0. Everett apps didnt
+        // in Whidbey, if you've set Min/Max size we will constrain you to 0,0. Everett apps didn't
         // have min/max size on control, which is why this works.
         if (MaximumSize != Size.Empty || MinimumSize != Size.Empty)
         {
@@ -5687,7 +5687,7 @@ public unsafe partial class Control :
     /// <summary>
     ///  Returns native child windows sorted according to their TabIndex property order. Controls with the same
     ///  TabIndex remain in original relative child index order (= z-order). Child windows with no corresponding
-    ///  Control objects (and therefore no discernable TabIndex) are sorted to the front of the list (but remain
+    ///  Control objects (and therefore no discernible TabIndex) are sorted to the front of the list (but remain
     ///  in relative z-order to one another).
     ///
     ///  This version returns a sorted array of integers, representing the original z-order based indexes of the
@@ -8417,7 +8417,7 @@ public unsafe partial class Control :
     /// <summary>
     ///  Core layout logic. Inheriting controls should override this function to do any custom
     ///  layout logic. It is not necessary to call base.OnLayout, however for normal docking
-    ///  an functions to work, base.OnLayout must be called.
+    ///  and anchoring functions to work, base.OnLayout must be called.
     ///  Raises the <see cref="Layout"/> event.
     /// </summary>
     [EditorBrowsable(EditorBrowsableState.Advanced)]
@@ -9063,7 +9063,7 @@ public unsafe partial class Control :
         }
 
         // We need to use theming painting for certain controls (like TabPage) when they parent other controls.
-        // But we don't want to to this always as this causes serious performance (at Runtime and DesignTime)
+        // But we don't want to always do this as this causes serious performance (at Runtime and DesignTime)
         // so checking for RenderTransparencyWithVisualStyles which is TRUE for TabPage and false by default.
         if (Application.RenderWithVisualStyles && parent.RenderTransparencyWithVisualStyles)
         {
@@ -10997,7 +10997,7 @@ public unsafe partial class Control :
             if (ParentInternal is not null)
             {
                 // Some layout engines (DefaultLayout) base their PreferredSize on
-                // the bounds of their children. If we change change the child bounds, we
+                // the bounds of their children. If we change the child bounds, we
                 // need to clear their PreferredSize cache. The semantics of SetBoundsCore
                 // is that it does not cause a layout, so we just clear.
                 CommonProperties.xClearPreferredSizeCache(ParentInternal);
