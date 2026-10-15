@@ -1007,7 +1007,7 @@ public class CheckBoxTests : AbstractButtonBaseTests
     [WinFormsFact]
     public void CheckBox_ToggleSwitch_Image_IsRenderedAndIncludedInPreferredSize()
     {
-        using Bitmap image = new(80, 22);
+        using Bitmap image = new(80, 80);
         using (Graphics imageGraphics = Graphics.FromImage(image))
         {
             imageGraphics.Clear(Color.Magenta);
@@ -1026,7 +1026,14 @@ public class CheckBoxTests : AbstractButtonBaseTests
         box.DrawToBitmap(bitmap, box.ClientRectangle);
 
         Rendering.CheckBox.ToggleSwitchMetrics metrics = Rendering.CheckBox.ToggleSwitchMetrics.Create(box);
+        Size contentSize = Rendering.CheckBox.AnimatedToggleSwitchRenderer.GetImageTextPreferredSize(box);
+        Rectangle switchBounds = Rendering.CheckBox.AnimatedToggleSwitchRenderer.GetSwitchBounds(
+            box,
+            box.RtlTranslatedCheckAlign,
+            metrics,
+            contentSize);
         Assert.True(CountPixels(bitmap, Color.Magenta) > 0);
+        Assert.True(Rendering.CheckBox.ToggleSwitchMetrics.GetContentBounds(box).Contains(switchBounds));
         Size preferredSize = box.GetPreferredSize(Size.Empty);
         Assert.True(preferredSize.Width >= metrics.SwitchWidth + metrics.TextGap + image.Width);
         Assert.True(preferredSize.Height >= Math.Max(metrics.SwitchHeight, image.Height));

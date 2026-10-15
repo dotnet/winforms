@@ -222,16 +222,20 @@ internal sealed class AnimatedToggleSwitchRenderer : AnimatedControlRenderer
             MeasureText(control, textFormatFlags));
     }
 
-    private static Rectangle GetSwitchBounds(
+    internal static Rectangle GetSwitchBounds(
         Control control,
         ContentAlignment checkAlign,
         ToggleSwitchMetrics metrics,
-        Size textSize)
+        Size contentSize)
     {
         Rectangle contentBounds = ToggleSwitchMetrics.GetContentBounds(control);
-        int totalHeight = Math.Max(textSize.Height, metrics.SwitchHeight);
+        int totalHeight = Math.Min(
+            contentBounds.Height,
+            Math.Max(contentSize.Height, metrics.SwitchHeight));
         int contentTop = contentBounds.Top + Math.Max(0, (contentBounds.Height - totalHeight) / 2);
-        int switchY = contentTop + ((totalHeight - metrics.SwitchHeight) / 2);
+        int switchY = Math.Max(
+            contentBounds.Top,
+            contentTop + ((totalHeight - metrics.SwitchHeight) / 2));
         int minimumSwitchX = contentBounds.Left;
         int maximumSwitchX = Math.Max(minimumSwitchX, contentBounds.Right - metrics.SwitchWidth);
         int edgeInset = Math.Max(1, (metrics.BorderThickness / 2) + 1);

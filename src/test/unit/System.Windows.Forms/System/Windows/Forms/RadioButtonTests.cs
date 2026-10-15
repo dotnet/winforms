@@ -70,7 +70,7 @@ public class RadioButtonTests : AbstractButtonBaseTests
     [WinFormsFact]
     public void RadioButton_ToggleSwitch_Image_IsRenderedAndIncludedInPreferredSize()
     {
-        using Bitmap image = new(80, 22);
+        using Bitmap image = new(80, 80);
         using (Graphics imageGraphics = Graphics.FromImage(image))
         {
             imageGraphics.Clear(Color.Magenta);
@@ -89,7 +89,14 @@ public class RadioButtonTests : AbstractButtonBaseTests
         control.DrawToBitmap(bitmap, control.ClientRectangle);
 
         Rendering.CheckBox.ToggleSwitchMetrics metrics = Rendering.CheckBox.ToggleSwitchMetrics.Create(control);
+        Size contentSize = Rendering.CheckBox.AnimatedToggleSwitchRenderer.GetImageTextPreferredSize(control);
+        Rectangle switchBounds = Rendering.CheckBox.AnimatedToggleSwitchRenderer.GetSwitchBounds(
+            control,
+            control.RtlTranslatedCheckAlign,
+            metrics,
+            contentSize);
         Assert.True(CountPixels(bitmap, Color.Magenta) > 0);
+        Assert.True(Rendering.CheckBox.ToggleSwitchMetrics.GetContentBounds(control).Contains(switchBounds));
         Size preferredSize = control.GetPreferredSize(Size.Empty);
         Assert.True(preferredSize.Width >= metrics.SwitchWidth + metrics.TextGap + image.Width);
         Assert.True(preferredSize.Height >= Math.Max(metrics.SwitchHeight, image.Height));
