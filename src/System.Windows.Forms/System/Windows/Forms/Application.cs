@@ -110,11 +110,11 @@ public sealed partial class Application
             return true;
         }
 
-        // To see if we are comctl6, we look for a function that is exposed only from comctl6
-        // we do not call DllGetVersion or any direct p/invoke, because the binding will be
+        // To see if we are ComCtl6, we look for a function that is exposed only from ComCtl6.
+        // We do not call DllGetVersion or any direct P/Invoke because the binding will be
         // cached.
         //
-        // GetModuleHandle  returns a handle to a mapped module without incrementing its
+        // GetModuleHandle returns a handle to a mapped module without incrementing its
         // reference count.
         var hModule = PInvoke.GetModuleHandle(Libraries.Comctl32);
         fixed (byte* ptr = "ImageList_WriteEx\0"u8)
@@ -316,7 +316,7 @@ public sealed partial class Application
     ///  </para>
     ///  <para>
     ///   Note that the dark color mode is only available from Windows 11 on or later versions. If the system
-    ///   is set to a accessibility contrast theme, the dark mode is not available.
+    ///   is set to an accessibility contrast theme, the dark mode is not available.
     ///  </para>
     ///  <para>
     ///   <b>Note for Visual Basic:</b> If you are using the Visual Basic Application Framework, set the color mode
@@ -509,7 +509,7 @@ public sealed partial class Application
 
     /// <summary>
     ///  Gets a value indicating whether the application is running in a dark system color context.
-    ///  Note: With a accessibility contrast theme selected in the OS, this will always return <see langword="false"/>.
+    ///  Note: With an accessibility contrast theme selected in the OS, this will always return <see langword="false"/>.
     /// </summary>
     public static bool IsDarkModeEnabled =>
         !SystemInformation.HighContrast
