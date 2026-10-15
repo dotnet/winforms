@@ -6,6 +6,7 @@
 using System.ComponentModel;
 using System.Drawing;
 using System.Windows.Forms.TestUtilities;
+using Microsoft.DotNet.RemoteExecutor;
 using Moq;
 using Point = System.Drawing.Point;
 using Size = System.Drawing.Size;
@@ -1974,41 +1975,55 @@ public class ProgressBarTests
     public void ProgressBar_DarkMode_CustomBackColor_DoesNotLeakThroughVisually()
     {
         // Regression test for https://github.com/dotnet/winforms/issues/11938.
-        if (SystemInformation.HighContrast)
+        using RemoteInvokeHandle handle = RemoteExecutor.Invoke(() =>
         {
-            return;
-        }
+            if (SystemInformation.HighContrast)
+            {
+                return;
+            }
 
-        try
-        {
             Application.SetColorMode(SystemColorMode.Dark);
+            Assert.True(Application.IsDarkModeEnabled);
+
             using ProgressBar control = new()
             {
                 BackColor = Color.Red
             };
 
-            // Force handle creation (OnCreateControl/OnHandleCreated).
-            Assert.NotEqual(IntPtr.Zero, control.Handle);
-
-            // BackColor property still reflects the user's value.
+            control.CreateControl();
+            Assert.True(control.IsHandleCreated);
             Assert.Equal(Color.Red, control.BackColor);
+            Assert.Equal(ColorTranslator.ToWin32(SystemColors.ControlDarkDark), GetNativeBackColor(control));
 
-            // PBM_SETBKCOLOR returns the previous native color; query it (then restore it) to
-            // confirm it was never set to the user's custom color.
-            int previousNativeBackColor = (int)PInvokeCore.SendMessage(
-                control,
-                PInvoke.PBM_SETBKCOLOR,
-                (WPARAM)0,
-                (LPARAM)ColorTranslator.ToWin32(Color.Red));
-            PInvokeCore.SendMessage(control, PInvoke.PBM_SETBKCOLOR, (WPARAM)0, (LPARAM)previousNativeBackColor);
+            int backColorChangedCallCount = 0;
+            control.BackColorChanged += (sender, e) =>
+            {
+                Assert.Same(control, sender);
+                Assert.Same(EventArgs.Empty, e);
+                backColorChangedCallCount++;
+            };
 
-            Assert.NotEqual(ColorTranslator.ToWin32(Color.Red), previousNativeBackColor);
-            Assert.Equal(ColorTranslator.ToWin32(SystemColors.ControlDarkDark), previousNativeBackColor);
-        }
-        finally
-        {
-            Application.SetColorMode(SystemColorMode.Classic);
-        }
+            control.BackColor = Color.Blue;
+
+            Assert.Equal(Color.Blue, control.BackColor);
+            Assert.Equal(1, backColorChangedCallCount);
+            Assert.Equal(ColorTranslator.ToWin32(SystemColors.ControlDarkDark), GetNativeBackColor(control));
+
+            static int GetNativeBackColor(ProgressBar control)
+            {
+                // PBM_SETBKCOLOR returns the previous native color; restore it after querying.
+                int previousNativeBackColor = (int)PInvokeCore.SendMessage(
+                    control,
+                    PInvoke.PBM_SETBKCOLOR,
+                    (WPARAM)0,
+                    (LPARAM)ColorTranslator.ToWin32(Color.Red));
+                PInvokeCore.SendMessage(control, PInvoke.PBM_SETBKCOLOR, (WPARAM)0, (LPARAM)previousNativeBackColor);
+
+                return previousNativeBackColor;
+            }
+        });
+
+        Assert.Equal(RemoteExecutor.SuccessExitCode, handle.ExitCode);
     }
 
     [WinFormsTheory]
