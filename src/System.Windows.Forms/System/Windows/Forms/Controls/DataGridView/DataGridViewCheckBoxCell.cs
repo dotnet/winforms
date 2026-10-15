@@ -1541,7 +1541,7 @@ public partial class DataGridViewCheckBoxCell : DataGridViewCell, IDataGridViewE
             resultBounds = Rectangle.Empty;
         }
 
-        if (paint && PaintErrorIcon(paintParts) &&  DataGridView.ShowCellErrors)
+        if (paint && PaintErrorIcon(paintParts) && DataGridView.ShowCellErrors)
         {
             PaintErrorIcon(g, cellStyle, rowIndex, cellBounds, errorBounds, errorText);
         }
