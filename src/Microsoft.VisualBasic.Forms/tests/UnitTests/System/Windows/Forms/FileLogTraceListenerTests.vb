@@ -129,6 +129,13 @@ Namespace Microsoft.VisualBasic.Forms.Tests
         End Sub
 
         <WinFormsFact>
+        Public Sub ConstructorDoesNotInitializeCustomLocation()
+            Using listener As New FileLogTraceListener(NameOf(FileLogTraceListenerTests))
+                CType(TestAccessors.get_TestAccessor(listener).Dynamic()._customLocation, String).Should.BeNull()
+            End Using
+        End Sub
+
+        <WinFormsFact>
         Public Sub ListenerSetInvalidTraceOptionsPropertiesThrows()
             Dim testDirectory As String = CreateTempDirectory()
             Using listener As New FileLogTraceListener(NameOf(FileLogTraceListenerTests)) _
