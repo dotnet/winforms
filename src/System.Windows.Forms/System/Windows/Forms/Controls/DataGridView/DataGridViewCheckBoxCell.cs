@@ -1227,10 +1227,11 @@ public partial class DataGridViewCheckBoxCell : DataGridViewCell, IDataGridViewE
             {
                 if (paint && PaintContentForeground(paintParts))
                 {
-                    DataGridViewCheckBoxCellRenderer.DrawCheckBox(
+                    CheckBoxRenderer.DrawCheckBoxWithVisualStyles(
                         g,
-                        new Rectangle(checkBoxX, checkBoxY, checkBoxSize.Width, checkBoxSize.Height),
-                        (int)themeCheckBoxState);
+                        new Point(checkBoxX, checkBoxY),
+                        themeCheckBoxState,
+                        DataGridView.HWNDInternal);
                 }
 
                 resultBounds = new Rectangle(checkBoxX, checkBoxY, checkBoxSize.Width, checkBoxSize.Height);
