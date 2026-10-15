@@ -18,6 +18,42 @@ public class ListViewItem_ListViewItemDetailsAccessibleObjectTests
     }
 
     [WinFormsFact]
+    public void ListViewItemDetailsAccessibleObject_Name_FullRowSelect_ReturnsAllColumnValues()
+    {
+        using ListView control = new()
+        {
+            FullRowSelect = true,
+            View = View.Details
+        };
+
+        control.Columns.AddRange((ColumnHeader[])[new(), new(), new()]);
+        ListViewItem item = new(["Item", "Value 1", "Value 2"]);
+        control.Items.Add(item);
+
+        AccessibleObject accessibleObject = item.AccessibilityObject;
+
+        Assert.Equal("Item, Value 1, Value 2", accessibleObject.Name);
+        Assert.Empty(accessibleObject.TestAccessor.Dynamic._listViewSubItemAccessibleObjects);
+        Assert.False(control.IsHandleCreated);
+    }
+
+    [WinFormsFact]
+    public void ListViewItemDetailsAccessibleObject_Name_FullRowSelectWithoutColumns_ReturnsItemText()
+    {
+        using ListView control = new()
+        {
+            FullRowSelect = true,
+            View = View.Details
+        };
+
+        ListViewItem item = new("Item");
+        control.Items.Add(item);
+
+        Assert.Equal("Item", item.AccessibilityObject.Name);
+        Assert.False(control.IsHandleCreated);
+    }
+
+    [WinFormsFact]
     public void ListViewItemDetailsAccessibleObject_FragmentNavigate_FirstChild_ReturnsExpected()
     {
         using ListView control = new() { View = View.Details };

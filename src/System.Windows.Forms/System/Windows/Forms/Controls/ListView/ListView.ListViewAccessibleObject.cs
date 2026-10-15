@@ -179,6 +179,22 @@ public partial class ListView
             return columnHeaders;
         }
 
+        internal override IRawElementProviderSimple.Interface? GetItem(int row, int column)
+        {
+            if (!this.TryGetOwnerAs(out ListView? owningListView)
+                || owningListView.View != View.Details
+                || row < 0
+                || row >= owningListView.Items.Count
+                || column < 0
+                || column >= owningListView.Columns.Count
+                || owningListView.Items[row].AccessibilityObject is not ListViewItem.ListViewItemDetailsAccessibleObject itemAccessibleObject)
+            {
+                return null;
+            }
+
+            return itemAccessibleObject.GetChild(column + itemAccessibleObject.FirstSubItemIndex);
+        }
+
         internal override IRawElementProviderFragment.Interface? GetFocus()
             => !this.IsOwnerHandleCreated(out ListView? owningListView)
                 ? null
