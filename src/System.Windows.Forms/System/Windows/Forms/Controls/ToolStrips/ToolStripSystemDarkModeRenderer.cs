@@ -592,10 +592,10 @@ internal class ToolStripSystemDarkModeRenderer : ToolStripRenderer
     {
         ArgumentNullException.ThrowIfNull(e);
 
-        Color textColor = (e.Item.Selected || e.Item.Pressed)
-            ? GetDarkModeColor(SystemColors.HighlightText)
-            : !e.Item.Enabled
-                ? GetDarkModeColor(SystemColors.GrayText)
+        Color textColor = !e.Item.Enabled
+            ? GetDarkModeColor(SystemColors.GrayText)
+            : e.Item.Selected || e.Item.Pressed
+                ? GetDarkModeColor(SystemColors.HighlightText)
                 : GetDarkModeColor(e.TextColor);
 
         TextRenderer.DrawText(

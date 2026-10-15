@@ -1298,6 +1298,12 @@ internal sealed partial class PropertyGridView :
             {
                 object[] values = gridEntry.GetPropertyValueList();
 
+                // If values.Length is 0, we can't cycle through anything.
+                if (values.Length == 0)
+                {
+                    return;
+                }
+
                 if (index >= (values.Length - 1))
                 {
                     index = 0;
@@ -3176,6 +3182,12 @@ internal sealed partial class PropertyGridView :
             {
                 int delta = e.Delta > 0 ? -1 : 1;
                 object[] values = _selectedGridEntry.GetPropertyValueList();
+
+                // Prevent out-of-range access
+                if (values.Length == 0)
+                {
+                    return;
+                }
 
                 if (delta > 0 && index >= (values.Length - 1))
                 {
