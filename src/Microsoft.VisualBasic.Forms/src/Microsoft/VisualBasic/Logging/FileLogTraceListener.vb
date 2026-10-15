@@ -279,13 +279,11 @@ Namespace Microsoft.VisualBasic.Logging
                     End If
                 End If
 
-                Dim resolved As String
                 If String.IsNullOrEmpty(_customLocation) Then
-                    resolved = Application.UserAppDataPath
-                Else
-                    resolved = _customLocation
+                    _customLocation = Application.UserAppDataPath
                 End If
-                Dim fileName As String = Path.GetFullPath(resolved)
+
+                Dim fileName As String = Path.GetFullPath(_customLocation)
                 Return fileName
             End Get
             Set(value As String)
