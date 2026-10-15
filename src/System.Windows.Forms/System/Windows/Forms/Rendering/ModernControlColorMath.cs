@@ -16,6 +16,23 @@ internal static class ModernControlColorMath
     private const float DisabledMuteAmount = 0.45f;
     private const int ContrastSearchIterations = 10;
 
+    // WinUI stroke alphas use black in light mode or white in dark mode; values follow
+    // Common_themeresources_any.xaml except Strong, raised to meet WCAG 1.4.11 (#14906).
+    private const int StrokeDefaultAlphaLight = 0x0F;    // ControlStrokeColorDefault
+    private const int StrokeDefaultAlphaDark = 0x03;     // Dark rest side; WinUI is 0x12 (#14919).
+    private const int StrokeSecondaryAlphaLight = 0x29;  // ControlStrokeColorSecondary
+    private const int StrokeSecondaryAlphaDark = 0x18;
+    private const int StrokeStrongAlphaLight = 0xB6;     // Resting bottom; ~3.1:1 WCAG 1.4.11 floor, from 0xD1 (#14906, #14997).
+    private const int StrokeStrongAlphaDark = 0x8B;
+
+    // Hover is one step stronger than Secondary (#14906).
+    private const int StrokeHoverAlphaLight = 0x40;
+    private const int StrokeHoverAlphaDark = 0x28;
+
+    // ReadOnly surface tint from Leaf's #14906 table.
+    private const int SurfaceReadOnlyAlphaLight = 0x0A;
+    private const int SurfaceReadOnlyAlphaDark = 0x0A;
+
     // Shared disabled-state palette for modern renderers. Modern controls do not honor user-set
     // BackColor/ForeColor while disabled, so these fixed surfaces replace them. This is the single
     // source of truth: the modern Button renderers and the modern ComboBox adapter all read from
@@ -26,6 +43,8 @@ internal static class ModernControlColorMath
     private static readonly Color s_lightModeDisabledBorder = Color.FromArgb(0xD0, 0xD0, 0xD0);
     private static readonly Color s_darkModeDisabledForeground = Color.FromArgb(0x88, 0x88, 0x88);
     private static readonly Color s_lightModeDisabledForeground = Color.FromArgb(0xA0, 0xA0, 0xA0);
+    private static readonly Color s_darkModeDisabledBorderStrong = Color.FromArgb(0x6A, 0x6A, 0x6A);
+    private static readonly Color s_lightModeDisabledBorderStrong = Color.FromArgb(0xB0, 0xB0, 0xB0);
 
     /// <summary>
     ///  Gets the stable border color for modern editable text controls when enabled.
@@ -56,6 +75,14 @@ internal static class ModernControlColorMath
             : Application.IsDarkModeEnabled
                 ? s_darkModeDisabledBorder
                 : s_lightModeDisabledBorder;
+
+    /// <summary>Returns the strong disabled bottom-edge color.</summary>
+    internal static Color GetDisabledStrongBorderColor()
+        => SystemInformation.HighContrast
+            ? SystemColors.GrayText
+            : Application.IsDarkModeEnabled
+                ? s_darkModeDisabledBorderStrong
+                : s_lightModeDisabledBorderStrong;
 
     /// <summary>
     ///  Gets the contrast-adjusted foreground color for content drawn on
@@ -136,6 +163,69 @@ internal static class ModernControlColorMath
         }
 
         return result;
+    }
+
+    /// <summary>Returns the lightest field stroke over <paramref name="background"/>.</summary>
+    internal static Color GetFieldStrokeDefault(Color background, bool darkMode)
+        => CompositeStrokeOverlay(background, darkMode ? StrokeDefaultAlphaDark : StrokeDefaultAlphaLight, darkMode);
+
+    /// <summary>Returns the secondary field stroke.</summary>
+    internal static Color GetFieldStrokeSecondary(Color background, bool darkMode)
+        => CompositeStrokeOverlay(background, darkMode ? StrokeSecondaryAlphaDark : StrokeSecondaryAlphaLight, darkMode);
+
+    /// <summary>Returns the hover stroke, stronger than secondary.</summary>
+    internal static Color GetFieldStrokeHover(Color background, bool darkMode)
+        => CompositeStrokeOverlay(background, darkMode ? StrokeHoverAlphaDark : StrokeHoverAlphaLight, darkMode);
+
+    /// <summary>Returns the ReadOnly surface tint.</summary>
+    internal static Color GetFieldReadOnlySurface(Color background, bool darkMode)
+        => CompositeStrokeOverlay(background, darkMode ? SurfaceReadOnlyAlphaDark : SurfaceReadOnlyAlphaLight, darkMode);
+
+    /// <summary>Returns the strong resting bottom-edge stroke.</summary>
+    internal static Color GetFieldStrokeStrong(Color background, bool darkMode)
+        => CompositeStrokeOverlay(background, darkMode ? StrokeStrongAlphaDark : StrokeStrongAlphaLight, darkMode);
+
+    // Composites a 0-255 black/white overlay onto an opaque background in linear light.
+    private static Color CompositeStrokeOverlay(Color background, int overlayAlpha, bool darkMode)
+    {
+        background = ResolveOpaqueColor(background);
+        float alpha = Math.Clamp(overlayAlpha / 255f, 0f, 1f);
+        float pole = darkMode ? 1f : 0f;
+
+        return Color.FromArgb(
+            byte.MaxValue,
+            CompositeChannel(background.R),
+            CompositeChannel(background.G),
+            CompositeChannel(background.B));
+
+        byte CompositeChannel(byte channel)
+        {
+            float mixed = (pole * alpha) + (SrgbToLinear(channel) * (1f - alpha));
+            return LinearToSrgb(mixed);
+        }
+    }
+
+    // SrgbToLinear and its inverse, LinearToSrgb, implement the standard sRGB transfer
+    // function from IEC 61966-2-1, converting gamma-encoded channel values to and from
+    // linear light. It uses a small linear segment near black and an approximately 2.4
+    // gamma power segment above it; 0.04045, 12.92, 0.055, 1.055, 2.4, and 0.0031308
+    // are standard sRGB constants, not tuned values. Physically correct alpha compositing
+    // is done in linear light, so overlay colors are decoded, blended, then re-encoded.
+    private static float SrgbToLinear(byte channel)
+    {
+        float value = channel / 255f;
+        return value <= 0.04045f
+            ? value / 12.92f
+            : MathF.Pow((value + 0.055f) / 1.055f, 2.4f);
+    }
+
+    private static byte LinearToSrgb(float linear)
+    {
+        linear = Math.Clamp(linear, 0f, 1f);
+        float value = linear <= 0.0031308f
+            ? linear * 12.92f
+            : (1.055f * MathF.Pow(linear, 1f / 2.4f)) - 0.055f;
+        return (byte)MathF.Round(value * 255f);
     }
 
     private static bool HasMinimumContrast(

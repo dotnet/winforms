@@ -274,6 +274,34 @@ public class RadioButtonTests : AbstractButtonBaseTests
     }
 
     [WinFormsFact]
+    public void RadioButton_ModernGlyph_InheritedOpaqueBackColor_DoesNotPaintParentBackgroundImage()
+    {
+        using Bitmap backgroundImage = new(1, 1);
+        backgroundImage.SetPixel(0, 0, Color.Blue);
+        using GroupBox parent = new()
+        {
+            BackgroundImage = backgroundImage,
+            Size = new Size(80, 50),
+            VisualStylesMode = VisualStylesMode.Net11
+        };
+        using RadioButton control = new()
+        {
+            Location = new Point(20, 20),
+            Size = new Size(40, 24),
+            VisualStylesMode = VisualStylesMode.Net11
+        };
+        parent.Controls.Add(control);
+
+        using Bitmap bitmap = new(control.Width, control.Height);
+        using Graphics graphics = Graphics.FromImage(bitmap);
+        PaintEventArgs e = new(graphics, control.ClientRectangle);
+
+        control.CreateStandardAdapter().PaintUp(e, CheckState.Unchecked);
+
+        Assert.Equal(parent.BackColor.ToArgb(), bitmap.GetPixel(control.Width - 2, control.Height / 2).ToArgb());
+    }
+
+    [WinFormsFact]
     public void RadioButton_ModernGlyph_UsesTranslucentBackColorWhenVisualStyleBackgroundEnabled()
     {
         Color parentBackColor = Color.White;
@@ -309,7 +337,7 @@ public class RadioButtonTests : AbstractButtonBaseTests
     [WinFormsFact]
     public void RadioButton_ModernGlyph_RightToLeftHovered_DoesNotClipAtRightEdge()
     {
-        using Panel parent = new();
+        using Panel parent = new() { BackColor = Color.Magenta };
         using RadioButton control = new()
         {
             RightToLeft = RightToLeft.Yes,
@@ -330,7 +358,7 @@ public class RadioButtonTests : AbstractButtonBaseTests
 
         for (int y = 0; y < bitmap.Height; y++)
         {
-            Assert.Equal(0, bitmap.GetPixel(bitmap.Width - 1, y).A);
+            Assert.Equal(parent.BackColor.ToArgb(), bitmap.GetPixel(bitmap.Width - 1, y).ToArgb());
         }
     }
 
