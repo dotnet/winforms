@@ -422,13 +422,13 @@ internal unsafe partial class Composition<TOleServices, TNrbfSerializer, TDataFo
                 tymed = (uint)Com.TYMED.TYMED_HGLOBAL
             };
 
-            HRESULT hr = dataObject->QueryGetData(formatetc);
+            HRESULT hr = ClipboardRetry.QueryGetData(dataObject, formatetc);
             if (hr.Failed)
             {
                 return HandleFailedHResult(hr);
             }
 
-            hr = dataObject->GetData(formatetc, out Com.STGMEDIUM medium);
+            hr = ClipboardRetry.GetData(dataObject, formatetc, out Com.STGMEDIUM medium);
 
             // One of the ways this can happen is when we attempt to put binary formatted data onto the
             // clipboard, which will succeed as Windows ignores all errors when putting data on the clipboard.
@@ -490,13 +490,13 @@ internal unsafe partial class Composition<TOleServices, TNrbfSerializer, TDataFo
                 tymed = (uint)Com.TYMED.TYMED_ISTREAM
             };
 
-            HRESULT hr = dataObject->QueryGetData(formatEtc);
+            HRESULT hr = ClipboardRetry.QueryGetData(dataObject, formatEtc);
             if (hr.Failed)
             {
                 return HandleFailedHResult(hr);
             }
 
-            hr = dataObject->GetData(formatEtc, out Com.STGMEDIUM medium);
+            hr = ClipboardRetry.GetData(dataObject, formatEtc, out Com.STGMEDIUM medium);
             if (hr.Failed)
             {
                 return HandleFailedHResult(hr);
@@ -602,7 +602,7 @@ internal unsafe partial class Composition<TOleServices, TNrbfSerializer, TDataFo
             }
 
             List<string> mappedFormats = [];
-            DataFormatNames.AddMappedFormats(request.Format, mappedFormats);
+            ClipboardCore<TOleServices>.AddMappedFormats(request.Format, mappedFormats);
 
             // Try to find a mapped format that works better.
             foreach (string mappedFormat in mappedFormats)
@@ -675,7 +675,7 @@ internal unsafe partial class Composition<TOleServices, TNrbfSerializer, TDataFo
             }
 
             List<string> mappedFormats = [];
-            DataFormatNames.AddMappedFormats(format, mappedFormats);
+            ClipboardCore<TOleServices>.AddMappedFormats(format, mappedFormats);
 
             foreach (string mappedFormat in mappedFormats)
             {
@@ -717,7 +717,7 @@ internal unsafe partial class Composition<TOleServices, TNrbfSerializer, TDataFo
 
                 if (autoConvert)
                 {
-                    DataFormatNames.AddMappedFormats(name, distinctFormats);
+                    ClipboardCore<TOleServices>.AddMappedFormats(name, distinctFormats);
                 }
 
                 formatEtc = default;
@@ -782,16 +782,25 @@ internal unsafe partial class Composition<TOleServices, TNrbfSerializer, TDataFo
 
         private bool GetDataPresentInner(string format)
         {
+            TDataFormat dataFormat = DataFormatsCore<TDataFormat>.GetOrAddFormat(format);
+            string canonicalFormat = dataFormat.Name;
+            Com.TYMED tymed = (Com.TYMED)AllowedTymeds;
+            if (IsNativeTymedSupported(canonicalFormat, Com.TYMED.TYMED_ENHMF))
+            {
+                // EMF providers commonly expose only a native enhanced-metafile handle, not an HGLOBAL fallback.
+                tymed |= Com.TYMED.TYMED_ENHMF;
+            }
+
             Com.FORMATETC formatEtc = new()
             {
-                cfFormat = (ushort)(DataFormatsCore<TDataFormat>.GetOrAddFormat(format).Id),
+                cfFormat = (ushort)dataFormat.Id,
                 dwAspect = (uint)Com.DVASPECT.DVASPECT_CONTENT,
                 lindex = -1,
-                tymed = (uint)AllowedTymeds
+                tymed = (uint)tymed
             };
 
             using var nativeDataObject = _nativeDataObject.GetInterface();
-            HRESULT hr = nativeDataObject.Value->QueryGetData(formatEtc);
+            HRESULT hr = ClipboardRetry.QueryGetData(nativeDataObject, formatEtc);
 
             // APIs will return S_FALSE, which is "success"
             return hr == HRESULT.S_OK;
