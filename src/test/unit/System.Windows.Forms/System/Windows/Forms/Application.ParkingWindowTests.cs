@@ -3,58 +3,15 @@
 
 #nullable disable
 
-using Microsoft.DotNet.RemoteExecutor;
 using static System.Windows.Forms.Application;
 
 namespace System.Windows.Forms.Tests;
 
 public class ParkingWindowTests
 {
-    [WinFormsFact(Skip = "Crash with AbandonedMutexException. See: https://github.com/dotnet/arcade/issues/5325")]
-    public void ParkingWindow_DoesNotThrowOnGarbageCollecting()
-    {
-        using RemoteInvokeHandle invokerHandle = RemoteExecutor.Invoke(() =>
-        {
-            Control.CheckForIllegalCrossThreadCalls = true;
-
-            Form form = InitFormWithControlToGarbageCollect();
-
-            try
-            {
-                // Force garbage collecting to access ComboBox from another (GC) thread.
-                GC.Collect();
-
-                GC.WaitForPendingFinalizers();
-            }
-            catch (Exception ex)
-            {
-                Assert.True(ex is null, $"Expected no exception, but got: {ex.Message}"); // Actually need to check whether GC.Collect() does not throw exception.
-            }
-        });
-
-        // verify the remote process succeeded
-        Assert.Equal(RemoteExecutor.SuccessExitCode, invokerHandle.ExitCode);
-    }
-
-    private static Form InitFormWithControlToGarbageCollect()
-    {
-        Form form = new();
-        ComboBox comboBox = new()
-        {
-            DropDownStyle = ComboBoxStyle.DropDown
-        };
-
-        form.Controls.Add(comboBox);
-        form.Show();
-
-        // Park ComboBox handle in ParkingWindow.
-        comboBox.Parent = null;
-
-        // Recreate ComboBox handle to set parent to ParkingWindow.
-        comboBox.DropDownStyle = ComboBoxStyle.DropDownList;
-
-        return form;
-    }
+    // ParkingWindow_DoesNotThrowOnGarbageCollecting moved to
+    // src/test/integration/UIIntegrationTests/Application.ParkingWindowTests.cs
+    // (issue #4500 — process-wide state mutation cannot be safely undone in this project).
 
     [WinFormsFact]
     public void ParkingWindow_Unaware()
