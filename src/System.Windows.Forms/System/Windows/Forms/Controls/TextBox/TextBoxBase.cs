@@ -1868,6 +1868,16 @@ public abstract partial class TextBoxBase : Control
         base.OnLostFocus(e);
     }
 
+    protected override void OnEnabledChanged(EventArgs e)
+    {
+        base.OnEnabledChanged(e);
+
+        if (EffectiveVisualStylesMode >= VisualStylesMode.Net11)
+        {
+            InvalidateVisualStylesFrame();
+        }
+    }
+
     protected override void OnMouseEnter(EventArgs e)
     {
         // Refresh the Net11 frame when hover changes so the state-specific border is repainted.
@@ -2795,7 +2805,6 @@ public abstract partial class TextBoxBase : Control
         int cornerRadius = ScaleVisualStylesMetric(ModernControlVisualStyles.FieldCornerRadius);
         Size focusBorderMetrics = GetVisualStylesFocusBorderMetrics();
         int borderThickness = ScaleVisualStylesMetric(ModernControlVisualStyles.BorderThickness);
-
         ModernFieldStrokeContext strokeContext = new(
             BackColor: BackColor,
             Enabled: Enabled,
@@ -2808,6 +2817,16 @@ public abstract partial class TextBoxBase : Control
         ModernFieldStroke stroke = ModernFieldStrokeResolver.GetStroke(strokeContext);
 
         Color clientBackColor = BackColor;
+        if (this is RichTextBox
+            && EffectiveVisualStylesMode >= VisualStylesMode.Net11
+            && !Enabled
+            && !ShouldSerializeBackColor())
+        {
+            clientBackColor = Application.IsDarkModeEnabled && DarkModeRequestState is true
+                ? SystemColors.ControlDark
+                : SystemColors.Control;
+        }
+
         Color parentBackColor = Parent?.BackColor ?? BackColor;
         // Resolve side colors and lower-edge width from the current field state.
         Color adornerColor = stroke.SideTopColor;

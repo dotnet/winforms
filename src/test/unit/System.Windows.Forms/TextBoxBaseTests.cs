@@ -8543,6 +8543,59 @@ public partial class TextBoxBaseTests
         Assert.Equal(0, createdCallCount);
     }
 
+    [WinFormsFact]
+    public void TextBoxBase_EnabledChanged_Net11_InvalidatesNonClientArea()
+    {
+        using Form form = new();
+        using NonClientPaintTrackingRichTextBox control = new()
+        {
+            VisualStylesMode = VisualStylesMode.Net11,
+            Size = new Size(200, 100),
+            Padding = new Padding(20),
+            Enabled = true
+        };
+
+        form.Controls.Add(control);
+        form.Show();
+
+        Assert.True(control.IsHandleCreated);
+
+        nint originalHandle = control.Handle;
+
+        control.ResetNonClientPaintCount();
+
+        control.Enabled = false;
+
+        // Process the area invalidated by TextBoxBase.OnEnabledChanged.
+        // Do not use Refresh(), because Refresh() itself invalidates the entire
+        // control and would hide whether EnabledChanged caused the invalidation.
+        control.Update();
+
+        Assert.False(control.Enabled);
+        Assert.Equal(originalHandle, control.Handle);
+        Assert.True(control.NonClientPaintCount > 0);
+    }
+
+    private sealed class NonClientPaintTrackingRichTextBox : RichTextBox
+    {
+        public int NonClientPaintCount { get; private set; }
+
+        public void ResetNonClientPaintCount()
+        {
+            NonClientPaintCount = 0;
+        }
+
+        protected override void WndProc(ref Message m)
+        {
+            if (m.Msg == (int)PInvokeCore.WM_NCPAINT)
+            {
+                NonClientPaintCount++;
+            }
+
+            base.WndProc(ref m);
+        }
+    }
+
     private class CantCreateHandleTextBox : TextBox
     {
         protected override void CreateHandle()
