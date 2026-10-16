@@ -13395,6 +13395,12 @@ public unsafe partial class Control :
 
                     // Left here for debugging purposes.
                     // string? text = m.LParamInternal == 0 ? null : new((char*)m.LParamInternal);
+                    if (m.LParamInternal != 0
+                        && Application.ColorModeSet
+                        && new string((char*)m.LParamInternal) is "ImmersiveColorSet")
+                    {
+                        OnSystemColorsChanged(EventArgs.Empty);
+                    }
 
                     if (action is SYSTEM_PARAMETERS_INFO_ACTION.SPI_SETNONCLIENTMETRICS && m.LParamInternal == 0)
                     {
