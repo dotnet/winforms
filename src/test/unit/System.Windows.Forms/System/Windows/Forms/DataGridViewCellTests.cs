@@ -78,6 +78,88 @@ public partial class DataGridViewCellTests
     }
 
     [WinFormsFact]
+    public void DataGridViewCheckBoxCell_ErrorIconBounds_InEditMode_NotEmpty()
+    {
+        using DataGridView control = new()
+        {
+            Size = new Size(100, 40),
+            ShowCellErrors = true
+        };
+        control.CreateControl();
+
+        using DataGridViewCheckBoxColumn column = new();
+        control.Columns.Add(column);
+        control.Rows.Add();
+
+        DataGridViewCheckBoxCell cell = (DataGridViewCheckBoxCell)control.Rows[0].Cells[0];
+        cell.Value = false;
+        cell.ErrorText = "error";
+
+        control.CurrentCell = cell;
+        Assert.True(control.BeginEdit(selectAll: true));
+
+        Assert.NotEqual(Rectangle.Empty, cell.ErrorIconBounds);
+    }
+
+    [WinFormsFact]
+    public void DataGridViewCheckBoxCell_PaintErrorIcon_InEditMode_RendersPixels()
+    {
+        using DataGridView control = new()
+        {
+            Size = new Size(100, 40),
+            ShowCellErrors = true
+        };
+        control.CreateControl();
+
+        using DataGridViewCheckBoxColumn column = new();
+        control.Columns.Add(column);
+        control.Rows.Add();
+
+        DataGridViewCheckBoxCell cell = (DataGridViewCheckBoxCell)control.Rows[0].Cells[0];
+        cell.Value = false;
+        cell.ErrorText = "error";
+
+        control.CurrentCell = cell;
+        Assert.True(control.BeginEdit(selectAll: true));
+
+        Rectangle errorIconBounds = cell.ErrorIconBounds;
+        Assert.NotEqual(Rectangle.Empty, errorIconBounds);
+
+        Rectangle cellBounds = new(Point.Empty, cell.Size);
+        using Bitmap bitmap = new(cellBounds.Width, cellBounds.Height);
+        using Graphics graphics = Graphics.FromImage(bitmap);
+        graphics.Clear(Color.Transparent);
+
+        cell.TestAccessor.Dynamic.Paint(
+            graphics,
+            cellBounds,
+            cellBounds,
+            0,
+            cell.State,
+            cell.Value,
+            cell.FormattedValue,
+            cell.ErrorText,
+            cell.InheritedStyle,
+            control.AdvancedCellBorderStyle,
+            DataGridViewPaintParts.ErrorIcon);
+
+        bool paintedPixelFound = false;
+        for (int y = errorIconBounds.Top; y < errorIconBounds.Bottom && !paintedPixelFound; y++)
+        {
+            for (int x = errorIconBounds.Left; x < errorIconBounds.Right; x++)
+            {
+                if (bitmap.GetPixel(x, y).A != 0)
+                {
+                    paintedPixelFound = true;
+                    break;
+                }
+            }
+        }
+
+        Assert.True(paintedPixelFound);
+    }
+
+    [WinFormsFact]
     public void DataGridViewCell_ContentBounds_GetWithDataGridView_ReturnsExpected()
     {
         using SubDataGridViewCell cellTemplate = new();
