@@ -7,6 +7,7 @@ using System.ComponentModel;
 using System.Drawing;
 using System.Reflection;
 using System.Windows.Forms.TestUtilities;
+using Microsoft.DotNet.RemoteExecutor;
 using Point = System.Drawing.Point;
 using Size = System.Drawing.Size;
 
@@ -568,6 +569,138 @@ public class ContainerControlTests
         };
         control.Controls.Add(child);
         control.PerformAutoScale();
+    }
+
+    [WinFormsTheory]
+    [InlineData(AutoScaleMode.Dpi, false)]
+    [InlineData(AutoScaleMode.Dpi, true)]
+    [InlineData(AutoScaleMode.Font, false)]
+    [InlineData(AutoScaleMode.Font, true)]
+    public void ContainerControl_ScaleContainerForDpi_RoundTrip_PreservesAnchoredChildBounds(
+        AutoScaleMode autoScaleMode,
+        bool explicitFont)
+    {
+        // DPI awareness is process-wide and must be established before any handles are created.
+        RemoteExecutor.Invoke((autoScaleModeString, explicitFontString) =>
+        {
+            Assert.True(Application.SetHighDpiMode(HighDpiMode.PerMonitorV2));
+            Assert.True(ScaleHelper.IsThreadPerMonitorV2Aware);
+            using AnchorLayoutV2Scope anchorScope = new(enable: true);
+            using Font font = new(FontFamily.GenericSansSerif, 12);
+            using ContainerControl control = new()
+            {
+                AutoScaleMode = Enum.Parse<AutoScaleMode>(autoScaleModeString),
+                Bounds = new Rectangle(0, 0, 300, 300)
+            };
+            if (bool.Parse(explicitFontString))
+            {
+                control.Font = font;
+            }
+
+            int handleCreatedCount = 0;
+            control.HandleCreated += (sender, e) => handleCreatedCount++;
+            control.CreateControl();
+            control.DeviceDpiInternal = 96;
+            control.AutoScaleDimensions = control.CurrentAutoScaleDimensions;
+
+            using Control child = new()
+            {
+                Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right,
+                Bounds = new Rectangle(48, 48, 204, 204)
+            };
+            control.Controls.Add(child);
+            Assert.True(child.IsHandleCreated);
+            Assert.Equal(new Rectangle(48, 48, 204, 204), child.Bounds);
+
+            foreach (int dpi in new[] { 120, 144, 192 })
+            {
+                Rectangle scaledBounds = new(0, 0, 300 * dpi / 96, 300 * dpi / 96);
+                Rectangle scaledChildBounds = new(48 * dpi / 96, 48 * dpi / 96, 204 * dpi / 96, 204 * dpi / 96);
+                for (int transition = 0; transition < 2; transition++)
+                {
+                    control.DeviceDpiInternal = dpi;
+                    control.ScaleContainerForDpi(dpi, 96, scaledBounds);
+
+                    Assert.Equal(scaledBounds, control.Bounds);
+                    Assert.Equal(scaledChildBounds, child.Bounds);
+                    Assert.Equal(control.CurrentAutoScaleDimensions, control.AutoScaleDimensions);
+
+                    control.DeviceDpiInternal = 96;
+                    control.ScaleContainerForDpi(96, dpi, new Rectangle(0, 0, 300, 300));
+
+                    Assert.Equal(new Rectangle(0, 0, 300, 300), control.Bounds);
+                    Assert.Equal(new Rectangle(48, 48, 204, 204), child.Bounds);
+                    Assert.Equal(control.CurrentAutoScaleDimensions, control.AutoScaleDimensions);
+                }
+            }
+
+            Assert.Equal(1, handleCreatedCount);
+        }, autoScaleMode.ToString(), explicitFont.ToString()).Dispose();
+    }
+
+    [WinFormsTheory]
+    [BoolData]
+    public void ContainerControl_ScaleContainerForDpi_ReentrantChange_PreservesLatestFontAndBounds(bool explicitFont)
+    {
+        RemoteExecutor.Invoke(explicitFontString =>
+        {
+            Assert.True(Application.SetHighDpiMode(HighDpiMode.PerMonitorV2));
+            Assert.True(ScaleHelper.IsThreadPerMonitorV2Aware);
+            using AnchorLayoutV2Scope anchorScope = new(enable: true);
+            using Font font = new(FontFamily.GenericSansSerif, 12);
+            using ContainerControl control = new()
+            {
+                AutoScaleMode = AutoScaleMode.Dpi,
+                Bounds = new Rectangle(0, 0, 300, 300)
+            };
+            if (bool.Parse(explicitFontString))
+            {
+                control.Font = font;
+            }
+
+            control.CreateControl();
+            control.DeviceDpiInternal = 96;
+            control.AutoScaleDimensions = new SizeF(96, 96);
+            float originalFontSize = control.Font.Size;
+            using Control child = new()
+            {
+                Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right,
+                Bounds = new Rectangle(48, 48, 204, 204)
+            };
+            control.Controls.Add(child);
+
+            bool reentered = false;
+            int fontChangedCount = 0;
+            control.SizeChanged += (sender, e) =>
+            {
+                if (reentered)
+                {
+                    return;
+                }
+
+                reentered = true;
+                Assert.Equal(originalFontSize * 1.5f, control.Font.Size, precision: 3);
+                control.DeviceDpiInternal = 192;
+                control.ScaleContainerForDpi(192, 144, new Rectangle(0, 0, 600, 600));
+            };
+            control.FontChanged += (sender, e) =>
+            {
+                fontChangedCount++;
+                Assert.Equal(originalFontSize * 2, control.Font.Size, precision: 3);
+                Assert.Equal(new Rectangle(0, 0, 600, 600), control.Bounds);
+            };
+
+            control.DeviceDpiInternal = 144;
+            control.ScaleContainerForDpi(144, 96, new Rectangle(0, 0, 450, 450));
+
+            Assert.True(reentered);
+            Assert.Equal(2, fontChangedCount);
+            Assert.Equal(192, control.DeviceDpiInternal);
+            Assert.Equal(originalFontSize * 2, control.Font.Size, precision: 3);
+            Assert.Equal(new Rectangle(0, 0, 600, 600), control.Bounds);
+            Assert.Equal(new Rectangle(96, 96, 408, 408), child.Bounds);
+            Assert.Equal(new SizeF(192, 192), control.AutoScaleDimensions);
+        }, explicitFont.ToString()).Dispose();
     }
 
     [WinFormsFact]

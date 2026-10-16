@@ -1367,6 +1367,7 @@ public class ContainerControl : ScrollableControl, IContainerControl
     internal void ScaleContainerForDpi(int deviceDpiNew, int deviceDpiOld, Rectangle suggestedRectangle)
     {
         CommonProperties.xClearAllPreferredSizeCaches(this);
+        bool wasScaledByDpiChangedEvent = _isScaledByDpiChangedEvent;
         SuspendAllLayout(this);
         try
         {
@@ -1390,18 +1391,12 @@ public class ContainerControl : ScrollableControl, IContainerControl
             // this control further by the 'OnFontChanged' event.
             _isScaledByDpiChangedEvent = true;
 
+            // Publish the scaled font before SetWindowPos, which can trigger a nested DPI change.
             Font fontForDpi = GetScaledFont(Font, deviceDpiNew, deviceDpiOld);
             ScaledControlFont = fontForDpi;
             if (IsFontSet())
             {
-                SetScaledFont(fontForDpi);
-            }
-            else
-            {
-                using (new LayoutTransaction(ParentInternal, this, PropertyNames.Font))
-                {
-                    OnFontChanged(EventArgs.Empty);
-                }
+                SetScaledFont(fontForDpi, raiseOnFontChangedEvent: false);
             }
 
             if (IsHandleCreated)
@@ -1415,12 +1410,18 @@ public class ContainerControl : ScrollableControl, IContainerControl
                     suggestedRectangle.Height,
                     SET_WINDOW_POS_FLAGS.SWP_NOZORDER | SET_WINDOW_POS_FLAGS.SWP_NOACTIVATE);
             }
+
+            // Autoscaling needs the updated parent bounds. A nested DPI change may also have updated the font.
+            using (new LayoutTransaction(ParentInternal, this, PropertyNames.Font))
+            {
+                OnFontChanged(EventArgs.Empty);
+            }
         }
         finally
         {
             // We want to perform layout for dpi-changed high Dpi improvements - setting the second parameter to 'true'
             ResumeAllLayout(this, true);
-            _isScaledByDpiChangedEvent = false;
+            _isScaledByDpiChangedEvent = wasScaledByDpiChangedEvent;
         }
     }
 
