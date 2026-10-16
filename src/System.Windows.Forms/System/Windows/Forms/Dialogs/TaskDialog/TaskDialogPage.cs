@@ -717,7 +717,10 @@ public class TaskDialogPage
         // Check if the button is part of the custom buttons.
         if (buttonID >= CustomButtonStartID)
         {
-            return _boundCustomButtons![buttonID - CustomButtonStartID];
+            int customButtonIndex = buttonID - CustomButtonStartID;
+            return (uint)customButtonIndex < (uint)_boundCustomButtons!.Length
+                ? _boundCustomButtons[customButtonIndex]
+                : null;
         }
         else
         {
@@ -736,7 +739,15 @@ public class TaskDialogPage
             throw new InvalidOperationException();
         }
 
-        return buttonID == 0 ? null : _radioButtons[buttonID - RadioButtonStartID];
+        if (buttonID == 0)
+        {
+            return null;
+        }
+
+        int radioButtonIndex = buttonID - RadioButtonStartID;
+        return (uint)radioButtonIndex < (uint)_radioButtons.Count
+            ? _radioButtons[radioButtonIndex]
+            : null;
     }
 
     internal void Validate()
