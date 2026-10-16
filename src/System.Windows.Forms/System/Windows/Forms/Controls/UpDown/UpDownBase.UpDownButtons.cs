@@ -33,6 +33,7 @@ public abstract partial class UpDownBase
         private Bitmap? _cachedBitmap;
 
         private bool _doubleClickFired;
+        private const double ModernArrowScaleFactor = 0.8;
 
         /// <summary>
         ///  Initializes a new instance of the <see cref="UpDownButtons"/> class.
@@ -319,14 +320,16 @@ public abstract partial class UpDownBase
                     GetButtonRectangle(ButtonID.Down),
                     ModernControlButtonStyle.Down,
                     GetButtonState(ButtonID.Down),
-                    isDarkMode);
+                    isDarkMode,
+                    ModernArrowScaleFactor);
 
                 DrawModernControlButton(
                     cachedGraphics,
                     GetButtonRectangle(ButtonID.Up),
                     ModernControlButtonStyle.Up,
                     GetButtonState(ButtonID.Up),
-                    isDarkMode);
+                    isDarkMode,
+                    ModernArrowScaleFactor);
 
                 e.GraphicsInternal.DrawImageUnscaled(_cachedBitmap, new Point(0, 0));
 
@@ -358,7 +361,8 @@ public abstract partial class UpDownBase
                         ? ModernControlButtonState.Pressed
                         : (Enabled ? (_mouseOver == ButtonID.Up ? ModernControlButtonState.Hover : ModernControlButtonState.Normal)
                                    : ModernControlButtonState.Disabled),
-                    true);
+                    true,
+                    ModernArrowScaleFactor);
 
                 DrawModernControlButton(
                     cachedGraphics,
@@ -368,7 +372,8 @@ public abstract partial class UpDownBase
                         ? ModernControlButtonState.Pressed
                         : (Enabled ? (_mouseOver == ButtonID.Down ? ModernControlButtonState.Hover : ModernControlButtonState.Normal)
                                    : ModernControlButtonState.Disabled),
-                    true);
+                    true,
+                    ModernArrowScaleFactor);
 
                 e.GraphicsInternal.DrawImageUnscaled(
                     _cachedBitmap,
