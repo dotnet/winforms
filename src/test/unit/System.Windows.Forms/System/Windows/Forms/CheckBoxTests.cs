@@ -1690,5 +1690,44 @@ public class CheckBoxTests : AbstractButtonBaseTests
         result.Height.Should().BeGreaterThanOrEqualTo(13);
     }
 
+    [WinFormsTheory]
+    [InlineData(FlatStyle.Standard, VisualStylesMode.Net11, true)]
+    [InlineData(FlatStyle.Standard, VisualStylesMode.Classic, false)]
+    [InlineData(FlatStyle.System, VisualStylesMode.Net11, false)]
+    public void CheckBox_AppearanceButton_DarkMode_OwnerDraw(
+        FlatStyle flatStyle,
+        VisualStylesMode visualStylesMode,
+        bool expectedOwnerDraw)
+    {
+        using ApplicationColorModeTestScope colorModeScope = new(darkModeEnabled: true);
+
+        using OwnerDrawTestCheckBox control = new()
+        {
+            Appearance = Appearance.Button,
+            FlatStyle = flatStyle,
+            VisualStylesMode = visualStylesMode,
+            Checked = true
+        };
+
+        control.CreateControl();
+
+        Assert.Equal(expectedOwnerDraw, control.UserPaintEnabled);
+        Assert.Equal(
+            expectedOwnerDraw,
+            HasOwnerDrawStyle(control.WindowStyle));
+    }
+
+    private sealed class OwnerDrawTestCheckBox : CheckBox
+    {
+        public bool UserPaintEnabled =>
+            GetStyle(ControlStyles.UserPaint);
+
+        public new int WindowStyle =>
+            CreateParams.Style;
+    }
+
+    private static bool HasOwnerDrawStyle(int style) =>
+    (style & PInvoke.BS_OWNERDRAW) == PInvoke.BS_OWNERDRAW;
+
     protected override ButtonBase CreateButton() => new SubCheckBox();
 }
