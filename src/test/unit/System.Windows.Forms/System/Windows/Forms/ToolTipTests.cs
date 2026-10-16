@@ -244,12 +244,24 @@ public class ToolTipTests
         form.Controls.AddRange([button, trackBar]);
         form.Show();
 
+        Assert.False(form.IsMirrored);
+        Assert.False(button.IsMirrored);
+        Assert.True(trackBar.IsMirrored);
+
+        WINDOW_EX_STYLE layoutStyles =
+            WINDOW_EX_STYLE.WS_EX_LAYOUTRTL | WINDOW_EX_STYLE.WS_EX_NOINHERITLAYOUT;
         Control firstControl = mirroredFirst ? trackBar : button;
         Control secondControl = mirroredFirst ? button : trackBar;
         toolTip.SetToolTip(firstControl, "First tooltip");
         Assert.True(toolTip.GetHandleCreated());
         IntPtr handle = toolTip.Handle;
+        WINDOW_EX_STYLE initialExStyle = (WINDOW_EX_STYLE)PInvokeCore.GetWindowLong(
+            toolTip, WINDOW_LONG_PTR_INDEX.GWL_EXSTYLE);
+        Assert.Equal(mirroredFirst ? layoutStyles : 0, initialExStyle & layoutStyles);
+
+        // In the LTR-first case, the shared HWND already exists before the mirrored tool is registered.
         toolTip.SetToolTip(secondControl, "Second tooltip");
+        Assert.Equal(handle, toolTip.Handle);
 
         List<(Control Control, WINDOW_EX_STYLE ExStyle)> popups = [];
         toolTip.Popup += (_, e) =>
@@ -259,8 +271,10 @@ public class ToolTipTests
             popups.Add((e.AssociatedControl, actualExStyle));
         };
 
+        Control[] expectedControls = [firstControl, secondControl, firstControl];
+
         // Activate native tracking tooltips to exercise TTN_SHOW without mouse timing or foreground focus.
-        foreach (Control control in new[] { firstControl, secondControl, firstControl })
+        foreach (Control control in expectedControls)
         {
             ToolInfoWrapper<Control> toolInfo = new(control);
             Assert.NotEqual(IntPtr.Zero, toolInfo.SendMessage(toolTip, PInvoke.TTM_GETTOOLINFOW));
@@ -275,12 +289,12 @@ public class ToolTipTests
             toolInfo.SendMessage(toolTip, PInvoke.TTM_TRACKACTIVATE, false);
         }
 
-        Assert.Equal(3, popups.Count);
-        WINDOW_EX_STYLE layoutStyles =
-            WINDOW_EX_STYLE.WS_EX_LAYOUTRTL | WINDOW_EX_STYLE.WS_EX_NOINHERITLAYOUT;
-        foreach ((Control control, WINDOW_EX_STYLE exStyle) in popups)
+        Assert.Equal(expectedControls.Length, popups.Count);
+        for (int i = 0; i < expectedControls.Length; i++)
         {
-            Assert.Equal(control.IsMirrored ? layoutStyles : 0, exStyle & layoutStyles);
+            Assert.Same(expectedControls[i], popups[i].Control);
+            WINDOW_EX_STYLE expectedLayout = expectedControls[i] == trackBar ? layoutStyles : 0;
+            Assert.Equal(expectedLayout, popups[i].ExStyle & layoutStyles);
         }
     }
 
