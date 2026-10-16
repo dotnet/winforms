@@ -58,6 +58,10 @@
     <Compile Remove="Windows\Win32\System\Com\IDispatch.Interface.cs" />
     <Compile Remove="Windows\Win32\System\Com\GlobalInterfaceTable.UnknownStrategy.cs" />
     <Compile Remove="Windows\Win32\System\Com\IComCallableWrapper.cs" />
+    <!-- WinRT accent-color interop is only consumed by the modern .NET build of System.Windows.Forms. -->
+    <Compile Remove="Windows\Win32\UI\ViewManagement\IUISettings3.cs" />
+    <Compile Remove="Windows\Win32\UI\ViewManagement\UIColor.cs" />
+    <Compile Remove="Windows\Win32\UI\ViewManagement\UIColorType.cs" />
   </ItemGroup>
 
   <ItemGroup>

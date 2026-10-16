@@ -832,7 +832,8 @@ internal static class DesignerUtils
         treeView.HotTracking = true;
         treeView.ShowLines = false;
         HWND hwnd = (HWND)treeView.Handle;
-        PInvoke.SetWindowTheme(hwnd, "Explorer", pszSubIdList: null);
+        string theme = Application.IsDarkModeEnabled ? "DarkMode_Explorer" : "Explorer";
+        PInvoke.SetWindowTheme(hwnd, theme, pszSubIdList: null);
         uint exstyle = TreeView_GetExtendedStyle(hwnd);
         exstyle |= PInvoke.TVS_EX_DOUBLEBUFFER | PInvoke.TVS_EX_FADEINOUTEXPANDOS;
         PInvokeCore.SendMessage(treeView, PInvoke.TVM_SETEXTENDEDSTYLE, 0, (nint)exstyle);

@@ -66,6 +66,28 @@ The project uses **xUnit** with **FluentAssertions**. Key attributes:
 These are custom xUnit attributes that ensure tests run on an STA thread,
 which WinForms requires for COM interop and UI operations.
 
+### 1.4 Async tests: pass a CancellationToken, respect `#nullable`
+
+The repository runs **xUnit v3** and enforces the relevant analyzers as **errors** under the CI
+build (`build.cmd`). Two pitfalls fail CI even though a plain `dotnet build` may not flag them:
+
+* **CA2016 / xUnit1051 — always pass a `CancellationToken` to async calls.** Methods such as
+  `Task.Delay` must receive a token so a cancelled test run stops promptly. In xUnit v3 use
+  `TestContext.Current.CancellationToken`:
+
+  ```csharp
+  await Task.Delay(25, TestContext.Current.CancellationToken);
+  ```
+
+  When you receive a `CancellationToken ct` (e.g. in a callback), **forward it** rather than dropping it.
+
+* **CS8632 — nullable annotations need a `#nullable` context.** If a test file uses `?` reference
+  annotations (e.g. `object? sender`) but the project does not enable nullable, add `#nullable enable`
+  at the top of the file (or remove the annotation). Match the surrounding files' convention.
+
+> Verify with `build.cmd` (CI parity) — see the `building-code` skill's build tenet. A plain
+> single-project `dotnet build` can report these as 0 warnings while CI fails them as errors.
+
 ---
 
 ## 2. Test Method Naming
