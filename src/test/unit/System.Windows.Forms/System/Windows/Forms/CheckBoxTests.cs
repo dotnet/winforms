@@ -1690,80 +1690,22 @@ public class CheckBoxTests : AbstractButtonBaseTests
         result.Height.Should().BeGreaterThanOrEqualTo(13);
     }
 
-    [WinFormsFact]
-    public void CheckBox_AppearanceButton_Standard_DarkMode_Net11_IsOwnerDrawn()
-    {
-        Application.SetDefaultVisualStylesMode(VisualStylesMode.Net11);
-        Application.SetColorMode(SystemColorMode.Dark);
-
-        using OwnerDrawTestCheckBox control = new()
-        {
-            Appearance = Appearance.Button,
-            FlatStyle = FlatStyle.Standard,
-            Checked = true
-        };
-
-        control.CreateControl();
-
-        Assert.True(control.UserPaintEnabled);
-        Assert.True(HasOwnerDrawStyle(control.WindowStyle));
-        Assert.True(control.IsHandleCreated);
-    }
-
-    [WinFormsFact]
-    public void CheckBox_AppearanceButton_Standard_DarkMode_LegacyMode_IsNotOwnerDrawn()
-    {
-        Application.SetColorMode(SystemColorMode.Dark);
-
-        using OwnerDrawTestCheckBox control = new()
-        {
-            Appearance = Appearance.Button,
-            FlatStyle = FlatStyle.Standard,
-            Checked = true
-        };
-
-        control.CreateControl();
-
-        Assert.False(control.UserPaintEnabled);
-        Assert.False(HasOwnerDrawStyle(control.WindowStyle));
-        Assert.True(control.IsHandleCreated);
-    }
-
-    [WinFormsFact]
-    public void CheckBox_AppearanceButton_System_DarkMode_Net11_IsNotOwnerDrawn()
-    {
-        Application.SetDefaultVisualStylesMode(VisualStylesMode.Net11);
-        Application.SetColorMode(SystemColorMode.Dark);
-
-        using OwnerDrawTestCheckBox control = new()
-        {
-            Appearance = Appearance.Button,
-            FlatStyle = FlatStyle.System,
-            Checked = true
-        };
-
-        control.CreateControl();
-
-        Assert.False(control.UserPaintEnabled);
-        Assert.False(HasOwnerDrawStyle(control.WindowStyle));
-        Assert.True(control.IsHandleCreated);
-    }
-
-    [Theory]
+    [WinFormsTheory]
     [InlineData(FlatStyle.Standard, VisualStylesMode.Net11, true)]
+    [InlineData(FlatStyle.Standard, VisualStylesMode.Classic, false)]
     [InlineData(FlatStyle.System, VisualStylesMode.Net11, false)]
     public void CheckBox_AppearanceButton_DarkMode_OwnerDraw(
-    FlatStyle flatStyle,
-    VisualStylesMode visualStylesMode,
-    bool expectedOwnerDraw)
+        FlatStyle flatStyle,
+        VisualStylesMode visualStylesMode,
+        bool expectedOwnerDraw)
     {
-        Application.SetDefaultVisualStylesMode(visualStylesMode);
-        Application.SetColorMode(SystemColorMode.Dark);
+        using ApplicationColorModeTestScope colorModeScope = new(darkModeEnabled: true);
 
         using OwnerDrawTestCheckBox control = new()
         {
             Appearance = Appearance.Button,
             FlatStyle = flatStyle,
+            VisualStylesMode = visualStylesMode,
             Checked = true
         };
 

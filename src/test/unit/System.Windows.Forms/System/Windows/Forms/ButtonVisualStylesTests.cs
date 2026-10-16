@@ -815,6 +815,44 @@ public class ButtonVisualStylesTests
         Assert.True(animator.IsRunning);
     }
 
+    [WinFormsTheory]
+    [InlineData(true, FlatStyle.Standard, VisualStylesMode.Net11, true)]
+    [InlineData(false, FlatStyle.Standard, VisualStylesMode.Net11, false)]
+    [InlineData(true, FlatStyle.Flat, VisualStylesMode.Net11, false)]
+    [InlineData(true, FlatStyle.Popup, VisualStylesMode.Net11, false)]
+    public void ButtonDarkModeAdapter_PaintOver_CheckedPreservesPressedStateOnlyForDarkStandard(
+        bool darkModeEnabled,
+        FlatStyle flatStyle,
+        VisualStylesMode visualStylesMode,
+        bool expectPressed)
+    {
+        if (SystemInformation.HighContrast)
+        {
+            return;
+        }
+
+        using ApplicationColorModeTestScope colorModeScope = new(darkModeEnabled);
+        using Button button = new()
+        {
+            FlatStyle = flatStyle,
+            VisualStylesMode = visualStylesMode,
+            Size = new Size(120, 40)
+        };
+        button.FlatAppearance.MouseOverBackColor = Color.Red;
+        button.FlatAppearance.MouseDownBackColor = Color.Blue;
+
+        ButtonInternal.ButtonDarkModeAdapter adapter = new(button);
+        using Bitmap bitmap = new(button.Width, button.Height);
+        using Graphics graphics = Graphics.FromImage(bitmap);
+        using PaintEventArgs e = new(graphics, button.ClientRectangle);
+
+        adapter.PaintOver(e, CheckState.Checked);
+
+        Assert.Equal(
+            expectPressed ? Color.Blue : Color.Red,
+            button.BackColorAnimator.CurrentColor);
+    }
+
     [WinFormsFact]
     public void ButtonDarkModeAdapter_InheritedBackColor_UsesThemeStateColorInNet11()
     {
