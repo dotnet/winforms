@@ -97,6 +97,207 @@ public class ToolTipTests
         Assert.NotSame(createParams, toolTip.CreateParams);
     }
 
+    [WinFormsFact]
+    public void ToolTip_CreateParams_TopLevelFormRightToLeftYesAndRightToLeftLayoutTrue_SetsLayoutRtlExStyle()
+    {
+        using SubToolTip toolTip = new();
+        using Form form = new()
+        {
+            RightToLeft = RightToLeft.Yes,
+            RightToLeftLayout = true
+        };
+        using Control control = new();
+        form.Controls.Add(control);
+        form.CreateControl();
+        control.CreateControl();
+
+        toolTip.SetToolTip(control, "caption");
+
+        CreateParams createParams = toolTip.CreateParams;
+        int expectedExStyle = (int)(WINDOW_EX_STYLE.WS_EX_LAYOUTRTL | WINDOW_EX_STYLE.WS_EX_NOINHERITLAYOUT);
+        Assert.Equal(expectedExStyle, createParams.ExStyle);
+    }
+
+    [WinFormsFact]
+    public void ToolTip_CreateParams_TopLevelFormRightToLeftYesOnly_DoesNotSetLayoutRtlExStyle()
+    {
+        // RightToLeft.Yes alone (without RightToLeftLayout) only affects reading order,
+        // not full window mirroring, so WS_EX_LAYOUTRTL should not be applied.
+        using SubToolTip toolTip = new();
+        using Form form = new()
+        {
+            RightToLeft = RightToLeft.Yes,
+            RightToLeftLayout = false
+        };
+        using Control control = new();
+        form.Controls.Add(control);
+        form.CreateControl();
+        control.CreateControl();
+
+        toolTip.SetToolTip(control, "caption");
+
+        CreateParams createParams = toolTip.CreateParams;
+        Assert.Equal(0, createParams.ExStyle);
+    }
+
+    [WinFormsFact]
+    public void ToolTip_CreateParams_TopLevelFormRightToLeftLayoutTrueOnly_DoesNotSetLayoutRtlExStyle()
+    {
+        // RightToLeftLayout without RightToLeft.Yes should not trigger mirroring.
+        using SubToolTip toolTip = new();
+        using Form form = new()
+        {
+            RightToLeft = RightToLeft.No,
+            RightToLeftLayout = true
+        };
+        using Control control = new();
+        form.Controls.Add(control);
+        form.CreateControl();
+        control.CreateControl();
+
+        toolTip.SetToolTip(control, "caption");
+
+        CreateParams createParams = toolTip.CreateParams;
+        Assert.Equal(0, createParams.ExStyle);
+    }
+
+    [WinFormsFact]
+    public void ToolTip_CreateHandle_AssociatedControlMirrored_SetsLayoutRtlExStyle()
+    {
+        using Form form = new();
+        using TrackBar trackBar = new()
+        {
+            RightToLeft = RightToLeft.Yes,
+            RightToLeftLayout = true
+        };
+        using SubToolTip toolTip = new()
+        {
+            IsBalloon = true,
+            ToolTipTitle = "Hi"
+        };
+
+        form.Controls.Add(trackBar);
+        form.Show();
+
+        Assert.True(trackBar.IsMirrored);
+        Assert.False(form.IsMirrored);
+
+        toolTip.SetToolTip(trackBar, "Tooltip text");
+
+        Assert.True(toolTip.GetHandleCreated());
+
+        WINDOW_EX_STYLE actualExStyle = unchecked(
+           (WINDOW_EX_STYLE)(long)PInvokeCore.GetWindowLong(
+                toolTip,
+               WINDOW_LONG_PTR_INDEX.GWL_EXSTYLE));
+
+        WINDOW_EX_STYLE expectedExStyle =
+            WINDOW_EX_STYLE.WS_EX_LAYOUTRTL |
+            WINDOW_EX_STYLE.WS_EX_NOINHERITLAYOUT;
+
+        Assert.Equal(expectedExStyle, actualExStyle & expectedExStyle);
+    }
+
+    [WinFormsFact]
+    public void ToolTip_CreateParams_AssociatedControlRightToLeftYesOnly_DoesNotSetLayoutRtlExStyle()
+    {
+        using SubToolTip toolTip = new();
+        using Form form = new();
+        using TrackBar trackBar = new()
+        {
+            RightToLeft = RightToLeft.Yes,
+            RightToLeftLayout = false
+        };
+        form.Controls.Add(trackBar);
+        form.CreateControl();
+        trackBar.CreateControl();
+
+        toolTip.SetToolTip(trackBar, "Hello");
+
+        CreateParams createParams = toolTip.CreateParams;
+        Assert.Equal(0, createParams.ExStyle);
+    }
+
+    [WinFormsTheory]
+    [InlineData(false, false)]
+    [InlineData(false, true)]
+    [InlineData(true, false)]
+    [InlineData(true, true)]
+    public void ToolTip_Show_MixedControlLayouts_UsesCurrentControlLayout(bool mirroredFirst, bool isBalloon)
+    {
+        using Form form = new();
+        using Button button = new();
+        using TrackBar trackBar = new()
+        {
+            RightToLeft = RightToLeft.Yes,
+            RightToLeftLayout = true,
+            Top = button.Bottom
+        };
+        using ToolTip toolTip = new()
+        {
+            IsBalloon = isBalloon,
+            ShowAlways = true,
+            ToolTipTitle = "Tooltip title",
+            UseAnimation = false,
+            UseFading = false
+        };
+        form.Controls.AddRange([button, trackBar]);
+        form.Show();
+
+        Assert.False(form.IsMirrored);
+        Assert.False(button.IsMirrored);
+        Assert.True(trackBar.IsMirrored);
+
+        WINDOW_EX_STYLE layoutStyles =
+            WINDOW_EX_STYLE.WS_EX_LAYOUTRTL | WINDOW_EX_STYLE.WS_EX_NOINHERITLAYOUT;
+        Control firstControl = mirroredFirst ? trackBar : button;
+        Control secondControl = mirroredFirst ? button : trackBar;
+        toolTip.SetToolTip(firstControl, "First tooltip");
+        Assert.True(toolTip.GetHandleCreated());
+        IntPtr handle = toolTip.Handle;
+        WINDOW_EX_STYLE initialExStyle = (WINDOW_EX_STYLE)PInvokeCore.GetWindowLong(
+            toolTip, WINDOW_LONG_PTR_INDEX.GWL_EXSTYLE);
+        Assert.Equal(mirroredFirst ? layoutStyles : 0, initialExStyle & layoutStyles);
+
+        // In the LTR-first case, the shared HWND already exists before the mirrored tool is registered.
+        toolTip.SetToolTip(secondControl, "Second tooltip");
+        Assert.Equal(handle, toolTip.Handle);
+
+        List<(Control Control, WINDOW_EX_STYLE ExStyle)> popups = [];
+        toolTip.Popup += (_, e) =>
+        {
+            WINDOW_EX_STYLE actualExStyle = (WINDOW_EX_STYLE)PInvokeCore.GetWindowLong(
+                toolTip, WINDOW_LONG_PTR_INDEX.GWL_EXSTYLE);
+            popups.Add((e.AssociatedControl, actualExStyle));
+        };
+
+        Control[] expectedControls = [firstControl, secondControl, firstControl];
+
+        // Activate native tracking tooltips to exercise TTN_SHOW without mouse timing or foreground focus.
+        foreach (Control control in expectedControls)
+        {
+            ToolInfoWrapper<Control> toolInfo = new(control);
+            Assert.NotEqual(IntPtr.Zero, toolInfo.SendMessage(toolTip, PInvoke.TTM_GETTOOLINFOW));
+            toolInfo.Info.uFlags |= TOOLTIP_FLAGS.TTF_TRACK | TOOLTIP_FLAGS.TTF_ABSOLUTE;
+            toolInfo.Text = toolTip.GetToolTip(control);
+            toolInfo.SendMessage(toolTip, PInvoke.TTM_SETTOOLINFOW);
+            toolInfo.SendMessage(toolTip, PInvoke.TTM_TRACKACTIVATE, true);
+
+            Assert.Equal(handle, toolTip.Handle);
+            Assert.True(PInvoke.IsWindowVisible(toolTip));
+
+            toolInfo.SendMessage(toolTip, PInvoke.TTM_TRACKACTIVATE, false);
+        }
+
+        Assert.Equal(expectedControls.Length, popups.Count);
+        for (int i = 0; i < expectedControls.Length; i++)
+        {
+            Assert.Same(expectedControls[i], popups[i].Control);
+            WINDOW_EX_STYLE expectedLayout = expectedControls[i] == trackBar ? layoutStyles : 0;
+            Assert.Equal(expectedLayout, popups[i].ExStyle & layoutStyles);
+        }
+    }
+
     [WinFormsTheory]
     [BoolData]
     public void ToolTip_Active_Set_GetReturnsExpected(bool value)
