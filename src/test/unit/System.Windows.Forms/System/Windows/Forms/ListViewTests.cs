@@ -4,7 +4,10 @@
 #nullable disable
 
 using System.ComponentModel;
+using System.ComponentModel.Design;
 using System.Drawing;
+using System.Drawing.Design;
+using System.Reflection;
 using System.Windows.Forms.Automation;
 using Microsoft.DotNet.RemoteExecutor;
 using Windows.Win32.UI.Accessibility;
@@ -190,6 +193,175 @@ public class ListViewTests
         listView.Activation = value;
         Assert.Equal(value, listView.Activation);
         Assert.False(listView.IsHandleCreated);
+    }
+
+    [WinFormsFact]
+    public void TEMP_DIAGNOSTIC_ListView_Group_SetBeforeAdd()
+    {
+        using ListView listView = new();
+        ListViewGroup group1 = new("Group1");
+        listView.Groups.Add(group1);
+
+        ListViewItem item = new("Item1") { Group = group1 };
+        listView.Items.Add(item);
+
+        CollectionEditor editor = (CollectionEditor)TypeDescriptor.GetProperties(listView)[nameof(ListView.Items)].GetEditor(typeof(UITypeEditor));
+        editor.GetType().GetMethod(
+            "SetItems",
+            BindingFlags.Instance | BindingFlags.NonPublic)!
+            .Invoke(editor, new object[] { listView.Items, new object[] { item } });
+
+        Assert.Same(group1, item.Group);
+        Assert.Contains(item, group1.Items.Cast<ListViewItem>());
+    }
+
+    private static void InvokeItemsEditorSetItems(ListView listView, params object[] items)
+    {
+        CollectionEditor editor = (CollectionEditor)TypeDescriptor.GetProperties(listView)[nameof(ListView.Items)]!.GetEditor(typeof(UITypeEditor))!;
+        editor.GetType().GetMethod("SetItems", BindingFlags.Instance | BindingFlags.NonPublic)!.Invoke(editor, [listView.Items, items]);
+    }
+
+    [WinFormsFact]
+    public void ListView_ItemsEditorSetItems_NewItemWithGroup_PreservesGroup()
+    {
+        using ListView listView = new();
+        ListViewGroup group = new("Group1");
+        listView.Groups.Add(group);
+        ListViewItem newItem = new("New")
+        {
+            Group = group
+        };
+
+        InvokeItemsEditorSetItems(listView, newItem);
+
+        Assert.Same(group, newItem.Group);
+        Assert.Single(listView.Items);
+    }
+
+    [WinFormsFact]
+    public void ListView_ItemsEditorSetItems_GroupRemovedFromListView_DoesNotRestoreGroup()
+    {
+        using ListView listView = new();
+        ListViewGroup group = new("Group1");
+        listView.Groups.Add(group);
+        ListViewItem item = new("Item1");
+        listView.Items.Add(item);
+        item.Group = group;
+        listView.Groups.Remove(group);
+
+        InvokeItemsEditorSetItems(listView, item);
+
+        Assert.Null(item.Group);
+    }
+
+    [WinFormsFact]
+    public void ListView_ItemsEditorSetItems_NullValue_ClearsItems()
+    {
+        using ListView listView = new();
+        listView.Items.Add(new ListViewItem("Item1"));
+
+        InvokeItemsEditorSetItems(listView, null);
+
+        Assert.Empty(listView.Items);
+    }
+
+    [WinFormsTheory]
+    [InlineData(false, false, false)]
+    [InlineData(false, false, true)]
+    [InlineData(false, true, false)]
+    [InlineData(false, true, true)]
+    [InlineData(true, false, false)]
+    [InlineData(true, false, true)]
+    [InlineData(true, true, false)]
+    [InlineData(true, true, true)]
+    public void ListView_OwnerDraw_CustomDrawState_ReflectsActualSelection(
+        bool drawSubItem,
+        bool selected,
+        bool hideSelection)
+    {
+        using ListView listView = new()
+        {
+            View = drawSubItem ? View.Details : View.List,
+            OwnerDraw = true,
+            FullRowSelect = true,
+            HideSelection = hideSelection,
+            Size = new Size(300, 200)
+        };
+        listView.Columns.Add("First", 100);
+        listView.Columns.Add("Second", 100);
+        ListViewItem item = listView.Items.Add("Item");
+        item.SubItems.Add("Subitem");
+        Assert.NotEqual(IntPtr.Zero, listView.Handle);
+        item.Selected = true;
+        item.Focused = true;
+        item.Selected = selected;
+        Assert.Equal(selected, item.Selected);
+        Assert.Equal(selected ? 1 : 0, listView.SelectedItems.Count);
+
+        ListViewItemStates notificationState =
+            ListViewItemStates.Selected | ListViewItemStates.Focused | ListViewItemStates.Hot;
+        ListViewItemStates expectedState = selected
+            ? notificationState
+            : notificationState & ~ListViewItemStates.Selected;
+        ListViewItemStates? actualState = null;
+        int drawCallCount = 0;
+        if (drawSubItem)
+        {
+            listView.DrawSubItem += (_, e) =>
+            {
+                Assert.Same(item, e.Item);
+                Assert.Same(item.SubItems[1], e.SubItem);
+                actualState = e.ItemState;
+                drawCallCount++;
+            };
+        }
+        else
+        {
+            listView.DrawItem += (_, e) =>
+            {
+                Assert.Same(item, e.Item);
+                actualState = e.State;
+                drawCallCount++;
+            };
+        }
+
+        using Bitmap bitmap = new(listView.Width, listView.Height);
+        using Graphics graphics = Graphics.FromImage(bitmap);
+        IntPtr hdc = graphics.GetHdc();
+        try
+        {
+            // Reproduce the stale Selected bit supplied by native custom draw after deselection.
+            NMLVCUSTOMDRAW notification = new()
+            {
+                nmcd = new NMCUSTOMDRAW
+                {
+                    hdr = new NMHDR
+                    {
+                        hwndFrom = (HWND)listView.Handle,
+                        code = PInvoke.NM_CUSTOMDRAW
+                    },
+                    hdc = (HDC)hdc,
+                    dwDrawStage = drawSubItem
+                        ? NMCUSTOMDRAW_DRAW_STAGE.CDDS_ITEMPREPAINT | NMCUSTOMDRAW_DRAW_STAGE.CDDS_SUBITEM
+                        : NMCUSTOMDRAW_DRAW_STAGE.CDDS_ITEMPREPAINT,
+                    dwItemSpec = 0,
+                    uItemState = (NMCUSTOMDRAW_DRAW_STATE_FLAGS)notificationState
+                },
+                iSubItem = drawSubItem ? 1 : 0
+            };
+            PInvokeCore.SendMessage(
+                listView,
+                (uint)MessageId.WM_REFLECT_NOTIFY,
+                (WPARAM)0,
+                ref notification);
+
+            Assert.Equal(1, drawCallCount);
+            Assert.Equal(expectedState, actualState);
+        }
+        finally
+        {
+            graphics.ReleaseHdc(hdc);
+        }
     }
 
     [WinFormsTheory]
