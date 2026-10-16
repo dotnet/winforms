@@ -2731,279 +2731,6 @@ public class TreeViewTests
         Assert.Equal(expectedHeight, treeView.ItemHeight);
     }
 
-#if NET11_0_OR_GREATER
-    public static IEnumerable<object[]> NodeLeading_Set_TestData()
-    {
-        yield return new object[] { 0.25f };
-        yield return new object[] { 1.0f };
-        yield return new object[] { 1.25f };
-    }
-
-    public static IEnumerable<object[]> NodeLeading_SetWithHandle_TestData()
-    {
-        yield return new object[] { 1.0f };
-        yield return new object[] { 1.25f };
-    }
-
-    public static IEnumerable<object[]> NodeLeading_SetInvalid_TestData()
-    {
-        yield return new object[] { -0.1f };
-        yield return new object[] { float.NaN };
-        yield return new object[] { float.PositiveInfinity };
-        yield return new object[] { float.NegativeInfinity };
-    }
-
-    [WinFormsFact]
-    public void TreeView_NodeLeading_DefaultValue()
-    {
-        using SubTreeView control = new();
-
-        Assert.Equal(0.0f, control.NodeLeading);
-        Assert.Equal(0, control.CreateParams.Style & (int)PInvoke.TVS_NONEVENHEIGHT);
-        Assert.False(control.IsHandleCreated);
-    }
-
-    [WinFormsTheory]
-    [MemberData(nameof(ItemHeight_Get_TestData))]
-    public void TreeView_NodeLeadingDefault_ItemHeightGet_ReturnsLegacyExpected(Font font, bool checkBoxes, TreeViewDrawMode drawMode, int expectedHeight)
-    {
-        using TreeView control = new()
-        {
-            Font = font,
-            CheckBoxes = checkBoxes,
-            DrawMode = drawMode,
-            NodeLeading = 0.0f
-        };
-
-        Assert.Equal(expectedHeight, control.ItemHeight);
-        Assert.False(control.IsHandleCreated);
-    }
-
-    [WinFormsTheory]
-    [MemberData(nameof(NodeLeading_Set_TestData))]
-    public void TreeView_NodeLeading_Set_GetReturnsExpected(float value)
-    {
-        using SubTreeView control = new()
-        {
-            NodeLeading = value
-        };
-
-        Assert.Equal(value, control.NodeLeading);
-        Assert.Equal(GetExpectedNodeLeadingItemHeight(control.Font, value), control.ItemHeight);
-        Assert.Equal((int)PInvoke.TVS_NONEVENHEIGHT, control.CreateParams.Style & (int)PInvoke.TVS_NONEVENHEIGHT);
-        Assert.False(control.IsHandleCreated);
-
-        control.NodeLeading = value;
-        Assert.Equal(value, control.NodeLeading);
-        Assert.Equal(GetExpectedNodeLeadingItemHeight(control.Font, value), control.ItemHeight);
-        Assert.False(control.IsHandleCreated);
-    }
-
-    [WinFormsTheory]
-    [MemberData(nameof(NodeLeading_SetWithHandle_TestData))]
-    public void TreeView_NodeLeading_SetWithHandle_GetReturnsExpected(float value)
-    {
-        using SubTreeView control = new();
-        Assert.NotEqual(IntPtr.Zero, control.Handle);
-        int invalidatedCallCount = 0;
-        control.Invalidated += (sender, e) => invalidatedCallCount++;
-        int styleChangedCallCount = 0;
-        control.StyleChanged += (sender, e) => styleChangedCallCount++;
-        int createdCallCount = 0;
-        control.HandleCreated += (sender, e) => createdCallCount++;
-
-        control.NodeLeading = value;
-        Assert.Equal(value, control.NodeLeading);
-        Assert.Equal(GetExpectedNodeLeadingItemHeight(control.Font, value), control.ItemHeight);
-        Assert.Equal((int)PInvoke.TVS_NONEVENHEIGHT, control.CreateParams.Style & (int)PInvoke.TVS_NONEVENHEIGHT);
-        Assert.True(control.IsHandleCreated);
-        Assert.Equal(0, invalidatedCallCount);
-        Assert.Equal(0, styleChangedCallCount);
-        Assert.Equal(1, createdCallCount);
-
-        control.NodeLeading = value;
-        Assert.Equal(value, control.NodeLeading);
-        Assert.Equal(GetExpectedNodeLeadingItemHeight(control.Font, value), control.ItemHeight);
-        Assert.True(control.IsHandleCreated);
-        Assert.Equal(0, invalidatedCallCount);
-        Assert.Equal(0, styleChangedCallCount);
-        Assert.Equal(1, createdCallCount);
-    }
-
-    [WinFormsTheory]
-    [MemberData(nameof(NodeLeading_SetInvalid_TestData))]
-    public void TreeView_NodeLeading_SetInvalid_ThrowsArgumentOutOfRangeException(float value)
-    {
-        using TreeView control = new();
-        Assert.Throws<ArgumentOutOfRangeException>("value", () => control.NodeLeading = value);
-    }
-
-    [WinFormsFact]
-    public void TreeView_NodeLeading_SetWithHandler_CallsNodeLeadingChanged()
-    {
-        using TreeView control = new();
-        int callCount = 0;
-        EventHandler handler = (sender, e) =>
-        {
-            Assert.Same(control, sender);
-            Assert.Same(EventArgs.Empty, e);
-            callCount++;
-        };
-
-        control.NodeLeadingChanged += handler;
-
-        control.NodeLeading = 1.0f;
-        Assert.Equal(1, callCount);
-
-        control.NodeLeading = 1.0f;
-        Assert.Equal(1, callCount);
-
-        control.NodeLeading = 1.25f;
-        Assert.Equal(2, callCount);
-
-        control.NodeLeadingChanged -= handler;
-        control.NodeLeading = 0.0f;
-        Assert.Equal(2, callCount);
-    }
-
-    [WinFormsTheory]
-    [NewAndDefaultData<EventArgs>]
-    public void TreeView_OnNodeLeadingChanged_Invoke_CallsNodeLeadingChanged(EventArgs eventArgs)
-    {
-        using SubTreeView control = new();
-        int callCount = 0;
-        EventHandler handler = (sender, e) =>
-        {
-            Assert.Same(control, sender);
-            Assert.Same(eventArgs, e);
-            callCount++;
-        };
-
-        control.NodeLeadingChanged += handler;
-        control.OnNodeLeadingChanged(eventArgs);
-        Assert.Equal(1, callCount);
-        Assert.False(control.IsHandleCreated);
-
-        control.NodeLeadingChanged -= handler;
-        control.OnNodeLeadingChanged(eventArgs);
-        Assert.Equal(1, callCount);
-        Assert.False(control.IsHandleCreated);
-    }
-
-    [WinFormsFact]
-    public void TreeView_NodeLeading_PrecedesItemHeightWithHandle()
-    {
-        using SubTreeView control = new()
-        {
-            ItemHeight = 42
-        };
-        Assert.NotEqual(IntPtr.Zero, control.Handle);
-        int createdCallCount = 0;
-        control.HandleCreated += (sender, e) => createdCallCount++;
-
-        control.NodeLeading = 1.0f;
-        Assert.Equal(GetExpectedNodeLeadingItemHeight(control.Font, 1.0f), control.ItemHeight);
-        Assert.Equal((int)PInvoke.TVS_NONEVENHEIGHT, control.CreateParams.Style & (int)PInvoke.TVS_NONEVENHEIGHT);
-        Assert.Equal(1, createdCallCount);
-
-        control.ItemHeight = 24;
-        Assert.Equal(GetExpectedNodeLeadingItemHeight(control.Font, 1.0f), control.ItemHeight);
-        Assert.Equal(1, createdCallCount);
-
-        control.NodeLeading = 0.0f;
-        Assert.Equal(24, control.ItemHeight);
-        Assert.Equal(0, control.CreateParams.Style & (int)PInvoke.TVS_NONEVENHEIGHT);
-        Assert.Equal(2, createdCallCount);
-    }
-
-    [WinFormsFact]
-    public void TreeView_NodeLeading_SetFontWithHandle_UpdatesItemHeight()
-    {
-        using Font initialFont = new(FontFamily.GenericSansSerif, 8.0f);
-        using Font updatedFont = new(FontFamily.GenericSansSerif, 20.0f);
-        using TreeView control = new()
-        {
-            Font = initialFont,
-            NodeLeading = 1.25f
-        };
-        Assert.NotEqual(IntPtr.Zero, control.Handle);
-        Assert.Equal(GetExpectedNodeLeadingItemHeight(initialFont, 1.25f), control.ItemHeight);
-
-        control.Font = updatedFont;
-        Assert.Equal(GetExpectedNodeLeadingItemHeight(updatedFont, 1.25f), control.ItemHeight);
-    }
-
-    [WinFormsFact]
-    public void TreeView_NodeLeading_OnDpiChangedAfterParentWithHandle_UpdatesItemHeight()
-    {
-        using SubTreeView control = new()
-        {
-            NodeLeading = 1.25f
-        };
-        Assert.NotEqual(IntPtr.Zero, control.Handle);
-        int expectedItemHeight = GetExpectedNodeLeadingItemHeight(control.Font, control.NodeLeading);
-
-        PInvokeCore.SendMessage(
-            control,
-            PInvoke.TVM_SETITEMHEIGHT,
-            (WPARAM)(expectedItemHeight + 1));
-        Assert.Equal(expectedItemHeight + 1, control.ItemHeight);
-
-        control.OnDpiChangedAfterParent(EventArgs.Empty);
-
-        Assert.Equal(expectedItemHeight, control.ItemHeight);
-    }
-
-    [WinFormsFact]
-    public void TreeView_ResetNodeLeading_Invoke_Success()
-    {
-        using TreeView treeView = new()
-        {
-            NodeLeading = 1.25f
-        };
-
-        var accessor = treeView.TestAccessor;
-        accessor.Dynamic.ResetNodeLeading();
-
-        Assert.Equal(0.0f, treeView.NodeLeading);
-    }
-
-    [WinFormsFact]
-    public void TreeView_ShouldSerializeNodeLeading_Invoke_ReturnsExpected()
-    {
-        using TreeView treeView = new();
-
-        var accessor = treeView.TestAccessor;
-        bool result = accessor.Dynamic.ShouldSerializeNodeLeading();
-        Assert.False(result);
-
-        treeView.NodeLeading = 1.25f;
-        result = accessor.Dynamic.ShouldSerializeNodeLeading();
-        Assert.True(result);
-
-        accessor.Dynamic.ResetNodeLeading();
-        result = accessor.Dynamic.ShouldSerializeNodeLeading();
-        Assert.False(result);
-    }
-
-    private static int GetExpectedNodeLeadingItemHeight(Font font, float nodeLeading)
-    {
-        double itemHeight = Math.Ceiling(nodeLeading * font.Height);
-
-        if (itemHeight < 1)
-        {
-            return 1;
-        }
-
-        if (itemHeight >= short.MaxValue)
-        {
-            return short.MaxValue - 1;
-        }
-
-        return (int)itemHeight;
-    }
-#endif
-
     public static IEnumerable<object[]> ItemHeight_Set_TestData()
     {
         yield return new object[] { -1, Control.DefaultFont.Height + 3 };
@@ -7842,6 +7569,57 @@ public class TreeViewTests
         treeView.VisibleCount.Should().Be(5);
     }
 
+    [WinFormsTheory]
+    [InlineData(0x1E, 0x1E, 0x1E, 0xFF, 0xFF, 0xFF)]  // Dark mode: dark bg, white text
+    [InlineData(0xFF, 0xFF, 0xFF, 0x00, 0x00, 0x00)]  // Light mode: white bg, black text
+    public void TreeView_WmCtlColorEdit_WithMatchingLabelEditHwnd_SetsDCColorsAndReturnsNonZeroBrush(int backR, int backG, int backB, int foreR, int foreG, int foreB)
+    {
+        // Regression test for issue #12042
+        Color expectedBackColor = Color.FromArgb(backR, backG, backB);
+        Color expectedForeColor = Color.FromArgb(foreR, foreG, foreB);
+
+        using SubTreeView treeView = new()
+        {
+            LabelEdit = true,
+            Size = new Size(200, 200),
+            BackColor = expectedBackColor,
+            ForeColor = expectedForeColor
+        };
+
+        treeView.Nodes.Add("Node0");
+        treeView.CreateControl();
+
+        treeView.Nodes[0].BeginEdit();
+        HWND editHwnd = (HWND)(nint)PInvokeCore.SendMessage(treeView, PInvoke.TVM_GETEDITCONTROL);
+        Assert.NotEqual(HWND.Null, editHwnd);
+
+        using GetDcScope hdc = new(editHwnd);
+        Message msg = Message.Create(
+            treeView.Handle,
+            (int)PInvokeCore.WM_CTLCOLOREDIT,
+            (nint)(HDC)hdc,
+            (nint)editHwnd);
+
+        treeView.WndProc(ref msg);
+
+        // 1. A valid (non-null) brush handle must be returned.
+        Assert.NotEqual(IntPtr.Zero, (nint)msg.ResultInternal);
+
+        // 2. DC text color must match the ForeColor we set on the control.
+        Color actualTextColor = PInvoke.GetTextColor(hdc);
+        Assert.Equal(
+            ColorTranslator.ToWin32(expectedForeColor),
+            ColorTranslator.ToWin32(actualTextColor));
+
+        // 3. DC background color must match the BackColor we set on the control.
+        Color actualBkColor = PInvoke.GetBkColor(hdc);
+        Assert.Equal(
+            ColorTranslator.ToWin32(expectedBackColor),
+            ColorTranslator.ToWin32(actualBkColor));
+
+        treeView.Nodes[0].EndEdit(cancel: true);
+    }
+
     private class SubTreeView : TreeView
     {
         public new bool CanEnableIme => base.CanEnableIme;
@@ -7924,10 +7702,6 @@ public class TreeViewTests
 
         public new void OnDrawNode(DrawTreeNodeEventArgs e) => base.OnDrawNode(e);
 
-#if NET11_0_OR_GREATER
-        public new void OnDpiChangedAfterParent(EventArgs e) => base.OnDpiChangedAfterParent(e);
-#endif
-
         public new void OnItemDrag(ItemDragEventArgs e) => base.OnItemDrag(e);
 
         public new void OnKeyDown(KeyEventArgs e) => base.OnKeyDown(e);
@@ -7948,12 +7722,10 @@ public class TreeViewTests
 
         public new void OnNodeMouseDoubleClick(TreeNodeMouseClickEventArgs e) => base.OnNodeMouseDoubleClick(e);
 
-#if NET11_0_OR_GREATER
-        public new void OnNodeLeadingChanged(EventArgs e) => base.OnNodeLeadingChanged(e);
-#endif
-
         public new void OnNodeMouseHover(TreeNodeMouseHoverEventArgs e) => base.OnNodeMouseHover(e);
 
         public new void OnRightToLeftLayoutChanged(EventArgs e) => base.OnRightToLeftLayoutChanged(e);
+
+        public new void WndProc(ref Message m) => base.WndProc(ref m);
     }
 }
