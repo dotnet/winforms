@@ -3,7 +3,6 @@
 
 using System.Drawing;
 using System.Drawing.Drawing2D;
-using System.Windows.Forms.ButtonInternal;
 using System.Windows.Forms.Rendering.Animation;
 using System.Windows.Forms.Rendering.Button;
 
@@ -18,7 +17,6 @@ internal sealed class AnimatedToggleSwitchRenderer : AnimatedControlRenderer
 {
     private const int AnimationDuration = 300;
 
-    private readonly ButtonBaseAdapter _layoutAdapter;
     private readonly ModernCheckBoxStyle _switchStyle;
     private float _focusCurrent;
     private float _focusStart;
@@ -38,7 +36,6 @@ internal sealed class AnimatedToggleSwitchRenderer : AnimatedControlRenderer
     public AnimatedToggleSwitchRenderer(Control control, ModernCheckBoxStyle switchStyle)
         : base(control)
     {
-        _layoutAdapter = CreateLayoutAdapter(control);
         _switchStyle = switchStyle;
     }
 
@@ -84,13 +81,12 @@ internal sealed class AnimatedToggleSwitchRenderer : AnimatedControlRenderer
         ToggleSwitchMetrics metrics = ToggleSwitchMetrics.Create(Control);
         TextFormatFlags textFormatFlags = GetTextFormatFlags(Control);
         Size textSize = MeasureText(Control, textFormatFlags);
-        Size contentSize = Button.Image is null ? textSize : GetImageTextPreferredSize();
         Rectangle contentBounds = ToggleSwitchMetrics.GetContentBounds(Control);
         Rectangle switchBounds = GetSwitchBounds(
             Control,
             RtlTranslatedCheckAlign,
             metrics,
-            contentSize);
+            textSize);
         Rectangle textBounds = GetTextBounds(
             contentBounds,
             switchBounds,
@@ -98,21 +94,15 @@ internal sealed class AnimatedToggleSwitchRenderer : AnimatedControlRenderer
             RtlTranslatedCheckAlign);
 
         PaintControlBackground(graphics);
+        RenderControlImage(graphics, Button.Image, Control.ClientRectangle);
 
         if (contentBounds.Width <= 0 || contentBounds.Height <= 0)
         {
             return;
         }
 
-        ButtonBaseAdapter.LayoutData? layout = null;
-        if (Button.Image is { } image)
-        {
-            layout = GetImageTextLayout(textBounds);
-            RenderImage(graphics, image, layout);
-        }
-
         RenderSwitch(graphics, switchBounds, metrics);
-        RenderText(graphics, layout?.TextBounds ?? textBounds, textFormatFlags);
+        RenderText(graphics, textBounds, textFormatFlags);
 
         if (Control.Focused && ShowFocusCues)
         {
@@ -122,63 +112,6 @@ internal sealed class AnimatedToggleSwitchRenderer : AnimatedControlRenderer
                 focusBounds,
                 Control.ForeColor,
                 Control.BackColor);
-        }
-    }
-
-    private static ButtonBaseAdapter CreateLayoutAdapter(Control control)
-        => control is Forms.RadioButton radioButton
-            ? new RadioButtonStandardAdapter(radioButton)
-            : new CheckBoxStandardAdapter((ButtonBase)control);
-
-    private static ButtonBaseAdapter.LayoutOptions GetImageTextLayoutOptions(
-        ButtonBaseAdapter layoutAdapter,
-        Rectangle bounds)
-    {
-        ButtonBaseAdapter.LayoutOptions options = layoutAdapter.CommonLayout();
-        options.Client = bounds;
-        options.GrowBorderBy1PxWhenDefault = false;
-        options.BorderSize = 0;
-        options.PaddingSize = 0;
-        options.MaxFocus = false;
-        options.CheckSize = 0;
-        options.CheckPaddingSize = 0;
-        options.TextImageInset = 0;
-        options.DotNetOneButtonCompat = false;
-        options.ClipImagesToClient = true;
-        return options;
-    }
-
-    private ButtonBaseAdapter.LayoutData GetImageTextLayout(Rectangle bounds)
-        => GetImageTextLayoutOptions(_layoutAdapter, bounds).Layout();
-
-    internal Size GetImageTextPreferredSize()
-        => GetImageTextLayoutOptions(_layoutAdapter, Rectangle.Empty).GetPreferredSizeCore(Size.Empty);
-
-    internal static Size GetImageTextPreferredSize(Control control)
-        => GetImageTextLayoutOptions(CreateLayoutAdapter(control), Rectangle.Empty).GetPreferredSizeCore(Size.Empty);
-
-    private void RenderImage(Graphics graphics, Image image, ButtonBaseAdapter.LayoutData layout)
-    {
-        Rectangle imageBounds = layout.ImageBounds;
-        if (imageBounds.Width <= 0 || imageBounds.Height <= 0)
-        {
-            return;
-        }
-
-        using GraphicsStateScope scope = new(graphics);
-        graphics.SetClip(layout.Client, CombineMode.Intersect);
-        if (imageBounds.Width < image.Width || imageBounds.Height < image.Height)
-        {
-            graphics.SetClip(imageBounds, CombineMode.Intersect);
-        }
-
-        if (Control.Enabled)
-        {
-            graphics.DrawImageUnscaled(image, imageBounds.Location);
-        }
-        else
-        {
-            ControlPaint.DrawImageDisabled(graphics, image, imageBounds, unscaledImage: true);
         }
     }
 
@@ -422,6 +355,26 @@ internal sealed class AnimatedToggleSwitchRenderer : AnimatedControlRenderer
         }
     }
 
+    private void RenderControlImage(
+        Graphics graphics,
+        Image? image,
+        Rectangle bounds)
+    {
+        if (image is null)
+        {
+            return;
+        }
+
+        if (Control.Enabled)
+        {
+            graphics.DrawImage(image, bounds);
+        }
+        else
+        {
+            ControlPaint.DrawImageDisabled(graphics, image, bounds, unscaledImage: false);
+        }
+    }
+
     internal void PrepareStateChange()
     {
         EnsurePositionInitialized();
@@ -606,9 +559,7 @@ internal readonly struct ToggleSwitchMetrics
     internal Size GetPreferredSize(Control control)
     {
         TextFormatFlags textFormatFlags = AnimatedToggleSwitchRenderer.GetTextFormatFlags(control);
-        Size contentSize = control is not ButtonBase { Image: not null }
-            ? AnimatedToggleSwitchRenderer.MeasureText(control, textFormatFlags)
-            : AnimatedToggleSwitchRenderer.GetImageTextPreferredSize(control);
+        Size contentSize = AnimatedToggleSwitchRenderer.MeasureText(control, textFormatFlags);
         return new Size(
             SwitchWidth + TextGap + contentSize.Width + control.Padding.Horizontal,
             Math.Max(SwitchHeight, contentSize.Height) + control.Padding.Vertical);

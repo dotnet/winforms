@@ -1005,9 +1005,9 @@ public class CheckBoxTests : AbstractButtonBaseTests
     }
 
     [WinFormsFact]
-    public void CheckBox_ToggleSwitch_Image_IsRenderedAndIncludedInPreferredSize()
+    public void CheckBox_ToggleSwitch_Image_FillsControlBehindUnchangedSwitchAndIsExcludedFromPreferredSize()
     {
-        using Bitmap image = new(80, 80);
+        using Bitmap image = new(12, 8);
         using (Graphics imageGraphics = Graphics.FromImage(image))
         {
             imageGraphics.Clear(Color.Magenta);
@@ -1016,9 +1016,16 @@ public class CheckBoxTests : AbstractButtonBaseTests
         using CheckBox box = new()
         {
             Appearance = Appearance.ToggleSwitch,
+            BackColor = Color.Lime,
             Image = image,
             Size = new Size(120, 30),
             Text = "checkBox4",
+            VisualStylesMode = VisualStylesMode.Net11
+        };
+        using CheckBox boxWithoutImage = new()
+        {
+            Appearance = Appearance.ToggleSwitch,
+            Text = box.Text,
             VisualStylesMode = VisualStylesMode.Net11
         };
         using Bitmap bitmap = new(box.Width, box.Height);
@@ -1026,17 +1033,19 @@ public class CheckBoxTests : AbstractButtonBaseTests
         box.DrawToBitmap(bitmap, box.ClientRectangle);
 
         Rendering.CheckBox.ToggleSwitchMetrics metrics = Rendering.CheckBox.ToggleSwitchMetrics.Create(box);
-        Size contentSize = Rendering.CheckBox.AnimatedToggleSwitchRenderer.GetImageTextPreferredSize(box);
         Rectangle switchBounds = Rendering.CheckBox.AnimatedToggleSwitchRenderer.GetSwitchBounds(
             box,
             box.RtlTranslatedCheckAlign,
-            metrics,
-            contentSize);
+            metrics);
+        Point switchPixel = new(
+            switchBounds.Right - (switchBounds.Height / 2),
+            switchBounds.Top + (switchBounds.Height / 2));
+
         Assert.True(CountPixels(bitmap, Color.Magenta) > 0);
+        Assert.NotEqual(Color.Magenta.ToArgb(), bitmap.GetPixel(switchPixel.X, switchPixel.Y).ToArgb());
+        Assert.Equal(Color.Magenta.ToArgb(), bitmap.GetPixel(0, 0).ToArgb());
         Assert.True(Rendering.CheckBox.ToggleSwitchMetrics.GetContentBounds(box).Contains(switchBounds));
-        Size preferredSize = box.GetPreferredSize(Size.Empty);
-        Assert.True(preferredSize.Width >= metrics.SwitchWidth + metrics.TextGap + image.Width);
-        Assert.True(preferredSize.Height >= Math.Max(metrics.SwitchHeight, image.Height));
+        Assert.Equal(boxWithoutImage.GetPreferredSize(Size.Empty), box.GetPreferredSize(Size.Empty));
     }
 
     [WinFormsTheory]
