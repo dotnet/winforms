@@ -2,7 +2,6 @@ Imports System.Windows.Forms.VisualBasic.Analyzers.MissingPropertySerializationC
 Imports System.Windows.Forms.VisualBasic.CodeFixes.AddDesignerSerializationVisibility
 Imports Microsoft.CodeAnalysis
 Imports Microsoft.CodeAnalysis.Testing
-Imports Microsoft.CodeAnalysis.VisualBasic.Testing
 Imports Xunit
 
 <ForceGC()>
@@ -165,15 +164,15 @@ End Namespace
     <Theory>
     <MemberData(NameOf(GetReferenceAssemblies))>
     Public Async Function VB_MissingControlPropertySerializationConfigurationAnalyzer(referenceAssemblies As ReferenceAssemblies) As Task
-        Dim context = New VisualBasicAnalyzerTest(Of
-            MissingPropertySerializationConfigurationAnalyzer,
-            DefaultVerifier) With
+        Dim testCase As New AnalyzerTestCase(
+            referenceAssemblies,
+            New AnalyzerTestSource("Test0.vb", ProblematicCode)) With
             {
-                .TestCode = ProblematicCode,
-                .ReferenceAssemblies = referenceAssemblies
+                .OutputKind = OutputKind.WindowsApplication
             }
 
-        context.TestState.OutputKind = OutputKind.WindowsApplication
+        Dim context = AnalyzerTestFactory.CreateVisualBasicAnalyzerTest(
+            Of MissingPropertySerializationConfigurationAnalyzer)(testCase)
 
         Await context.RunAsync().ConfigureAwait(continueOnCapturedContext:=True)
     End Function
@@ -181,15 +180,15 @@ End Namespace
     <Theory>
     <MemberData(NameOf(GetReferenceAssemblies))>
     Public Async Function VB_ControlPropertySerializationConfigurationAnalyzer(referenceAssemblies As ReferenceAssemblies) As Task
-        Dim context = New VisualBasicAnalyzerTest(Of
-            MissingPropertySerializationConfigurationAnalyzer,
-            DefaultVerifier) With
+        Dim testCase As New AnalyzerTestCase(
+            referenceAssemblies,
+            New AnalyzerTestSource("Test0.vb", CorrectCode)) With
             {
-                .TestCode = CorrectCode,
-                .ReferenceAssemblies = referenceAssemblies
+                .OutputKind = OutputKind.WindowsApplication
             }
 
-        context.TestState.OutputKind = OutputKind.WindowsApplication
+        Dim context = AnalyzerTestFactory.CreateVisualBasicAnalyzerTest(
+            Of MissingPropertySerializationConfigurationAnalyzer)(testCase)
 
         Await context.RunAsync().ConfigureAwait(continueOnCapturedContext:=True)
     End Function
@@ -197,18 +196,19 @@ End Namespace
     <Theory>
     <MemberData(NameOf(GetReferenceAssemblies))>
     Public Async Function VB_AddDesignerSerializationVisibilityCodeFix(referenceAssemblies As ReferenceAssemblies) As Task
-        Dim context = New VisualBasicCodeFixTest(Of
-            MissingPropertySerializationConfigurationAnalyzer,
-            AddDesignerSerializationVisibilityCodeFixProvider,
-            DefaultVerifier) With
+        Dim testCase As New AnalyzerTestCase(
+            referenceAssemblies,
+            New AnalyzerTestSource("Test0.vb", ProblematicCode)) With
             {
-                .TestCode = ProblematicCode,
-                .FixedCode = FixedCode,
-                .ReferenceAssemblies = referenceAssemblies,
+                .OutputKind = OutputKind.WindowsApplication,
                 .NumberOfFixAllIterations = 2
             }
 
-        context.TestState.OutputKind = OutputKind.WindowsApplication
+        testCase.FixedSources.Add(New AnalyzerTestSource("Test0.vb", FixedCode))
+
+        Dim context = AnalyzerTestFactory.CreateVisualBasicCodeFixTest(
+            Of MissingPropertySerializationConfigurationAnalyzer,
+               AddDesignerSerializationVisibilityCodeFixProvider)(testCase)
 
         Await context.RunAsync().ConfigureAwait(continueOnCapturedContext:=True)
     End Function
