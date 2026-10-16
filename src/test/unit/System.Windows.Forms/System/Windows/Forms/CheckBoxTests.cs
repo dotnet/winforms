@@ -634,6 +634,34 @@ public class CheckBoxTests : AbstractButtonBaseTests
     }
 
     [WinFormsFact]
+    public void CheckBox_ModernGlyph_InheritedOpaqueBackColor_DoesNotPaintParentBackgroundImage()
+    {
+        using Bitmap backgroundImage = new(1, 1);
+        backgroundImage.SetPixel(0, 0, Color.Blue);
+        using GroupBox parent = new()
+        {
+            BackgroundImage = backgroundImage,
+            Size = new Size(80, 50),
+            VisualStylesMode = VisualStylesMode.Net11
+        };
+        using CheckBox box = new()
+        {
+            Location = new Point(20, 20),
+            Size = new Size(40, 24),
+            VisualStylesMode = VisualStylesMode.Net11
+        };
+        parent.Controls.Add(box);
+
+        using Bitmap bitmap = new(box.Width, box.Height);
+        using Graphics graphics = Graphics.FromImage(bitmap);
+        PaintEventArgs e = new(graphics, box.ClientRectangle);
+
+        box.CreateStandardAdapter().PaintUp(e, box.CheckState);
+
+        Assert.Equal(parent.BackColor.ToArgb(), bitmap.GetPixel(box.Width - 2, box.Height / 2).ToArgb());
+    }
+
+    [WinFormsFact]
     public void CheckBox_ModernGlyph_UsesTranslucentBackColorWhenVisualStyleBackgroundEnabled()
     {
         Color parentBackColor = Color.White;
