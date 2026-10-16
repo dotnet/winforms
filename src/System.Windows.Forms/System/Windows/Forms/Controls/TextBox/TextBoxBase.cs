@@ -2866,12 +2866,6 @@ public abstract partial class TextBoxBase : Control
             BorderStyle == BorderStyle.Fixed3D
             && canRenderRoundedChrome;
 
-        // We need anti-aliasing for the rounded chrome.
-        offscreenGraphics.SmoothingMode =
-            BorderStyle == BorderStyle.None
-                ? SmoothingMode.None
-                : SmoothingMode.AntiAlias;
-
         if (usesRoundedChrome)
         {
             ParentBackgroundRenderer.Paint(this, offscreenGraphics, bufferBounds, parentBackColor);
