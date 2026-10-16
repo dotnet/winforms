@@ -365,6 +365,8 @@ internal sealed class AnimatedToggleSwitchRenderer : AnimatedControlRenderer
             return;
         }
 
+        ImageAnimator.UpdateFrames(image);
+
         if (Control.Enabled)
         {
             graphics.DrawImage(image, bounds);
