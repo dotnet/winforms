@@ -4266,7 +4266,7 @@ public partial class DataGridViewTests : IDisposable
 
         form.ForeColor = Color.Red;
 
-        Assert.Equal(Color.Lime, control.DefaultCellStyle.ForeColor); 
+        Assert.Equal(Color.Lime, control.DefaultCellStyle.ForeColor);
     }
 
     public void DataGridView_DefaultCellStyle_WithoutForeColor_InheritsParentForeColor()
