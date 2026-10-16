@@ -1007,7 +1007,7 @@ public class CheckBoxTests : AbstractButtonBaseTests
     }
 
     [WinFormsFact]
-    public void CheckBox_ToggleSwitch_DefaultOnColorUsesWindowsAccent()
+    public void CheckBox_ToggleSwitch_CheckedTrackUsesContrastAdjustedWindowsAccent()
     {
         if (SystemInformation.HighContrast)
         {
@@ -1030,36 +1030,73 @@ public class CheckBoxTests : AbstractButtonBaseTests
 
         renderer.RenderControl(graphics);
 
-        Assert.True(CountPixels(bitmap, Application.SystemVisualSettings.AccentColor) > 0);
+        Color expectedTrackColor = Rendering.CheckBox.AnimatedToggleSwitchRenderer.GetCheckedTrackColor(
+            Application.SystemVisualSettings.AccentColor,
+            Application.IsDarkModeEnabled);
+
+        Assert.True(CountPixels(bitmap, expectedTrackColor) > 0);
     }
 
-    [WinFormsFact]
-    public void CheckBox_ToggleSwitch_DarkAccentUsesReadableThumbColor()
+    [Theory]
+    [InlineData(false, 0x4D, 0x4D, 0x4D, true)]
+    [InlineData(false, 0xFF, 0xD8, 0x00, false)]
+    [InlineData(true, 0x20, 0x20, 0x20, false)]
+    [InlineData(true, 0xFF, 0xD8, 0x00, true)]
+    public void CheckBox_ToggleSwitch_CheckedTrackMaintainsThumbContrast(
+        bool darkMode,
+        int red,
+        int green,
+        int blue,
+        bool unchanged)
     {
-        if (SystemInformation.HighContrast)
-        {
-            return;
-        }
+        Color accentColor = Color.FromArgb(red, green, blue);
 
-        using SystemVisualSettingsTestScope settingsScope =
-            new(clientAreaAnimationEnabled: true, accentColor: Color.FromArgb(0x4D, 0x4D, 0x4D));
-        using CheckBox box = new()
-        {
-            Appearance = Appearance.ToggleSwitch,
-            BackColor = Color.Black,
-            Checked = true,
-            Size = new Size(60, 24),
-            VisualStylesMode = VisualStylesMode.Net11
-        };
-        Rendering.CheckBox.AnimatedToggleSwitchRenderer renderer =
-            box.TestAccessor.Dynamic.ToggleSwitchRenderer;
-        renderer.SynchronizeState();
-        using Bitmap bitmap = new(box.Width, box.Height);
-        using Graphics graphics = Graphics.FromImage(bitmap);
+        Color trackColor = Rendering.CheckBox.AnimatedToggleSwitchRenderer.GetCheckedTrackColor(
+            accentColor,
+            darkMode);
+        Color focusedTrackColor = Rendering.Animation.AnimatedControlRenderer.ApplyInteractionShade(
+            trackColor,
+            1f);
+        Color thumbColor = darkMode ? Color.Black : Color.White;
 
-        renderer.RenderControl(graphics);
+        Assert.Equal(unchanged, trackColor == accentColor);
+        Assert.True(
+            Rendering.Button.PopupButtonColorMath.GetContrastRatio(
+                thumbColor,
+                focusedTrackColor) >= 3f);
+    }
 
-        Assert.True(CountPixels(bitmap, Color.White) > 0);
+    [Theory]
+    [InlineData(false, false, 0x5D, 0x5D, 0x5D)]
+    [InlineData(false, true, 0xFF, 0xFF, 0xFF)]
+    [InlineData(true, false, 0xCF, 0xCE, 0xCD)]
+    [InlineData(true, true, 0x00, 0x00, 0x00)]
+    public void CheckBox_ToggleSwitch_CircleUsesModeAndStateColor(
+        bool darkMode,
+        bool isChecked,
+        int expectedRed,
+        int expectedGreen,
+        int expectedBlue)
+    {
+        Color expected = Color.FromArgb(expectedRed, expectedGreen, expectedBlue);
+
+        Assert.Equal(
+            expected,
+            Rendering.CheckBox.AnimatedToggleSwitchRenderer.GetCircleColor(
+                darkMode,
+                isChecked ? 1f : 0f,
+                interactionAmount: 0f));
+    }
+
+    [Fact]
+    public void CheckBox_ToggleSwitch_LightModeUncheckedTrackMatchesWindowsColors()
+    {
+        Assert.Equal(
+            Color.FromArgb(0xF5, 0xF5, 0xF5),
+            Rendering.CheckBox.AnimatedToggleSwitchRenderer.GetUncheckedTrackColor(darkMode: false));
+        Assert.Equal(
+            Color.FromArgb(0x89, 0x89, 0x89),
+            Rendering.CheckBox.AnimatedToggleSwitchRenderer.GetUncheckedBorderColor(darkMode: false));
     }
 
     [WinFormsFact]
