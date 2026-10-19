@@ -968,12 +968,13 @@ public class NumericUpDownTests
         parent.Controls.Add(numericUpDown);
         parent.CreateControl();
 
-        Size sizeBeforeChange = numericUpDown.Size;
+        int layoutCallCount = 0;
+        parent.Layout += (_, _) => layoutCallCount++;
 
         numericUpDown.VisualStylesMode = VisualStylesMode.Net11;
 
         // Size may change due to different rendering in modern visual styles
-        Assert.NotNull(numericUpDown.Size);
+        Assert.True(layoutCallCount >= 1);
         Assert.Equal(VisualStylesMode.Net11, numericUpDown.VisualStylesMode);
     }
 
