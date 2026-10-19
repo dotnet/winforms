@@ -1284,6 +1284,109 @@ public partial class RichTextBoxTests
         Assert.Equal(clientColor.ToArgb(), paddingColor.ToArgb());
     }
 
+    [WinFormsFact]
+    public void RichTextBox_EnabledDisabledEnabledNet11_WithoutExplicitBackColor_RestoresBackground()
+    {
+        using Form form = new();
+        using BackColorTrackingRichTextBox control = new()
+        {
+            VisualStylesMode = VisualStylesMode.Net11,
+            Location = new Point(20, 20),
+            Size = new Size(200, 100),
+            Padding = new Padding(20),
+            Text = string.Empty
+        };
+
+        form.Controls.Add(control);
+        form.Show();
+
+        (Color enabledPaddingColor, Color enabledClientColor) = CaptureBackgroundColors(control);
+
+        control.Enabled = false;
+        (Color disabledPaddingColor, Color disabledClientColor) = CaptureBackgroundColors(control);
+
+        control.Enabled = true;
+        (Color restoredPaddingColor, Color restoredClientColor) = CaptureBackgroundColors(control);
+
+        Assert.NotEqual(Color.Magenta.ToArgb(), disabledPaddingColor.ToArgb());
+        Assert.NotEqual(Color.Magenta.ToArgb(), disabledClientColor.ToArgb());
+        Assert.Equal(enabledPaddingColor.ToArgb(), restoredPaddingColor.ToArgb());
+        Assert.Equal(enabledClientColor.ToArgb(), restoredClientColor.ToArgb());
+    }
+
+    [WinFormsFact]
+    public void RichTextBox_EnabledDisabledEnabledNet11_WithExplicitBackColor_RestoresBackground()
+    {
+        using Form form = new();
+        using BackColorTrackingRichTextBox control = new()
+        {
+            VisualStylesMode = VisualStylesMode.Net11,
+            Location = new Point(20, 20),
+            Size = new Size(200, 100),
+            Padding = new Padding(20),
+            BackColor = Color.Red,
+            Text = string.Empty
+        };
+
+        form.Controls.Add(control);
+        form.Show();
+
+        (Color enabledPaddingColor, Color enabledClientColor) = CaptureBackgroundColors(control);
+
+        control.Enabled = false;
+        Assert.Equal(Color.Red.ToArgb(), control.LastNativeBackgroundColor.ToArgb());
+
+        control.Enabled = true;
+        (Color restoredPaddingColor, Color restoredClientColor) = CaptureBackgroundColors(control);
+
+        Assert.Equal(Color.Red.ToArgb(), control.LastNativeBackgroundColor.ToArgb());
+        Assert.Equal(enabledPaddingColor.ToArgb(), restoredPaddingColor.ToArgb());
+        Assert.Equal(enabledClientColor.ToArgb(), restoredClientColor.ToArgb());
+
+        control.Enabled = false;
+        control.BackColor = Color.Yellow;
+        Assert.Equal(Color.Yellow.ToArgb(), control.LastNativeBackgroundColor.ToArgb());
+
+        control.Enabled = true;
+        _ = CaptureBackgroundColors(control);
+
+        Assert.Equal(Color.Yellow.ToArgb(), control.LastNativeBackgroundColor.ToArgb());
+    }
+
+    private static (Color PaddingColor, Color ClientColor) CaptureBackgroundColors(Control control)
+    {
+        control.Update();
+
+        using Bitmap bitmap = CaptureWindow(control);
+
+        Point windowOrigin = control.Parent!.PointToScreen(control.Location);
+        Point clientOrigin = control.PointToScreen(Point.Empty);
+
+        int clientOffsetX = clientOrigin.X - windowOrigin.X;
+        int clientOffsetY = clientOrigin.Y - windowOrigin.Y;
+
+        Point paddingPoint = new(
+            Math.Max(2, clientOffsetX / 2),
+            clientOffsetY + control.ClientSize.Height / 2);
+
+        Point clientPoint = new(
+            clientOffsetX + control.ClientSize.Width / 2,
+            clientOffsetY + control.ClientSize.Height / 2);
+
+        Assert.InRange(paddingPoint.X, 0, bitmap.Width - 1);
+        Assert.InRange(paddingPoint.Y, 0, bitmap.Height - 1);
+        Assert.InRange(clientPoint.X, 0, bitmap.Width - 1);
+        Assert.InRange(clientPoint.Y, 0, bitmap.Height - 1);
+
+        Color paddingColor = bitmap.GetPixel(paddingPoint.X, paddingPoint.Y);
+        Color clientColor = bitmap.GetPixel(clientPoint.X, clientPoint.Y);
+
+        Assert.NotEqual(Color.Magenta.ToArgb(), paddingColor.ToArgb());
+        Assert.NotEqual(Color.Magenta.ToArgb(), clientColor.ToArgb());
+
+        return (paddingColor, clientColor);
+    }
+
     private static Bitmap CaptureWindow(Control control)
     {
         const uint WM_PRINT = 0x0317;
