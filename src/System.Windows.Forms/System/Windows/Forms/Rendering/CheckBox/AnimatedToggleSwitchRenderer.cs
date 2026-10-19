@@ -427,9 +427,10 @@ internal sealed class AnimatedToggleSwitchRenderer : AnimatedControlRenderer
     }
 
     private static bool HasMinimumThumbContrast(Color trackColor, Color thumbColor)
-        => PopupButtonColorMath.GetContrastRatio(
-            thumbColor,
-            trackColor) >= MinimumThumbContrastRatio;
+        => PopupButtonColorMath.GetContrastRatio(thumbColor, trackColor) >= MinimumThumbContrastRatio
+           && PopupButtonColorMath.GetContrastRatio(
+               thumbColor,
+               ApplyInteractionShade(trackColor, 1f)) >= MinimumThumbContrastRatio;
 
     internal void PrepareStateChange()
     {
