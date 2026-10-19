@@ -576,9 +576,7 @@ public class ContainerControlTests
     [InlineData(AutoScaleMode.Dpi, true)]
     [InlineData(AutoScaleMode.Font, false)]
     [InlineData(AutoScaleMode.Font, true)]
-    public void ContainerControl_ScaleContainerForDpi_RoundTrip_PreservesAnchoredChildBounds(
-        AutoScaleMode autoScaleMode,
-        bool explicitFont)
+    public void ContainerControl_ScaleContainerForDpi_RoundTrip_PreservesAnchoredChildBounds(AutoScaleMode autoScaleMode, bool explicitFont)
     {
         // DPI awareness is process-wide and must be established before any handles are created.
         RemoteExecutor.Invoke((autoScaleModeString, explicitFontString) =>
@@ -624,6 +622,7 @@ public class ContainerControlTests
                     Assert.Equal(scaledBounds, control.Bounds);
                     Assert.Equal(scaledChildBounds, child.Bounds);
                     Assert.Equal(control.CurrentAutoScaleDimensions, control.AutoScaleDimensions);
+                    Assert.False((bool)control.TestAccessor.Dynamic._isScaledByDpiChangedEvent);
 
                     control.DeviceDpiInternal = 96;
                     control.ScaleContainerForDpi(96, dpi, new Rectangle(0, 0, 300, 300));
@@ -631,6 +630,7 @@ public class ContainerControlTests
                     Assert.Equal(new Rectangle(0, 0, 300, 300), control.Bounds);
                     Assert.Equal(new Rectangle(48, 48, 204, 204), child.Bounds);
                     Assert.Equal(control.CurrentAutoScaleDimensions, control.AutoScaleDimensions);
+                    Assert.False((bool)control.TestAccessor.Dynamic._isScaledByDpiChangedEvent);
                 }
             }
 
@@ -673,7 +673,7 @@ public class ContainerControlTests
             int fontChangedCount = 0;
             control.SizeChanged += (sender, e) =>
             {
-                if (reentered)
+                if (reentered || control.DeviceDpiInternal != 144)
                 {
                     return;
                 }
@@ -682,24 +682,50 @@ public class ContainerControlTests
                 Assert.Equal(originalFontSize * 1.5f, control.Font.Size, precision: 3);
                 control.DeviceDpiInternal = 192;
                 control.ScaleContainerForDpi(192, 144, new Rectangle(0, 0, 600, 600));
+                Assert.True((bool)control.TestAccessor.Dynamic._isScaledByDpiChangedEvent);
             };
             control.FontChanged += (sender, e) =>
             {
                 fontChangedCount++;
-                Assert.Equal(originalFontSize * 2, control.Font.Size, precision: 3);
-                Assert.Equal(new Rectangle(0, 0, 600, 600), control.Bounds);
+                int deviceDpi = control.DeviceDpiInternal;
+                Assert.Equal(originalFontSize * deviceDpi / 96, control.Font.Size, precision: 3);
+                Size expectedSize = deviceDpi switch
+                {
+                    96 => new Size(300, 300),
+                    144 => new Size(450, 450),
+                    192 => new Size(600, 600),
+                    _ => throw new InvalidOperationException($"Unexpected DPI: {deviceDpi}")
+                };
+                Assert.Equal(new Rectangle(Point.Empty, expectedSize), control.Bounds);
+                Assert.True((bool)control.TestAccessor.Dynamic._isScaledByDpiChangedEvent);
             };
 
-            control.DeviceDpiInternal = 144;
-            control.ScaleContainerForDpi(144, 96, new Rectangle(0, 0, 450, 450));
+            for (int transition = 0; transition < 2; transition++)
+            {
+                reentered = false;
+                control.DeviceDpiInternal = 144;
+                control.ScaleContainerForDpi(144, 96, new Rectangle(0, 0, 450, 450));
 
-            Assert.True(reentered);
-            Assert.Equal(2, fontChangedCount);
-            Assert.Equal(192, control.DeviceDpiInternal);
-            Assert.Equal(originalFontSize * 2, control.Font.Size, precision: 3);
-            Assert.Equal(new Rectangle(0, 0, 600, 600), control.Bounds);
-            Assert.Equal(new Rectangle(96, 96, 408, 408), child.Bounds);
-            Assert.Equal(new SizeF(192, 192), control.AutoScaleDimensions);
+                Assert.True(reentered);
+                Assert.Equal(2 + transition * 3, fontChangedCount);
+                Assert.Equal(192, control.DeviceDpiInternal);
+                Assert.Equal(originalFontSize * 2, control.Font.Size, precision: 3);
+                Assert.Equal(new Rectangle(0, 0, 600, 600), control.Bounds);
+                Assert.Equal(new Rectangle(96, 96, 408, 408), child.Bounds);
+                Assert.Equal(new SizeF(192, 192), control.AutoScaleDimensions);
+                Assert.False((bool)control.TestAccessor.Dynamic._isScaledByDpiChangedEvent);
+
+                control.DeviceDpiInternal = 96;
+                control.ScaleContainerForDpi(96, 192, new Rectangle(0, 0, 300, 300));
+
+                Assert.Equal(3 + transition * 3, fontChangedCount);
+                Assert.Equal(96, control.DeviceDpiInternal);
+                Assert.Equal(originalFontSize, control.Font.Size, precision: 3);
+                Assert.Equal(new Rectangle(0, 0, 300, 300), control.Bounds);
+                Assert.Equal(new Rectangle(48, 48, 204, 204), child.Bounds);
+                Assert.Equal(new SizeF(96, 96), control.AutoScaleDimensions);
+                Assert.False((bool)control.TestAccessor.Dynamic._isScaledByDpiChangedEvent);
+            }
         }, explicitFont.ToString()).Dispose();
     }
 
