@@ -11,6 +11,16 @@ namespace System.Private.Windows.Ole;
 internal unsafe interface IOleServices
 {
     /// <summary>
+    ///  Storage media supported by the UI stack.
+    /// </summary>
+    /// <remarks>
+    ///  <para>
+    ///   Preserve the WinForms default while allowing other UI stacks to opt into media they can render.
+    ///  </para>
+    /// </remarks>
+    static virtual TYMED AllowedTymeds => TYMED.TYMED_HGLOBAL | TYMED.TYMED_ISTREAM | TYMED.TYMED_GDI;
+
+    /// <summary>
     ///  This method is called to validate that OLE is initialized and
     ///  that the current thread is a single-threaded apartment (STA).
     /// </summary>
