@@ -16,6 +16,7 @@ namespace System.Windows.Forms.Rendering.CheckBox;
 internal sealed class AnimatedToggleSwitchRenderer : AnimatedControlRenderer
 {
     private const int AnimationDuration = 300;
+    private const int ThumbHorizontalGapLogical = 1;
     private const float MinimumThumbContrastRatio = 3f;
     private const int ContrastSearchIterations = 10;
 
@@ -312,11 +313,12 @@ internal sealed class AnimatedToggleSwitchRenderer : AnimatedControlRenderer
             : SystemColors.GrayText;
         borderColor = ApplyInteractionShade(borderColor, focus);
 
-        float thumbDiameter = Lerp(
-            metrics.ThumbDiameter,
-            metrics.HoverThumbDiameter,
+        RectangleF thumbBounds = GetThumbBounds(
+            Control,
+            rect,
+            metrics,
+            _positionCurrent,
             Control.Enabled ? _hoverCurrent : 0f);
-        float circlePosition = (rect.Width - thumbDiameter) * _positionCurrent;
 
         using var backgroundBrush = backgroundColor.GetCachedSolidBrushScope();
         using var circleBrush = circleColor.GetCachedSolidBrushScope();
@@ -347,18 +349,30 @@ internal sealed class AnimatedToggleSwitchRenderer : AnimatedControlRenderer
                 graphics.DrawRectangle(backgroundPen, rect);
             }
 
-            float circleTop = rect.Y + ((rect.Height - thumbDiameter) / 2f);
-            graphics.FillEllipse(
-                circleBrush,
-                rect.X + circlePosition,
-                circleTop,
-                thumbDiameter,
-                thumbDiameter);
+            graphics.FillEllipse(circleBrush, thumbBounds);
         }
         finally
         {
             graphics.SmoothingMode = previousSmoothingMode;
         }
+    }
+
+    internal static RectangleF GetThumbBounds(
+        Control control,
+        Rectangle switchBounds,
+        ToggleSwitchMetrics metrics,
+        float position,
+        float hoverAmount)
+    {
+        float diameter = Lerp(metrics.ThumbDiameter, metrics.HoverThumbDiameter, hoverAmount);
+        float inset = (metrics.BorderThickness / 2f) + control.LogicalToDeviceUnits(ThumbHorizontalGapLogical);
+        float travel = switchBounds.Width - diameter - (2 * inset);
+
+        return new RectangleF(
+            switchBounds.X + inset + (travel * position),
+            switchBounds.Y + ((switchBounds.Height - diameter) / 2f),
+            diameter,
+            diameter);
     }
 
     internal static Color GetUncheckedTrackColor(bool darkMode)
@@ -413,9 +427,9 @@ internal sealed class AnimatedToggleSwitchRenderer : AnimatedControlRenderer
     }
 
     private static bool HasMinimumThumbContrast(Color trackColor, Color thumbColor)
-       => PopupButtonColorMath.GetContrastRatio(
-           thumbColor,
-           trackColor) >= MinimumThumbContrastRatio;
+        => PopupButtonColorMath.GetContrastRatio(
+            thumbColor,
+            trackColor) >= MinimumThumbContrastRatio;
 
     internal void PrepareStateChange()
     {

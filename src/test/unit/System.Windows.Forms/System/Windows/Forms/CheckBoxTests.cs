@@ -1006,6 +1006,56 @@ public class CheckBoxTests : AbstractButtonBaseTests
         Assert.Equal(metrics.GetPreferredSize(box), preferredSize);
     }
 
+    [WinFormsTheory]
+    [InlineData(96, 0f, 0f)]
+    [InlineData(96, 1f, 0f)]
+    [InlineData(96, 0f, 1f)]
+    [InlineData(96, 1f, 1f)]
+    [InlineData(120, 0f, 0f)]
+    [InlineData(120, 1f, 0f)]
+    [InlineData(120, 0f, 1f)]
+    [InlineData(120, 1f, 1f)]
+    [InlineData(144, 0f, 0f)]
+    [InlineData(144, 1f, 0f)]
+    [InlineData(144, 0f, 1f)]
+    [InlineData(144, 1f, 1f)]
+    [InlineData(192, 0f, 0f)]
+    [InlineData(192, 1f, 0f)]
+    [InlineData(192, 0f, 1f)]
+    [InlineData(192, 1f, 1f)]
+    public void CheckBox_ToggleSwitch_ThumbBounds_LeaveScaledHorizontalGap(
+        int deviceDpi,
+        float position,
+        float hoverAmount)
+    {
+        using CheckBox box = new()
+        {
+            Appearance = Appearance.ToggleSwitch,
+            VisualStylesMode = VisualStylesMode.Net11
+        };
+        box.DeviceDpiInternal = deviceDpi;
+        Rendering.CheckBox.ToggleSwitchMetrics metrics = Rendering.CheckBox.ToggleSwitchMetrics.Create(box);
+        Rectangle switchBounds = new(10, 10, metrics.SwitchWidth, metrics.SwitchHeight);
+
+        RectangleF thumbBounds = Rendering.CheckBox.AnimatedToggleSwitchRenderer.GetThumbBounds(
+            box,
+            switchBounds,
+            metrics,
+            position,
+            hoverAmount);
+
+        float borderInset = metrics.BorderThickness / 2f;
+        float actualGap = position == 0f
+            ? thumbBounds.Left - switchBounds.Left - borderInset
+            : switchBounds.Right - borderInset - thumbBounds.Right;
+
+        Assert.Equal(box.LogicalToDeviceUnits(2), actualGap);
+        Assert.Equal(hoverAmount == 0f ? metrics.ThumbDiameter : metrics.HoverThumbDiameter, thumbBounds.Width);
+        Assert.Equal(thumbBounds.Width, thumbBounds.Height);
+        Assert.Equal(switchBounds.Top + (switchBounds.Height / 2f), thumbBounds.Top + (thumbBounds.Height / 2f));
+        Assert.True(switchBounds.Contains(Rectangle.Ceiling(thumbBounds)));
+    }
+
     [WinFormsFact]
     public void CheckBox_ToggleSwitch_CheckedTrackUsesContrastAdjustedWindowsAccent()
     {
