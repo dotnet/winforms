@@ -1054,16 +1054,21 @@ public class CheckBoxTests : AbstractButtonBaseTests
         Color trackColor = Rendering.CheckBox.AnimatedToggleSwitchRenderer.GetCheckedTrackColor(
             accentColor,
             darkMode);
-        Color focusedTrackColor = Rendering.Animation.AnimatedControlRenderer.ApplyInteractionShade(
-            trackColor,
-            1f);
         Color thumbColor = darkMode ? Color.Black : Color.White;
+        float contrastRatio = Rendering.Button.PopupButtonColorMath.GetContrastRatio(
+            thumbColor,
+            trackColor);
 
         Assert.Equal(unchanged, trackColor == accentColor);
-        Assert.True(
-            Rendering.Button.PopupButtonColorMath.GetContrastRatio(
-                thumbColor,
-                focusedTrackColor) >= 3f);
+        Assert.True(contrastRatio >= 3f);
+
+        if (!unchanged)
+        {
+            Assert.InRange(contrastRatio, 3f, 3.05f);
+            Assert.True(darkMode ? trackColor.R >= accentColor.R : trackColor.R <= accentColor.R);
+            Assert.True(darkMode ? trackColor.G >= accentColor.G : trackColor.G <= accentColor.G);
+            Assert.True(darkMode ? trackColor.B >= accentColor.B : trackColor.B <= accentColor.B);
+        }
     }
 
     [Theory]
