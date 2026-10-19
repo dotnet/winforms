@@ -300,7 +300,7 @@ internal sealed class AnimatedToggleSwitchRenderer : AnimatedControlRenderer
                 ? highContrastForeground
                 : PopupButtonColorMath.Blend(
                     GetUncheckedBorderColor(darkMode),
-                    SystemColors.WindowFrame,
+                    onColor,
                     _onAmountCurrent)
             : SystemColors.GrayText;
         float focus = Control.Enabled && !highContrast ? _focusCurrent : 0f;
