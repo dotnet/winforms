@@ -136,16 +136,7 @@ internal class ButtonDarkModeAdapter : ButtonBaseAdapter
         => PaintCore(e, PushButtonState.Pressed);
 
     internal override void PaintOver(PaintEventArgs e, CheckState state)
-    {
-        PushButtonState buttonState = state == CheckState.Checked
-            && Application.IsDarkModeEnabled
-            && Control.FlatStyle == FlatStyle.Standard
-            && Control.EffectiveVisualStylesModeInternal >= VisualStylesMode.Net11
-                ? ToPushButtonState(state, Control.Enabled)
-                : PushButtonState.Hot;
-
-        PaintCore(e, buttonState);
-    }
+        => PaintCore(e, PushButtonState.Hot);
 
     private void PaintCore(PaintEventArgs e, PushButtonState state)
     {

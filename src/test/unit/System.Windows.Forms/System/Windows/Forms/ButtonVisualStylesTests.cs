@@ -816,41 +816,71 @@ public class ButtonVisualStylesTests
     }
 
     [WinFormsTheory]
-    [InlineData(true, FlatStyle.Standard, VisualStylesMode.Net11, true)]
-    [InlineData(false, FlatStyle.Standard, VisualStylesMode.Net11, false)]
-    [InlineData(true, FlatStyle.Flat, VisualStylesMode.Net11, false)]
-    [InlineData(true, FlatStyle.Popup, VisualStylesMode.Net11, false)]
-    public void ButtonDarkModeAdapter_PaintOver_CheckedPreservesPressedStateOnlyForDarkStandard(
-        bool darkModeEnabled,
-        FlatStyle flatStyle,
-        VisualStylesMode visualStylesMode,
-        bool expectPressed)
+    [InlineData(typeof(CheckBox))]
+    [InlineData(typeof(RadioButton))]
+    public void ButtonDarkModeAdapter_CheckedMouseOver_UsesAccentHoverState(Type controlType)
     {
         if (SystemInformation.HighContrast)
         {
             return;
         }
 
-        using ApplicationColorModeTestScope colorModeScope = new(darkModeEnabled);
-        using Button button = new()
+        using ApplicationColorModeTestScope colorModeScope = new(darkModeEnabled: true);
+        using SystemVisualSettingsTestScope settingsScope = new(
+            clientAreaAnimationEnabled: false,
+            accentColor: Color.DodgerBlue);
+        using ButtonBase control = CreateAppearanceButton(controlType, FlatStyle.Standard);
+        control.VisualStylesMode = VisualStylesMode.Net11;
+        control.Size = new Size(120, 40);
+        control.Text = string.Empty;
+
+        if (control is CheckBox checkBoxControl)
         {
-            FlatStyle = flatStyle,
-            VisualStylesMode = visualStylesMode,
-            Size = new Size(120, 40)
+            checkBoxControl.Checked = true;
+        }
+        else
+        {
+            ((RadioButton)control).Checked = true;
+        }
+
+        ButtonInternal.ButtonBaseAdapter adapter = control switch
+        {
+            CheckBox checkBoxAdapterControl => checkBoxAdapterControl.CreateStandardAdapter(),
+            RadioButton radioButton => radioButton.CreateStandardAdapter(),
+            _ => throw new ArgumentOutOfRangeException(nameof(controlType))
         };
-        button.FlatAppearance.MouseOverBackColor = Color.Red;
-        button.FlatAppearance.MouseDownBackColor = Color.Blue;
 
-        ButtonInternal.ButtonDarkModeAdapter adapter = new(button);
-        using Bitmap bitmap = new(button.Width, button.Height);
-        using Graphics graphics = Graphics.FromImage(bitmap);
-        using PaintEventArgs e = new(graphics, button.ClientRectangle);
+        using Bitmap checkedNormal = new(control.Width, control.Height);
+        using Graphics normalGraphics = Graphics.FromImage(checkedNormal);
+        using (PaintEventArgs e = new(normalGraphics, control.ClientRectangle))
+        {
+            adapter.PaintUp(e, CheckState.Checked);
+        }
 
-        adapter.PaintOver(e, CheckState.Checked);
+        using Bitmap checkedHot = new(control.Width, control.Height);
+        using Graphics hotGraphics = Graphics.FromImage(checkedHot);
+        using (PaintEventArgs e = new(hotGraphics, control.ClientRectangle))
+        {
+            adapter.PaintOver(e, CheckState.Checked);
+        }
 
+        Color accentColor = Application.SystemVisualSettings.AccentColor;
+        Color expectedHoverColor = ModernButtonColorMath.GetStateColor(
+            new ModernButtonDarkModeRenderer
+            {
+                FlatAppearance = control.FlatAppearance
+            },
+            VisualStyles.PushButtonState.Hot,
+            isDefault: false,
+            customBaseColor: Color.Empty);
+
+        Assert.Equal(accentColor.ToArgb(), checkedNormal.GetPixel(control.Width / 2, control.Height / 2).ToArgb());
         Assert.Equal(
-            expectPressed ? Color.Blue : Color.Red,
-            button.BackColorAnimator.CurrentColor);
+            expectedHoverColor.ToArgb(),
+            checkedHot.GetPixel(control.Width / 2, control.Height / 2).ToArgb());
+        Assert.NotEqual(
+            checkedNormal.GetPixel(control.Width / 2, control.Height / 2).ToArgb(),
+            checkedHot.GetPixel(control.Width / 2, control.Height / 2).ToArgb());
     }
 
     [WinFormsFact]
