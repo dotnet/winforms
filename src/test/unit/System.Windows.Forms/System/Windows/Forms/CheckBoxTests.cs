@@ -1292,7 +1292,7 @@ public class CheckBoxTests : AbstractButtonBaseTests
     public void CheckBox_ToggleSwitch_LightModeUncheckedTrackMatchesWindowsColors()
     {
         Assert.Equal(
-            Color.FromArgb(0xF5, 0xF5, 0xF5),
+            Color.WhiteSmoke,
             Rendering.CheckBox.AnimatedToggleSwitchRenderer.GetUncheckedTrackColor(darkMode: false));
         Assert.Equal(
             Color.FromArgb(0x89, 0x89, 0x89),
