@@ -20009,26 +20009,28 @@ public partial class DataGridView
 
                         if (deleteSelectedNewRow
                             && DataConnection is { CurrencyManager.List: { } list, IsInAddNewTransaction: true }
-                            && !IsCurrentRowDirty
-                            && NewRowIndex >= 0
-                            && NewRowIndex < list.Count)
+                            && !IsCurrentRowDirty)
                         {
-                            DataGridViewDataErrorEventArgs? dgvdee = null;
-                            try
+                            int addNewItemIndex = NewRowIndex == list.Count ? NewRowIndex - 1 : NewRowIndex;
+                            if (addNewItemIndex >= 0 && addNewItemIndex < list.Count)
                             {
-                                DataConnection.DeleteRow(NewRowIndex);
-                            }
-                            catch (Exception exception) when (!exception.IsCriticalException())
-                            {
-                                dgvdee = new(
-                                    exception,
-                                    -1,
-                                    NewRowIndex,
-                                    DataGridViewDataErrorContexts.RowDeletion);
-                                OnDataErrorInternal(dgvdee);
-                                if (dgvdee.ThrowException)
+                                DataGridViewDataErrorEventArgs? dgvdee = null;
+                                try
                                 {
-                                    throw dgvdee.Exception;
+                                    DataConnection.DeleteRow(addNewItemIndex);
+                                }
+                                catch (Exception exception) when (!exception.IsCriticalException())
+                                {
+                                    dgvdee = new(
+                                        exception,
+                                        -1,
+                                        addNewItemIndex,
+                                        DataGridViewDataErrorContexts.RowDeletion);
+                                    OnDataErrorInternal(dgvdee);
+                                    if (dgvdee.ThrowException)
+                                    {
+                                        throw dgvdee.Exception;
+                                    }
                                 }
                             }
                         }

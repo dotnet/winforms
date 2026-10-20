@@ -4266,13 +4266,14 @@ public partial class DataGridViewTests : IDisposable
         form.Show();
         dataGridView.CreateControl();
 
-        dataGridView.CurrentCell = dataGridView[0, 2];
-        dataGridView.Rows[2].Selected = true;
         dataGridView.CurrentCell = dataGridView[0, dataGridView.NewRowIndex];
+        dataGridView.ClearSelection();
+        dataGridView.Rows[2].Selected = true;
         dataGridView.Rows[dataGridView.NewRowIndex].Selected = true;
 
         Assert.True(dataGridView.CallProcessDataGridViewKey(Keys.Delete));
-        Assert.True(list.Count == dataGridView.Rows.Count || list.Count == dataGridView.Rows.Count - 1);
+        Assert.Equal(["A", "B"], list.Select(item => item.Val));
+        Assert.Equal(list.Count + 1, dataGridView.Rows.Count);
 
         dataGridView.CurrentCell = dataGridView[0, 0];
         Exception secondNewRowEntryException = Record.Exception(
@@ -4280,7 +4281,8 @@ public partial class DataGridViewTests : IDisposable
 
         Assert.Null(secondNewRowEntryException);
         Assert.Equal(dataGridView.NewRowIndex, dataGridView.CurrentCell!.RowIndex);
-        Assert.True(list.Count == dataGridView.Rows.Count || list.Count == dataGridView.Rows.Count - 1);
+        Assert.Equal(3, list.Count);
+        Assert.Equal(list.Count, dataGridView.Rows.Count);
     }
 
     private static TestDataGridView CreateGrid()
