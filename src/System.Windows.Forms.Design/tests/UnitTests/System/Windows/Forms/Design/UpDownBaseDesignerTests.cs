@@ -17,16 +17,22 @@ public class UpDownBaseDesignerTests : IDisposable
     {
         _numericUpDown = new();
         _designer = new();
-        Mock<ISite> site = new();
-        site.Setup(s => s.DesignMode).Returns(true);
-        site.Setup(s => s.GetService(typeof(IDesignerHost))).Returns(new Mock<IDesignerHost>().Object);
-        _numericUpDown.Site = site.Object;
     }
 
     private void InitializeDesigner(BorderStyle borderStyle)
+        => InitializeDesigner(_designer, _numericUpDown, borderStyle);
+
+    private static void InitializeDesigner(
+        UpDownBaseDesigner designer,
+        UpDownBase upDownBase,
+        BorderStyle borderStyle)
     {
-        _numericUpDown.BorderStyle = borderStyle;
-        _designer.Initialize(_numericUpDown);
+        Mock<ISite> site = new();
+        site.Setup(s => s.DesignMode).Returns(true);
+        site.Setup(s => s.GetService(typeof(IDesignerHost))).Returns(new Mock<IDesignerHost>().Object);
+        upDownBase.Site = site.Object;
+        upDownBase.BorderStyle = borderStyle;
+        designer.Initialize(upDownBase);
     }
 
     public void Dispose()
@@ -50,11 +56,18 @@ public class UpDownBaseDesignerTests : IDisposable
     public void Height_SetWithModernVisualStylesMode_ReturnsPreferredHeight(VisualStylesMode visualStylesMode)
     {
         InitializeDesigner(BorderStyle.Fixed3D);
-        _numericUpDown.VisualStylesMode = visualStylesMode;
+        using DomainUpDown domainUpDown = new();
+        using UpDownBaseDesigner domainUpDownDesigner = new();
+        InitializeDesigner(domainUpDownDesigner, domainUpDown, BorderStyle.Fixed3D);
 
-        _numericUpDown.Height = _numericUpDown.PreferredHeight + 10;
+        foreach (UpDownBase upDownBase in new UpDownBase[] { _numericUpDown, domainUpDown })
+        {
+            upDownBase.AutoSize = false;
+            upDownBase.VisualStylesMode = visualStylesMode;
+            upDownBase.Height = upDownBase.PreferredHeight + 10;
 
-        _numericUpDown.Height.Should().Be(_numericUpDown.PreferredHeight);
+            upDownBase.Height.Should().Be(upDownBase.PreferredHeight);
+        }
     }
 
     [WinFormsTheory]

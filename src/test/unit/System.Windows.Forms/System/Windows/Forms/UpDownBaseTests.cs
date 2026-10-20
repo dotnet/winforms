@@ -3143,7 +3143,7 @@ public class UpDownBaseTests
     }
 
     [WinFormsFact]
-    public void UpDownBase_ModernVisualStylesMode_UsesSmallInsetAndPreservesExplicitSmallHeight()
+    public void UpDownBase_ModernVisualStylesMode_UsesSmallInsetAndRejectsExplicitSmallHeight()
     {
         using SubUpDownBase upDownBase = new()
         {
@@ -3160,8 +3160,25 @@ public class UpDownBaseTests
         int inset = upDownBase.LogicalToDeviceUnits(4);
         upDownBase._upDownEdit.Left.Should().Be(inset);
         upDownBase._upDownEdit.Top.Should().Be(inset);
-        upDownBase._upDownEdit.Height.Should().Be(Math.Max(0, 9 - (2 * inset)));
-        upDownBase.Height.Should().Be(9);
+        upDownBase._upDownEdit.Height.Should().Be(Math.Max(0, upDownBase.PreferredHeight - (2 * inset)));
+        upDownBase.Height.Should().Be(upDownBase.PreferredHeight);
+    }
+
+    [WinFormsTheory]
+    [InlineData(VisualStylesMode.Net11)]
+    [InlineData(VisualStylesMode.Latest)]
+    public void UpDownBase_ModernVisualStylesMode_ExplicitHeightReturnsPreferredHeight(
+        VisualStylesMode visualStylesMode)
+    {
+        using SubUpDownBase upDownBase = new()
+        {
+            AutoSize = false,
+            VisualStylesMode = visualStylesMode
+        };
+
+        upDownBase.Height = upDownBase.PreferredHeight + 10;
+
+        upDownBase.Height.Should().Be(upDownBase.PreferredHeight);
     }
 
     [WinFormsTheory]

@@ -497,9 +497,7 @@ public abstract partial class UpDownBase : ContainerControl
     {
         int height = AutoSize
             ? PreferredHeight + Padding.Vertical
-            : UseSideBySideButtons && !DesignMode
-                ? proposedHeight
-                : PreferredHeight;
+            : PreferredHeight;
 
         return base.ApplyBoundsConstraints(suggestedX, suggestedY, proposedWidth, height);
     }
