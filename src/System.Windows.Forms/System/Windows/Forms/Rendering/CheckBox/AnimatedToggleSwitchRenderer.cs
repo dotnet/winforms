@@ -24,7 +24,7 @@ internal sealed class AnimatedToggleSwitchRenderer : AnimatedControlRenderer
     private static readonly Color s_darkModeUncheckedBorderColor = Color.FromArgb(0x9E, 0x9E, 0x9E);
     private static readonly Color s_lightModeUncheckedBorderColor = Color.FromArgb(0x89, 0x89, 0x89);
     private static readonly Color s_lightModeUncheckedCircleColor = Color.FromArgb(0x5D, 0x5D, 0x5D);
-    private static readonly Color s_lightModeUncheckedTrackColor = Color.FromArgb(0xF5, 0xF5, 0xF5);
+    private static readonly Color s_lightModeUncheckedTrackColor = Color.WhiteSmoke;
 
     private readonly ModernCheckBoxStyle _switchStyle;
     private float _focusCurrent;
@@ -365,6 +365,8 @@ internal sealed class AnimatedToggleSwitchRenderer : AnimatedControlRenderer
         float hoverAmount)
     {
         float diameter = Lerp(metrics.ThumbDiameter, metrics.HoverThumbDiameter, hoverAmount);
+
+        // Keep track color between the thumb and the parent background to preserve contrast.
         float inset = (metrics.BorderThickness / 2f) + control.LogicalToDeviceUnits(ThumbHorizontalGapLogical);
         float travel = switchBounds.Width - diameter - (2 * inset);
 
