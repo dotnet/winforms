@@ -519,7 +519,7 @@ public partial class ListView : Control
                         (value && View == View.List && IsHandleCreated) ||
                         (value && (View == View.SmallIcon || View == View.LargeIcon) && IsHandleCreated))
                     {
-                        // we have to recreate the handle when we are going from CheckBoxes == true to CheckBoxes == false
+                        // We need to recreate the handle whenever the CheckBoxes value changes
                         // if we want to have the bitmaps from the StateImageList on the items.
 
                         // There are a LOT of issues with setting CheckBoxes to true when in View.List,
