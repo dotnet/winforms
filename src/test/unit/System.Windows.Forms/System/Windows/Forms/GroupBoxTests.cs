@@ -2890,7 +2890,6 @@ public class GroupBoxTests
         using Bitmap image = new(100, 100);
         using Graphics graphics = Graphics.FromImage(image);
         using PaintEventArgs eventArgs = new(graphics, Rectangle.Empty);
-
         using Form form = new()
         {
             ForeColor = Color.Red
