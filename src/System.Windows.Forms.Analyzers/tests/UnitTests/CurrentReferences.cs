@@ -32,6 +32,7 @@ public static class CurrentReferences
     public static string? RepoRootPath { get; }
 
     private const string RefPackageName = "Microsoft.NETCore.App.Ref";
+    private const string WindowsDesktopRefPackageName = "Microsoft.WindowsDesktop.App.Ref";
 
     static CurrentReferences()
     {
@@ -56,7 +57,25 @@ public static class CurrentReferences
             "Release";
 #endif
 
-        WinFormsRefPath = Path.Join(RepoRootPath, "artifacts", "obj", "System.Windows.Forms", configuration, tfm, "ref", "System.Windows.Forms.dll");
+        string winFormsRefPath = Path.Join(RepoRootPath, "artifacts", "obj", "System.Windows.Forms", configuration, tfm, "ref", "System.Windows.Forms.dll");
+        if (!File.Exists(winFormsRefPath))
+        {
+            // Test-only builds may not produce System.Windows.Forms in artifacts\obj.
+            // Fall back to the WinForms reference assembly from the repo-local Windows Desktop reference pack.
+            string windowsDesktopAppRefPath = Path.Join(RepoRootPath, ".dotnet", "packs", WindowsDesktopRefPackageName);
+            if (Directory.Exists(windowsDesktopAppRefPath))
+            {
+                string windowsDesktopRefVersion = netCoreRefsVersion;
+                if (!Directory.Exists(Path.Join(windowsDesktopAppRefPath, windowsDesktopRefVersion)))
+                {
+                    windowsDesktopRefVersion = GetAvailableVersion(windowsDesktopAppRefPath, $"{windowsDesktopRefVersion.Split('.')[0]}.");
+                }
+
+                winFormsRefPath = Path.Join(windowsDesktopAppRefPath, windowsDesktopRefVersion, "ref", tfm, "System.Windows.Forms.dll");
+            }
+        }
+
+        WinFormsRefPath = winFormsRefPath;
 
         // Specify absolute path to the reference assemblies because this version is not necessarily available in the nuget packages cache.
         string netCoreAppRefPath = Path.Join(RepoRootPath, ".dotnet", "packs", RefPackageName);
