@@ -15,6 +15,13 @@ internal unsafe class FailingGetDataNativeDataObject : NativeDataObjectMock
     private readonly ushort _format;
     private readonly HRESULT _failureHResult;
 
+    /// <summary>
+    ///  Initializes the mock for the specified clipboard format and failure result.
+    /// </summary>
+    /// <param name="format">The clipboard format for which <see cref="QueryGetData"/> reports success.</param>
+    /// <param name="failureHResult">
+    ///  The failure returned by <see cref="GetData"/>. The default represents clipboard contention.
+    /// </param>
     public FailingGetDataNativeDataObject(ushort format, HRESULT failureHResult = default)
     {
         _format = format;
@@ -25,12 +32,10 @@ internal unsafe class FailingGetDataNativeDataObject : NativeDataObjectMock
 
     public override HRESULT QueryGetData(FORMATETC* pformatetc)
     {
-        if (pformatetc is null)
-        {
-            return HRESULT.DV_E_FORMATETC;
-        }
-
-        if (pformatetc->cfFormat != _format)
+        if (pformatetc is null
+            || pformatetc->cfFormat != _format
+            || pformatetc->dwAspect != (uint)DVASPECT.DVASPECT_CONTENT
+            || pformatetc->lindex != -1)
         {
             return HRESULT.DV_E_FORMATETC;
         }

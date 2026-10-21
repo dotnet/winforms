@@ -84,9 +84,7 @@ internal class CheckBoxFlatAdapter : CheckBoxBaseAdapter
         PaintField(e, layout, colors, checkColor, drawFocus: true);
     }
 
-    private new ButtonFlatAdapter ButtonAdapter => (ButtonFlatAdapter)base.ButtonAdapter;
-
-    protected override ButtonBaseAdapter CreateButtonAdapter() => new ButtonFlatAdapter(Control);
+    protected override ButtonBaseAdapter CreateButtonAdapter() => DarkModeAdapterFactory.CreateFlatAdapter(Control);
 
     protected override LayoutOptions Layout(PaintEventArgs e)
     {
