@@ -2574,6 +2574,20 @@ public partial class ListView : Control
     }
 
     /// <summary>
+    ///  Removes a stale native selection flag before passing item state to owner-draw handlers.
+    /// </summary>
+    private ListViewItemStates GetOwnerDrawItemState(int itemIndex, NMCUSTOMDRAW_DRAW_STATE_FLAGS state)
+    {
+        if ((state & NMCUSTOMDRAW_DRAW_STATE_FLAGS.CDIS_SELECTED) != 0
+            && (GetItemState(itemIndex, LIST_VIEW_ITEM_STATE_FLAGS.LVIS_SELECTED) & LIST_VIEW_ITEM_STATE_FLAGS.LVIS_SELECTED) == 0)
+        {
+            state &= ~NMCUSTOMDRAW_DRAW_STATE_FLAGS.CDIS_SELECTED;
+        }
+
+        return (ListViewItemStates)state;
+    }
+
+    /// <summary>
     ///  Handles custom drawing of list items - for individual item font/color changes.
     /// </summary>
     /// <remarks>
@@ -2651,7 +2665,7 @@ public partial class ListView : Control
                             Items[(int)nmcd->nmcd.dwItemSpec],
                             itemBounds,
                             (int)nmcd->nmcd.dwItemSpec,
-                            (ListViewItemStates)nmcd->nmcd.uItemState);
+                            GetOwnerDrawItemState(itemIndex, nmcd->nmcd.uItemState));
 
                         OnDrawItem(e);
 
@@ -2743,7 +2757,7 @@ public partial class ListView : Control
                                     itemIndex,
                                     nmcd->iSubItem,
                                     _columnHeaders![nmcd->iSubItem],
-                                    (ListViewItemStates)nmcd->nmcd.uItemState);
+                                    GetOwnerDrawItemState(itemIndex, nmcd->nmcd.uItemState));
                                 OnDrawSubItem(e);
 
                                 // the customer still wants to draw the default.
