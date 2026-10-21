@@ -12,7 +12,7 @@ public partial class CheckBox
     /// </summary>
     /// <remarks>
     ///  <para>
-    ///   <see cref="Forms.Appearance.ToggleSwitch"/> selects the framework's owner-drawn toggle renderer for a
+    ///   <see cref="Appearance.ToggleSwitch"/> selects the framework's owner-drawn toggle renderer for a
     ///   two-state check box in an effective .NET 11-or-later mode. Because a native check box cannot render a
     ///   toggle switch, this appearance intentionally takes precedence over <see cref="ButtonBase.FlatStyle"/> when
     ///   that property is <see cref="FlatStyle.System"/>. A check box with <see cref="ThreeState"/> enabled retains

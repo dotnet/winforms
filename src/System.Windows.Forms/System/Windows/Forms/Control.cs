@@ -25,7 +25,7 @@ namespace System.Windows.Forms;
 /// </summary>
 /// <remarks>
 ///  <para>
-///   Do not add instance variables to Control absolutely necessary. Every control on a form has the overhead of
+///   Do not add instance variables to Control unless absolutely necessary. Every control on a form has the overhead of
 ///   all of these variables.
 ///  </para>
 /// </remarks>
@@ -899,10 +899,7 @@ public unsafe partial class Control :
 
             VisualStylesMode oldEffectiveValue = EffectiveVisualStylesMode;
 
-            // Inherit was requested explicitly, or the requested value matches the ambient (parent) value:
-            // drop any local override so the value is inherited again.
-            if (value == VisualStylesMode.Inherit
-                || (ParentInternal is { } parent && parent.ResolvedVisualStylesMode == value))
+            if (value == VisualStylesMode.Inherit)
             {
                 Properties.RemoveValue(s_visualStylesModeProperty);
             }
@@ -927,17 +924,29 @@ public unsafe partial class Control :
     private void ResetVisualStylesMode()
         => VisualStylesMode = VisualStylesMode.Inherit;
 
-    private VisualStylesMode ResolvedVisualStylesMode
+    private VisualStylesMode UncoercedVisualStylesMode
     {
         get
         {
             VisualStylesMode value = VisualStylesMode;
 
             return value == VisualStylesMode.Inherit
-                ? ParentInternal?.ResolvedVisualStylesMode ?? DefaultVisualStylesMode
+                ? ParentInternal?.UncoercedVisualStylesMode ?? DefaultVisualStylesMode
                 : value;
         }
     }
+
+    private VisualStylesMode ResolvedVisualStylesMode
+        => GetSupportedVisualStylesMode(
+            VisualStylesMode == VisualStylesMode.Inherit
+                ? ParentInternal?.ResolvedVisualStylesMode ?? DefaultVisualStylesMode
+                : VisualStylesMode);
+
+    /// <summary>
+    ///  Coerces a requested visual styles mode to one supported by this control.
+    /// </summary>
+    private protected virtual VisualStylesMode GetSupportedVisualStylesMode(VisualStylesMode mode)
+        => mode;
 
     /// <summary>
     ///  Gets the renderer-authoritative <see cref="Forms.VisualStylesMode"/> that controls must honor when deciding
@@ -1546,7 +1555,7 @@ public unsafe partial class Control :
 
     /// <summary>
     ///  Returns the CreateParams used to create the handle for this control.
-    ///  Inheriting classes should call base.CreateParams in the manor
+    ///  Inheriting classes should call base.CreateParams in the manner described
     ///  below:
     /// </summary>
     protected virtual CreateParams CreateParams
@@ -2648,7 +2657,7 @@ public unsafe partial class Control :
     }
 
     /// <summary>
-    ///  Specifies whether the control is willing to process mnemonics when hosted in an container ActiveX (Ax Sourcing).
+    ///  Specifies whether the control is willing to process mnemonics when hosted in a container ActiveX (Ax Sourcing).
     /// </summary>
     internal virtual bool IsMnemonicsListenerAxSourced => false;
 
@@ -4429,7 +4438,7 @@ public unsafe partial class Control :
     [EditorBrowsable(EditorBrowsableState.Advanced)]
     protected void AccessibilityNotifyClients(AccessibleEvents accEvent, int objectID, int childID)
     {
-        if (IsHandleCreated && AppContextSwitches.NoClientNotifications)
+        if (IsHandleCreated && !AppContextSwitches.NoClientNotifications)
         {
             PInvoke.NotifyWinEvent((uint)accEvent, this, objectID, childID + 1);
         }
@@ -5438,8 +5447,8 @@ public unsafe partial class Control :
     /// <summary>
     ///  Returns the control that is currently associated with handle.
     ///  This method will search up the HWND parent chain until it finds some
-    ///  handle that is associated with with a control. This method is more
-    ///  robust that fromHandle because it will correctly return controls
+    ///  handle that is associated with a control. This method is more
+    ///  robust than fromHandle because it will correctly return controls
     ///  that own more than one handle.
     /// </summary>
     [EditorBrowsable(EditorBrowsableState.Advanced)]
@@ -5498,7 +5507,7 @@ public unsafe partial class Control :
     internal virtual Rectangle ApplyBoundsConstraints(int suggestedX, int suggestedY, int proposedWidth, int proposedHeight)
     {
         // COMPAT: in Everett we would allow you to set negative values in pre-handle mode
-        // in Whidbey, if you've set Min/Max size we will constrain you to 0,0. Everett apps didnt
+        // in Whidbey, if you've set Min/Max size we will constrain you to 0,0. Everett apps didn't
         // have min/max size on control, which is why this works.
         if (MaximumSize != Size.Empty || MinimumSize != Size.Empty)
         {
@@ -5678,7 +5687,7 @@ public unsafe partial class Control :
     /// <summary>
     ///  Returns native child windows sorted according to their TabIndex property order. Controls with the same
     ///  TabIndex remain in original relative child index order (= z-order). Child windows with no corresponding
-    ///  Control objects (and therefore no discernable TabIndex) are sorted to the front of the list (but remain
+    ///  Control objects (and therefore no discernible TabIndex) are sorted to the front of the list (but remain
     ///  in relative z-order to one another).
     ///
     ///  This version returns a sorted array of integers, representing the original z-order based indexes of the
@@ -7446,28 +7455,62 @@ public unsafe partial class Control :
             return;
         }
 
-        if (Properties.ContainsKey(s_visualStylesModeProperty))
-        {
-            if (Properties.GetValueOrDefault<VisualStylesMode>(s_visualStylesModeProperty)
-                == ParentInternal?.ResolvedVisualStylesMode)
-            {
-                // Same as the parent value, make it ambient again by removing it.
-                Properties.RemoveValue(s_visualStylesModeProperty);
-            }
-
-            // A local value isolates this subtree from parent changes. If the local value matched the
-            // parent's new value, removing it preserves the effective value while making it ambient again.
-            return;
-        }
-
-        if (e is VisualStylesModeChangeEventArgs transition
+        VisualStylesModeChangeEventArgs? transition = e as VisualStylesModeChangeEventArgs;
+        if (transition is not null
             && (!transition.IsCurrent
                 || ParentInternal?.EffectiveVisualStylesMode != transition.NewEffectiveVisualStylesMode))
         {
             return;
         }
 
-        // In every other case we're going to raise the event.
+        if (Properties.ContainsKey(s_visualStylesModeProperty))
+        {
+            if (ParentInternal is not { } parent
+                || Properties.GetValueOrDefault<VisualStylesMode>(s_visualStylesModeProperty)
+                    != parent.UncoercedVisualStylesMode
+                || parent.UncoercedVisualStylesMode == parent.EffectiveVisualStylesMode)
+            {
+                // A local value isolates this subtree from parent changes.
+                return;
+            }
+
+            VisualStylesMode oldEffectiveVisualStylesMode = EffectiveVisualStylesMode;
+
+            // Inherit the parent's coerced mode when the local value matches its uncoerced mode.
+            Properties.RemoveValue(s_visualStylesModeProperty);
+
+            VisualStylesMode newEffectiveVisualStylesMode = EffectiveVisualStylesMode;
+            if (oldEffectiveVisualStylesMode == newEffectiveVisualStylesMode)
+            {
+                return;
+            }
+
+            OnVisualStylesModeChanged(
+                transition?.CreateForControl(
+                    this,
+                    oldEffectiveVisualStylesMode,
+                    newEffectiveVisualStylesMode)
+                ?? e);
+
+            return;
+        }
+
+        if (transition is not null)
+        {
+            VisualStylesModeChangeEventArgs transitionForControl = transition.CreateForControl(this);
+            if (transitionForControl.OldEffectiveVisualStylesMode
+                != transitionForControl.NewEffectiveVisualStylesMode)
+            {
+                OnVisualStylesModeChanged(transitionForControl);
+            }
+            else if (ChildControls is { } children)
+            {
+                CascadeVisualStylesModeChanged(children, transitionForControl, transitionForControl);
+            }
+
+            return;
+        }
+
         OnVisualStylesModeChanged(e);
     }
 
@@ -7534,19 +7577,34 @@ public unsafe partial class Control :
 
         public VisualStylesModeChangeEventArgs CreateForControl(Control control)
         {
-            if (SystemVisualSettingsTransition is not { } systemVisualSettingsTransition)
+            if (SystemVisualSettingsTransition is { } systemVisualSettingsTransition)
             {
-                return this;
+                return new(
+                    _state,
+                    control,
+                    control.Properties.GetValueOrDefault(s_visualStylesModeChangeVersionProperty, 0),
+                    control.GetEffectiveVisualStylesMode(systemVisualSettingsTransition.OldSettings.HighContrastEnabled),
+                    control.GetEffectiveVisualStylesMode(systemVisualSettingsTransition.NewSettings.HighContrastEnabled),
+                    systemVisualSettingsTransition);
             }
 
-            return new(
+            return CreateForControl(
+                control,
+                control.GetSupportedVisualStylesMode(OldEffectiveVisualStylesMode),
+                control.GetSupportedVisualStylesMode(NewEffectiveVisualStylesMode));
+        }
+
+        public VisualStylesModeChangeEventArgs CreateForControl(
+            Control control,
+            VisualStylesMode oldEffectiveVisualStylesMode,
+            VisualStylesMode newEffectiveVisualStylesMode)
+            => new(
                 _state,
                 control,
                 control.Properties.GetValueOrDefault(s_visualStylesModeChangeVersionProperty, 0),
-                control.GetEffectiveVisualStylesMode(systemVisualSettingsTransition.OldSettings.HighContrastEnabled),
-                control.GetEffectiveVisualStylesMode(systemVisualSettingsTransition.NewSettings.HighContrastEnabled),
-                systemVisualSettingsTransition);
-        }
+                oldEffectiveVisualStylesMode,
+                newEffectiveVisualStylesMode,
+                systemVisualSettingsTransition: null);
 
         public void PerformLayouts()
         {
@@ -8359,7 +8417,7 @@ public unsafe partial class Control :
     /// <summary>
     ///  Core layout logic. Inheriting controls should override this function to do any custom
     ///  layout logic. It is not necessary to call base.OnLayout, however for normal docking
-    ///  an functions to work, base.OnLayout must be called.
+    ///  and anchoring functions to work, base.OnLayout must be called.
     ///  Raises the <see cref="Layout"/> event.
     /// </summary>
     [EditorBrowsable(EditorBrowsableState.Advanced)]
@@ -9005,7 +9063,7 @@ public unsafe partial class Control :
         }
 
         // We need to use theming painting for certain controls (like TabPage) when they parent other controls.
-        // But we don't want to to this always as this causes serious performance (at Runtime and DesignTime)
+        // But we don't want to always do this as this causes serious performance (at Runtime and DesignTime)
         // so checking for RenderTransparencyWithVisualStyles which is TRUE for TabPage and false by default.
         if (Application.RenderWithVisualStyles && parent.RenderTransparencyWithVisualStyles)
         {
@@ -10939,7 +10997,7 @@ public unsafe partial class Control :
             if (ParentInternal is not null)
             {
                 // Some layout engines (DefaultLayout) base their PreferredSize on
-                // the bounds of their children. If we change change the child bounds, we
+                // the bounds of their children. If we change the child bounds, we
                 // need to clear their PreferredSize cache. The semantics of SetBoundsCore
                 // is that it does not cause a layout, so we just clear.
                 CommonProperties.xClearPreferredSizeCache(ParentInternal);
