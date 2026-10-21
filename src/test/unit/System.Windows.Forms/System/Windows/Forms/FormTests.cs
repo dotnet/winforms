@@ -199,18 +199,29 @@ public partial class FormTests
 
         main.Show();
 
-        bool childShown = false;
-        child.Shown += (sender, e) => childShown = true;
+        TaskCompletionSource childShown = new(TaskCreationOptions.RunContinuationsAsynchronously);
+        child.Shown += (sender, e) => childShown.SetResult();
 
-        await child.ShowAsync().ConfigureAwait(false);
+        Task showTask = child.ShowAsync();
 
-        Assert.True(childShown);
+        try
+        {
+            await childShown.Task.WaitAsync(TimeSpan.FromSeconds(30));
 
-        WINDOW_EX_STYLE childExStyle = (WINDOW_EX_STYLE)PInvokeCore.GetWindowLong(child, WINDOW_LONG_PTR_INDEX.GWL_EXSTYLE);
-        Assert.False(childExStyle.HasFlag(WINDOW_EX_STYLE.WS_EX_TOPMOST),
-            "Child form should not have WS_EX_TOPMOST when shown without an owner.");
+            Assert.True(child.Visible);
+            Assert.Null(child.Owner);
+            Assert.True(PInvoke.GetWindow(child, GET_WINDOW_CMD.GW_OWNER).IsNull);
 
-        child.Close();
+            WINDOW_EX_STYLE childExStyle = (WINDOW_EX_STYLE)PInvokeCore.GetWindowLong(child, WINDOW_LONG_PTR_INDEX.GWL_EXSTYLE);
+            Assert.False(childExStyle.HasFlag(WINDOW_EX_STYLE.WS_EX_TOPMOST),
+                "Child form should not have WS_EX_TOPMOST when shown without an owner.");
+        }
+        finally
+        {
+            child.Close();
+        }
+
+        await showTask.WaitAsync(TimeSpan.FromSeconds(30));
     }
 
     [WinFormsFact]
@@ -229,16 +240,24 @@ public partial class FormTests
 
         mdiParent.Show();
 
-        bool childShown = false;
-        child.Shown += (s, e) => childShown = true;
-        await child.ShowAsync().ConfigureAwait(false);
+        TaskCompletionSource childShown = new(TaskCreationOptions.RunContinuationsAsynchronously);
+        child.Shown += (s, e) => childShown.SetResult();
+        Task showTask = child.ShowAsync();
 
-        Assert.True(childShown);
-        Assert.True(child.Visible);
-        Assert.True(child.IsMdiChild);
-        Assert.Same(mdiParent, child.MdiParent);
+        try
+        {
+            await childShown.Task.WaitAsync(TimeSpan.FromSeconds(30));
 
-        child.Close();
+            Assert.True(child.Visible);
+            Assert.True(child.IsMdiChild);
+            Assert.Same(mdiParent, child.MdiParent);
+        }
+        finally
+        {
+            child.Close();
+        }
+
+        await showTask.WaitAsync(TimeSpan.FromSeconds(30));
         mdiParent.Close();
     }
 
@@ -258,7 +277,7 @@ public partial class FormTests
         owner.Show();
 
         await Assert.ThrowsAsync<InvalidOperationException>(
-            () => child.ShowAsync(owner)).ConfigureAwait(false);
+            () => child.ShowAsync(owner)).WaitAsync(TimeSpan.FromSeconds(30));
 
         owner.Close();
         mdiParent.Close();
@@ -269,15 +288,26 @@ public partial class FormTests
     {
         using Form form = new();
 
+        TaskCompletionSource formShown = new(TaskCreationOptions.RunContinuationsAsynchronously);
+        form.Shown += (sender, e) => formShown.SetResult();
+
         Task first = form.ShowAsync();
         Task second = form.ShowAsync();
 
-        Assert.Same(first, second);
-        Assert.True(form.Visible);
+        try
+        {
+            Assert.Same(first, second);
 
-        form.Close();
+            await formShown.Task.WaitAsync(TimeSpan.FromSeconds(30));
 
-        await first.ConfigureAwait(false);
+            Assert.True(form.Visible);
+        }
+        finally
+        {
+            form.Close();
+        }
+
+        await first.WaitAsync(TimeSpan.FromSeconds(30));
     }
 
     [WinFormsFact]
