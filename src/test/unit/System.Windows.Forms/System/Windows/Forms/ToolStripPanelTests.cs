@@ -576,6 +576,70 @@ public class ToolStripPanelTests
         Assert.Equal(requestedLocation, toolStrip.Location);
     }
 
+    [WinFormsTheory]
+    [InlineData(RightToLeft.No, 0, 0, 0, 0)]
+    [InlineData(RightToLeft.No, 4, 4, 3, 0)]
+    [InlineData(RightToLeft.No, 4, 11, 3, 5)]
+    [InlineData(RightToLeft.Yes, 0, 0, 0, 0)]
+    [InlineData(RightToLeft.Yes, 4, 4, 0, 0)]
+    [InlineData(RightToLeft.Yes, 4, 11, 3, 5)]
+    public void ToolStripPanel_Join_Horizontal_FirstControl_UsesRequestedLocation(
+        RightToLeft rightToLeft, int paddingLeft, int paddingRight, int marginLeft, int marginRight)
+    {
+        using Form form = new() { ClientSize = new Size(600, 200) };
+        using ToolStripPanel panel = new()
+        {
+            Dock = DockStyle.Top,
+            RightToLeft = rightToLeft,
+            Padding = new Padding(paddingLeft, 0, paddingRight, 0),
+            RowMargin = new Padding(marginLeft, 0, marginRight, 0)
+        };
+        using ToolStrip toolStrip = new() { AutoSize = false, Size = new Size(40, 25) };
+        form.Controls.Add(panel);
+        form.Show();
+
+        Point requestedLocation = new(20, 0);
+        panel.Join(toolStrip, requestedLocation);
+        panel.PerformLayout();
+
+        Assert.Single(panel.RowsInternal);
+        Assert.Equal(requestedLocation, toolStrip.Location);
+    }
+
+    [WinFormsTheory]
+    [InlineData(RightToLeft.No, 0, 0, 0, 0)]
+    [InlineData(RightToLeft.No, 4, 4, 3, 0)]
+    [InlineData(RightToLeft.No, 4, 11, 3, 5)]
+    [InlineData(RightToLeft.Yes, 0, 0, 0, 0)]
+    [InlineData(RightToLeft.Yes, 4, 4, 0, 0)]
+    [InlineData(RightToLeft.Yes, 4, 11, 3, 5)]
+    public void ToolStripPanel_Join_Horizontal_InsertBeforeExistingControl_UsesRequestedLocation(
+        RightToLeft rightToLeft, int paddingLeft, int paddingRight, int marginLeft, int marginRight)
+    {
+        using Form form = new() { ClientSize = new Size(600, 200) };
+        using ToolStripPanel panel = new()
+        {
+            Dock = DockStyle.Top,
+            RightToLeft = rightToLeft,
+            Padding = new Padding(paddingLeft, 0, paddingRight, 0),
+            RowMargin = new Padding(marginLeft, 0, marginRight, 0)
+        };
+        using ToolStrip existingToolStrip = new() { AutoSize = false, Size = new Size(40, 25) };
+        using ToolStrip insertedToolStrip = new() { AutoSize = false, Size = new Size(40, 25) };
+        form.Controls.Add(panel);
+        form.Show();
+
+        Point existingLocation = new(200, 0);
+        panel.Join(existingToolStrip, existingLocation);
+        Point requestedLocation = new(20, 0);
+        panel.Join(insertedToolStrip, requestedLocation);
+        panel.PerformLayout();
+
+        Assert.Single(panel.RowsInternal);
+        Assert.Equal(requestedLocation, insertedToolStrip.Location);
+        Assert.Equal(existingLocation, existingToolStrip.Location);
+    }
+
     private class SubToolStripPanel : ToolStripPanel
     {
         public new SizeF AutoScaleFactor => base.AutoScaleFactor;
