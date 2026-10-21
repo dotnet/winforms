@@ -119,6 +119,14 @@ public partial class Buttons : Form
             column: 1,
             row: 1);
 
+        Button visualStylesButton = new()
+        {
+            AutoSize = true,
+            Text = "VisualStyles Buttons\u2026"
+        };
+        visualStylesButton.Click += (s, _) => new VisualStylesButtons().Show(this);
+        table.Controls.Add(visualStylesButton, column: 2, row: 1);
+
         base.OnLoad(e);
     }
 }

@@ -43,7 +43,7 @@ public partial class ListBox
         {
             get
             {
-                return true;
+                return false;
             }
         }
 
