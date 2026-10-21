@@ -3,6 +3,7 @@
 
 #nullable disable
 
+using System.Reflection;
 using Moq;
 
 namespace System.Windows.Forms.Tests;
