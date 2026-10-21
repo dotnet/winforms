@@ -86,9 +86,10 @@ internal sealed class WinFormsOleServices : IOleServices
             };
 
             HRESULT result = dataObject->QueryGetData(formatEtc);
+
             if (result.Failed)
             {
-                return false;
+                return HandleFailedHResult(result);
             }
 
             result = dataObject->GetData(formatEtc, out STGMEDIUM medium);
@@ -99,12 +100,17 @@ internal sealed class WinFormsOleServices : IOleServices
             // get the data out.
             Debug.WriteLineIf(result == HRESULT.CLIPBRD_E_BAD_DATA, "CLIPBRD_E_BAD_DATA returned when trying to get clipboard data.");
 
+            // If GetData failed, don't try to read from the medium - it may contain uninitialized data.
+            if (result.Failed)
+            {
+                return HandleFailedHResult(result);
+            }
+
             try
             {
                 // GDI+ doesn't own this HBITMAP, but we can't delete it while the object is still around. So we
                 // have to do the really expensive thing of cloning the image so we can release the HBITMAP.
-                if (result.Succeeded
-                    && (uint)medium.tymed == (uint)TYMED.TYMED_GDI
+                if ((uint)medium.tymed == (uint)TYMED.TYMED_GDI
                     && !medium.hGlobal.IsNull
                     && Image.FromHbitmap(medium.hGlobal) is Bitmap clipboardBitmap)
                 {
@@ -120,6 +126,18 @@ internal sealed class WinFormsOleServices : IOleServices
 
             return false;
         }
+    }
+
+    // Handles a failed clipboard get operation by either throwing (when the opt-in switch is set)
+    // or reporting failure to the caller. Always returns false so callers can 'return HandleFailedHResult(hr);'.
+    private static bool HandleFailedHResult(HRESULT hr)
+    {
+        if (CoreAppContextSwitches.ClipboardThrowExceptionsForGetAPIs)
+        {
+            hr.ThrowOnFailure();
+        }
+
+        return false;
     }
 
     static bool IOleServices.AllowTypeWithoutResolver<T>() =>
