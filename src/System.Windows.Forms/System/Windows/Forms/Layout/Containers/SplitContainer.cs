@@ -1417,8 +1417,8 @@ public partial class SplitContainer : ContainerControl, ISupportInitialize
         => new SplitContainerAccessibleObject(this);
 
     /// <summary>
-    ///  Draws the splitter bar at the current location. Will automatically
-    ///  cleanup anyplace the splitter was drawn previously.
+    /// Draws the splitter bar at the current location. Will automatically
+    /// cleanup anyplace the splitter was drawn previously.
     /// </summary>
     private void DrawSplitBar(int mode)
     {
