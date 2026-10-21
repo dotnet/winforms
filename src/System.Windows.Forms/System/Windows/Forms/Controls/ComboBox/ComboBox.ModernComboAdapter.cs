@@ -463,21 +463,20 @@ public partial class ComboBox
                 return ModernControlColorMath.GetDisabledBorderColor();
             }
 
+            // Use a subdued field-derived stroke for the idle modern border.
             return useAccent
                 ? Application.SystemVisualSettings.AccentColor
-                : ModernControlColorMath.TextControlBorderColor;
+                : ModernControlColorMath.GetFieldStrokeStrong(
+                    GetEffectiveFieldColor(comboBox),
+                    Application.IsDarkModeEnabled);
         }
 
         private static int GetBorderThickness(ComboBox comboBox)
-        {
-            SystemVisualSettings settings = Application.SystemVisualSettings;
-            Size borderMetrics = ModernControlVisualStyles.GetFocusBorderMetrics(
-                settings.FocusBorderMetrics,
-                settings.TextScaleFactor,
-                comboBox.DeviceDpiInternal);
-
-            return Math.Max(borderMetrics.Width, borderMetrics.Height);
-        }
+            => Math.Max(
+                1,
+                ScaleHelper.ScaleToDpi(
+                    ModernControlVisualStyles.BorderThickness,
+                    comboBox.DeviceDpiInternal));
 
         private static GraphicsPath CreateFieldPath(
             ComboBox comboBox,
