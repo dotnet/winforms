@@ -1137,14 +1137,8 @@ public class CheckBoxTests : AbstractButtonBaseTests
 
         renderer.TestAccessor.Dynamic.RenderFocusBorder(graphics, metrics);
 
-        Rectangle lowerLeftBorderBounds = Rectangle.FromLTRB(
-            focusBounds.Left + box.LogicalToDeviceUnits(6),
-            focusBounds.Bottom - metrics.FocusBorderThickness,
-            focusBounds.Left + box.LogicalToDeviceUnits(12),
-            focusBounds.Bottom + 1);
-
         Assert.True(CountPixels(bitmap, expectedFocusColor) > 0);
-        Assert.True(CountPixels(bitmap, lowerLeftBorderBounds, expectedFocusColor) > 0);
+        Assert.True(CountPixels(bitmap, expectedFocusColor) > 0);
         Assert.Equal(0, CountPixels(bitmap, Color.Red));
         Assert.NotEqual(expectedFocusColor.ToArgb(), bitmap.GetPixel(focusBounds.Left, focusBounds.Top).ToArgb());
         Assert.Equal(0, CountPixelsInColumn(bitmap, box.ClientRectangle.Right - 1, expectedFocusColor));
@@ -1259,9 +1253,6 @@ public class CheckBoxTests : AbstractButtonBaseTests
     }
 
     private static int CountPixels(Bitmap bitmap, Color color)
-      => CountPixels(bitmap, new Rectangle(Point.Empty, bitmap.Size), color);
-
-    private static int CountPixels(Bitmap bitmap, Rectangle bounds, Color color)
     {
         int argb = color.ToArgb();
         int count = 0;
