@@ -7057,6 +7057,48 @@ public partial class ToolStripTests : IDisposable
         Assert.False(control.IsHandleCreated);
     }
 
+    [WinFormsFact]
+    public void ToolStrip_RescaleConstantsForDpi_ScalesHostedTextBoxAndComboBox()
+    {
+        using IDisposable dpiScope = ScaleHelper.EnterDpiAwarenessScope(
+            DPI_AWARENESS_CONTEXT.DPI_AWARENESS_CONTEXT_PER_MONITOR_AWARE_V2);
+        if (!ScaleHelper.IsThreadPerMonitorV2Aware)
+        {
+            return;
+        }
+
+        using SubToolStrip toolStrip = new();
+        using ToolStripTextBox textBox = new();
+        using ToolStripComboBox comboBox = new();
+
+        toolStrip.Items.Add(textBox);
+        toolStrip.Items.Add(comboBox);
+        toolStrip.CreateControl();
+
+        int textBoxWidth = textBox.Width;
+        int comboBoxWidth = comboBox.Width;
+        int textBoxFontHeight = textBox.Control.Font.Height;
+        int comboBoxFontHeight = comboBox.ComboBox.Font.Height;
+        int expectedTextBoxWidth = (int)Math.Round(textBoxWidth * 288 / 96.0);
+        int expectedComboBoxWidth = (int)Math.Round(comboBoxWidth * 288 / 96.0);
+
+        toolStrip.TestAccessor.Dynamic.RescaleConstantsForDpi(96, 288);
+        toolStrip.PerformLayout();
+
+        Assert.Equal(expectedTextBoxWidth, textBox.Width);
+        Assert.Equal(expectedComboBoxWidth, comboBox.Width);
+        Assert.True(textBox.Control.Font.Height > textBoxFontHeight);
+        Assert.True(comboBox.ComboBox.Font.Height > comboBoxFontHeight);
+
+        toolStrip.TestAccessor.Dynamic.RescaleConstantsForDpi(288, 96);
+        toolStrip.PerformLayout();
+
+        Assert.Equal(textBoxWidth, textBox.Width);
+        Assert.Equal(comboBoxWidth, comboBox.Width);
+        Assert.Equal(textBoxFontHeight, textBox.Control.Font.Height);
+        Assert.Equal(comboBoxFontHeight, comboBox.ComboBox.Font.Height);
+    }
+
     public static IEnumerable<object[]> SetItemLocation_TestData()
     {
         yield return new object[] { new Point(1, 0), 1 };
