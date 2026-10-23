@@ -202,6 +202,38 @@ public class ListView_ListViewAccessibleObjectTests
         Assert.False(listView.IsHandleCreated);
     }
 
+    [WinFormsTheory]
+    [InlineData(false)]
+    [InlineData(true)]
+    public void ListViewAccessibleObject_GetItem_DetailsView_ReturnsSubItem(bool hasImage)
+    {
+        using ImageList imageList = new();
+        imageList.Images.Add(Form.DefaultIcon);
+        using ListView listView = new()
+        {
+            SmallImageList = imageList,
+            View = View.Details
+        };
+
+        listView.Columns.AddRange((ColumnHeader[])[new("Title"), new("Position")]);
+        ListViewItem item = new(["Item 1", "Position 1"], hasImage ? 0 : -1);
+        listView.Items.Add(item);
+        listView.CreateControl();
+
+        AccessibleObject actual = (AccessibleObject)listView.AccessibilityObject.GetItem(0, 1);
+
+        Assert.Same(item.SubItems[1].AccessibilityObject, actual);
+        Assert.Equal("Position 1", actual.Name);
+        Assert.Equal(
+            UIA_CONTROLTYPE_ID.UIA_TextControlTypeId,
+            (UIA_CONTROLTYPE_ID)(int)actual.GetPropertyValue(UIA_PROPERTY_ID.UIA_ControlTypePropertyId));
+        Assert.Null(listView.AccessibilityObject.GetItem(-1, 0));
+        Assert.Null(listView.AccessibilityObject.GetItem(0, -1));
+        Assert.Null(listView.AccessibilityObject.GetItem(1, 0));
+        Assert.Null(listView.AccessibilityObject.GetItem(0, 2));
+        Assert.True(listView.IsHandleCreated);
+    }
+
     [WinFormsFact]
     public void ListViewAccessibleObject_GetPropertyValue_returns_correct_values()
     {

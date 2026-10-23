@@ -2,6 +2,7 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 
 using System.Drawing;
+using System.Text;
 using Windows.Win32.UI.Accessibility;
 
 namespace System.Windows.Forms;
@@ -21,6 +22,38 @@ public partial class ListViewItem
         internal override int FirstSubItemIndex => HasImage ? 1 : 0;
 
         private int LastChildIndex => HasImage ? _owningListView.Columns.Count : _owningListView.Columns.Count - 1;
+
+        public override string? Name
+        {
+            get
+            {
+                if (!_owningListView.FullRowSelect
+                    || !_owningListView.SupportsListViewSubItems
+                    || _owningListView.Columns.Count == 0)
+                {
+                    return base.Name;
+                }
+
+                StringBuilder name = new();
+                for (int columnIndex = 0; columnIndex < _owningListView.Columns.Count; columnIndex++)
+                {
+                    int subItemIndex = _owningListView.Columns[columnIndex]._correspondingListViewSubItemIndex;
+                    if (subItemIndex < 0 || subItemIndex >= _owningItem.SubItems.Count)
+                    {
+                        continue;
+                    }
+
+                    if (name.Length > 0)
+                    {
+                        name.Append(", ");
+                    }
+
+                    name.Append(_owningItem.SubItems[subItemIndex].AccessibilityObject?.Name);
+                }
+
+                return name.Length > 0 ? name.ToString() : base.Name;
+            }
+        }
 
         protected override View View => View.Details;
 
