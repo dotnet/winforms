@@ -5,7 +5,6 @@ using System.ComponentModel;
 using System.Drawing;
 using System.Windows.Forms.ButtonInternal;
 using System.Windows.Forms.Layout;
-using Windows.Win32.System.Variant;
 using Windows.Win32.UI.Accessibility;
 
 namespace System.Windows.Forms;
@@ -445,16 +444,22 @@ public partial class RadioButton : ButtonBase
     /// </summary>
     protected virtual void OnCheckedChanged(EventArgs e)
     {
+        // Take the state before the MSAA notifications, which run synchronously.
+        bool isChecked = Checked;
+
         // MSAA events:
         AccessibilityNotifyClients(AccessibleEvents.StateChange, -1);
         AccessibilityNotifyClients(AccessibleEvents.NameChange, -1);
 
         // UIA events:
-        if (IsAccessibilityObjectCreated)
+        if (IsAccessibilityObjectCreated
+            && AccessibilityObject.IsPatternSupported(UIA_PATTERN_ID.UIA_SelectionItemPatternId))
         {
-            using var nameVariant = (VARIANT)Name;
-            AccessibilityObject.RaiseAutomationPropertyChangedEvent(UIA_PROPERTY_ID.UIA_NamePropertyId, nameVariant, nameVariant);
-            AccessibilityObject.RaiseAutomationEvent(UIA_EVENT_ID.UIA_AutomationPropertyChangedEventId);
+            UIA_EVENT_ID selectionEventId = isChecked
+                ? UIA_EVENT_ID.UIA_SelectionItem_ElementSelectedEventId
+                : UIA_EVENT_ID.UIA_SelectionItem_ElementRemovedFromSelectionEventId;
+
+            AccessibilityObject.RaiseAutomationEvent(selectionEventId);
         }
 
         ((EventHandler?)Events[s_checkedChangedEvent])?.Invoke(this, e);
