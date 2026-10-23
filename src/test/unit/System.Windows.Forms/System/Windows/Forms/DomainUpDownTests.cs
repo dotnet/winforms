@@ -1514,6 +1514,38 @@ public class DomainUpDownTests : IDisposable
         _control.SelectedIndex.Should().Be(-1);
     }
 
+    [WinFormsTheory]
+    [InlineData(0, 2)]
+    [InlineData(1, 2)]
+    [InlineData(2, 1)]
+    public void DomainUpDown_Items_Insert_UpdatesSelectedIndex_WhenNotSorted(int insertIndex, int expectedSelectedIndex)
+    {
+        using DomainUpDown control = new();
+        control.Items.AddRange(new string[] { "Item1", "Item2", "Item3" });
+        control.SelectedIndex = 1;
+        control.SelectedItem.Should().Be("Item2");
+        control.Text.Should().Be("Item2");
+
+        control.Items.Insert(insertIndex, "NewItem");
+
+        control.SelectedIndex.Should().Be(expectedSelectedIndex);
+        control.SelectedItem.Should().Be("Item2");
+        control.Text.Should().Be("Item2");
+    }
+
+    [WinFormsFact]
+    public void DomainUpDown_Items_Insert_NoSelection_SelectedIndexRemainsNegativeOne()
+    {
+        using DomainUpDown control = new();
+        control.Items.AddRange(new string[] { "Item1", "Item2" });
+        control.SelectedIndex.Should().Be(-1);
+
+        control.Items.Insert(0, "Item0");
+
+        control.SelectedIndex.Should().Be(-1);
+        control.SelectedItem.Should().BeNull();
+    }
+
     public class SubDomainUpDown : DomainUpDown
     {
         public new const int ScrollStateAutoScrolling = ScrollableControl.ScrollStateAutoScrolling;
