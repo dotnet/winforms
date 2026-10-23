@@ -85,6 +85,7 @@ internal sealed class RadioButtonModernAdapter : RadioButtonBaseAdapter
         LayoutData layout = Layout(e).Layout();
         AdjustFocusRectangle(layout);
         PaintBackgroundImage(e);
+        PaintImage(e, layout);
 
         Color? customBorderColor = Control.FlatAppearance.BorderColor.IsEmpty
             ? null
@@ -100,8 +101,6 @@ internal sealed class RadioButtonModernAdapter : RadioButtonBaseAdapter
             Control.Focused && Control.ShowFocusCues,
             customOnColor: null,
             customBorderColor);
-
-        PaintImage(e, layout);
 
         Color preferredTextColor = Control.ShouldSerializeForeColor() || Control.ForeColor != Forms.Control.DefaultForeColor
             ? Control.ForeColor
