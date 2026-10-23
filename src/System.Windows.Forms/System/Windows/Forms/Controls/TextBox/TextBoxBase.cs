@@ -2862,7 +2862,11 @@ public abstract partial class TextBoxBase : Control
             cornerRadius,
             borderThickness);
 
-        if (BorderStyle == BorderStyle.Fixed3D && canRenderRoundedChrome)
+        bool usesRoundedChrome =
+            BorderStyle == BorderStyle.Fixed3D
+            && canRenderRoundedChrome;
+
+        if (usesRoundedChrome)
         {
             ParentBackgroundRenderer.Paint(this, offscreenGraphics, bufferBounds, parentBackColor);
         }
@@ -2876,8 +2880,7 @@ public abstract partial class TextBoxBase : Control
         {
             case BorderStyle.None:
 
-                // Just fill a rectangle.
-                offscreenGraphics.FillRectangle(clientBackgroundBrush, deflatedBounds);
+                offscreenGraphics.FillRectangle(clientBackgroundBrush, bounds);
                 break;
 
             case BorderStyle.FixedSingle:
@@ -2916,7 +2919,7 @@ public abstract partial class TextBoxBase : Control
         }
 
         // Render the lower edge according to the border style, keeping straight styles to one pixel.
-        if (BorderStyle == BorderStyle.Fixed3D && canRenderRoundedChrome)
+        if (usesRoundedChrome)
         {
             using GraphicsPath bottomEdgePath = CreateVisualStylesBottomEdgePath(
                 deflatedBounds,
