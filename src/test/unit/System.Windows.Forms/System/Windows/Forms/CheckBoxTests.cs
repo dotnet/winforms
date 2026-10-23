@@ -1092,6 +1092,58 @@ public class CheckBoxTests : AbstractButtonBaseTests
         Assert.Equal(preferredSize, box.GetPreferredSize(Size.Empty));
     }
 
+    [WinFormsTheory]
+    [InlineData(KnownColor.White, KnownColor.Black)]
+    [InlineData(KnownColor.Black, KnownColor.White)]
+    public void CheckBox_ToggleSwitch_FocusedPaintsContrastingRoundedFocusBorderAndReservesMargin(
+        KnownColor backgroundKnownColor,
+        KnownColor expectedFocusKnownColor)
+    {
+        using SystemVisualSettingsTestScope settingsScope = new(
+            clientAreaAnimationEnabled: false,
+            highContrastEnabled: false,
+            accentColor: Color.Red);
+        Color backgroundColor = Color.FromKnownColor(backgroundKnownColor);
+        Color expectedFocusColor = Color.FromKnownColor(expectedFocusKnownColor);
+        using CheckBox box = new()
+        {
+            Appearance = Appearance.ToggleSwitch,
+            BackColor = backgroundColor,
+            ForeColor = Color.Black,
+            Size = new Size(180, 120),
+            Text = "Toggle\r\n11111\r\n2222222222\r\n33333\r\n555555555555555",
+            VisualStylesMode = VisualStylesMode.Net11
+        };
+
+        Rendering.CheckBox.ToggleSwitchMetrics metrics = Rendering.CheckBox.ToggleSwitchMetrics.Create(box);
+        Rectangle contentBounds = Rendering.CheckBox.ToggleSwitchMetrics.GetContentBounds(box, metrics);
+        Rectangle focusBounds = Rendering.CheckBox.ToggleSwitchMetrics.GetFocusBounds(box.ClientRectangle, metrics);
+        Size textSize = TextRenderer.MeasureText(box.Text, box.Font);
+        Size preferredSizeWithoutFocusMargin = new(
+            metrics.SwitchWidth + metrics.TextGap + textSize.Width + box.Padding.Horizontal,
+            Math.Max(metrics.SwitchHeight, textSize.Height) + box.Padding.Vertical);
+
+        Assert.Equal(box.Padding.Left + metrics.FocusMargin, contentBounds.Left);
+        Assert.Equal(box.Padding.Top + metrics.FocusMargin, contentBounds.Top);
+        Assert.Equal(
+            preferredSizeWithoutFocusMargin + new Size(2 * metrics.FocusMargin, 2 * metrics.FocusMargin),
+            box.GetPreferredSize(Size.Empty));
+
+        Rendering.CheckBox.AnimatedToggleSwitchRenderer renderer =
+            box.TestAccessor.Dynamic.ToggleSwitchRenderer;
+        renderer.SynchronizeState();
+        using Bitmap bitmap = new(box.Width, box.Height);
+        using Graphics graphics = Graphics.FromImage(bitmap);
+
+        renderer.TestAccessor.Dynamic.RenderFocusBorder(graphics, metrics);
+
+        Assert.True(CountPixels(bitmap, expectedFocusColor) > 0);
+        Assert.True(CountPixels(bitmap, expectedFocusColor) > 0);
+        Assert.Equal(0, CountPixels(bitmap, Color.Red));
+        Assert.NotEqual(expectedFocusColor.ToArgb(), bitmap.GetPixel(focusBounds.Left, focusBounds.Top).ToArgb());
+        Assert.Equal(0, CountPixelsInColumn(bitmap, box.ClientRectangle.Right - 1, expectedFocusColor));
+    }
+
     [WinFormsFact]
     public void CheckBox_ToggleSwitch_SynchronizeState_SettlesInteractionChannels()
     {
@@ -1213,6 +1265,22 @@ public class CheckBoxTests : AbstractButtonBaseTests
                 {
                     count++;
                 }
+            }
+        }
+
+        return count;
+    }
+
+    private static int CountPixelsInColumn(Bitmap bitmap, int column, Color color)
+    {
+        int argb = color.ToArgb();
+        int count = 0;
+
+        for (int y = 0; y < bitmap.Height; y++)
+        {
+            if (bitmap.GetPixel(column, y).ToArgb() == argb)
+            {
+                count++;
             }
         }
 
