@@ -835,6 +835,18 @@ public class DataGridViewCellStyleTests
         Assert.Equal(DataGridViewTriState.NotSet, style.WrapMode);
     }
 
+    [Fact]
+    public void DataGridViewCellStyle_SortGlyphColor_HasExpectedDesignerMetadata()
+    {
+        PropertyDescriptor descriptor =
+            TypeDescriptor.GetProperties(typeof(DataGridViewCellStyle))
+                          [nameof(DataGridViewCellStyle.SortGlyphColor)];
+
+        Assert.NotNull(descriptor);
+        Assert.False(descriptor.IsBrowsable);
+        Assert.Equal(DesignerSerializationVisibility.Hidden, descriptor.SerializationVisibility);
+    }
+
     public static IEnumerable<object[]> Equals_TestData()
     {
         Font font = SystemFonts.DefaultFont;
@@ -1008,6 +1020,19 @@ public class DataGridViewCellStyleTests
         {
             new DataGridViewCellStyle { Tag = "tag" },
             new DataGridViewCellStyle { Tag = "other" },
+            false
+        };
+        yield return new object[]
+        {
+            new DataGridViewCellStyle { SortGlyphColor = Color.Red },
+            new DataGridViewCellStyle { SortGlyphColor = Color.Red },
+            true
+        };
+
+        yield return new object[]
+        {
+            new DataGridViewCellStyle { SortGlyphColor = Color.Red },
+            new DataGridViewCellStyle { SortGlyphColor = Color.Blue },
             false
         };
         yield return new object[]
