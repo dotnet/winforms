@@ -218,9 +218,10 @@ public partial class RadioButton : ButtonBase
         //   (because that would let us usually let us draw with the VisualStyleRenderers,
         //   which cause HighDPI issues in Dark Mode).
         IsToggleSwitchAppearance
-            || ((!Application.IsDarkModeEnabled
+           || ((!Application.IsDarkModeEnabled
                 || Appearance != Appearance.Button
-                || FlatStyle != FlatStyle.Standard)
+                || FlatStyle != FlatStyle.Standard
+                || EffectiveVisualStylesMode >= VisualStylesMode.Net11)
                 && base.OwnerDraw);
 
     private bool IsToggleSwitchAppearance
