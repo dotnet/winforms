@@ -108,7 +108,7 @@ public partial class DomainUpDown
             }
             else if (_owner._domainIndex != -1 && index <= _owner._domainIndex)
             {
-                _owner.SelectIndex(_owner._domainIndex + 1);
+                _owner._domainIndex++;
             }
         }
     }
