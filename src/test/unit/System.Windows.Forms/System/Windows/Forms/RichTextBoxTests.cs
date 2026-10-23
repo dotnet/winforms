@@ -24,6 +24,74 @@ public partial class RichTextBoxTests
     private static readonly int s_preferredHeight = Control.DefaultFont.Height + SystemInformation.BorderSize.Height * 4 + 3;
 
     [WinFormsFact]
+    public void RichTextBox_DrawDisabledText_RendersPartialLastLineAndClipsOverflow()
+    {
+        int lineHeight = Control.DefaultFont.Height;
+        Size size = new(80, lineHeight * 4 + lineHeight / 2);
+
+        using Bitmap fourLines = Render("1\r\n2\r\n3\r\n4", size);
+        using Bitmap fiveLines = Render("1\r\n2\r\n3\r\n4\r\n5", size);
+        using Bitmap overflow = Render("1\r\n2\r\n3\r\n4\r\n5\r\n6\r\n7\r\n8\r\n9\r\n10", size);
+        using Bitmap longWord = Render(new string('1', 100), new(40, lineHeight * 3));
+
+        AssertBitmapsNotEqual(fourLines, fiveLines);
+        AssertBitmapsEqual(fiveLines, overflow);
+        AssertHasInkBelowFirstLine(longWord, lineHeight);
+
+        static Bitmap Render(string text, Size size)
+        {
+            Bitmap bitmap = new(size.Width, size.Height);
+            using Graphics graphics = Graphics.FromImage(bitmap);
+            graphics.Clear(Color.Black);
+            RichTextBox.DrawDisabledText(graphics, text, Control.DefaultFont, new(Point.Empty, size));
+            return bitmap;
+        }
+
+        static void AssertBitmapsEqual(Bitmap expected, Bitmap actual)
+        {
+            for (int y = 0; y < expected.Height; y++)
+            {
+                for (int x = 0; x < expected.Width; x++)
+                {
+                    Assert.Equal(expected.GetPixel(x, y), actual.GetPixel(x, y));
+                }
+            }
+        }
+
+        static void AssertBitmapsNotEqual(Bitmap expected, Bitmap actual)
+        {
+            for (int y = 0; y < expected.Height; y++)
+            {
+                for (int x = 0; x < expected.Width; x++)
+                {
+                    if (expected.GetPixel(x, y) != actual.GetPixel(x, y))
+                    {
+                        return;
+                    }
+                }
+            }
+
+            Assert.Fail("Expected bitmaps to differ.");
+        }
+
+        static void AssertHasInkBelowFirstLine(Bitmap bitmap, int lineHeight)
+        {
+            for (int y = lineHeight; y < bitmap.Height; y++)
+            {
+                for (int x = 0; x < bitmap.Width; x++)
+                {
+                    if (bitmap.GetPixel(x, y) != Color.Black)
+                    {
+                        return;
+                    }
+                }
+            }
+
+            Assert.Fail("Expected the long word to wrap onto another line.");
+        }
+    }
+
+    [WinFormsFact]
     public void RichTextBox_Ctor_Default()
     {
         using SubRichTextBox control = new();
