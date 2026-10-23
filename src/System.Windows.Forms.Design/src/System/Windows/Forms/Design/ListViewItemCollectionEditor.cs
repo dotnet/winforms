@@ -70,7 +70,29 @@ internal class ListViewItemCollectionEditor : CollectionEditor
             }
         }
 
+        List<(ListViewItem Item, ListViewGroup Group)> previousGroups = [];
+        if (editValue is ListView.ListViewItemCollection items)
+        {
+            foreach (ListViewItem item in items)
+            {
+                if (item.Group is { } group)
+                {
+                    previousGroups.Add((item, group));
+                }
+            }
+        }
+
         object result = base.SetItems(editValue, value);
+
+        // Unhosting can clear Group without removing the item from the group's collection.
+        // Clean up all original items, including those removed by the editor.
+        foreach ((ListViewItem item, ListViewGroup group) in previousGroups)
+        {
+            if (item.Group != group)
+            {
+                group.Items.Remove(item);
+            }
+        }
 
         if (groups is not null)
         {
@@ -81,12 +103,6 @@ internal class ListViewItemCollectionEditor : CollectionEditor
                     && item.Group != group
                     && item.ListView == group.ListView)
                 {
-                    // With a created handle the item may be left in the group's list even though its Group is null.
-                    if (group.Items.Contains(item))
-                    {
-                        group.Items.Remove(item);
-                    }
-
                     item.Group = group;
                 }
             }
