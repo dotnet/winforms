@@ -27,6 +27,32 @@
   </Suppression>
   <Suppression>
     <DiagnosticId>CP0015</DiagnosticId>
+    <Target>P:System.Drawing.Image.Height:[T:System.ComponentModel.DefaultValueAttribute]</Target>
+    <Left>lib/net10.0/System.Drawing.Common.dll</Left>
+    <Right>lib/net10.0/System.Drawing.Common.dll</Right>
+    <IsBaselineSuppression>true</IsBaselineSuppression>
+  </Suppression>
+  <Suppression>
+    <DiagnosticId>CP0015</DiagnosticId>
+    <Target>P:System.Drawing.Image.Width:[T:System.ComponentModel.DefaultValueAttribute]</Target>
+    <Left>lib/net10.0/System.Drawing.Common.dll</Left>
+    <Right>lib/net10.0/System.Drawing.Common.dll</Right>
+    <IsBaselineSuppression>true</IsBaselineSuppression>
+  </Suppression>
+  <Suppression>
+    <DiagnosticId>CP0015</DiagnosticId>
+    <Target>P:System.Drawing.Image.Height:[T:System.ComponentModel.DefaultValueAttribute]</Target>
+    <Left>lib/netstandard2.0/System.Drawing.Common.dll</Left>
+    <Right>lib/net10.0/System.Drawing.Common.dll</Right>
+  </Suppression>
+  <Suppression>
+    <DiagnosticId>CP0015</DiagnosticId>
+    <Target>P:System.Drawing.Image.Width:[T:System.ComponentModel.DefaultValueAttribute]</Target>
+    <Left>lib/netstandard2.0/System.Drawing.Common.dll</Left>
+    <Right>lib/net10.0/System.Drawing.Common.dll</Right>
+  </Suppression>
+  <Suppression>
+    <DiagnosticId>CP0015</DiagnosticId>
     <Target>P:System.Drawing.Font.Name:[T:System.ComponentModel.EditorAttribute]</Target>
     <Left>lib/netstandard2.0/System.Drawing.Common.dll</Left>
     <Right>lib/net462/System.Drawing.Common.dll</Right>
