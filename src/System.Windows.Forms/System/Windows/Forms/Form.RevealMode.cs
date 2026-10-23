@@ -20,16 +20,14 @@ public partial class Form
     ///  Gets or sets how this form is presented while its initial appearance is prepared.
     /// </summary>
     /// <value>
-    ///  A <see cref="FormRevealMode"/> value. When not explicitly set, the effective value is
-    ///  <see cref="FormRevealMode.Deferred"/> or <see cref="FormRevealMode.Classic"/>, resolved from
-    ///  <see cref="Application.IsFormRevealDeferred"/>.
+    ///  A <see cref="FormRevealMode"/> value. The default is <see cref="FormRevealMode.Inherit"/>.
     /// </value>
     /// <remarks>
     ///  <para>
-    ///   As an ambient property, a form that does not have this value set explicitly resolves it from
-    ///   <see cref="Application.DefaultFormRevealMode"/>. Unlike a control-level ambient property that
-    ///   chains through a parent hierarchy, this property does not chain through a parent hierarchy:
-    ///   deferred reveal is a top-level-window-only concept (see remarks on
+    ///   When this property is <see cref="FormRevealMode.Inherit"/>, the effective reveal behavior is
+    ///   resolved from <see cref="Application.DefaultFormRevealMode"/>. Unlike a control-level ambient
+    ///   property that chains through a parent hierarchy, this property does not chain through a parent
+    ///   hierarchy: deferred reveal is a top-level-window-only concept (see remarks on
     ///   <see cref="FormRevealMode.Deferred"/> and the DWM cloaking mechanism it relies on), so only
     ///   <see cref="Form"/> itself, and the process-wide <see cref="Application"/> default, participate.
     ///  </para>
@@ -44,21 +42,12 @@ public partial class Form
     [SRDescription(nameof(SR.FormFormRevealModeDescr))]
     public virtual FormRevealMode FormRevealMode
     {
-        get
-        {
-            if (!Properties.TryGetValue(s_propFormRevealMode, out FormRevealMode value)
-                || value == FormRevealMode.Inherit)
-            {
-                value = Application.IsFormRevealDeferred ? FormRevealMode.Deferred : FormRevealMode.Classic;
-            }
-
-            return value;
-        }
+        get => Properties.GetValueOrDefault(s_propFormRevealMode, FormRevealMode.Inherit);
         set
         {
             SourceGenerated.EnumValidator.Validate(value, nameof(value));
 
-            FormRevealMode previous = FormRevealMode;
+            FormRevealMode previousEffectiveValue = EffectiveFormRevealMode;
 
             if (value == FormRevealMode.Inherit)
             {
@@ -69,10 +58,25 @@ public partial class Form
                 Properties.AddValue(s_propFormRevealMode, value);
             }
 
-            if (FormRevealMode != previous)
+            if (EffectiveFormRevealMode != previousEffectiveValue)
             {
                 OnFormRevealModeChanged(EventArgs.Empty);
             }
+        }
+    }
+
+    private FormRevealMode EffectiveFormRevealMode
+    {
+        get
+        {
+            FormRevealMode mode = FormRevealMode;
+
+            return mode switch
+            {
+                FormRevealMode.Inherit when Application.IsFormRevealDeferred => FormRevealMode.Deferred,
+                FormRevealMode.Inherit => FormRevealMode.Classic,
+                _ => mode
+            };
         }
     }
 
@@ -96,7 +100,7 @@ public partial class Form
 
     private bool ShouldSerializeFormRevealMode() => Properties.ContainsKey(s_propFormRevealMode);
 
-    private void ResetFormRevealMode() => Properties.RemoveValue(s_propFormRevealMode);
+    private void ResetFormRevealMode() => FormRevealMode = FormRevealMode.Inherit;
 
     internal bool DeferredAppearanceCloaked
     {
@@ -190,7 +194,7 @@ public partial class Form
         // be true and the cloak would never engage, so the window is shown uncloaked and the
         // default-background flash the mode is meant to prevent still occurs. Cloaking the
         // already-hidden window now is exactly the intended behavior for both Show and ShowDialog.
-        => FormRevealMode == FormRevealMode.Deferred
+        => EffectiveFormRevealMode == FormRevealMode.Deferred
             && TopLevel
             && !IsMdiChild
             && IsHandleCreated;
