@@ -335,6 +335,10 @@ internal abstract class CheckBoxBaseAdapter : CheckableControlBaseAdapter
             // done in WPF and ComCtl32).
             layout.Focus = Control.AutoSize ? Rectangle.Inflate(layout.CheckBounds, -2, -2) : layout.Field;
         }
+        else if (Control.Image is not null)
+        {
+            layout.Focus = layout.TextBounds;
+        }
     }
 
     internal override LayoutOptions CommonLayout()
