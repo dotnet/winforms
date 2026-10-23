@@ -38,7 +38,7 @@ Namespace Microsoft.VisualBasic.Logging
         Private _baseFileName As String = Path.GetFileNameWithoutExtension(Application.ExecutablePath)
 
         ' Directory to be used for the log file if Location is set to Custom
-        Private _customLocation As String = Application.UserAppDataPath
+        Private _customLocation As String
 
         ' The delimiter to be used to separate fields in a line of output
         Private _delimiter As String = vbTab
@@ -277,6 +277,10 @@ Namespace Microsoft.VisualBasic.Logging
                     If Attributes.ContainsKey(KEY_CUSTOMLOCATION) Then
                         Me.CustomLocation = Attributes(KEY_CUSTOMLOCATION)
                     End If
+                End If
+
+                If String.IsNullOrEmpty(_customLocation) Then
+                    _customLocation = Application.UserAppDataPath
                 End If
 
                 Dim fileName As String = Path.GetFullPath(_customLocation)
