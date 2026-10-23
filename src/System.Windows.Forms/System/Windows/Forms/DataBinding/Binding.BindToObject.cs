@@ -212,7 +212,7 @@ public partial class Binding
 
             if (_bindingManager is not null
                 && _owner.BindableComponent is not null
-                && _owner.ComponentCreated
+                && (_owner.ComponentCreated || _owner.SupportsBindingBeforeComponentCreated(_owner.BindableComponent))
                 && IsDataSourceInitialized)
             {
                 string dataField = _owner.BindingMemberInfo.BindingField;
