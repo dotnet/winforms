@@ -7042,6 +7042,20 @@ public partial class ToolStripTests : IDisposable
         Assert.False(control.IsHandleCreated);
     }
 
+    [WinFormsFact]
+    public void ToolStripManager_ProcessShortcut_ContextMenuStripGetterModifiesToolStrips_DoesNotThrow()
+    {
+        using ContextMenuStrip contextMenuStrip = new();
+        using ToolStrip toolStrip = new();
+        using DynamicContextMenuControl control = new(contextMenuStrip);
+        Message message = Message.Create(control.Handle, 0, 0, 0);
+
+        bool processed = ToolStripManager.ProcessShortcut(ref message, Keys.F5);
+
+        processed.Should().BeFalse();
+        control.ContextMenuStripGetCount.Should().Be(1);
+    }
+
     [WinFormsTheory]
     [InlineData(1, 2)]
     [InlineData(0, 0)]
@@ -7560,6 +7574,23 @@ public partial class ToolStripTests : IDisposable
         public Func<char, bool> ProcessDialogCharAction { get; set; }
 
         protected override bool ProcessDialogChar(char charCode) => ProcessDialogCharAction(charCode);
+    }
+
+    private sealed class DynamicContextMenuControl(ContextMenuStrip contextMenuStrip) : Control
+    {
+        public int ContextMenuStripGetCount { get; private set; }
+
+        public override ContextMenuStrip ContextMenuStrip
+        {
+            get
+            {
+                ContextMenuStripGetCount++;
+                using ToolStrip toolStrip = new();
+
+                return contextMenuStrip;
+            }
+            set => base.ContextMenuStrip = value;
+        }
     }
 
     private class SubToolStripItem : ToolStripItem
