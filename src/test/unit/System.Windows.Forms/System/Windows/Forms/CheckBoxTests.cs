@@ -1006,8 +1006,204 @@ public class CheckBoxTests : AbstractButtonBaseTests
         Assert.Equal(metrics.GetPreferredSize(box), preferredSize);
     }
 
+    [WinFormsTheory]
+    [InlineData(96, 0f, 0f)]
+    [InlineData(96, 1f, 0f)]
+    [InlineData(96, 0f, 1f)]
+    [InlineData(96, 1f, 1f)]
+    [InlineData(120, 0f, 0f)]
+    [InlineData(120, 1f, 0f)]
+    [InlineData(120, 0f, 1f)]
+    [InlineData(120, 1f, 1f)]
+    [InlineData(144, 0f, 0f)]
+    [InlineData(144, 1f, 0f)]
+    [InlineData(144, 0f, 1f)]
+    [InlineData(144, 1f, 1f)]
+    [InlineData(192, 0f, 0f)]
+    [InlineData(192, 1f, 0f)]
+    [InlineData(192, 0f, 1f)]
+    [InlineData(192, 1f, 1f)]
+    public void CheckBox_ToggleSwitch_ThumbBounds_LeaveScaledHorizontalGap(
+        int deviceDpi,
+        float position,
+        float hoverAmount)
+    {
+        using CheckBox box = new()
+        {
+            Appearance = Appearance.ToggleSwitch,
+            VisualStylesMode = VisualStylesMode.Net11
+        };
+        box.DeviceDpiInternal = deviceDpi;
+        Rendering.CheckBox.ToggleSwitchMetrics metrics = Rendering.CheckBox.ToggleSwitchMetrics.Create(box);
+        Rectangle switchBounds = new(10, 10, metrics.SwitchWidth, metrics.SwitchHeight);
+
+        RectangleF thumbBounds = Rendering.CheckBox.AnimatedToggleSwitchRenderer.GetThumbBounds(
+            box,
+            switchBounds,
+            metrics,
+            position,
+            hoverAmount);
+
+        float borderInset = metrics.BorderThickness / 2f;
+        float actualGap = position == 0f
+            ? thumbBounds.Left - switchBounds.Left - borderInset
+            : switchBounds.Right - borderInset - thumbBounds.Right;
+
+        Assert.Equal(box.LogicalToDeviceUnits(1), actualGap);
+        Assert.Equal(hoverAmount == 0f ? metrics.ThumbDiameter : metrics.HoverThumbDiameter, thumbBounds.Width);
+        Assert.Equal(thumbBounds.Width, thumbBounds.Height);
+        Assert.Equal(switchBounds.Top + (switchBounds.Height / 2f), thumbBounds.Top + (thumbBounds.Height / 2f));
+        Assert.True(switchBounds.Contains(Rectangle.Ceiling(thumbBounds)));
+    }
+
+    [WinFormsTheory]
+    [InlineData(96, 0f)]
+    [InlineData(96, 0.5f)]
+    [InlineData(96, 1f)]
+    [InlineData(144, 0f)]
+    [InlineData(144, 0.5f)]
+    [InlineData(144, 1f)]
+    [InlineData(192, 0f)]
+    [InlineData(192, 0.5f)]
+    [InlineData(192, 1f)]
+    public void CheckBox_ToggleSwitch_ThumbBounds_TravelPreservesGapThroughoutAnimation(int deviceDpi, float hoverAmount)
+    {
+        using CheckBox box = new()
+        {
+            Appearance = Appearance.ToggleSwitch,
+            VisualStylesMode = VisualStylesMode.Net11
+        };
+        box.DeviceDpiInternal = deviceDpi;
+        Rendering.CheckBox.ToggleSwitchMetrics metrics = Rendering.CheckBox.ToggleSwitchMetrics.Create(box);
+        Rectangle switchBounds = new(10, 10, metrics.SwitchWidth, metrics.SwitchHeight);
+        float diameter = metrics.ThumbDiameter + ((metrics.HoverThumbDiameter - metrics.ThumbDiameter) * hoverAmount);
+        float inset = (metrics.BorderThickness / 2f) + box.LogicalToDeviceUnits(1);
+        float expectedLeft = switchBounds.Left + inset;
+        float expectedRight = switchBounds.Right - inset;
+        float expectedTravel = expectedRight - expectedLeft - diameter;
+        float[] positions = [0f, 0.25f, 0.5f, 0.75f, 1f];
+
+        foreach (float position in positions)
+        {
+            RectangleF thumbBounds = Rendering.CheckBox.AnimatedToggleSwitchRenderer.GetThumbBounds(
+                box,
+                switchBounds,
+                metrics,
+                position,
+                hoverAmount);
+
+            Assert.Equal(expectedLeft + (expectedTravel * position), thumbBounds.Left);
+            Assert.Equal(diameter, thumbBounds.Width);
+            Assert.Equal(diameter, thumbBounds.Height);
+            Assert.InRange(thumbBounds.Left, expectedLeft, expectedRight - diameter);
+            Assert.InRange(thumbBounds.Right, expectedLeft + diameter, expectedRight);
+            Assert.Equal(switchBounds.Top + (switchBounds.Height / 2f), thumbBounds.Top + (diameter / 2f));
+            Assert.True(switchBounds.Contains(Rectangle.Ceiling(thumbBounds)));
+        }
+
+        RectangleF uncheckedBounds = Rendering.CheckBox.AnimatedToggleSwitchRenderer.GetThumbBounds(
+            box, switchBounds, metrics, position: 0f, hoverAmount: hoverAmount);
+        RectangleF checkedBounds = Rendering.CheckBox.AnimatedToggleSwitchRenderer.GetThumbBounds(
+            box, switchBounds, metrics, position: 1f, hoverAmount: hoverAmount);
+
+        Assert.Equal(expectedTravel, checkedBounds.Left - uncheckedBounds.Left);
+        Assert.Equal(expectedRight, checkedBounds.Right);
+    }
+
+    public static IEnumerable<object[]> CheckBox_ToggleSwitch_RendererGeometry_TestData()
+    {
+        int[] deviceDpis = [96, 144, 192];
+        RightToLeft[] directions = [RightToLeft.No, RightToLeft.Yes];
+        Size[] sizes = [new(100, 60), new(1, 1), new(8, 8), new(1, 30), new(30, 1)];
+        bool[] states = [false, true];
+
+        foreach (int deviceDpi in deviceDpis)
+        {
+            foreach (RightToLeft direction in directions)
+            {
+                foreach (Size size in sizes)
+                {
+                    foreach (bool isChecked in states)
+                    {
+                        foreach (bool hovered in states)
+                        {
+                            yield return [deviceDpi, direction, size, isChecked, hovered];
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    [WinFormsTheory]
+    [MemberData(nameof(CheckBox_ToggleSwitch_RendererGeometry_TestData))]
+    public void CheckBox_ToggleSwitch_RendererGeometry_PreservesEndpointsWhenClipped(
+        int deviceDpi,
+        RightToLeft rightToLeft,
+        Size size,
+        bool isChecked,
+        bool hovered)
+    {
+        using SystemVisualSettingsTestScope settingsScope = new(
+            clientAreaAnimationEnabled: false,
+            highContrastEnabled: false);
+        using CheckBox box = new()
+        {
+            Appearance = Appearance.ToggleSwitch,
+            VisualStylesMode = VisualStylesMode.Net11,
+            RightToLeft = rightToLeft,
+            CheckAlign = ContentAlignment.MiddleLeft,
+            Checked = isChecked,
+            Size = size,
+            Text = string.Empty
+        };
+        box.DeviceDpiInternal = deviceDpi;
+        Rendering.CheckBox.AnimatedToggleSwitchRenderer renderer =
+            box.TestAccessor.Dynamic.ToggleSwitchRenderer;
+        if (hovered)
+        {
+            box.TestAccessor.Dynamic.OnMouseEnter(EventArgs.Empty);
+        }
+
+        renderer.SynchronizeState();
+        using Bitmap bitmap = new(box.Width, box.Height);
+        using Graphics graphics = Graphics.FromImage(bitmap);
+
+        renderer.RenderControl(graphics);
+
+        float position = renderer.TestAccessor.Dynamic._positionCurrent;
+        float hoverAmount = renderer.TestAccessor.Dynamic._hoverCurrent;
+        Assert.Equal(isChecked ? 1f : 0f, position);
+        Assert.Equal(hovered ? 1f : 0f, hoverAmount);
+        Rendering.CheckBox.ToggleSwitchMetrics metrics = Rendering.CheckBox.ToggleSwitchMetrics.Create(box);
+        Rectangle switchBounds = Rendering.CheckBox.AnimatedToggleSwitchRenderer.GetSwitchBounds(
+            box, box.RtlTranslatedCheckAlign, metrics);
+        RectangleF thumbBounds = Rendering.CheckBox.AnimatedToggleSwitchRenderer.GetThumbBounds(
+            box, switchBounds, metrics, position, hoverAmount);
+        float borderInset = metrics.BorderThickness / 2f;
+        float actualGap = isChecked
+            ? switchBounds.Right - borderInset - thumbBounds.Right
+            : thumbBounds.Left - switchBounds.Left - borderInset;
+
+        Assert.Equal(box.LogicalToDeviceUnits(1), actualGap);
+        Assert.Equal(hovered ? metrics.HoverThumbDiameter : metrics.ThumbDiameter, thumbBounds.Width);
+        Assert.True(switchBounds.Contains(Rectangle.Ceiling(thumbBounds)));
+        Assert.Equal(metrics.SwitchWidth, switchBounds.Width);
+        Assert.Equal(metrics.SwitchHeight, switchBounds.Height);
+        int edgeInset = Math.Max(1, (metrics.BorderThickness / 2) + 1);
+        int maximumSwitchX = Math.Max(0, box.ClientRectangle.Width - metrics.SwitchWidth);
+        if (rightToLeft == RightToLeft.Yes)
+        {
+            Assert.InRange(switchBounds.Left, Math.Max(0, maximumSwitchX - edgeInset), maximumSwitchX);
+        }
+        else
+        {
+            Assert.InRange(switchBounds.Left, 0, Math.Min(edgeInset, maximumSwitchX));
+        }
+    }
+
     [WinFormsFact]
-    public void CheckBox_ToggleSwitch_DefaultOnColorUsesWindowsAccent()
+    public void CheckBox_ToggleSwitch_CheckedTrackUsesContrastAdjustedWindowsAccent()
     {
         if (SystemInformation.HighContrast)
         {
@@ -1030,36 +1226,77 @@ public class CheckBoxTests : AbstractButtonBaseTests
 
         renderer.RenderControl(graphics);
 
-        Assert.True(CountPixels(bitmap, Application.SystemVisualSettings.AccentColor) > 0);
+        Color expectedTrackColor = Rendering.CheckBox.AnimatedToggleSwitchRenderer.GetCheckedTrackColor(
+            Application.SystemVisualSettings.AccentColor,
+            Application.IsDarkModeEnabled);
+
+        Assert.True(CountPixels(bitmap, expectedTrackColor) > 0);
     }
 
-    [WinFormsFact]
-    public void CheckBox_ToggleSwitch_DarkAccentUsesReadableThumbColor()
+    [Theory]
+    [InlineData(false, 0x4D, 0x4D, 0x4D, true)]
+    [InlineData(false, 0xFF, 0xD8, 0x00, false)]
+    [InlineData(true, 0x20, 0x20, 0x20, false)]
+    [InlineData(true, 0xFF, 0xD8, 0x00, true)]
+    public void CheckBox_ToggleSwitch_CheckedTrackMaintainsThumbContrast(
+        bool darkMode,
+        int red,
+        int green,
+        int blue,
+        bool unchanged)
     {
-        if (SystemInformation.HighContrast)
-        {
-            return;
-        }
+        Color accentColor = Color.FromArgb(red, green, blue);
 
-        using SystemVisualSettingsTestScope settingsScope =
-            new(clientAreaAnimationEnabled: true, accentColor: Color.FromArgb(0x4D, 0x4D, 0x4D));
-        using CheckBox box = new()
-        {
-            Appearance = Appearance.ToggleSwitch,
-            BackColor = Color.Black,
-            Checked = true,
-            Size = new Size(60, 24),
-            VisualStylesMode = VisualStylesMode.Net11
-        };
-        Rendering.CheckBox.AnimatedToggleSwitchRenderer renderer =
-            box.TestAccessor.Dynamic.ToggleSwitchRenderer;
-        renderer.SynchronizeState();
-        using Bitmap bitmap = new(box.Width, box.Height);
-        using Graphics graphics = Graphics.FromImage(bitmap);
+        Color trackColor = Rendering.CheckBox.AnimatedToggleSwitchRenderer.GetCheckedTrackColor(
+            accentColor,
+            darkMode);
+        Color focusedTrackColor = Rendering.Animation.AnimatedControlRenderer.ApplyInteractionShade(
+            trackColor,
+            1f);
+        Color thumbColor = darkMode ? Color.Black : Color.White;
+        float contrastRatio = Rendering.Button.PopupButtonColorMath.GetContrastRatio(
+            thumbColor,
+            trackColor);
 
-        renderer.RenderControl(graphics);
+        Assert.Equal(unchanged, trackColor == accentColor);
+        Assert.True(contrastRatio >= 3f);
+        Assert.True(
+            Rendering.Button.PopupButtonColorMath.GetContrastRatio(
+                thumbColor,
+                focusedTrackColor) >= 3f);
+    }
 
-        Assert.True(CountPixels(bitmap, Color.White) > 0);
+    [Theory]
+    [InlineData(false, false, 0x5D, 0x5D, 0x5D)]
+    [InlineData(false, true, 0xFF, 0xFF, 0xFF)]
+    [InlineData(true, false, 0xCF, 0xCE, 0xCD)]
+    [InlineData(true, true, 0x00, 0x00, 0x00)]
+    public void CheckBox_ToggleSwitch_CircleUsesModeAndStateColor(
+        bool darkMode,
+        bool isChecked,
+        int expectedRed,
+        int expectedGreen,
+        int expectedBlue)
+    {
+        Color expected = Color.FromArgb(expectedRed, expectedGreen, expectedBlue);
+
+        Assert.Equal(
+            expected,
+            Rendering.CheckBox.AnimatedToggleSwitchRenderer.GetCircleColor(
+                darkMode,
+                isChecked ? 1f : 0f,
+                interactionAmount: 0f));
+    }
+
+    [Fact]
+    public void CheckBox_ToggleSwitch_LightModeUncheckedTrackMatchesWindowsColors()
+    {
+        Assert.Equal(
+            Color.WhiteSmoke,
+            Rendering.CheckBox.AnimatedToggleSwitchRenderer.GetUncheckedTrackColor(darkMode: false));
+        Assert.Equal(
+            Color.FromArgb(0x89, 0x89, 0x89),
+            Rendering.CheckBox.AnimatedToggleSwitchRenderer.GetUncheckedBorderColor(darkMode: false));
     }
 
     [WinFormsFact]
