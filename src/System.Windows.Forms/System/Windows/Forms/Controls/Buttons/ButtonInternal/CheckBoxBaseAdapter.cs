@@ -325,7 +325,7 @@ internal abstract class CheckBoxBaseAdapter : CheckableControlBaseAdapter
         return cacheCheckImage;
     }
 
-    protected void AdjustFocusRectangle(LayoutData layout)
+    protected virtual void AdjustFocusRectangle(LayoutData layout)
     {
         if (string.IsNullOrEmpty(Control.Text))
         {
