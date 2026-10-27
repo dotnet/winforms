@@ -50,6 +50,7 @@ function Get-DotNetInstallationArchitecture([string] $dotnetRoot) {
 }
 
 function Get-DotNetSdkDirectory([string] $dotnetRoot) {
+    $dotnetRoot = [IO.Path]::GetFullPath($dotnetRoot)
     $osArchitecture = Get-WindowsBuildArchitecture
     $sdkArchitecture = Get-DotNetInstallationArchitecture $dotnetRoot
     if ($osArchitecture -eq 'arm64' -or $sdkArchitecture -eq $osArchitecture -or $sdkArchitecture -eq 'x86') {
@@ -93,9 +94,9 @@ function Repair-DotNetInstallation([string] $dotnetRoot) {
     }
 
     $architecture = Get-DotNetExecutableArchitecture $muxer
-    $foreignVersions = @()
+    $incompatibleVersions = @()
     $compatibleResolvers = 0
-    $foreignResolvers = 0
+    $incompatibleResolvers = 0
 
     foreach ($component in @('host\fxr', 'shared\Microsoft.NETCore.App')) {
         $componentDir = Join-Path $dotnetRoot $component
@@ -106,27 +107,43 @@ function Repair-DotNetInstallation([string] $dotnetRoot) {
         $binaryName = if ($component -eq 'host\fxr') { 'hostfxr.dll' } else { 'coreclr.dll' }
         foreach ($versionDir in Get-ChildItem -LiteralPath $componentDir -Directory) {
             $binaryPath = Join-Path $versionDir.FullName $binaryName
-            if (!(Test-Path -LiteralPath $binaryPath)) {
-                continue
-            }
-
-            if ((Get-DotNetExecutableArchitecture $binaryPath) -eq $architecture) {
+            if ((Test-Path -LiteralPath $binaryPath -PathType Leaf) -and
+                (Get-DotNetExecutableArchitecture $binaryPath) -eq $architecture) {
                 if ($component -eq 'host\fxr') { $compatibleResolvers++ }
             }
             else {
-                if ($component -eq 'host\fxr') { $foreignResolvers++ }
-                $foreignVersions += @{ Component = $component; Directory = $versionDir }
+                if ($component -eq 'host\fxr') { $incompatibleResolvers++ }
+                $incompatibleVersions += @{ Component = $component; Directory = $versionDir }
             }
         }
     }
 
     # Preflight the whole installation before moving anything, including shared runtimes.
-    if ($foreignResolvers -gt 0 -and $compatibleResolvers -eq 0) {
+    if ($incompatibleResolvers -gt 0 -and $compatibleResolvers -eq 0) {
         throw "No hostfxr compatible with the $architecture SDK in '$dotnetRoot'. No files were moved. Restore into a new DOTNET_GLOBAL_INSTALL_DIR or reinstall this SDK."
     }
 
-    foreach ($version in $foreignVersions) {
+    foreach ($version in $incompatibleVersions) {
         Move-DotNetRuntimeVersion $dotnetRoot $version.Component $version.Directory
+    }
+}
+
+function Get-DotNetRuntimeInstallationProblem([string] $dotnetRoot, [string] $version, [string] $architecture) {
+    $runtimeDir = Join-Path $dotnetRoot "shared\Microsoft.NETCore.App\$version"
+    foreach ($binary in @(
+        (Join-Path $dotnetRoot 'dotnet.exe'),
+        (Join-Path $dotnetRoot "host\fxr\$version\hostfxr.dll"),
+        (Join-Path $runtimeDir 'coreclr.dll'),
+        (Join-Path $runtimeDir 'hostpolicy.dll'))) {
+        if (!(Test-Path -LiteralPath $binary -PathType Leaf) -or
+            (Get-DotNetExecutableArchitecture $binary) -ne $architecture) {
+            return $binary
+        }
+    }
+
+    $coreLib = Join-Path $runtimeDir 'System.Private.CoreLib.dll'
+    if (!(Test-Path -LiteralPath $coreLib -PathType Leaf)) {
+        return $coreLib
     }
 }
 
@@ -145,28 +162,26 @@ function Install-WinFormsDotNetRuntime(
     }
 
     $runtimeDir = Join-Path $installDir "shared\Microsoft.NETCore.App\$version"
-    $coreclr = Join-Path $runtimeDir 'coreclr.dll'
-    $resolver = Join-Path $installDir "host\fxr\$version\hostfxr.dll"
-    $complete = (Test-Path -LiteralPath $muxer) -and
-        (Test-Path -LiteralPath $coreclr) -and
-        (Test-Path -LiteralPath $resolver)
-    if ($complete) {
-        $complete = (Get-DotNetExecutableArchitecture $coreclr) -eq $runtimeArchitecture -and
+    $resolverDir = Join-Path $installDir "host\fxr\$version"
+    $resolver = Join-Path $resolverDir 'hostfxr.dll'
+    if (Get-DotNetRuntimeInstallationProblem $installDir $version $runtimeArchitecture) {
+        $compatibleResolver = (Test-Path -LiteralPath $resolver -PathType Leaf) -and
             (Get-DotNetExecutableArchitecture $resolver) -eq $runtimeArchitecture
-    }
-
-    if (!$complete) {
         # Arcade's cache check only tests the directory's existence. Move an incomplete
         # entry aside so the shared installer downloads it rather than skipping it.
         if (Test-Path -LiteralPath $runtimeDir) {
             Move-DotNetRuntimeVersion $installDir 'shared\Microsoft.NETCore.App' (Get-Item -LiteralPath $runtimeDir)
         }
 
+        # The extractor also skips existing versioned directories, even if empty.
+        if (!$compatibleResolver -and (Test-Path -LiteralPath $resolverDir)) {
+            Move-DotNetRuntimeVersion $installDir 'host\fxr' (Get-Item -LiteralPath $resolverDir)
+        }
+
         InstallDotNet $installDir $version $runtimeArchitecture 'dotnet' $true $runtimeSourceFeed $runtimeSourceFeedKey -noPath
-        foreach ($binary in @($muxer, $coreclr, $resolver)) {
-            if (!(Test-Path -LiteralPath $binary) -or (Get-DotNetExecutableArchitecture $binary) -ne $runtimeArchitecture) {
-                throw "The $runtimeArchitecture runtime $version installation is incomplete or incompatible: $binary"
-            }
+        $problem = Get-DotNetRuntimeInstallationProblem $installDir $version $runtimeArchitecture
+        if ($problem) {
+            throw "The $runtimeArchitecture runtime $version installation is incomplete or incompatible: $problem. Previous files were preserved under '$installDir\legacy-runtimes'."
         }
     }
     else {

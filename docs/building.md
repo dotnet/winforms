@@ -29,18 +29,27 @@ Any CPU mappings. Cross-compiling does not make ARM64 executables runnable on an
 
 Restore installs the SDK architecture's runtime alongside the SDK. Other architectures go
 into the active installation's `arm64`, `x64`, or `x86` subdirectories. The runtime cache checks
-the architecture and presence of the host, resolver, and runtime, not just a version directory.
+the architecture of `dotnet.exe`, `hostfxr.dll`, `hostpolicy.dll`, and `coreclr.dll`, and the
+presence of `System.Private.CoreLib.dll`, not just a version directory.
 Incomplete entries are preserved and reinstalled rather than silently skipped.
+
+This separation matters even for a fresh checkout. Previously, the runtime manifest explicitly
+requested x64, and the shared installer only isolated x86. An ARM64 SDK could therefore receive
+a newer x64 `hostfxr.dll` in its own installation. The ARM64 host cannot load that resolver.
+The default runtime request now follows the SDK architecture; explicit cross-target runtimes
+are installed separately.
 
 For a separate SDK installation, set `DOTNET_GLOBAL_INSTALL_DIR` before running the build or
 restore scripts. `global.json` prefers the SDK muxer's own installation before falling back
 to `.dotnet`, so an external x64 SDK does not load ARM64 SDK binaries (or vice versa).
-`start-vs.cmd` and `start-code.cmd` also honor this root and expose architecture-specific
-runtime roots for launched applications.
+Command-line builds, `start-vs.cmd`, and `start-code.cmd` honor this root and expose
+architecture-specific runtime roots for apphost executables, including tests and their child
+processes. These roots select the runtime independently of the SDK used to build the executable.
 
 Older mixed-architecture installations are repaired relative to their **SDK muxer**, not the
 OS. Incompatible version directories are preserved under the installation's `legacy-runtimes`
-directory. Repair checks both `hostfxr.dll` and `coreclr.dll`, and refuses to move any files
+directory. Repair checks both `hostfxr.dll` and `coreclr.dll`, including version directories
+missing those files, and refuses to move any files
 if that would leave the muxer without a compatible resolver.
 
 The changes use repository-owned scripts, `eng\configure-toolset.ps1`, and `eng\Tools.props`;

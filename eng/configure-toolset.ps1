@@ -14,6 +14,12 @@ if ([Environment]::OSVersion.Platform -eq [PlatformID]::Win32NT) {
     $_WinFormsDotNetRoot = $_WinFormsSdkRoot
   }
 
+  $_WinFormsSdkArchitecture = Get-DotNetInstallationArchitecture $_WinFormsDotNetRoot
+  foreach ($_WinFormsArchitecture in @('x86', 'x64', 'arm64')) {
+    $_WinFormsRuntimeRoot = Get-DotNetRuntimeDirectory $_WinFormsDotNetRoot $_WinFormsSdkArchitecture $_WinFormsArchitecture
+    [Environment]::SetEnvironmentVariable("DOTNET_ROOT_$($_WinFormsArchitecture.ToUpperInvariant())", $_WinFormsRuntimeRoot)
+  }
+
   if (Test-Path -LiteralPath (Join-Path $_WinFormsDotNetRoot "sdk\$($GlobalJson.tools.dotnet)")) {
     Repair-DotNetInstallation $_WinFormsDotNetRoot
   }
