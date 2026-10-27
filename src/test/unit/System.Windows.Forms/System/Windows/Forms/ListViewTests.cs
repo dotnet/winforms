@@ -927,7 +927,7 @@ public class ListViewTests
         listView.CheckBoxes = true;
         Assert.Equal(3, stateImageList.Images.Count);
     }
-    
+
     public static IEnumerable<object[]> CheckBoxes_SetWithHandle_TestData()
     {
         foreach (ListViewAlignment alignment in Enum.GetValues(typeof(ListViewAlignment)))
