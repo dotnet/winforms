@@ -97,6 +97,8 @@ function Repair-DotNetInstallation([string] $dotnetRoot) {
     $incompatibleVersions = @()
     $compatibleResolvers = 0
     $incompatibleResolvers = 0
+    $compatibleFrameworks = 0
+    $incompatibleFrameworks = 0
 
     foreach ($component in @('host\fxr', 'shared\Microsoft.NETCore.App')) {
         $componentDir = Join-Path $dotnetRoot $component
@@ -110,9 +112,11 @@ function Repair-DotNetInstallation([string] $dotnetRoot) {
             if ((Test-Path -LiteralPath $binaryPath -PathType Leaf) -and
                 (Get-DotNetExecutableArchitecture $binaryPath) -eq $architecture) {
                 if ($component -eq 'host\fxr') { $compatibleResolvers++ }
+                else { $compatibleFrameworks++ }
             }
             else {
                 if ($component -eq 'host\fxr') { $incompatibleResolvers++ }
+                else { $incompatibleFrameworks++ }
                 $incompatibleVersions += @{ Component = $component; Directory = $versionDir }
             }
         }
@@ -121,6 +125,13 @@ function Repair-DotNetInstallation([string] $dotnetRoot) {
     # Preflight the whole installation before moving anything, including shared runtimes.
     if ($incompatibleResolvers -gt 0 -and $compatibleResolvers -eq 0) {
         throw "No hostfxr compatible with the $architecture SDK in '$dotnetRoot'. No files were moved. Restore into a new DOTNET_GLOBAL_INSTALL_DIR or reinstall this SDK."
+    }
+
+    $sdkDir = Join-Path $dotnetRoot 'sdk'
+    if ($incompatibleFrameworks -gt 0 -and $compatibleFrameworks -eq 0 -and
+        (Test-Path -LiteralPath $sdkDir) -and
+        @(Get-ChildItem -LiteralPath $sdkDir -Directory).Count -gt 0) {
+        throw "No shared framework compatible with the $architecture SDK in '$dotnetRoot' would remain after repair. No files were moved. Restore into a new DOTNET_GLOBAL_INSTALL_DIR or reinstall this SDK."
     }
 
     foreach ($version in $incompatibleVersions) {

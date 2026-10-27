@@ -104,6 +104,7 @@ try {
         Write-TestPE "$root\shared\Microsoft.NETCore.App\1.0.0\coreclr.dll" $sdk
         Write-TestPE "$root\host\fxr\2.0.0\hostfxr.dll" $other
         Write-TestPE "$root\shared\Microsoft.NETCore.App\2.0.0\coreclr.dll" $other
+        New-Item -ItemType Directory -Path "$root\sdk\1.0.0" -Force | Out-Null
         Repair-DotNetInstallation $root
         Assert-True ((Test-Path "$root\host\fxr\1.0.0\hostfxr.dll") -and (Test-Path "$root\shared\Microsoft.NETCore.App\1.0.0\coreclr.dll")) 'Compatible files were moved.'
         Assert-True (!(Test-Path "$root\host\fxr\2.0.0") -and !(Test-Path "$root\shared\Microsoft.NETCore.App\2.0.0")) 'Foreign files remain in the live installation.'
@@ -131,6 +132,17 @@ try {
         Write-TestPE "$missingRoot\shared\Microsoft.NETCore.App\3.0.0\coreclr.dll" $other
         Assert-Throws { Repair-DotNetInstallation $missingRoot } 'No hostfxr compatible*'
         Assert-True ((Test-Path "$missingRoot\host\fxr\3.0.0") -and (Test-Path "$missingRoot\shared\Microsoft.NETCore.App\3.0.0\coreclr.dll")) 'Missing-resolver preflight moved files.'
+
+        $noFrameworkRoot = "$testRoot\no-compatible-framework-$sdk"
+        Write-TestPE "$noFrameworkRoot\dotnet.exe" $sdk
+        Write-TestPE "$noFrameworkRoot\host\fxr\1.0.0\hostfxr.dll" $sdk
+        Write-TestPE "$noFrameworkRoot\host\fxr\2.0.0\hostfxr.dll" $other
+        Write-TestPE "$noFrameworkRoot\shared\Microsoft.NETCore.App\1.0.0\coreclr.dll" $other
+        New-Item -ItemType Directory -Path "$noFrameworkRoot\sdk\1.0.0" -Force | Out-Null
+        Assert-Throws { Repair-DotNetInstallation $noFrameworkRoot } 'No shared framework compatible*No files were moved*reinstall this SDK*'
+        Assert-True ((Test-Path "$noFrameworkRoot\host\fxr\2.0.0\hostfxr.dll") -and
+            (Test-Path "$noFrameworkRoot\shared\Microsoft.NETCore.App\1.0.0\coreclr.dll") -and
+            !(Test-Path "$noFrameworkRoot\legacy-runtimes")) 'Missing-framework preflight moved files.'
 
         foreach ($target in @('x64', 'arm64', 'x86')) {
             $runtimeRoot = "$testRoot\runtime-$sdk-$target"
