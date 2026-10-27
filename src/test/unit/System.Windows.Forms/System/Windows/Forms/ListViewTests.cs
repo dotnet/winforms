@@ -900,6 +900,34 @@ public class ListViewTests
         Assert.False(listView.IsHandleCreated);
     }
 
+    [WinFormsFact]
+    public void ListView_CheckBoxes_SetWithHandle_PreservesStateImages()
+    {
+        using Bitmap image1 = new(16, 16);
+        using Bitmap image2 = new(16, 16);
+        using Bitmap image3 = new(16, 16);
+        using ImageList stateImageList = new();
+        stateImageList.Images.AddRange([image1, image2, image3]);
+        using ListView listView = new()
+        {
+            UseCompatibleStateImageBehavior = false,
+            View = View.Details,
+            StateImageList = stateImageList
+        };
+        Assert.NotEqual(IntPtr.Zero, listView.Handle);
+        Assert.Equal(3, stateImageList.Images.Count);
+
+        listView.CheckBoxes = true;
+        Assert.Same(stateImageList, listView.StateImageList);
+        Assert.Equal(3, stateImageList.Images.Count);
+
+        listView.CheckBoxes = false;
+        Assert.Equal(3, stateImageList.Images.Count);
+
+        listView.CheckBoxes = true;
+        Assert.Equal(3, stateImageList.Images.Count);
+    }
+    
     public static IEnumerable<object[]> CheckBoxes_SetWithHandle_TestData()
     {
         foreach (ListViewAlignment alignment in Enum.GetValues(typeof(ListViewAlignment)))
