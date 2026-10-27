@@ -13260,45 +13260,120 @@ public partial class ControlTests
         }
     }
 
-    [WinFormsFact]
-    public void Control_OnHandleCreated_HiddenControlFontChangedUpdatesText_DpiScaleDoesNotRestoreStaleText()
+    [WinFormsTheory]
+    [InlineData(false)]
+    [InlineData(true)]
+    public void Control_OnHandleCreated_HiddenControlFontChangedUpdatesText_DpiScaleDoesNotRestoreStaleText(bool nativeTextControl)
     {
         using IDisposable dpiScope = ScaleHelper.EnterDpiAwarenessScope(
             DPI_AWARENESS_CONTEXT.DPI_AWARENESS_CONTEXT_PER_MONITOR_AWARE_V2);
         using Form form = new();
         Assert.NotEqual(IntPtr.Zero, form.Handle);
 
-        int currentDpi = form.DeviceDpi;
+        int currentDpi = (int)PInvoke.GetDpiForWindow(form);
         int alternateDpi = currentDpi == 96 ? 120 : 96;
 
-        using Label control = new()
-        {
-            Visible = false,
-            DeviceDpiInternal = alternateDpi
-        };
+        using Font font = new("Segoe UI", 12f);
+        using Control visibleControl = nativeTextControl ? new TextBox() : new Label();
+        form.Controls.Add(visibleControl);
+        Assert.NotEqual(IntPtr.Zero, visibleControl.Handle);
+        visibleControl.Font = font;
 
+        using Control control = nativeTextControl ? new TextBox() : new Label();
+        control.Visible = false;
+        control.DeviceDpiInternal = alternateDpi;
         form.Controls.Add(control);
 
-        int fontChangedCallCount = 0;
+        List<(float Size, int Dpi, bool HasHandle)> fontChanges = [];
+        List<string> events = [];
         control.FontChanged += (_, _) =>
         {
-            fontChangedCallCount++;
+            fontChanges.Add((control.Font.Size, control.DeviceDpiInternal, control.IsHandleCreated));
+            events.Add(nameof(Control.FontChanged));
             control.Text = control.Font.ToString();
         };
+        control.TextChanged += (_, _) => events.Add(nameof(Control.TextChanged));
+        control.HandleCreated += (_, _) => events.Add(nameof(Control.HandleCreated));
 
-        using Font font = new("Segoe UI", 12f);
         control.Font = font;
 
+        Assert.Collection(fontChanges, change => Assert.Equal((font.Size, alternateDpi, false), change));
+        Assert.Equal([nameof(Control.FontChanged), nameof(Control.TextChanged)], events);
         Assert.Equal(control.Font.ToString(), control.Text);
         Assert.False(control.IsHandleCreated);
 
         control.Visible = true;
         Assert.NotEqual(IntPtr.Zero, control.Handle);
 
+        // Deferred handle creation still scales the explicit font; the text-ordering fix does not change that behavior.
+        float expectedFontSize = font.Size * ((float)currentDpi / alternateDpi);
+        Assert.Equal(font.Size, visibleControl.Font.Size);
+        Assert.Equal(expectedFontSize, control.Font.Size, precision: 3);
+        Assert.NotEqual(visibleControl.Font.Size, control.Font.Size);
         Assert.True(control.IsHandleCreated);
-        Assert.NotEqual(alternateDpi, control.DeviceDpi);
-        Assert.True(fontChangedCallCount >= 2);
+        Assert.Equal(currentDpi, control.DeviceDpiInternal);
+        Assert.Collection(
+            fontChanges,
+            change => Assert.Equal((font.Size, alternateDpi, false), change),
+            change =>
+            {
+                Assert.Equal(expectedFontSize, change.Size, precision: 3);
+                Assert.Equal(currentDpi, change.Dpi);
+                Assert.True(change.HasHandle);
+            });
+        Assert.Equal(
+            [
+                nameof(Control.FontChanged),
+                nameof(Control.TextChanged),
+                nameof(Control.FontChanged),
+                nameof(Control.TextChanged),
+                nameof(Control.HandleCreated)
+            ],
+            events);
         Assert.Equal(control.Font.ToString(), control.Text);
+        Assert.Equal(control.Text, PInvokeCore.GetWindowText(control));
+    }
+
+    [WinFormsTheory]
+    [InlineData(false, "")]
+    [InlineData(false, "Initial text")]
+    [InlineData(true, "")]
+    [InlineData(true, "Initial text")]
+    public void Control_OnHandleCreated_WithoutDpiChange_PreservesTextAndEvents(bool nativeTextControl, string text)
+    {
+        using IDisposable dpiScope = ScaleHelper.EnterDpiAwarenessScope(
+            DPI_AWARENESS_CONTEXT.DPI_AWARENESS_CONTEXT_SYSTEM_AWARE);
+        using Font font = new("Segoe UI", 12f);
+        using Control control = nativeTextControl ? new TextBox() : new Label();
+        control.Font = font;
+        int originalDpi = control.DeviceDpi;
+
+        int fontChangedCallCount = 0;
+        int textChangedCallCount = 0;
+        int handleCreatedCallCount = 0;
+        control.FontChanged += (_, _) => fontChangedCallCount++;
+        control.TextChanged += (_, _) => textChangedCallCount++;
+        control.HandleCreated += (_, _) =>
+        {
+            handleCreatedCallCount++;
+            Assert.Equal(text, control.Text);
+            Assert.Equal(text, PInvokeCore.GetWindowText(control));
+        };
+
+        control.Text = text;
+        int expectedTextChangedCallCount = text.Length == 0 ? 0 : 1;
+        Assert.Equal(expectedTextChangedCallCount, textChangedCallCount);
+        Assert.False(control.IsHandleCreated);
+
+        Assert.NotEqual(IntPtr.Zero, control.Handle);
+
+        Assert.Equal(text, control.Text);
+        Assert.Equal(text, PInvokeCore.GetWindowText(control));
+        Assert.Equal(font.Size, control.Font.Size);
+        Assert.Equal(originalDpi, control.DeviceDpi);
+        Assert.Equal(0, fontChangedCallCount);
+        Assert.Equal(expectedTextChangedCallCount, textChangedCallCount);
+        Assert.Equal(1, handleCreatedCallCount);
     }
 
     public static IEnumerable<object[]> WndProc_EraseBkgndWithoutHandleWithoutWParam_TestData()
