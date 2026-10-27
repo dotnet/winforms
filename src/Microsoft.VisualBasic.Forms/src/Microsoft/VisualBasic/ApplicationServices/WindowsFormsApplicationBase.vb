@@ -665,9 +665,14 @@ Namespace Microsoft.VisualBasic.ApplicationServices
                 Dim handleNextInstance As New Action(
                     Sub()
                         invoked = True
-                        OnStartupNextInstance(New StartupNextInstanceEventArgs(
-                                        New ReadOnlyCollection(Of String)(args),
-                                        bringToForegroundFlag:=True))
+                        Try
+                            OnStartupNextInstance(New StartupNextInstanceEventArgs(
+                                            New ReadOnlyCollection(Of String)(args),
+                                            bringToForegroundFlag:=True))
+                        Catch ex As Exception
+                            ' Keep the pipe listener alive while using WinForms' standard exception handling.
+                            Application.OnThreadException(ex)
+                        End Try
                     End Sub)
 
                 ' If we have a Main form, we need to make sure that we are on _its_ UI thread
@@ -683,8 +688,7 @@ Namespace Microsoft.VisualBasic.ApplicationServices
                 End If
             Catch ex As Exception When Not invoked
                 ' Only catch exceptions thrown when the UI thread is not available, before
-                ' the UI thread has been created or after it has been terminated. Exceptions
-                ' thrown from OnStartupNextInstance() should be allowed to propagate.
+                ' the UI thread has been created or after it has been terminated.
             End Try
         End Sub
 

@@ -104,7 +104,11 @@ Namespace Microsoft.VisualBasic.ApplicationServices
                     Dim args() As String =
                         Await ReadArgsAsync(pipeServer, cancellationToken).ConfigureAwait(continueOnCapturedContext:=False)
                     If args IsNot Nothing Then
-                        callback(args)
+                        Try
+                            callback(args)
+                        Catch ex As Exception
+                            ' The callback handles user exceptions; keep accepting later connections.
+                        End Try
                     End If
                 Finally
                     pipeServer.Disconnect()
