@@ -7,7 +7,7 @@ setlocal enabledelayedexpansion
 set DOTNET_ROOT=%~dp0.dotnet
 if defined DOTNET_GLOBAL_INSTALL_DIR set "DOTNET_ROOT=%DOTNET_GLOBAL_INSTALL_DIR%"
 set "__DotNetSdkRoot="
-for /f "delims=" %%r in ('powershell -NoProfile -ExecutionPolicy ByPass -File "%~dp0eng\dotnet-architecture.ps1" -ResolveSdkRoot "%DOTNET_ROOT%"') do set "__DotNetSdkRoot=%%r"
+for /f "delims=" %%r in ('powershell -NoProfile -ExecutionPolicy ByPass -File "%~dp0eng\dotnet-architecture.ps1" -ResolveSdkRoot "%DOTNET_ROOT%\."') do set "__DotNetSdkRoot=%%r"
 if not defined __DotNetSdkRoot exit /b 1
 set "DOTNET_ROOT=%__DotNetSdkRoot%"
 set "DOTNET_GLOBAL_INSTALL_DIR=%DOTNET_ROOT%"
@@ -24,7 +24,7 @@ if not exist "%DOTNET_ROOT%\dotnet.exe" (
     exit /b 1
 )
 
-for /f "delims=" %%r in ('powershell -NoProfile -ExecutionPolicy ByPass -File "%~dp0eng\dotnet-architecture.ps1" -ResolveSdkRoot "%DOTNET_ROOT%" -ResolveRuntimeRoots') do set "%%r"
+for /f "delims=" %%r in ('powershell -NoProfile -ExecutionPolicy ByPass -File "%~dp0eng\dotnet-architecture.ps1" -ResolveSdkRoot "%DOTNET_ROOT%\." -ResolveRuntimeRoots') do set "%%r"
 set "DOTNET_ROOT(x86)=%DOTNET_ROOT_X86%"
 
 :: Prefer the VS in the developer command prompt if we're in one, followed by whatever shows up in the current search path.

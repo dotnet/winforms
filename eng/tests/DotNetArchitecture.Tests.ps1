@@ -35,17 +35,35 @@ function Write-TestPE([string] $path, [string] $architecture) {
 function InstallDotNet($root, $version, $architecture, $runtime, $skipNonVersionedFiles, $runtimeSourceFeed, $runtimeSourceFeedKey, [switch] $noPath) {
     $installCalls.Add(@{ Root = $root; Architecture = $architecture; Runtime = $runtime; Version = $version })
     Assert-True (!(Test-Path "$root\shared\Microsoft.NETCore.App\$version")) 'Installer would skip a cached runtime directory.'
-    Write-TestPE "$root\dotnet.exe" $architecture
-    Write-TestPE "$root\host\fxr\$version\hostfxr.dll" $architecture
-    Write-TestPE "$root\shared\Microsoft.NETCore.App\$version\coreclr.dll" $architecture
+    if (!(Test-Path "$root\dotnet.exe")) {
+        Write-TestPE "$root\dotnet.exe" $architecture
+    }
+
+    # Like the real extractor, do not overwrite an existing versioned resolver folder.
+    if (!(Test-Path "$root\host\fxr\$version") -and $omitRuntimeFile -ne 'hostfxr.dll') {
+        Write-TestPE "$root\host\fxr\$version\hostfxr.dll" $architecture
+    }
+
+    foreach ($binary in @('coreclr.dll', 'hostpolicy.dll')) {
+        if ($omitRuntimeFile -ne $binary) {
+            $binaryArchitecture = if ($wrongRuntimeFile -eq $binary) { 'x86' } else { $architecture }
+            Write-TestPE "$root\shared\Microsoft.NETCore.App\$version\$binary" $binaryArchitecture
+        }
+    }
+
+    if ($omitRuntimeFile -ne 'System.Private.CoreLib.dll') {
+        Set-Content -LiteralPath "$root\shared\Microsoft.NETCore.App\$version\System.Private.CoreLib.dll" -Value 'managed fixture'
+    }
     if (!$runtime) {
         New-Item -ItemType Directory -Path "$root\sdk\$version" -Force | Out-Null
     }
 }
 
 $testRoot = Join-Path ([IO.Path]::GetTempPath()) "WinForms-architecture-tests-$([Guid]::NewGuid().ToString('N'))"
+$omitRuntimeFile = $null
+$wrongRuntimeFile = $null
 $savedEnvironment = @{}
-foreach ($name in @('PROCESSOR_ARCHITECTURE', 'PROCESSOR_ARCHITEW6432', 'DOTNET_GLOBAL_INSTALL_DIR', 'PATH')) {
+foreach ($name in @('PROCESSOR_ARCHITECTURE', 'PROCESSOR_ARCHITEW6432', 'DOTNET_GLOBAL_INSTALL_DIR', 'DOTNET_ROOT', 'DOTNET_ROOT_X86', 'DOTNET_ROOT_X64', 'DOTNET_ROOT_ARM64', 'PATH')) {
     $savedEnvironment[$name] = [Environment]::GetEnvironmentVariable($name)
 }
 
@@ -93,12 +111,26 @@ try {
         Repair-DotNetInstallation $root
         Assert-True (@(Get-ChildItem "$root\legacy-runtimes" -Recurse -File).Count -eq 2) 'Repair is not idempotent.'
 
+        New-Item -ItemType Directory -Path "$root\host\fxr\3.0.0", "$root\shared\Microsoft.NETCore.App\3.0.0" -Force | Out-Null
+        Repair-DotNetInstallation $root
+        Assert-True (!(Test-Path "$root\host\fxr\3.0.0") -and !(Test-Path "$root\shared\Microsoft.NETCore.App\3.0.0")) 'Incomplete version directories still block runtime discovery.'
+        Assert-True (@(Get-ChildItem "$root\legacy-runtimes\host\fxr" -Directory).Count -eq 2) 'Incomplete resolver folder was not preserved.'
+        Repair-DotNetInstallation $root
+        Assert-True (@(Get-ChildItem "$root\legacy-runtimes\host\fxr" -Directory).Count -eq 2) 'Incomplete resolver repair is not idempotent.'
+
         $unsafeRoot = "$testRoot\no-compatible-resolver-$sdk"
         Write-TestPE "$unsafeRoot\dotnet.exe" $sdk
         Write-TestPE "$unsafeRoot\host\fxr\1.0.0\hostfxr.dll" $other
         Write-TestPE "$unsafeRoot\shared\Microsoft.NETCore.App\1.0.0\coreclr.dll" $other
         Assert-Throws { Repair-DotNetInstallation $unsafeRoot } 'No hostfxr compatible*'
         Assert-True ((Test-Path "$unsafeRoot\host\fxr\1.0.0\hostfxr.dll") -and (Test-Path "$unsafeRoot\shared\Microsoft.NETCore.App\1.0.0\coreclr.dll")) 'Failed preflight moved files.'
+
+        $missingRoot = "$testRoot\missing-resolver-$sdk"
+        Write-TestPE "$missingRoot\dotnet.exe" $sdk
+        New-Item -ItemType Directory -Path "$missingRoot\host\fxr\3.0.0" -Force | Out-Null
+        Write-TestPE "$missingRoot\shared\Microsoft.NETCore.App\3.0.0\coreclr.dll" $other
+        Assert-Throws { Repair-DotNetInstallation $missingRoot } 'No hostfxr compatible*'
+        Assert-True ((Test-Path "$missingRoot\host\fxr\3.0.0") -and (Test-Path "$missingRoot\shared\Microsoft.NETCore.App\3.0.0\coreclr.dll")) 'Missing-resolver preflight moved files.'
 
         foreach ($target in @('x64', 'arm64', 'x86')) {
             $runtimeRoot = "$testRoot\runtime-$sdk-$target"
@@ -116,7 +148,46 @@ try {
             Install-WinFormsDotNetRuntime $runtimeRoot $sdk $target '3.0.0' '' ''
             Assert-True ((Get-DotNetExecutableArchitecture "$expectedRoot\shared\Microsoft.NETCore.App\3.0.0\coreclr.dll") -eq $target) 'Partial or foreign runtime cache was not repaired.'
         }
+
+        foreach ($case in @(
+            @{ Name = 'missing-hostpolicy'; File = 'shared\Microsoft.NETCore.App\2.0.0\hostpolicy.dll' },
+            @{ Name = 'missing-corelib'; File = 'shared\Microsoft.NETCore.App\2.0.0\System.Private.CoreLib.dll' },
+            @{ Name = 'foreign-hostpolicy'; File = 'shared\Microsoft.NETCore.App\2.0.0\hostpolicy.dll'; Architecture = $other },
+            @{ Name = 'missing-hostfxr'; File = 'host\fxr\2.0.0\hostfxr.dll' },
+            @{ Name = 'foreign-hostfxr'; File = 'host\fxr\2.0.0\hostfxr.dll'; Architecture = $other })) {
+            $cacheRoot = "$testRoot\$sdk-$($case.Name)"
+            $installCalls = [System.Collections.Generic.List[object]]::new()
+            Install-WinFormsDotNetRuntime $cacheRoot $sdk $sdk '2.0.0' '' ''
+            $file = Join-Path $cacheRoot $case.File
+            if ($case.Architecture) { Write-TestPE $file $case.Architecture }
+            else { Remove-Item -LiteralPath $file }
+
+            Install-WinFormsDotNetRuntime $cacheRoot $sdk $sdk '2.0.0' '' ''
+            Assert-True ($installCalls.Count -eq 2 -and (Test-Path -LiteralPath $file)) "Incomplete cache was reused: $($case.Name)"
+            if ($case.Architecture) {
+                Assert-True ((Get-DotNetExecutableArchitecture $file) -eq $sdk) "Foreign payload was not replaced: $($case.Name)"
+            }
+
+            $resolverBackups = "$cacheRoot\legacy-runtimes\host\fxr"
+            Assert-True ((Test-Path $resolverBackups) -eq $case.File.StartsWith('host\')) 'A healthy resolver was moved, or an incomplete resolver was not preserved.'
+            Install-WinFormsDotNetRuntime $cacheRoot $sdk $sdk '2.0.0' '' ''
+            Assert-True ($installCalls.Count -eq 2) 'Repaired runtime was not reused.'
+        }
     }
+
+    foreach ($omittedFile in @('hostfxr.dll', 'System.Private.CoreLib.dll')) {
+        $omitRuntimeFile = $omittedFile
+        $installCalls = [System.Collections.Generic.List[object]]::new()
+        Assert-Throws {
+            Install-WinFormsDotNetRuntime "$testRoot\incomplete-install-$omittedFile" 'x64' 'x64' '2.0.0' '' ''
+        } "*incomplete or incompatible: *$omittedFile*legacy-runtimes*"
+    }
+    $omitRuntimeFile = $null
+    $wrongRuntimeFile = 'hostpolicy.dll'
+    Assert-Throws {
+        Install-WinFormsDotNetRuntime "$testRoot\foreign-install" 'x64' 'x64' '2.0.0' '' ''
+    } '*incomplete or incompatible: *hostpolicy.dll*'
+    $wrongRuntimeFile = $null
 
     # Exercise the repository's Arcade extension, including native fresh bootstrap and
     # preserving an x64 SDK while the OS (and requested target) is ARM64.
@@ -128,11 +199,20 @@ try {
         $env:PROCESSOR_ARCHITECTURE = $os
         $env:PROCESSOR_ARCHITEW6432 = $null
         $env:DOTNET_GLOBAL_INSTALL_DIR = "$testRoot\bootstrap-$os"
+        $env:DOTNET_ROOT_ARM64 = 'stale runtime root'
         $installCalls = [System.Collections.Generic.List[object]]::new()
+        $genericRoot = $env:DOTNET_ROOT
         . "$PSScriptRoot\..\configure-toolset.ps1"
+        $rootsBeforeInstall = @($env:DOTNET_ROOT_X86, $env:DOTNET_ROOT_X64, $env:DOTNET_ROOT_ARM64)
         InstallDotNetSdk $env:DOTNET_GLOBAL_INSTALL_DIR '4.0.0'
         $expected = if ($os -eq 'ARM64') { 'arm64' } else { 'x64' }
         Assert-True ($installCalls[0].Architecture -eq $expected) 'Fresh SDK bootstrap used the shell instead of the OS architecture.'
+        Assert-True ($env:DOTNET_ROOT -eq $genericRoot) 'Toolset initialization retargeted the generic runtime root.'
+        $index = 0
+        foreach ($architecture in @('x86', 'x64', 'arm64')) {
+            $runtimeRoot = Get-DotNetRuntimeDirectory $env:DOTNET_GLOBAL_INSTALL_DIR $expected $architecture
+            Assert-True ($rootsBeforeInstall[$index++] -eq $runtimeRoot) 'Pre-install runtime roots do not match the bootstrapped SDK.'
+        }
     }
 
     $env:PROCESSOR_ARCHITECTURE = 'ARM64'
@@ -143,6 +223,7 @@ try {
     . "$PSScriptRoot\..\configure-toolset.ps1"
     InstallDotNetSdk $env:DOTNET_GLOBAL_INSTALL_DIR '4.0.0'
     Assert-True ($installCalls[0].Architecture -eq 'x64') 'SDK upgrade replaced an emulated x64 installation.'
+    Assert-True ($env:DOTNET_ROOT_X64 -eq $env:DOTNET_GLOBAL_INSTALL_DIR -and $env:DOTNET_ROOT_ARM64 -eq "$env:DOTNET_GLOBAL_INSTALL_DIR\arm64") 'Emulated SDK did not export independent apphost runtime roots.'
 
     $env:PROCESSOR_ARCHITECTURE = 'AMD64'
     $originalRoot = "$testRoot\arm64-sdk-on-x64"
@@ -161,14 +242,22 @@ try {
     Copy-Item "$PSScriptRoot\..\dotnet-architecture.ps1" "$installerRepo\eng\dotnet-architecture.ps1"
     '$GlobalJson = Get-Content "$PSScriptRoot\..\..\global.json" -Raw | ConvertFrom-Json' |
         Set-Content "$installerRepo\eng\common\tools.ps1"
-    '{"tools":{"runtimes":{"dotnet":["$(MicrosoftNETCoreAppRefPackageVersion)"],"dotnet/x86":["$(MicrosoftNETCoreAppRefPackageVersion)"]}}}' |
-        Set-Content "$installerRepo\global.json"
+    Copy-Item "$PSScriptRoot\..\..\global.json" "$installerRepo\global.json"
     foreach ($sdk in @('x64', 'arm64')) {
-        $sdkRoot = "$installerRepo\sdk-$sdk"
-        Write-TestPE "$sdkRoot\dotnet.exe" $sdk
-        Write-TestPE "$sdkRoot\host\fxr\1.0.0\hostfxr.dll" $sdk
+        $env:PROCESSOR_ARCHITECTURE = if ($sdk -eq 'arm64') { 'ARM64' } else { 'AMD64' }
+        $sdkRoot = "$installerRepo\sdk $sdk"
+        $env:DOTNET_GLOBAL_INSTALL_DIR = $sdkRoot
         $installCalls = [System.Collections.Generic.List[object]]::new()
+        . "$PSScriptRoot\..\configure-toolset.ps1"
+        InstallDotNetSdk $sdkRoot '4.0.0'
+        $installCalls.Clear()
+        & "$installerRepo\eng\install-runtimes.ps1" -SdkRoot $sdkRoot -RuntimeVersion '5.0.0' -TargetArchitecture $sdk
+        Assert-True ($installCalls.Count -eq 2) 'Fresh native restore did not install SDK-native and x86 runtimes.'
         $target = if ($sdk -eq 'x64') { 'arm64' } else { 'x64' }
+        Assert-True (!(Test-Path "$sdkRoot\$target")) 'Fresh native restore installed an unrequested foreign runtime.'
+        Assert-True ((Get-DotNetExecutableArchitecture "$sdkRoot\dotnet.exe") -eq $sdk -and
+            (Get-DotNetExecutableArchitecture "$sdkRoot\host\fxr\5.0.0\hostfxr.dll") -eq $sdk) 'Fresh restore mixed SDK and resolver architectures.'
+
         & "$installerRepo\eng\install-runtimes.ps1" -SdkRoot $sdkRoot -RuntimeVersion '5.0.0' -TargetArchitecture $target
         Assert-True ($installCalls.Count -eq 3) 'Runtime manifest did not install SDK, cross-target, and x86 runtimes.'
         foreach ($architecture in @($sdk, $target, 'x86')) {
@@ -177,6 +266,23 @@ try {
         }
         & "$installerRepo\eng\install-runtimes.ps1" -SdkRoot $sdkRoot -RuntimeVersion '5.0.0' -TargetArchitecture $sdk
         Assert-True ($installCalls.Count -eq 3) 'Duplicate manifest requests bypassed the complete runtime cache.'
+    }
+
+    $repoRoot = [IO.Path]::GetFullPath("$PSScriptRoot\..\..\")
+    foreach ($launcher in @('start-vs.cmd', 'start-code.cmd')) {
+        $commands = [regex]::Matches((Get-Content (Join-Path $repoRoot $launcher) -Raw), "'(?<Command>powershell [^']+)'")
+        Assert-True ($commands.Count -eq 2) "Could not find SDK/runtime queries in $launcher."
+        foreach ($match in $commands) {
+            $command = $match.Groups['Command'].Value.Replace('%~dp0', $repoRoot).Replace('%DOTNET_ROOT%', "$sdkRoot\")
+            $resolved = @(& $env:ComSpec /d /c $command)
+            Assert-True ($LASTEXITCODE -eq 0) "Trailing-backslash SDK query failed in $launcher."
+            if ($command -like '*-ResolveRuntimeRoots') {
+                Assert-True ($resolved -contains "DOTNET_ROOT_ARM64=$sdkRoot") "Runtime query corrupted a trailing-backslash root in $launcher."
+            }
+            else {
+                Assert-True ($resolved.Count -eq 1 -and $resolved[0] -eq $sdkRoot) "SDK query corrupted a trailing-backslash root in $launcher."
+            }
+        }
     }
 
     Assert-Throws { Get-DotNetRuntimeDirectory $testRoot 'x64' 'invalid' } 'Unsupported .NET runtime architecture*'
