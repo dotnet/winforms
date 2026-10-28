@@ -902,11 +902,7 @@ public abstract partial class UpDownBase : ContainerControl
         // Clear the font height cache
         FontHeight = -1;
 
-        if (!UseSideBySideButtons || AutoSize)
-        {
-            Height = PreferredHeight;
-        }
-
+        Height = PreferredHeight;
         PositionControls();
 
         base.OnFontChanged(e);

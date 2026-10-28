@@ -3182,6 +3182,32 @@ public class UpDownBaseTests
     }
 
     [WinFormsTheory]
+    [InlineData(VisualStylesMode.Net11)]
+    [InlineData(VisualStylesMode.Latest)]
+    public void UpDownBase_ModernVisualStylesMode_FontChangeUpdatesHeight(
+        VisualStylesMode visualStylesMode)
+    {
+        using SubUpDownBase upDownBase = new()
+        {
+            AutoSize = false,
+            VisualStylesMode = visualStylesMode
+        };
+
+        if (!upDownBase.UseSideBySideButtons)
+        {
+            return;
+        }
+
+        int originalHeight = upDownBase.Height;
+        using Font font = new(upDownBase.Font.FontFamily, upDownBase.Font.Size + 10);
+
+        upDownBase.Font = font;
+
+        upDownBase.Height.Should().Be(upDownBase.PreferredHeight);
+        upDownBase.Height.Should().BeGreaterThan(originalHeight);
+    }
+
+    [WinFormsTheory]
     [InlineData(RightToLeft.No)]
     [InlineData(RightToLeft.Yes)]
     public void UpDownBase_ModernVisualStylesMode_PreservesButtonOrderForRightToLeft(RightToLeft rightToLeft)
@@ -3388,6 +3414,41 @@ public class UpDownBaseTests
         Action drawToBitmap = () => upDownBase.DrawToBitmap(bitmap, new Rectangle(Point.Empty, upDownBase.Size));
 
         drawToBitmap.Should().NotThrow();
+    }
+
+    [WinFormsTheory]
+    [InlineData(0, 20)]
+    [InlineData(20, 0)]
+    public void UpDownButtons_ModernVisualStylesMode_OnPaintWithEmptyBounds_DoesNotThrow(
+        int width,
+        int height)
+    {
+        using SubUpDownBase upDownBase = new()
+        {
+            VisualStylesMode = VisualStylesMode.Net11
+        };
+
+        if (!upDownBase.UseSideBySideButtons)
+        {
+            return;
+        }
+
+        using SubUpDownButtons buttons = new(upDownBase)
+        {
+            Size = new Size(width, height)
+        };
+        using Bitmap bitmap = new(1, 1);
+        using Graphics graphics = Graphics.FromImage(bitmap);
+        using PaintEventArgs eventArgs = new(graphics, Rectangle.Empty);
+
+        Action paint = () => buttons.OnPaint(eventArgs);
+
+        paint.Should().NotThrow();
+    }
+
+    private sealed class SubUpDownButtons(UpDownBase parent) : UpDownBase.UpDownButtons(parent)
+    {
+        public new void OnPaint(PaintEventArgs e) => base.OnPaint(e);
     }
 
     private class CustomValidateUpDownBase : UpDownBase
