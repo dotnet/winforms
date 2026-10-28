@@ -15,6 +15,7 @@ This file should be imported by eng/Versions.props
     <MicrosoftDotNetXUnitV3ExtensionsPackageVersion>12.0.0-beta.26519.114</MicrosoftDotNetXUnitV3ExtensionsPackageVersion>
     <MicrosoftNETSdkILPackageVersion>12.0.0-alpha.1.26519.114</MicrosoftNETSdkILPackageVersion>
     <MicrosoftNETCoreAppRefPackageVersion>12.0.0-alpha.1.26519.114</MicrosoftNETCoreAppRefPackageVersion>
+    <MicrosoftNETCorePlatformsPackageVersion>12.0.0-alpha.1.26519.114</MicrosoftNETCorePlatformsPackageVersion>
     <MicrosoftNETCoreILAsmPackageVersion>12.0.0-alpha.1.26519.114</MicrosoftNETCoreILAsmPackageVersion>
     <MicrosoftNETCoreILDAsmPackageVersion>12.0.0-alpha.1.26519.114</MicrosoftNETCoreILDAsmPackageVersion>
     <MicrosoftWin32SystemEventsPackageVersion>12.0.0-alpha.1.26519.114</MicrosoftWin32SystemEventsPackageVersion>
@@ -44,6 +45,7 @@ This file should be imported by eng/Versions.props
     <MicrosoftDotNetXUnitV3ExtensionsVersion>$(MicrosoftDotNetXUnitV3ExtensionsPackageVersion)</MicrosoftDotNetXUnitV3ExtensionsVersion>
     <MicrosoftNETSdkILVersion>$(MicrosoftNETSdkILPackageVersion)</MicrosoftNETSdkILVersion>
     <MicrosoftNETCoreAppRefVersion>$(MicrosoftNETCoreAppRefPackageVersion)</MicrosoftNETCoreAppRefVersion>
+    <MicrosoftNETCorePlatformsVersion>$(MicrosoftNETCorePlatformsPackageVersion)</MicrosoftNETCorePlatformsVersion>
     <MicrosoftNETCoreILAsmVersion>$(MicrosoftNETCoreILAsmPackageVersion)</MicrosoftNETCoreILAsmVersion>
     <MicrosoftNETCoreILDAsmVersion>$(MicrosoftNETCoreILDAsmPackageVersion)</MicrosoftNETCoreILDAsmVersion>
     <MicrosoftWin32SystemEventsVersion>$(MicrosoftWin32SystemEventsPackageVersion)</MicrosoftWin32SystemEventsVersion>
