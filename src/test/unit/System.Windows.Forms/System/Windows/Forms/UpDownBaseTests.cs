@@ -6,6 +6,7 @@
 using System.ComponentModel;
 using System.Drawing;
 using System.Windows.Forms.TestUtilities;
+using Moq;
 using Point = System.Drawing.Point;
 using Size = System.Drawing.Size;
 
@@ -82,6 +83,49 @@ public class UpDownBaseTests
 
         Assert.NotEqual(editBounds, control.TextBox.Bounds);
         Assert.NotEqual(buttonsBounds, control.UpDownButtonsInternal.Bounds);
+    }
+
+    [WinFormsTheory]
+    [InlineData(false, false)]
+    [InlineData(false, true)]
+    [InlineData(true, false)]
+    [InlineData(true, true)]
+    public void UpDownBase_ModernVisualStylesMode_ButtonPress_DoesNotInterruptEditFocus(bool numeric, bool initiallyFocused)
+    {
+        using Form form = new();
+        using UpDownBase control = numeric ? new NumericUpDown() : new DomainUpDown();
+        using Button otherControl = new() { Top = 100 };
+        control.VisualStylesMode = VisualStylesMode.Net11;
+        form.Controls.AddRange([control, otherControl]);
+        form.Show();
+
+        if (!control.UseSideBySideButtons)
+        {
+            return;
+        }
+
+        Control initialControl = initiallyFocused ? control : otherControl;
+        initialControl.Focus().Should().BeTrue();
+        control.Focused.Should().Be(initiallyFocused);
+
+        int gotFocusCount = 0;
+        int lostFocusCount = 0;
+        control.GotFocus += (sender, e) => gotFocusCount++;
+        control.LostFocus += (sender, e) => lostFocusCount++;
+
+        foreach (UpDownBase.ButtonID button in new[] { UpDownBase.ButtonID.Up, UpDownBase.ButtonID.Down })
+        {
+            Rectangle bounds = control.UpDownButtonsInternal.GetButtonRectangle(button);
+            MouseEventArgs eventArgs = new(MouseButtons.Left, 1, bounds.Left + bounds.Width / 2, bounds.Top + bounds.Height / 2, 0);
+            dynamic buttons = control.UpDownButtonsInternal.TestAccessor.Dynamic;
+            buttons.OnMouseDown(eventArgs);
+            buttons.OnMouseUp(eventArgs);
+
+            control.Focused.Should().BeTrue();
+            control.TextBox.Focused.Should().BeTrue();
+            gotFocusCount.Should().Be(initiallyFocused ? 0 : 1);
+            lostFocusCount.Should().Be(0);
+        }
     }
 
     [WinFormsFact]
@@ -3162,6 +3206,88 @@ public class UpDownBaseTests
         upDownBase._upDownEdit.Top.Should().Be(inset);
         upDownBase._upDownEdit.Height.Should().Be(Math.Max(0, 9 - (2 * inset)));
         upDownBase.Height.Should().Be(9);
+    }
+
+    [WinFormsTheory]
+    [InlineData(false, false)]
+    [InlineData(false, true)]
+    [InlineData(true, false)]
+    [InlineData(true, true)]
+    public void UpDownBase_ModernVisualStylesMode_FontChangedAtDesignTime_ResizesControlAndButtons(bool numeric, bool createHandle)
+    {
+        using Font initialFont = new(FontFamily.GenericSansSerif, 9);
+        using Font largerFont = new(FontFamily.GenericSansSerif, 18);
+        using UpDownBase control = numeric ? new NumericUpDown() : new DomainUpDown();
+        Mock<ISite> site = new();
+        site.Setup(s => s.DesignMode).Returns(true);
+        control.Site = site.Object;
+        control.VisualStylesMode = VisualStylesMode.Net11;
+        control.Font = initialFont;
+
+        if (createHandle)
+        {
+            control.CreateControl();
+        }
+
+        if (!control.UseSideBySideButtons)
+        {
+            return;
+        }
+
+        control.AutoSize.Should().BeFalse();
+        int initialHeight = control.Height;
+        int initialButtonsHeight = control.UpDownButtonsInternal.Height;
+        int width = control.Width;
+
+        control.Font = largerFont;
+
+        control.Height.Should().Be(control.PreferredHeight);
+        control.Height.Should().BeGreaterThan(initialHeight);
+        control.Width.Should().Be(width);
+        control.UpDownButtonsInternal.Height.Should().Be(initialButtonsHeight + control.Height - initialHeight);
+        control.UpDownButtonsInternal.GetButtonRectangle(UpDownBase.ButtonID.Up).Height.Should().Be(control.UpDownButtonsInternal.Height);
+        control.UpDownButtonsInternal.GetButtonRectangle(UpDownBase.ButtonID.Down).Height.Should().Be(control.UpDownButtonsInternal.Height);
+
+        control.Font = initialFont;
+
+        control.Height.Should().Be(initialHeight);
+        control.UpDownButtonsInternal.Height.Should().Be(initialButtonsHeight);
+        control.IsHandleCreated.Should().Be(createHandle);
+    }
+
+    [WinFormsTheory]
+    [InlineData(false, false)]
+    [InlineData(false, true)]
+    [InlineData(true, false)]
+    [InlineData(true, true)]
+    public void UpDownBase_ModernVisualStylesMode_FontChangedAtRunTime_RespectsAutoSize(bool numeric, bool autoSize)
+    {
+        using Font initialFont = new(FontFamily.GenericSansSerif, 9);
+        using Font largerFont = new(FontFamily.GenericSansSerif, 18);
+        using UpDownBase control = numeric ? new NumericUpDown() : new DomainUpDown();
+        control.VisualStylesMode = VisualStylesMode.Net11;
+        control.Font = initialFont;
+        control.AutoSize = autoSize;
+        control.Height = control.PreferredHeight;
+        control.CreateControl();
+
+        if (!control.UseSideBySideButtons)
+        {
+            return;
+        }
+
+        int initialHeight = control.Height;
+        int initialButtonsHeight = control.UpDownButtonsInternal.Height;
+
+        control.Font = largerFont;
+
+        control.Height.Should().Be(autoSize ? control.PreferredHeight : initialHeight);
+        control.UpDownButtonsInternal.Height.Should().Be(initialButtonsHeight + control.Height - initialHeight);
+
+        control.Font = initialFont;
+
+        control.Height.Should().Be(initialHeight);
+        control.UpDownButtonsInternal.Height.Should().Be(initialButtonsHeight);
     }
 
     [WinFormsTheory]

@@ -904,7 +904,7 @@ public abstract partial class UpDownBase : ContainerControl
         // Clear the font height cache
         FontHeight = -1;
 
-        if (!UseSideBySideButtons || AutoSize)
+        if (!UseSideBySideButtons || AutoSize || DesignMode)
         {
             Height = PreferredHeight;
         }

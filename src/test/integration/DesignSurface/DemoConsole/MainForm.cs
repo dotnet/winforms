@@ -226,6 +226,9 @@ public partial class MainForm : Form
                         lb1.Items.AddRange(new string[] { "a1", "b2", "c3" });
 
                         TreeView tv1 = surface.CreateControl<TreeView>(new Size(200, 160), new Point(10, 220));
+
+                        NumericUpDown nud1 = surface.CreateControl<NumericUpDown>(new Size(200, 20), new Point(260, 260));
+                        DomainUpDown du1 = surface.CreateControl<DomainUpDown>(new Size(200, 20), new Point(260, 300));
                     }
 
                     break;
