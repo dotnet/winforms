@@ -2799,9 +2799,9 @@ public partial class ComboBox : ListControl
         {
             UpdateControl(true);
         }
-        else
+        else if (!GetState(States.CreatingHandle))
         {
-            // we always will recreate the handle when autocomplete mode is on
+            // DPI scaling can change the font during handle creation, before autocomplete is initialized.
             RecreateHandle();
         }
 
@@ -3458,6 +3458,19 @@ public partial class ComboBox : ListControl
         return $"{s}, Items.Count: {_itemsCollection?.Count ?? 0}";
     }
 
+    private int GetCalculatedDropDownHeight()
+    {
+        int height = DropDownHeight;
+        if (height == DefaultDropDownHeight)
+        {
+            int itemCount = (_itemsCollection is null) ? 0 : _itemsCollection.Count;
+            int count = Math.Min(Math.Max(itemCount, 1), _maxDropDownItems);
+            height = ItemHeight * count + 2;
+        }
+
+        return height;
+    }
+
     private void UpdateDropDownHeight()
     {
         if (_dropDownHandle.IsNull)
@@ -3466,13 +3479,7 @@ public partial class ComboBox : ListControl
         }
 
         // Now use the DropDownHeight property instead of calculating the Height...
-        int height = DropDownHeight;
-        if (height == DefaultDropDownHeight)
-        {
-            int itemCount = (_itemsCollection is null) ? 0 : _itemsCollection.Count;
-            int count = Math.Min(Math.Max(itemCount, 1), _maxDropDownItems);
-            height = ItemHeight * count + 2;
-        }
+        int height = GetCalculatedDropDownHeight();
 
         PInvoke.SetWindowPos(
             _dropDownHandle,
