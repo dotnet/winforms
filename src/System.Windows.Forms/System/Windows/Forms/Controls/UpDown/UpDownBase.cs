@@ -84,6 +84,7 @@ public abstract partial class UpDownBase : ContainerControl
 
         SetStyle(ControlStyles.StandardClick, false);
         SetStyle(ControlStyles.UseTextForAccessibility, false);
+        SetStyle(ControlStyles.OptimizedDoubleBuffer, UseSideBySideButtons);
     }
 
     [Browsable(false)]
@@ -574,6 +575,8 @@ public abstract partial class UpDownBase : ContainerControl
         int oldPreferredHeight = PreferredHeight;
 
         base.OnVisualStylesModeChanged(e);
+        // Present the modern background, border, and animated focus edge in a single frame.
+        SetStyle(ControlStyles.OptimizedDoubleBuffer, UseSideBySideButtons);
         _focusIndicatorRenderer?.Synchronize(Focused, invalidate: false);
         CommonProperties.xClearPreferredSizeCache(this);
 
@@ -904,7 +907,7 @@ public abstract partial class UpDownBase : ContainerControl
         // Clear the font height cache
         FontHeight = -1;
 
-        if (!UseSideBySideButtons || AutoSize || DesignMode)
+        if (!UseSideBySideButtons || AutoSize)
         {
             Height = PreferredHeight;
         }
