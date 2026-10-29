@@ -26,6 +26,7 @@
   <ItemGroup>
     <ProjectReference Include="..\..\..\Common\tests\TestUtilities\System.Private.Windows.Core.TestUtilities.csproj" />
     <ProjectReference Include="..\..\src\System.Windows.Forms.Analyzers.csproj" />
+    <ProjectReference Include="..\..\..\System.Windows.Forms\System.Windows.Forms.csproj" ReferenceOutputAssembly="false" />
   </ItemGroup>
 
   <ItemGroup>
