@@ -3775,8 +3775,9 @@ public partial class ToolStrip : ScrollableControl, IArrangedElement, ISupportTo
         int deviceDpiNew,
         bool isDropDownChild = false)
     {
-        if (item is ToolStripControlHost controlHost)
+        if (item is ToolStripControlHost controlHost and (ToolStripTextBox or ToolStripComboBox))
         {
+            // Other hosted controls retain their normal DPI message processing.
             // DropDown child items are already font-scaled in ToolStripDropDownItem.ToolStrip_RescaleConstants.
             controlHost.RescaleHostedControlBoundsForDpi(deviceDpiOld, deviceDpiNew, rescaleFont: !isDropDownChild);
         }

@@ -480,6 +480,7 @@ public partial class ToolStripControlHost : ToolStripItem
 
         // Capture item width before font/layout mutations; ToolStripItem sizes are not OS-scaled with the form.
         int baseWidth = Width > 0 ? Width : hostedControl.Width;
+        int baseHeight = Height;
         if (baseWidth <= 0)
         {
             Rectangle specified = CommonProperties.GetSpecifiedBounds(hostedControl);
@@ -506,9 +507,11 @@ public partial class ToolStripControlHost : ToolStripItem
 
         // Calculate the new width of the hosted control at the new DPI.
         int newWidth = Math.Max(1, (int)Math.Round(baseWidth * (double)deviceDpiNew / deviceDpiOld));
-        // Calculate the preferred height of the hosted control at the new DPI.
-        int preferredHeight = Math.Max(1, hostedControl.PreferredSize.Height);
-        Size newSize = new(newWidth, preferredHeight);
+        // Only autosized items should replace their configured height with the preferred height.
+        int newHeight = AutoSize
+            ? Math.Max(1, hostedControl.PreferredSize.Height)
+            : Math.Max(1, (int)Math.Round(baseHeight * (double)deviceDpiNew / deviceDpiOld));
+        Size newSize = new(newWidth, newHeight);
 
         // If the item size is already set to the new size, we still need to call OnBoundsChanged to ensure the hosted control is aligned correctly.
         if (Size != newSize)

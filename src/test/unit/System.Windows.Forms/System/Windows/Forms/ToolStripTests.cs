@@ -7,6 +7,7 @@ using System.ComponentModel;
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.Windows.Forms.TestUtilities;
+using Microsoft.DotNet.RemoteExecutor;
 using Moq;
 using Windows.Win32.System.Ole;
 using Point = System.Drawing.Point;
@@ -7057,46 +7058,215 @@ public partial class ToolStripTests : IDisposable
         Assert.False(control.IsHandleCreated);
     }
 
-    [WinFormsFact]
-    public void ToolStrip_RescaleConstantsForDpi_ScalesHostedTextBoxAndComboBox()
+    [WinFormsTheory]
+    [InlineData(false)]
+    [InlineData(true)]
+    public void ToolStrip_RescaleConstantsForDpi_ScalesHostedTextBoxAndComboBox(bool customFont)
     {
-        using IDisposable dpiScope = ScaleHelper.EnterDpiAwarenessScope(
-            DPI_AWARENESS_CONTEXT.DPI_AWARENESS_CONTEXT_PER_MONITOR_AWARE_V2);
-        if (!ScaleHelper.IsThreadPerMonitorV2Aware)
+        RemoteExecutor.Invoke(VerifyHostedControlScaling, customFont.ToString()).Dispose();
+    }
+
+    private static void VerifyHostedControlScaling(string customFontValue)
+    {
+        Assert.True(Application.SetHighDpiMode(HighDpiMode.PerMonitorV2));
+        Assert.True(ScaleHelper.IsThreadPerMonitorV2Aware);
+        bool customFont = bool.Parse(customFontValue);
+
+        int originalDpi = ToolStripManager.CurrentDpi;
+        try
         {
-            return;
+            using Font font = new(FontFamily.GenericSansSerif, 13);
+            using SubToolStrip toolStrip = new();
+            using ToolStripTextBox textBox = new();
+            using ToolStripComboBox comboBox = new();
+            toolStrip.Items.AddRange([textBox, comboBox]);
+            toolStrip.CreateControl();
+            int initialDpi = toolStrip.DeviceDpi;
+            Assert.Equal(initialDpi, textBox.Control.DeviceDpi);
+            Assert.Equal(initialDpi, comboBox.Control.DeviceDpi);
+            toolStrip.Width = Math.Max(initialDpi, 480) * 4;
+            if (customFont)
+            {
+                textBox.Font = font;
+                comboBox.Font = font;
+            }
+
+            // Size updates the hosted control's specified bounds; Width only changes its current bounds.
+            // DPI-divisible dimensions avoid pixel-rounding drift during the round trip.
+            textBox.Size = new(initialDpi, textBox.Height);
+            comboBox.Size = new(initialDpi, comboBox.Height);
+            toolStrip.PerformLayout();
+            Assert.Equal(initialDpi, textBox.Width);
+            Assert.Equal(initialDpi, comboBox.Width);
+
+            int textBoxWidth = textBox.Width;
+            int comboBoxWidth = comboBox.Width;
+            Font textBoxFont = textBox.Font;
+            Font comboBoxFont = comboBox.Font;
+            int oldDpi = initialDpi;
+            foreach (int newDpi in new[] { 96, 120, 144, 168, 96, 192, 216, 240, 288, 384, 480, 96, initialDpi })
+            {
+                if (newDpi == oldDpi)
+                {
+                    continue;
+                }
+
+                int expectedTextBoxWidth = (int)Math.Round(textBox.Width * (double)newDpi / oldDpi);
+                int expectedComboBoxWidth = (int)Math.Round(comboBox.Width * (double)newDpi / oldDpi);
+                toolStrip.RescaleConstantsForDpi(oldDpi, newDpi);
+                toolStrip.PerformLayout();
+
+                Assert.Equal(expectedTextBoxWidth, textBox.Width);
+                Assert.Equal(expectedComboBoxWidth, comboBox.Width);
+                if (customFont)
+                {
+                    Assert.Equal(textBoxFont.Size * newDpi / initialDpi, textBox.Font.Size, precision: 3);
+                    Assert.Equal(comboBoxFont.Size * newDpi / initialDpi, comboBox.Font.Size, precision: 3);
+                }
+                else
+                {
+                    Assert.Equal(ToolStripManager.DefaultFont, textBox.Font);
+                    Assert.Equal(ToolStripManager.DefaultFont, comboBox.Font);
+                }
+
+                oldDpi = newDpi;
+            }
+
+            Assert.Equal(textBoxWidth, textBox.Width);
+            Assert.Equal(comboBoxWidth, comboBox.Width);
+            Assert.Equal(textBoxFont.Height, textBox.Font.Height);
+            Assert.Equal(comboBoxFont.Height, comboBox.Font.Height);
         }
+        finally
+        {
+            ToolStripManager.CurrentDpi = originalDpi;
+        }
+    }
 
-        using SubToolStrip toolStrip = new();
-        using ToolStripTextBox textBox = new();
-        using ToolStripComboBox comboBox = new();
+    [WinFormsTheory]
+    [InlineData(false)]
+    [InlineData(true)]
+    public void ToolStrip_RescaleConstantsForDpi_CustomHostPreservesDpiProcessing(bool controlFirst)
+    {
+        RemoteExecutor.Invoke(VerifyCustomHostDpiProcessing, controlFirst.ToString()).Dispose();
+    }
 
-        toolStrip.Items.Add(textBox);
-        toolStrip.Items.Add(comboBox);
-        toolStrip.CreateControl();
+    private static void VerifyCustomHostDpiProcessing(string controlFirstValue)
+    {
+        Assert.True(Application.SetHighDpiMode(HighDpiMode.PerMonitorV2));
+        Assert.True(ScaleHelper.IsThreadPerMonitorV2Aware);
+        bool controlFirst = bool.Parse(controlFirstValue);
 
-        int textBoxWidth = textBox.Width;
-        int comboBoxWidth = comboBox.Width;
-        int textBoxFontHeight = textBox.Control.Font.Height;
-        int comboBoxFontHeight = comboBox.ComboBox.Font.Height;
-        int expectedTextBoxWidth = (int)Math.Round(textBoxWidth * 288 / 96.0);
-        int expectedComboBoxWidth = (int)Math.Round(comboBoxWidth * 288 / 96.0);
+        int originalDpi = ToolStripManager.CurrentDpi;
+        try
+        {
+            using Font font = new(FontFamily.GenericSansSerif, 13);
+            using SubToolStrip toolStrip = new() { AutoSize = false, Size = new(800, 200) };
+            using DpiAwareHostedControl control = new() { Font = font, Size = new(200, 80) };
+            using ToolStripControlHost host = new(control) { AutoSize = false };
+            toolStrip.Items.Add(host);
+            toolStrip.CreateControl();
+            _ = control.Handle;
+            int initialDpi = control.DeviceDpi;
+            Assert.Equal(initialDpi, toolStrip.DeviceDpi);
+            int maximumDpi = Math.Max(initialDpi, 480);
+            toolStrip.Size = new(maximumDpi * 8, maximumDpi * 4);
+            host.Size = new(initialDpi * 2, initialDpi);
+            Size originalSize = host.Size;
+            float originalFontSize = control.Font.Size;
+            int initialCallCount = control.RescaleCallCount;
+            int oldDpi = initialDpi;
+            int transitionCount = 0;
+            foreach (int newDpi in new[] { 96, 120, 144, 168, 96, 192, 216, 240, 288, 384, 480, 96, initialDpi })
+            {
+                if (newDpi == oldDpi)
+                {
+                    continue;
+                }
 
-        toolStrip.TestAccessor.Dynamic.RescaleConstantsForDpi(96, 288);
-        toolStrip.PerformLayout();
+                Size expectedSize = new(
+                    (int)Math.Round(control.Width * (double)newDpi / oldDpi),
+                    (int)Math.Round(control.Height * (double)newDpi / oldDpi));
+                if (controlFirst)
+                {
+                    control.ChangeDpi(newDpi);
+                }
 
-        Assert.Equal(expectedTextBoxWidth, textBox.Width);
-        Assert.Equal(expectedComboBoxWidth, comboBox.Width);
-        Assert.True(textBox.Control.Font.Height > textBoxFontHeight);
-        Assert.True(comboBox.ComboBox.Font.Height > comboBoxFontHeight);
+                toolStrip.RescaleConstantsForDpi(oldDpi, newDpi);
+                if (!controlFirst)
+                {
+                    control.ChangeDpi(newDpi);
+                }
 
-        toolStrip.TestAccessor.Dynamic.RescaleConstantsForDpi(288, 96);
-        toolStrip.PerformLayout();
+                toolStrip.PerformLayout();
+                Assert.Equal(initialCallCount + ++transitionCount, control.RescaleCallCount);
+                Assert.Equal(newDpi, control.DeviceDpi);
+                Assert.Equal(expectedSize, control.Size);
+                Assert.Equal(expectedSize, host.Size);
+                Assert.Equal(originalFontSize * newDpi / initialDpi, control.Font.Size, precision: 3);
+                oldDpi = newDpi;
+            }
 
-        Assert.Equal(textBoxWidth, textBox.Width);
-        Assert.Equal(comboBoxWidth, comboBox.Width);
-        Assert.Equal(textBoxFontHeight, textBox.Control.Font.Height);
-        Assert.Equal(comboBoxFontHeight, comboBox.ComboBox.Font.Height);
+            Assert.Equal(originalSize, host.Size);
+            Assert.Equal(originalSize, control.Size);
+        }
+        finally
+        {
+            ToolStripManager.CurrentDpi = originalDpi;
+        }
+    }
+
+    [WinFormsFact]
+    public void ToolStrip_RescaleConstantsForDpi_FixedHeightScalesConfiguredHeight()
+    {
+        RemoteExecutor.Invoke(VerifyFixedHeightScaling).Dispose();
+    }
+
+    private static void VerifyFixedHeightScaling()
+    {
+        Assert.True(Application.SetHighDpiMode(HighDpiMode.PerMonitorV2));
+        Assert.True(ScaleHelper.IsThreadPerMonitorV2Aware);
+
+        int originalDpi = ToolStripManager.CurrentDpi;
+        try
+        {
+            using SubToolStrip toolStrip = new() { AutoSize = false, Size = new(800, 200) };
+            using ToolStripTextBox textBox = new() { AutoSize = false };
+            textBox.TextBox.Multiline = true;
+            textBox.TextBox.AutoSize = false;
+            textBox.Size = new(200, 80);
+            toolStrip.Items.Add(textBox);
+            toolStrip.CreateControl();
+            int initialDpi = textBox.Control.DeviceDpi;
+            Assert.Equal(initialDpi, toolStrip.DeviceDpi);
+            int maximumDpi = Math.Max(initialDpi, 480);
+            toolStrip.Size = new(maximumDpi * 8, maximumDpi * 4);
+            textBox.Size = new(initialDpi * 2, initialDpi);
+            Size originalSize = textBox.Size;
+            int oldDpi = initialDpi;
+            foreach (int newDpi in new[] { 96, 120, 144, 168, 96, 192, 216, 240, 288, 384, 480, 96, initialDpi })
+            {
+                if (newDpi == oldDpi)
+                {
+                    continue;
+                }
+
+                Size expectedSize = new(
+                    (int)Math.Round(textBox.Width * (double)newDpi / oldDpi),
+                    (int)Math.Round(textBox.Height * (double)newDpi / oldDpi));
+                toolStrip.RescaleConstantsForDpi(oldDpi, newDpi);
+                toolStrip.PerformLayout();
+                Assert.Equal(expectedSize, textBox.Size);
+                Assert.Equal(expectedSize, textBox.Control.Size);
+                oldDpi = newDpi;
+            }
+
+            Assert.Equal(originalSize, textBox.Size);
+        }
+        finally
+        {
+            ToolStripManager.CurrentDpi = originalDpi;
+        }
     }
 
     public static IEnumerable<object[]> SetItemLocation_TestData()
@@ -7602,6 +7772,30 @@ public partial class ToolStripTests : IDisposable
         public Func<char, bool> ProcessDialogCharAction { get; set; }
 
         protected override bool ProcessDialogChar(char charCode) => ProcessDialogCharAction(charCode);
+    }
+
+    /// <summary>
+    ///  Models a hosted control that scales its own bounds during DPI message processing.
+    /// </summary>
+    private sealed class DpiAwareHostedControl : Control
+    {
+        public int RescaleCallCount { get; private set; }
+
+        public void ChangeDpi(int newDpi)
+        {
+            Message message = Message.Create(
+                (HWND)Handle, PInvokeCore.WM_DPICHANGED_BEFOREPARENT, (WPARAM)newDpi, (LPARAM)0);
+            WndProc(ref message);
+        }
+
+        protected override void RescaleConstantsForDpi(int deviceDpiOld, int deviceDpiNew)
+        {
+            base.RescaleConstantsForDpi(deviceDpiOld, deviceDpiNew);
+            RescaleCallCount++;
+            Size = new(
+                (int)Math.Round(Width * (double)deviceDpiNew / deviceDpiOld),
+                (int)Math.Round(Height * (double)deviceDpiNew / deviceDpiOld));
+        }
     }
 
     private class SubToolStripItem : ToolStripItem
