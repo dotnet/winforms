@@ -162,6 +162,11 @@ public abstract partial class UpDownBase
             {
                 _parent.Focus();
             }
+            else if (_parent.UserEdit)
+            {
+                // Normalize pending edits even when spinning at a bound leaves Value unchanged.
+                _parent.ValidateEditText();
+            }
 
             if (!_parent.ValidationCancelled && e.Button == MouseButtons.Left)
             {
