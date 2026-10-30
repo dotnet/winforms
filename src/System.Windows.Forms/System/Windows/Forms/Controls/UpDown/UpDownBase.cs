@@ -84,7 +84,6 @@ public abstract partial class UpDownBase : ContainerControl
 
         SetStyle(ControlStyles.StandardClick, false);
         SetStyle(ControlStyles.UseTextForAccessibility, false);
-        SetStyle(ControlStyles.OptimizedDoubleBuffer, UseSideBySideButtons);
     }
 
     [Browsable(false)]
@@ -274,6 +273,29 @@ public abstract partial class UpDownBase : ContainerControl
     [EditorBrowsable(EditorBrowsableState.Never)]
     [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public new DockPaddingEdges DockPadding => base.DockPadding;
+
+    /// <inheritdoc/>
+    /// <remarks>
+    ///  <para>
+    ///   Modern visual styles always use double buffering. Explicit settings are retained for classic visual styles.
+    ///  </para>
+    /// </remarks>
+    protected override bool DoubleBuffered
+    {
+        get => UseSideBySideButtons || base.DoubleBuffered;
+        set
+        {
+            // The base setter compares against the effective value, which is always true in modern mode.
+            if (value)
+            {
+                SetStyle(ControlStyles.OptimizedDoubleBuffer | ControlStyles.AllPaintingInWmPaint, true);
+            }
+            else
+            {
+                SetStyle(ControlStyles.OptimizedDoubleBuffer, false);
+            }
+        }
+    }
 
     /// <summary>
     ///  Returns true if this control has focus.
@@ -575,8 +597,6 @@ public abstract partial class UpDownBase : ContainerControl
         int oldPreferredHeight = PreferredHeight;
 
         base.OnVisualStylesModeChanged(e);
-        // Present the modern background, border, and animated focus edge in a single frame.
-        SetStyle(ControlStyles.OptimizedDoubleBuffer, UseSideBySideButtons);
         _focusIndicatorRenderer?.Synchronize(Focused, invalidate: false);
         CommonProperties.xClearPreferredSizeCache(this);
 

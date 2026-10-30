@@ -84,6 +84,163 @@ public class UpDownBaseTests
         Assert.NotEqual(buttonsBounds, control.UpDownButtonsInternal.Bounds);
     }
 
+    [WinFormsTheory]
+    [InlineData(false, false, false)]
+    [InlineData(false, false, true)]
+    [InlineData(false, true, false)]
+    [InlineData(false, true, true)]
+    [InlineData(true, false, false)]
+    [InlineData(true, false, true)]
+    [InlineData(true, true, false)]
+    [InlineData(true, true, true)]
+    public void UpDownBase_DoubleBuffered_VisualStylesModeChanged_PreservesExplicitValue(bool value, bool createHandle, bool inherited)
+    {
+        using Control parent = new() { VisualStylesMode = VisualStylesMode.Disabled };
+        using SubUpDownBase control = new()
+        {
+            VisualStylesMode = inherited ? VisualStylesMode.Inherit : VisualStylesMode.Disabled
+        };
+        parent.Controls.Add(control);
+
+        if (createHandle)
+        {
+            parent.CreateControl();
+        }
+
+        control.IsHandleCreated.Should().Be(createHandle);
+        control.DoubleBuffered = value;
+        Control styleOwner = inherited ? parent : control;
+
+        for (int i = 0; i < 2; i++)
+        {
+            styleOwner.VisualStylesMode = VisualStylesMode.Net11;
+
+            control.UseSideBySideButtons.Should().BeTrue();
+            control.DoubleBuffered.Should().BeTrue();
+            control.GetStyle(ControlStyles.OptimizedDoubleBuffer).Should().Be(value);
+            control.GetStyle(ControlStyles.AllPaintingInWmPaint).Should().Be(value);
+            control.IsHandleCreated.Should().Be(createHandle);
+
+            if (createHandle)
+            {
+                int handleCreatedCount = 0;
+                EventHandler handler = (sender, e) => handleCreatedCount++;
+                control.HandleCreated += handler;
+                control.BorderStyle = control.BorderStyle == BorderStyle.Fixed3D
+                    ? BorderStyle.FixedSingle
+                    : BorderStyle.Fixed3D;
+                control.HandleCreated -= handler;
+
+                handleCreatedCount.Should().Be(1);
+                control.DoubleBuffered.Should().BeTrue();
+                control.GetStyle(ControlStyles.OptimizedDoubleBuffer).Should().Be(value);
+            }
+
+            styleOwner.VisualStylesMode = VisualStylesMode.Disabled;
+
+            control.DoubleBuffered.Should().Be(value);
+            control.GetStyle(ControlStyles.OptimizedDoubleBuffer).Should().Be(value);
+            control.GetStyle(ControlStyles.AllPaintingInWmPaint).Should().Be(value);
+            control.IsHandleCreated.Should().Be(createHandle);
+        }
+    }
+
+    [WinFormsTheory]
+    [InlineData(false, false, false)]
+    [InlineData(false, false, true)]
+    [InlineData(false, true, false)]
+    [InlineData(false, true, true)]
+    [InlineData(true, false, false)]
+    [InlineData(true, false, true)]
+    [InlineData(true, true, false)]
+    [InlineData(true, true, true)]
+    public void UpDownBase_DoubleBuffered_SetInModernMode_PreservesUpdatedValue(bool value, bool createHandle, bool inherited)
+    {
+        using Control parent = new() { VisualStylesMode = VisualStylesMode.Disabled };
+        using SubUpDownBase control = new()
+        {
+            VisualStylesMode = inherited ? VisualStylesMode.Inherit : VisualStylesMode.Disabled,
+            DoubleBuffered = !value
+        };
+        parent.Controls.Add(control);
+
+        if (createHandle)
+        {
+            parent.CreateControl();
+        }
+
+        Control styleOwner = inherited ? parent : control;
+        styleOwner.VisualStylesMode = VisualStylesMode.Net11;
+        control.UseSideBySideButtons.Should().BeTrue();
+        int invalidatedCount = 0;
+        int styleChangedCount = 0;
+        int handleCreatedCount = 0;
+        control.Invalidated += (sender, e) => invalidatedCount++;
+        control.StyleChanged += (sender, e) => styleChangedCount++;
+        control.HandleCreated += (sender, e) => handleCreatedCount++;
+
+        control.DoubleBuffered = value;
+        control.DoubleBuffered = value;
+
+        control.DoubleBuffered.Should().BeTrue();
+        control.GetStyle(ControlStyles.OptimizedDoubleBuffer).Should().Be(value);
+        control.GetStyle(ControlStyles.AllPaintingInWmPaint).Should().BeTrue();
+        control.IsHandleCreated.Should().Be(createHandle);
+        invalidatedCount.Should().Be(0);
+        styleChangedCount.Should().Be(0);
+        handleCreatedCount.Should().Be(0);
+
+        styleOwner.VisualStylesMode = VisualStylesMode.Disabled;
+
+        control.DoubleBuffered.Should().Be(value);
+        control.IsHandleCreated.Should().Be(createHandle);
+    }
+
+    [WinFormsTheory]
+    [InlineData(false)]
+    [InlineData(true)]
+    public void UpDownBase_ModernVisualStylesMode_Paint_UsesMemoryDeviceContext(bool numeric)
+    {
+        using Form form = new();
+        using UpDownBase control = numeric ? new NumericUpDown() : new DomainUpDown();
+        control.VisualStylesMode = VisualStylesMode.Net11;
+        form.Controls.Add(control);
+        form.Show();
+        control.UseSideBySideButtons.Should().BeTrue();
+
+        List<OBJ_TYPE> paintDeviceContexts = [];
+        control.Paint += (sender, e) =>
+        {
+            IntPtr hdc = e.Graphics.GetHdc();
+            try
+            {
+                paintDeviceContexts.Add((OBJ_TYPE)PInvokeCore.GetObjectType((HDC)hdc));
+            }
+            finally
+            {
+                e.Graphics.ReleaseHdc(hdc);
+            }
+        };
+
+        control.Focus().Should().BeTrue();
+        control.Refresh();
+
+        foreach (UpDownBase.ButtonID button in new[] { UpDownBase.ButtonID.Up, UpDownBase.ButtonID.Down })
+        {
+            Rectangle bounds = control.UpDownButtonsInternal.GetButtonRectangle(button);
+            MouseEventArgs eventArgs = new(MouseButtons.Left, 1, bounds.Left + bounds.Width / 2, bounds.Top + bounds.Height / 2, 0);
+            dynamic buttons = control.UpDownButtonsInternal.TestAccessor.Dynamic;
+            buttons.OnMouseMove(eventArgs);
+            buttons.OnMouseDown(eventArgs);
+            control.Refresh();
+            buttons.OnMouseUp(eventArgs);
+            control.Refresh();
+        }
+
+        paintDeviceContexts.Should().NotBeEmpty();
+        paintDeviceContexts.Should().OnlyContain(type => type == OBJ_TYPE.OBJ_MEMDC);
+    }
+
     [WinFormsFact]
     public void UpDownBase_Ctor_Default()
     {
