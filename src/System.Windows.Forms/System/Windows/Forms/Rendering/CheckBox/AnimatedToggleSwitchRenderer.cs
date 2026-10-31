@@ -1,4 +1,4 @@
-// Licensed to the .NET Foundation under one or more agreements.
+﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
 using System.Drawing;
@@ -16,6 +16,15 @@ namespace System.Windows.Forms.Rendering.CheckBox;
 internal sealed class AnimatedToggleSwitchRenderer : AnimatedControlRenderer
 {
     private const int AnimationDuration = 300;
+    private const int ThumbHorizontalGapLogical = 1;
+    private const float MinimumThumbContrastRatio = 3f;
+    private const int ContrastSearchIterations = 10;
+
+    private static readonly Color s_darkModeUncheckedCircleColor = Color.FromArgb(0xCF, 0xCE, 0xCD);
+    private static readonly Color s_darkModeUncheckedBorderColor = Color.FromArgb(0x9E, 0x9E, 0x9E);
+    private static readonly Color s_lightModeUncheckedBorderColor = Color.FromArgb(0x89, 0x89, 0x89);
+    private static readonly Color s_lightModeUncheckedCircleColor = Color.FromArgb(0x5D, 0x5D, 0x5D);
+    private static readonly Color s_lightModeUncheckedTrackColor = Color.WhiteSmoke;
 
     private readonly ModernCheckBoxStyle _switchStyle;
     private float _focusCurrent;
@@ -273,10 +282,13 @@ internal sealed class AnimatedToggleSwitchRenderer : AnimatedControlRenderer
         }
 
         bool highContrast = SystemInformation.HighContrast;
+        bool darkMode = Application.IsDarkModeEnabled;
         Color onColor = highContrast
             ? SystemColors.Highlight
-            : WindowsAccentColor;
-        Color offColor = highContrast ? SystemColors.Window : SystemColors.ControlDark;
+            : GetCheckedTrackColor(WindowsAccentColor, darkMode);
+        Color offColor = highContrast
+            ? SystemColors.Window
+            : GetUncheckedTrackColor(darkMode);
         Color backgroundColor = Control.Enabled
             ? PopupButtonColorMath.Blend(offColor, onColor, _onAmountCurrent)
             : SystemColors.Control;
@@ -287,23 +299,26 @@ internal sealed class AnimatedToggleSwitchRenderer : AnimatedControlRenderer
         Color borderColor = Control.Enabled
             ? highContrast
                 ? highContrastForeground
-                : SystemColors.WindowFrame
+                : PopupButtonColorMath.Blend(
+                    GetUncheckedBorderColor(darkMode),
+                    onColor,
+                    _onAmountCurrent)
             : SystemColors.GrayText;
         float focus = Control.Enabled && !highContrast ? _focusCurrent : 0f;
         backgroundColor = ApplyInteractionShade(backgroundColor, focus);
         Color circleColor = Control.Enabled
             ? highContrast
                 ? highContrastForeground
-                : PopupButtonColorMath.GetReadableForeColor(backgroundColor)
+                : GetCircleColor(darkMode, _onAmountCurrent, focus)
             : SystemColors.GrayText;
-        circleColor = ApplyInteractionShade(circleColor, focus);
         borderColor = ApplyInteractionShade(borderColor, focus);
 
-        float thumbDiameter = Lerp(
-            metrics.ThumbDiameter,
-            metrics.HoverThumbDiameter,
+        RectangleF thumbBounds = GetThumbBounds(
+            Control,
+            rect,
+            metrics,
+            _positionCurrent,
             Control.Enabled ? _hoverCurrent : 0f);
-        float circlePosition = (rect.Width - thumbDiameter) * _positionCurrent;
 
         using var backgroundBrush = backgroundColor.GetCachedSolidBrushScope();
         using var circleBrush = circleColor.GetCachedSolidBrushScope();
@@ -334,19 +349,90 @@ internal sealed class AnimatedToggleSwitchRenderer : AnimatedControlRenderer
                 graphics.DrawRectangle(backgroundPen, rect);
             }
 
-            float circleTop = rect.Y + ((rect.Height - thumbDiameter) / 2f);
-            graphics.FillEllipse(
-                circleBrush,
-                rect.X + circlePosition,
-                circleTop,
-                thumbDiameter,
-                thumbDiameter);
+            graphics.FillEllipse(circleBrush, thumbBounds);
         }
         finally
         {
             graphics.SmoothingMode = previousSmoothingMode;
         }
     }
+
+    internal static RectangleF GetThumbBounds(
+        Control control,
+        Rectangle switchBounds,
+        ToggleSwitchMetrics metrics,
+        float position,
+        float hoverAmount)
+    {
+        float diameter = Lerp(metrics.ThumbDiameter, metrics.HoverThumbDiameter, hoverAmount);
+
+        // Keep track color between the thumb and the parent background to preserve contrast.
+        float inset = (metrics.BorderThickness / 2f) + control.LogicalToDeviceUnits(ThumbHorizontalGapLogical);
+        float travel = switchBounds.Width - diameter - (2 * inset);
+
+        return new RectangleF(
+            switchBounds.X + inset + (travel * position),
+            switchBounds.Y + ((switchBounds.Height - diameter) / 2f),
+            diameter,
+            diameter);
+    }
+
+    internal static Color GetUncheckedTrackColor(bool darkMode)
+        => darkMode ? SystemColors.ControlDark : s_lightModeUncheckedTrackColor;
+
+    internal static Color GetUncheckedBorderColor(bool darkMode)
+        => darkMode ? s_darkModeUncheckedBorderColor : s_lightModeUncheckedBorderColor;
+
+    internal static Color GetCircleColor(bool darkMode, float onAmount, float interactionAmount)
+    {
+        Color uncheckedColor = darkMode
+            ? s_darkModeUncheckedCircleColor
+            : s_lightModeUncheckedCircleColor;
+        Color checkedColor = darkMode ? Color.Black : Color.White;
+
+        return PopupButtonColorMath.Blend(
+            ApplyInteractionShade(uncheckedColor, interactionAmount),
+            checkedColor,
+            onAmount);
+    }
+
+    internal static Color GetCheckedTrackColor(Color accentColor, bool darkMode)
+    {
+        Color thumbColor = darkMode ? Color.Black : Color.White;
+        if (HasMinimumThumbContrast(accentColor, thumbColor))
+        {
+            return accentColor;
+        }
+
+        Color contrastColor = darkMode ? Color.White : Color.Black;
+        Color result = contrastColor;
+        float low = 0f;
+        float high = 1f;
+
+        for (int i = 0; i < ContrastSearchIterations; i++)
+        {
+            float amount = (low + high) / 2f;
+            Color candidate = PopupButtonColorMath.Blend(accentColor, contrastColor, amount);
+
+            if (HasMinimumThumbContrast(candidate, thumbColor))
+            {
+                result = candidate;
+                high = amount;
+            }
+            else
+            {
+                low = amount;
+            }
+        }
+
+        return result;
+    }
+
+    private static bool HasMinimumThumbContrast(Color trackColor, Color thumbColor)
+        => PopupButtonColorMath.GetContrastRatio(thumbColor, trackColor) >= MinimumThumbContrastRatio
+           && PopupButtonColorMath.GetContrastRatio(
+               thumbColor,
+               ApplyInteractionShade(trackColor, 1f)) >= MinimumThumbContrastRatio;
 
     internal void PrepareStateChange()
     {
