@@ -232,6 +232,7 @@ GetWindowDisplayAffinity
 GetWindowDpiAwarenessContext
 GetWindowPlacement
 GetWindowRgn
+GetWindowTheme
 GMR_*
 HC_*
 HDHITTESTINFO
