@@ -134,27 +134,66 @@ public abstract class ToolStripDropDownItem : ToolStripItem
                         dropDownDirection = RTLTranslateDropDownDirection(dropDownDirection, RightToLeft);
                     }
 
-                    if (IsOnDropDown)
-                    {
-                        // we gotta make sure that we don't collide with the existing menu.
-                        Rectangle bounds = GetDropDownBounds(dropDownDirection);
-                        Rectangle ownerItemBounds = new(TranslatePoint(Point.Empty, ToolStripPointType.ToolStripItemCoords, ToolStripPointType.ScreenCoords), Size);
-                        Rectangle intersectionBetweenChildAndParent = Rectangle.Intersect(bounds, ownerItemBounds);
+                  if (IsOnDropDown)
+{
+    // Make sure that we don't collide with the existing menu.
+    Rectangle bounds = GetDropDownBounds(dropDownDirection);
+    Rectangle ownerItemBounds = new(
+        TranslatePoint(
+            Point.Empty,
+            ToolStripPointType.ToolStripItemCoords,
+            ToolStripPointType.ScreenCoords),
+        Size);
 
-                        // grab the intersection
-                        if (intersectionBetweenChildAndParent.Width >= 2)
-                        {
-                            RightToLeft toggledRightToLeft = (RightToLeft == RightToLeft.Yes) ? RightToLeft.No : RightToLeft.Yes;
-                            ToolStripDropDownDirection newDropDownDirection = RTLTranslateDropDownDirection(dropDownDirection, toggledRightToLeft);
+    Rectangle intersectionBetweenChildAndParent = Rectangle.Intersect(bounds, ownerItemBounds);
 
-                            // verify that changing the dropdown direction actually causes less intersection.
-                            int newIntersectionWidth = Rectangle.Intersect(GetDropDownBounds(newDropDownDirection), ownerItemBounds).Width;
-                            if (newIntersectionWidth < intersectionBetweenChildAndParent.Width)
-                            {
-                                dropDownDirection = newDropDownDirection;
-                            }
-                        }
-                    }
+    if (intersectionBetweenChildAndParent.Width >= 2)
+    {
+        RightToLeft toggledRightToLeft = RightToLeft == RightToLeft.Yes
+            ? RightToLeft.No
+            : RightToLeft.Yes;
+
+        ToolStripDropDownDirection newDropDownDirection =
+            RTLTranslateDropDownDirection(dropDownDirection, toggledRightToLeft);
+
+        // Verify that changing the dropdown direction actually causes less intersection.
+        int newIntersectionWidth =
+            Rectangle.Intersect(GetDropDownBounds(newDropDownDirection), ownerItemBounds).Width;
+
+        if (newIntersectionWidth < intersectionBetweenChildAndParent.Width)
+        {
+            dropDownDirection = newDropDownDirection;
+            bounds = GetDropDownBounds(dropDownDirection);
+        }
+    }
+
+    // Keep a horizontal submenu on the same monitor as its parent item.
+    if (dropDownDirection is ToolStripDropDownDirection.Left or ToolStripDropDownDirection.Right)
+    {
+        Rectangle workingArea = Screen.FromRectangle(ownerItemBounds).WorkingArea;
+
+        Rectangle currentIntersection = Rectangle.Intersect(workingArea, bounds);
+
+        ToolStripDropDownDirection alternateDirection =
+            dropDownDirection == ToolStripDropDownDirection.Right
+                ? ToolStripDropDownDirection.Left
+                : ToolStripDropDownDirection.Right;
+
+        Rectangle alternateBounds = GetDropDownBounds(alternateDirection);
+        Rectangle alternateIntersection = Rectangle.Intersect(workingArea, alternateBounds);
+
+        long currentVisibleArea =
+            (long)currentIntersection.Width * currentIntersection.Height;
+
+        long alternateVisibleArea =
+            (long)alternateIntersection.Width * alternateIntersection.Height;
+
+        if (alternateVisibleArea > currentVisibleArea)
+        {
+            dropDownDirection = alternateDirection;
+        }
+    }
+}
 
                     return dropDownDirection;
                 }
