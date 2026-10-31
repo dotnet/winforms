@@ -186,48 +186,56 @@ public sealed class InputLanguage
     ///  </see>
     ///  of the current input language.
     /// </summary>
-    private string LanguageTag
-    {
-        get
-        {
-            // According to the GetKeyboardLayout API function docs low word of HKL contains input language identifier.
-            int langId = PARAM.LOWORD(_handle);
+    // The low word of HKL contains the input language identifier.
+    private string LanguageTag => GetLanguageTag(PARAM.LOWORD(_handle), GetTransientLanguages);
 
-            // We need to convert the language identifier to a language tag, because they are deprecated and may have a
-            // transient value.
-            // https://learn.microsoft.com/globalization/locale/other-locale-names#lcid
-            // https://learn.microsoft.com/windows/win32/winmsg/wm-inputlangchange#remarks
-            //
-            // It turns out that the LCIDToLocaleName API, which is used inside CultureInfo, may return incorrect
-            // language tags for transient language identifiers. For example, it returns "nqo-GN" and "jv-Java-ID"
-            // instead of the "nqo" and "jv-Java" (as seen in the Get-WinUserLanguageList PowerShell cmdlet).
-            //
-            // Try to extract proper language tag from registry as a workaround approved by a Windows team.
-            // https://github.com/dotnet/winforms/pull/8573#issuecomment-1542600949
-            //
-            // NOTE: this logic may break in future versions of Windows since it is not documented.
-            if (langId is (int)PInvoke.LOCALE_TRANSIENT_KEYBOARD1
-                or (int)PInvoke.LOCALE_TRANSIENT_KEYBOARD2
-                or (int)PInvoke.LOCALE_TRANSIENT_KEYBOARD3
-                or (int)PInvoke.LOCALE_TRANSIENT_KEYBOARD4)
+    internal static string GetLanguageTag(int langId, Func<IEnumerable<KeyValuePair<string, int>>> getTransientLanguages)
+    {
+        // We need to convert the language identifier to a language tag, because they are deprecated and may have a
+        // transient value.
+        // https://learn.microsoft.com/globalization/locale/other-locale-names#lcid
+        // https://learn.microsoft.com/windows/win32/winmsg/wm-inputlangchange#remarks
+        //
+        // It turns out that the LCIDToLocaleName API, which is used inside CultureInfo, may return incorrect
+        // language tags for transient language identifiers. For example, it returns "nqo-GN" and "jv-Java-ID"
+        // instead of the "nqo" and "jv-Java" (as seen in the Get-WinUserLanguageList PowerShell cmdlet).
+        //
+        // Try to extract proper language tag from registry as a workaround approved by a Windows team.
+        // https://github.com/dotnet/winforms/pull/8573#issuecomment-1542600949
+        //
+        // NOTE: this logic may break in future versions of Windows since it is not documented.
+        if (langId is (int)PInvoke.LOCALE_TRANSIENT_KEYBOARD1
+            or (int)PInvoke.LOCALE_TRANSIENT_KEYBOARD2
+            or (int)PInvoke.LOCALE_TRANSIENT_KEYBOARD3
+            or (int)PInvoke.LOCALE_TRANSIENT_KEYBOARD4)
+        {
+            foreach ((string language, int transientLangId) in getTransientLanguages())
             {
-                using RegistryKey? key = Registry.CurrentUser.OpenSubKey(UserProfileRegistryPath);
-                if (key is not null && key.GetValue("Languages") is string[] languages)
+                if (transientLangId == langId)
                 {
-                    foreach (string language in languages)
-                    {
-                        using RegistryKey? subKey = key.OpenSubKey(language);
-                        if (subKey is not null
-                            && subKey.GetValue("TransientLangId") is int transientLangId
-                            && transientLangId == langId)
-                        {
-                            return language;
-                        }
-                    }
+                    return language;
                 }
             }
+        }
 
-            return CultureInfo.GetCultureInfo(langId).Name;
+        return CultureInfo.GetCultureInfo(langId).Name;
+    }
+
+    private static IEnumerable<KeyValuePair<string, int>> GetTransientLanguages()
+    {
+        using RegistryKey? key = Registry.CurrentUser.OpenSubKey(UserProfileRegistryPath);
+        if (key is null || key.GetValue("Languages") is not string[] languages)
+        {
+            yield break;
+        }
+
+        foreach (string language in languages)
+        {
+            using RegistryKey? subKey = key.OpenSubKey(language);
+            if (subKey?.GetValue("TransientLangId") is int transientLangId)
+            {
+                yield return new(language, transientLangId);
+            }
         }
     }
 
