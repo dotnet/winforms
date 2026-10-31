@@ -6,6 +6,8 @@
 using System.ComponentModel;
 using System.Drawing;
 using System.Windows.Forms.TestUtilities;
+using System.Windows.Forms.VisualStyles;
+using Microsoft.DotNet.RemoteExecutor;
 using Moq;
 using Point = System.Drawing.Point;
 using Size = System.Drawing.Size;
@@ -5703,6 +5705,53 @@ public class TabControlTests
         actual = tabControl._controlTipText;
 
         Assert.Equal(text, actual);
+    }
+
+    [WinFormsFact]
+    public void TabControl_ToolTip_DarkModeUsesDarkTheme()
+    {
+        using RemoteInvokeHandle handle = RemoteExecutor.Invoke(() =>
+        {
+            if (SystemInformation.HighContrast)
+            {
+                return;
+            }
+
+            Application.EnableVisualStyles();
+            Application.SetColorMode(SystemColorMode.Dark);
+
+            using ToolTip expectedToolTip = new();
+            using TabControl control = new() { ShowToolTips = true };
+            control.CreateControl();
+
+            HWND toolTipHandle = (HWND)PInvokeCore.SendMessage(control, PInvoke.TCM_GETTOOLTIPS);
+            Assert.False(toolTipHandle.IsNull);
+
+            VisualStyleElement element = VisualStyleElement.ToolTip.Standard.Normal;
+            using PInvoke.OpenThemeDataScope expectedTheme = new((HWND)expectedToolTip.Handle, element.ClassName);
+            using PInvoke.OpenThemeDataScope actualTheme = new(toolTipHandle, element.ClassName);
+            Assert.False(expectedTheme.IsNull);
+            Assert.False(actualTheme.IsNull);
+
+            HRESULT expectedResult = PInvoke.GetThemeColor(
+                expectedTheme,
+                element.Part,
+                element.State,
+                THEME_PROPERTY_SYMBOL_ID.TMT_TEXTCOLOR,
+                out COLORREF expectedColor);
+            HRESULT actualResult = PInvoke.GetThemeColor(
+                actualTheme,
+                element.Part,
+                element.State,
+                THEME_PROPERTY_SYMBOL_ID.TMT_TEXTCOLOR,
+                out COLORREF actualColor);
+
+            Assert.True(expectedResult.Succeeded);
+            Assert.True(actualResult.Succeeded);
+            Assert.Equal(expectedColor, actualColor);
+        });
+
+        Assert.Equal(RemoteExecutor.SuccessExitCode, handle.ExitCode);
     }
 
     [WinFormsFact]
