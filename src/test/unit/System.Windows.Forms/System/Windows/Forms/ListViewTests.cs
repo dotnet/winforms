@@ -900,6 +900,34 @@ public class ListViewTests
         Assert.False(listView.IsHandleCreated);
     }
 
+    [WinFormsFact]
+    public void ListView_CheckBoxes_SetWithHandle_PreservesStateImages()
+    {
+        using Bitmap image1 = new(16, 16);
+        using Bitmap image2 = new(16, 16);
+        using Bitmap image3 = new(16, 16);
+        using ImageList stateImageList = new();
+        stateImageList.Images.AddRange([image1, image2, image3]);
+        using ListView listView = new()
+        {
+            UseCompatibleStateImageBehavior = false,
+            View = View.Details,
+            StateImageList = stateImageList
+        };
+        Assert.NotEqual(IntPtr.Zero, listView.Handle);
+        Assert.Equal(3, stateImageList.Images.Count);
+
+        listView.CheckBoxes = true;
+        Assert.Same(stateImageList, listView.StateImageList);
+        Assert.Equal(3, stateImageList.Images.Count);
+
+        listView.CheckBoxes = false;
+        Assert.Equal(3, stateImageList.Images.Count);
+
+        listView.CheckBoxes = true;
+        Assert.Equal(3, stateImageList.Images.Count);
+    }
+
     public static IEnumerable<object[]> CheckBoxes_SetWithHandle_TestData()
     {
         foreach (ListViewAlignment alignment in Enum.GetValues(typeof(ListViewAlignment)))
@@ -927,28 +955,36 @@ public class ListViewTests
                 yield return new object[] { false, View.List, alignment, null, false, 0, 0, 1, 1 };
                 yield return new object[] { false, View.SmallIcon, alignment, null, false, 0, 0, 2, 1 };
 
-                yield return new object[] { false, View.Details, alignment, new ImageList(), true, 1, 0, 2, 1 };
+                yield return new object[] { false, View.Details, alignment, new ImageList(), true, 1, 1, 2, 2 };
                 yield return new object[] { false, View.LargeIcon, alignment, new ImageList(), true, 2, 1, 4, 2 };
                 yield return new object[] { false, View.List, alignment, new ImageList(), true, 1, 1, 2, 2 };
                 yield return new object[] { false, View.SmallIcon, alignment, new ImageList(), true, 2, 1, 4, 2 };
-                yield return new object[] { false, View.Details, alignment, new ImageList(), false, 0, 0, 1, 0 };
+                yield return new object[] { false, View.Details, alignment, new ImageList(), false, 0, 0, 1, 1 };
                 yield return new object[] { false, View.LargeIcon, alignment, new ImageList(), false, 0, 0, 2, 1 };
                 yield return new object[] { false, View.List, alignment, new ImageList(), false, 0, 0, 1, 1 };
                 yield return new object[] { false, View.SmallIcon, alignment, new ImageList(), false, 0, 0, 2, 1 };
             }
         }
 
-        foreach (Func<ImageList> imageListFactory in new Func<ImageList>[] { () => new ImageList(), () => null })
-        {
-            yield return new object[] { false, View.Details, ListViewAlignment.Left, imageListFactory(), true, 1, 0, 2, 1 };
-            yield return new object[] { false, View.LargeIcon, ListViewAlignment.Left, imageListFactory(), true, 2, 1, 4, 2 };
-            yield return new object[] { false, View.List, ListViewAlignment.Left, imageListFactory(), true, 1, 1, 2, 2 };
-            yield return new object[] { false, View.SmallIcon, ListViewAlignment.Left, imageListFactory(), true, 2, 1, 4, 2 };
-            yield return new object[] { false, View.Details, ListViewAlignment.Left, imageListFactory(), false, 0, 0, 1, 0 };
-            yield return new object[] { false, View.LargeIcon, ListViewAlignment.Left, imageListFactory(), false, 0, 0, 2, 1 };
-            yield return new object[] { false, View.List, ListViewAlignment.Left, imageListFactory(), false, 0, 0, 1, 1 };
-            yield return new object[] { false, View.SmallIcon, ListViewAlignment.Left, imageListFactory(), false, 0, 0, 2, 1 };
-        }
+        // With StateImageList: handle recreation occurs both when enabling and disabling CheckBoxes
+        yield return new object[] { false, View.Details, ListViewAlignment.Left, new ImageList(), true, 1, 1, 2, 2 };
+        yield return new object[] { false, View.LargeIcon, ListViewAlignment.Left, new ImageList(), true, 2, 1, 4, 2 };
+        yield return new object[] { false, View.List, ListViewAlignment.Left, new ImageList(), true, 1, 1, 2, 2 };
+        yield return new object[] { false, View.SmallIcon, ListViewAlignment.Left, new ImageList(), true, 2, 1, 4, 2 };
+        yield return new object[] { false, View.Details, ListViewAlignment.Left, new ImageList(), false, 0, 0, 1, 1 };
+        yield return new object[] { false, View.LargeIcon, ListViewAlignment.Left, new ImageList(), false, 0, 0, 2, 1 };
+        yield return new object[] { false, View.List, ListViewAlignment.Left, new ImageList(), false, 0, 0, 1, 1 };
+        yield return new object[] { false, View.SmallIcon, ListViewAlignment.Left, new ImageList(), false, 0, 0, 2, 1 };
+
+        // Without a StateImageList, only the alignment/view-specific conditions drive handle recreation.
+        yield return new object[] { false, View.Details, ListViewAlignment.Left, null, true, 1, 0, 2, 1 };
+        yield return new object[] { false, View.LargeIcon, ListViewAlignment.Left, null, true, 2, 1, 4, 2 };
+        yield return new object[] { false, View.List, ListViewAlignment.Left, null, true, 1, 1, 2, 2 };
+        yield return new object[] { false, View.SmallIcon, ListViewAlignment.Left, null, true, 2, 1, 4, 2 };
+        yield return new object[] { false, View.Details, ListViewAlignment.Left, null, false, 0, 0, 1, 0 };
+        yield return new object[] { false, View.LargeIcon, ListViewAlignment.Left, null, false, 0, 0, 2, 1 };
+        yield return new object[] { false, View.List, ListViewAlignment.Left, null, false, 0, 0, 1, 1 };
+        yield return new object[] { false, View.SmallIcon, ListViewAlignment.Left, null, false, 0, 0, 2, 1 };
     }
 
     [WinFormsTheory]
