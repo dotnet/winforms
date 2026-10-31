@@ -12,6 +12,7 @@ public partial class Binding
         InSetPropValue         = 0b0000_0100,
         InPushOrPull           = 0b0000_1000,
         InOnBindingComplete    = 0b0001_0000,
-        DataSourceNullValueSet = 0b0010_0000
+        DataSourceNullValueSet = 0b0010_0000,
+        PreserveVisibleValue   = 0b0100_0000
     }
 }
