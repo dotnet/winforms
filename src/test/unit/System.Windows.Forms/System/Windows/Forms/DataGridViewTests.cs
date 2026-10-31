@@ -4315,6 +4315,49 @@ public partial class DataGridViewTests : IDisposable
         Assert.False(dataGridView.ProcessDataGridViewKeyCalled);
     }
 
+    [WinFormsFact]
+    public void DataGridView_DeleteSelectionContainingNewRow_SecondNewRowEntry_KeepsDataSourceSynchronized()
+    {
+        using Form form = new();
+        using TestDataGridView dataGridView = new()
+        {
+            AllowUserToAddRows = true,
+            AllowUserToDeleteRows = true,
+            SelectionMode = DataGridViewSelectionMode.FullRowSelect,
+            MultiSelect = true
+        };
+
+        BindingList<DeleteSelectionTestItem> list =
+        [
+            new() { Val = "A" },
+            new() { Val = "B" },
+            new() { Val = "C" }
+        ];
+
+        form.Controls.Add(dataGridView);
+        dataGridView.DataSource = list;
+        form.Show();
+        dataGridView.CreateControl();
+
+        dataGridView.CurrentCell = dataGridView[0, dataGridView.NewRowIndex];
+        dataGridView.ClearSelection();
+        dataGridView.Rows[2].Selected = true;
+        dataGridView.Rows[dataGridView.NewRowIndex].Selected = true;
+
+        Assert.True(dataGridView.CallProcessDataGridViewKey(Keys.Delete));
+        Assert.Equal(["A", "B"], list.Select(item => item.Val));
+        Assert.Equal(list.Count + 1, dataGridView.Rows.Count);
+
+        dataGridView.CurrentCell = dataGridView[0, 0];
+        Exception secondNewRowEntryException = Record.Exception(
+            () => dataGridView.CurrentCell = dataGridView[0, dataGridView.NewRowIndex]);
+
+        Assert.Null(secondNewRowEntryException);
+        Assert.Equal(dataGridView.NewRowIndex, dataGridView.CurrentCell!.RowIndex);
+        Assert.Equal(3, list.Count);
+        Assert.Equal(list.Count, dataGridView.Rows.Count);
+    }
+
     private static TestDataGridView CreateGrid()
     {
         TestDataGridView grid = new()
@@ -4335,6 +4378,9 @@ public partial class DataGridViewTests : IDisposable
     {
         public bool ProcessDataGridViewKeyCalled { get; private set; }
 
+        public bool CallProcessDataGridViewKey(Keys keyData)
+            => ProcessDataGridViewKey(new KeyEventArgs(keyData));
+
         public bool CallProcessKeyPreview(ref Message m)
         => ProcessKeyPreview(ref m);
 
@@ -4343,5 +4389,10 @@ public partial class DataGridViewTests : IDisposable
             ProcessDataGridViewKeyCalled = true;
             return base.ProcessDataGridViewKey(e);
         }
+    }
+
+    private sealed class DeleteSelectionTestItem
+    {
+        public string Val { get; set; }
     }
 }
