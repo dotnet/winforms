@@ -2529,6 +2529,66 @@ public class ComboBoxTests
         Assert.Equal(0, displayMemberCallCount);
     }
 
+    [WinFormsFact]
+    public void ComboBox_SelectedValueBindingAddedFirstOnHiddenTab_DoesNotBreakSiblingBindings()
+    {
+        using Form form = new();
+        using ComboBox comboBox = new() { Dock = DockStyle.Top };
+        using TabControl tabControl = new() { Dock = DockStyle.Fill };
+        using TabPage tabPage1 = new();
+        using TabPage tabPage2 = new();
+        using GroupBox groupBox = new();
+        using Label label = new();
+        using CheckBox checkBox = new();
+
+        Issue9272DataModel model = new();
+        List<KeyValuePair<int, string>> dataSource =
+        [
+            new(2, "TwoYears"),
+            new(5, "FiveYears")
+        ];
+
+        groupBox.Controls.Add(label);
+        tabPage2.Controls.Add(groupBox);
+        tabPage2.Controls.Add(checkBox);
+        tabControl.TabPages.Add(tabPage1);
+        tabControl.TabPages.Add(tabPage2);
+        form.Controls.Add(comboBox);
+        form.Controls.Add(tabControl);
+
+        comboBox.DataSource = dataSource;
+        comboBox.DisplayMember = nameof(KeyValuePair<int, string>.Value);
+        comboBox.ValueMember = nameof(KeyValuePair<int, string>.Key);
+        _ = comboBox.DataBindings.Add(
+            nameof(comboBox.SelectedValue),
+            model,
+            nameof(Issue9272DataModel.CbbContent),
+            true,
+            DataSourceUpdateMode.OnPropertyChanged);
+        model.OnPropertyChanged(nameof(Issue9272DataModel.CbbContent));
+
+        _ = checkBox.DataBindings.Add(
+            nameof(checkBox.Checked),
+            model,
+            nameof(Issue9272DataModel.IsChecked),
+            true,
+            DataSourceUpdateMode.OnPropertyChanged);
+
+        Binding visibleBinding = label.DataBindings.Add(nameof(label.Visible), model, nameof(Issue9272DataModel.DisableText));
+
+        form.Show();
+        Application.DoEvents();
+
+        Assert.False(label.Created);
+        Assert.Null(visibleBinding.BindingManagerBase);
+
+        tabControl.SelectedTab = tabPage2;
+        Application.DoEvents();
+        label.CreateControl();
+        Assert.True(label.Created);
+        Assert.NotNull(visibleBinding.BindingManagerBase);
+    }
+
     public class CustomComboBox : ComboBox
     {
         // Make methods private to improve encapsulation
@@ -5090,5 +5150,35 @@ public class ComboBoxTests
     private class DataClass
     {
         public string Value { get; set; }
+    }
+
+    private class Issue9272DataModel : INotifyPropertyChanged
+    {
+        private bool _isChecked;
+
+        public bool IsChecked
+        {
+            get => _isChecked;
+            set
+            {
+                if (_isChecked == value)
+                {
+                    return;
+                }
+
+                _isChecked = value;
+                OnPropertyChanged(nameof(IsChecked));
+                OnPropertyChanged(nameof(DisableText));
+            }
+        }
+
+        public bool DisableText => !IsChecked;
+
+        public int CbbContent { get; set; } = 2;
+
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        public void OnPropertyChanged(string propertyName) =>
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
     }
 }

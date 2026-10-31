@@ -11720,7 +11720,10 @@ public unsafe partial class Control :
     {
         for (int i = 0; i < DataBindings.Count; i++)
         {
-            BindingContext.UpdateBinding(BindingContext, DataBindings[i]);
+            // Attach only after Created, matching Binding.SetBindableComponent.
+            // Otherwise PushData on a shared PropertyManager can set Visible=false
+            // on a not-yet-created control (e.g. on a hidden TabPage).
+            BindingContext.UpdateBinding(Created ? BindingContext : null, DataBindings[i]);
         }
     }
 
