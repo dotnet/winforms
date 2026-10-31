@@ -236,6 +236,39 @@ public class SingleInstanceTests
         }
     }
 
+    // Guards that the server keeps accepting clients after the callback throws.
+    [Fact]
+    public void CallbackThrows_ServerKeepsAcceptingClients()
+    {
+        string pipeName = GetUniqueName();
+        Assert.True(TryCreatePipeServer(pipeName, out var pipeServer));
+        using (pipeServer)
+        {
+            ReceivedArgs receivedArgs = new();
+            bool first = true;
+            WaitForClientConnectionsAsync(
+                pipeServer,
+                args =>
+                {
+                    if (first)
+                    {
+                        first = false;
+                        throw new InvalidOperationException();
+                    }
+
+                    receivedArgs.Add(args);
+                },
+                TestContext.Current.CancellationToken);
+
+            Assert.True(SendSecondInstanceArgs(pipeName, SendTimeout, ["first"]));
+            Assert.True(SendSecondInstanceArgs(pipeName, 2500, ["second"]));
+
+            FlushLastConnection(pipeName);
+
+            Assert.Equal(new[] { new[] { "second" } }, receivedArgs.Freeze());
+        }
+    }
+
     // Send data other than string[].
     [Fact]
     public void InvalidClientData()
