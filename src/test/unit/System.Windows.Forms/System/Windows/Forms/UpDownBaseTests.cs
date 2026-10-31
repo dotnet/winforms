@@ -3143,7 +3143,7 @@ public class UpDownBaseTests
     }
 
     [WinFormsFact]
-    public void UpDownBase_ModernVisualStylesMode_UsesSmallInsetAndPreservesExplicitSmallHeight()
+    public void UpDownBase_ModernVisualStylesMode_UsesSmallInsetAndRejectsExplicitSmallHeight()
     {
         using SubUpDownBase upDownBase = new()
         {
@@ -3160,8 +3160,51 @@ public class UpDownBaseTests
         int inset = upDownBase.LogicalToDeviceUnits(4);
         upDownBase._upDownEdit.Left.Should().Be(inset);
         upDownBase._upDownEdit.Top.Should().Be(inset);
-        upDownBase._upDownEdit.Height.Should().Be(Math.Max(0, 9 - (2 * inset)));
-        upDownBase.Height.Should().Be(9);
+        upDownBase._upDownEdit.Height.Should().Be(Math.Max(0, upDownBase.PreferredHeight - (2 * inset)));
+        upDownBase.Height.Should().Be(upDownBase.PreferredHeight);
+    }
+
+    [WinFormsTheory]
+    [InlineData(VisualStylesMode.Net11)]
+    [InlineData(VisualStylesMode.Latest)]
+    public void UpDownBase_ModernVisualStylesMode_ExplicitHeightReturnsPreferredHeight(
+        VisualStylesMode visualStylesMode)
+    {
+        using SubUpDownBase upDownBase = new()
+        {
+            AutoSize = false,
+            VisualStylesMode = visualStylesMode
+        };
+
+        upDownBase.Height = upDownBase.PreferredHeight + 10;
+
+        upDownBase.Height.Should().Be(upDownBase.PreferredHeight);
+    }
+
+    [WinFormsTheory]
+    [InlineData(VisualStylesMode.Net11)]
+    [InlineData(VisualStylesMode.Latest)]
+    public void UpDownBase_ModernVisualStylesMode_FontChangeUpdatesHeight(
+        VisualStylesMode visualStylesMode)
+    {
+        using SubUpDownBase upDownBase = new()
+        {
+            AutoSize = false,
+            VisualStylesMode = visualStylesMode
+        };
+
+        if (!upDownBase.UseSideBySideButtons)
+        {
+            return;
+        }
+
+        int originalHeight = upDownBase.Height;
+        using Font font = new(upDownBase.Font.FontFamily, upDownBase.Font.Size + 10);
+
+        upDownBase.Font = font;
+
+        upDownBase.Height.Should().Be(upDownBase.PreferredHeight);
+        upDownBase.Height.Should().BeGreaterThan(originalHeight);
     }
 
     [WinFormsTheory]
@@ -3371,6 +3414,41 @@ public class UpDownBaseTests
         Action drawToBitmap = () => upDownBase.DrawToBitmap(bitmap, new Rectangle(Point.Empty, upDownBase.Size));
 
         drawToBitmap.Should().NotThrow();
+    }
+
+    [WinFormsTheory]
+    [InlineData(0, 20)]
+    [InlineData(20, 0)]
+    public void UpDownButtons_ModernVisualStylesMode_OnPaintWithEmptyBounds_DoesNotThrow(
+        int width,
+        int height)
+    {
+        using SubUpDownBase upDownBase = new()
+        {
+            VisualStylesMode = VisualStylesMode.Net11
+        };
+
+        if (!upDownBase.UseSideBySideButtons)
+        {
+            return;
+        }
+
+        using SubUpDownButtons buttons = new(upDownBase)
+        {
+            Size = new Size(width, height)
+        };
+        using Bitmap bitmap = new(1, 1);
+        using Graphics graphics = Graphics.FromImage(bitmap);
+        using PaintEventArgs eventArgs = new(graphics, Rectangle.Empty);
+
+        Action paint = () => buttons.OnPaint(eventArgs);
+
+        paint.Should().NotThrow();
+    }
+
+    private sealed class SubUpDownButtons(UpDownBase parent) : UpDownBase.UpDownButtons(parent)
+    {
+        public new void OnPaint(PaintEventArgs e) => base.OnPaint(e);
     }
 
     private class CustomValidateUpDownBase : UpDownBase

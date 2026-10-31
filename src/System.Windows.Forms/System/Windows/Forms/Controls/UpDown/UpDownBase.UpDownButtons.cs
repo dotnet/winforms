@@ -303,6 +303,12 @@ public abstract partial class UpDownBase
 
         protected override void OnPaint(PaintEventArgs e)
         {
+            if (ClientSize.Width <= 0 || ClientSize.Height <= 0)
+            {
+                base.OnPaint(e);
+                return;
+            }
+
             int half_height = ClientSize.Height / 2;
 
             // Draw the up and down buttons
