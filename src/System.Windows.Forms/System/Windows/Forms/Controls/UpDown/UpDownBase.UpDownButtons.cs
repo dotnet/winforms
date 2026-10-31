@@ -157,9 +157,16 @@ public abstract partial class UpDownBase
         /// <param name="e">The mouse event arguments.</param>
         protected override void OnMouseDown(MouseEventArgs e)
         {
-            // Begin spinning the value
-            // Focus the parent
-            _parent.Focus();
+            // Avoid restarting the modern focus indicator when the edit already has focus.
+            if (!UseSideBySideButtons || !_parent.Focused)
+            {
+                _parent.Focus();
+            }
+            else if (_parent.UserEdit)
+            {
+                // Normalize pending edits even when spinning at a bound leaves Value unchanged.
+                _parent.ValidateEditText();
+            }
 
             if (!_parent.ValidationCancelled && e.Button == MouseButtons.Left)
             {
