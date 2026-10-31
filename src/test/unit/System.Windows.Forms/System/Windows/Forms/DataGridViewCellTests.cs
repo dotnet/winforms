@@ -240,6 +240,55 @@ public partial class DataGridViewCellTests
         Assert.Equal(value, cell.ContextMenuStrip);
     }
 
+    [WinFormsFact]
+    public void DataGridViewCell_DrawFocusRectangle_DarkMode_UsesSharedFocusBorderColor()
+    {
+        if (SystemInformation.HighContrast)
+        {
+            return;
+        }
+
+        var applicationAccessor = typeof(Application).TestAccessor.Dynamic;
+        SystemColorMode? previousColorMode = applicationAccessor.s_colorMode;
+
+        try
+        {
+            applicationAccessor.s_colorMode = SystemColorMode.Dark;
+            using AppContextSwitchScope scope = new(
+                "System.Windows.Forms.DataGridViewDarkModeTheming",
+                enable: true);
+            using Bitmap bitmap = new(10, 10);
+            using Graphics graphics = Graphics.FromImage(bitmap);
+            graphics.Clear(Color.Black);
+
+            DataGridViewCell.DrawFocusRectangle(
+                graphics,
+                new Rectangle(1, 1, 8, 8),
+                Color.Red,
+                Color.Black);
+
+            Color expectedColor = DarkModeButtonColors.DefaultColors.FocusBorderColor;
+            bool containsFocusColor = false;
+            for (int y = 0; y < bitmap.Height && !containsFocusColor; y++)
+            {
+                for (int x = 0; x < bitmap.Width; x++)
+                {
+                    if (bitmap.GetPixel(x, y).ToArgb() == expectedColor.ToArgb())
+                    {
+                        containsFocusColor = true;
+                        break;
+                    }
+                }
+            }
+
+            containsFocusColor.Should().BeTrue();
+        }
+        finally
+        {
+            applicationAccessor.s_colorMode = previousColorMode;
+        }
+    }
+
     [WinFormsTheory]
     [MemberData(nameof(ContextMenuStrip_Set_TestData))]
     public void DataGridViewCell_ContextMenuStrip_SetWithRow_GetReturnsExpected(ContextMenuStrip value)
