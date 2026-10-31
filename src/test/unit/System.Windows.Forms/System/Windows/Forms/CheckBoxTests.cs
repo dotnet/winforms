@@ -634,6 +634,30 @@ public class CheckBoxTests : AbstractButtonBaseTests
     }
 
     [WinFormsFact]
+    public void CheckBox_ModernGlyph_ImageDoesNotCoverGlyph()
+    {
+        using Bitmap image = new(80, 24);
+        using (Graphics imageGraphics = Graphics.FromImage(image))
+        {
+            imageGraphics.Clear(Color.Magenta);
+        }
+
+        using CheckBox box = new()
+        {
+            Image = image,
+            Size = new Size(40, 24),
+            VisualStylesMode = VisualStylesMode.Net11
+        };
+        using Bitmap bitmap = new(box.Width, box.Height);
+        using Graphics graphics = Graphics.FromImage(bitmap);
+        PaintEventArgs e = new(graphics, box.ClientRectangle);
+
+        box.CreateStandardAdapter().PaintUp(e, CheckState.Unchecked);
+
+        Assert.NotEqual(Color.Magenta.ToArgb(), bitmap.GetPixel(6, box.Height / 2).ToArgb());
+    }
+
+    [WinFormsFact]
     public void CheckBox_ModernGlyph_InheritedOpaqueBackColor_DoesNotPaintParentBackgroundImage()
     {
         using Bitmap backgroundImage = new(1, 1);
@@ -978,6 +1002,50 @@ public class CheckBoxTests : AbstractButtonBaseTests
             metrics);
 
         Assert.InRange(textBounds.Width, 0, 1);
+    }
+
+    [WinFormsFact]
+    public void CheckBox_ToggleSwitch_Image_FillsControlBehindUnchangedSwitchAndIsExcludedFromPreferredSize()
+    {
+        using Bitmap image = new(12, 8);
+        using (Graphics imageGraphics = Graphics.FromImage(image))
+        {
+            imageGraphics.Clear(Color.Magenta);
+        }
+
+        using CheckBox box = new()
+        {
+            Appearance = Appearance.ToggleSwitch,
+            BackColor = Color.Lime,
+            Image = image,
+            Size = new Size(120, 30),
+            Text = "checkBox4",
+            VisualStylesMode = VisualStylesMode.Net11
+        };
+        using CheckBox boxWithoutImage = new()
+        {
+            Appearance = Appearance.ToggleSwitch,
+            Text = box.Text,
+            VisualStylesMode = VisualStylesMode.Net11
+        };
+        using Bitmap bitmap = new(box.Width, box.Height);
+
+        box.DrawToBitmap(bitmap, box.ClientRectangle);
+
+        Rendering.CheckBox.ToggleSwitchMetrics metrics = Rendering.CheckBox.ToggleSwitchMetrics.Create(box);
+        Rectangle switchBounds = Rendering.CheckBox.AnimatedToggleSwitchRenderer.GetSwitchBounds(
+            box,
+            box.RtlTranslatedCheckAlign,
+            metrics);
+        Point switchPixel = new(
+            switchBounds.Right - (switchBounds.Height / 2),
+            switchBounds.Top + (switchBounds.Height / 2));
+
+        Assert.True(CountPixels(bitmap, Color.Magenta) > 0);
+        Assert.NotEqual(Color.Magenta.ToArgb(), bitmap.GetPixel(switchPixel.X, switchPixel.Y).ToArgb());
+        Assert.Equal(Color.Magenta.ToArgb(), bitmap.GetPixel(0, 0).ToArgb());
+        Assert.True(Rendering.CheckBox.ToggleSwitchMetrics.GetContentBounds(box).Contains(switchBounds));
+        Assert.Equal(boxWithoutImage.GetPreferredSize(Size.Empty), box.GetPreferredSize(Size.Empty));
     }
 
     [WinFormsTheory]
