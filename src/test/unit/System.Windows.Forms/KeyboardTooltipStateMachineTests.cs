@@ -109,6 +109,36 @@ public class KeyboardTooltipStateMachineTests
         Assert.Equal(isPersistent && OsVersion.IsWindows11_OrGreater() ? "Hidden" : "Shown", currentState);
     }
 
+    [WinFormsFact]
+    public void KeyboardTooltipStateMachine_UnexpectedTransition_DoesNotThrow_AndResets()
+    {
+        using TestControl control = new();
+        using ToolTip toolTip = new();
+
+        control.CreateControl();
+        _ = toolTip.Handle;
+
+        toolTip.SetToolTip(control, "test");
+
+        KeyboardToolTipStateMachine instance = KeyboardToolTipStateMachine.Instance;
+        instance.Hook(control, toolTip);
+
+        instance.TestAccessor.Dynamic._currentTool = control;
+        instance.TestAccessor.Dynamic._currentState = KeyboardToolTipStateMachine.SmState.Shown;
+
+        // SmEvent.InitialDelayTimerExpired = 2, which is invalid for Shown state
+        // This simulates a re-entrant focus change triggering an unexpected transition.
+        Exception exception = Record.Exception(() =>
+            instance.TestAccessor.Dynamic.Transit((byte)2, control));
+
+        IKeyboardToolTip currentTool = instance.TestAccessor.Dynamic._currentTool;
+        string currentState = instance.TestAccessor.Dynamic._currentState.ToString();
+
+        Assert.Null(exception);
+        Assert.Null(currentTool);
+        Assert.Equal("Hidden", currentState);
+    }
+
     private class TestControl : Control
     {
         public void SimulateKeyUp(Keys keys) => base.OnKeyUp(new KeyEventArgs(keys));

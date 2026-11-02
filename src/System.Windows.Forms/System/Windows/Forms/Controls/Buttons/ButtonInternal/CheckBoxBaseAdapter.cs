@@ -314,8 +314,8 @@ internal abstract class CheckBoxBaseAdapter : CheckableControlBaseAdapter
             PInvoke.DrawFrameControl(
                 hdc,
                 ref rcCheck,
-                DFC_TYPE.DFC_MENU,
-                DFCS_STATE.DFCS_MENUCHECK);
+                (uint)DFC_TYPE.DFC_MENU,
+                (uint)DFCS_STATE.DFCS_MENUCHECK);
         }
 
         bitmap.MakeTransparent();

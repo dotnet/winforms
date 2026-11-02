@@ -98,13 +98,37 @@ internal unsafe partial class Composition<TOleServices, TNrbfSerializer, TDataFo
 
         public void SetData(ref FORMATETC formatIn, ref STGMEDIUM medium, bool release)
         {
-            Com.STGMEDIUM nativeMedium = (Com.STGMEDIUM)medium;
-            Com.FORMATETC nativeFormat = Unsafe.As<FORMATETC, Com.FORMATETC>(ref formatIn);
-            using var nativeDataObject = _nativeDataObject.GetInterface();
-            HRESULT result = nativeDataObject.Value->SetData(&nativeFormat, &nativeMedium, release);
-            medium = (STGMEDIUM)nativeMedium;
-            nativeMedium.ReleaseUnknown();
-            result.ThrowOnFailure();
+            Com.IUnknown* releaseOwner = null;
+            try
+            {
+                Com.STGMEDIUM nativeMedium = (Com.STGMEDIUM)medium;
+
+                // Conversion acquired this reference, independently of the managed release owner.
+                // Guard it before GetInterface and preserve its identity if native code changes the medium.
+                releaseOwner = nativeMedium.pUnkForRelease;
+                Com.FORMATETC nativeFormat = Unsafe.As<FORMATETC, Com.FORMATETC>(ref formatIn);
+                using var nativeDataObject = _nativeDataObject.GetInterface();
+                HRESULT result = nativeDataObject.Value->SetData(&nativeFormat, &nativeMedium, release);
+                if (release && result.Succeeded)
+                {
+                    // The recipient may already have released the medium. Neither re-wrap its owner nor
+                    // release our transferred reference again; leave the caller's managed medium unchanged.
+                    releaseOwner = null;
+                    return;
+                }
+
+                medium = (STGMEDIUM)nativeMedium;
+                result.ThrowOnFailure();
+            }
+            finally
+            {
+                // Borrowing or a failed transfer leaves only the conversion reference ours to release,
+                // including when interface retrieval, the call, or conversion back to managed code fails.
+                if (releaseOwner is not null)
+                {
+                    releaseOwner->Release();
+                }
+            }
         }
     }
 }

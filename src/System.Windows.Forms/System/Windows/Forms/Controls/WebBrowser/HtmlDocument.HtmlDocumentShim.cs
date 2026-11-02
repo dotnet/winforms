@@ -22,7 +22,7 @@ public sealed unsafe partial class HtmlDocument
     /// </summary>
     internal class HtmlDocumentShim : HtmlShim
     {
-        private readonly AgileComPointer<IHTMLWindow2>? _associatedWindow;
+        private AgileComPointer<IHTMLWindow2>? _associatedWindow;
         private AxHost.ConnectionPointCookie? _cookie;
         private HtmlDocument _htmlDocument;
 
@@ -45,18 +45,25 @@ public sealed unsafe partial class HtmlDocument
         internal HtmlDocument Document => _htmlDocument;
 
         /// Support IHtmlDocument3.AttachHandler
-        public override void AttachEventHandler(string eventName, EventHandler eventHandler)
+        protected override bool AttachEventProxy(HtmlToClrEventProxy proxy)
         {
             // IE likes to call back on an IDispatch of DISPID=0 when it has an event,
             // the HtmlToClrEventProxy helps us fake out the CLR so that we can call back on
             // our EventHandler properly.
 
-            HtmlToClrEventProxy proxy = AddEventProxy(eventName, eventHandler);
             using var htmlDoc3 = _htmlDocument.GetHtmlDocument<IHTMLDocument3>();
-            using BSTR name = new(eventName);
+            using BSTR name = new(proxy.EventName);
             using var dispatch = ComHelpers.GetComScope<IDispatch>(proxy);
             VARIANT_BOOL result = default;
             htmlDoc3.Value->attachEvent(name, dispatch, &result).ThrowOnFailure();
+            if (IsDisposed && result)
+            {
+                // Retain this scoped interface for rollback if native attachment reenters disposal.
+                htmlDoc3.Value->detachEvent(name, dispatch).ThrowOnFailure();
+                ObjectDisposedException.ThrowIf(IsDisposed, this);
+            }
+
+            return result;
         }
 
         //
@@ -66,30 +73,29 @@ public sealed unsafe partial class HtmlDocument
         {
             if (_cookie is null || !_cookie.Connected)
             {
-                _cookie = new AxHost.ConnectionPointCookie(
+                AxHost.ConnectionPointCookie cookie = new(
                     NativeHtmlDocument2,
                     new HTMLDocumentEvents2(_htmlDocument),
                     typeof(Interop.Mshtml.DHTMLDocumentEvents2),
                     throwException: false);
 
-                if (!_cookie.Connected)
+                if (IsDisposed)
                 {
-                    _cookie = null;
+                    cookie.Disconnect();
+                    return;
                 }
+
+                _cookie = cookie.Connected ? cookie : null;
             }
         }
 
         /// Support IHtmlDocument3.DetachHandler
-        public override void DetachEventHandler(string eventName, EventHandler eventHandler)
+        protected override void DetachEventProxy(HtmlToClrEventProxy proxy)
         {
-            HtmlToClrEventProxy? proxy = RemoveEventProxy(eventHandler);
-            if (proxy is not null)
-            {
-                using var htmlDoc3 = _htmlDocument.GetHtmlDocument<IHTMLDocument3>();
-                using BSTR name = new(eventName);
-                using var dispatch = ComHelpers.GetComScope<IDispatch>(proxy);
-                htmlDoc3.Value->detachEvent(name, dispatch).ThrowOnFailure();
-            }
+            using var htmlDoc3 = _htmlDocument.GetHtmlDocument<IHTMLDocument3>();
+            using BSTR name = new(proxy.EventName);
+            using var dispatch = ComHelpers.GetComScope<IDispatch>(proxy);
+            htmlDoc3.Value->detachEvent(name, dispatch).ThrowOnFailure();
         }
 
         //
@@ -97,17 +103,33 @@ public sealed unsafe partial class HtmlDocument
         //
         public override void DisconnectFromEvents()
         {
-            _cookie?.Disconnect();
+            AxHost.ConnectionPointCookie? cookie = _cookie;
             _cookie = null;
+            cookie?.Disconnect();
         }
 
         protected override void Dispose(bool disposing)
         {
-            base.Dispose(disposing);
-            if (disposing)
+            try
             {
-                _htmlDocument?.NativeHtmlDocument2.Dispose();
-                _htmlDocument = null!;
+                base.Dispose(disposing);
+            }
+            finally
+            {
+                if (disposing)
+                {
+                    HtmlDocument? document = _htmlDocument;
+                    _htmlDocument = null!;
+                    try
+                    {
+                        document?.NativeHtmlDocument2.Dispose();
+                    }
+                    finally
+                    {
+                        // This independent GIT registration keeps the old window alive even after unadvising.
+                        DisposeHelper.NullAndDispose(ref _associatedWindow);
+                    }
+                }
             }
         }
 

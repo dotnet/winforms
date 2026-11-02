@@ -9,8 +9,10 @@ internal static partial class PInvoke
     {
         Span<char> buffer = stackalloc char[512];
         fixed (char* pBuffer = buffer)
+        fixed (char* pszTheme = pszThemeName)
+        fixed (char* pszProperty = pszPropertyName)
         {
-            GetThemeDocumentationProperty(pszThemeName, pszPropertyName, pBuffer, buffer.Length);
+            GetThemeDocumentationProperty(pszTheme, pszProperty, pBuffer, buffer.Length);
         }
 
         return buffer.SliceAtFirstNull().ToString();

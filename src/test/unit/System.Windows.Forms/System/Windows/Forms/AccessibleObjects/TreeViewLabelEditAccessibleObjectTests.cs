@@ -133,6 +133,64 @@ public class TreeViewLabelEditAccessibleObjectTests
     }
 
     [WinFormsFact]
+    public void LabelEditNativeWindow_OnHandleChange_DuringRelease_DoesNotReinstallHooks()
+    {
+        using TreeView treeView = new() { Size = new Size(300, 200) };
+        treeView.CreateControl();
+
+        TreeViewLabelEditNativeWindow labelEdit = new(treeView);
+        labelEdit.AssignHandle(treeView.Handle);
+        _ = treeView.AccessibilityObject;
+
+        Assert.True(labelEdit.IsHandleCreated);
+
+        labelEdit.TestAccessor.Dynamic._isReleasing = true;
+        labelEdit.TestAccessor.Dynamic.OnHandleChange();
+
+        Assert.False((bool)labelEdit.TestAccessor.Dynamic._winEventHooksInstalled);
+    }
+
+    [WinFormsFact]
+    public void LabelEditNativeWindow_OnHandleChange_AfterHandleDestroyed_DoesNotReinstallHooks()
+    {
+        using TreeView treeView = new() { Size = new Size(300, 200) };
+        treeView.CreateControl();
+
+        TreeViewLabelEditNativeWindow labelEdit = new(treeView);
+        labelEdit.AssignHandle(treeView.Handle);
+
+        // Simulate installed hooks.
+        labelEdit.TestAccessor.Dynamic._winEventHooksInstalled = true;
+
+        // Simulate handle already destroyed.
+        labelEdit.ReleaseHandle();
+
+        labelEdit.TestAccessor.Dynamic._isReleasing = false;
+        labelEdit.TestAccessor.Dynamic.OnHandleChange();
+
+        Assert.False((bool)labelEdit.TestAccessor.Dynamic._winEventHooksInstalled);
+        Assert.Null(labelEdit.TestAccessor.Dynamic._winEventProcCallback);
+    }
+
+    [WinFormsFact]
+    public void TreeViewLabelEditNativeWindow_ReleaseHandle_UnhooksAndCleansUpState()
+    {
+        using TreeView treeView = new() { Size = new Size(300, 200) };
+        treeView.CreateControl();
+
+        TreeViewLabelEditNativeWindow labelEdit = new(treeView);
+        labelEdit.AssignHandle(treeView.Handle);
+
+        // Simulate hooks installed
+        labelEdit.TestAccessor.Dynamic._winEventHooksInstalled = true;
+
+        labelEdit.ReleaseHandle();
+
+        Assert.False((bool)labelEdit.TestAccessor.Dynamic._winEventHooksInstalled);
+        Assert.Null(labelEdit.TestAccessor.Dynamic._winEventProcCallback);
+    }
+
+    [WinFormsFact]
     public void TreeViewLabelEditUiaTextProvider_Ctor_NullOwningTreeView_ThrowsArgumentNullException()
     {
         using TreeView treeView = CreateTreeViewAndStartEditing();
@@ -148,6 +206,79 @@ public class TreeViewLabelEditAccessibleObjectTests
 
         TreeViewLabelEditNativeWindow labelEdit = treeView.TestAccessor.Dynamic._labelEdit;
         Assert.Throws<ArgumentNullException>(() => new LabelEditUiaTextProvider(treeView, labelEdit, null));
+    }
+
+    [WinFormsFact]
+    public void LabelEditNativeWindow_RepeatedDestroyRecreate_WithGCBetweenCycles_HooksCleanAfterEachRelease()
+    {
+        using TreeView treeView = new() { Size = new Size(300, 200) };
+        treeView.CreateControl();
+        _ = treeView.AccessibilityObject;
+
+        TreeViewLabelEditNativeWindow labelEdit = new(treeView);
+
+        for (int cycle = 0; cycle < 3; cycle++)
+        {
+            labelEdit.AssignHandle(treeView.Handle);
+            Assert.True(labelEdit.IsHandleCreated);
+            Assert.False((bool)labelEdit.TestAccessor.Dynamic._isReleasing);
+
+            // Simulate hooks installed (UiaClientsAreListening() returns false in tests,
+            // so we set the flag manually to replicate the real-world state).
+            labelEdit.TestAccessor.Dynamic._winEventHooksInstalled = true;
+
+            // Force GC to simulate the delegate becoming eligible for collection
+            // while the hooks are still logically registered.
+            GC.Collect();
+            GC.WaitForPendingFinalizers();
+
+            labelEdit.ReleaseHandle();
+
+            // After release both cleanup obligations must be fulfilled:
+            // hooks unregistered (_winEventHooksInstalled=false) and delegate reference
+            // dropped (_winEventProcCallback=null) so GC can collect it safely.
+            Assert.False((bool)labelEdit.TestAccessor.Dynamic._winEventHooksInstalled);
+            Assert.Null(labelEdit.TestAccessor.Dynamic._winEventProcCallback);
+            Assert.False((bool)labelEdit.TestAccessor.Dynamic._isReleasing);
+            Assert.False(labelEdit.IsHandleCreated);
+
+            // Force GC again to ensure no outstanding finalizers from this cycle
+            // could corrupt the next cycle.
+            GC.Collect();
+            GC.WaitForPendingFinalizers();
+        }
+    }
+
+    [WinFormsFact]
+    public void LabelEditNativeWindow_LateWinEventCallback_AfterHandleReleased_IsSafelyIgnored()
+    {
+        using TreeView treeView = new() { Size = new Size(300, 200) };
+        treeView.CreateControl();
+
+        TreeViewLabelEditNativeWindow labelEdit = new(treeView);
+        labelEdit.AssignHandle(treeView.Handle);
+
+        // Simulate hooks installed.
+        labelEdit.TestAccessor.Dynamic._winEventHooksInstalled = true;
+
+        // Release the handle; this must uninstall hooks and null the callback.
+        labelEdit.ReleaseHandle();
+        Assert.False((bool)labelEdit.TestAccessor.Dynamic._winEventHooksInstalled);
+
+        // Invoke the callback directly as if the OS delivered a late event after teardown.
+        // The _winEventHooksInstalled == false guard must make this a no-op without throwing.
+        labelEdit.TestAccessor.Dynamic.WinEventProcCallback(
+            default(HWINEVENTHOOK),
+            (uint)AccessibleEvents.ValueChange,
+            (HWND)treeView.Handle,
+            (int)OBJECT_IDENTIFIER.OBJID_CLIENT,
+            0,
+            0u,
+            0u);
+
+        // State must remain consistent: no hooks, no callback reference.
+        Assert.False((bool)labelEdit.TestAccessor.Dynamic._winEventHooksInstalled);
+        Assert.Null(labelEdit.TestAccessor.Dynamic._winEventProcCallback);
     }
 
     private TreeView CreateTreeViewAndStartEditing()

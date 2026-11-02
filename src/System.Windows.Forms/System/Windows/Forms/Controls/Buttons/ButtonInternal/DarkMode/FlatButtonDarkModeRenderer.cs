@@ -23,7 +23,12 @@ internal sealed class FlatButtonDarkModeRenderer : ButtonDarkModeRendererBase
     private protected override Padding PaddingCore { get; } = new(0);
 
     public override Rectangle DrawButtonBackground(
-        Graphics graphics, Rectangle bounds, PushButtonState state, bool isDefault, Color backColor)
+        Graphics graphics,
+        Rectangle bounds,
+        PushButtonState state,
+        bool isDefault,
+        bool focused,
+        Color backColor)
     {
         // fill background
         using var back = backColor.GetCachedSolidBrushScope();
@@ -51,7 +56,7 @@ internal sealed class FlatButtonDarkModeRenderer : ButtonDarkModeRendererBase
             focusBackColor);
     }
 
-    public override Color GetTextColor(PushButtonState state, bool isDefault) =>
+    public override Color GetTextColor(PushButtonState state, bool isDefault, Color backColor) =>
         state == PushButtonState.Disabled
             ? DefaultColors.DisabledTextColor
             : isDefault
@@ -77,32 +82,37 @@ internal sealed class FlatButtonDarkModeRenderer : ButtonDarkModeRendererBase
                 _ => DefaultColors.StandardBackColor
             };
 
-    private static void DrawButtonBorder(Graphics g, Rectangle bounds, PushButtonState state, bool isDefault)
+    private void DrawButtonBorder(Graphics g, Rectangle bounds, PushButtonState state, bool isDefault)
     {
         g.SmoothingMode = SmoothingMode.AntiAlias;
 
-        // Win32 draws its stroke fully *inside* the control → inset by 1 px
+        int thickness = ScaleBorderThickness(1);
+        if (thickness == 0)
+        {
+            return;
+        }
+
+        // Win32 draws its stroke fully inside the control.
         Rectangle outer = Rectangle.Inflate(bounds, -1, -1);
 
-        DrawSingleBorder(g, outer, GetBorderColor(state));
+        DrawSingleBorder(g, outer, ResolveBorderColor(GetBorderColor(state)), thickness);
 
-        // Default button gets a second 1‑px border one pixel further inside
+        // Default button gets a second border one pixel further inside.
         if (isDefault)
         {
             Rectangle inner = Rectangle.Inflate(outer, -1, -1);
-            DrawSingleBorder(g, inner, DefaultColors.AcceptFocusIndicatorBackColor);
+            DrawSingleBorder(g, inner, DefaultColors.AcceptFocusIndicatorBackColor, thickness);
         }
     }
 
-    private static void DrawSingleBorder(Graphics g, Rectangle rect, Color color)
+    private static void DrawSingleBorder(Graphics g, Rectangle rect, Color color, int thickness)
     {
         g.SmoothingMode = SmoothingMode.AntiAlias;
 
         using var path = new GraphicsPath();
         path.AddRoundedRectangle(rect, s_corner);
 
-        // a 1‑px stroke, aligned *inside*, is exactly what Win32 draws
-        using var pen = new Pen(color) { Alignment = PenAlignment.Inset };
+        using var pen = new Pen(color, thickness) { Alignment = PenAlignment.Inset };
         g.DrawPath(pen, path);
     }
 

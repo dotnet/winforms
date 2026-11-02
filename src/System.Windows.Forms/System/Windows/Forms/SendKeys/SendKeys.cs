@@ -127,7 +127,7 @@ public partial class SendKeys
         char character,
         int repeat,
         HWND hwnd,
-        (int HaveShift, int HaveCtrl, int HaveAlt) haveKeys,
+        ref (int HaveShift, int HaveCtrl, int HaveAlt) haveKeys,
         bool startNewChar,
         int cGrp)
     {
@@ -509,7 +509,7 @@ public partial class SendKeys
                     }
                     else if (keyName.Length == 1)
                     {
-                        s_startNewChar = AddSimpleKey(keyName[0], repeat, hwnd, haveKeys, s_startNewChar, cGrp);
+                        s_startNewChar = AddSimpleKey(keyName[0], repeat, hwnd, ref haveKeys, s_startNewChar, cGrp);
                     }
                     else
                     {
@@ -605,7 +605,7 @@ public partial class SendKeys
                     break;
 
                 default:
-                    s_startNewChar = AddSimpleKey(keys[i], repeat, hwnd, haveKeys, s_startNewChar, cGrp);
+                    s_startNewChar = AddSimpleKey(keys[i], repeat, hwnd, ref haveKeys, s_startNewChar, cGrp);
                     break;
             }
 

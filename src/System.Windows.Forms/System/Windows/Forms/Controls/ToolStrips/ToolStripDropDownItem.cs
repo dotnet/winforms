@@ -334,7 +334,9 @@ public abstract class ToolStripDropDownItem : ToolStripItem
 
         Point itemScreenLocation = TranslatePoint(Point.Empty, ToolStripPointType.ToolStripItemCoords, ToolStripPointType.ScreenCoords);
         dropDownBounds.Location = new Point(itemScreenLocation.X + offset.X, itemScreenLocation.Y + offset.Y);
-        dropDownBounds = WindowsFormsUtils.ConstrainToScreenWorkingAreaBounds(dropDownBounds);
+        dropDownBounds = WindowsFormsUtils.ConstrainToScreenWorkingAreaBounds(
+            dropDownBounds,
+            Owner?.GetToplevelOwnerToolStrip());
         return dropDownBounds;
     }
 

@@ -3158,7 +3158,9 @@ public partial class ListView : Control
     /// <summary>
     ///  Cancels the effect of BeginUpdate.
     /// </summary>
-    public void EndUpdate()
+    public void EndUpdate() => EndUpdate(invalidate: true);
+
+    private void EndUpdate(bool invalidate)
     {
         // On the final EndUpdate, check to see if we've got any cached items.
         // If we do, insert them as normal, then turn off the painting freeze.
@@ -3167,7 +3169,7 @@ public partial class ListView : Control
             ApplyUpdateCachedItems();
         }
 
-        EndUpdateInternal();
+        EndUpdateInternal(invalidate);
     }
 
     private void EnsureDefaultGroup()
@@ -4690,6 +4692,21 @@ public partial class ListView : Control
                 HWND,
                 $"{DarkModeIdentifier}_{ExplorerThemeIdentifier}",
                 null);
+
+            // Apply dark mode theme to the ListView Tooltip
+            HWND toolTipHandle = (HWND)PInvokeCore.SendMessage(
+                this,
+                PInvoke.LVM_GETTOOLTIPS,
+                (WPARAM)0,
+                (LPARAM)0);
+
+            if (!toolTipHandle.IsNull)
+            {
+                _ = PInvoke.SetWindowTheme(
+                    toolTipHandle,
+                    $"{DarkModeIdentifier}_{ExplorerThemeIdentifier}",
+                    null);
+            }
 
             // Get the ListView's ColumnHeader handle:
             HWND columnHeaderHandle = (HWND)PInvokeCore.SendMessage(
@@ -6971,6 +6988,18 @@ public partial class ListView : Control
         {
             case MessageId.WM_REFLECT_NOTIFY:
                 WmReflectNotify(ref m);
+                break;
+
+            case PInvokeCore.WM_CTLCOLOREDIT:
+                if (_labelEdit is not null && (HWND)m.LParamInternal == _labelEdit.HWND)
+                {
+                    m.ResultInternal = (LRESULT)(nint)InitializeDCForWmCtlColor((HDC)(nint)m.WParamInternal, m.MsgInternal);
+                }
+                else
+                {
+                    base.WndProc(ref m);
+                }
+
                 break;
 
             case PInvokeCore.WM_KEYUP:

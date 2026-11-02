@@ -4,7 +4,6 @@
 using System.Windows.Forms.CSharp.Analyzers.MissingPropertySerializationConfiguration;
 using System.Windows.Forms.CSharp.CodeFixes.AddDesignerSerializationVisibility;
 using Microsoft.CodeAnalysis;
-using Microsoft.CodeAnalysis.CSharp.Testing;
 using Microsoft.CodeAnalysis.Testing;
 
 namespace System.Windows.Forms.Analyzers.Tests;
@@ -168,22 +167,17 @@ public sealed class ControlPropertySerializationDiagnosticAnalyzerTest
     [MemberData(nameof(GetReferenceAssemblies))]
     public async Task CS_ControlPropertySerializationConfigurationDiagnosticsEngage(ReferenceAssemblies referenceAssemblies)
     {
-        var context = new CSharpAnalyzerTest
-            <MissingPropertySerializationConfigurationAnalyzer,
-             DefaultVerifier>
+        AnalyzerTestCase testCase = new(
+            referenceAssemblies,
+            new AnalyzerTestSource("Test0.cs", ProblematicCode),
+            new AnalyzerTestSource("GlobalUsings.cs", GlobalUsingCode))
         {
-            // Note: The ProblematicCode includes the expected Diagnostic's span in the areas
-            // where the code is enclosed in limiting characters ("[|...|]"),
-            // like `public SizeF [|ScaledSize|]`.
-            TestCode = ProblematicCode,
-            TestState =
-                {
-                    OutputKind = OutputKind.WindowsApplication,
-                },
-            ReferenceAssemblies = referenceAssemblies
+            OutputKind = OutputKind.WindowsApplication
         };
 
-        context.TestState.Sources.Add(GlobalUsingCode);
+        // The ProblematicCode marks expected diagnostic spans with [| and |].
+        var context = AnalyzerTestFactory.CreateCSharpAnalyzerTest
+            <MissingPropertySerializationConfigurationAnalyzer>(testCase);
 
         await context.RunAsync(TestContext.Current.CancellationToken);
     }
@@ -192,19 +186,16 @@ public sealed class ControlPropertySerializationDiagnosticAnalyzerTest
     [MemberData(nameof(GetReferenceAssemblies))]
     public async Task CS_ControlPropertySerializationConfigurationDiagnosticPass(ReferenceAssemblies referenceAssemblies)
     {
-        var context = new CSharpAnalyzerTest
-            <MissingPropertySerializationConfigurationAnalyzer,
-             DefaultVerifier>
+        AnalyzerTestCase testCase = new(
+            referenceAssemblies,
+            new AnalyzerTestSource("Test0.cs", CorrectCode),
+            new AnalyzerTestSource("GlobalUsings.cs", GlobalUsingCode))
         {
-            TestCode = CorrectCode,
-            TestState =
-                {
-                    OutputKind = OutputKind.WindowsApplication,
-                },
-            ReferenceAssemblies = referenceAssemblies
+            OutputKind = OutputKind.WindowsApplication
         };
 
-        context.TestState.Sources.Add(GlobalUsingCode);
+        var context = AnalyzerTestFactory.CreateCSharpAnalyzerTest
+            <MissingPropertySerializationConfigurationAnalyzer>(testCase);
 
         await context.RunAsync(TestContext.Current.CancellationToken);
     }
@@ -213,25 +204,24 @@ public sealed class ControlPropertySerializationDiagnosticAnalyzerTest
     [MemberData(nameof(GetReferenceAssemblies))]
     public async Task CS_AddDesignerSerializationVisibilityCodeFix(ReferenceAssemblies referenceAssemblies)
     {
-        var context = new CSharpCodeFixTest
-            <MissingPropertySerializationConfigurationAnalyzer,
-             AddDesignerSerializationVisibilityCodeFixProvider,
-             DefaultVerifier>
+        AnalyzerTestCase testCase = new(
+            referenceAssemblies,
+            new AnalyzerTestSource("Test0.cs", ProblematicCode),
+            new AnalyzerTestSource("GlobalUsings.cs", GlobalUsingCode))
         {
-            TestCode = ProblematicCode,
-            FixedCode = FixedCode,
-            TestState =
-                {
-                    OutputKind = OutputKind.WindowsApplication,
-                    Sources = { GlobalUsingCode }
-                },
-            ReferenceAssemblies = referenceAssemblies,
             NumberOfFixAllIterations = 2,
-            FixedState =
-                {
-                    Sources = { GlobalUsingCode }
-                },
+            OutputKind = OutputKind.WindowsApplication
         };
+
+        testCase.FixedSources.AddRange(
+        [
+            new AnalyzerTestSource("Test0.cs", FixedCode),
+            new AnalyzerTestSource("GlobalUsings.cs", GlobalUsingCode)
+        ]);
+
+        var context = AnalyzerTestFactory.CreateCSharpCodeFixTest
+            <MissingPropertySerializationConfigurationAnalyzer,
+             AddDesignerSerializationVisibilityCodeFixProvider>(testCase);
 
         await context.RunAsync(TestContext.Current.CancellationToken);
     }

@@ -58,6 +58,21 @@
     <IncludeTestAssembly>true</IncludeTestAssembly>
 
     <CollectCoverage Condition="'$(CollectCoverage)' == '' and '$(IsTestProject)' == 'true' and '$(TargetFramework)' != ''">true</CollectCoverage>
+
+    <!--
+      coverlet.msbuild 8.0.0 splits its task assemblies by MSBuild host: under 'dotnet build' (MSBuildRuntimeType ==
+      'Core') it loads tasks\net8.0\coverlet.core.dll, which references System.Runtime, Version=8.0.0.0. The
+      instrumenter copies its tracker type out of that assembly into the assembly under test, so the injected
+      Coverlet.Core.Instrumentation.Tracker.* type carries the same reference. .NET Framework cannot resolve
+      System.Runtime 8.0.0.0, so the tracker's type initializer throws TypeInitializationException at test time.
+      Instrument .NET (Core) targets only.
+
+      Upstream bug: https://github.com/coverlet-coverage/coverlet/issues/1818. Later releases are not yet a way out:
+      8.0.1 reports no .NET Framework coverage at all (coverlet #1842), and 10.0.1 regressed with a different
+      TypeInitializationException on net481 (coverlet #2009). Tracked by https://github.com/dotnet/winforms/issues/15030.
+    -->
+    <CollectCoverage Condition="'$(TargetFramework)' == 'net481'">false</CollectCoverage>
+
     <SingleHit>true</SingleHit>
     <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
     <CoverletOutputFormat>opencover</CoverletOutputFormat>
@@ -70,11 +85,6 @@
 
   <PropertyGroup>
     <TestRunnerName>XUnitV3</TestRunnerName>
-  </PropertyGroup>
-
-  <!-- workaround for package downgrade in Microsoft.NetCore.Platforms -->
-  <PropertyGroup>
-    <DisableImplicitNETCorePlatformsReference>true</DisableImplicitNETCorePlatformsReference>
   </PropertyGroup>
 
 </Project>

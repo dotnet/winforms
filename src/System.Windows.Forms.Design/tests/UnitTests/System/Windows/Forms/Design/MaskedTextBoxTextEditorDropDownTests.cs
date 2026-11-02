@@ -1,6 +1,8 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
+using System.Drawing;
+
 namespace System.Windows.Forms.Design.Tests;
 
 public class MaskedTextBoxTextEditorDropDownTests
@@ -53,5 +55,27 @@ public class MaskedTextBoxTextEditorDropDownTests
         // Incorrectly formatted values will result in the error "Error at position 0: expected number".
         dropDownMaskedTextBox.Text = "invalid";
         errorProvider.GetError(dropDownMaskedTextBox).Should().Contain(SR.MaskedTextBoxHintDigitExpected);
+    }
+
+    [Fact]
+    public void DropDown_SizeAndPadding_ScalesWithDPI()
+    {
+        using MaskedTextBox maskedTextBox = new();
+        using SubMaskedTextBoxTextEditorDropDown dropDown = new(maskedTextBox);
+
+        dropDown.RescaleConstantsForDpi(96, 192);
+        dropDown.Size.Should().Be(new Size(200, 104));
+        dropDown.Padding.Should().Be(new Padding(32));
+        dropDown.IsHandleCreated.Should().BeFalse();
+    }
+
+    private sealed class SubMaskedTextBoxTextEditorDropDown : MaskedTextBoxTextEditorDropDown
+    {
+        public SubMaskedTextBoxTextEditorDropDown(MaskedTextBox maskedTextBox) : base(maskedTextBox)
+        {
+        }
+
+        public new void RescaleConstantsForDpi(int deviceDpiOld, int deviceDpiNew)
+            => base.RescaleConstantsForDpi(deviceDpiOld, deviceDpiNew);
     }
 }

@@ -242,6 +242,16 @@
         <target state="translated">只要在线程上创建了任何控件，则线程异常模式将不能再有任何更改。</target>
         <note />
       </trans-unit>
+      <trans-unit id="Application_VisualStylesModeCanOnlyBeSetOnce">
+        <source>The default visual styles mode can only be set once and cannot be changed afterwards.</source>
+        <target state="translated">默认视觉样式模式只能设置一次，之后无法更改。</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="Application_VisualStylesModeInheritInvalidAsDefault">
+        <source>VisualStylesMode.Inherit cannot be used as the application-wide default visual styles mode because the application root has no parent to inherit from.</source>
+        <target state="translated">VisualStylesMode.Inherit 不能用作应用程序范围的默认视觉样式模式，因为应用程序根没有可以继承的父级对象。</target>
+        <note />
+      </trans-unit>
       <trans-unit id="ApplyCaption">
         <source>&amp;Apply</source>
         <target state="translated">应用(&amp;A)</target>
@@ -1697,6 +1707,11 @@
         <target state="translated">指定控件的最小大小。</target>
         <note />
       </trans-unit>
+      <trans-unit id="ControlMutationExtensionsLayoutSuspensionRequiresControl">
+        <source>Layout suspension requires a target derived from Control.</source>
+        <target state="translated">布局挂起需要派生自“控件”的目标。</target>
+        <note />
+      </trans-unit>
       <trans-unit id="ControlNotChild">
         <source>'child' is not a child control of this parent.</source>
         <target state="translated">“child”不是此父级的子控件。</target>
@@ -2027,6 +2042,11 @@
         <target state="translated">在系统颜色更改时引发的事件。</target>
         <note />
       </trans-unit>
+      <trans-unit id="ControlOnSystemVisualSettingsChangedDescr">
+        <source>Event raised when a Windows visual or accessibility setting changes.</source>
+        <target state="translated">Windows 视觉或辅助功能设置更改时引发的事件。</target>
+        <note />
+      </trans-unit>
       <trans-unit id="ControlOnTabIndexChangedDescr">
         <source>Event raised when the value of the TabIndex property is changed.</source>
         <target state="translated">TabIndex 属性值更改时引发的事件。</target>
@@ -2170,6 +2190,16 @@
       <trans-unit id="ControlVisibleDescr">
         <source>Determines whether the control is visible or hidden.</source>
         <target state="translated">确定该控件是可见的还是隐藏的。</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ControlVisualStylesModeChangedDescr">
+        <source>Occurs when the value of the VisualStylesMode property changes.</source>
+        <target state="translated">当 VisualStylesMode 属性的值更改时发生。</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ControlVisualStylesModeDescr">
+        <source>Determines how the control renders itself when visual styles are applied.</source>
+        <target state="translated">确定应用视觉样式时控件自身的呈现方式。</target>
         <note />
       </trans-unit>
       <trans-unit id="ControlWidthDescr">
@@ -4519,6 +4549,11 @@ To replace this default dialog please handle the DataError event.</source>
         <target state="translated">管理通常由其他控件(如 ListView、TreeView 或 ToolStrip)使用的图像集合。</target>
         <note />
       </trans-unit>
+      <trans-unit id="DescriptionKioskModeManager">
+        <source>Manages common fullscreen, input, cursor, and power behavior for kiosk-style WinForms applications.</source>
+        <target state="translated">管理展台样式 WinForms 应用程序的通用全屏、输入、光标和电源行为。</target>
+        <note />
+      </trans-unit>
       <trans-unit id="DescriptionLabel">
         <source>Provides run-time information or descriptive text for a control.</source>
         <target state="translated">为控件提供运行时信息或说明性文字。</target>
@@ -5420,6 +5455,11 @@ Do you want to replace it?</source>
         <target state="translated">此窗体在显示为对话框时将返回的值。</target>
         <note />
       </trans-unit>
+      <trans-unit id="FormFormRevealModeDescr">
+        <source>Indicates how the form is presented while its initial appearance is prepared. Classic never defers reveal. Deferred hides the form behind a DWM cloak until its background has painted, to reduce startup flash. Inherit resolves from the application-wide default.</source>
+        <target state="translated">指示在准备窗体初始外观时窗体的呈现方式。经典模式从不延迟显示。在绘制窗体背景之前，延迟模式会将窗体隐藏在 DWM 遮蔽后面，以减轻启动闪烁。继承模式将从应用程序范围的默认值进行解析。</target>
+        <note />
+      </trans-unit>
       <trans-unit id="FormHelpButtonClickedDescr">
         <source>Event raised when the help button is clicked.</source>
         <target state="translated">单击“帮助”按钮时引发的事件。</target>
@@ -5538,6 +5578,11 @@ Do you want to replace it?</source>
       <trans-unit id="FormOnFormClosingDescr">
         <source>Occurs whenever the user closes the form, before the form has been closed and specifies the close reason.</source>
         <target state="translated">每当用户关闭窗体时，在窗体已关闭并指定关闭原因前发生。</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="FormOnFormRevealModeChangedDescr">
+        <source>Occurs when the effective value of the FormRevealMode property changes.</source>
+        <target state="translated">在 FormRevealMode 属性的有效值更改时发生。</target>
         <note />
       </trans-unit>
       <trans-unit id="FormOnInputLangChangeDescr">
@@ -6102,6 +6147,51 @@ Stack trace where the illegal operation occurred was:
       <trans-unit id="KeysConverterInvalidKeyCombination">
         <source>Key combination is not valid.</source>
         <target state="translated">组合键无效。</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="KioskModeManagerAlwaysOnDescr">
+        <source>Indicates whether Windows should keep the display and system awake while this component is active.</source>
+        <target state="translated">指示当此组件处于活动状态时，Windows 是否应保持显示器和系统处于唤醒状态。</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="KioskModeManagerContainerControlChangedDescr">
+        <source>Occurs when the ContainerControl property value changes.</source>
+        <target state="translated">当 ContainerControl 属性值更改时发生。</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="KioskModeManagerContainerControlDescr">
+        <source>The container whose containing form is controlled by the kiosk mode manager.</source>
+        <target state="translated">其包含窗体由展台模式管理器控制的容器。</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="KioskModeManagerEscapeExitsFullScreenDescr">
+        <source>Indicates whether pressing Escape exits fullscreen mode.</source>
+        <target state="translated">指示按 Esc 是否退出全屏模式。</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="KioskModeManagerFullScreenDescr">
+        <source>Gets or sets a value indicating whether the resolved form is currently fullscreen.</source>
+        <target state="translated">获取或设置一个值，以指示解析后的窗体当前是否处于全屏状态。</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="KioskModeManagerFullScreenChangedDescr">
+        <source>Occurs when the fullscreen state changes.</source>
+        <target state="translated">当全屏状态更改时发生。</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="KioskModeManagerMousePointerAutoHideDelayDescr">
+        <source>The delay, in milliseconds, before the mouse pointer is hidden while fullscreen. A value of 0 disables automatic pointer hiding.</source>
+        <target state="translated">全屏状态下隐藏鼠标指针之前的延迟(以毫秒为单位)。值为 0 将禁用自动指针隐藏。</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="KioskModeManagerToggleFullScreenKeysDescr">
+        <source>The key combination that toggles between fullscreen and restored mode.</source>
+        <target state="translated">在全屏模式和还原模式之间切换的键组合。</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="KioskModeManagerTopMostInFullScreenDescr">
+        <source>Indicates whether the form is topmost while fullscreen.</source>
+        <target state="translated">指示窗体在全屏时是否位于最顶端。</target>
         <note />
       </trans-unit>
       <trans-unit id="LabelAutoEllipsisDescr">
@@ -8675,8 +8765,8 @@ Stack trace where the illegal operation occurred was:
         <note />
       </trans-unit>
       <trans-unit id="RadioButtonAppearanceDescr">
-        <source>Controls whether the RadioButton appears as normal or as a Windows PushButton.</source>
-        <target state="translated">控制 RadioButton 是按通常情况显示还是显示为 Windows PushButton。</target>
+        <source>Controls whether the RadioButton appears as normal, as a Windows PushButton, or as a toggle switch.</source>
+        <target state="translated">控制 RadioButton 是显示为常规样式、Windows PushButton，还是显示为切换开关。</target>
         <note />
       </trans-unit>
       <trans-unit id="RadioButtonAutoCheckDescr">

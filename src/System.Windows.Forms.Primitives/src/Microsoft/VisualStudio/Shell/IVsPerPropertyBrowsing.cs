@@ -180,7 +180,7 @@ internal unsafe struct IVsPerPropertyBrowsing : IComIID
         ///  Returns the class name for this object. The class name is the non-bolded text that appears in the properties
         ///  window selection combo. Returning any result other than <see cref="HRESULT.S_OK"/> will cause the default to
         ///  be used. The default is the name string from a call to
-        ///  <see cref="ITypeInfo.GetDocumentation(int, BSTR*, BSTR*, out uint, BSTR*)"/> with <see cref="PInvoke.MEMBERID_NIL"/>.
+        ///  <see cref="ITypeInfo.GetDocumentation(int, BSTR*, BSTR*, uint*, BSTR*)"/> with <see cref="PInvoke.MEMBERID_NIL"/>.
         /// </summary>
         [PreserveSig]
         HRESULT GetClassName(

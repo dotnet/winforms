@@ -29,6 +29,46 @@ public class DomainUpDownTests : IDisposable
     }
 
     [WinFormsFact]
+    public void DomainUpDown_ModernVisualStylesMode_PreferredSizeIncludesButtonGroup()
+    {
+        using DomainUpDown control = new()
+        {
+            VisualStylesMode = VisualStylesMode.Net11,
+            AutoSize = true
+        };
+
+        if (!control.UseSideBySideButtons)
+        {
+            return;
+        }
+
+        Size preferredSize = control.GetPreferredSize(Size.Empty);
+        Assert.True(preferredSize.Height >= control.PreferredHeight);
+        Assert.True(preferredSize.Width >= control.LogicalToDeviceUnits(3) * 2 + control.GetModernButtonGroupWidth());
+    }
+
+    [WinFormsFact]
+    public void DomainUpDown_ModernVisualStylesMode_PreferredHeightMatchesSingleLineTextBox()
+    {
+        using TextBox textBox = new()
+        {
+            VisualStylesMode = VisualStylesMode.Net11
+        };
+        using DomainUpDown control = new()
+        {
+            VisualStylesMode = VisualStylesMode.Net11
+        };
+
+        if (!control.UseSideBySideButtons)
+        {
+            return;
+        }
+
+        Assert.Equal(textBox.PreferredHeight, control.PreferredHeight);
+        Assert.Equal(textBox.PreferredHeight, control.Height);
+    }
+
+    [WinFormsFact]
     public void DomainUpDown_Ctor_Default()
     {
         _sub.ActiveControl.Should().BeNull();
@@ -197,6 +237,29 @@ public class DomainUpDownTests : IDisposable
         _control.Padding = value;
         _control.Padding.Should().Be(expected);
         _control.IsHandleCreated.Should().BeFalse();
+    }
+
+    [WinFormsFact]
+    public void DomainUpDown_Padding_DesignerMetadataAndResetBehavior()
+    {
+        PropertyDescriptor property = TypeDescriptor.GetProperties(_control)[nameof(DomainUpDown.Padding)];
+
+        property.IsBrowsable.Should().BeTrue();
+        ((EditorBrowsableAttribute)property.Attributes[typeof(EditorBrowsableAttribute)])
+            .State.Should().Be(EditorBrowsableState.Always);
+        property.Attributes[typeof(DesignerSerializationVisibilityAttribute)]
+            .Should().Be(DesignerSerializationVisibilityAttribute.Visible);
+        property.ShouldSerializeValue(_control).Should().BeFalse();
+
+        _control.Padding = new Padding(1, 2, 3, 4);
+
+        property.ShouldSerializeValue(_control).Should().BeTrue();
+        property.CanResetValue(_control).Should().BeTrue();
+
+        property.ResetValue(_control);
+
+        _control.Padding.Should().Be(Padding.Empty);
+        property.ShouldSerializeValue(_control).Should().BeFalse();
     }
 
     [WinFormsTheory]

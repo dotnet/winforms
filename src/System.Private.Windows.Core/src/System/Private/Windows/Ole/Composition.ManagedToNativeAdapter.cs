@@ -375,7 +375,7 @@ internal unsafe partial class Composition<TOleServices, TNrbfSerializer, TDataFo
 
             static HRESULT SaveDbcsToHGLOBAL(HGLOBAL hglobal, string value)
             {
-                int byteCount = PInvokeCore.WideCharToMultiByte(PInvokeCore.CP_ACP, 0, value, value.Length, null, 0, null, null);
+                int byteCount = PInvokeCore.WideCharToMultiByte(PInvokeCore.CP_ACP, 0, value, value.Length, null, 0, null);
 
                 using GlobalBuffer buffer = new(hglobal, (uint)byteCount + 1);
                 if (buffer.Status.Failed)
@@ -383,7 +383,7 @@ internal unsafe partial class Composition<TOleServices, TNrbfSerializer, TDataFo
                     return buffer.Status;
                 }
 
-                PInvokeCore.WideCharToMultiByte(PInvokeCore.CP_ACP, 0, value, value.Length, (PSTR)buffer.Pointer, byteCount, null, null);
+                PInvokeCore.WideCharToMultiByte(PInvokeCore.CP_ACP, 0, value, value.Length, (PSTR)buffer.Pointer, byteCount, null);
 
                 // Null terminate.
                 buffer.AsSpan()[byteCount] = 0;

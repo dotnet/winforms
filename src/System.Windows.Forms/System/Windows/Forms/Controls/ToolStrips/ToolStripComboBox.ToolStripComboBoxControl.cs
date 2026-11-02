@@ -44,7 +44,9 @@ public partial class ToolStripComboBox
 
         internal override FlatComboAdapter CreateFlatComboAdapterInstance()
         {
-            return new ToolStripComboBoxFlatComboAdapter(this);
+            return UsesModernComboAdapter
+                ? base.CreateFlatComboAdapterInstance()
+                : new ToolStripComboBoxFlatComboAdapter(this);
         }
 
         protected override bool IsInputKey(Keys keyData)

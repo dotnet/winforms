@@ -119,6 +119,7 @@ GetSystemMetrics
 GetThreadLocale
 GetViewportExtEx
 GetViewportOrgEx
+GetWindowDC
 GetWindowOrgEx
 GetWindowRect
 GetWindowText
@@ -150,6 +151,7 @@ HINSTANCE
 HPEN
 HPROPSHEETPAGE
 HRGN
+HSTRING
 HWND
 HWND_*
 IDataObject
@@ -164,6 +166,7 @@ IDropTargetHelper
 IEnumFORMATETC
 IEnumUnknown
 IGlobalInterfaceTable
+IInspectable
 ImageFormat*
 ImageLockMode
 INK_SERIALIZED_FORMAT
@@ -188,6 +191,7 @@ MonitorFromWindow
 MONITORINFOEXW
 MONITORINFOF_*
 MultiByteToWideChar
+NCCALCSIZE_PARAMS
 NONCLIENTMETRICSW
 NS_E_WMP_CANNOT_FIND_FILE
 NS_E_WMP_DSHOW_UNSUPPORTED_FORMAT
@@ -230,6 +234,7 @@ ReleaseDC
 ReleaseStgMedium
 RestoreDC
 RevokeDragDrop
+RoActivateInstance
 RPC_E_CHANGED_MODE
 RPC_E_DISCONNECTED
 RPC_E_SERVERFAULT
@@ -277,5 +282,7 @@ WIN32_ERROR
 WINCODEC_ERR_*
 WINDOW_LONG_PTR_INDEX
 WindowFromDC
+WindowsCreateString
+WindowsDeleteString
 WM_*
 WPARAM
