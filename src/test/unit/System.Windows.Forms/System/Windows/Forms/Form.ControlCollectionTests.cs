@@ -32,7 +32,7 @@ public class Form_ControlCollection
 
         int oldCount = form.Controls.Count;
 
-        Assert.ThrowsAny<ArgumentException>(() => form.Controls.Add(tabPage));
+        Assert.Throws<ArgumentException>(() => form.Controls.Add(tabPage));
 
         Assert.Equal(oldCount, form.Controls.Count);
         Assert.False(form.Controls.Contains(tabPage));
@@ -42,48 +42,98 @@ public class Form_ControlCollection
     [WinFormsFact]
     public void ControlCollection_Clear_AfterFailedTabPageAdd_DoesNotHang()
     {
-        Exception threadException = null;
-        using ManualResetEventSlim completed = new(false);
+        using Form form = new();
+        using Button button = new();
+        using TabPage tabPage = new();
 
-        Thread thread = new(() =>
+        form.Controls.Add(button);
+
+        Assert.Throws<ArgumentException>(() => form.Controls.Add(tabPage));
+
+        // Check the invariant before Clear so a regression fails instead of hanging.
+        Assert.Same(button, Assert.Single(form.Controls));
+        Assert.Null(tabPage.Parent);
+
+        form.Controls.Clear();
+
+        Assert.Empty(form.Controls);
+        Assert.Null(button.Parent);
+        Assert.Null(tabPage.Parent);
+    }
+
+    [WinFormsTheory]
+    [InlineData(null, 8)]
+    [InlineData(3, 3)]
+    public void ControlCollection_Add_InvalidTabPageParent_PreservesTabIndexForValidParent(int? tabIndex, int expectedTabIndex)
+    {
+        using Form form = new();
+        using TabPage tabPage = new();
+        using TabControl tabControl = new();
+        using TabPage existingTabPage = new() { TabIndex = 7 };
+
+        if (tabIndex is int index)
         {
-            try
-            {
-                using Form form = new();
-                using Button button = new() { Name = "button1" };
-                using TabPage tabPage = new();
+            tabPage.TabIndex = index;
+        }
 
-                form.Controls.Add(button);
+        Assert.Throws<ArgumentException>(() => form.Controls.Add(tabPage));
 
-                Assert.ThrowsAny<ArgumentException>(() => form.Controls.Add(tabPage));
+        Assert.Empty(form.Controls);
+        Assert.Null(tabPage.Parent);
+        Assert.Equal(tabIndex ?? 0, tabPage.TabIndex);
 
-                // This is the operation that previously could hang.
-                form.Controls.Clear();
+        tabControl.Controls.Add(existingTabPage);
+        tabControl.Controls.Add(tabPage);
 
-                Assert.Empty(form.Controls);
-                Assert.Null(tabPage.Parent);
-            }
-            catch (Exception ex)
-            {
-                threadException = ex;
-            }
-            finally
-            {
-                completed.Set();
-            }
-        });
+        Assert.Same(tabControl, tabPage.Parent);
+        Assert.Equal(expectedTabIndex, tabPage.TabIndex);
+    }
 
-        thread.SetApartmentState(ApartmentState.STA);
-        thread.IsBackground = true;
-        thread.Start();
+    [WinFormsTheory]
+    [InlineData(false)]
+    [InlineData(true)]
+    public void ControlCollection_Add_ParentChangedThrows_PreservesAssignedParent(bool createHandle)
+    {
+        using Form form = new();
+        using Button existingControl = new() { TabIndex = 5 };
+        using Control control = new();
+        InvalidOperationException exception = new();
 
-        Assert.True(
-            completed.Wait(TimeSpan.FromSeconds(5)),
-            "ControlCollection.Clear() appears to hang after a failed TabPage add.");
+        form.Controls.Add(existingControl);
 
-        if (threadException is not null)
+        if (createHandle)
         {
-            ExceptionDispatchInfo.Capture(threadException).Throw();
+            _ = form.Handle;
+        }
+
+        void ParentChangedHandler(object sender, EventArgs e)
+        {
+            if (createHandle)
+            {
+                _ = control.Handle;
+            }
+
+            throw exception;
+        }
+
+        control.ParentChanged += ParentChangedHandler;
+        try
+        {
+            Assert.Same(exception, Assert.Throws<InvalidOperationException>(() => form.Controls.Add(control)));
+        }
+        finally
+        {
+            control.ParentChanged -= ParentChangedHandler;
+        }
+
+        Assert.Same(form, control.Parent);
+        Assert.Contains(control, form.Controls.Cast<Control>());
+        Assert.Equal(6, control.TabIndex);
+        Assert.Equal(createHandle, control.IsHandleCreated);
+
+        if (createHandle)
+        {
+            Assert.Equal(form.Handle, PInvoke.GetParent(control));
         }
     }
 }
