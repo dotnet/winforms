@@ -36,6 +36,22 @@ internal unsafe interface IOleServices
     HRESULT GetDataHere(string format, object data, FORMATETC* pformatetc, STGMEDIUM* pmedium);
 
     /// <summary>
+    ///  The storage medium types that the platform can provide and request.
+    /// </summary>
+    /// <remarks>
+    ///  <para>
+    ///   Requests for any other <see cref="TYMED"/> are rejected with <see cref="HRESULT.DV_E_TYMED"/>. A platform
+    ///   that handles additional storage medium types in
+    ///   <see cref="GetDataHere(string, object, FORMATETC*, STGMEDIUM*)"/>, such as <see cref="TYMED.TYMED_ENHMF"/>,
+    ///   must include them here.
+    ///  </para>
+    /// </remarks>
+#if NET
+    static abstract
+#endif
+    TYMED AllowedTymeds { get; }
+
+    /// <summary>
     ///  If the <typeparamref name="T"/> is a the requested format this method will attempt to extract it
     ///  from the <paramref name="dataObject"/>.
     /// </summary>
