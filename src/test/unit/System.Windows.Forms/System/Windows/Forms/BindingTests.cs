@@ -699,6 +699,7 @@ public class BindingTests
         Assert.False(num2.Created);
         Exception exception = Record.Exception(() => num1.Value = 41);
         Assert.Null(exception);
+        Assert.Equal(8M, num2.Value);
 
         tabControl.SelectedTab = tabPage2;
 
