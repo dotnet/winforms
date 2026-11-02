@@ -2,10 +2,13 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 
 using System.Collections.Specialized;
+using System.ComponentModel;
 using System.Diagnostics.CodeAnalysis;
+using System.Runtime.InteropServices;
 using Windows.Win32;
 using Windows.Win32.Foundation;
 using Windows.Win32.System.Com;
+using Windows.Win32.UI.WindowsAndMessaging;
 
 using ClipboardCore = System.Private.Windows.Ole.ClipboardCore<System.Private.Windows.Ole.MockOleServices<System.Private.Windows.Ole.ClipboardCoreTests>>;
 using ClipboardScope = System.Private.Windows.Ole.ClipboardScope<System.Private.Windows.Ole.MockOleServices<System.Private.Windows.Ole.ClipboardCoreTests>>;
@@ -114,6 +117,223 @@ public unsafe class ClipboardCoreTests
             data.IsNull.Should().BeTrue();
             original.Should().BeNull();
         }
+    }
+
+    [StaTheory]
+    [InlineData("Clear")]
+    [InlineData("SetData")]
+    [InlineData("Flush")]
+    [InlineData("SetDataAndFlush")]
+    [InlineData("TryGetData")]
+    public void Retry_DispatchesSentRenderRequestWithoutDispatchingPostedMessages(string operation)
+    {
+        using ClipboardScope scope = new();
+        DataObject dataObject = new();
+        ClipboardCore.SetData(dataObject, copy: false).Should().Be(HRESULT.S_OK);
+        using ManualResetEventSlim operationStarted = new();
+        int rendered = 0;
+        int posted = 0;
+        using SentMessageWindow window = new(
+            () => Volatile.Write(ref rendered, 1),
+            () => posted++);
+
+        ((bool)PInvokeCore.PostMessage((HWND)window.Handle, (uint)0x8000, default, default)).Should().BeTrue();
+        bool sent = false;
+        Thread reader = new(() =>
+        {
+            if (operationStarted.Wait(TimeSpan.FromSeconds(5)))
+            {
+                sent = window.SendRenderRequest();
+            }
+        });
+
+        reader.Start();
+        SetResultCallback(operation, () =>
+        {
+            operationStarted.Set();
+            return Volatile.Read(ref rendered) == 1 ? HRESULT.S_OK : HRESULT.CLIPBRD_E_CANT_OPEN;
+        });
+
+        try
+        {
+            HRESULT result = InvokeClipboardOperation(operation, dataObject);
+            posted.Should().Be(0);
+            result.Should().Be(HRESULT.S_OK);
+            Volatile.Read(ref rendered).Should().Be(1);
+            MSG message;
+            ((bool)PInvokeCore.PeekMessage(
+                &message,
+                (HWND)window.Handle,
+                0x8000,
+                0x8000,
+                PEEK_MESSAGE_REMOVE_TYPE.PM_NOREMOVE)).Should().BeTrue();
+        }
+        finally
+        {
+            SetResultCallback(operation, null);
+            operationStarted.Set();
+            reader.Join(TimeSpan.FromSeconds(5)).Should().BeTrue();
+        }
+
+        sent.Should().BeTrue();
+    }
+
+    [Theory]
+    [InlineData("Clear", 0)]
+    [InlineData("SetData", 0)]
+    [InlineData("Flush", 0)]
+    [InlineData("SetDataAndFlush", 0)]
+    [InlineData("TryGetData", 0)]
+    [InlineData("Clear", 20)]
+    [InlineData("SetData", 20)]
+    [InlineData("Flush", 20)]
+    [InlineData("SetDataAndFlush", 20)]
+    [InlineData("TryGetData", 20)]
+    public void Retry_PreservesAttemptLimitAndFailure(string operation, int retryDelay)
+    {
+        using ClipboardScope scope = new();
+        DataObject dataObject = new();
+        int attempts = 0;
+        SetResultCallback(operation, () =>
+        {
+            attempts++;
+            return HRESULT.CLIPBRD_E_CANT_OPEN;
+        });
+
+        try
+        {
+            InvokeClipboardOperation(operation, dataObject, retryTimes: 2, retryDelay)
+                .Should().Be(HRESULT.CLIPBRD_E_CANT_OPEN);
+            attempts.Should().Be(3);
+        }
+        finally
+        {
+            SetResultCallback(operation, null);
+        }
+    }
+
+    private static void SetResultCallback(string operation, Func<HRESULT>? callback)
+    {
+        switch (operation)
+        {
+            case "Clear":
+            case "SetData":
+                MockOleServices<ClipboardCoreTests>.OleSetClipboardResult = callback;
+                break;
+            case "Flush":
+            case "SetDataAndFlush":
+                MockOleServices<ClipboardCoreTests>.OleFlushClipboardResult = callback;
+                break;
+            case "TryGetData":
+                MockOleServices<ClipboardCoreTests>.OleGetClipboardResult = callback;
+                break;
+            default:
+                throw new ArgumentOutOfRangeException(nameof(operation));
+        }
+    }
+
+    private static HRESULT InvokeClipboardOperation(
+        string operation,
+        DataObject dataObject,
+        int retryTimes = 10,
+        int retryDelay = 100)
+    {
+        switch (operation)
+        {
+            case "Clear":
+                return ClipboardCore.Clear(retryTimes, retryDelay);
+            case "SetData":
+                return ClipboardCore.SetData(dataObject, copy: false, retryTimes, retryDelay);
+            case "Flush":
+                return ClipboardCore.Flush(retryTimes, retryDelay);
+            case "SetDataAndFlush":
+                return ClipboardCore.SetData(dataObject, copy: true, retryTimes, retryDelay);
+            case "TryGetData":
+                HRESULT result = ClipboardCore.TryGetData(out var data, out _, retryTimes, retryDelay);
+                data.Dispose();
+                return result;
+            default:
+                throw new ArgumentOutOfRangeException(nameof(operation));
+        }
+    }
+
+    private sealed class SentMessageWindow : IDisposable
+    {
+        private readonly WindowProcedure _procedure;
+        private readonly nint _previousProcedure;
+
+        public nint Handle { get; }
+
+        public SentMessageWindow(Action render, Action posted)
+        {
+            Handle = CreateWindowExW(0, "STATIC", null, 0, 0, 0, 0, 0, -3, 0, 0, 0);
+            if (Handle == 0)
+            {
+                throw new Win32Exception();
+            }
+
+            _procedure = (window, message, wParam, lParam) =>
+            {
+                if (message == 0x0305)
+                {
+                    render();
+                    return 0;
+                }
+
+                if (message == 0x8000)
+                {
+                    posted();
+                    return 0;
+                }
+
+                return CallWindowProcW(_previousProcedure, window, message, wParam, lParam);
+            };
+
+            nint procedure = Marshal.GetFunctionPointerForDelegate(_procedure);
+            _previousProcedure = sizeof(nint) == 8
+                ? SetWindowLongPtrW(Handle, -4, procedure)
+                : SetWindowLongW(Handle, -4, procedure);
+            if (_previousProcedure == 0)
+            {
+                int error = Marshal.GetLastWin32Error();
+                DestroyWindow(Handle);
+                throw new Win32Exception(error);
+            }
+        }
+
+        public bool SendRenderRequest() =>
+            SendMessageTimeoutW(Handle, 0x0305, 0, 0, 3, 3000, out _) != 0;
+
+        public void Dispose()
+        {
+            DestroyWindow(Handle).Should().BeTrue();
+            GC.KeepAlive(_procedure);
+        }
+
+        [UnmanagedFunctionPointer(CallingConvention.Winapi)]
+        private delegate nint WindowProcedure(nint window, uint message, nuint wParam, nint lParam);
+
+        [DllImport("user32.dll", CharSet = CharSet.Unicode, SetLastError = true)]
+        private static extern nint CreateWindowExW(
+            uint extendedStyle, string className, string? windowName, uint style,
+            int x, int y, int width, int height, nint parent, nint menu, nint instance, nint parameter);
+
+        [DllImport("user32.dll", SetLastError = true)]
+        private static extern nint SetWindowLongPtrW(nint window, int index, nint value);
+
+        [DllImport("user32.dll", SetLastError = true)]
+        private static extern int SetWindowLongW(nint window, int index, nint value);
+
+        [DllImport("user32.dll")]
+        private static extern nint CallWindowProcW(nint previous, nint window, uint message, nuint wParam, nint lParam);
+
+        [DllImport("user32.dll", SetLastError = true)]
+        private static extern nint SendMessageTimeoutW(
+            nint window, uint message, nuint wParam, nint lParam, uint flags, uint timeout, out nuint result);
+
+        [DllImport("user32.dll", SetLastError = true)]
+        [return: MarshalAs(UnmanagedType.Bool)]
+        private static extern bool DestroyWindow(nint window);
     }
 
     [Fact]
