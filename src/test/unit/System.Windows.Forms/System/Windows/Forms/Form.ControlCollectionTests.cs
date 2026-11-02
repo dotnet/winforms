@@ -40,6 +40,28 @@ public class Form_ControlCollection
     }
 
     [WinFormsFact]
+    public void ControlCollection_Add_InvalidTabPageParent_RestoresOriginalParent()
+    {
+        using Form form = new();
+        using TabControl tabControl = new();
+        using TabPage firstTabPage = new();
+        using TabPage tabPage = new() { TabIndex = 5 };
+        using TabPage lastTabPage = new();
+
+        tabControl.TabPages.AddRange([firstTabPage, tabPage, lastTabPage]);
+
+        int originalPageIndex = tabControl.TabPages.IndexOf(tabPage);
+        int originalTabIndex = tabPage.TabIndex;
+
+        Assert.Throws<ArgumentException>(() => form.Controls.Add(tabPage));
+
+        Assert.Empty(form.Controls);
+        Assert.Same(tabControl, tabPage.Parent);
+        Assert.Same(tabPage, tabControl.TabPages[originalPageIndex]);
+        Assert.Equal(originalTabIndex, tabPage.TabIndex);
+    }
+
+    [WinFormsFact]
     public void ControlCollection_Clear_AfterFailedTabPageAdd_DoesNotHang()
     {
         using Form form = new();
