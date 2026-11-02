@@ -19,8 +19,6 @@ public class ToolStripItemDropDownTests
     [InlineData(ToolStripDropDownDirection.Left, -220, 40, ToolStripDropDownDirection.Right)]
     // Right-to-left: a left-opening submenu at the right edge should stay left.
     [InlineData(ToolStripDropDownDirection.Left, 1620, 1920, ToolStripDropDownDirection.Left)]
-    // Right-to-left: a left-opening submenu at the left edge should flip right.
-    [InlineData(ToolStripDropDownDirection.Left, -220, 40, ToolStripDropDownDirection.Right)]
     // When both directions fit equally, retain the requested direction.
     [InlineData(ToolStripDropDownDirection.Right, 500, 1000, ToolStripDropDownDirection.Right)]
     // Vertical dropdowns are not changed by the horizontal placement helper.
@@ -48,8 +46,9 @@ public class ToolStripItemDropDownTests
     [WinFormsFact]
     public void ToolStripDropDownItem_GetPreferredHorizontalDropDownDirection_RespectsFullscreenOwnerBounds()
     {
-        // The working area could exclude a vertical taskbar, while a fullscreen owner can use the whole screen.
+        // A left-side taskbar reduces the working area, but a fullscreen owner may use the whole monitor.
         Rectangle fullscreenBounds = new(0, 0, 1920, 1080);
+        Rectangle workingAreaBounds = new(80, 0, 1840, 1080);
         Rectangle currentBounds = new(0, 200, 250, 300);
         Rectangle alternateBounds = new(300, 200, 250, 300);
 
@@ -57,6 +56,11 @@ public class ToolStripItemDropDownTests
             ToolStripDropDownDirection.Right,
             ToolStripDropDownItem.GetPreferredHorizontalDropDownDirection(
                 ToolStripDropDownDirection.Right, currentBounds, alternateBounds, fullscreenBounds));
+
+        Assert.Equal(
+            ToolStripDropDownDirection.Left,
+            ToolStripDropDownItem.GetPreferredHorizontalDropDownDirection(
+                ToolStripDropDownDirection.Right, currentBounds, alternateBounds, workingAreaBounds));
     }
 
     [WinFormsFact]
