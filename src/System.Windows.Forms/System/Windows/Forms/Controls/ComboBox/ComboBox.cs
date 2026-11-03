@@ -2799,9 +2799,9 @@ public partial class ComboBox : ListControl
         {
             UpdateControl(true);
         }
-        else
+        else if (!GetState(States.CreatingHandle))
         {
-            // we always will recreate the handle when autocomplete mode is on
+            // DPI scaling can change the font during handle creation, before autocomplete is initialized.
             RecreateHandle();
         }
 
