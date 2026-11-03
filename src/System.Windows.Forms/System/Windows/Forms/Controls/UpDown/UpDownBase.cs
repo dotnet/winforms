@@ -274,6 +274,29 @@ public abstract partial class UpDownBase : ContainerControl
     [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public new DockPaddingEdges DockPadding => base.DockPadding;
 
+    /// <inheritdoc/>
+    /// <remarks>
+    ///  <para>
+    ///   Modern visual styles always use double buffering. Explicit settings are retained for classic visual styles.
+    ///  </para>
+    /// </remarks>
+    protected override bool DoubleBuffered
+    {
+        get => UseSideBySideButtons || base.DoubleBuffered;
+        set
+        {
+            // The base setter compares against the effective value, which is always true in modern mode.
+            if (value)
+            {
+                SetStyle(ControlStyles.OptimizedDoubleBuffer | ControlStyles.AllPaintingInWmPaint, true);
+            }
+            else
+            {
+                SetStyle(ControlStyles.OptimizedDoubleBuffer, false);
+            }
+        }
+    }
+
     /// <summary>
     ///  Returns true if this control has focus.
     /// </summary>
