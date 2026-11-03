@@ -2581,12 +2581,348 @@ public class ComboBoxTests
 
         Assert.False(label.Created);
         Assert.Null(visibleBinding.BindingManagerBase);
+        model.IsChecked = true;
 
         tabControl.SelectedTab = tabPage2;
         Application.DoEvents();
-        label.CreateControl();
         Assert.True(label.Created);
         Assert.NotNull(visibleBinding.BindingManagerBase);
+        Assert.False(label.Visible);
+
+        checkBox.Checked = false;
+        Assert.False(model.IsChecked);
+        Assert.True(label.Visible);
+
+        checkBox.Checked = true;
+        Assert.True(model.IsChecked);
+        Assert.False(label.Visible);
+    }
+
+    [WinFormsTheory]
+    [InlineData(false, false)]
+    [InlineData(false, true)]
+    [InlineData(true, false)]
+    [InlineData(true, true)]
+    public void TextBox_DataBindingAddedBeforeCreation_BindsWhenCreated(bool parentDriven, bool explicitContext)
+    {
+        using Panel panel = new();
+        using TextBox textBox = new();
+        if (explicitContext)
+        {
+            textBox.BindingContext = new BindingContext();
+        }
+
+        Issue9272DataModel model = new() { TextValue = "initial" };
+        Binding binding = textBox.DataBindings.Add(
+            nameof(textBox.Text),
+            model,
+            nameof(Issue9272DataModel.TextValue),
+            true,
+            DataSourceUpdateMode.OnPropertyChanged);
+
+        panel.Controls.Add(textBox);
+        panel.BindingContext = new BindingContext();
+
+        Assert.False(textBox.IsHandleCreated);
+        Assert.Null(binding.BindingManagerBase);
+
+        model.TextValue = "latest";
+        textBox.Text = "before creation";
+        Assert.Equal("latest", model.TextValue);
+        Assert.Equal("before creation", textBox.Text);
+        Assert.False(textBox.IsHandleCreated);
+
+        if (parentDriven)
+        {
+            panel.CreateControl();
+        }
+        else
+        {
+            textBox.CreateControl();
+        }
+
+        Assert.True(textBox.IsHandleCreated);
+        Assert.NotNull(binding.BindingManagerBase);
+        Assert.True(binding.IsBinding);
+        Assert.Equal("latest", textBox.Text);
+        textBox.Text = "updated";
+        Assert.Equal("updated", model.TextValue);
+    }
+
+    [WinFormsTheory]
+    [InlineData(false)]
+    [InlineData(true)]
+    public void CheckBox_BindingContextReplacedBeforeAndAfterCreation_UpdatesBinding(bool parentDriven)
+    {
+        using Panel panel = new();
+        using CheckBox checkBox = new();
+        panel.Controls.Add(checkBox);
+        BindingContext context1 = new();
+        BindingContext context2 = new();
+        Issue9272DataModel model = new();
+        checkBox.BindingContext = context1;
+        Binding binding = checkBox.DataBindings.Add(
+            nameof(checkBox.Checked),
+            model,
+            nameof(Issue9272DataModel.IsChecked));
+
+        checkBox.BindingContext = context2;
+        model.IsChecked = true;
+
+        Assert.Null(binding.BindingManagerBase);
+        Assert.False(checkBox.Checked);
+        Assert.False(checkBox.IsHandleCreated);
+
+        if (parentDriven)
+        {
+            panel.CreateControl();
+        }
+        else
+        {
+            checkBox.CreateControl();
+        }
+
+        Assert.Same(context2[model], binding.BindingManagerBase);
+        Assert.True(checkBox.Checked);
+
+        checkBox.BindingContext = context1;
+
+        Assert.Same(context1[model], binding.BindingManagerBase);
+        Assert.Empty(context2[model].Bindings);
+        model.IsChecked = false;
+        Assert.False(checkBox.Checked);
+    }
+
+    [WinFormsFact]
+    public void CheckBox_DataBindingOnPermanentlyHiddenControl_DoesNotCreateHandle()
+    {
+        using Panel panel = new() { BindingContext = new BindingContext() };
+        using CheckBox checkBox = new() { Visible = false, BindingContext = new BindingContext() };
+        Issue9272DataModel model = new();
+        Binding binding = checkBox.DataBindings.Add(
+            nameof(checkBox.Checked),
+            model,
+            nameof(Issue9272DataModel.IsChecked));
+        panel.Controls.Add(checkBox);
+
+        model.IsChecked = true;
+        panel.CreateControl();
+        checkBox.CreateControl();
+        checkBox.BindingContext = new BindingContext();
+
+        Assert.False(checkBox.Created);
+        Assert.False(checkBox.IsHandleCreated);
+        Assert.Null(binding.BindingManagerBase);
+        Assert.False(checkBox.Checked);
+
+        model.IsChecked = false;
+        model.IsChecked = true;
+        Assert.False(checkBox.Checked);
+        Assert.False(checkBox.IsHandleCreated);
+        Assert.Null(binding.BindingManagerBase);
+    }
+
+    [WinFormsTheory]
+    [InlineData(false, false)]
+    [InlineData(false, true)]
+    [InlineData(true, false)]
+    [InlineData(true, true)]
+    public void TextBox_Creation_ActivatesBindingOnce(bool parentDriven, bool lazyContext)
+    {
+        using Panel parent = new();
+        using TextBox textBox = lazyContext ? new LazyBindingContextTextBox() : new TextBox();
+        if (!lazyContext)
+        {
+            parent.BindingContext = new BindingContext();
+        }
+
+        Issue9272DataModel model = new() { TextValue = "bound" };
+        Binding binding = new(nameof(textBox.Text), model, nameof(Issue9272DataModel.TextValue), true);
+        int formatCallCount = 0;
+        binding.Format += (sender, e) => formatCallCount++;
+        textBox.DataBindings.Add(binding);
+        parent.Controls.Add(textBox);
+
+        if (parentDriven)
+        {
+            parent.CreateControl();
+        }
+        else
+        {
+            textBox.CreateControl();
+        }
+
+        Assert.True(textBox.Created);
+        Assert.True(binding.IsBinding);
+        Assert.Equal("bound", textBox.Text);
+        Assert.Equal(1, formatCallCount);
+    }
+
+    [WinFormsTheory]
+    [InlineData(false, false)]
+    [InlineData(false, true)]
+    [InlineData(true, false)]
+    [InlineData(true, true)]
+    public void TextBox_BindingAssociatedBeforeCreation_ActivatesWhenCreated(
+        bool parentDriven,
+        bool explicitContext)
+    {
+        BindingContext context = new();
+        using Panel panel = new() { BindingContext = context };
+        using TextBox textBox = new();
+
+        if (explicitContext)
+        {
+            textBox.BindingContext = context;
+        }
+
+        panel.Controls.Add(textBox);
+        Issue9272DataModel model = new() { TextValue = "initial" };
+        Binding binding = textBox.DataBindings.Add(
+            nameof(textBox.Text),
+            model,
+            nameof(Issue9272DataModel.TextValue),
+            true,
+            DataSourceUpdateMode.OnPropertyChanged);
+
+        // Association before creation does not activate the binding.
+        BindingContext.UpdateBinding(context, binding);
+
+        Assert.Same(context[model], binding.BindingManagerBase);
+        Assert.False(binding.IsBinding);
+        Assert.False(textBox.IsHandleCreated);
+
+        if (parentDriven)
+        {
+            panel.CreateControl();
+        }
+        else
+        {
+            textBox.CreateControl();
+        }
+
+        Assert.True(textBox.IsHandleCreated);
+        Assert.True(binding.IsBinding);
+        Assert.Equal("initial", textBox.Text);
+
+        textBox.Text = "updated";
+        Assert.Equal("updated", model.TextValue);
+    }
+
+    [WinFormsTheory]
+    [InlineData(false, false)]
+    [InlineData(false, true)]
+    [InlineData(true, false)]
+    [InlineData(true, true)]
+    public void TextBox_BindingNotifiedDuringCreation_UsesBoundProperty(bool parentDriven, bool explicitContext)
+    {
+        BindingContext context = new();
+        using Panel panel = new() { BindingContext = context };
+        using TextBox existing = new();
+        using TextBox textBox = new();
+        if (explicitContext)
+        {
+            textBox.BindingContext = context;
+        }
+
+        panel.Controls.Add(existing);
+        panel.Controls.Add(textBox);
+        Issue9272DataModel model = new();
+        existing.DataBindings.Add(
+            nameof(existing.Text), model, nameof(Issue9272DataModel.IsChecked), true);
+        existing.CreateControl();
+        Binding binding = textBox.DataBindings.Add(
+            nameof(textBox.Text),
+            model,
+            nameof(Issue9272DataModel.IsChecked),
+            true,
+            DataSourceUpdateMode.OnPropertyChanged);
+        BindingContext.UpdateBinding(context, binding);
+        textBox.HandleCreated += (sender, e) => model.IsChecked = true;
+
+        if (parentDriven)
+        {
+            panel.CreateControl();
+        }
+        else
+        {
+            textBox.CreateControl();
+        }
+
+        Assert.True(binding.IsBinding);
+        Assert.Equal(bool.TrueString, textBox.Text);
+
+        model.IsChecked = false;
+        Assert.Equal(bool.FalseString, textBox.Text);
+
+        textBox.Text = bool.TrueString;
+        Assert.True(model.IsChecked);
+    }
+
+    [WinFormsTheory]
+    [InlineData(false, false)]
+    [InlineData(false, true)]
+    [InlineData(true, false)]
+    [InlineData(true, true)]
+    public void TextBox_BindingRemovedDuringContextResolution_RemainsDetached(bool parentDriven, bool replaceBinding)
+    {
+        using Panel panel = new();
+        using LazyBindingContextTextBox textBox = new();
+        panel.Controls.Add(textBox);
+        Issue9272DataModel model = new() { TextValue = "original" };
+        Issue9272DataModel replacement = new() { TextValue = "replacement" };
+        Binding binding = textBox.DataBindings.Add(
+            nameof(textBox.Text), model, nameof(Issue9272DataModel.TextValue), true);
+        textBox.BindingContextChanged += (sender, e) =>
+        {
+            textBox.DataBindings.Clear();
+            if (replaceBinding)
+            {
+                textBox.DataBindings.Add(
+                    nameof(textBox.Text), replacement, nameof(Issue9272DataModel.TextValue), true);
+            }
+        };
+
+        if (parentDriven)
+        {
+            panel.CreateControl();
+        }
+        else
+        {
+            textBox.CreateControl();
+        }
+
+        Assert.Null(binding.BindableComponent);
+        Assert.Null(binding.BindingManagerBase);
+        Assert.Empty(textBox.BindingContext[model].Bindings);
+        Assert.Equal(replaceBinding ? 1 : 0, textBox.DataBindings.Count);
+        if (replaceBinding)
+        {
+            Assert.Equal("replacement", textBox.Text);
+            Assert.True(textBox.DataBindings[0].IsBinding);
+        }
+    }
+
+    [WinFormsFact]
+    public void TextBox_BindingContextCleared_DetachesBinding()
+    {
+        using TextBox textBox = new() { BindingContext = new BindingContext() };
+        Issue9272DataModel model = new() { TextValue = "bound" };
+        Binding binding = textBox.DataBindings.Add(
+            nameof(textBox.Text),
+            model,
+            nameof(Issue9272DataModel.TextValue),
+            true,
+            DataSourceUpdateMode.OnPropertyChanged);
+        textBox.CreateControl();
+        Assert.True(binding.IsBinding);
+
+        textBox.BindingContext = null;
+        textBox.Text = "unbound";
+
+        Assert.Null(binding.BindingManagerBase);
+        Assert.False(binding.IsBinding);
+        Assert.Equal("bound", model.TextValue);
     }
 
     public class CustomComboBox : ComboBox
@@ -5079,6 +5415,18 @@ public class ComboBoxTests
         public string Value { get; set; }
     }
 
+    /// <summary>
+    ///  Initializes its binding context on demand, triggering binding notifications from the getter.
+    /// </summary>
+    private class LazyBindingContextTextBox : TextBox
+    {
+        public override BindingContext BindingContext
+        {
+            get => base.BindingContext ??= new BindingContext();
+            set => base.BindingContext = value;
+        }
+    }
+
     private class Issue9272DataModel : INotifyPropertyChanged
     {
         private bool _isChecked;
@@ -5102,6 +5450,8 @@ public class ComboBoxTests
         public bool DisableText => !IsChecked;
 
         public int CbbContent { get; set; } = 2;
+
+        public string TextValue { get; set; }
 
         public event PropertyChangedEventHandler PropertyChanged;
 
