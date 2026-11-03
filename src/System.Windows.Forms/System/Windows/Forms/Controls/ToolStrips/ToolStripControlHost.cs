@@ -499,6 +499,24 @@ public partial class ToolStripControlHost : ToolStripItem
             hostedControl.DeviceDpiInternal = deviceDpiNew;
         }
 
+        // An autoscaling container will scale this control through ToolStrip.Controls after
+        // WM_DPICHANGED_BEFOREPARENT. Leave its bounds to that pass to avoid scaling them twice.
+        for (Control? parent = hostedControl.ParentInternal; parent is not null; parent = parent.ParentInternal)
+        {
+            if (parent is not ContainerControl container || container.AutoScaleMode == AutoScaleMode.Inherit)
+            {
+                continue;
+            }
+
+            if (container.AutoScaleMode != AutoScaleMode.None)
+            {
+                InvalidateItemLayout(PropertyNames.Font);
+                return;
+            }
+
+            break;
+        }
+
         // Return early if we cannot determine a base width to scale from; this can happen if the hosted control has not yet been laid out and has no preferred size.
         if (baseWidth <= 0)
         {
@@ -531,7 +549,7 @@ public partial class ToolStripControlHost : ToolStripItem
     /// Update the hosted control's font to the new default font if it is still using the old default font,
     /// or scale a truly user-set font if the hosted control has not already applied DPI font scaling for this jump.
     /// </summary>
-    private static void SyncHostedControlFontForDpiChange(Control hostedControl, int deviceDpiOld, int deviceDpiNew)
+    private void SyncHostedControlFontForDpiChange(Control hostedControl, int deviceDpiOld, int deviceDpiNew)
     {
         if (deviceDpiOld == deviceDpiNew)
         {
@@ -541,15 +559,15 @@ public partial class ToolStripControlHost : ToolStripItem
         Font currentFont = hostedControl.Font;
 
         // ToolStrip.RescaleConstantsForDpi sets CurrentDpi to the new DPI before this runs.
-        // Temporarily resolve MenuFont for the old/new DPI so we can detect toolbar-default intent
-        // even when Control already WithSize'd the local font (Combo is always IsFontSet).
+        // Compare with the default at the control's current DPI, which may already have changed.
+        // A custom font can coincide with the default at the other DPI.
         int previousCurrentDpi = ToolStripManager.CurrentDpi;
-        Font oldDefaultFont;
+        Font currentDefaultFont;
         Font newDefaultFont;
         try
         {
-            ToolStripManager.CurrentDpi = deviceDpiOld;
-            oldDefaultFont = ToolStripManager.DefaultFont;
+            ToolStripManager.CurrentDpi = hostedControl.DeviceDpi;
+            currentDefaultFont = ToolStripManager.DefaultFont;
             ToolStripManager.CurrentDpi = deviceDpiNew;
             newDefaultFont = ToolStripManager.DefaultFont;
         }
@@ -558,7 +576,7 @@ public partial class ToolStripControlHost : ToolStripItem
             ToolStripManager.CurrentDpi = previousCurrentDpi;
         }
 
-        if (currentFont.Equals(oldDefaultFont) || currentFont.Equals(newDefaultFont))
+        if (currentFont.Equals(currentDefaultFont))
         {
             // Align DeviceDpi first so a synchronous handle recreate from OnFontChanged cannot
             // treat MenuFont-at-new-DPI as still living at the old DPI and WithSize it again.
@@ -584,7 +602,7 @@ public partial class ToolStripControlHost : ToolStripItem
     /// <summary>
     /// Update the hosted control's font to the new default font if it is still using the old default font.
     /// </summary>
-    private static void ApplyToolStripDefaultFont(Control hostedControl, Font newDefaultFont)
+    private void ApplyToolStripDefaultFont(Control hostedControl, Font newDefaultFont)
     {
         if (!hostedControl.IsFontSet())
         {
@@ -593,7 +611,14 @@ public partial class ToolStripControlHost : ToolStripItem
 
         if (!hostedControl.Font.Equals(newDefaultFont))
         {
-            hostedControl.Font = newDefaultFont;
+            if (this is ToolStripTextBox textBox)
+            {
+                textBox.SetFontForDpi(newDefaultFont);
+            }
+            else
+            {
+                hostedControl.Font = newDefaultFont;
+            }
         }
     }
 

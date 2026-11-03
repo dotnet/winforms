@@ -104,6 +104,9 @@ public partial class ToolStripTextBox
 
         public ToolStripTextBox? Owner { get; set; }
 
+        // DPI updates must not mark the menu font as explicitly set by the application.
+        internal void SetFontForDpi(Font font) => base.Font = font;
+
         private unsafe void InvalidateNonClient()
         {
             if (!IsPopupTextBox)

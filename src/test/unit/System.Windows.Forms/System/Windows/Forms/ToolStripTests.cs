@@ -8,6 +8,7 @@ using System.Drawing;
 using System.Drawing.Imaging;
 using System.Windows.Forms.TestUtilities;
 using Microsoft.DotNet.RemoteExecutor;
+using Microsoft.Win32;
 using Moq;
 using Windows.Win32.System.Ole;
 using Point = System.Drawing.Point;
@@ -7136,6 +7137,181 @@ public partial class ToolStripTests : IDisposable
             Assert.Equal(comboBoxWidth, comboBox.Width);
             Assert.Equal(textBoxFont.Height, textBox.Font.Height);
             Assert.Equal(comboBoxFont.Height, comboBox.Font.Height);
+        }
+        finally
+        {
+            ToolStripManager.CurrentDpi = originalDpi;
+        }
+    }
+
+    [WinFormsTheory]
+    [InlineData(AutoScaleMode.Dpi)]
+    [InlineData(AutoScaleMode.Font)]
+    [InlineData(AutoScaleMode.None)]
+    [InlineData(AutoScaleMode.Inherit)]
+    public void ToolStrip_RescaleConstantsForDpi_FormScalesHostedBoundsOnce(AutoScaleMode autoScaleMode)
+    {
+        RemoteExecutor.Invoke(VerifyFormHostedControlScaling, autoScaleMode.ToString()).Dispose();
+    }
+
+    private static void VerifyFormHostedControlScaling(string autoScaleModeValue)
+    {
+        Assert.True(Application.SetHighDpiMode(HighDpiMode.PerMonitorV2));
+        AutoScaleMode autoScaleMode = Enum.Parse<AutoScaleMode>(autoScaleModeValue);
+        int originalDpi = ToolStripManager.CurrentDpi;
+        try
+        {
+            using Form form = new() { AutoScaleMode = AutoScaleMode.Dpi, Size = new(1600, 800) };
+            using UserControl container = new() { AutoScaleMode = autoScaleMode, Dock = DockStyle.Fill };
+            using ToolStrip toolStrip = new();
+            using ToolStripTextBox textBox = new();
+            using ToolStripComboBox comboBox = new();
+            using TextBox referenceTextBox = new() { BorderStyle = textBox.TextBox.BorderStyle };
+            using ComboBox referenceComboBox = new();
+            toolStrip.Items.AddRange([textBox, comboBox]);
+            container.Controls.AddRange([toolStrip, referenceTextBox, referenceComboBox]);
+            form.Controls.Add(container);
+            form.Show();
+            int initialDpi = form.DeviceDpi;
+            textBox.Size = new(initialDpi * 2, textBox.Height);
+            comboBox.Size = new(initialDpi * 2, comboBox.Height);
+            referenceTextBox.Width = textBox.Width;
+            referenceComboBox.Width = comboBox.Width;
+            int oldDpi = initialDpi;
+            foreach (int newDpi in new[] { 120, 144, 168, 96, 288, initialDpi })
+            {
+                if (newDpi == oldDpi)
+                {
+                    continue;
+                }
+
+                int expectedTextBoxWidth = (int)Math.Round(textBox.Width * (double)newDpi / oldDpi);
+                int expectedComboBoxWidth = (int)Math.Round(comboBox.Width * (double)newDpi / oldDpi);
+                WPARAM dpiParam = WPARAM.MAKEWPARAM(newDpi, newDpi);
+                foreach (Control control in new Control[]
+                {
+                    textBox.Control, comboBox.Control, referenceTextBox, referenceComboBox, toolStrip, container
+                })
+                {
+                    PInvokeCore.SendMessage(control, PInvokeCore.WM_DPICHANGED_BEFOREPARENT, dpiParam);
+                }
+
+                RECT suggestedRectangle = new(
+                    0, 0,
+                    (int)Math.Round(form.Width * (double)newDpi / oldDpi),
+                    (int)Math.Round(form.Height * (double)newDpi / oldDpi));
+                PInvokeCore.SendMessage(form, PInvokeCore.WM_DPICHANGED, dpiParam, ref suggestedRectangle);
+                toolStrip.PerformLayout();
+
+                if (autoScaleMode != AutoScaleMode.None)
+                {
+                    expectedTextBoxWidth = referenceTextBox.Width;
+                    expectedComboBoxWidth = referenceComboBox.Width;
+                }
+
+                Assert.Equal(expectedTextBoxWidth, textBox.Width);
+                Assert.Equal(expectedComboBoxWidth, comboBox.Width);
+                Assert.Equal(textBox.Width, textBox.Control.Width);
+                Assert.Equal(comboBox.Width, comboBox.Control.Width);
+                oldDpi = newDpi;
+            }
+        }
+        finally
+        {
+            ToolStripManager.CurrentDpi = originalDpi;
+        }
+    }
+
+    [WinFormsTheory]
+    [InlineData(false)]
+    [InlineData(true)]
+    public void ToolStrip_RescaleConstantsForDpi_CustomFontMatchesOtherDpiDefault(bool controlFirst)
+    {
+        RemoteExecutor.Invoke(VerifyHostedControlFontCollision, controlFirst.ToString()).Dispose();
+    }
+
+    private static void VerifyHostedControlFontCollision(string controlFirstValue)
+    {
+        Assert.True(Application.SetHighDpiMode(HighDpiMode.PerMonitorV2));
+        bool controlFirst = bool.Parse(controlFirstValue);
+        int originalDpi = ToolStripManager.CurrentDpi;
+        try
+        {
+            using SubToolStrip toolStrip = new() { Width = 1600 };
+            using ToolStripTextBox textBox = new();
+            using ToolStripComboBox comboBox = new();
+            toolStrip.Items.AddRange([textBox, comboBox]);
+            toolStrip.CreateControl();
+            int oldDpi = textBox.Control.DeviceDpi;
+            int newDpi = oldDpi * 2;
+            ToolStripManager.CurrentDpi = oldDpi;
+            Font oldDefaultFont = ToolStripManager.DefaultFont;
+            ToolStripManager.CurrentDpi = newDpi;
+            Font newDefaultFont = ToolStripManager.DefaultFont;
+            ToolStripManager.CurrentDpi = oldDpi;
+            Font collisionFont = controlFirst ? oldDefaultFont : newDefaultFont;
+            using Font customFont = new(
+                collisionFont.FontFamily,
+                controlFirst ? collisionFont.Size / 2 : collisionFont.Size,
+                collisionFont.Style,
+                collisionFont.Unit,
+                collisionFont.GdiCharSet,
+                collisionFont.GdiVerticalFont);
+            textBox.Font = customFont;
+            comboBox.Font = customFont;
+            if (controlFirst)
+            {
+                PInvokeCore.SendMessage(textBox.Control, PInvokeCore.WM_DPICHANGED_BEFOREPARENT, (WPARAM)newDpi);
+                PInvokeCore.SendMessage(comboBox.Control, PInvokeCore.WM_DPICHANGED_BEFOREPARENT, (WPARAM)newDpi);
+                Assert.Equal(oldDefaultFont, textBox.Font);
+                Assert.Equal(oldDefaultFont, comboBox.Font);
+            }
+
+            toolStrip.RescaleConstantsForDpi(oldDpi, newDpi);
+
+            Assert.Equal(customFont.Size * 2, textBox.Font.Size, precision: 3);
+            Assert.Equal(customFont.Size * 2, comboBox.Font.Size, precision: 3);
+        }
+        finally
+        {
+            ToolStripManager.CurrentDpi = originalDpi;
+        }
+    }
+
+    [WinFormsTheory]
+    [InlineData(false)]
+    [InlineData(true)]
+    public void ToolStrip_RescaleConstantsForDpi_PreservesTextBoxDefaultFontTracking(bool customFont)
+    {
+        RemoteExecutor.Invoke(VerifyTextBoxDefaultFontTracking, customFont.ToString()).Dispose();
+    }
+
+    private static void VerifyTextBoxDefaultFontTracking(string customFontValue)
+    {
+        Assert.True(Application.SetHighDpiMode(HighDpiMode.PerMonitorV2));
+        bool customFont = bool.Parse(customFontValue);
+        int originalDpi = ToolStripManager.CurrentDpi;
+        try
+        {
+            using SubToolStrip toolStrip = new() { Width = 1600 };
+            using ToolStripTextBox textBox = new();
+            using Font font = new(FontFamily.GenericSansSerif, 13);
+            toolStrip.Items.Add(textBox);
+            if (customFont)
+            {
+                textBox.Font = font;
+            }
+
+            int oldDpi = textBox.Control.DeviceDpi;
+            toolStrip.RescaleConstantsForDpi(oldDpi, oldDpi * 2);
+            Font scaledFont = textBox.Font;
+
+            // Model a new menu font without changing machine-wide preferences.
+            ToolStripManager.CurrentDpi = oldDpi;
+            textBox.Control.TestAccessor.Dynamic.OnUserPreferenceChanged(
+                null, new UserPreferenceChangedEventArgs(UserPreferenceCategory.Window));
+
+            Assert.Equal(customFont ? scaledFont : ToolStripManager.DefaultFont, textBox.Font);
         }
         finally
         {
