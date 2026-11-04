@@ -18,6 +18,7 @@ public partial class ListBox
         private bool _stateDirty;
         private int _lastVersion;
         private int _count;
+        private ItemArray? _lastInnerArray;
 
         public SelectedObjectCollection(ListBox owner)
         {
@@ -60,10 +61,13 @@ public partial class ListBox
 
                 // If the handle hasn't been created, we must do this the hard way.
                 // Getting the count when using a mask is expensive, so cache it.
-                if (_lastVersion != InnerArray.Version)
+                ItemArray innerArray = InnerArray;
+                if (!ReferenceEquals(_lastInnerArray, innerArray)
+                    || _lastVersion != innerArray.Version)
                 {
-                    _lastVersion = InnerArray.Version;
-                    _count = InnerArray.GetCount(SelectedObjectMask);
+                    _lastInnerArray = innerArray;
+                    _lastVersion = innerArray.Version;
+                    _count = innerArray.GetCount(SelectedObjectMask);
                 }
 
                 return _count;

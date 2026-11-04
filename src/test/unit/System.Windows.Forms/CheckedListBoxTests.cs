@@ -294,6 +294,24 @@ public class CheckedListBoxTests
     }
 
     [WinFormsFact]
+    public void CheckedListBox_HorizontalScrollbar_SetWithCachedSelectedItemsCount_PreservesSelection()
+    {
+        using CheckedListBox control = new();
+        control.Items.Add("item1");
+        control.SelectedIndex = 0;
+        Assert.Single(control.SelectedItems);
+        control.Items.Add("item2");
+
+        control.HorizontalScrollbar = true;
+
+        Assert.True(control.HorizontalScrollbar);
+        Assert.Equal(0, control.SelectedIndex);
+        Assert.Equal("item1", control.SelectedItem);
+        Assert.Single(control.SelectedItems);
+        Assert.False(control.IsHandleCreated);
+    }
+
+    [WinFormsFact]
     public void CheckedListBox_RefreshItems_InvokeEmptyWithHandle_Success()
     {
         using SubCheckedListBox control = new();
