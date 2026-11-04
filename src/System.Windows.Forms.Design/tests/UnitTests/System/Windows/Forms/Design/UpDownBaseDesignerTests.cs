@@ -1,4 +1,4 @@
-// Licensed to the .NET Foundation under one or more agreements.
+﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
 using System.ComponentModel;
@@ -17,15 +17,22 @@ public class UpDownBaseDesignerTests : IDisposable
     {
         _numericUpDown = new();
         _designer = new();
-        Mock<ISite> site = new();
-        site.Setup(s => s.GetService(typeof(IDesignerHost))).Returns(new Mock<IDesignerHost>().Object);
-        _numericUpDown.Site = site.Object;
     }
 
     private void InitializeDesigner(BorderStyle borderStyle)
+        => InitializeDesigner(_designer, _numericUpDown, borderStyle);
+
+    private static void InitializeDesigner(
+        UpDownBaseDesigner designer,
+        UpDownBase upDownBase,
+        BorderStyle borderStyle)
     {
-        _numericUpDown.BorderStyle = borderStyle;
-        _designer.Initialize(_numericUpDown);
+        Mock<ISite> site = new();
+        site.Setup(s => s.DesignMode).Returns(true);
+        site.Setup(s => s.GetService(typeof(IDesignerHost))).Returns(new Mock<IDesignerHost>().Object);
+        upDownBase.Site = site.Object;
+        upDownBase.BorderStyle = borderStyle;
+        designer.Initialize(upDownBase);
     }
 
     public void Dispose()
@@ -41,6 +48,26 @@ public class UpDownBaseDesignerTests : IDisposable
         SelectionRules rules = _designer.SelectionRules;
         _designer.AutoResizeHandles.Should().BeTrue();
         rules.Should().NotHaveFlag(SelectionRules.TopSizeable | SelectionRules.BottomSizeable);
+    }
+
+    [WinFormsTheory]
+    [InlineData(VisualStylesMode.Net11)]
+    [InlineData(VisualStylesMode.Latest)]
+    public void Height_SetWithModernVisualStylesMode_ReturnsPreferredHeight(VisualStylesMode visualStylesMode)
+    {
+        InitializeDesigner(BorderStyle.Fixed3D);
+        using DomainUpDown domainUpDown = new();
+        using UpDownBaseDesigner domainUpDownDesigner = new();
+        InitializeDesigner(domainUpDownDesigner, domainUpDown, BorderStyle.Fixed3D);
+
+        foreach (UpDownBase upDownBase in new UpDownBase[] { _numericUpDown, domainUpDown })
+        {
+            upDownBase.AutoSize = false;
+            upDownBase.VisualStylesMode = visualStylesMode;
+            upDownBase.Height = upDownBase.PreferredHeight + 10;
+
+            upDownBase.Height.Should().Be(upDownBase.PreferredHeight);
+        }
     }
 
     [WinFormsTheory]

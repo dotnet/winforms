@@ -520,9 +520,7 @@ public abstract partial class UpDownBase : ContainerControl
     {
         int height = AutoSize
             ? PreferredHeight + Padding.Vertical
-            : UseSideBySideButtons
-                ? proposedHeight
-                : PreferredHeight;
+            : PreferredHeight;
 
         return base.ApplyBoundsConstraints(suggestedX, suggestedY, proposedWidth, height);
     }
@@ -927,11 +925,7 @@ public abstract partial class UpDownBase : ContainerControl
         // Clear the font height cache
         FontHeight = -1;
 
-        if (!UseSideBySideButtons || AutoSize)
-        {
-            Height = PreferredHeight;
-        }
-
+        Height = PreferredHeight;
         PositionControls();
 
         base.OnFontChanged(e);
