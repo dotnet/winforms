@@ -7105,7 +7105,15 @@ public partial class ToolStripTests : IDisposable
             Font textBoxFont = textBox.Font;
             Font comboBoxFont = comboBox.Font;
             int oldDpi = initialDpi;
-            foreach (int newDpi in new[] { 96, 120, 144, 168, 96, 192, 216, 240, 288, 384, 480, 96, initialDpi })
+            foreach (int newDpi in new[]
+            {
+                ScaleHelper.ScaleToDpi(120, initialDpi),
+                ScaleHelper.ScaleToDpi(144, initialDpi),
+                ScaleHelper.ScaleToDpi(168, initialDpi),
+                ScaleHelper.ScaleToDpi(96, initialDpi),
+                ScaleHelper.ScaleToDpi(288, initialDpi),
+                initialDpi
+            })
             {
                 if (newDpi == oldDpi)
                 {
