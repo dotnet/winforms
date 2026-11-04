@@ -1972,6 +1972,7 @@ public partial class ListBox : ListControl
 
         // Clear the items.
         _itemsCollection = null;
+        _selectedItems?.Dirty();
         _selectedIndices = null;
 
         if (IsHandleCreated)
