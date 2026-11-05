@@ -100,6 +100,8 @@ public partial class ListBox
         internal void Dirty()
         {
             _stateDirty = true;
+
+            // Resetting the version also invalidates the cached Count.
             _lastVersion = -1;
         }
 

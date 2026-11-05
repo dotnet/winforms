@@ -299,7 +299,9 @@ public class CheckedListBoxTests
         using CheckedListBox control = new();
         control.Items.Add("item1");
         control.SelectedIndex = 0;
-        Assert.Single(control.SelectedItems);
+#pragma warning disable xUnit2013 // Do not use equality check to check for collection size.
+        Assert.Equal(1, control.SelectedItems.Count);
+#pragma warning restore xUnit2013 // Do not use equality check to check for collection size.
         control.Items.Add("item2");
 
         control.HorizontalScrollbar = true;
@@ -307,7 +309,9 @@ public class CheckedListBoxTests
         Assert.True(control.HorizontalScrollbar);
         Assert.Equal(0, control.SelectedIndex);
         Assert.Equal("item1", control.SelectedItem);
-        Assert.Single(control.SelectedItems);
+#pragma warning disable xUnit2013 // Do not use equality check to check for collection size.
+        Assert.Equal(1, control.SelectedItems.Count);
+#pragma warning restore xUnit2013 // Do not use equality check to check for collection size.
         Assert.False(control.IsHandleCreated);
     }
 
