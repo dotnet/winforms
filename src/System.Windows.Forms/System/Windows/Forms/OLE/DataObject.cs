@@ -34,6 +34,14 @@ public unsafe partial class DataObject :
     static DataObject IDataObjectInternal<DataObject, IDataObject>.Create(Com.IDataObject* dataObject) => new(dataObject);
     static DataObject IDataObjectInternal<DataObject, IDataObject>.Create(object data) => new(data);
 
+    // The shared factory retains the proxy adapters without changing the original managed object.
+    // Adapt application IDataObject implementations that do not expose the internal shared-core contract.
+    static DataObject IDataObjectInternal<DataObject, IDataObject>.Create(DataObject clipboardData, IDataObject managedData) =>
+        new(clipboardData._innerData.WithManagedDataObject(managedData as IDataObjectInternal ?? new DataObjectAdapter(managedData)));
+
+    // Accept the composed view without rebuilding its adapters or losing the captured clipboard fallback.
+    private DataObject(Composition data) => _innerData = data;
+
     static IDataObjectInternal IDataObjectInternal<DataObject, IDataObject>.Wrap(IDataObject data) =>
         new DataObjectAdapter(data);
 

@@ -339,6 +339,21 @@ internal static unsafe class ClipboardCore<TOleServices>
             if (originalObject is TDataObject dataObjectInternal
                 && dataObjectInternal.TryUnwrapUserDataObject(out TIDataObject? userObject))
             {
+                if (TOleServices.UseNativeClipboardTextFallback)
+                {
+                    // Capture this proxy, not the clipboard at a later read. Only text needs native synthesis.
+                    TDataObject clipboardData = TDataObject.Create(proxyDataObject.Value);
+
+                    // Windows synthesizes UnicodeText from ANSI/OEM text, even when managed autoConvert is false.
+                    // Querying the captured proxy detects all three plain-text source formats without wrapping other data.
+                    if (clipboardData.GetDataPresent(DataFormatNames.UnicodeText, autoConvert: false))
+                    {
+                        // Keep custom payloads on the managed path, including nonserializable objects.
+                        dataObject = TDataObject.Create(clipboardData, userObject);
+                        return result;
+                    }
+                }
+
                 // We have an original user object that we want to return.
                 dataObject = userObject;
                 return result;
