@@ -62,11 +62,19 @@ internal sealed unsafe partial class Composition<TOleServices, TNrbfSerializer, 
     private readonly IDataObject.Interface _nativeDataObject;
     private readonly ComTypes.IDataObject _runtimeDataObject;
 
-    private Composition(IDataObjectInternal managedDataObject, IDataObject.Interface nativeDataObject, ComTypes.IDataObject runtimeDataObject)
+    // Only clipboard compositions retain this captured native reader; ordinary data objects have no fallback.
+    private readonly IDataObjectInternal? _clipboardTextDataObject;
+
+    private Composition(
+        IDataObjectInternal managedDataObject,
+        IDataObject.Interface nativeDataObject,
+        ComTypes.IDataObject runtimeDataObject,
+        IDataObjectInternal? clipboardTextDataObject = null)
     {
         ManagedDataObject = managedDataObject;
         _nativeDataObject = nativeDataObject;
         _runtimeDataObject = runtimeDataObject;
+        _clipboardTextDataObject = clipboardTextDataObject;
     }
 
     internal static Composition<TOleServices, TNrbfSerializer, TDataFormat> Create() => Create(new DataStore<TOleServices>());
@@ -120,6 +128,27 @@ internal sealed unsafe partial class Composition<TOleServices, TNrbfSerializer, 
         return new(nativeToWinForms, nativeToWinForms, nativeToRuntime);
     }
 
+    /// <summary>
+    ///  Creates a managed-first clipboard view while retaining this composition's native text reader.
+    /// </summary>
+    /// <param name="data">
+    ///  The original managed source, or an adapter for an application-provided data object. It remains the
+    ///  source for custom data, format enumeration, and writes.
+    /// </param>
+    /// <returns>A new composition sharing the existing owning COM adapters and captured text fallback.</returns>
+    internal Composition<TOleServices, TNrbfSerializer, TDataFormat> WithManagedDataObject(IDataObjectInternal data)
+    {
+        // WPF needs Windows' plain-text synthesis, but other formats must retain in-process managed retrieval.
+        // Reuse the owning adapters so the fallback stays tied to this snapshot without adding separate COM ownership.
+        return new(data, _nativeDataObject, _runtimeDataObject, clipboardTextDataObject: ManagedDataObject);
+    }
+
+    // Do not expand fallback to rich text, type names, or custom formats: those must retain managed semantics.
+    private IDataObjectInternal? GetClipboardTextDataObject(string format) =>
+        format is DataFormatNames.Text or DataFormatNames.UnicodeText or DataFormatNames.OemText
+            ? _clipboardTextDataObject
+            : null;
+
     internal static Composition<TOleServices, TNrbfSerializer, TDataFormat> Create(ComTypes.IDataObject runtimeDataObject)
     {
         RuntimeToNativeAdapter runtimeToNative = new(runtimeDataObject);
@@ -169,7 +198,10 @@ internal sealed unsafe partial class Composition<TOleServices, TNrbfSerializer, 
     #region IDataObjectInternal
     public object? GetData(string format, bool autoConvert)
     {
-        object? result = ManagedDataObject.GetData(format, autoConvert);
+        // Preserve managed payload identity first. A missing plain-text value can still be synthesized by OLE,
+        // whose format conversion is independent of the managed autoConvert flag.
+        object? result = ManagedDataObject.GetData(format, autoConvert)
+            ?? GetClipboardTextDataObject(format)?.GetData(format, autoConvert);
 
         // Avoid exposing our internal JsonData<T>
         return
@@ -179,10 +211,23 @@ internal sealed unsafe partial class Composition<TOleServices, TNrbfSerializer, 
             result;
     }
 
-    public object? GetData(string format) => ManagedDataObject.GetData(format);
+    // Preserve an ordinary source's overload-specific behavior; only clipboard views route through the fallback.
+    public object? GetData(string format) => _clipboardTextDataObject is null
+        ? ManagedDataObject.GetData(format)
+        : GetData(format, autoConvert: true);
+
     public object? GetData(Type format) => ManagedDataObject.GetData(format);
-    public bool GetDataPresent(string format, bool autoConvert) => ManagedDataObject.GetDataPresent(format, autoConvert);
-    public bool GetDataPresent(string format) => ManagedDataObject.GetDataPresent(format);
+
+    // Availability may come from native synthesis even when the unwrapped managed object lacks the format.
+    public bool GetDataPresent(string format, bool autoConvert) =>
+        ManagedDataObject.GetDataPresent(format, autoConvert)
+        || (GetClipboardTextDataObject(format)?.GetDataPresent(format, autoConvert) ?? false);
+
+    // Keep the same overload-preservation rule as GetData(string) when no clipboard fallback is installed.
+    public bool GetDataPresent(string format) => _clipboardTextDataObject is null
+        ? ManagedDataObject.GetDataPresent(format)
+        : GetDataPresent(format, autoConvert: true);
+
     public bool GetDataPresent(Type format) => ManagedDataObject.GetDataPresent(format);
     public string[] GetFormats(bool autoConvert) => ManagedDataObject.GetFormats(autoConvert);
     public string[] GetFormats() => ManagedDataObject.GetFormats();
@@ -193,23 +238,29 @@ internal sealed unsafe partial class Composition<TOleServices, TNrbfSerializer, 
     #endregion
 
     #region ITypedDataObject
+    // Typed reads use the same managed-first, plain-text-only fallback and preserve the caller's resolver.
     public bool TryGetData<[DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.All)] T>(
         string format,
         Func<TypeName, Type?> resolver,
         bool autoConvert,
         [NotNullWhen(true), MaybeNullWhen(false)] out T data) =>
-            ManagedDataObject.TryGetData(format, resolver, autoConvert, out data);
+            ManagedDataObject.TryGetData(format, resolver, autoConvert, out data)
+            || (GetClipboardTextDataObject(format) is { } clipboard && clipboard.TryGetData(format, resolver, autoConvert, out data));
 
     public bool TryGetData<[DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.All)] T>(
         string format,
         bool autoConvert,
         [NotNullWhen(true), MaybeNullWhen(false)] out T data) =>
-            ManagedDataObject.TryGetData(format, autoConvert, out data);
+            ManagedDataObject.TryGetData(format, autoConvert, out data)
+            || (GetClipboardTextDataObject(format) is { } clipboard && clipboard.TryGetData(format, autoConvert, out data));
 
+    // A clipboard view must also provide synthesis when the typed overload omits autoConvert.
     public bool TryGetData<[DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.All)] T>(
         string format,
         [NotNullWhen(true), MaybeNullWhen(false)] out T data) =>
-            ManagedDataObject.TryGetData(format, out data);
+            _clipboardTextDataObject is null
+                ? ManagedDataObject.TryGetData(format, out data)
+                : TryGetData(format, autoConvert: true, out data);
 
     public bool TryGetData<[DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.All)] T>(
         [NotNullWhen(true), MaybeNullWhen(false)] out T data) =>
