@@ -23,8 +23,16 @@ internal unsafe class TestDataObject<TOleServices> :
         new(dataObject);
     static TestDataObject<TOleServices> IDataObjectInternal<TestDataObject<TOleServices>, ITestDataObject>.Create(object data) =>
         new(data);
+
+    // Exercise the same shared-adapter factory contract as the framework data objects.
+    static TestDataObject<TOleServices> IDataObjectInternal<TestDataObject<TOleServices>, ITestDataObject>.Create(
+        TestDataObject<TOleServices> clipboardData, ITestDataObject managedData) =>
+            new(clipboardData._innerData.WithManagedDataObject(managedData as IDataObjectInternal ?? new TestDataObjectAdapter(managedData)));
     static IDataObjectInternal IDataObjectInternal<TestDataObject<TOleServices>, ITestDataObject>.Wrap(ITestDataObject data) =>
         new TestDataObjectAdapter(data);
+
+    // Keep the factory's composed adapters intact, matching the framework implementations under test.
+    private TestDataObject(Composition<TOleServices, CoreNrbfSerializer, TestFormat> data) => _innerData = data;
 
     bool IDataObjectInternal<TestDataObject<TOleServices>, ITestDataObject>.TryUnwrapUserDataObject([NotNullWhen(true)] out ITestDataObject? dataObject)
         => TryUnwrapUserDataObject(out dataObject);
