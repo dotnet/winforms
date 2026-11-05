@@ -7107,11 +7107,18 @@ public partial class ToolStripTests : IDisposable
             int oldDpi = initialDpi;
             foreach (int newDpi in new[]
             {
+                ScaleHelper.ScaleToDpi(96, initialDpi),
                 ScaleHelper.ScaleToDpi(120, initialDpi),
                 ScaleHelper.ScaleToDpi(144, initialDpi),
                 ScaleHelper.ScaleToDpi(168, initialDpi),
                 ScaleHelper.ScaleToDpi(96, initialDpi),
+                ScaleHelper.ScaleToDpi(192, initialDpi),
+                ScaleHelper.ScaleToDpi(216, initialDpi),
+                ScaleHelper.ScaleToDpi(240, initialDpi),
                 ScaleHelper.ScaleToDpi(288, initialDpi),
+                ScaleHelper.ScaleToDpi(384, initialDpi),
+                ScaleHelper.ScaleToDpi(480, initialDpi),
+                ScaleHelper.ScaleToDpi(96, initialDpi),
                 initialDpi
             })
             {
@@ -7186,7 +7193,15 @@ public partial class ToolStripTests : IDisposable
             referenceTextBox.Width = textBox.Width;
             referenceComboBox.Width = comboBox.Width;
             int oldDpi = initialDpi;
-            foreach (int newDpi in new[] { 120, 144, 168, 96, 288, initialDpi })
+            foreach (int newDpi in new[]
+            {
+                ScaleHelper.ScaleToDpi(120, initialDpi),
+                ScaleHelper.ScaleToDpi(144, initialDpi),
+                ScaleHelper.ScaleToDpi(168, initialDpi),
+                ScaleHelper.ScaleToDpi(96, initialDpi),
+                ScaleHelper.ScaleToDpi(288, initialDpi),
+                initialDpi
+            })
             {
                 if (newDpi == oldDpi)
                 {
