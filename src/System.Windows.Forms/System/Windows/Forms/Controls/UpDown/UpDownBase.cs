@@ -617,6 +617,13 @@ public abstract partial class UpDownBase : ContainerControl
         }
     }
 
+    protected override void OnParentFontChanged(EventArgs e)
+    {
+        base.OnParentFontChanged(e);
+        Height = PreferredHeight;
+        _defaultButtonsWidth = LogicalToDeviceUnits(DefaultButtonsWidth);
+    }
+
     /// <summary>
     ///  Handles painting the buttons on the control.
     /// </summary>
