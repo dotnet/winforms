@@ -4916,6 +4916,25 @@ public unsafe partial class Control :
         }
 
         OnCreateControl();
+
+        if (Created && Properties.TryGetValue(s_bindingsProperty, out ControlBindingsCollection? bindings))
+        {
+            Binding[] bindingSnapshot = new Binding[bindings.Count];
+            bindings.CopyTo(bindingSnapshot, 0);
+
+            foreach (Binding binding in bindingSnapshot)
+            {
+                if (!binding.IsBinding)
+                {
+                    // Getting the context can raise notifications that activate this binding.
+                    BindingContext? context = BindingContext;
+                    if (Created && binding.BindableComponent == this && !binding.IsBinding)
+                    {
+                        BindingContext.UpdateBinding(context, binding);
+                    }
+                }
+            }
+        }
     }
 
     /// <summary>
@@ -11720,7 +11739,21 @@ public unsafe partial class Control :
     {
         for (int i = 0; i < DataBindings.Count; i++)
         {
-            BindingContext.UpdateBinding(BindingContext, DataBindings[i]);
+            // Attach only after Created, matching Binding.SetBindableComponent.
+            // Otherwise PushData on a shared PropertyManager can set Visible=false
+            // on a not-yet-created control (e.g. on a hidden TabPage).
+            BindingContext? context = Created ? BindingContext : null;
+            Binding binding = DataBindings[i];
+            if (context is not null
+                && binding.IsBinding
+                && binding.BindingManagerBase is not null
+                && binding.BindingManagerBase == context[binding.DataSource!, binding.BindingMemberInfo.BindingPath])
+            {
+                // Skip only active bindings; association before creation does not activate a binding.
+                continue;
+            }
+
+            BindingContext.UpdateBinding(context, binding);
         }
     }
 
