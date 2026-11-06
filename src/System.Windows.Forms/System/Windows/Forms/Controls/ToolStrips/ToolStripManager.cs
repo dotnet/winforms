@@ -753,12 +753,20 @@ public static partial class ToolStripManager
             return false;
         }
 
+        ContextMenuStrip? activeContextMenuStrip = null;
+
         // Start from the focused control and work your way up the parent chain
         do
         {
+            ContextMenuStrip? contextMenuStrip = activeControlInChain.ContextMenuStrip;
+            if (activeControlInChain == activeControl)
+            {
+                activeContextMenuStrip = contextMenuStrip;
+            }
+
             // Check the context menu strip first.
-            if (activeControlInChain.ContextMenuStrip is not null
-                && activeControlInChain.ContextMenuStrip.Shortcuts.TryGetValue(shortcut, out ToolStripMenuItem? item)
+            if (contextMenuStrip is not null
+                && contextMenuStrip.Shortcuts.TryGetValue(shortcut, out ToolStripMenuItem? item)
                 && item.ProcessCmdKey(ref m, shortcut))
             {
                 return true;
@@ -782,7 +790,7 @@ public static partial class ToolStripManager
             bool isAssociatedContextMenu = false;
             bool isDoublyAssignedContextMenuStrip = false;
 
-            if ((activeControl is not null && toolStrip == activeControl.ContextMenuStrip)
+            if (toolStrip == activeContextMenuStrip
                 || !toolStrip.Shortcuts.ContainsKey(shortcut))
             {
                 continue;
@@ -803,7 +811,7 @@ public static partial class ToolStripManager
                     isDoublyAssignedContextMenuStrip = topLevelContextMenu.IsAssignedToDropDownItem;
                     if (!isDoublyAssignedContextMenuStrip)
                     {
-                        if (topLevelContextMenu != activeControl!.ContextMenuStrip)
+                        if (topLevelContextMenu != activeContextMenuStrip)
                         {
                             // The toplevel context menu is NOT the same as the active control's context menu.
                             continue;
