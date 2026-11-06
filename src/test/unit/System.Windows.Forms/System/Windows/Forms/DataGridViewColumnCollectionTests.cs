@@ -553,6 +553,30 @@ public class DataGridViewColumnCollectionTests
         Assert.Throws<InvalidOperationException>(() => control.Columns.Add(column));
     }
 
+    [WinFormsFact]
+    public void DataGridViewColumnCollection_RemoveAt_WithAccessibilityObject_DoesNotUnshareRows()
+    {
+        using DataGridView control = new()
+        {
+            ColumnCount = 2,
+            RowCount = 100
+        };
+
+        for (int rowIndex = 0; rowIndex < control.Rows.Count; rowIndex++)
+        {
+            Assert.Equal(-1, control.Rows.SharedRow(rowIndex).Index);
+        }
+
+        _ = control.AccessibilityObject;
+
+        control.Columns.RemoveAt(0);
+
+        for (int rowIndex = 0; rowIndex < control.Rows.Count; rowIndex++)
+        {
+            Assert.Equal(-1, control.Rows.SharedRow(rowIndex).Index);
+        }
+    }
+
     private class SubDataGridView : DataGridView
     {
         public new void OnRowValidating(DataGridViewCellCancelEventArgs e) => base.OnRowValidating(e);
