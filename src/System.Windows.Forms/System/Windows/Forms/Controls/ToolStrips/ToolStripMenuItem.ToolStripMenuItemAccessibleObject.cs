@@ -121,6 +121,20 @@ public partial class ToolStripMenuItem
 
         private protected override bool IsInternal => true;
 
+        internal override void Invoke()
+        {
+            ToolStrip? owningToolStrip = _owningToolStripMenuItem.Owner;
+
+            if (owningToolStrip is { IsHandleCreated: true })
+            {
+                owningToolStrip.BeginInvoke(new MethodInvoker(DoDefaultAction));
+
+                return;
+            }
+
+            DoDefaultAction();
+        }
+
         internal override bool IsPatternSupported(UIA_PATTERN_ID patternId) =>
             patternId switch
             {
