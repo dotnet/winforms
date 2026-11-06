@@ -2040,6 +2040,32 @@ public class RadioButtonTests : AbstractButtonBaseTests
         Assert.Equal("System.Windows.Forms.RadioButton, Checked: False", control.ToString());
     }
 
+    [WinFormsTheory]
+    [InlineData(FlatStyle.Standard, VisualStylesMode.Net11, true)]
+    [InlineData(FlatStyle.Standard, VisualStylesMode.Classic, false)]
+    [InlineData(FlatStyle.System, VisualStylesMode.Net11, false)]
+    public void RadioButton_AppearanceButton_DarkMode_OwnerDraw(
+        FlatStyle flatStyle,
+        VisualStylesMode visualStylesMode,
+        bool expectedOwnerDraw)
+    {
+        using ApplicationColorModeTestScope colorModeScope = new(darkModeEnabled: true);
+
+        using OwnerDrawTestRadioButton control = new()
+        {
+            Appearance = Appearance.Button,
+            FlatStyle = flatStyle,
+            VisualStylesMode = visualStylesMode,
+            Checked = true
+        };
+
+        control.CreateControl();
+
+        Assert.Equal(expectedOwnerDraw, control.UserPaintEnabled);
+        Assert.Equal(expectedOwnerDraw, HasOwnerDrawStyle(control.WindowStyle));
+        Assert.True(control.IsHandleCreated);
+    }
+
     private class SubRadioButton : RadioButton
     {
         public new bool CanEnableIme => base.CanEnableIme;
@@ -2136,6 +2162,17 @@ public class RadioButtonTests : AbstractButtonBaseTests
 
         public new void SetStyle(ControlStyles flag, bool value) => base.SetStyle(flag, value);
     }
+
+    private sealed class OwnerDrawTestRadioButton : RadioButton
+    {
+        public bool UserPaintEnabled => GetStyle(ControlStyles.UserPaint);
+
+        public new int WindowStyle =>
+            CreateParams.Style;
+    }
+
+    private static bool HasOwnerDrawStyle(int style) =>
+        (style & PInvoke.BS_OWNERDRAW) == PInvoke.BS_OWNERDRAW;
 
     private class TestRadioButton : RadioButton
     {
