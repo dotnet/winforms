@@ -164,6 +164,24 @@ internal unsafe interface IDataObjectInternal<TDataObject, TIDataObject> : IData
     static abstract TDataObject Create();
     static abstract TDataObject Create(IDataObject* dataObject);
     static abstract TDataObject Create(object data);
+
+    /// <summary>
+    ///  Combines a captured clipboard proxy with managed-first retrieval without changing the original object.
+    /// </summary>
+    /// <param name="clipboardData">
+    ///  The platform data object wrapping the captured native OLE clipboard proxy. Its owning adapters are
+    ///  shared with the result and supply Windows' synthesized Text, UnicodeText, and OEMText formats.
+    /// </param>
+    /// <param name="managedData">
+    ///  The original managed data object recovered from the clipboard. Its retrieval takes precedence so
+    ///  custom payloads retain their in-process identity without being serialized through the native proxy.
+    /// </param>
+    /// <returns>
+    ///  A new platform data object that reads managed data first and falls back to the captured proxy only
+    ///  for plain-text formats. Neither input object is modified.
+    /// </returns>
+    static abstract TDataObject Create(TDataObject clipboardData, TIDataObject managedData);
+
     static abstract IDataObjectInternal Wrap(TIDataObject data);
 
     /// <summary>
