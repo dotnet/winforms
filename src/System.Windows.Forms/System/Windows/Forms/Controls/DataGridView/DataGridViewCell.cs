@@ -3,6 +3,7 @@
 
 using System.ComponentModel;
 using System.Drawing;
+using System.Drawing.Drawing2D;
 using System.Globalization;
 using System.Text;
 using Windows.Win32.UI.Accessibility;
@@ -3586,6 +3587,29 @@ public abstract partial class DataGridViewCell : DataGridViewElement, ICloneable
     internal static bool PaintFocus(DataGridViewPaintParts paintParts)
     {
         return (paintParts & DataGridViewPaintParts.Focus) != 0;
+    }
+
+    internal static void DrawFocusRectangle(
+        Graphics graphics,
+        Rectangle bounds,
+        Color foreColor,
+        Color backColor)
+    {
+        if (!Application.IsDarkModeEnabled
+            || !AppContextSwitches.DataGridViewDarkModeTheming
+            || SystemInformation.HighContrast)
+        {
+            ControlPaint.DrawFocusRectangle(graphics, bounds, foreColor, backColor);
+            return;
+        }
+
+        bounds.Width--;
+        bounds.Height--;
+        using var focusPen = new Pen(DarkModeButtonColors.DefaultColors.FocusBorderColor)
+        {
+            DashStyle = DashStyle.Dot
+        };
+        graphics.DrawRectangle(focusPen, bounds);
     }
 
     internal static void PaintPadding(
