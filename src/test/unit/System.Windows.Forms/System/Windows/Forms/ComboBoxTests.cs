@@ -2925,6 +2925,46 @@ public class ComboBoxTests
         Assert.Equal("bound", model.TextValue);
     }
 
+    [WinFormsFact]
+    public void TextBox_BindingRemovedDuringActivation_DoesNotSkipRemainingBindings()
+    {
+        using TextBox textBox = new() { BindingContext = new BindingContext() };
+        Issue9272DataModel model = new() { TextValue = "bound" };
+        Binding textBinding = textBox.DataBindings.Add(
+            nameof(textBox.Text),
+            model,
+            nameof(Issue9272DataModel.TextValue),
+            true);
+        Binding enabledBinding = textBox.DataBindings.Add(
+            nameof(textBox.Enabled),
+            model,
+            nameof(Issue9272DataModel.IsChecked),
+            true);
+        Binding visibleBinding = textBox.DataBindings.Add(
+            nameof(textBox.Visible),
+            model,
+            nameof(Issue9272DataModel.DisableText));
+        bool textBindingRemoved = false;
+        enabledBinding.Format += (sender, e) =>
+        {
+            if (!textBindingRemoved)
+            {
+                textBindingRemoved = true;
+                textBox.DataBindings.Remove(textBinding);
+            }
+        };
+
+        textBox.CreateControl();
+
+        Assert.True(textBindingRemoved);
+        Assert.Null(textBinding.BindableComponent);
+        Assert.True(enabledBinding.IsBinding);
+        Assert.True(visibleBinding.IsBinding);
+
+        model.IsChecked = true;
+        Assert.False(textBox.Visible);
+    }
+
     public class CustomComboBox : ComboBox
     {
         // Make methods private to improve encapsulation

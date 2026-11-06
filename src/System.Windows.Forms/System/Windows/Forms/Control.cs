@@ -4919,9 +4919,11 @@ public unsafe partial class Control :
 
         if (Created && Properties.TryGetValue(s_bindingsProperty, out ControlBindingsCollection? bindings))
         {
-            for (int i = 0; i < bindings.Count; i++)
+            Binding[] bindingSnapshot = new Binding[bindings.Count];
+            bindings.CopyTo(bindingSnapshot, 0);
+
+            foreach (Binding binding in bindingSnapshot)
             {
-                Binding binding = bindings[i];
                 if (!binding.IsBinding)
                 {
                     // Getting the context can raise notifications that activate this binding.
