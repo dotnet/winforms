@@ -487,6 +487,65 @@ public class ContainerControlTests
         Assert.Equal(3, callCount);
     }
 
+    [WinFormsTheory]
+    [InlineData(false, false)]
+    [InlineData(false, true)]
+    [InlineData(true, false)]
+    [InlineData(true, true)]
+    public void ContainerControl_Font_Set_ScalesInheritingContainers(bool nested, bool explicitFont)
+    {
+        using Font font = new(Control.DefaultFont.FontFamily, Control.DefaultFont.Size * 2);
+        using ContainerControl parent = new()
+        {
+            AutoScaleMode = AutoScaleMode.Font
+        };
+        using ContainerControl container = new();
+        if (explicitFont)
+        {
+            container.Font = Control.DefaultFont;
+        }
+
+        using ContainerControl child = new()
+        {
+            Bounds = new Rectangle(40, 50, 100, 80)
+        };
+        if (explicitFont && !nested)
+        {
+            child.Font = Control.DefaultFont;
+        }
+
+        using ContainerControl sibling = new()
+        {
+            Bounds = child.Bounds
+        };
+        parent.Controls.Add(container);
+        (nested ? container.Controls : parent.Controls).Add(child);
+        parent.Controls.Add(sibling);
+        Assert.NotEqual(IntPtr.Zero, parent.Handle);
+        Assert.NotEqual(IntPtr.Zero, container.Handle);
+        Assert.NotEqual(IntPtr.Zero, child.Handle);
+        Assert.NotEqual(IntPtr.Zero, sibling.Handle);
+        parent.PerformAutoScale();
+        SizeF dimensions = parent.CurrentAutoScaleDimensions;
+        Rectangle bounds = child.Bounds;
+
+        parent.Font = font;
+
+        SizeF factor = ContainerControl.GetCurrentAutoScaleFactor(parent.CurrentAutoScaleDimensions, dimensions);
+        Rectangle expected = new(
+            (int)Math.Round(bounds.X * factor.Width),
+            (int)Math.Round(bounds.Y * factor.Height),
+            (int)Math.Round(bounds.Width * factor.Width),
+            (int)Math.Round(bounds.Height * factor.Height));
+        child.Bounds.Should().Be(expected);
+        sibling.Bounds.Should().Be(expected);
+
+        child.Font = Control.DefaultFont;
+        child.Bounds.Should().Be(expected);
+        child.ResetFont();
+        child.Bounds.Should().Be(expected);
+    }
+
     [WinFormsFact]
     public void ContainerControl_GetAutoSizeMode_Invoke_ReturnsExpected()
     {

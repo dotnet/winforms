@@ -77,8 +77,9 @@ public class ContainerControl : ScrollableControl, IContainerControl
 
     /// <summary>
     ///  Child Container control that inherit <see cref="AutoScaleMode"/> (and does not store their own) would need
-    ///  <see cref="AutoScaleFactor"/> from parent to scale them during Dpi changed events. We can not use
-    ///  <see cref="AutoScaleFactor"/> property as it get computed with already updated Font and Dpi of their parent.
+    ///  <see cref="AutoScaleFactor"/> from parent to scale them during font and DPI changes. The factor is retained
+    ///  until font changes have propagated to children, then restored to avoid scaling unrelated font changes.
+    ///  We cannot use the <see cref="AutoScaleFactor"/> property as the parent's scaling baseline is already updated.
     /// </summary>
     internal SizeF _currentAutoScaleFactor = new(1F, 1F);
 
@@ -139,9 +140,7 @@ public class ContainerControl : ScrollableControl, IContainerControl
 
             // If no one has configured auto scale dimensions yet, the scaling factor
             // is the unit scale.
-            _currentAutoScaleFactor = GetCurrentAutoScaleFactor(current, saved);
-
-            return _currentAutoScaleFactor;
+            return GetCurrentAutoScaleFactor(current, saved);
         }
     }
 
@@ -849,33 +848,42 @@ public class ContainerControl : ScrollableControl, IContainerControl
     [EditorBrowsable(EditorBrowsableState.Advanced)]
     protected override void OnFontChanged(EventArgs e)
     {
-        // Font may be updated for container controls that are set
-        // to scale in Dpi mode (during WM_DPICHANGED event).
-        // This may require scaling/relayout of the form. AutoScaleFactor will take
-        // AutoScaleMode into account while scaling the controls.
-        if (AutoScaleMode != AutoScaleMode.None && IsHandleCreated)
+        SizeF previousAutoScaleFactor = _currentAutoScaleFactor;
+        try
         {
-            _currentAutoScaleDimensions = SizeF.Empty;
-
-            // If the font changes and we are going to autoscale
-            // as a result, do it now, and wrap the entire
-            // transaction in a suspend layout to prevent
-            // the layout engines from conflicting with our
-            // work.
-            SuspendAllLayout(this);
-
-            try
+            // Font may be updated for container controls that are set
+            // to scale in Dpi mode (during WM_DPICHANGED event).
+            // This may require scaling/relayout of the form. AutoScaleFactor will take
+            // AutoScaleMode into account while scaling the controls.
+            if (AutoScaleMode != AutoScaleMode.None && IsHandleCreated)
             {
-                // Parameter 'causedByFontChanged' helps to differentiate the scaling between ResumeLayout and FontChanged event.
-                PerformAutoScale(!RequiredScalingEnabled, excludedBounds: true, causedByFontChanged: true);
+                _currentAutoScaleDimensions = SizeF.Empty;
+                _currentAutoScaleFactor = AutoScaleFactor;
+
+                // If the font changes and we are going to autoscale
+                // as a result, do it now, and wrap the entire
+                // transaction in a suspend layout to prevent
+                // the layout engines from conflicting with our
+                // work.
+                SuspendAllLayout(this);
+
+                try
+                {
+                    // Parameter 'causedByFontChanged' helps to differentiate the scaling between ResumeLayout and FontChanged event.
+                    PerformAutoScale(!RequiredScalingEnabled, excludedBounds: true, causedByFontChanged: true);
+                }
+                finally
+                {
+                    ResumeAllLayout(this, performLayout: false);
+                }
             }
-            finally
-            {
-                ResumeAllLayout(this, performLayout: false);
-            }
+
+            base.OnFontChanged(e);
         }
-
-        base.OnFontChanged(e);
+        finally
+        {
+            _currentAutoScaleFactor = previousAutoScaleFactor;
+        }
     }
 
     /// <summary>
