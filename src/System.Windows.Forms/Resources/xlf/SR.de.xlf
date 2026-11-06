@@ -1334,7 +1334,7 @@
       </trans-unit>
       <trans-unit id="ContainerControlAutoScaleModeDescr">
         <source>Determines how the form or control will scale when screen resolution or fonts change.</source>
-        <target state="translated">Bestimmt, wie die Größe des Formulars oder Steuerelements angepasst wird, wenn sich die Bildschirmauflösung oder Schriftarten ändern. </target>
+        <target state="translated">Bestimmt, wie die Größe des Formulars oder Steuerelements angepasst wird, wenn sich die Bildschirmauflösung oder Schriftarten ändern.</target>
         <note />
       </trans-unit>
       <trans-unit id="ContainerControlAutoValidate">
