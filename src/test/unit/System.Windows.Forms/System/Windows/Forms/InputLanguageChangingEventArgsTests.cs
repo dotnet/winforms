@@ -12,8 +12,11 @@ public class InputLanguageChangingEventArgsTests
 {
     public static IEnumerable<object[]> Ctor_CultureInfo_Bool_TestData()
     {
-        yield return new object[] { new CultureInfo("en-US"), true };
-        yield return new object[] { new CultureInfo("en-US"), false };
+        foreach (InputLanguage language in InputLanguage.InstalledInputLanguages)
+        {
+            yield return new object[] { language.Culture, true };
+            yield return new object[] { language.Culture, false };
+        }
     }
 
     [Theory]
@@ -48,20 +51,17 @@ public class InputLanguageChangingEventArgsTests
 
     public static IEnumerable<object[]> Ctor_InputLanguage_Bool_TestData()
     {
-        yield return new object[] { InputLanguage.FromCulture(CultureInfo.InvariantCulture), true };
-        yield return new object[] { InputLanguage.FromCulture(new CultureInfo("en")), false };
+        foreach (InputLanguage language in InputLanguage.InstalledInputLanguages)
+        {
+            yield return new object[] { language, true };
+            yield return new object[] { language, false };
+        }
     }
 
     [Theory]
     [MemberData(nameof(Ctor_InputLanguage_Bool_TestData))]
     public void Ctor_InputLanguage_Bool(InputLanguage inputLanguage, bool sysCharSet)
     {
-        if (inputLanguage is null)
-        {
-            // Couldn't get the language.
-            return;
-        }
-
         InputLanguageChangingEventArgs e = new(inputLanguage, sysCharSet);
         Assert.Equal(inputLanguage, e.InputLanguage);
         Assert.Equal(inputLanguage.Culture, e.Culture);
