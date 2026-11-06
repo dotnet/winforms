@@ -1,6 +1,7 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
+using System.ComponentModel;
 using System.Drawing.Imaging;
 using System.Runtime.InteropServices;
 using System.Text;
@@ -18,6 +19,19 @@ public class ImageTests
     private const int PropertyTagExifUserComment = 0x9286;
     private const int PropertyTagTypeASCII = 2;
     private const int PropertyTagTypeShort = 3;
+
+    [Theory]
+    [InlineData(nameof(Image.Width))]
+    [InlineData(nameof(Image.Height))]
+    public void ImageDimensionProperty_DefaultValueIsZero(string propertyName)
+    {
+        PropertyDescriptor? property = TypeDescriptor.GetProperties(typeof(Image))[propertyName];
+        Assert.NotNull(property);
+
+        DefaultValueAttribute defaultValue = Assert.IsType<DefaultValueAttribute>(
+            property.Attributes[typeof(DefaultValueAttribute)]);
+        Assert.Equal(0, defaultValue.Value);
+    }
 
     [Fact]
     public void PropertyIdList_GetBitmapJpg_Success()
