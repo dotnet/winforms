@@ -80,6 +80,8 @@ public partial class ToolStripTextBox : ToolStripControlHost
     [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public TextBox TextBox => (TextBox)Control;
 
+    internal void SetFontForDpi(Font font) => ((ToolStripTextBoxControl)Control).SetFontForDpi(font);
+
     private static ToolStripTextBoxControl CreateControlInstance() => new()
     {
         BorderStyle = BorderStyle.Fixed3D,
