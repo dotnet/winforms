@@ -2,10 +2,14 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 
 using System.Collections.Specialized;
+using System.ComponentModel;
 using System.Diagnostics.CodeAnalysis;
+using System.Runtime.ExceptionServices;
+using System.Runtime.InteropServices;
 using Windows.Win32;
 using Windows.Win32.Foundation;
 using Windows.Win32.System.Com;
+using Windows.Win32.UI.WindowsAndMessaging;
 
 using ClipboardCore = System.Private.Windows.Ole.ClipboardCore<System.Private.Windows.Ole.MockOleServices<System.Private.Windows.Ole.ClipboardCoreTests>>;
 using ClipboardScope = System.Private.Windows.Ole.ClipboardScope<System.Private.Windows.Ole.MockOleServices<System.Private.Windows.Ole.ClipboardCoreTests>>;
@@ -114,6 +118,469 @@ public unsafe class ClipboardCoreTests
             data.IsNull.Should().BeTrue();
             original.Should().BeNull();
         }
+    }
+
+    [StaTheory]
+    [InlineData("Clear", 0x0305u)]
+    [InlineData("SetData", 0x0305u)]
+    [InlineData("Flush", 0x0305u)]
+    [InlineData("SetDataAndFlush", 0x0305u)]
+    [InlineData("TryGetData", 0x0305u)]
+    [InlineData("Clear", 0x8001u)]
+    [InlineData("SetData", 0x8001u)]
+    [InlineData("Flush", 0x8001u)]
+    [InlineData("SetDataAndFlush", 0x8001u)]
+    [InlineData("TryGetData", 0x8001u)]
+    public void Retry_DispatchesSentMessagesWithoutDispatchingPostedMessages(string operation, uint sentMessage)
+    {
+        using ClipboardScope scope = new();
+        DataObject dataObject = new();
+        ClipboardCore.SetData(dataObject, copy: false).Should().Be(HRESULT.S_OK);
+        using ManualResetEventSlim operationStarted = new();
+        int handled = 0;
+        int posted = 0;
+        using SentMessageWindow window = new(
+            () => Volatile.Write(ref handled, 1),
+            () => posted++,
+            sentMessage);
+
+        ((bool)PInvokeCore.PostMessage((HWND)window.Handle, (uint)0x8000, default, default)).Should().BeTrue();
+        bool sent = false;
+        Thread reader = new(() =>
+        {
+            if (operationStarted.Wait(TimeSpan.FromSeconds(5)))
+            {
+                sent = window.SendRequest();
+            }
+        });
+
+        reader.Start();
+        SetResultCallback(operation, () =>
+        {
+            operationStarted.Set();
+            return Volatile.Read(ref handled) == 1 ? HRESULT.S_OK : HRESULT.CLIPBRD_E_CANT_OPEN;
+        });
+
+        try
+        {
+            HRESULT result = InvokeClipboardOperation(operation, dataObject);
+            window.ThrowCallbackException();
+            posted.Should().Be(0);
+            result.Should().Be(HRESULT.S_OK);
+            Volatile.Read(ref handled).Should().Be(1);
+            MSG message;
+            ((bool)PInvokeCore.PeekMessage(
+                &message,
+                (HWND)window.Handle,
+                0x8000,
+                0x8000,
+                PEEK_MESSAGE_REMOVE_TYPE.PM_NOREMOVE)).Should().BeTrue();
+        }
+        finally
+        {
+            SetResultCallback(operation, null);
+            operationStarted.Set();
+            reader.Join(TimeSpan.FromSeconds(5)).Should().BeTrue();
+        }
+
+        sent.Should().BeTrue();
+    }
+
+    [StaTheory]
+    [InlineData("Clear", false)]
+    [InlineData("SetData", false)]
+    [InlineData("Flush", false)]
+    [InlineData("SetDataAndFlush", false)]
+    [InlineData("TryGetData", false)]
+    [InlineData("Clear", true)]
+    [InlineData("SetData", true)]
+    [InlineData("Flush", true)]
+    [InlineData("SetDataAndFlush", true)]
+    [InlineData("TryGetData", true)]
+    public void Retry_RejectsReentrantClipboardOperations(string operation, bool failOuter)
+    {
+        using ClipboardScope scope = new();
+        DataObject initialData = new();
+        initialData.SetData(DataFormatNames.UnicodeText, "initial");
+        ClipboardCore.SetData(initialData, copy: false).Should().Be(HRESULT.S_OK);
+        DataObject outerData = new();
+        outerData.SetData(DataFormatNames.UnicodeText, "outer");
+        DataObject nestedData = new();
+        nestedData.SetData(DataFormatNames.UnicodeText, "nested");
+        using ManualResetEventSlim operationStarted = new();
+        bool outerActive = false;
+        bool reenteredOuter = false;
+        bool inSentHandler = false;
+        bool nestedFinished = false;
+        int outerAttempts = 0;
+        int nestedAttempts = 0;
+        HRESULT nestedResult = HRESULT.E_FAIL;
+        using SentMessageWindow window = new(
+            () =>
+            {
+                reenteredOuter = outerActive;
+                inSentHandler = true;
+                try
+                {
+                    nestedResult = InvokeClipboardOperation(operation, nestedData, retryTimes: 2, retryDelay: 10);
+                }
+                finally
+                {
+                    inSentHandler = false;
+                    nestedFinished = true;
+                }
+            },
+            () => { },
+            sentMessage: 0x8001);
+        bool sent = false;
+        Thread sender = new(() =>
+        {
+            if (operationStarted.Wait(TimeSpan.FromSeconds(5)))
+            {
+                sent = window.SendRequest();
+            }
+        });
+
+        SetResultCallback(operation, () =>
+        {
+            if (inSentHandler)
+            {
+                nestedAttempts++;
+                return HRESULT.S_OK;
+            }
+
+            outerAttempts++;
+            operationStarted.Set();
+            return failOuter || !nestedFinished ? HRESULT.CLIPBRD_E_CANT_OPEN : HRESULT.S_OK;
+        });
+        sender.Start();
+
+        try
+        {
+            outerActive = true;
+            HRESULT result = InvokeClipboardOperation(operation, outerData, retryTimes: 2, retryDelay: 100);
+            outerActive = false;
+            window.ThrowCallbackException();
+            result.Should().Be(failOuter ? HRESULT.CLIPBRD_E_CANT_OPEN : HRESULT.S_OK);
+            nestedResult.Should().Be(HRESULT.CLIPBRD_E_CANT_OPEN);
+            reenteredOuter.Should().BeTrue();
+            outerAttempts.Should().Be(failOuter ? 3 : 2);
+            nestedAttempts.Should().Be(0);
+        }
+        finally
+        {
+            SetResultCallback(operation, null);
+            operationStarted.Set();
+            sender.Join(TimeSpan.FromSeconds(5)).Should().BeTrue();
+        }
+
+        sent.Should().BeTrue();
+        HRESULT readResult = ClipboardCore.GetDataObject<DataObject, ITestDataObject>(out ITestDataObject? actual);
+        if (operation == "Clear" && !failOuter)
+        {
+            readResult.Should().Be(HRESULT.CLIPBRD_E_BAD_DATA);
+            actual.Should().BeNull();
+        }
+        else
+        {
+            readResult.Should().Be(HRESULT.S_OK);
+            string expectedText = operation switch
+            {
+                "SetData" => failOuter ? "initial" : "outer",
+                "SetDataAndFlush" => "outer",
+                _ => "initial"
+            };
+            actual.Should().NotBeNull();
+            actual!.GetData(DataFormatNames.UnicodeText).Should().Be(expectedText);
+        }
+    }
+
+    [StaFact]
+    public void Retry_RejectsReentryAcrossOleServices()
+    {
+        using ClipboardScope scope = new();
+        using ManualResetEventSlim operationStarted = new();
+        int outerAttempts = 0;
+        int nestedAttempts = 0;
+        HRESULT nestedResult = HRESULT.E_FAIL;
+        using SentMessageWindow window = new(
+            () => nestedResult = ClipboardCore<MockOleServices<SentMessageWindow>>.Clear(),
+            () => { },
+            sentMessage: 0x8001);
+
+        MockOleServices<ClipboardCoreTests>.OleSetClipboardResult = () =>
+        {
+            operationStarted.Set();
+            return ++outerAttempts == 1 ? HRESULT.CLIPBRD_E_CANT_OPEN : HRESULT.S_OK;
+        };
+        MockOleServices<SentMessageWindow>.OleSetClipboardResult = () =>
+        {
+            nestedAttempts++;
+            return HRESULT.S_OK;
+        };
+        bool sent = false;
+        Thread sender = new(() =>
+        {
+            if (operationStarted.Wait(TimeSpan.FromSeconds(5)))
+            {
+                sent = window.SendRequest();
+            }
+        });
+
+        sender.Start();
+        try
+        {
+            ClipboardCore.Clear(retryTimes: 1, retryDelay: 100).Should().Be(HRESULT.S_OK);
+            window.ThrowCallbackException();
+            nestedResult.Should().Be(HRESULT.CLIPBRD_E_CANT_OPEN);
+            nestedAttempts.Should().Be(0);
+
+            ClipboardCore<MockOleServices<SentMessageWindow>>.Clear().Should().Be(HRESULT.S_OK);
+            nestedAttempts.Should().Be(1);
+        }
+        finally
+        {
+            MockOleServices<ClipboardCoreTests>.OleSetClipboardResult = null;
+            MockOleServices<SentMessageWindow>.OleSetClipboardResult = null;
+            operationStarted.Set();
+            sender.Join(TimeSpan.FromSeconds(5)).Should().BeTrue();
+        }
+
+        sent.Should().BeTrue();
+    }
+
+    [StaFact]
+    public void Retry_DoesNotBlockNativeOleCallbacks()
+    {
+        using ClipboardScope scope = new();
+        DataObject dataObject = new();
+        ClipboardCore.SetData(dataObject, copy: false).Should().Be(HRESULT.S_OK);
+        HRESULT callbackResult = HRESULT.E_FAIL;
+        bool callbackHasData = false;
+        MockOleServices<ClipboardCoreTests>.OleSetClipboardResult = () =>
+        {
+            callbackResult = ClipboardCore.TryGetData(out var data, out _, retryTimes: 0, retryDelay: 0);
+            using (data)
+            {
+                callbackHasData = !data.IsNull;
+            }
+
+            return HRESULT.S_OK;
+        };
+
+        try
+        {
+            ClipboardCore.Clear().Should().Be(HRESULT.S_OK);
+            callbackResult.Should().Be(HRESULT.S_OK);
+            callbackHasData.Should().BeTrue();
+        }
+        finally
+        {
+            MockOleServices<ClipboardCoreTests>.OleSetClipboardResult = null;
+        }
+    }
+
+    [Theory]
+    [InlineData("Clear", 0)]
+    [InlineData("SetData", 0)]
+    [InlineData("Flush", 0)]
+    [InlineData("SetDataAndFlush", 0)]
+    [InlineData("TryGetData", 0)]
+    [InlineData("Clear", 20)]
+    [InlineData("SetData", 20)]
+    [InlineData("Flush", 20)]
+    [InlineData("SetDataAndFlush", 20)]
+    [InlineData("TryGetData", 20)]
+    public void Retry_PreservesAttemptLimitAndFailure(string operation, int retryDelay)
+    {
+        using ClipboardScope scope = new();
+        DataObject dataObject = new();
+        int attempts = 0;
+        SetResultCallback(operation, () =>
+        {
+            attempts++;
+            return HRESULT.CLIPBRD_E_CANT_OPEN;
+        });
+
+        try
+        {
+            InvokeClipboardOperation(operation, dataObject, retryTimes: 2, retryDelay)
+                .Should().Be(HRESULT.CLIPBRD_E_CANT_OPEN);
+            attempts.Should().Be(3);
+        }
+        finally
+        {
+            SetResultCallback(operation, null);
+        }
+    }
+
+    [Theory]
+    [InlineData(0, false, false)]
+    [InlineData(2, false, false)]
+    [InlineData(2, true, false)]
+    [InlineData(2, false, true)]
+    public void Retry_SetDataAndFlushPreservesIndependentAttemptLimits(int retryTimes, bool failSet, bool failFlush)
+    {
+        using ClipboardScope scope = new();
+        DataObject dataObject = new();
+        int setAttempts = 0;
+        int flushAttempts = 0;
+        MockOleServices<ClipboardCoreTests>.OleSetClipboardResult = () =>
+            ++setAttempts <= retryTimes || failSet ? HRESULT.CLIPBRD_E_CANT_OPEN : HRESULT.S_OK;
+        MockOleServices<ClipboardCoreTests>.OleFlushClipboardResult = () =>
+            ++flushAttempts <= retryTimes || failFlush ? HRESULT.E_FAIL : HRESULT.S_OK;
+
+        try
+        {
+            HRESULT expected = failSet
+                ? HRESULT.CLIPBRD_E_CANT_OPEN
+                : failFlush ? HRESULT.E_FAIL : HRESULT.S_OK;
+            ClipboardCore.SetData(dataObject, copy: true, retryTimes, retryDelay: 0).Should().Be(expected);
+            setAttempts.Should().Be(retryTimes + 1);
+            flushAttempts.Should().Be(failSet ? 0 : retryTimes + 1);
+        }
+        finally
+        {
+            MockOleServices<ClipboardCoreTests>.OleSetClipboardResult = null;
+            MockOleServices<ClipboardCoreTests>.OleFlushClipboardResult = null;
+        }
+    }
+
+    private static void SetResultCallback(string operation, Func<HRESULT>? callback)
+    {
+        switch (operation)
+        {
+            case "Clear":
+            case "SetData":
+                MockOleServices<ClipboardCoreTests>.OleSetClipboardResult = callback;
+                break;
+            case "Flush":
+            case "SetDataAndFlush":
+                MockOleServices<ClipboardCoreTests>.OleFlushClipboardResult = callback;
+                break;
+            case "TryGetData":
+                MockOleServices<ClipboardCoreTests>.OleGetClipboardResult = callback;
+                break;
+            default:
+                throw new ArgumentOutOfRangeException(nameof(operation));
+        }
+    }
+
+    private static HRESULT InvokeClipboardOperation(
+        string operation,
+        DataObject dataObject,
+        int retryTimes = 10,
+        int retryDelay = 100)
+    {
+        switch (operation)
+        {
+            case "Clear":
+                return ClipboardCore.Clear(retryTimes, retryDelay);
+            case "SetData":
+                return ClipboardCore.SetData(dataObject, copy: false, retryTimes, retryDelay);
+            case "Flush":
+                return ClipboardCore.Flush(retryTimes, retryDelay);
+            case "SetDataAndFlush":
+                return ClipboardCore.SetData(dataObject, copy: true, retryTimes, retryDelay);
+            case "TryGetData":
+                HRESULT result = ClipboardCore.TryGetData(out var data, out _, retryTimes, retryDelay);
+                data.Dispose();
+                return result;
+            default:
+                throw new ArgumentOutOfRangeException(nameof(operation));
+        }
+    }
+
+    private sealed class SentMessageWindow : IDisposable
+    {
+        private readonly WindowProcedure _procedure;
+        private readonly nint _previousProcedure;
+        private readonly uint _sentMessage;
+        private ExceptionDispatchInfo? _callbackException;
+
+        public nint Handle { get; }
+
+        public SentMessageWindow(Action sent, Action posted, uint sentMessage = 0x0305)
+        {
+            _sentMessage = sentMessage;
+            Handle = CreateWindowExW(0, "STATIC", null, 0, 0, 0, 0, 0, -3, 0, 0, 0);
+            if (Handle == 0)
+            {
+                throw new Win32Exception();
+            }
+
+            _procedure = (window, message, wParam, lParam) =>
+            {
+                if (message == _sentMessage)
+                {
+                    try
+                    {
+                        sent();
+                    }
+                    catch (Exception exception)
+                    {
+                        _callbackException = ExceptionDispatchInfo.Capture(exception);
+                    }
+
+                    return 0;
+                }
+
+                if (message == 0x8000)
+                {
+                    posted();
+                    return 0;
+                }
+
+                return CallWindowProcW(_previousProcedure, window, message, wParam, lParam);
+            };
+
+            nint procedure = Marshal.GetFunctionPointerForDelegate(_procedure);
+            _previousProcedure = sizeof(nint) == 8
+                ? SetWindowLongPtrW(Handle, -4, procedure)
+                : SetWindowLongW(Handle, -4, procedure);
+            if (_previousProcedure == 0)
+            {
+                int error = Marshal.GetLastWin32Error();
+                DestroyWindow(Handle);
+                throw new Win32Exception(error);
+            }
+        }
+
+        public bool SendRequest() =>
+            SendMessageTimeoutW(Handle, _sentMessage, 0, 0, 3, 3000, out _) != 0;
+
+        public void ThrowCallbackException() => _callbackException?.Throw();
+
+        public void Dispose()
+        {
+            DestroyWindow(Handle).Should().BeTrue();
+            GC.KeepAlive(_procedure);
+        }
+
+        [UnmanagedFunctionPointer(CallingConvention.Winapi)]
+        private delegate nint WindowProcedure(nint window, uint message, nuint wParam, nint lParam);
+
+        [DllImport("user32.dll", CharSet = CharSet.Unicode, SetLastError = true)]
+        private static extern nint CreateWindowExW(
+            uint extendedStyle, string className, string? windowName, uint style,
+            int x, int y, int width, int height, nint parent, nint menu, nint instance, nint parameter);
+
+        [DllImport("user32.dll", SetLastError = true)]
+        private static extern nint SetWindowLongPtrW(nint window, int index, nint value);
+
+        [DllImport("user32.dll", SetLastError = true)]
+        private static extern int SetWindowLongW(nint window, int index, nint value);
+
+        [DllImport("user32.dll")]
+        private static extern nint CallWindowProcW(nint previous, nint window, uint message, nuint wParam, nint lParam);
+
+        [DllImport("user32.dll", SetLastError = true)]
+        private static extern nint SendMessageTimeoutW(
+            nint window, uint message, nuint wParam, nint lParam, uint flags, uint timeout, out nuint result);
+
+        [DllImport("user32.dll", SetLastError = true)]
+        [return: MarshalAs(UnmanagedType.Bool)]
+        private static extern bool DestroyWindow(nint window);
     }
 
     [Fact]
