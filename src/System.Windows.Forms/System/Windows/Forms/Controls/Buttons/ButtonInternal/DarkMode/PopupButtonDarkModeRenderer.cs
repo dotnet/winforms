@@ -81,14 +81,7 @@ internal sealed class PopupButtonDarkModeRenderer : ButtonDarkModeRendererBase
             return;
         }
 
-        Color focusBackColor = isDefault
-            ? DefaultColors.AcceptFocusIndicatorBackColor
-            : DefaultColors.FocusIndicatorBackColor;
-        ControlPaint.DrawFocusRectangle(
-            graphics,
-            focusBounds,
-            DefaultColors.FocusBorderColor,
-            focusBackColor);
+        DrawDottedFocusRectangle(graphics, focusBounds, DefaultColors.FocusBorderColor);
     }
 
     public override Color GetTextColor(
