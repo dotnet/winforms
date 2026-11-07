@@ -15,6 +15,6 @@
       <_WinFormsTargetArchitectureOptions Condition="'$(TargetArchitecture)' != ''">-TargetArchitecture "$(TargetArchitecture)"</_WinFormsTargetArchitectureOptions>
     </PropertyGroup>
 
-    <Exec Command="powershell -NoProfile -ExecutionPolicy Bypass -File &quot;$(RepositoryEngineeringDir)install-runtimes.ps1&quot; -SdkRoot &quot;$(_WinFormsRuntimeRootArgument)&quot; -RuntimeVersion &quot;$(MicrosoftNETCoreAppRefPackageVersion)&quot; $(_WinFormsTargetArchitectureOptions) $(_WinFormsRuntimeSourceOptions)" />
+    <Exec Command="powershell -NoProfile -ExecutionPolicy Bypass -File &quot;$(RepositoryEngineeringDir)install-runtimes.ps1&quot; -SdkRoot &quot;$(_WinFormsRuntimeRootArgument)&quot; -RuntimeVersion &quot;$(MicrosoftNETCoreAppRefPackageVersion)&quot; -PlatformsRuntimeVersion &quot;$(MicrosoftNETCorePlatformsPackageVersion)&quot; $(_WinFormsTargetArchitectureOptions) $(_WinFormsRuntimeSourceOptions)" />
   </Target>
 </Project>

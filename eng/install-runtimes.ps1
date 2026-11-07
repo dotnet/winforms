@@ -4,6 +4,7 @@ param(
     [string] $SdkRoot,
     [Parameter(Mandatory = $true)]
     [string] $RuntimeVersion,
+    [string] $PlatformsRuntimeVersion,
     [string] $TargetArchitecture,
     [string] $RuntimeSourceFeed,
     [string] $RuntimeSourceFeedKey
@@ -25,7 +26,11 @@ try {
 
         $architecture = if ($parts.Length -eq 2) { $parts[1].ToLowerInvariant() } else { $sdkArchitecture }
         foreach ($value in $runtime.Value) {
-            $version = if ($value -eq '$(MicrosoftNETCoreAppRefPackageVersion)') { $RuntimeVersion } else { $value }
+            $version = switch ($value) {
+                '$(MicrosoftNETCoreAppRefPackageVersion)' { $RuntimeVersion }
+                '$(MicrosoftNETCorePlatformsPackageVersion)' { $PlatformsRuntimeVersion }
+                default { $value }
+            }
             if ($version -notmatch '^\d+\.\d+\.\d+([+-][0-9A-Za-z.-]+)?$') {
                 throw "Unresolved or invalid runtime version: $value"
             }

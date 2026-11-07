@@ -263,20 +263,20 @@ try {
         . "$PSScriptRoot\..\configure-toolset.ps1"
         InstallDotNetSdk $sdkRoot '4.0.0'
         $installCalls.Clear()
-        & "$installerRepo\eng\install-runtimes.ps1" -SdkRoot $sdkRoot -RuntimeVersion '5.0.0' -TargetArchitecture $sdk
+        & "$installerRepo\eng\install-runtimes.ps1" -SdkRoot $sdkRoot -RuntimeVersion '4.9.0' -PlatformsRuntimeVersion '5.0.0' -TargetArchitecture $sdk
         Assert-True ($installCalls.Count -eq 2) 'Fresh native restore did not install SDK-native and x86 runtimes.'
         $target = if ($sdk -eq 'x64') { 'arm64' } else { 'x64' }
         Assert-True (!(Test-Path "$sdkRoot\$target")) 'Fresh native restore installed an unrequested foreign runtime.'
         Assert-True ((Get-DotNetExecutableArchitecture "$sdkRoot\dotnet.exe") -eq $sdk -and
             (Get-DotNetExecutableArchitecture "$sdkRoot\host\fxr\5.0.0\hostfxr.dll") -eq $sdk) 'Fresh restore mixed SDK and resolver architectures.'
 
-        & "$installerRepo\eng\install-runtimes.ps1" -SdkRoot $sdkRoot -RuntimeVersion '5.0.0' -TargetArchitecture $target
+        & "$installerRepo\eng\install-runtimes.ps1" -SdkRoot $sdkRoot -RuntimeVersion '4.9.0' -PlatformsRuntimeVersion '5.0.0' -TargetArchitecture $target
         Assert-True ($installCalls.Count -eq 3) 'Runtime manifest did not install SDK, cross-target, and x86 runtimes.'
         foreach ($architecture in @($sdk, $target, 'x86')) {
             $expectedRoot = Get-DotNetRuntimeDirectory $sdkRoot $sdk $architecture
             Assert-True (@($installCalls | Where-Object { $_.Root -eq $expectedRoot -and $_.Architecture -eq $architecture -and $_.Version -eq '5.0.0' }).Count -eq 1) 'Manifest installation used the wrong root, version, or architecture.'
         }
-        & "$installerRepo\eng\install-runtimes.ps1" -SdkRoot $sdkRoot -RuntimeVersion '5.0.0' -TargetArchitecture $sdk
+        & "$installerRepo\eng\install-runtimes.ps1" -SdkRoot $sdkRoot -RuntimeVersion '4.9.0' -PlatformsRuntimeVersion '5.0.0' -TargetArchitecture $sdk
         Assert-True ($installCalls.Count -eq 3) 'Duplicate manifest requests bypassed the complete runtime cache.'
     }
 
