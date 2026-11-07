@@ -59,9 +59,17 @@ Namespace Microsoft.VisualBasic.ApplicationServices
         ' Sync object
         Private ReadOnly _networkAvailabilityChangeLock As New Object
 
+        Private ReadOnly _nextInstanceDeliveryLock As New Object
+
         Private ReadOnly _splashLock As New Object
 
         Private _appSynchronizationContext As SynchronizationContext
+
+        Private _nextInstanceDeliveryContext As SynchronizationContext
+
+        Private ReadOnly _pendingNextInstanceArgs As New List(Of String())
+
+        Private _nextInstanceDeliveryClosed As Boolean
 
         ' The ColorMode (Classic/Light, System, Dark) the user assigned to the ApplyApplicationsDefault event.
         ' Note: We aim to expose this to the App Designer in later runtime/VS versions.
@@ -657,34 +665,51 @@ Namespace Microsoft.VisualBasic.ApplicationServices
             RaiseEvent NetworkAvailabilityChanged(sender, e)
         End Sub
 
-        Private Sub OnStartupNextInstanceMarshallingAdaptor(args As String())
-
-            Dim invoked As Boolean = False
-
-            Try
-                Dim handleNextInstance As New Action(
-                    Sub()
-                        invoked = True
-                        OnStartupNextInstance(New StartupNextInstanceEventArgs(
-                                        New ReadOnlyCollection(Of String)(args),
-                                        bringToForegroundFlag:=True))
-                    End Sub)
-
-                ' If we have a Main form, we need to make sure that we are on _its_ UI thread
-                ' before we call OnStartupNextInstance.
-                If MainForm IsNot Nothing Then
-                    MainForm.Invoke(handleNextInstance)
-                Else
-                    ' Otherwise, we need to make sure that we are on the thread
-                    ' provided by the SynchronizationContext.
-                    AsyncOperationManager.
-                        SynchronizationContext.
-                        Send(Sub() handleNextInstance(), Nothing)
+        ' Queue delivery on the UI context so handler failures use WinForms exception handling.
+        ' Hold requests received before setup until the context is ready.
+        Friend Sub OnStartupNextInstanceMarshallingAdaptor(args As String())
+            SyncLock _nextInstanceDeliveryLock
+                If _nextInstanceDeliveryClosed Then
+                    Return
                 End If
-            Catch ex As Exception When Not invoked
-                ' Only catch exceptions thrown when the UI thread is not available, before
-                ' the UI thread has been created or after it has been terminated. Exceptions
-                ' thrown from OnStartupNextInstance() should be allowed to propagate.
+
+                If _nextInstanceDeliveryContext Is Nothing Then
+                    _pendingNextInstanceArgs.Add(args)
+                    Return
+                End If
+
+                PostStartupNextInstance(args, _nextInstanceDeliveryContext)
+            End SyncLock
+        End Sub
+
+        Friend Sub EnableNextInstanceDelivery(context As SynchronizationContext)
+            SyncLock _nextInstanceDeliveryLock
+                If _nextInstanceDeliveryClosed OrElse
+                    _nextInstanceDeliveryContext IsNot Nothing OrElse
+                    Not TypeOf context Is WindowsFormsSynchronizationContext Then
+                    Return
+                End If
+
+                _nextInstanceDeliveryContext = context
+
+                For Each args As String() In _pendingNextInstanceArgs
+                    PostStartupNextInstance(args, context)
+                Next
+
+                _pendingNextInstanceArgs.Clear()
+            End SyncLock
+        End Sub
+
+        Private Sub PostStartupNextInstance(args As String(), context As SynchronizationContext)
+            Try
+                context.Post(
+                    Sub(state)
+                        OnStartupNextInstance(New StartupNextInstanceEventArgs(
+                            New ReadOnlyCollection(Of String)(args),
+                            bringToForegroundFlag:=True))
+                    End Sub,
+                    Nothing)
+            Catch ex As Exception
             End Try
         End Sub
 
@@ -800,7 +825,9 @@ Namespace Microsoft.VisualBasic.ApplicationServices
 
             ' This creates the native window, and that means, we can no longer apply a different Default Font.
             ' So, this is the earliest point in time to set the AsyncOperationManager's SyncContext.
-            AsyncOperationManager.SynchronizationContext = New WindowsFormsSynchronizationContext()
+            Dim synchronizationContext As New WindowsFormsSynchronizationContext()
+            AsyncOperationManager.SynchronizationContext = synchronizationContext
+            EnableNextInstanceDelivery(synchronizationContext)
 
             _highDpiMode = applicationDefaultsEventArgs.HighDpiMode
             _colorMode = applicationDefaultsEventArgs.ColorMode
@@ -871,8 +898,14 @@ Namespace Microsoft.VisualBasic.ApplicationServices
             ' If our user didn't write an UnhandledException event, then we land in the try/catch handler
             ' for Forms.Application.Run().
             Try
+                EnableNextInstanceDelivery(SynchronizationContext.Current)
                 Application.Run(_appContext)
             Finally
+                SyncLock _nextInstanceDeliveryLock
+                    _nextInstanceDeliveryContext = Nothing
+                    _nextInstanceDeliveryClosed = True
+                    _pendingNextInstanceArgs.Clear()
+                End SyncLock
 
                 ' When Run() returns, the context we pushed in our ctor
                 ' (which was a WindowsFormsSynchronizationContext) is restored.
