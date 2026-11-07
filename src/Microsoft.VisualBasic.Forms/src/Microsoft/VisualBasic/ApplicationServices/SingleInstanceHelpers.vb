@@ -107,7 +107,7 @@ Namespace Microsoft.VisualBasic.ApplicationServices
                         Try
                             callback(args)
                         Catch ex As Exception
-                            ' The callback handles user exceptions; keep accepting later connections.
+                            ' A faulty callback must not stop the listener.
                         End Try
                     End If
                 Finally
