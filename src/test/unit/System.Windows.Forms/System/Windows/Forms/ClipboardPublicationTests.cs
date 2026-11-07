@@ -38,8 +38,11 @@ public partial class ClipboardPublicationTests
     }
 
     [Theory(Skip = "Private clipboard window stations require elevation.", SkipUnless = nameof(IsElevated))]
+    // The live publication remains owned by the replacement publisher until the coordinator clears it.
     [InlineData(false, false)]
+    // The live publication is cleared when its publisher exits before coordinator cleanup.
     [InlineData(false, true)]
+    // The flushed publication remains available after its publisher exits and is then cleared.
     [InlineData(true, true)]
     public void SetDataObject_CrossProcessReplacement_PreservesPublicationLifetime(bool copy, bool exitBeforeClear)
     {
@@ -355,16 +358,6 @@ public partial class ClipboardPublicationTests
         return 0;
     }
 
-    /// <summary>
-    ///  Transfers a scenario and its failure across the native worker boundary.
-    /// </summary>
-    private sealed class StaInvocation(WindowStation station, Action action)
-    {
-        public WindowStation Station { get; } = station;
-        public Action Action { get; } = action;
-        public ExceptionDispatchInfo? Failure { get; set; }
-    }
-
     private static void WaitWithMessagePump(Task task)
     {
         Stopwatch stopwatch = Stopwatch.StartNew();
@@ -397,96 +390,6 @@ public partial class ClipboardPublicationTests
         if (!result)
         {
             throw new Win32Exception(Marshal.GetLastPInvokeError());
-        }
-    }
-
-    /// <summary>
-    ///  Keeps queued input observable without involving an interactive window.
-    /// </summary>
-    private sealed class PublicationWindow : NativeWindow, IDisposable
-    {
-        private const int Message = 0x8000;
-
-        public PublicationWindow() => CreateHandle(new CreateParams());
-
-        public int Delivered { get; private set; }
-
-        public void QueueMessage() => Check(PostMessage(Handle, Message, 0, 0));
-
-        public unsafe void VerifyMessagePreserved()
-        {
-            global::Windows.Win32.UI.WindowsAndMessaging.MSG message;
-            ((bool)global::Windows.Win32.PInvokeCore.PeekMessage(
-                &message,
-                (global::Windows.Win32.Foundation.HWND)Handle,
-                Message,
-                Message,
-                global::Windows.Win32.UI.WindowsAndMessaging.PEEK_MESSAGE_REMOVE_TYPE.PM_NOREMOVE))
-                .Should().BeTrue("the posted message must remain queued after publication");
-        }
-
-        protected override void WndProc(ref Message message)
-        {
-            if (message.Msg == Message)
-            {
-                Delivered++;
-            }
-
-            base.WndProc(ref message);
-        }
-
-        public void Dispose() => DestroyHandle();
-    }
-
-    /// <summary>
-    ///  Assigns only a RemoteExecutor process to a private clipboard and desktop.
-    /// </summary>
-    private sealed class WindowStation : IDisposable
-    {
-        private readonly nint _original = GetProcessWindowStation();
-        private readonly nint _station;
-
-        public WindowStation(string name, bool create)
-        {
-            Name = name;
-            _station = create
-                // CREATE_ONLY prevents accidentally using an existing station.
-                ? CreateWindowStation(name, 1, 0x37F, 0)
-                : OpenWindowStation(name, false, 0x37F);
-            Check(_station != 0);
-            try
-            {
-                Check(SetProcessWindowStation(_station));
-                Desktop = create
-                    ? CreateDesktop(DesktopName, 0, 0, 0, 0x01FF, 0)
-                    : OpenDesktop(DesktopName, 0, false, 0x01FF);
-                Check(Desktop != 0);
-            }
-            catch (Exception exception)
-            {
-                RunWithCleanup(
-                    () => ExceptionDispatchInfo.Capture(exception).Throw(),
-                    () => Check(SetProcessWindowStation(_original)),
-                    () => Check(CloseWindowStation(_station)));
-                throw;
-            }
-        }
-
-        public string Name { get; }
-        public nint Desktop { get; }
-        public bool WorkerRunning { get; set; }
-
-        public void Dispose()
-        {
-            if (WorkerRunning)
-            {
-                throw new InvalidOperationException("The timed-out STA still uses the desktop; the failed isolated process must release it on exit.");
-            }
-
-            RunWithCleanup(
-                () => Check(CloseDesktop(Desktop)),
-                () => Check(SetProcessWindowStation(_original)),
-                () => Check(CloseWindowStation(_station)));
         }
     }
 
