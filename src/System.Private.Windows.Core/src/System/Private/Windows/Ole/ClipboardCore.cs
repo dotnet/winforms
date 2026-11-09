@@ -237,6 +237,7 @@ internal static unsafe class ClipboardCore<TOleServices>
             {
                 if (TOleServices.UseNativeClipboardTextFallback)
                 {
+                    // Returning the managed source directly skips OLE's text conversion, causing WPF's regression.
                     // Capture this proxy, not the clipboard at a later read. Only text needs native synthesis.
                     TDataObject clipboardData = TDataObject.Create(proxyDataObject.Value);
 

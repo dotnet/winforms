@@ -97,7 +97,7 @@ internal unsafe class TestDataObject<TOleServices> :
         Func<TypeName, Type?> resolver,
         bool autoConvert,
         [MaybeNullWhen(false), NotNullWhen(true)] out T data) =>
-        TryGetDataInternal(typeof(T).FullName!, resolver: null, autoConvert: autoConvert, out data);
+        TryGetDataInternal(format, resolver, autoConvert, out data);
 
     internal bool TryGetDataInternal<[DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.All)] T>(
         string format,

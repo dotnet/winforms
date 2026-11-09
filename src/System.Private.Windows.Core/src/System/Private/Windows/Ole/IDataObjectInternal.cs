@@ -18,6 +18,16 @@ namespace System.Private.Windows.Ole;
 internal interface IDataObjectInternal
 {
     /// <summary>
+    ///  Indicates whether the managed source implements typed retrieval rather than a legacy-only adapter.
+    /// </summary>
+    /// <remarks>
+    ///  <para>Currently used only to select the typed clipboard fallback for plain-text formats.
+    ///  Adapters must report the wrapped source's capability. Clipboard text reads use this to avoid unsupported
+    ///  typed calls without falling back to legacy GetData, which may deserialize before returning.</para>
+    /// </remarks>
+    bool SupportsTypedData => true;
+
+    /// <summary>
     ///  Retrieves the data associated with the specified data format, using
     ///  <paramref name="autoConvert"/> to determine whether to convert the data to the format.
     /// </summary>

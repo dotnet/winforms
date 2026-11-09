@@ -10,6 +10,8 @@ internal class TestDataObjectAdapter : ITestDataObject, IDataObjectInternal
 {
     internal ITestDataObject DataObject { get; }
 
+    public bool SupportsTypedData => DataObject is IDataObjectInternal;
+
     internal TestDataObjectAdapter(ITestDataObject dataObject) => DataObject = dataObject;
 
     internal static IDataObjectInternal Create(ITestDataObject dataObject) => new TestDataObjectAdapter(dataObject);
