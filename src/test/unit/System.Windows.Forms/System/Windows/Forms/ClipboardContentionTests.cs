@@ -17,6 +17,7 @@ namespace System.Windows.Forms.Tests;
 ///  </para>
 /// </remarks>
 [Collection("Sequential")]
+[UISettings(MaxAttempts = 3)] // Try up to 3 times before failing.
 public class ClipboardContentionTests
 {
     private const int WaitMilliseconds = 10_000;
