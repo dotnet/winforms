@@ -1,4 +1,4 @@
-﻿// Licensed to the .NET Foundation under one or more agreements.
+// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
 using System.Runtime.InteropServices;
@@ -29,7 +29,7 @@ public class ClipboardContentionTests
     [InlineData(true, 2, 20)]
     public void SetDataObject_LockedClipboard_ThrowsAndRecovers(bool copy, int retryTimes, int retryDelay)
     {
-        // OLE-006: native contention exhausts even a zero retry budget, preserves the HRESULT, and permits recovery.
+        // Native contention exhausts even a zero retry budget, preserves the HRESULT, and permits recovery.
         string name = $"WinForms-Clipboard-{Guid.NewGuid():N}";
         using EventWaitHandle locked = new(false, EventResetMode.ManualReset, name + "-locked");
         using EventWaitHandle release = new(false, EventResetMode.ManualReset, name + "-release");
@@ -65,7 +65,7 @@ public class ClipboardContentionTests
     [WinFormsFact]
     public unsafe void SetDataObject_DelayedNativeRead_CompletesReplacementWithoutRemovingPostedMessage()
     {
-        // OLE-006: replacement retries service another process's delayed read while leaving posted input queued.
+        // Replacement retries service another process's delayed read while leaving posted input queued.
         const string Original = "original";
         const string Live = "changed after publication\r\n\u03a9";
         const string Replacement = "replacement";
