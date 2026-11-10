@@ -341,26 +341,37 @@ public class CheckedListBoxTests
         control.IsHandleCreated.Should().Be(createHandle);
     }
 
-    [WinFormsFact]
-    public void CheckedListBox_HorizontalScrollbar_SetWithCachedSelectedItemsCount_PreservesSelection()
+    [WinFormsTheory]
+    [InlineData(false)]
+    [InlineData(true)]
+    public void CheckedListBox_HorizontalScrollbar_SetWithCachedSelectedItemsCount_PreservesSelection(bool createHandle)
     {
-        using CheckedListBox control = new();
+        using SubCheckedListBox control = new();
         control.Items.Add("item1");
         control.SelectedIndex = 0;
 #pragma warning disable xUnit2013 // Do not use equality check to check for collection size.
         Assert.Equal(1, control.SelectedItems.Count);
 #pragma warning restore xUnit2013 // Do not use equality check to check for collection size.
+
+        if (createHandle)
+        {
+            Assert.NotEqual(IntPtr.Zero, control.Handle);
+        }
+
         control.Items.Add("item2");
 
         control.HorizontalScrollbar = true;
+        control.RefreshItems();
+        control.RefreshItems();
 
         Assert.True(control.HorizontalScrollbar);
         Assert.Equal(0, control.SelectedIndex);
         Assert.Equal("item1", control.SelectedItem);
+        Assert.Equal(0, Assert.Single(control.SelectedIndices));
 #pragma warning disable xUnit2013 // Do not use equality check to check for collection size.
         Assert.Equal(1, control.SelectedItems.Count);
 #pragma warning restore xUnit2013 // Do not use equality check to check for collection size.
-        Assert.False(control.IsHandleCreated);
+        Assert.Equal(createHandle, control.IsHandleCreated);
     }
 
     [WinFormsFact]
