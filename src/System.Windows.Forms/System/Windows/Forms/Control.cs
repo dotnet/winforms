@@ -10513,7 +10513,10 @@ public unsafe partial class Control :
                 }
             }
 
-            child.Scale(includedFactor, excludedFactor, requestingControl, causedByFontChanged && receivesFontChanged);
+            // An explicit font also stops notifications at non-container controls (for example, Panel).
+            // Scale their descendants recursively instead of waiting for a font change that will not arrive.
+            bool scaleDescendantsThroughFontChanged = causedByFontChanged && receivesFontChanged;
+            child.Scale(includedFactor, excludedFactor, requestingControl, scaleDescendantsThroughFontChanged);
         }
     }
 

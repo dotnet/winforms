@@ -76,10 +76,10 @@ public class ContainerControl : ScrollableControl, IContainerControl
     private const string FontMeasureString = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
 
     /// <summary>
-    ///  Child Container control that inherit <see cref="AutoScaleMode"/> (and does not store their own) would need
-    ///  <see cref="AutoScaleFactor"/> from parent to scale them during font and DPI changes. The factor is retained
-    ///  until font changes have propagated to children, then restored to avoid scaling unrelated font changes.
-    ///  We cannot use the <see cref="AutoScaleFactor"/> property as the parent's scaling baseline is already updated.
+    ///  Transient parent scaling factor used by child containers that inherit <see cref="AutoScaleMode"/>.
+    ///  Set only during <see cref="OnFontChanged(EventArgs)"/>, including font propagation during DPI changes,
+    ///  and restored afterward; this is not a persistent cache of <see cref="AutoScaleFactor"/>.
+    ///  Children need this factor because the parent's scaling baseline is already updated before propagation.
     /// </summary>
     internal SizeF _currentAutoScaleFactor = new(1F, 1F);
 
