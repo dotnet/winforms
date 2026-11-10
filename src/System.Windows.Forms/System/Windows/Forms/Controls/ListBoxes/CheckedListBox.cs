@@ -843,8 +843,9 @@ public partial class CheckedListBox : ListBox
         // call the base
         base.RefreshItems();
 
-        // restore the checkedItems...
-        for (int j = 0; j < Items.Count; j++)
+        // Data binding can change the item count, so restore only the states that still have an item.
+        int count = Math.Min(savedCheckedItems.Length, Items.Count);
+        for (int j = 0; j < count; j++)
         {
             CheckedItems.SetCheckedState(j, savedCheckedItems[j]);
         }
