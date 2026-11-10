@@ -2775,6 +2775,111 @@ public partial class FormTests
         Assert.False(child.IsHandleCreated);
     }
 
+    [WinFormsTheory]
+    [InlineData(false, false)]
+    [InlineData(true, false)]
+    [InlineData(false, true)]
+    public void Form_ShowDialog_CloseOwner_RaisesFormClosedOnce(bool cancelInFormClosing, bool cancelInLegacyClosing)
+    {
+        // Regression test for https://github.com/dotnet/winforms/issues/2451.
+        using Form owner = new();
+        using Form dialog = new();
+        List<CloseReason> closingReasons = [];
+        List<(Form, CloseReason)> closedEvents = [];
+        bool remainedVisibleAfterFirstClose = false;
+        int legacyClosingCount = 0;
+        int legacyClosedCount = 0;
+        bool cancelFirstClose = cancelInFormClosing || cancelInLegacyClosing;
+
+#pragma warning disable WFDEV004 // Type or member is obsolete - compat
+        dialog.Closing += (_, e) =>
+        {
+            legacyClosingCount++;
+            if (cancelInLegacyClosing && legacyClosingCount == 1)
+            {
+                e.Cancel = true;
+            }
+        };
+        dialog.Closed += (_, _) => legacyClosedCount++;
+#pragma warning restore WFDEV004
+        dialog.FormClosing += (_, e) =>
+        {
+            closingReasons.Add(e.CloseReason);
+            if (cancelInFormClosing && closingReasons.Count == 1)
+            {
+                e.Cancel = true;
+            }
+        };
+        dialog.FormClosed += (_, e) => closedEvents.Add((dialog, e.CloseReason));
+        owner.FormClosed += (_, e) => closedEvents.Add((owner, e.CloseReason));
+        dialog.Shown += (_, _) => dialog.BeginInvoke((Action)(() =>
+        {
+            owner.Close();
+            if (cancelFirstClose)
+            {
+                remainedVisibleAfterFirstClose = owner.Visible && dialog.Visible;
+                owner.Close();
+            }
+        }));
+
+        owner.Show();
+
+        Assert.Equal(DialogResult.Cancel, dialog.ShowDialog(owner));
+        Assert.Equal(cancelFirstClose, remainedVisibleAfterFirstClose);
+        Assert.Equal(cancelFirstClose ? 2 : 1, closingReasons.Count);
+        Assert.All(closingReasons, reason => Assert.Equal(CloseReason.FormOwnerClosing, reason));
+        Assert.Equal(new[] { (dialog, CloseReason.FormOwnerClosing), (owner, CloseReason.UserClosing) }, closedEvents);
+        Assert.Equal(closingReasons.Count, legacyClosingCount);
+        Assert.Equal(1, legacyClosedCount);
+    }
+
+    [WinFormsFact]
+    public void Form_ShowDialog_CloseDialogAndOwner_ResetsClosingStateForNextRun()
+    {
+        using Form owner = new();
+        using ReusableDialogForOwnerClose dialog = new();
+        EventHandler closeBoth = (_, _) => dialog.BeginInvoke((Action)(() =>
+        {
+            dialog.Close();
+            owner.Close();
+        }));
+
+        dialog.Shown += closeBoth;
+        owner.Show();
+        dialog.DelayDisposal = true;
+        try
+        {
+            Assert.Equal(DialogResult.Cancel, dialog.ShowDialog(owner));
+        }
+        finally
+        {
+            dialog.DelayDisposal = false;
+        }
+
+        List<CloseReason> closingReasons = [];
+        dialog.FormClosing += (_, e) => closingReasons.Add(e.CloseReason);
+        dialog.Shown -= closeBoth;
+        dialog.Shown += (_, _) => dialog.BeginInvoke((Action)(() => dialog.DialogResult = DialogResult.OK));
+        using Form nextOwner = new();
+        nextOwner.Show();
+
+        Assert.Equal(DialogResult.OK, dialog.ShowDialog(nextOwner));
+        Assert.Equal([CloseReason.None], closingReasons);
+    }
+
+    private sealed partial class ReusableDialogForOwnerClose : Form
+    {
+        public bool DelayDisposal { get; set; }
+
+        protected override void Dispose(bool disposing)
+        {
+            if (!disposing || !DelayDisposal)
+            {
+                base.Dispose(disposing);
+            }
+        }
+    }
+
     [WinFormsFact]
     public async Task Form_ShowAsync_GeneralTaskTests()
     {

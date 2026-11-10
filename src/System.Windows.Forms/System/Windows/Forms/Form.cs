@@ -3187,6 +3187,12 @@ public partial class Form : ContainerControl
             return false;
         }
 
+        // The window close path already handles the events for this dialog.
+        if (IsClosing)
+        {
+            return true;
+        }
+
         try
         {
             FormClosingEventArgs e = new(_closeReason, false);
@@ -5768,8 +5774,10 @@ public partial class Form : ContainerControl
         CalledOnLoad = false;
         CalledMakeVisible = false;
 
-        // for modal dialogs make sure we reset close reason.
+        // Reset the close state for each modal run.
         CloseReason = CloseReason.None;
+        IsClosing = false;
+        CalledClosing = false;
 
         HWND captureHwnd = PInvoke.GetCapture();
         if (!captureHwnd.IsNull)
@@ -6802,10 +6810,20 @@ public partial class Form : ContainerControl
                 {
                     for (int i = ownedForms.Count - 1; i >= 0; i--)
                     {
+                        Form ownedForm = ownedForms[i];
                         FormClosingEventArgs cfe = new(CloseReason.FormOwnerClosing, e.Cancel);
 
+                        // The modal loop normally raises the legacy Closing event. Raise it here
+                        // so it can still cancel the close before the owner commits it.
+                        if (ownedForm.Modal)
+                        {
+#pragma warning disable WFDEV004 // Type or member is obsolete - compat
+                            ownedForm.OnClosing(cfe);
+#pragma warning restore WFDEV004
+                        }
+
                         // Call OnFormClosing on the child forms.
-                        ownedForms[i].OnFormClosing(cfe);
+                        ownedForm.OnFormClosing(cfe);
                         if (cfe.Cancel)
                         {
                             // Set the cancel flag for the Owner form
@@ -6871,12 +6889,19 @@ public partial class Form : ContainerControl
                 {
                     for (int i = ownedForms.Count - 1; i >= 0; i--)
                     {
+                        Form ownedForm = ownedForms[i];
+                        if (ownedForm.Modal)
+                        {
+                            // The modal message loop will exit after the owner disposes the dialog.
+                            ownedForm.IsClosing = true;
+                        }
+
                         fc = new FormClosedEventArgs(CloseReason.FormOwnerClosing);
                         // Call OnClosed and OnFormClosed on the child forms.
 #pragma warning disable WFDEV004 // Type or member is obsolete - compat
-                        ownedForms[i].OnClosed(fc);
+                        ownedForm.OnClosed(fc);
 #pragma warning restore WFDEV004
-                        ownedForms[i].OnFormClosed(fc);
+                        ownedForm.OnFormClosed(fc);
                     }
                 }
 
