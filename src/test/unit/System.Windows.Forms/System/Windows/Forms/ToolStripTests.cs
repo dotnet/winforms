@@ -7178,7 +7178,10 @@ public partial class ToolStripTests : IDisposable
         {
             using Form form = new() { AutoScaleMode = AutoScaleMode.Dpi, Size = new(1600, 800) };
             using UserControl container = new() { AutoScaleMode = autoScaleMode, Dock = DockStyle.Fill };
-            using ToolStrip toolStrip = new();
+            using ToolStrip toolStrip = new()
+            {
+                CanOverflow = false
+            };
             using ToolStripTextBox textBox = new();
             using ToolStripComboBox comboBox = new();
             using TextBox referenceTextBox = new() { BorderStyle = textBox.TextBox.BorderStyle };
