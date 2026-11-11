@@ -17,6 +17,14 @@ on:
         description: 'Issue number to fix'
         required: true
         type: number
+      issue_repo:
+        description: >
+          owner/repo the issue lives in, if different from this repository
+          (e.g. testing from a fork whose Issues tab is disabled, against
+          the real dotnet/winforms issue tracker). Leave blank to use this
+          repository.
+        required: false
+        type: string
   issues:
     types: [labeled]
 
@@ -55,6 +63,14 @@ jobs:
           if (-not $n) { $n = "${{ github.event.issue.number }}" }
           "number=$n" >> $env:GITHUB_OUTPUT
 
+          $repo = "${{ github.event.inputs.issue_repo }}"
+          if (-not $repo) { $repo = "${{ github.repository }}" }
+          "repo=$repo" >> $env:GITHUB_OUTPUT
+          if ($repo -ne "${{ github.repository }}") {
+            Write-Output "Reading issue #$n from $repo (different from this repository, ${{ github.repository }})."
+            Write-Output "Any PR will still be opened against this repository; comments on $repo may fail if this repo's token has no write access there."
+          }
+
       - name: Checkout
         uses: actions/checkout@v5
         with:
@@ -76,7 +92,8 @@ jobs:
           GH_TOKEN: ${{ github.token }}
         run: |
           $n = "${{ steps.issue.outputs.number }}"
-          gh issue view $n --json title,body,labels --jq . > issue.json
+          $repo = "${{ steps.issue.outputs.repo }}"
+          gh issue view $n -R $repo --json title,body,labels --jq . > issue.json
           $issue = Get-Content issue.json -Raw | ConvertFrom-Json
           "title=$($issue.title)" >> $env:GITHUB_OUTPUT
           Write-Output "Issue #$n`: $($issue.title)"
@@ -97,14 +114,19 @@ jobs:
         shell: pwsh
         env:
           ISSUE_NUMBER: ${{ steps.issue.outputs.number }}
+          ISSUE_REPO: ${{ steps.issue.outputs.repo }}
           BRANCH_NAME: ${{ steps.branch.outputs.name }}
         run: |
           $n = $env:ISSUE_NUMBER
+          $issueRepo = $env:ISSUE_REPO
           $branch = $env:BRANCH_NAME
           $body = @'
-          Read GitHub issue #ISSUE_NUMBER_PLACEHOLDER in this repository (gh issue view ISSUE_NUMBER_PLACEHOLDER --json title,body,comments)
+          Read GitHub issue #ISSUE_NUMBER_PLACEHOLDER from the repository ISSUE_REPO_PLACEHOLDER
+          (gh issue view ISSUE_NUMBER_PLACEHOLDER -R ISSUE_REPO_PLACEHOLDER --json title,body,comments)
           and follow the fix-issue skill (loaded from this session's --plugin-dir) to resolve it,
-          together with the factory-coordination skill's shared rules.
+          together with the factory-coordination skill's shared rules. If ISSUE_REPO_PLACEHOLDER is
+          not this checked-out repository, you are testing against a different repository's issue;
+          make the code change here, in this checked-out repository, as if that issue applied to it.
 
           This single CI run plays the part the agent-factory launcher would normally play:
           the working branch BRANCH_NAME_PLACEHOLDER already exists and is checked out; there is
@@ -130,7 +152,7 @@ jobs:
           auto-merge, change branch protection or touch secrets; those stay with the human who
           reviews this run's pull request.
           '@
-          $body = $body -replace 'ISSUE_NUMBER_PLACEHOLDER', $n -replace 'BRANCH_NAME_PLACEHOLDER', $branch
+          $body = $body -replace 'ISSUE_NUMBER_PLACEHOLDER', $n -replace 'ISSUE_REPO_PLACEHOLDER', $issueRepo -replace 'BRANCH_NAME_PLACEHOLDER', $branch
           $body | Set-Content -Path prompt.txt -Encoding utf8
           Write-Output "----- prompt -----"
           Get-Content prompt.txt
@@ -168,10 +190,17 @@ jobs:
         shell: pwsh
         env:
           GH_TOKEN: ${{ github.token }}
+          ISSUE_NUMBER: ${{ steps.issue.outputs.number }}
+          ISSUE_REPO: ${{ steps.issue.outputs.repo }}
         run: |
-          $n = "${{ steps.issue.outputs.number }}"
+          $n = $env:ISSUE_NUMBER
+          $repo = $env:ISSUE_REPO
           $reason = Get-Content docs/factory/BLOCKED.md -Raw
-          gh issue comment $n --body "Automated fix attempt stopped without changes:`n`n$reason"
+          Write-Output "Blocked: $reason"
+          gh issue comment $n -R $repo --body "Automated fix attempt stopped without changes:`n`n$reason"
+          if ($LASTEXITCODE -ne 0) {
+            Write-Output "::warning::Could not comment on $repo#$n (likely no write access from this repository's token, e.g. when test-running from a fork). See the reason logged above."
+          }
           Remove-Item docs/factory/BLOCKED.md -Force
           exit 0
 
@@ -182,14 +211,19 @@ jobs:
         env:
           GH_TOKEN: ${{ github.token }}
           ISSUE_NUMBER: ${{ steps.issue.outputs.number }}
+          ISSUE_REPO: ${{ steps.issue.outputs.repo }}
           BRANCH_NAME: ${{ steps.branch.outputs.name }}
         run: |
           $n = $env:ISSUE_NUMBER
+          $repo = $env:ISSUE_REPO
           $branch = $env:BRANCH_NAME
           $commits = git log "origin/main..HEAD" --oneline
           if (-not $commits) {
             Write-Output "No commits were made; nothing to open a pull request for."
-            gh issue comment $n --body "Automated fix attempt made no changes and did not explain why; see the workflow run for details."
+            gh issue comment $n -R $repo --body "Automated fix attempt made no changes and did not explain why; see the workflow run for details."
+            if ($LASTEXITCODE -ne 0) {
+              Write-Output "::warning::Could not comment on $repo#$n (likely no write access from this repository's token, e.g. when test-running from a fork)."
+            }
             exit 0
           }
           git push origin $branch
