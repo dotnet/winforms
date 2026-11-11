@@ -3113,7 +3113,7 @@ public partial class FormTests
     public void Form_Close_ReopenInClosedHandlerAsDialog_CanClose(bool useLegacyClosed)
     {
         using Form form = new();
-        using System.Windows.Forms.Timer timer = new() { Interval = 50 };
+        using global::System.Windows.Forms.Timer timer = new() { Interval = 50 };
         bool reopened = false;
         int closedCount = 0;
         int ticks = 0;
