@@ -85,7 +85,8 @@ itself is always deterministic launcher code, never a model decision.
 | `.agent-factory/profile.toml` — validated policy (preset, budgets, check modes, policy file paths) | The core engine / launcher (§2, §4) — nothing claims issues, reviews PRs or merges automatically |
 | `.agent-factory/harness.lock` — pins the exact vendored commit + sha256 | A merge policy file (`factory-merge-policy.json`), sensitive-path list, placement file |
 | `scripts/agent-factory/agent_factory/` — vendored `profile.py`/`roles.py`/`janitor.py` + the full skill library | `policies.constitution` / `policies.conduct` (no such docs exist in this repo yet) |
-| This document + [`docs/factory/adoption.md`](adoption.md) | Any CI/workflow wiring that runs `agent-factory` automatically |
+| This document + [`docs/factory/adoption.md`](adoption.md) | Full claim/discover/merge automation — only the single-issue [thin wrapper](thin-wrapper.md) exists |
+| [`.github/workflows/copilot-fix-issue.yml`](../../.github/workflows/copilot-fix-issue.yml) ([docs](thin-wrapper.md)) — one issue in, one draft PR out, human merges | Any multi-host coordination, claiming or scheduling |
 
 See [`adoption.md`](adoption.md) for the full rationale and file-by-file breakdown.
 

@@ -1,0 +1,202 @@
+name: Copilot fix issue (agent-factory, thin wrapper)
+
+# Manual-first automation: runs the vendored `fix-issue` skill
+# (scripts/agent-factory/agent_factory/plugin) against one GitHub issue and
+# opens a DRAFT pull request. It never merges, approves or pushes to a
+# protected branch; a human reviews and merges like any other PR.
+#
+# See docs/factory/architecture.md and docs/factory/adoption.md for context:
+# this is the "thin wrapper" step beyond Tier 1, not the full agent-factory
+# engine. Budgets below mirror .agent-factory/profile.toml's [budgets]
+# section; keep them in sync by hand until a shared reader is wired in.
+
+on:
+  workflow_dispatch:
+    inputs:
+      issue_number:
+        description: 'Issue number to fix'
+        required: true
+        type: number
+  issues:
+    types: [labeled]
+
+permissions:
+  contents: write
+  issues: write
+  pull-requests: write
+  copilot-requests: write
+
+concurrency:
+  group: copilot-fix-issue-${{ github.event.inputs.issue_number || github.event.issue.number }}
+  cancel-in-progress: false
+
+env:
+  # Mirrors .agent-factory/profile.toml [budgets]; update both together.
+  MAX_AI_CREDITS: 20000
+  MAX_AUTOPILOT_CONTINUES: 20
+
+jobs:
+  fix-issue:
+    # Manual dispatch is always allowed. The automatic `labeled` trigger only
+    # runs when a maintainer/collaborator applied the label, so an arbitrary
+    # issue author or external triager cannot invoke the agent by labeling.
+    if: >
+      github.event_name == 'workflow_dispatch' ||
+      (github.event.label.name == 'copilot-fix' &&
+       contains(fromJSON('["OWNER","MEMBER","COLLABORATOR"]'), github.event.sender.author_association))
+    runs-on: windows-latest
+    timeout-minutes: 45
+    steps:
+      - name: Resolve issue number
+        id: issue
+        shell: pwsh
+        run: |
+          $n = "${{ github.event.inputs.issue_number }}"
+          if (-not $n) { $n = "${{ github.event.issue.number }}" }
+          "number=$n" >> $env:GITHUB_OUTPUT
+
+      - name: Checkout
+        uses: actions/checkout@v5
+        with:
+          persist-credentials: true
+          fetch-depth: 1
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Install Copilot CLI
+        run: npm install -g @github/copilot
+
+      - name: Read issue
+        id: data
+        shell: pwsh
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          $n = "${{ steps.issue.outputs.number }}"
+          gh issue view $n --json title,body,labels --jq . > issue.json
+          $issue = Get-Content issue.json -Raw | ConvertFrom-Json
+          "title=$($issue.title)" >> $env:GITHUB_OUTPUT
+          Write-Output "Issue #$n`: $($issue.title)"
+
+      - name: Create working branch
+        id: branch
+        shell: pwsh
+        run: |
+          $n = "${{ steps.issue.outputs.number }}"
+          $slug = "${{ steps.data.outputs.title }}".ToLower() -replace '[^a-z0-9]+','-' -replace '(^-+|-+$)',''
+          $slug = $slug.Substring(0, [Math]::Min(40, $slug.Length))
+          $branch = "copilot/$n-$slug"
+          git checkout -b $branch
+          "name=$branch" >> $env:GITHUB_OUTPUT
+
+      - name: Build the prompt
+        id: prompt
+        shell: pwsh
+        env:
+          ISSUE_NUMBER: ${{ steps.issue.outputs.number }}
+          BRANCH_NAME: ${{ steps.branch.outputs.name }}
+        run: |
+          $n = $env:ISSUE_NUMBER
+          $branch = $env:BRANCH_NAME
+          $body = @'
+          Read GitHub issue #ISSUE_NUMBER_PLACEHOLDER in this repository (gh issue view ISSUE_NUMBER_PLACEHOLDER --json title,body,comments)
+          and follow the fix-issue skill (loaded from this session's --plugin-dir) to resolve it,
+          together with the factory-coordination skill's shared rules.
+
+          This single CI run plays the part the agent-factory launcher would normally play:
+          the working branch BRANCH_NAME_PLACEHOLDER already exists and is checked out; there is
+          no separate worktree, no issue assignee/claim, and no other concurrent job. Treat the
+          issue as already confirmed open and in scope.
+
+          Follow this repository's policy from .agent-factory/profile.toml: its issue_tracking
+          file (docs/issue-guide.md) and pr_template (.github/PULL_REQUEST_TEMPLATE.md).
+
+          Stop and make no code changes, instead writing an UNTRACKED file (never run "git add"
+          on it, never commit it) at docs/factory/BLOCKED.md with a line starting "reason=" and
+          an explanation, if: the issue's acceptance criteria are missing or ambiguous, the work
+          needs a product, risk or architecture decision, or it would touch a sensitive path
+          (anything under src/dotnet/*/Authorization, anything matching *Auth*, *Token*,
+          *Identity* or *Credential* under src/dotnet, or anything under infra).
+
+          Otherwise: make the change and commit it. As your last step, write an UNTRACKED file
+          (never run "git add" on it, never commit it) at docs/factory/PR_BODY.md whose first
+          line is the pull request title and whose remaining lines are the body, following the
+          PR template. These two files are read by a CI step that runs after you and must never
+          appear in "git status --porcelain" output or in any commit; do not reference, move or
+          delete them yourself beyond creating one of them. Never push, merge, approve, enable
+          auto-merge, change branch protection or touch secrets; those stay with the human who
+          reviews this run's pull request.
+          '@
+          $body = $body -replace 'ISSUE_NUMBER_PLACEHOLDER', $n -replace 'BRANCH_NAME_PLACEHOLDER', $branch
+          $body | Set-Content -Path prompt.txt -Encoding utf8
+          Write-Output "----- prompt -----"
+          Get-Content prompt.txt
+
+      - name: Run Copilot CLI
+        shell: pwsh
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+        run: |
+          copilot `
+            --prompt (Get-Content prompt.txt -Raw) `
+            --silent `
+            --mode autopilot `
+            --plugin-dir scripts/agent-factory/agent_factory/plugin `
+            --allow-all-tools `
+            --deny-tool 'shell(git push:*)' `
+            --deny-tool 'shell(gh pr merge:*)' `
+            --deny-tool 'shell(gh pr review:*)' `
+            --deny-tool 'shell(gh api:*)' `
+            --max-ai-credits $env:MAX_AI_CREDITS `
+            --max-autopilot-continues $env:MAX_AUTOPILOT_CONTINUES `
+            --usage-output-file usage.json `
+            --no-auto-update
+
+      - name: Upload usage report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: copilot-usage-issue-${{ steps.issue.outputs.number }}
+          path: usage.json
+          if-no-files-found: ignore
+
+      - name: Report a blocked run
+        if: hashFiles('docs/factory/BLOCKED.md') != ''
+        shell: pwsh
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          $n = "${{ steps.issue.outputs.number }}"
+          $reason = Get-Content docs/factory/BLOCKED.md -Raw
+          gh issue comment $n --body "Automated fix attempt stopped without changes:`n`n$reason"
+          Remove-Item docs/factory/BLOCKED.md -Force
+          exit 0
+
+      - name: Push and open a draft pull request
+        id: pr
+        if: hashFiles('docs/factory/BLOCKED.md') == ''
+        shell: pwsh
+        env:
+          GH_TOKEN: ${{ github.token }}
+          ISSUE_NUMBER: ${{ steps.issue.outputs.number }}
+          BRANCH_NAME: ${{ steps.branch.outputs.name }}
+        run: |
+          $n = $env:ISSUE_NUMBER
+          $branch = $env:BRANCH_NAME
+          $commits = git log "origin/main..HEAD" --oneline
+          if (-not $commits) {
+            Write-Output "No commits were made; nothing to open a pull request for."
+            gh issue comment $n --body "Automated fix attempt made no changes and did not explain why; see the workflow run for details."
+            exit 0
+          }
+          git push origin $branch
+          if (Test-Path docs/factory/PR_BODY.md) {
+            $bodyFile = "docs/factory/PR_BODY.md"
+          } else {
+            "Fixes #$n`n`nOpened automatically by the copilot-fix-issue workflow; see the workflow run for details." | Set-Content pr_body_fallback.md
+            $bodyFile = "pr_body_fallback.md"
+          }
+          gh pr create --draft --base main --head $branch --title "Fix #$n" --body-file $bodyFile
