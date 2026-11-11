@@ -387,8 +387,8 @@ public class ButtonVisualStylesTests
     }
 
     [WinFormsTheory]
-    [InlineData(96, 4)]
-    [InlineData(144, 6)]
+    [InlineData(96, 3)]
+    [InlineData(144, 4)]
     public void FlatButtonDarkModeRenderer_FocusIndicator_UsesDpiScaledInsetWithoutPaintingBlackPixels(
         int deviceDpi,
         int expectedInset)
@@ -407,8 +407,8 @@ public class ButtonVisualStylesTests
     }
 
     [WinFormsTheory]
-    [InlineData(96, 4)]
-    [InlineData(144, 6)]
+    [InlineData(96, 3)]
+    [InlineData(144, 4)]
     public void PopupButtonDarkModeRenderer_FocusIndicator_UsesDpiScaledInsetWithoutPaintingBlackPixels(
         int deviceDpi,
         int expectedInset)
