@@ -472,6 +472,255 @@ public class CheckedListBoxTests
         Assert.Equal(expected, box.GetItemCheckState(0));
     }
 
+    private static CheckedListBox CreateCheckedListBox(bool createHandle)
+    {
+        CheckedListBox control = new();
+        control.Items.AddRange(["zero", "one", "two", "three"]);
+        if (createHandle)
+        {
+            control.CreateControl();
+        }
+
+        return control;
+    }
+
+    [WinFormsTheory]
+    [InlineData(false)]
+    [InlineData(true)]
+    public void CheckedListBox_SetItemCheckState_RaisesItemCheckWithOldAndNewState(bool createHandle)
+    {
+        // Programmatic checking raises ItemCheck once per real change with the index, the old state and the
+        // requested new state, and does not raise it when the state is unchanged.
+        using CheckedListBox control = CreateCheckedListBox(createHandle);
+        List<(int Index, CheckState Current, CheckState New, object Sender)> events = [];
+        control.ItemCheck += (sender, e) => events.Add((e.Index, e.CurrentValue, e.NewValue, sender));
+
+        control.SetItemCheckState(1, CheckState.Checked);
+        control.SetItemCheckState(1, CheckState.Indeterminate);
+        control.SetItemChecked(1, false);
+        control.SetItemCheckState(1, CheckState.Unchecked);
+        control.SetItemChecked(3, true);
+
+        events.Should().Equal(
+            (1, CheckState.Unchecked, CheckState.Checked, control),
+            (1, CheckState.Checked, CheckState.Indeterminate, control),
+            (1, CheckState.Indeterminate, CheckState.Unchecked, control),
+            (3, CheckState.Unchecked, CheckState.Checked, control));
+        control.GetItemCheckState(1).Should().Be(CheckState.Unchecked);
+        control.GetItemCheckState(3).Should().Be(CheckState.Checked);
+        control.IsHandleCreated.Should().Be(createHandle);
+    }
+
+    [WinFormsTheory]
+    [InlineData(false, CheckState.Checked, CheckState.Indeterminate)]
+    [InlineData(false, CheckState.Checked, CheckState.Unchecked)]
+    [InlineData(false, CheckState.Indeterminate, CheckState.Checked)]
+    [InlineData(true, CheckState.Checked, CheckState.Indeterminate)]
+    [InlineData(true, CheckState.Checked, CheckState.Unchecked)]
+    [InlineData(true, CheckState.Indeterminate, CheckState.Checked)]
+    public void CheckedListBox_SetItemCheckState_HandlerChangesNewValue_CommitsHandlerValue(bool createHandle, CheckState requested, CheckState replacement)
+    {
+        // A handler can replace NewValue, and the replacement (not the requested value) is what gets committed.
+        // Replacing it with the current Unchecked state means the change is vetoed.
+        using CheckedListBox control = CreateCheckedListBox(createHandle);
+        control.ItemCheck += (sender, e) => e.NewValue = replacement;
+
+        control.SetItemCheckState(2, requested);
+
+        control.GetItemCheckState(2).Should().Be(replacement);
+        control.CheckedIndices.Cast<int>().Should().Equal(replacement == CheckState.Unchecked ? Array.Empty<int>() : new[] { 2 });
+        control.IsHandleCreated.Should().Be(createHandle);
+    }
+
+    [WinFormsTheory]
+    [InlineData(false)]
+    [InlineData(true)]
+    public void CheckedListBox_SetItemCheckState_HandlerRestoresCurrentValue_KeepsStateAndCollections(bool createHandle)
+    {
+        // A handler that sets NewValue back to the current value cancels the change and leaves the state alone.
+        using CheckedListBox control = CreateCheckedListBox(createHandle);
+        control.SetItemChecked(0, true);
+        control.ItemCheck += (sender, e) => e.NewValue = e.CurrentValue;
+
+        control.SetItemCheckState(0, CheckState.Indeterminate);
+        control.SetItemCheckState(1, CheckState.Checked);
+
+        control.GetItemCheckState(0).Should().Be(CheckState.Checked);
+        control.GetItemCheckState(1).Should().Be(CheckState.Unchecked);
+        control.CheckedIndices.Cast<int>().Should().Equal(0);
+        control.CheckedItems.Cast<string>().Should().Equal("zero");
+    }
+
+    [WinFormsTheory]
+    [InlineData(false)]
+    [InlineData(true)]
+    public void CheckedListBox_CheckedCollections_FollowCheckingNotSelection(bool createHandle)
+    {
+        // CheckedItems/CheckedIndices track the checked (including indeterminate) items in index order, and
+        // are unaffected by which items are selected.
+        using CheckedListBox control = CreateCheckedListBox(createHandle);
+        control.SelectedIndex = 0;
+
+        control.SetItemCheckState(3, CheckState.Indeterminate);
+        control.SetItemChecked(1, true);
+
+        control.SelectedIndex.Should().Be(0);
+        control.CheckedIndices.Cast<int>().Should().Equal(1, 3);
+        control.CheckedItems.Cast<string>().Should().Equal("one", "three");
+        control.CheckedItems.Contains("zero").Should().BeFalse();
+        control.CheckedIndices.Contains(0).Should().BeFalse();
+        control.GetItemChecked(0).Should().BeFalse();
+        control.GetItemChecked(1).Should().BeTrue();
+        control.GetItemChecked(3).Should().BeTrue();
+
+        control.SelectedIndex = 2;
+        control.CheckedIndices.Cast<int>().Should().Equal(1, 3);
+
+        control.SetItemChecked(1, false);
+        control.CheckedIndices.Cast<int>().Should().Equal(3);
+        control.CheckedItems.Cast<string>().Should().Equal("three");
+        control.SelectedIndex.Should().Be(2);
+    }
+
+    [WinFormsFact]
+    public void CheckedListBox_RecreateHandle_PreservesIndeterminateAndCheckedStates()
+    {
+        // Check states, including Indeterminate, are cached by the control and survive native handle recreation.
+        using SubCheckedListBox control = new();
+        control.Items.AddRange(["zero", "one", "two", "three"]);
+        control.CreateControl();
+        control.SetItemCheckState(0, CheckState.Indeterminate);
+        control.SetItemCheckState(2, CheckState.Checked);
+        control.SelectedIndex = 1;
+        IntPtr oldHandle = control.Handle;
+
+        control.RecreateHandle();
+
+        control.IsHandleCreated.Should().BeTrue();
+        control.Handle.Should().NotBe(oldHandle);
+        control.GetItemCheckState(0).Should().Be(CheckState.Indeterminate);
+        control.GetItemCheckState(1).Should().Be(CheckState.Unchecked);
+        control.GetItemCheckState(2).Should().Be(CheckState.Checked);
+        control.CheckedIndices.Cast<int>().Should().Equal(0, 2);
+        control.SelectedIndex.Should().Be(1);
+    }
+
+    private static void ClickItem(CheckedListBox control, int index)
+    {
+        RECT rect = default;
+        Assert.Equal(1, (int)PInvokeCore.SendMessage(control, PInvoke.LB_GETITEMRECT, (WPARAM)index, ref rect));
+        Point point = new(rect.left + (rect.Width / 2), rect.top + (rect.Height / 2));
+        PInvokeCore.SendMessage(control, PInvokeCore.WM_LBUTTONDOWN, 1, PARAM.FromPoint(point));
+        PInvokeCore.SendMessage(control, PInvokeCore.WM_LBUTTONUP, 0, PARAM.FromPoint(point));
+    }
+
+    private static CheckedListBox CreateHostedCheckedListBox(Form form, bool checkOnClick)
+    {
+        CheckedListBox control = CreateCheckedListBox(createHandle: false);
+        control.CheckOnClick = checkOnClick;
+        control.Dock = DockStyle.Fill;
+        form.Controls.Add(control);
+        form.CreateControl();
+        _ = control.Handle;
+        return control;
+    }
+
+    [WinFormsFact]
+    public void CheckedListBox_UserClick_CheckOnClick_TogglesWithItemCheckAndSelectionSeparately()
+    {
+        // With CheckOnClick, a single click both selects the item and toggles it, raising ItemCheck with the
+        // old and new state; the checked collections reflect the check, not the selection.
+        using Form form = new();
+        CheckedListBox control = CreateHostedCheckedListBox(form, checkOnClick: true);
+        List<(int Index, CheckState Current, CheckState New)> events = [];
+        control.ItemCheck += (sender, e) => events.Add((e.Index, e.CurrentValue, e.NewValue));
+
+        ClickItem(control, 1);
+
+        events.Should().Equal((1, CheckState.Unchecked, CheckState.Checked));
+        control.SelectedIndex.Should().Be(1);
+        control.CheckedIndices.Cast<int>().Should().Equal(1);
+
+        // Selecting and checking a different item leaves the first one checked but no longer selected.
+        ClickItem(control, 2);
+
+        events.Should().Equal(
+            (1, CheckState.Unchecked, CheckState.Checked),
+            (2, CheckState.Unchecked, CheckState.Checked));
+        control.SelectedIndex.Should().Be(2);
+        control.CheckedIndices.Cast<int>().Should().Equal(1, 2);
+        control.CheckedItems.Cast<string>().Should().Equal("one", "two");
+
+        // Clicking a checked item unchecks it.
+        ClickItem(control, 1);
+
+        events.Should().HaveCount(3);
+        events[2].Should().Be((1, CheckState.Checked, CheckState.Unchecked));
+        control.GetItemCheckState(1).Should().Be(CheckState.Unchecked);
+        control.CheckedIndices.Cast<int>().Should().Equal(2);
+    }
+
+    [WinFormsFact]
+    public void CheckedListBox_UserClick_WithoutCheckOnClick_RequiresSecondClickOnSelectedItem()
+    {
+        // Without CheckOnClick, the first click only selects an item (no ItemCheck, nothing checked); clicking the
+        // already-selected item then toggles it.
+        using Form form = new();
+        CheckedListBox control = CreateHostedCheckedListBox(form, checkOnClick: false);
+        List<(int Index, CheckState Current, CheckState New)> events = [];
+        control.ItemCheck += (sender, e) => events.Add((e.Index, e.CurrentValue, e.NewValue));
+
+        ClickItem(control, 2);
+
+        events.Should().BeEmpty();
+        control.SelectedIndex.Should().Be(2);
+        control.CheckedIndices.Count.Should().Be(0);
+
+        ClickItem(control, 2);
+
+        events.Should().Equal((2, CheckState.Unchecked, CheckState.Checked));
+        control.SelectedIndex.Should().Be(2);
+        control.CheckedIndices.Cast<int>().Should().Equal(2);
+    }
+
+    [WinFormsFact]
+    public void CheckedListBox_UserClick_IndeterminateItem_UnchecksWithItemCheck()
+    {
+        // Clicking an indeterminate item counts as checked-to-unchecked: ItemCheck reports Indeterminate as the
+        // old state and Unchecked as the new one, and the item leaves both checked collections.
+        using Form form = new();
+        CheckedListBox control = CreateHostedCheckedListBox(form, checkOnClick: true);
+        control.SetItemCheckState(1, CheckState.Indeterminate);
+        control.SetItemChecked(2, true);
+        List<(int Index, CheckState Current, CheckState New)> events = [];
+        control.ItemCheck += (sender, e) => events.Add((e.Index, e.CurrentValue, e.NewValue));
+
+        ClickItem(control, 1);
+
+        events.Should().Equal((1, CheckState.Indeterminate, CheckState.Unchecked));
+        control.GetItemCheckState(1).Should().Be(CheckState.Unchecked);
+        control.CheckedIndices.Cast<int>().Should().Equal(2);
+        control.CheckedItems.Cast<string>().Should().Equal("two");
+    }
+
+    [WinFormsTheory]
+    [InlineData(CheckState.Indeterminate)]
+    [InlineData(CheckState.Unchecked)]
+    public void CheckedListBox_UserClick_HandlerChangesNewValue_CommitsHandlerValue(CheckState replacement)
+    {
+        // When a handler replaces NewValue during a user click, the replacement is committed: Indeterminate stays
+        // indeterminate (and counts as checked), while Unchecked vetoes the check.
+        using Form form = new();
+        CheckedListBox control = CreateHostedCheckedListBox(form, checkOnClick: true);
+        control.ItemCheck += (sender, e) => e.NewValue = replacement;
+
+        ClickItem(control, 3);
+
+        control.GetItemCheckState(3).Should().Be(replacement);
+        control.SelectedIndex.Should().Be(3);
+        control.CheckedIndices.Cast<int>().Should().Equal(replacement == CheckState.Unchecked ? Array.Empty<int>() : new[] { 3 });
+    }
+
     public static IEnumerable<object[]> OnDrawItem_TestData()
     {
         yield return new object[] { null, Rectangle.Empty, 0, DrawItemState.Default, Color.Red, Color.Blue };
@@ -967,6 +1216,8 @@ public class CheckedListBoxTests
         public new int _listItemBordersHeight => base._listItemBordersHeight;
 
         public new void RefreshItems() => base.RefreshItems();
+
+        public new void RecreateHandle() => base.RecreateHandle();
 
         public new void OnDrawItem(DrawItemEventArgs e) => base.OnDrawItem(e);
 
