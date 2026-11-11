@@ -2833,6 +2833,66 @@ public partial class FormTests
         Assert.Equal(1, legacyClosedCount);
     }
 
+    [WinFormsTheory]
+    [InlineData(false, 0)]
+    [InlineData(true, 0)]
+    [InlineData(false, 2)]
+    [InlineData(true, 2)]
+    public void Form_ShowDialog_CloseOwnerAgainInFormClosed_RaisesFormClosedOnce(bool closeFromDialog, int otherOwnedFormsCount)
+    {
+        using Form owner = new();
+        using Form dialog = new();
+        Form[] otherOwnedForms = new Form[otherOwnedFormsCount];
+        List<(Form, CloseReason)> closedEvents = [];
+        bool reenteredClose = false;
+
+        dialog.FormClosed += (_, e) => closedEvents.Add((dialog, e.CloseReason));
+        owner.FormClosed += (_, e) => closedEvents.Add((owner, e.CloseReason));
+        Form reenteringForm = closeFromDialog ? dialog : owner;
+        reenteringForm.FormClosed += (_, _) =>
+        {
+            if (!reenteredClose)
+            {
+                reenteredClose = true;
+                owner.Close();
+            }
+        };
+        dialog.Shown += (_, _) => dialog.BeginInvoke((Action)owner.Close);
+
+        try
+        {
+            owner.Show();
+            for (int i = 0; i < otherOwnedForms.Length; i++)
+            {
+                Form ownedForm = new();
+                otherOwnedForms[i] = ownedForm;
+                ownedForm.FormClosed += (_, e) => closedEvents.Add((ownedForm, e.CloseReason));
+                ownedForm.Show(owner);
+            }
+
+            Assert.Equal(DialogResult.Cancel, dialog.ShowDialog(owner));
+            Assert.True(reenteredClose);
+            List<(Form, CloseReason)> expectedClosedEvents = [(dialog, CloseReason.FormOwnerClosing)];
+            for (int i = otherOwnedForms.Length - 1; i >= 0; i--)
+            {
+                expectedClosedEvents.Add((otherOwnedForms[i], CloseReason.FormOwnerClosing));
+            }
+
+            expectedClosedEvents.Add((owner, CloseReason.UserClosing));
+            Assert.Equal(expectedClosedEvents, closedEvents);
+            Assert.True(owner.IsDisposed);
+            Assert.True(dialog.IsDisposed);
+            Assert.All(otherOwnedForms, form => Assert.True(form.IsDisposed));
+        }
+        finally
+        {
+            foreach (Form ownedForm in otherOwnedForms)
+            {
+                ownedForm?.Dispose();
+            }
+        }
+    }
+
     [WinFormsFact]
     public void Form_ShowDialog_CloseDialogAndOwner_ResetsClosingStateForNextRun()
     {
@@ -2970,6 +3030,145 @@ public partial class FormTests
         var message = Message.Create(HWND.Null, PInvokeCore.WM_QUERYENDSESSION, wparam: default, lparam: default);
         form.WndProc(ref message);
         Assert.True((BOOL)message.ResultInternal);
+    }
+
+    [WinFormsTheory]
+    [InlineData(false)]
+    [InlineData(true)]
+    public void Form_QueryEndSession_WhileClosing_PreservesCancellation(bool cancelQuery)
+    {
+        using SubForm form = new();
+        bool querying = false;
+        int closingCount = 0;
+        int closedCount = 0;
+        form.FormClosing += (_, e) =>
+        {
+            closingCount++;
+            if (querying)
+            {
+                e.Cancel = cancelQuery;
+            }
+        };
+        form.FormClosed += (_, _) =>
+        {
+            closedCount++;
+            querying = true;
+            var message = Message.Create(HWND.Null, PInvokeCore.WM_QUERYENDSESSION, wparam: default, lparam: default);
+            form.WndProc(ref message);
+            Assert.Equal(!cancelQuery, (bool)(BOOL)message.ResultInternal);
+            querying = false;
+            message = Message.Create(HWND.Null, PInvokeCore.WM_ENDSESSION, wparam: default, lparam: default);
+            form.WndProc(ref message);
+        };
+
+        form.Show();
+        form.Close();
+
+        Assert.Equal(2, closingCount);
+        Assert.Equal(1, closedCount);
+        Assert.True(form.IsDisposed);
+    }
+
+    [WinFormsTheory]
+    [InlineData(false)]
+    [InlineData(true)]
+    public void Form_WmClose_ClosedHandlerThrows_CanRetry(bool useLegacyClosed)
+    {
+        using SubForm form = new();
+        int callbackCount = 0;
+        void ThrowOnce()
+        {
+            if (++callbackCount == 1)
+            {
+                throw new InvalidOperationException();
+            }
+        }
+
+        if (useLegacyClosed)
+        {
+#pragma warning disable WFDEV004 // Type or member is obsolete - compat
+            form.Closed += (_, _) => ThrowOnce();
+#pragma warning restore WFDEV004
+        }
+        else
+        {
+            form.FormClosed += (_, _) => ThrowOnce();
+        }
+
+        form.Show();
+        var message = Message.Create(HWND.Null, PInvokeCore.WM_CLOSE, wparam: default, lparam: default);
+        Assert.Throws<InvalidOperationException>(() => form.WndProc(ref message));
+        Assert.False(form.IsDisposed);
+        Assert.True(form.IsHandleCreated);
+
+        form.Close();
+
+        Assert.Equal(2, callbackCount);
+        Assert.True(form.IsDisposed);
+    }
+
+    [WinFormsTheory]
+    [InlineData(false)]
+    [InlineData(true)]
+    public void Form_Close_ReopenInClosedHandlerAsDialog_CanClose(bool useLegacyClosed)
+    {
+        using Form form = new();
+        using System.Windows.Forms.Timer timer = new() { Interval = 50 };
+        bool reopened = false;
+        int closedCount = 0;
+        int ticks = 0;
+        DialogResult result = DialogResult.None;
+        timer.Tick += (_, _) =>
+        {
+            ticks++;
+            if (ticks == 1)
+            {
+                form.Close();
+            }
+            else if (ticks == 3)
+            {
+                // Stop a broken close guard from hanging the test, but still fail the first-tick assertion.
+                form.DialogResult = DialogResult.Cancel;
+            }
+        };
+        void ReopenAsDialog()
+        {
+            closedCount++;
+            if (!reopened)
+            {
+                reopened = true;
+                form.Hide();
+                timer.Start();
+                try
+                {
+                    result = form.ShowDialog();
+                }
+                finally
+                {
+                    timer.Stop();
+                }
+            }
+        }
+
+        if (useLegacyClosed)
+        {
+#pragma warning disable WFDEV004 // Type or member is obsolete - compat
+            form.Closed += (_, _) => ReopenAsDialog();
+#pragma warning restore WFDEV004
+        }
+        else
+        {
+            form.FormClosed += (_, _) => ReopenAsDialog();
+        }
+
+        form.Show();
+        form.Close();
+
+        Assert.True(reopened);
+        Assert.Equal(1, ticks);
+        Assert.Equal(DialogResult.Cancel, result);
+        Assert.Equal(2, closedCount);
+        Assert.True(form.IsDisposed);
     }
 
     [WinFormsFact]

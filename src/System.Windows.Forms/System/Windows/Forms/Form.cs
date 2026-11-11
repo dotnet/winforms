@@ -97,6 +97,7 @@ public partial class Form : ContainerControl
     private static readonly BitVector32.Section s_formStateExWindowBoundsWidthIsClientSize = BitVector32.CreateSection(1, s_formStateExSettingAutoScale);
     private static readonly BitVector32.Section s_formStateExWindowBoundsHeightIsClientSize = BitVector32.CreateSection(1, s_formStateExWindowBoundsWidthIsClientSize);
     private static readonly BitVector32.Section s_formStateExWindowClosing = BitVector32.CreateSection(1, s_formStateExWindowBoundsHeightIsClientSize);
+    private static readonly BitVector32.Section s_formStateExInCloseEventDispatch = BitVector32.CreateSection(1, s_formStateExWindowClosing);
 
     private const int SizeGripSize = 16;
 
@@ -6747,6 +6748,13 @@ public partial class Form : ContainerControl
     /// </summary>
     private void WmClose(ref Message m)
     {
+        // A closed handler can call Close again before the committed close disposes the handle.
+        // A modal close can instead belong to a new ShowDialog run nested in that handler.
+        if (m.MsgInternal == PInvokeCore.WM_CLOSE && !Modal && _formStateEx[s_formStateExInCloseEventDispatch] != 0)
+        {
+            return;
+        }
+
         FormClosingEventArgs e = new(CloseReason, false);
 
         // Pass 1 (WM_CLOSE & WM_QUERYENDSESSION)... Closing
@@ -6867,51 +6875,59 @@ public partial class Form : ContainerControl
             if (!e.Cancel)
             {
                 IsClosing = true;
-
-                if (IsMdiContainer)
+                int previousCloseEventDispatch = _formStateEx[s_formStateExInCloseEventDispatch];
+                _formStateEx[s_formStateExInCloseEventDispatch] = 1;
+                try
                 {
-                    fc = new FormClosedEventArgs(CloseReason.MdiFormClosing);
-                    foreach (Form mdiChild in MdiChildren)
+                    if (IsMdiContainer)
                     {
-                        if (mdiChild.IsHandleCreated)
+                        fc = new FormClosedEventArgs(CloseReason.MdiFormClosing);
+                        foreach (Form mdiChild in MdiChildren)
                         {
-                            mdiChild.IsTopMdiWindowClosing = IsClosing;
+                            if (mdiChild.IsHandleCreated)
+                            {
+                                mdiChild.IsTopMdiWindowClosing = IsClosing;
 #pragma warning disable WFDEV004 // Type or member is obsolete - compat
-                            mdiChild.OnClosed(fc);
+                                mdiChild.OnClosed(fc);
 #pragma warning restore WFDEV004
-                            mdiChild.OnFormClosed(fc);
+                                mdiChild.OnFormClosed(fc);
+                            }
                         }
                     }
-                }
 
-                // Call OnClosed/OnFormClosed on all the forms that current form owns.
-                if (Properties.TryGetValue(s_propOwnedForms, out List<Form>? ownedForms))
-                {
-                    for (int i = ownedForms.Count - 1; i >= 0; i--)
+                    // Call OnClosed/OnFormClosed on all the forms that current form owns.
+                    if (Properties.TryGetValue(s_propOwnedForms, out List<Form>? ownedForms))
                     {
-                        Form ownedForm = ownedForms[i];
-                        if (ownedForm.Modal)
+                        for (int i = ownedForms.Count - 1; i >= 0; i--)
                         {
-                            // The modal message loop will exit after the owner disposes the dialog.
-                            ownedForm.IsClosing = true;
+                            Form ownedForm = ownedForms[i];
+                            if (ownedForm.Modal)
+                            {
+                                // The modal message loop will exit after the owner disposes the dialog.
+                                ownedForm.IsClosing = true;
+                            }
+
+                            fc = new FormClosedEventArgs(CloseReason.FormOwnerClosing);
+                            // Call OnClosed and OnFormClosed on the child forms.
+#pragma warning disable WFDEV004 // Type or member is obsolete - compat
+                            ownedForm.OnClosed(fc);
+#pragma warning restore WFDEV004
+                            ownedForm.OnFormClosed(fc);
                         }
-
-                        fc = new FormClosedEventArgs(CloseReason.FormOwnerClosing);
-                        // Call OnClosed and OnFormClosed on the child forms.
-#pragma warning disable WFDEV004 // Type or member is obsolete - compat
-                        ownedForm.OnClosed(fc);
-#pragma warning restore WFDEV004
-                        ownedForm.OnFormClosed(fc);
                     }
-                }
 
-                fc = new FormClosedEventArgs(CloseReason);
+                    fc = new FormClosedEventArgs(CloseReason);
 #pragma warning disable WFDEV004 // Type or member is obsolete - compat
-                OnClosed(fc);
+                    OnClosed(fc);
 #pragma warning restore WFDEV004
-                OnFormClosed(fc);
+                    OnFormClosed(fc);
 
-                Dispose();
+                    Dispose();
+                }
+                finally
+                {
+                    _formStateEx[s_formStateExInCloseEventDispatch] = previousCloseEventDispatch;
+                }
             }
         }
     }
