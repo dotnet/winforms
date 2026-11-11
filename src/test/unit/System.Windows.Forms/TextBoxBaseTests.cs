@@ -95,6 +95,9 @@ public partial class TextBoxBaseTests
         WINDOW_STYLE modernStyle = (WINDOW_STYLE)PInvokeCore.GetWindowLong(
             control,
             WINDOW_LONG_PTR_INDEX.GWL_STYLE);
+
+        // Clearing WS_BORDER alone can leave the inner border visible.
+        // Check that the handle was recreated to ensure the old border is removed.
         Assert.NotEqual(classicHandle, control.Handle);
         Assert.Equal((WINDOW_STYLE)0, modernStyle & WINDOW_STYLE.WS_BORDER);
         Assert.Equal(8, control.SelectionStart);
