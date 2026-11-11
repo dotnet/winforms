@@ -2006,6 +2006,7 @@ public class MonthCalendarTests
         Assert.Equal(0, createdCallCount);
     }
 
+    // Verifies setting SelectionStart relative to the calendar's initial selection without creating a handle.
     [WinFormsTheory]
     [InlineData(-1, 0)]
     [InlineData(0, 0)]
@@ -2031,6 +2032,7 @@ public class MonthCalendarTests
         Assert.False(calendar.IsHandleCreated);
     }
 
+    // Verifies setting SelectionStart relative to the calendar's initial selection with a handle.
     [WinFormsTheory]
     [InlineData(-1, 0)]
     [InlineData(0, 0)]
@@ -2147,6 +2149,7 @@ public class MonthCalendarTests
         Assert.Equal(0, createdCallCount);
     }
 
+    // Verifies setting SelectionEnd relative to the calendar's initial selection without creating a handle.
     [WinFormsTheory]
     [InlineData(1, 0)]
     [InlineData(0, 0)]
@@ -2172,6 +2175,7 @@ public class MonthCalendarTests
         Assert.False(calendar.IsHandleCreated);
     }
 
+    // Verifies setting SelectionEnd relative to the calendar's initial selection with a handle.
     [WinFormsTheory]
     [InlineData(1, 0)]
     [InlineData(0, 0)]
@@ -2310,6 +2314,7 @@ public class MonthCalendarTests
         Assert.Equal(0, createdCallCount);
     }
 
+    // Verifies SelectionRange normalization, reversed-range handling, and MaxSelectionCount clamping without a handle.
     [WinFormsTheory]
     [InlineData(0, 0, 0, 0)]
     [InlineData(0, 24, 0, 24)]
@@ -2347,6 +2352,7 @@ public class MonthCalendarTests
         Assert.False(calendar.IsHandleCreated);
     }
 
+    // Verifies SelectionRange normalization, reversed-range handling, and MaxSelectionCount clamping with a handle.
     [WinFormsTheory]
     [InlineData(0, 0, 0, 0)]
     [InlineData(0, 24, 0, 24)]
@@ -4318,6 +4324,7 @@ public class MonthCalendarTests
         Assert.Equal(0, createdCallCount);
     }
 
+    // Verifies SetSelectionRange's MaxSelectionCount clamping relative to the initial selection without a handle.
     [WinFormsTheory]
     [InlineData(0, 0, 0, 0)]
     [InlineData(0, 24, 0, 24)]
@@ -4352,6 +4359,7 @@ public class MonthCalendarTests
         Assert.False(calendar.IsHandleCreated);
     }
 
+    // Verifies SetSelectionRange's MaxSelectionCount clamping relative to the initial selection with a handle.
     [WinFormsTheory]
     [InlineData(0, 0, 0, 0)]
     [InlineData(0, 24, 0, 24)]
