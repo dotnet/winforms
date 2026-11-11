@@ -341,26 +341,46 @@ public class CheckedListBoxTests
         control.IsHandleCreated.Should().Be(createHandle);
     }
 
-    [WinFormsFact]
-    public void CheckedListBox_HorizontalScrollbar_SetWithCachedSelectedItemsCount_PreservesSelection()
+    [WinFormsTheory]
+    [InlineData(false)]
+    [InlineData(true)]
+    public void CheckedListBox_HorizontalScrollbar_SetWithCachedSelectedItemsCount_PreservesSelection(bool createHandle)
     {
-        using CheckedListBox control = new();
+        // Cached selection views must survive scrollbar-triggered and repeated explicit refreshes in both handle states.
+        using SubCheckedListBox control = new();
         control.Items.Add("item1");
         control.SelectedIndex = 0;
 #pragma warning disable xUnit2013 // Do not use equality check to check for collection size.
         Assert.Equal(1, control.SelectedItems.Count);
 #pragma warning restore xUnit2013 // Do not use equality check to check for collection size.
+
+        if (createHandle)
+        {
+            Assert.NotEqual(IntPtr.Zero, control.Handle);
+        }
+
         control.Items.Add("item2");
 
         control.HorizontalScrollbar = true;
 
-        Assert.True(control.HorizontalScrollbar);
-        Assert.Equal(0, control.SelectedIndex);
-        Assert.Equal("item1", control.SelectedItem);
+        // Check the scrollbar refresh first, then re-prime the count cache between explicit rebuilds.
+        for (int refresh = 0; refresh < 3; refresh++)
+        {
+            if (refresh > 0)
+            {
+                control.RefreshItems();
+            }
+
 #pragma warning disable xUnit2013 // Do not use equality check to check for collection size.
-        Assert.Equal(1, control.SelectedItems.Count);
+            Assert.Equal(1, control.SelectedItems.Count);
 #pragma warning restore xUnit2013 // Do not use equality check to check for collection size.
-        Assert.False(control.IsHandleCreated);
+            Assert.True(control.HorizontalScrollbar);
+            Assert.Equal(0, control.SelectedIndex);
+            Assert.Equal("item1", control.SelectedItem);
+            Assert.Equal(0, Assert.Single(control.SelectedIndices));
+            Assert.Equal(new object[] { "item1", "item2" }, control.Items.Cast<object>());
+            Assert.Equal(createHandle, control.IsHandleCreated);
+        }
     }
 
     [WinFormsFact]
