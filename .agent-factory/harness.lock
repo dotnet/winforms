@@ -1,0 +1,24 @@
+# The agent-factory harness this repository vendors (Tier 1 adoption; see
+# docs/factory/adoption.md). There is no published package feed yet, so these
+# files are copied verbatim into scripts/agent-factory/agent_factory at the
+# pinned commit below, the way https://msft.ghe.com/coreai/firefly vendors them.
+# sha256 hashes "<file>\n<sha256 hex of the file>\n" for each file in order.
+source = "https://msft.ghe.com/coreai/agent-factory"
+commit = "110c979461bf6d70867c85f3792740f8f4d748a9"
+vendored = "scripts/agent-factory"
+files = [
+  "agent_factory/__init__.py",
+  "agent_factory/janitor.py",
+  "agent_factory/profile.py",
+  "agent_factory/roles.py",
+  "agent_factory/plugin/plugin.json",
+  "agent_factory/plugin/skills/code-review/SKILL.md",
+  "agent_factory/plugin/skills/factory-coordination/SKILL.md",
+  "agent_factory/plugin/skills/fix-issue/SKILL.md",
+  "agent_factory/plugin/skills/overcooked-kitchen/SKILL.md",
+  "agent_factory/plugin/skills/patrol/SKILL.md",
+  "agent_factory/plugin/skills/scout/SKILL.md",
+  "agent_factory/plugin/skills/ship-it/SKILL.md",
+  "agent_factory/plugin/skills/work-queue/SKILL.md",
+]
+sha256 = "a4c68193ed1f70720169c2dff571930cbd4b6e91e16a21cc4a57044f849be198"

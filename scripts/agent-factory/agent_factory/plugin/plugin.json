@@ -1,0 +1,4 @@
+{
+  "name": "agent-factory",
+  "description": "Skills for the agent factory's built-in roles: fix, ship, review, patrol and scout jobs, and the coordination rules they share."
+}

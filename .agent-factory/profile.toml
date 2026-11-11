@@ -1,0 +1,36 @@
+# This repository's agent-factory profile (Tier 1 adoption; see docs/factory/adoption.md).
+# Only the profile schema, janitor sweeps and Copilot CLI skills are vendored today
+# (scripts/agent-factory/agent_factory, pinned by .agent-factory/harness.lock); there is
+# no claim/review/merge engine running against this file yet. Values below are read only
+# by `agent-factory profile validate|show` until that engine exists.
+schema = 1
+preset = "prototype"          # loosest built-in check modes while this is being evaluated
+
+[repository]
+forge = "github"
+url = "https://github.com/dotnet/winforms"
+
+[policies]
+# No constitution.md or agents.md exist yet; add them and set
+# policies.constitution / policies.conduct once written.
+issue_tracking = "docs/issue-guide.md"
+pr_template = ".github/PULL_REQUEST_TEMPLATE.md"
+
+[budgets]
+# Deliberately conservative while Tier 1 is only validated, not run.
+max_jobs = 1
+pr_job_reserve = 1
+pr_backlog = 2
+credits_per_session = 20000
+continues = 20
+stall_minutes = 60
+open_prs_per_owner = 5
+
+[checks.format]
+mode = "advisory"
+
+[[checks.custom]]
+id = "build"
+run = ["cmd", "/c", "build.cmd"]
+mode = "advisory"
+timeout = 3600
