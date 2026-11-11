@@ -1990,6 +1990,93 @@ public class UpDownBaseTests
         Assert.Equal(0, createdCallCount);
     }
 
+    [WinFormsTheory]
+    [InlineData(false, false, false)]
+    [InlineData(false, false, true)]
+    [InlineData(false, true, false)]
+    [InlineData(false, true, true)]
+    [InlineData(true, false, false)]
+    [InlineData(true, false, true)]
+    [InlineData(true, true, false)]
+    [InlineData(true, true, true)]
+    public void UpDownBase_Font_SetAfterParentFontChange_PreservesWidthAndLocation(bool numeric, bool nested, bool resetParentFont)
+    {
+        using Font parentFont = new(Control.DefaultFont.FontFamily, Control.DefaultFont.Size * 2);
+        using Font controlFont = new(Control.DefaultFont.FontFamily, Control.DefaultFont.Size + 4);
+        using Form form = new()
+        {
+            AutoScaleMode = AutoScaleMode.Font
+        };
+        using Panel panel = new();
+        using UpDownBase control = numeric ? new NumericUpDown() : new DomainUpDown();
+        form.Controls.Add(panel);
+        (nested ? panel.Controls : form.Controls).Add(control);
+        control.Location = new Point(40, 50);
+        control.Width = 120;
+        Assert.NotEqual(IntPtr.Zero, form.Handle);
+        Assert.NotEqual(IntPtr.Zero, control.Handle);
+
+        form.Font = parentFont;
+        if (resetParentFont)
+        {
+            form.ResetFont();
+        }
+
+        Rectangle bounds = control.Bounds;
+
+        for (int i = 0; i < 2; i++)
+        {
+            control.Font = controlFont;
+            control.Location.Should().Be(bounds.Location);
+            control.Width.Should().Be(bounds.Width);
+            control.Height.Should().Be(control.PreferredHeight);
+
+            control.ResetFont();
+            control.Bounds.Should().Be(bounds);
+        }
+    }
+
+    [WinFormsTheory]
+    [InlineData(false, false)]
+    [InlineData(false, true)]
+    [InlineData(true, false)]
+    [InlineData(true, true)]
+    public void UpDownBase_Font_ResetParentWithExplicitFont_RestoresLocation(bool numeric, bool nested)
+    {
+        using Font parentFont = new(Control.DefaultFont.FontFamily, Control.DefaultFont.Size * 2);
+        using Font controlFont = new(Control.DefaultFont.FontFamily, Control.DefaultFont.Size + 4);
+        using Form form = new()
+        {
+            AutoScaleMode = AutoScaleMode.Font
+        };
+        using Panel panel = new();
+        using UpDownBase control = numeric ? new NumericUpDown() : new DomainUpDown();
+        form.Controls.Add(panel);
+        (nested ? panel.Controls : form.Controls).Add(control);
+        control.Location = new Point(40, 50);
+        control.Width = 120;
+        Assert.NotEqual(IntPtr.Zero, form.Handle);
+        Assert.NotEqual(IntPtr.Zero, control.Handle);
+        Point location = control.Location;
+        int width = control.Width;
+
+        form.Font = parentFont;
+        Point scaledLocation = control.Location;
+        scaledLocation.Should().NotBe(location);
+
+        control.Font = controlFont;
+        control.Location.Should().Be(scaledLocation);
+
+        form.ResetFont();
+        control.Location.Should().Be(location);
+        control.Width.Should().Be(width);
+        control.Font.Should().BeSameAs(controlFont);
+
+        control.ResetFont();
+        control.Location.Should().Be(location);
+        control.Width.Should().Be(width);
+    }
+
     public static IEnumerable<object[]> OnFontChanged_TestData()
     {
         foreach (BorderStyle borderStyle in Enum.GetValues(typeof(BorderStyle)))
