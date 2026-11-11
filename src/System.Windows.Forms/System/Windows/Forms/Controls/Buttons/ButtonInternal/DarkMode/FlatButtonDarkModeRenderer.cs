@@ -16,7 +16,7 @@ namespace System.Windows.Forms;
 /// </summary>
 internal sealed class FlatButtonDarkModeRenderer : ButtonDarkModeRendererBase
 {
-    private const int FocusIndicatorInflate = -3;
+    private const int FocusInsetLogical = 3;
     private const int CornerRadius = 6;
     private static readonly Size s_corner = new(CornerRadius, CornerRadius);
 
@@ -43,7 +43,8 @@ internal sealed class FlatButtonDarkModeRenderer : ButtonDarkModeRendererBase
 
     public override void DrawFocusIndicator(Graphics g, Rectangle contentBounds, bool isDefault)
     {
-        Rectangle focus = Rectangle.Inflate(contentBounds, FocusIndicatorInflate, FocusIndicatorInflate);
+        int focusInset = Math.Max(1, Scale(FocusInsetLogical));
+        Rectangle focus = Rectangle.Inflate(contentBounds, -focusInset, -focusInset);
         DrawDottedFocusRectangle(g, focus, DefaultColors.FocusBorderColor);
     }
 
