@@ -36,6 +36,8 @@ internal sealed unsafe partial class Composition<TOleServices, TNrbfSerializer, 
 #endif
 {
 #if NETFRAMEWORK
+    public bool SupportsTypedData => true;
+
     private static readonly TOleServices s_oleServices = new();
 #endif
 

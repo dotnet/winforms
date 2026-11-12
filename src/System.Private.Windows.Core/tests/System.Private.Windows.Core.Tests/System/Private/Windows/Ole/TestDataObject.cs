@@ -17,6 +17,10 @@ internal unsafe class TestDataObject<TOleServices> :
 {
     private readonly Composition<TOleServices, CoreNrbfSerializer, TestFormat> _innerData;
 
+#if NETFRAMEWORK
+    public bool SupportsTypedData => true;
+#endif
+
 #if NET
     static
 #endif
@@ -48,8 +52,10 @@ internal unsafe class TestDataObject<TOleServices> :
     IDataObjectInternal IDataObjectInternal<TestDataObject<TOleServices>, ITestDataObject>.Wrap(ITestDataObject data) =>
         new TestDataObjectAdapter(data);
 
+#if NET
     // Keep the factory's composed adapters intact, matching the framework implementations under test.
     private TestDataObject(Composition<TOleServices, CoreNrbfSerializer, TestFormat> data) => _innerData = data;
+#endif
 
     bool IDataObjectInternal<TestDataObject<TOleServices>, ITestDataObject>.TryUnwrapUserDataObject([NotNullWhen(true)] out ITestDataObject? dataObject)
         => TryUnwrapUserDataObject(out dataObject);

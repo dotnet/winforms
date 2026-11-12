@@ -15,6 +15,8 @@ internal sealed partial class DataStore<TOleServices>
 #endif
 {
 #if NETFRAMEWORK
+    public bool SupportsTypedData => true;
+
     private static readonly TOleServices s_oleServices = new();
 #endif
 
