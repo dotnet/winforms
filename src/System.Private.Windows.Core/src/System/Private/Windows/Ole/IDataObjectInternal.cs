@@ -195,7 +195,6 @@ internal unsafe interface IDataObjectInternal<TDataObject, TIDataObject> : IData
 #endif
     IDataObjectInternal Wrap(TIDataObject data);
 
-#if NET
     /// <summary>
     ///  Combines a captured clipboard proxy with managed-first retrieval without changing the original object.
     /// </summary>
@@ -211,9 +210,10 @@ internal unsafe interface IDataObjectInternal<TDataObject, TIDataObject> : IData
     ///  A new platform data object that reads managed data first and falls back to the captured proxy only
     ///  for plain-text formats. Neither input object is modified.
     /// </returns>
-    static abstract TDataObject Create(TDataObject clipboardData, TIDataObject managedData);
-
+#if NET
+    static abstract
 #endif
+    TDataObject Create(TDataObject clipboardData, TIDataObject managedData);
 
     /// <summary>
     ///  Unwraps the user IDataObject instance when applicable.

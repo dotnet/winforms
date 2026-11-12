@@ -1,7 +1,6 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
-#if NET
 using Windows.Win32;
 using Windows.Win32.Foundation;
 using Windows.Win32.System.Com;
@@ -15,6 +14,53 @@ namespace System.Private.Windows.Ole;
 
 public unsafe class ClipboardTextFallbackTests
 {
+#if NETFRAMEWORK
+    [Theory]
+    [InlineData(false, false)]
+    [InlineData(false, true)]
+    [InlineData(true, false)]
+    [InlineData(true, true)]
+    public void GetDataObject_FrameworkManagedSource_UsesOptInPolicy(bool enabled, bool legacySource)
+    {
+        // The Framework mock proxy has its own managed identity. Return an original CCW here to exercise
+        // built-in COM recovery and the instance factory, rather than the ordinary native-only reader.
+        using ClipboardScope<FrameworkSourceOleServices> scope = new();
+        TestDataObject<FrameworkSourceOleServices> source = new(DataFormatNames.Text, autoConvert: true, "test string");
+        object payload = new();
+        source.SetData("CustomPayload", autoConvert: false, payload);
+        ITestDataObject managedSource = legacySource ? new LegacyDataObject(source) : source;
+        FrameworkSourceOleServices.Source = legacySource ? new(managedSource) : source;
+        FrameworkSourceOleServices.Enabled = enabled;
+
+        try
+        {
+            ClipboardCore<FrameworkSourceOleServices>.GetDataObject<TestDataObject<FrameworkSourceOleServices>, ITestDataObject>(
+                out ITestDataObject? result).Should().Be(HRESULT.S_OK);
+            if (enabled)
+            {
+                result.Should().NotBeSameAs(managedSource);
+                result!.GetData(DataFormatNames.UnicodeText, autoConvert: false).Should().Be("test string");
+                IDataObjectInternal typed = result.Should().BeAssignableTo<IDataObjectInternal>().Subject;
+                typed.TryGetData(DataFormatNames.UnicodeText, autoConvert: false, out string? text).Should().BeTrue();
+                text.Should().Be("test string");
+            }
+            else
+            {
+                result.Should().BeSameAs(managedSource);
+                result!.GetData(DataFormatNames.UnicodeText, autoConvert: false).Should().BeNull();
+            }
+
+            result.GetData("CustomPayload", autoConvert: false).Should().BeSameAs(payload);
+            result.GetFormats(autoConvert: false).Should().Equal(managedSource.GetFormats(autoConvert: false));
+        }
+        finally
+        {
+            FrameworkSourceOleServices.Source = null;
+            FrameworkSourceOleServices.Enabled = false;
+        }
+    }
+#endif
+
     [Theory]
     [InlineData(false)]
     [InlineData(true)]
@@ -182,8 +228,33 @@ public unsafe class ClipboardTextFallbackTests
 
     internal class TextFallbackOleServices : MockOleServices<ClipboardTextFallbackTests>, IOleServices
     {
+#if NET
         static bool IOleServices.UseNativeClipboardTextFallback => true;
+#else
+        public override bool UseNativeClipboardTextFallback => true;
+#endif
     }
+
+#if NETFRAMEWORK
+    internal class FrameworkSourceOleServices : MockOleServices<ClipboardTextFallbackTests>, IOleServices
+    {
+        internal static TestDataObject<FrameworkSourceOleServices>? Source { get; set; }
+        internal static bool Enabled { get; set; }
+
+        public override bool UseNativeClipboardTextFallback => Enabled;
+
+        HRESULT IOleServices.OleGetClipboard(IDataObject** dataObject)
+        {
+            if (dataObject is null)
+            {
+                return HRESULT.E_POINTER;
+            }
+
+            *dataObject = Source is { } source ? ComHelpers.GetComPointer<IDataObject>(source) : null;
+            return *dataObject is null ? HRESULT.CLIPBRD_E_BAD_DATA : HRESULT.S_OK;
+        }
+    }
+#endif
 
     private class SingleArgumentDataObject : DataObject
     {
@@ -219,4 +290,3 @@ public unsafe class ClipboardTextFallbackTests
         public void SetData(object? value) => data.SetData(value);
     }
 }
-#endif
