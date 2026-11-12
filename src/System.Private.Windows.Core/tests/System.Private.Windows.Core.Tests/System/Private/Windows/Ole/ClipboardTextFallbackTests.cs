@@ -1,6 +1,7 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
+#if NET
 using Windows.Win32;
 using Windows.Win32.Foundation;
 using Windows.Win32.System.Com;
@@ -218,3 +219,4 @@ public unsafe class ClipboardTextFallbackTests
         public void SetData(object? value) => data.SetData(value);
     }
 }
+#endif

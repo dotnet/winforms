@@ -339,6 +339,7 @@ internal static unsafe class ClipboardCore<TOleServices>
             if (originalObject is TDataObject dataObjectInternal
                 && dataObjectInternal.TryUnwrapUserDataObject(out TIDataObject? userObject))
             {
+#if NET
                 if (TOleServices.UseNativeClipboardTextFallback)
                 {
                     // Returning the managed source directly skips OLE's text conversion, causing WPF's regression.
@@ -355,6 +356,7 @@ internal static unsafe class ClipboardCore<TOleServices>
                     }
                 }
 
+#endif
                 // We have an original user object that we want to return.
                 dataObject = userObject;
                 return result;
