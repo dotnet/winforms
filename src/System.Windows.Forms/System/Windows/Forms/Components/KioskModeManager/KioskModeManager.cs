@@ -4,7 +4,9 @@
 using System.ComponentModel;
 using System.ComponentModel.Design;
 using System.Drawing;
+using System.Globalization;
 using System.Runtime.InteropServices;
+using System.Windows.Forms.PropertyGridInternal;
 using Windows.Win32.System.Power;
 using Windows.Win32.System.Threading;
 
@@ -66,6 +68,7 @@ public class KioskModeManager : Component, ISupportInitialize
     private static readonly object s_fullScreenChangedEvent = new();
 
     private ContainerControl? _containerControl;
+    private WeakReference<ContainerControl>? _lastContainerControl;
     private bool _containerControlExplicitlySet;
     private Form? _targetForm;
     private bool _isFullScreen;
@@ -161,6 +164,7 @@ public class KioskModeManager : Component, ISupportInitialize
     [SRCategory(nameof(SR.CatBehavior))]
     [SRDescription(nameof(SR.KioskModeManagerContainerControlDescr))]
     [DefaultValue(null)]
+    [TypeConverter(typeof(ContainerControlConverter))]
     public ContainerControl? ContainerControl
     {
         get => _containerControl;
@@ -460,9 +464,9 @@ public class KioskModeManager : Component, ISupportInitialize
     /// </summary>
     /// <remarks>
     ///  <para>
-///   The component saves the form's border style, window state, bounds, and
-///   topmost state before applying fullscreen mode. Call
-///   <see cref="ToggleFullScreen"/> again to restore the saved state.
+    ///   The component saves the form's border style, window state, bounds, and
+    ///   topmost state before applying fullscreen mode. Call
+    ///   <see cref="ToggleFullScreen"/> again to restore the saved state.
     ///  </para>
     /// </remarks>
     private bool EnterFullScreen()
@@ -580,6 +584,11 @@ public class KioskModeManager : Component, ISupportInitialize
 
     private void SetContainerControl(ContainerControl? value, bool isExplicitAssignment)
     {
+        if (value is not null)
+        {
+            _lastContainerControl = new(value);
+        }
+
         if (_containerControl == value)
         {
             if (isExplicitAssignment)
@@ -955,6 +964,157 @@ public class KioskModeManager : Component, ISupportInitialize
         }
 
         return false;
+    }
+
+    /// <summary>
+    ///  Resolves container references and exposes their properties.
+    /// </summary>
+    private sealed class ContainerControlConverter : ReferenceConverter
+    {
+        public ContainerControlConverter() : base(typeof(ContainerControl))
+        {
+        }
+
+        public override object? ConvertTo(ITypeDescriptorContext? context, CultureInfo? culture, object? value, Type destinationType)
+        {
+            object? result = base.ConvertTo(context, culture, value, destinationType);
+            if (destinationType == typeof(string)
+                && result is string { Length: 0 }
+                && value is ContainerControl controlValue
+                && context?.Instance is KioskModeManager manager
+                && !string.IsNullOrEmpty(controlValue.Name)
+                && ReferenceEquals(FindControl(context, manager, controlValue.Name, culture), controlValue))
+            {
+                return controlValue.Name;
+            }
+
+            return result;
+        }
+
+        public override object? ConvertFrom(ITypeDescriptorContext? context, CultureInfo? culture, object value)
+        {
+            object? result = base.ConvertFrom(context, culture, value);
+            if (result is null
+                && value is string text
+                && context?.Instance is KioskModeManager manager
+                && FindControl(context, manager, text, culture) is { } control)
+            {
+                return control;
+            }
+
+            return result;
+        }
+
+        public override StandardValuesCollection GetStandardValues(ITypeDescriptorContext? context)
+        {
+            StandardValuesCollection values = base.GetStandardValues(context);
+            if (context?.Instance is not KioskModeManager manager)
+            {
+                return values;
+            }
+
+            List<object?> result = [];
+            foreach (object? value in values)
+            {
+                result.Add(value);
+            }
+
+            foreach (ContainerControl control in GetControls(context, manager))
+            {
+                if (result.Any(value => ReferenceEquals(value, control)))
+                {
+                    continue;
+                }
+
+                string? name = ConvertToString(context, control);
+                if (!string.IsNullOrEmpty(name) && ReferenceEquals(ConvertFrom(context, null, name), control))
+                {
+                    result.Add(control);
+                }
+            }
+
+            return new StandardValuesCollection(result);
+        }
+
+        public override bool GetPropertiesSupported(ITypeDescriptorContext? context) => true;
+
+        [RequiresUnreferencedCode(TrimmingConstants.TypeConverterGetPropertiesMessage)]
+        public override PropertyDescriptorCollection GetProperties(ITypeDescriptorContext? context, object value, Attribute[]? attributes)
+            => TypeDescriptor.GetProperties(value, attributes);
+
+        private ContainerControl? FindControl(ITypeDescriptorContext context, KioskModeManager manager, string name, CultureInfo? culture)
+        {
+            if (string.IsNullOrWhiteSpace(name)
+                || !string.Equals(name, name.Trim(), StringComparison.Ordinal)
+                || string.Equals(name, ConvertToString(context, null), StringComparison.OrdinalIgnoreCase)
+                || base.ConvertFrom(context, culture, name) is not null)
+            {
+                return null;
+            }
+
+            ContainerControl? match = null;
+            foreach (ContainerControl control in GetControls(context, manager))
+            {
+                if (string.Equals(control.Name, name, StringComparison.OrdinalIgnoreCase))
+                {
+                    if (match is not null)
+                    {
+                        return null;
+                    }
+
+                    match = control;
+                }
+            }
+
+            return match;
+        }
+
+        private static IEnumerable<ContainerControl> GetControls(ITypeDescriptorContext context, KioskModeManager manager)
+        {
+            ContainerControl? current = GetContainerControl(manager);
+            PropertyGrid? grid = (context as GridEntry)?.OwnerGrid;
+            Control? page = (Control?)grid?.FindForm() ?? (grid?.Parent is not null ? grid : null);
+            Control? root = page ?? current;
+            while (root?.Parent is { } parent)
+            {
+                root = parent;
+            }
+
+            HashSet<ContainerControl> seen = [];
+            if (root is not null)
+            {
+                Stack<Control> pending = new();
+                pending.Push(root);
+                while (pending.TryPop(out Control? control))
+                {
+                    if (control is ContainerControl container && !container.IsDisposed && seen.Add(container))
+                    {
+                        yield return container;
+                    }
+
+                    foreach (Control child in control.Controls)
+                    {
+                        pending.Push(child);
+                    }
+                }
+            }
+
+            if (current is not null
+                && !current.IsDisposed
+                && (manager.ContainerControl is not null || page is null)
+                && seen.Add(current))
+            {
+                yield return current;
+            }
+        }
+
+        private static ContainerControl? GetContainerControl(KioskModeManager manager)
+            => manager.ContainerControl
+                ?? (manager._lastContainerControl is { } reference
+                    && reference.TryGetTarget(out ContainerControl? control)
+                    && !control.IsDisposed
+                        ? control
+                        : null);
     }
 
     /// <summary>
