@@ -401,6 +401,8 @@ public sealed class HighPrecisionTimerTests : IDisposable
 
         try
         {
+            // Keep the real timer from racing the deterministic dispatches below.
+            HighPrecisionTimer.TargetFramesPerSecond = 1;
             using HighPrecisionTimer.TimerRegistration registration = HighPrecisionTimer.Register(
                 (tick, ct) => ValueTask.CompletedTask);
 
