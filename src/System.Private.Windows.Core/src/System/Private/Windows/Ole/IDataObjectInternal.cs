@@ -25,11 +25,7 @@ internal interface IDataObjectInternal
     ///  Adapters must report the wrapped source's capability. Clipboard text reads use this to avoid unsupported
     ///  typed calls without falling back to legacy GetData, which may deserialize before returning.</para>
     /// </remarks>
-#if NET
-    bool SupportsTypedData => true;
-#else
     bool SupportsTypedData { get; }
-#endif
 
     /// <summary>
     ///  Retrieves the data associated with the specified data format, using
