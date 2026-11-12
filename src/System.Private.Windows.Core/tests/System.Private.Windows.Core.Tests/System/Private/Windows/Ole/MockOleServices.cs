@@ -24,6 +24,10 @@ internal unsafe class MockOleServices<TTestClass> : IOleServices
     internal static Func<HRESULT>? OleGetClipboardResult { get; set; }
     internal static Func<HRESULT>? OleFlushClipboardResult { get; set; }
 
+#if NETFRAMEWORK
+    public virtual bool UseNativeClipboardTextFallback => false;
+#endif
+
 #if NET
     static
 #endif
