@@ -170,9 +170,14 @@ public class TestAccessor<T> : ITestAccessor
                     case PropertyInfo propertyInfo:
                         // Non-public auto property without a setter (e.g. get-only). Fall back to the
                         // compiler-generated backing field so tests can still set up state directly.
-                        FieldInfo backingField = GetAutoPropertyBackingField(propertyInfo.DeclaringType!, propertyInfo.Name)
-                            ?? throw new InvalidOperationException($"'{propertyInfo.Name}' has no setter and no backing field could be found.");
-                        backingField.SetValue(_instance, value);
+                        if (GetAutoPropertyBackingField(propertyInfo.DeclaringType!, propertyInfo.Name) is { } backingField)
+                        {
+                            backingField.SetValue(_instance, value);
+                            break;
+                        }
+
+                        // Preserve prior behavior/exception for non-auto get-only properties.
+                        propertyInfo.SetValue(_instance, value);
                         break;
                     default:
                         throw new InvalidOperationException();
