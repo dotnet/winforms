@@ -29,6 +29,8 @@ public abstract partial class UpDownBase : ContainerControl
     // internal chrome inset used by TextBoxBase; only the gap between the two buttons is additional.
     private const int ModernButtonGroupSpacingLogical = 2;
     private const int ModernFocusBandHeight = 4;
+    // Thickness, in DIPs, of the modern focus edge.
+    private const int ModernFocusEdgeThickness = 2;
     private const BorderStyle DefaultBorderStyle = BorderStyle.Fixed3D;
     private const LeftRightAlignment DefaultUpDownAlign = LeftRightAlignment.Right;
     private const int DefaultTimerInterval = 500;
@@ -272,6 +274,29 @@ public abstract partial class UpDownBase : ContainerControl
     [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public new DockPaddingEdges DockPadding => base.DockPadding;
 
+    /// <inheritdoc/>
+    /// <remarks>
+    ///  <para>
+    ///   Modern visual styles always use double buffering. Explicit settings are retained for classic visual styles.
+    ///  </para>
+    /// </remarks>
+    protected override bool DoubleBuffered
+    {
+        get => UseSideBySideButtons || base.DoubleBuffered;
+        set
+        {
+            // The base setter compares against the effective value, which is always true in modern mode.
+            if (value)
+            {
+                SetStyle(ControlStyles.OptimizedDoubleBuffer | ControlStyles.AllPaintingInWmPaint, true);
+            }
+            else
+            {
+                SetStyle(ControlStyles.OptimizedDoubleBuffer, false);
+            }
+        }
+    }
+
     /// <summary>
     ///  Returns true if this control has focus.
     /// </summary>
@@ -360,35 +385,37 @@ public abstract partial class UpDownBase : ContainerControl
         {
             if (!UseSideBySideButtons)
             {
-                int height = FontHeight;
-
-                // Adjust for the border style
-                if (_borderStyle != BorderStyle.None)
-                {
-                    height += SystemInformation.BorderSize.Height * 4 + 3;
-                }
-                else
-                {
-                    height += 3;
-                }
-
-                return height;
+                return GetClassicPreferredHeight();
             }
 
-            int contentInset = ModernContentInset;
-            int preferredHeight = FontHeight + (contentInset * 2);
+            SystemVisualSettings settings = Application.SystemVisualSettings;
 
-            if (_borderStyle == BorderStyle.Fixed3D)
-            {
-                int roundedChromeMinimumHeight = LogicalToDeviceUnits(ModernControlVisualStyles.UpDownCornerRadius)
-                    + LogicalToDeviceUnits(ModernControlVisualStyles.BorderThickness)
-                    + LogicalToDeviceUnits(ModernControlVisualStyles.InternalChromeInset);
-
-                preferredHeight = Math.Max(preferredHeight, roundedChromeMinimumHeight);
-            }
+            int preferredHeight = ModernControlVisualStyles.GetSingleLineTextBoxPreferredHeight(
+                fontHeight: Font.Height,
+                borderStyle: _borderStyle,
+                focusBorderMetrics: settings.FocusBorderMetrics,
+                textScaleFactor: settings.TextScaleFactor,
+                deviceDpi: DeviceDpiInternal);
 
             return preferredHeight;
         }
+    }
+
+    private int GetClassicPreferredHeight()
+    {
+        int height = FontHeight;
+
+        // Adjust for the border style
+        if (_borderStyle != BorderStyle.None)
+        {
+            height += SystemInformation.BorderSize.Height * 4 + 3;
+        }
+        else
+        {
+            height += 3;
+        }
+
+        return height;
     }
 
     /// <summary>
@@ -493,9 +520,7 @@ public abstract partial class UpDownBase : ContainerControl
     {
         int height = AutoSize
             ? PreferredHeight + Padding.Vertical
-            : UseSideBySideButtons
-                ? proposedHeight
-                : PreferredHeight;
+            : PreferredHeight;
 
         return base.ApplyBoundsConstraints(suggestedX, suggestedY, proposedWidth, height);
     }
@@ -566,11 +591,20 @@ public abstract partial class UpDownBase : ContainerControl
     /// <inheritdoc/>
     protected override void OnVisualStylesModeChanged(EventArgs e)
     {
+        bool usedModernMetrics = UseSideBySideButtons;
+        int oldPreferredHeight = PreferredHeight;
+
         base.OnVisualStylesModeChanged(e);
         _focusIndicatorRenderer?.Synchronize(Focused, invalidate: false);
         CommonProperties.xClearPreferredSizeCache(this);
 
-        if (AutoSize)
+        bool usesModernMetrics = UseSideBySideButtons;
+        bool heightStillAtClassicPreferred = Height == GetClassicPreferredHeight();
+
+        if (AutoSize
+            || (usedModernMetrics != usesModernMetrics
+                && Height == oldPreferredHeight)
+            || (usesModernMetrics && heightStillAtClassicPreferred))
         {
             Height = PreferredHeight;
         }
@@ -581,6 +615,13 @@ public abstract partial class UpDownBase : ContainerControl
         {
             Invalidate(true);
         }
+    }
+
+    protected override void OnParentFontChanged(EventArgs e)
+    {
+        base.OnParentFontChanged(e);
+        Height = PreferredHeight;
+        _defaultButtonsWidth = LogicalToDeviceUnits(DefaultButtonsWidth);
     }
 
     /// <summary>
@@ -891,11 +932,7 @@ public abstract partial class UpDownBase : ContainerControl
         // Clear the font height cache
         FontHeight = -1;
 
-        if (!UseSideBySideButtons || AutoSize)
-        {
-            Height = PreferredHeight;
-        }
-
+        Height = PreferredHeight;
         PositionControls();
 
         base.OnFontChanged(e);
@@ -1086,8 +1123,9 @@ public abstract partial class UpDownBase : ContainerControl
 
         Color parentBackColor = Parent?.BackColor ?? BackColor;
         Color clientBackColor = BackColor;
+        // Match TextBoxBase's lighter field stroke while retaining the up-down frame on all sides.
         Color adornerColor = Enabled
-            ? ModernControlColorMath.TextControlBorderColor
+            ? ModernControlColorMath.GetFieldStrokeStrong(clientBackColor, Application.IsDarkModeEnabled)
             : ModernControlColorMath.GetDisabledBorderColor();
 
         using var clientBackgroundBrush = clientBackColor.GetCachedSolidBrushScope();
@@ -1150,15 +1188,20 @@ public abstract partial class UpDownBase : ContainerControl
 
         if (_borderStyle == BorderStyle.Fixed3D && canRenderRoundedChrome)
         {
-            Color focusColor = ModernFocusColor;
-            FocusIndicatorRenderer.DrawRoundedFocusIndicator(
-                graphics,
-                deflatedBounds,
-                cornerRadius,
-                borderThickness,
-                LogicalToDeviceUnits(ModernFocusBandHeight),
-                adornerColor,
-                focusColor);
+            if (FocusIndicatorRenderer.FocusAmount > 0f)
+            {
+                // Fade the focus accent into the shared tapered edge instead of a rounded band.
+                Color focusEdgeColor = FocusIndicatorRenderer.GetCurrentColor(adornerColor, ModernFocusColor);
+                using GraphicsPath focusEdgePath = TextBoxBase.CreateVisualStylesBottomEdgePath(
+                    deflatedBounds,
+                    cornerRadius,
+                    LogicalToDeviceUnits(ModernFocusEdgeThickness));
+                using var focusEdgeBrush = focusEdgeColor.GetCachedSolidBrushScope();
+                GraphicsState focusEdgeState = graphics.Save();
+                graphics.SetClip(bounds, CombineMode.Replace);
+                graphics.FillPath(focusEdgeBrush, focusEdgePath);
+                graphics.Restore(focusEdgeState);
+            }
         }
         else if (Focused && _borderStyle == BorderStyle.Fixed3D)
         {

@@ -84,6 +84,163 @@ public class UpDownBaseTests
         Assert.NotEqual(buttonsBounds, control.UpDownButtonsInternal.Bounds);
     }
 
+    [WinFormsTheory]
+    [InlineData(false, false, false)]
+    [InlineData(false, false, true)]
+    [InlineData(false, true, false)]
+    [InlineData(false, true, true)]
+    [InlineData(true, false, false)]
+    [InlineData(true, false, true)]
+    [InlineData(true, true, false)]
+    [InlineData(true, true, true)]
+    public void UpDownBase_DoubleBuffered_VisualStylesModeChanged_PreservesExplicitValue(bool value, bool createHandle, bool inherited)
+    {
+        using Control parent = new() { VisualStylesMode = VisualStylesMode.Disabled };
+        using SubUpDownBase control = new()
+        {
+            VisualStylesMode = inherited ? VisualStylesMode.Inherit : VisualStylesMode.Disabled
+        };
+        parent.Controls.Add(control);
+
+        if (createHandle)
+        {
+            parent.CreateControl();
+        }
+
+        control.IsHandleCreated.Should().Be(createHandle);
+        control.DoubleBuffered = value;
+        Control styleOwner = inherited ? parent : control;
+
+        for (int i = 0; i < 2; i++)
+        {
+            styleOwner.VisualStylesMode = VisualStylesMode.Net11;
+
+            control.UseSideBySideButtons.Should().BeTrue();
+            control.DoubleBuffered.Should().BeTrue();
+            control.GetStyle(ControlStyles.OptimizedDoubleBuffer).Should().Be(value);
+            control.GetStyle(ControlStyles.AllPaintingInWmPaint).Should().Be(value);
+            control.IsHandleCreated.Should().Be(createHandle);
+
+            if (createHandle)
+            {
+                int handleCreatedCount = 0;
+                EventHandler handler = (sender, e) => handleCreatedCount++;
+                control.HandleCreated += handler;
+                control.BorderStyle = control.BorderStyle == BorderStyle.Fixed3D
+                    ? BorderStyle.FixedSingle
+                    : BorderStyle.Fixed3D;
+                control.HandleCreated -= handler;
+
+                handleCreatedCount.Should().Be(1);
+                control.DoubleBuffered.Should().BeTrue();
+                control.GetStyle(ControlStyles.OptimizedDoubleBuffer).Should().Be(value);
+            }
+
+            styleOwner.VisualStylesMode = VisualStylesMode.Disabled;
+
+            control.DoubleBuffered.Should().Be(value);
+            control.GetStyle(ControlStyles.OptimizedDoubleBuffer).Should().Be(value);
+            control.GetStyle(ControlStyles.AllPaintingInWmPaint).Should().Be(value);
+            control.IsHandleCreated.Should().Be(createHandle);
+        }
+    }
+
+    [WinFormsTheory]
+    [InlineData(false, false, false)]
+    [InlineData(false, false, true)]
+    [InlineData(false, true, false)]
+    [InlineData(false, true, true)]
+    [InlineData(true, false, false)]
+    [InlineData(true, false, true)]
+    [InlineData(true, true, false)]
+    [InlineData(true, true, true)]
+    public void UpDownBase_DoubleBuffered_SetInModernMode_PreservesUpdatedValue(bool value, bool createHandle, bool inherited)
+    {
+        using Control parent = new() { VisualStylesMode = VisualStylesMode.Disabled };
+        using SubUpDownBase control = new()
+        {
+            VisualStylesMode = inherited ? VisualStylesMode.Inherit : VisualStylesMode.Disabled,
+            DoubleBuffered = !value
+        };
+        parent.Controls.Add(control);
+
+        if (createHandle)
+        {
+            parent.CreateControl();
+        }
+
+        Control styleOwner = inherited ? parent : control;
+        styleOwner.VisualStylesMode = VisualStylesMode.Net11;
+        control.UseSideBySideButtons.Should().BeTrue();
+        int invalidatedCount = 0;
+        int styleChangedCount = 0;
+        int handleCreatedCount = 0;
+        control.Invalidated += (sender, e) => invalidatedCount++;
+        control.StyleChanged += (sender, e) => styleChangedCount++;
+        control.HandleCreated += (sender, e) => handleCreatedCount++;
+
+        control.DoubleBuffered = value;
+        control.DoubleBuffered = value;
+
+        control.DoubleBuffered.Should().BeTrue();
+        control.GetStyle(ControlStyles.OptimizedDoubleBuffer).Should().Be(value);
+        control.GetStyle(ControlStyles.AllPaintingInWmPaint).Should().BeTrue();
+        control.IsHandleCreated.Should().Be(createHandle);
+        invalidatedCount.Should().Be(0);
+        styleChangedCount.Should().Be(0);
+        handleCreatedCount.Should().Be(0);
+
+        styleOwner.VisualStylesMode = VisualStylesMode.Disabled;
+
+        control.DoubleBuffered.Should().Be(value);
+        control.IsHandleCreated.Should().Be(createHandle);
+    }
+
+    [WinFormsTheory]
+    [InlineData(false)]
+    [InlineData(true)]
+    public void UpDownBase_ModernVisualStylesMode_Paint_UsesMemoryDeviceContext(bool numeric)
+    {
+        using Form form = new();
+        using UpDownBase control = numeric ? new NumericUpDown() : new DomainUpDown();
+        control.VisualStylesMode = VisualStylesMode.Net11;
+        form.Controls.Add(control);
+        form.Show();
+        control.UseSideBySideButtons.Should().BeTrue();
+
+        List<OBJ_TYPE> paintDeviceContexts = [];
+        control.Paint += (sender, e) =>
+        {
+            IntPtr hdc = e.Graphics.GetHdc();
+            try
+            {
+                paintDeviceContexts.Add((OBJ_TYPE)PInvokeCore.GetObjectType((HDC)hdc));
+            }
+            finally
+            {
+                e.Graphics.ReleaseHdc(hdc);
+            }
+        };
+
+        control.Focus().Should().BeTrue();
+        control.Refresh();
+
+        foreach (UpDownBase.ButtonID button in new[] { UpDownBase.ButtonID.Up, UpDownBase.ButtonID.Down })
+        {
+            Rectangle bounds = control.UpDownButtonsInternal.GetButtonRectangle(button);
+            MouseEventArgs eventArgs = new(MouseButtons.Left, 1, bounds.Left + bounds.Width / 2, bounds.Top + bounds.Height / 2, 0);
+            dynamic buttons = control.UpDownButtonsInternal.TestAccessor.Dynamic;
+            buttons.OnMouseMove(eventArgs);
+            buttons.OnMouseDown(eventArgs);
+            control.Refresh();
+            buttons.OnMouseUp(eventArgs);
+            control.Refresh();
+        }
+
+        paintDeviceContexts.Should().NotBeEmpty();
+        paintDeviceContexts.Should().OnlyContain(type => type == OBJ_TYPE.OBJ_MEMDC);
+    }
+
     [WinFormsFact]
     public void UpDownBase_Ctor_Default()
     {
@@ -1833,6 +1990,93 @@ public class UpDownBaseTests
         Assert.Equal(0, createdCallCount);
     }
 
+    [WinFormsTheory]
+    [InlineData(false, false, false)]
+    [InlineData(false, false, true)]
+    [InlineData(false, true, false)]
+    [InlineData(false, true, true)]
+    [InlineData(true, false, false)]
+    [InlineData(true, false, true)]
+    [InlineData(true, true, false)]
+    [InlineData(true, true, true)]
+    public void UpDownBase_Font_SetAfterParentFontChange_PreservesWidthAndLocation(bool numeric, bool nested, bool resetParentFont)
+    {
+        using Font parentFont = new(Control.DefaultFont.FontFamily, Control.DefaultFont.Size * 2);
+        using Font controlFont = new(Control.DefaultFont.FontFamily, Control.DefaultFont.Size + 4);
+        using Form form = new()
+        {
+            AutoScaleMode = AutoScaleMode.Font
+        };
+        using Panel panel = new();
+        using UpDownBase control = numeric ? new NumericUpDown() : new DomainUpDown();
+        form.Controls.Add(panel);
+        (nested ? panel.Controls : form.Controls).Add(control);
+        control.Location = new Point(40, 50);
+        control.Width = 120;
+        Assert.NotEqual(IntPtr.Zero, form.Handle);
+        Assert.NotEqual(IntPtr.Zero, control.Handle);
+
+        form.Font = parentFont;
+        if (resetParentFont)
+        {
+            form.ResetFont();
+        }
+
+        Rectangle bounds = control.Bounds;
+
+        for (int i = 0; i < 2; i++)
+        {
+            control.Font = controlFont;
+            control.Location.Should().Be(bounds.Location);
+            control.Width.Should().Be(bounds.Width);
+            control.Height.Should().Be(control.PreferredHeight);
+
+            control.ResetFont();
+            control.Bounds.Should().Be(bounds);
+        }
+    }
+
+    [WinFormsTheory]
+    [InlineData(false, false)]
+    [InlineData(false, true)]
+    [InlineData(true, false)]
+    [InlineData(true, true)]
+    public void UpDownBase_Font_ResetParentWithExplicitFont_RestoresLocation(bool numeric, bool nested)
+    {
+        using Font parentFont = new(Control.DefaultFont.FontFamily, Control.DefaultFont.Size * 2);
+        using Font controlFont = new(Control.DefaultFont.FontFamily, Control.DefaultFont.Size + 4);
+        using Form form = new()
+        {
+            AutoScaleMode = AutoScaleMode.Font
+        };
+        using Panel panel = new();
+        using UpDownBase control = numeric ? new NumericUpDown() : new DomainUpDown();
+        form.Controls.Add(panel);
+        (nested ? panel.Controls : form.Controls).Add(control);
+        control.Location = new Point(40, 50);
+        control.Width = 120;
+        Assert.NotEqual(IntPtr.Zero, form.Handle);
+        Assert.NotEqual(IntPtr.Zero, control.Handle);
+        Point location = control.Location;
+        int width = control.Width;
+
+        form.Font = parentFont;
+        Point scaledLocation = control.Location;
+        scaledLocation.Should().NotBe(location);
+
+        control.Font = controlFont;
+        control.Location.Should().Be(scaledLocation);
+
+        form.ResetFont();
+        control.Location.Should().Be(location);
+        control.Width.Should().Be(width);
+        control.Font.Should().BeSameAs(controlFont);
+
+        control.ResetFont();
+        control.Location.Should().Be(location);
+        control.Width.Should().Be(width);
+    }
+
     public static IEnumerable<object[]> OnFontChanged_TestData()
     {
         foreach (BorderStyle borderStyle in Enum.GetValues(typeof(BorderStyle)))
@@ -2419,6 +2663,53 @@ public class UpDownBaseTests
 
         using SubUpDownBase control = new();
         Assert.Throws<ArgumentNullException>(() => control.OnPaint(null));
+    }
+
+    [WinFormsTheory]
+    [NewAndDefaultData<EventArgs>]
+    public void UpDownBase_OnParentFontChanged_Invoke_UpdatesDefaultButtonsWidthAndHeightAndCallsFontChanged(EventArgs eventArgs)
+    {
+        using SubUpDownBase control = new();
+        control._defaultButtonsWidth = -1;
+        control.Height = control.PreferredHeight + 10;
+
+        int fontChangedCallCount = 0;
+        control.FontChanged += (sender, e) =>
+        {
+            Assert.Same(control, sender);
+            Assert.Same(eventArgs, e);
+            fontChangedCallCount++;
+        };
+
+        control.OnParentFontChanged(eventArgs);
+
+        Assert.Equal(ScaleHelper.ScaleToDpi(16, control.DeviceDpi), control._defaultButtonsWidth);
+        Assert.Equal(control.PreferredHeight, control.Height);
+        Assert.Equal(1, fontChangedCallCount);
+        Assert.False(control.IsHandleCreated);
+    }
+
+    [WinFormsTheory]
+    [NewAndDefaultData<EventArgs>]
+    public void UpDownBase_OnParentFontChanged_InvokeWithLocalFont_UpdatesDefaultButtonsWidthAndHeight(EventArgs eventArgs)
+    {
+        using SubUpDownBase control = new()
+        {
+            Font = SystemFonts.MenuFont
+        };
+
+        control._defaultButtonsWidth = -1;
+        control.Height = control.PreferredHeight + 10;
+
+        int fontChangedCallCount = 0;
+        control.FontChanged += (sender, e) => fontChangedCallCount++;
+
+        control.OnParentFontChanged(eventArgs);
+
+        Assert.Equal(ScaleHelper.ScaleToDpi(16, control.DeviceDpi), control._defaultButtonsWidth);
+        Assert.Equal(control.PreferredHeight, control.Height);
+        Assert.Equal(0, fontChangedCallCount);
+        Assert.False(control.IsHandleCreated);
     }
 
     public static IEnumerable<object[]> OnTextBoxKeyDown_TestData()
@@ -3143,7 +3434,7 @@ public class UpDownBaseTests
     }
 
     [WinFormsFact]
-    public void UpDownBase_ModernVisualStylesMode_UsesSmallInsetAndPreservesExplicitSmallHeight()
+    public void UpDownBase_ModernVisualStylesMode_UsesSmallInsetAndRejectsExplicitSmallHeight()
     {
         using SubUpDownBase upDownBase = new()
         {
@@ -3160,8 +3451,51 @@ public class UpDownBaseTests
         int inset = upDownBase.LogicalToDeviceUnits(4);
         upDownBase._upDownEdit.Left.Should().Be(inset);
         upDownBase._upDownEdit.Top.Should().Be(inset);
-        upDownBase._upDownEdit.Height.Should().Be(Math.Max(0, 9 - (2 * inset)));
-        upDownBase.Height.Should().Be(9);
+        upDownBase._upDownEdit.Height.Should().Be(Math.Max(0, upDownBase.PreferredHeight - (2 * inset)));
+        upDownBase.Height.Should().Be(upDownBase.PreferredHeight);
+    }
+
+    [WinFormsTheory]
+    [InlineData(VisualStylesMode.Net11)]
+    [InlineData(VisualStylesMode.Latest)]
+    public void UpDownBase_ModernVisualStylesMode_ExplicitHeightReturnsPreferredHeight(
+        VisualStylesMode visualStylesMode)
+    {
+        using SubUpDownBase upDownBase = new()
+        {
+            AutoSize = false,
+            VisualStylesMode = visualStylesMode
+        };
+
+        upDownBase.Height = upDownBase.PreferredHeight + 10;
+
+        upDownBase.Height.Should().Be(upDownBase.PreferredHeight);
+    }
+
+    [WinFormsTheory]
+    [InlineData(VisualStylesMode.Net11)]
+    [InlineData(VisualStylesMode.Latest)]
+    public void UpDownBase_ModernVisualStylesMode_FontChangeUpdatesHeight(
+        VisualStylesMode visualStylesMode)
+    {
+        using SubUpDownBase upDownBase = new()
+        {
+            AutoSize = false,
+            VisualStylesMode = visualStylesMode
+        };
+
+        if (!upDownBase.UseSideBySideButtons)
+        {
+            return;
+        }
+
+        int originalHeight = upDownBase.Height;
+        using Font font = new(upDownBase.Font.FontFamily, upDownBase.Font.Size + 10);
+
+        upDownBase.Font = font;
+
+        upDownBase.Height.Should().Be(upDownBase.PreferredHeight);
+        upDownBase.Height.Should().BeGreaterThan(originalHeight);
     }
 
     [WinFormsTheory]
@@ -3277,6 +3611,27 @@ public class UpDownBaseTests
         upDownBase.Height.Should().Be(upDownBase.PreferredHeight + upDownBase.Padding.Vertical);
     }
 
+    [WinFormsFact]
+    public void UpDownBase_ModernVisualStylesMode_PreferredHeightMatchesSingleLineTextBox()
+    {
+        using TextBox textBox = new()
+        {
+            VisualStylesMode = VisualStylesMode.Net11
+        };
+        using SubUpDownBase upDownBase = new()
+        {
+            VisualStylesMode = VisualStylesMode.Net11
+        };
+
+        if (!upDownBase.UseSideBySideButtons)
+        {
+            return;
+        }
+
+        upDownBase.PreferredHeight.Should().Be(textBox.PreferredHeight);
+        upDownBase.Height.Should().Be(textBox.PreferredHeight);
+    }
+
     [WinFormsTheory]
     [InlineData(96)]
     [InlineData(144)]
@@ -3329,12 +3684,13 @@ public class UpDownBaseTests
             return;
         }
 
-        int minimumHeight = upDownBase.LogicalToDeviceUnits(14)
-            + upDownBase.LogicalToDeviceUnits(1)
-            + upDownBase.LogicalToDeviceUnits(2);
-        int contentHeight = upDownBase.Font.Height + (upDownBase.LogicalToDeviceUnits(4) * 2);
+        using TextBox textBox = new()
+        {
+            VisualStylesMode = VisualStylesMode.Net11,
+            Font = new Font(Control.DefaultFont.FontFamily, fontSize)
+        };
 
-        upDownBase.PreferredHeight.Should().Be(Math.Max(contentHeight, minimumHeight));
+        upDownBase.PreferredHeight.Should().Be(textBox.PreferredHeight);
     }
 
     [WinFormsFact]
@@ -3349,6 +3705,41 @@ public class UpDownBaseTests
         Action drawToBitmap = () => upDownBase.DrawToBitmap(bitmap, new Rectangle(Point.Empty, upDownBase.Size));
 
         drawToBitmap.Should().NotThrow();
+    }
+
+    [WinFormsTheory]
+    [InlineData(0, 20)]
+    [InlineData(20, 0)]
+    public void UpDownButtons_ModernVisualStylesMode_OnPaintWithEmptyBounds_DoesNotThrow(
+        int width,
+        int height)
+    {
+        using SubUpDownBase upDownBase = new()
+        {
+            VisualStylesMode = VisualStylesMode.Net11
+        };
+
+        if (!upDownBase.UseSideBySideButtons)
+        {
+            return;
+        }
+
+        using SubUpDownButtons buttons = new(upDownBase)
+        {
+            Size = new Size(width, height)
+        };
+        using Bitmap bitmap = new(1, 1);
+        using Graphics graphics = Graphics.FromImage(bitmap);
+        using PaintEventArgs eventArgs = new(graphics, Rectangle.Empty);
+
+        Action paint = () => buttons.OnPaint(eventArgs);
+
+        paint.Should().NotThrow();
+    }
+
+    private sealed class SubUpDownButtons(UpDownBase parent) : UpDownBase.UpDownButtons(parent)
+    {
+        public new void OnPaint(PaintEventArgs e) => base.OnPaint(e);
     }
 
     private class CustomValidateUpDownBase : UpDownBase
@@ -3526,6 +3917,8 @@ public class UpDownBaseTests
         public new void OnMouseWheel(MouseEventArgs e) => base.OnMouseWheel(e);
 
         public new void OnPaint(PaintEventArgs e) => base.OnPaint(e);
+
+        public new void OnParentFontChanged(EventArgs e) => base.OnParentFontChanged(e);
 
         public new void OnTextBoxKeyDown(object source, KeyEventArgs e) => base.OnTextBoxKeyDown(source, e);
 

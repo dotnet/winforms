@@ -7,6 +7,7 @@ using System.ComponentModel;
 using System.Drawing;
 using System.Reflection;
 using System.Windows.Forms.TestUtilities;
+using Microsoft.DotNet.RemoteExecutor;
 using Point = System.Drawing.Point;
 using Size = System.Drawing.Size;
 
@@ -485,6 +486,258 @@ public class ContainerControlTests
         control.Font = font1;
         Assert.Same(font1, control.Font);
         Assert.Equal(3, callCount);
+    }
+
+    [WinFormsTheory]
+    [InlineData(false, false)]
+    [InlineData(false, true)]
+    [InlineData(true, false)]
+    [InlineData(true, true)]
+    public void ContainerControl_Font_Set_ScalesInheritingContainers(bool nested, bool explicitFont)
+    {
+        using Font font = new(Control.DefaultFont.FontFamily, Control.DefaultFont.Size * 2);
+        using ContainerControl parent = new()
+        {
+            AutoScaleMode = AutoScaleMode.Font
+        };
+        using ContainerControl container = new();
+        if (explicitFont)
+        {
+            container.Font = Control.DefaultFont;
+        }
+
+        using ContainerControl child = new()
+        {
+            Bounds = new Rectangle(40, 50, 100, 80)
+        };
+        if (explicitFont && !nested)
+        {
+            child.Font = Control.DefaultFont;
+        }
+
+        using ContainerControl sibling = new()
+        {
+            Bounds = child.Bounds
+        };
+        parent.Controls.Add(container);
+        (nested ? container.Controls : parent.Controls).Add(child);
+        parent.Controls.Add(sibling);
+        Assert.NotEqual(IntPtr.Zero, parent.Handle);
+        Assert.NotEqual(IntPtr.Zero, container.Handle);
+        Assert.NotEqual(IntPtr.Zero, child.Handle);
+        Assert.NotEqual(IntPtr.Zero, sibling.Handle);
+        parent.PerformAutoScale();
+        SizeF dimensions = parent.CurrentAutoScaleDimensions;
+        Rectangle bounds = child.Bounds;
+
+        parent.Font = font;
+
+        SizeF factor = ContainerControl.GetCurrentAutoScaleFactor(parent.CurrentAutoScaleDimensions, dimensions);
+        Rectangle expected = new(
+            (int)Math.Round(bounds.X * factor.Width),
+            (int)Math.Round(bounds.Y * factor.Height),
+            (int)Math.Round(bounds.Width * factor.Width),
+            (int)Math.Round(bounds.Height * factor.Height));
+        child.Bounds.Should().Be(expected);
+        sibling.Bounds.Should().Be(expected);
+
+        child.Font = Control.DefaultFont;
+        child.Bounds.Should().Be(expected);
+        child.ResetFont();
+        child.Bounds.Should().Be(expected);
+    }
+
+    [Theory]
+    [InlineData(AutoScaleMode.Font, false)]
+    [InlineData(AutoScaleMode.Font, true)]
+    [InlineData(AutoScaleMode.Dpi, false)]
+    [InlineData(AutoScaleMode.Dpi, true)]
+    public void ContainerControl_DpiChanged_ScalesNestedContainersOnce(AutoScaleMode autoScaleMode, bool explicitFont)
+    {
+        // DPI awareness must be set before any windows are created, without changing the test host's mode.
+        using RemoteInvokeHandle handle = RemoteExecutor.Invoke((mode, fontSet) =>
+        {
+            Application.SetHighDpiMode(HighDpiMode.PerMonitorV2).Should().BeTrue();
+            ScaleHelper.IsThreadPerMonitorV2Aware.Should().BeTrue();
+            bool hasExplicitFont = bool.Parse(fontSet);
+            using SubContainerControl parent = new()
+            {
+                AutoScaleMode = Enum.Parse<AutoScaleMode>(mode),
+                Font = Control.DefaultFont
+            };
+            using SubContainerControl child = new()
+            {
+                Bounds = new Rectangle(40, 50, 100, 80)
+            };
+            if (hasExplicitFont)
+            {
+                child.Font = Control.DefaultFont;
+            }
+
+            using SubContainerControl grandchild = new()
+            {
+                Bounds = new Rectangle(20, 30, 40, 50)
+            };
+            parent.Controls.Add(child);
+            child.Controls.Add(grandchild);
+            Assert.NotEqual(IntPtr.Zero, parent.Handle);
+            Assert.NotEqual(IntPtr.Zero, child.Handle);
+            Assert.NotEqual(IntPtr.Zero, grandchild.Handle);
+            parent.PerformAutoScale();
+            SizeF dimensions = parent.CurrentAutoScaleDimensions;
+            Rectangle childBounds = child.Bounds;
+            Rectangle grandchildBounds = grandchild.Bounds;
+            int childFontChanged = 0;
+            int grandchildFontChanged = 0;
+            child.FontChanged += (_, _) => childFontChanged++;
+            grandchild.FontChanged += (_, _) => grandchildFontChanged++;
+            int newDpi = parent.DeviceDpi * 2;
+
+            Message grandchildMessage = Message.Create(grandchild.Handle, (int)PInvokeCore.WM_DPICHANGED_BEFOREPARENT, newDpi, 0);
+            grandchild.WndProc(ref grandchildMessage);
+            Message childMessage = Message.Create(child.Handle, (int)PInvokeCore.WM_DPICHANGED_BEFOREPARENT, newDpi, 0);
+            child.WndProc(ref childMessage);
+
+            child.IsDpiChangeScalingRequired.Should().Be(hasExplicitFont);
+            child.Bounds.Should().Be(childBounds);
+            grandchild.Bounds.Should().Be(grandchildBounds);
+            childFontChanged.Should().Be(0);
+            grandchildFontChanged.Should().Be(0);
+
+            Message parentMessage = Message.Create(parent.Handle, (int)PInvokeCore.WM_DPICHANGED_BEFOREPARENT, newDpi, 0);
+            parent.WndProc(ref parentMessage);
+
+            SizeF factor = ContainerControl.GetCurrentAutoScaleFactor(parent.CurrentAutoScaleDimensions, dimensions);
+            factor.Width.Should().BeGreaterThan(1);
+            factor.Height.Should().BeGreaterThan(1);
+            child.Bounds.Should().Be(new Rectangle(
+                (int)Math.Round(childBounds.X * factor.Width),
+                (int)Math.Round(childBounds.Y * factor.Height),
+                (int)Math.Round(childBounds.Width * factor.Width),
+                (int)Math.Round(childBounds.Height * factor.Height)));
+            grandchild.Bounds.Should().Be(new Rectangle(
+                (int)Math.Round(grandchildBounds.X * factor.Width),
+                (int)Math.Round(grandchildBounds.Y * factor.Height),
+                (int)Math.Round(grandchildBounds.Width * factor.Width),
+                (int)Math.Round(grandchildBounds.Height * factor.Height)));
+            childFontChanged.Should().Be(1);
+            grandchildFontChanged.Should().Be(1);
+            child.IsDpiChangeScalingRequired.Should().BeFalse();
+            parent._currentAutoScaleFactor.Should().Be(new SizeF(1, 1));
+            child._currentAutoScaleFactor.Should().Be(new SizeF(1, 1));
+        }, autoScaleMode.ToString(), explicitFont.ToString());
+
+        handle.ExitCode.Should().Be(RemoteExecutor.SuccessExitCode);
+    }
+
+    [WinFormsTheory]
+    [InlineData(AutoScaleMode.Font, false)]
+    [InlineData(AutoScaleMode.Font, true)]
+    [InlineData(AutoScaleMode.Dpi, false)]
+    [InlineData(AutoScaleMode.Dpi, true)]
+    public void ContainerControl_ResumeLayout_ScalesNestedContainersOnce(AutoScaleMode autoScaleMode, bool performLayout)
+    {
+        using SubContainerControl parent = new()
+        {
+            AutoScaleMode = autoScaleMode
+        };
+        using ContainerControl child = new()
+        {
+            Font = Control.DefaultFont,
+            Bounds = new Rectangle(40, 50, 100, 80)
+        };
+        using ContainerControl grandchild = new()
+        {
+            Bounds = new Rectangle(20, 30, 40, 50)
+        };
+        parent.Controls.Add(child);
+        child.Controls.Add(grandchild);
+        Assert.NotEqual(IntPtr.Zero, parent.Handle);
+        Assert.NotEqual(IntPtr.Zero, child.Handle);
+        Assert.NotEqual(IntPtr.Zero, grandchild.Handle);
+        parent.SuspendLayout();
+        SizeF dimensions = parent.CurrentAutoScaleDimensions;
+        parent.AutoScaleDimensions = new SizeF(dimensions.Width / 2, dimensions.Height / 2);
+
+        parent.AutoScaleFactor.Should().Be(new SizeF(2, 2));
+        parent._currentAutoScaleFactor.Should().Be(new SizeF(1, 1));
+        child.Bounds.Should().Be(new Rectangle(40, 50, 100, 80));
+        grandchild.Bounds.Should().Be(new Rectangle(20, 30, 40, 50));
+
+        parent.ResumeLayout(performLayout);
+
+        child.Bounds.Should().Be(new Rectangle(80, 100, 200, 160));
+        grandchild.Bounds.Should().Be(new Rectangle(40, 60, 80, 100));
+        parent.AutoScaleDimensions.Should().Be(dimensions);
+        parent._currentAutoScaleFactor.Should().Be(new SizeF(1, 1));
+
+        using Font childFont = new(Control.DefaultFont, FontStyle.Bold);
+        child.Font = childFont;
+        child.Bounds.Should().Be(new Rectangle(80, 100, 200, 160));
+        grandchild.Bounds.Should().Be(new Rectangle(40, 60, 80, 100));
+    }
+
+    [WinFormsTheory]
+    [InlineData(false)]
+    [InlineData(true)]
+    public void ContainerControl_Font_Set_ScalesNonContainerChildren(bool explicitFont)
+    {
+        using Font font = new(Control.DefaultFont.FontFamily, Control.DefaultFont.Size * 2);
+        using ContainerControl parent = new()
+        {
+            AutoScaleMode = AutoScaleMode.Font
+        };
+        using Label label = new();
+        using TextBox textBox = new() { AutoSize = false, BorderStyle = BorderStyle.None };
+        using Panel panel = new();
+        Control[] controls = [label, textBox, panel];
+        foreach (Control control in controls)
+        {
+            if (explicitFont)
+            {
+                control.Font = Control.DefaultFont;
+            }
+
+            control.Bounds = new Rectangle(40, 50, 100, 80);
+            parent.Controls.Add(control);
+            Assert.NotEqual(IntPtr.Zero, control.Handle);
+        }
+
+        using ContainerControl nested = new()
+        {
+            Bounds = new Rectangle(40, 50, 100, 80)
+        };
+        panel.Controls.Add(nested);
+        Assert.NotEqual(IntPtr.Zero, parent.Handle);
+        Assert.NotEqual(IntPtr.Zero, nested.Handle);
+        parent.PerformAutoScale();
+        SizeF dimensions = parent.CurrentAutoScaleDimensions;
+        Rectangle bounds = nested.Bounds;
+
+        parent.Font = font;
+
+        SizeF factor = ContainerControl.GetCurrentAutoScaleFactor(parent.CurrentAutoScaleDimensions, dimensions);
+        Rectangle expected = new(
+            (int)Math.Round(bounds.X * factor.Width),
+            (int)Math.Round(bounds.Y * factor.Height),
+            (int)Math.Round(bounds.Width * factor.Width),
+            (int)Math.Round(bounds.Height * factor.Height));
+        foreach (Control control in controls)
+        {
+            control.Bounds.Should().Be(expected);
+            control.Font.Should().BeSameAs(explicitFont ? Control.DefaultFont : font);
+        }
+
+        nested.Bounds.Should().Be(expected);
+
+        parent.ResetFont();
+
+        foreach (Control control in controls)
+        {
+            control.Bounds.Should().Be(bounds);
+        }
+
+        nested.Bounds.Should().Be(bounds);
     }
 
     [WinFormsFact]

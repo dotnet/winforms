@@ -20,6 +20,39 @@ public class ImageTests
     private const int PropertyTagTypeShort = 3;
 
     [Fact]
+    public void Save_StreamImageFormat_DoesNotGrowNativeMemoryAcrossCollections()
+    {
+        if (PlatformDetection.IsNetFramework)
+        {
+            Assert.Skip("Regression is tracked for System.Drawing.Common 9+ path used in .NET.");
+        }
+
+        const int iterationCount = 500;
+        const long allowedGrowthBytes = 64L * 1024 * 1024;
+
+        static long NativeMemory() =>
+            Process.GetCurrentProcess().PrivateMemorySize64 - GC.GetGCMemoryInfo().TotalCommittedBytes;
+
+        GC.Collect();
+        GC.WaitForPendingFinalizers();
+        GC.Collect();
+
+        long before = NativeMemory();
+
+        for (int i = 0; i < iterationCount; i++)
+        {
+            new Bitmap(1500, 1500).Save(new MemoryStream(), ImageFormat.Bmp);
+        }
+
+        GC.Collect();
+        GC.WaitForPendingFinalizers();
+        GC.Collect();
+
+        long leakedBytes = NativeMemory() - before;
+        Assert.True(leakedBytes < allowedGrowthBytes, $"Unexpected native memory growth: {leakedBytes / 1024 / 1024} MB");
+    }
+
+    [Fact]
     public void PropertyIdList_GetBitmapJpg_Success()
     {
         using Bitmap bitmap = new(Helpers.GetTestBitmapPath("nature24bits.jpg"));

@@ -204,6 +204,37 @@ public class PopupButtonVisualStylesTests
     }
 
     [WinFormsFact]
+    public void AnimatedPopupButtonRenderer_InheritedBackColor_UsesThemeStateColorsInNet11()
+    {
+        using Panel parent = new() { BackColor = Color.Red };
+        using Button button = new()
+        {
+            FlatStyle = FlatStyle.Popup,
+            VisualStylesMode = VisualStylesMode.Net11
+        };
+        parent.Controls.Add(button);
+        using AnimatedPopupButtonRenderer renderer = new(button);
+        ModernButtonDarkModeRenderer neutralRenderer = new()
+        {
+            DeviceDpi = button.DeviceDpi,
+            FlatAppearance = button.FlatAppearance
+        };
+
+        (Color baseColor, Color hoverColor, Color pressedColor) = renderer.GetStateColors();
+
+        Assert.Equal(
+            neutralRenderer.GetBackgroundColor(VisualStyles.PushButtonState.Normal, isDefault: false),
+            baseColor);
+        Assert.Equal(
+            neutralRenderer.GetBackgroundColor(VisualStyles.PushButtonState.Hot, isDefault: false),
+            hoverColor);
+        Assert.Equal(
+            neutralRenderer.GetBackgroundColor(VisualStyles.PushButtonState.Pressed, isDefault: false),
+            pressedColor);
+        Assert.False(button.ShouldSerializeBackColor());
+    }
+
+    [WinFormsFact]
     public void PopupButtonKeyCapRenderer_FocusedDefault_RendersWithoutThrow()
     {
         PopupButtonRenderContext context = CreateContext(

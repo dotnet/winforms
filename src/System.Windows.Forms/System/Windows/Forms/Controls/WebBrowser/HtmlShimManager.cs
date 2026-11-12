@@ -17,6 +17,7 @@ internal sealed class HtmlShimManager : IDisposable
     private Dictionary<HtmlWindow, HtmlWindow.HtmlWindowShim>? _htmlWindowShims;
     private Dictionary<HtmlElement, HtmlElement.HtmlElementShim>? _htmlElementShims;
     private Dictionary<HtmlDocument, HtmlDocument.HtmlDocumentShim>? _htmlDocumentShims;
+    private bool _disposed;
 
     internal HtmlShimManager()
     {
@@ -28,6 +29,8 @@ internal sealed class HtmlShimManager : IDisposable
     /// </summary>
     public void AddDocumentShim(HtmlDocument doc)
     {
+        ObjectDisposedException.ThrowIf(_disposed, this);
+        ObjectDisposedException.ThrowIf(doc.NativeHtmlDocument2.IsDisposed, doc);
         HtmlDocument.HtmlDocumentShim? shim = null;
 
         if (_htmlDocumentShims is null)
@@ -53,6 +56,8 @@ internal sealed class HtmlShimManager : IDisposable
     /// </summary>
     public void AddWindowShim(HtmlWindow window)
     {
+        ObjectDisposedException.ThrowIf(_disposed, this);
+        ObjectDisposedException.ThrowIf(window.NativeHtmlWindow.IsDisposed, window);
         HtmlWindow.HtmlWindowShim? shim = null;
         if (_htmlWindowShims is null)
         {
@@ -66,11 +71,8 @@ internal sealed class HtmlShimManager : IDisposable
             _htmlWindowShims[window] = shim;
         }
 
-        if (shim is not null)
-        {
-            // strictly not necessary, but here for future use.
-            OnShimAdded(shim);
-        }
+        // Reuse an existing shim as well: application subscriptions may have created it first.
+        (shim ?? _htmlWindowShims[window]).EnsureWindowObservation();
     }
 
     /// <summary> AddElementShim - adds a HtmlDocumentShim to list of shims to manage
@@ -78,6 +80,8 @@ internal sealed class HtmlShimManager : IDisposable
     /// </summary>
     public void AddElementShim(HtmlElement element)
     {
+        ObjectDisposedException.ThrowIf(_disposed, this);
+        ObjectDisposedException.ThrowIf(element.NativeHtmlElement.IsDisposed, element);
         HtmlElement.HtmlElementShim? shim = null;
 
         if (_htmlElementShims is null)
@@ -100,7 +104,9 @@ internal sealed class HtmlShimManager : IDisposable
 
     internal HtmlDocument.HtmlDocumentShim? GetDocumentShim(HtmlDocument document)
     {
-        if (_htmlDocumentShims is null)
+        // Dictionary equality queries COM identity. A revoked wrapper can share a cached hash with
+        // a live replacement after navigation, so reject it before the comparer queries its dead registration.
+        if (_htmlDocumentShims is null || document.NativeHtmlDocument2.IsDisposed)
         {
             return null;
         }
@@ -115,7 +121,7 @@ internal sealed class HtmlShimManager : IDisposable
 
     internal HtmlElement.HtmlElementShim? GetElementShim(HtmlElement element)
     {
-        if (_htmlElementShims is null)
+        if (_htmlElementShims is null || element.NativeHtmlElement.IsDisposed)
         {
             return null;
         }
@@ -130,7 +136,7 @@ internal sealed class HtmlShimManager : IDisposable
 
     internal HtmlWindow.HtmlWindowShim? GetWindowShim(HtmlWindow window)
     {
-        if (_htmlWindowShims is null)
+        if (_htmlWindowShims is null || window.NativeHtmlWindow.IsDisposed)
         {
             return null;
         }
@@ -145,15 +151,28 @@ internal sealed class HtmlShimManager : IDisposable
 
     private unsafe void OnShimAdded(HtmlShim addedShim)
     {
-        Debug.Assert(addedShim is not null, "Why are we calling this with a null shim?");
-        if (addedShim is not null and not HtmlWindow.HtmlWindowShim)
+        IHTMLWindow2.Interface? associatedWindow = addedShim.AssociatedWindow;
+        if (associatedWindow is null)
         {
-            // We need to add a window shim here for documents and elements
-            // so we can sync Window.Unload. The window shim itself will trap
-            // the unload event and call back on us on OnWindowUnloaded. When
-            // that happens we know we can free all our ptrs to COM.
-            AddWindowShim(new HtmlWindow(this, ComHelpers.GetComPointer<IHTMLWindow2>(addedShim.AssociatedWindow)));
+            return;
         }
+
+        using var nativeWindow = ComHelpers.GetComScope<IHTMLWindow2>(associatedWindow);
+        if (_htmlWindowShims is not null)
+        {
+            foreach (var (window, shim) in _htmlWindowShims)
+            {
+                if (window.NativeHtmlWindow.IsSameNativeObject(nativeWindow.Value))
+                {
+                    shim.EnsureWindowObservation();
+                    return;
+                }
+            }
+        }
+
+        // Only create a wrapper when the manager needs a new owner. A discarded duplicate wrapper
+        // would leave another GIT registration waiting for finalization on every shim addition.
+        AddWindowShim(new HtmlWindow(this, ComHelpers.GetComPointer<IHTMLWindow2>(associatedWindow)));
     }
 
     /// <summary>
@@ -162,92 +181,90 @@ internal sealed class HtmlShimManager : IDisposable
     /// </summary>
     internal void OnWindowUnloaded(HtmlWindow unloadedWindow)
     {
-        Debug.Assert(unloadedWindow is not null, "Why are we calling this with a null window?");
-        if (unloadedWindow is not null)
+        if (_disposed)
         {
-            //
-            // prune documents
-            //
-            if (_htmlDocumentShims is not null)
+            return;
+        }
+
+        List<HtmlShim> unloadedShims = [];
+        if (_htmlDocumentShims is not null)
+        {
+            foreach (HtmlDocument.HtmlDocumentShim shim in _htmlDocumentShims.Values.ToArray())
             {
-                HtmlDocument.HtmlDocumentShim[] shims = new HtmlDocument.HtmlDocumentShim[_htmlDocumentShims.Count];
-                _htmlDocumentShims.Values.CopyTo(shims, 0);
-
-                foreach (HtmlDocument.HtmlDocumentShim shim in shims)
+                if (IsAssociatedWindow(shim, unloadedWindow))
                 {
-                    if (shim.AssociatedWindow == unloadedWindow.NativeHtmlWindow)
-                    {
-                        _htmlDocumentShims.Remove(shim.Document);
-                        shim.Dispose();
-                    }
-                }
-            }
-
-            //
-            // prune elements
-            //
-            if (_htmlElementShims is not null)
-            {
-                HtmlElement.HtmlElementShim[] shims = new HtmlElement.HtmlElementShim[_htmlElementShims.Count];
-                _htmlElementShims.Values.CopyTo(shims, 0);
-
-                foreach (HtmlElement.HtmlElementShim shim in shims)
-                {
-                    if (shim.AssociatedWindow == unloadedWindow.NativeHtmlWindow)
-                    {
-                        _htmlElementShims.Remove(shim.Element);
-                        shim.Dispose();
-                    }
-                }
-            }
-
-            // Prune the particular window from the list.
-            if (_htmlWindowShims is not null)
-            {
-                if (_htmlWindowShims.Remove(unloadedWindow, out HtmlWindow.HtmlWindowShim? shim))
-                {
-                    shim.Dispose();
+                    _htmlDocumentShims.Remove(shim.Document);
+                    unloadedShims.Add(shim);
                 }
             }
         }
+
+        if (_htmlElementShims is not null)
+        {
+            foreach (HtmlElement.HtmlElementShim shim in _htmlElementShims.Values.ToArray())
+            {
+                if (IsAssociatedWindow(shim, unloadedWindow))
+                {
+                    _htmlElementShims.Remove(shim.Element);
+                    unloadedShims.Add(shim);
+                }
+            }
+        }
+
+        if (_htmlWindowShims is not null
+            && _htmlWindowShims.Remove(unloadedWindow, out HtmlWindow.HtmlWindowShim? windowShim))
+        {
+            unloadedShims.Add(windowShim);
+        }
+
+        // Remove all affected owners before native releases can reenter the manager. Attempt every
+        // disposal even if one detach fails, without disturbing another frame's live subscriptions.
+        HtmlShim.DisposeAll(unloadedShims);
+    }
+
+    private static unsafe bool IsAssociatedWindow(HtmlShim shim, HtmlWindow window)
+    {
+        IHTMLWindow2.Interface? associatedWindow = shim.AssociatedWindow;
+        if (associatedWindow is null)
+        {
+            return false;
+        }
+
+        // RCWs and AgileComPointer wrappers are not comparable; COM identity must be queried
+        // in the same apartment or the unloaded page's shims will never be removed.
+        using var nativeWindow = ComHelpers.GetComScope<IHTMLWindow2>(associatedWindow);
+        return window.NativeHtmlWindow.IsSameNativeObject(nativeWindow.Value);
     }
 
     public void Dispose()
     {
-        Dispose(true);
-    }
-
-    private void Dispose(bool disposing)
-    {
-        if (disposing)
+        if (_disposed)
         {
-            if (_htmlElementShims is not null)
-            {
-                foreach (HtmlElement.HtmlElementShim shim in _htmlElementShims.Values)
-                {
-                    shim.Dispose();
-                }
-            }
-
-            if (_htmlDocumentShims is not null)
-            {
-                foreach (HtmlDocument.HtmlDocumentShim shim in _htmlDocumentShims.Values)
-                {
-                    shim.Dispose();
-                }
-            }
-
-            if (_htmlWindowShims is not null)
-            {
-                foreach (HtmlWindow.HtmlWindowShim shim in _htmlWindowShims.Values)
-                {
-                    shim.Dispose();
-                }
-            }
-
-            _htmlWindowShims = null;
-            _htmlDocumentShims = null;
-            _htmlWindowShims = null;
+            return;
         }
+
+        _disposed = true;
+        List<HtmlShim> shims = [];
+        if (_htmlElementShims is not null)
+        {
+            shims.AddRange(_htmlElementShims.Values);
+        }
+
+        if (_htmlDocumentShims is not null)
+        {
+            shims.AddRange(_htmlDocumentShims.Values);
+        }
+
+        if (_htmlWindowShims is not null)
+        {
+            shims.AddRange(_htmlWindowShims.Values);
+        }
+
+        // A retained browser/wrapper must not retain disposed element shims through the manager.
+        // Clear before releasing COM objects, which may call back into this manager.
+        _htmlElementShims = null;
+        _htmlDocumentShims = null;
+        _htmlWindowShims = null;
+        HtmlShim.DisposeAll(shims);
     }
 }

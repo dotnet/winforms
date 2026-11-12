@@ -293,6 +293,96 @@ public class CheckedListBoxTests
         Assert.False(control.IsHandleCreated);
     }
 
+    [WinFormsTheory]
+    [InlineData(0, 3, false)]
+    [InlineData(0, 3, true)]
+    [InlineData(1, 3, false)]
+    [InlineData(1, 3, true)]
+    [InlineData(3, 1, false)]
+    [InlineData(3, 1, true)]
+    [InlineData(3, 3, false)]
+    [InlineData(3, 3, true)]
+    public void CheckedListBox_RefreshItems_DataSourceCountChanged_PreservesCheckStates(int oldCount, int newCount, bool createHandle)
+    {
+        List<string> dataSource = Enumerable.Range(0, oldCount).Select(i => $"item{i}").ToList();
+        using SubCheckedListBox control = new()
+        {
+            BindingContext = new BindingContext(),
+            DataSource = dataSource
+        };
+        CheckState[] checkStates = [CheckState.Checked, CheckState.Indeterminate, CheckState.Unchecked];
+        for (int i = 0; i < oldCount; i++)
+        {
+            control.SetItemCheckState(i, checkStates[i]);
+        }
+
+        if (createHandle)
+        {
+            Assert.NotEqual(IntPtr.Zero, control.Handle);
+        }
+
+        if (newCount > oldCount)
+        {
+            dataSource.AddRange(Enumerable.Range(oldCount, newCount - oldCount).Select(i => $"item{i}"));
+        }
+        else
+        {
+            dataSource.RemoveRange(newCount, oldCount - newCount);
+        }
+
+        control.RefreshItems();
+
+        control.Items.Cast<string>().Should().Equal(dataSource);
+        for (int i = 0; i < newCount; i++)
+        {
+            control.GetItemCheckState(i).Should().Be(i < oldCount ? checkStates[i] : CheckState.Unchecked);
+        }
+
+        control.IsHandleCreated.Should().Be(createHandle);
+    }
+
+    [WinFormsTheory]
+    [InlineData(false)]
+    [InlineData(true)]
+    public void CheckedListBox_HorizontalScrollbar_SetWithCachedSelectedItemsCount_PreservesSelection(bool createHandle)
+    {
+        // Cached selection views must survive scrollbar-triggered and repeated explicit refreshes in both handle states.
+        using SubCheckedListBox control = new();
+        control.Items.Add("item1");
+        control.SelectedIndex = 0;
+#pragma warning disable xUnit2013 // Do not use equality check to check for collection size.
+        Assert.Equal(1, control.SelectedItems.Count);
+#pragma warning restore xUnit2013 // Do not use equality check to check for collection size.
+
+        if (createHandle)
+        {
+            Assert.NotEqual(IntPtr.Zero, control.Handle);
+        }
+
+        control.Items.Add("item2");
+
+        control.HorizontalScrollbar = true;
+
+        // Check the scrollbar refresh first, then re-prime the count cache between explicit rebuilds.
+        for (int refresh = 0; refresh < 3; refresh++)
+        {
+            if (refresh > 0)
+            {
+                control.RefreshItems();
+            }
+
+#pragma warning disable xUnit2013 // Do not use equality check to check for collection size.
+            Assert.Equal(1, control.SelectedItems.Count);
+#pragma warning restore xUnit2013 // Do not use equality check to check for collection size.
+            Assert.True(control.HorizontalScrollbar);
+            Assert.Equal(0, control.SelectedIndex);
+            Assert.Equal("item1", control.SelectedItem);
+            Assert.Equal(0, Assert.Single(control.SelectedIndices));
+            Assert.Equal(new object[] { "item1", "item2" }, control.Items.Cast<object>());
+            Assert.Equal(createHandle, control.IsHandleCreated);
+        }
+    }
+
     [WinFormsFact]
     public void CheckedListBox_RefreshItems_InvokeEmptyWithHandle_Success()
     {
@@ -656,6 +746,40 @@ public class CheckedListBoxTests
         checkedListBox.DataSource = dataSource2;
         checkedListBox.DataSource.Should().BeEquivalentTo(dataSource2);
         callCount.Should().Be(4);
+    }
+
+    [WinFormsTheory]
+    [InlineData(false)]
+    [InlineData(true)]
+    public void CheckedListBox_DataSource_SetWithDisplayMember_PreservesDisplayMember(bool createHandle)
+    {
+        using CheckedListBox control = new()
+        {
+            BindingContext = new BindingContext(),
+            DisplayMember = "Name"
+        };
+        if (createHandle)
+        {
+            Assert.NotEqual(IntPtr.Zero, control.Handle);
+        }
+
+        foreach (int count in new[] { 3, 5, 1, 0 })
+        {
+            var dataSource = Enumerable.Range(0, count).Select(i => new { Name = $"item{i}" }).ToList();
+
+            control.DataSource = dataSource;
+
+            control.DataSource.Should().BeSameAs(dataSource);
+            control.DisplayMember.Should().Be("Name");
+            control.Items.Cast<object>().Should().Equal(dataSource);
+            for (int i = 0; i < count; i++)
+            {
+                control.GetItemText(control.Items[i]).Should().Be(dataSource[i].Name);
+                control.GetItemCheckState(i).Should().Be(CheckState.Unchecked);
+            }
+
+            control.IsHandleCreated.Should().Be(createHandle);
+        }
     }
 
     [WinFormsFact]

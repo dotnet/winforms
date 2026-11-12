@@ -274,17 +274,27 @@ public class ClipboardTests
         action.Should().Throw<ArgumentNullException>().WithParameterName("data");
     }
 
-    [WinFormsFact]
-    public void SetDataObject_NegativeRetryTimes_ThrowsArgumentOutOfRangeException()
+    [WinFormsTheory]
+    [InlineData(false, -1)]
+    [InlineData(true, -1)]
+    [InlineData(false, int.MinValue)]
+    [InlineData(true, int.MinValue)]
+    public void SetDataObject_NegativeRetryTimes_ThrowsArgumentOutOfRangeException(bool copy, int retryTimes)
     {
-        Action action = () => Clipboard.SetDataObject(new object(), copy: true, retryTimes: -1, retryDelay: 0);
+        // OLE-006: both copy modes reject negative retry budgets, including the integer boundary.
+        Action action = () => Clipboard.SetDataObject(new object(), copy, retryTimes, retryDelay: 0);
         action.Should().Throw<ArgumentOutOfRangeException>().WithParameterName("retryTimes");
     }
 
-    [WinFormsFact]
-    public void SetDataObject_NegativeRetryDelay_ThrowsArgumentOutOfRangeException()
+    [WinFormsTheory]
+    [InlineData(false, -1)]
+    [InlineData(true, -1)]
+    [InlineData(false, int.MinValue)]
+    [InlineData(true, int.MinValue)]
+    public void SetDataObject_NegativeRetryDelay_ThrowsArgumentOutOfRangeException(bool copy, int retryDelay)
     {
-        Action action = () => Clipboard.SetDataObject(new object(), copy: true, retryTimes: 10, retryDelay: -1);
+        // OLE-006: both copy modes reject negative delays before any wait or native clipboard mutation.
+        Action action = () => Clipboard.SetDataObject(new object(), copy, retryTimes: 10, retryDelay);
         action.Should().Throw<ArgumentOutOfRangeException>().WithParameterName("retryDelay");
     }
 
@@ -305,6 +315,7 @@ public class ClipboardTests
     [MemberData(nameof(NotAnStaTheoryData))]
     public void NotSta_ThrowsThreadStateException(Action action)
     {
+        // OLE-006: clipboard-writing APIs require STA/OLE initialization on the calling thread.
         action.Should().Throw<ThreadStateException>();
     }
 
@@ -635,6 +646,73 @@ public class ClipboardTests
         }
 
         CoreAppContextSwitches.ClipboardDragDropEnableNrbfSerialization.Should().BeTrue();
+    }
+
+    [WinFormsFact]
+    public void ThrowExceptionsForClipboardGetAPIs_AppContextSwitch()
+    {
+        string switchName = CoreAppContextSwitches.ClipboardThrowExceptionsForGetAPIsSwitchName;
+
+        CoreAppContextSwitches.ClipboardThrowExceptionsForGetAPIs.Should().BeFalse();
+
+        using (AppContextSwitchScope scope = new(switchName, getDefaultValue: () => false, enable: true))
+        {
+            CoreAppContextSwitches.ClipboardThrowExceptionsForGetAPIs.Should().BeTrue();
+        }
+
+        using (AppContextSwitchScope scope = new(switchName, getDefaultValue: () => false, enable: false))
+        {
+            CoreAppContextSwitches.ClipboardThrowExceptionsForGetAPIs.Should().BeFalse();
+        }
+    }
+
+    [WinFormsTheory]
+    [InlineData(nameof(Clipboard.GetText), DataFormatNames.UnicodeText)]
+    [InlineData(nameof(Clipboard.GetAudioStream), DataFormatNames.WaveAudio)]
+    [InlineData(nameof(Clipboard.GetImage), DataFormatNames.Bitmap)]
+    [InlineData(nameof(Clipboard.GetFileDropList), DataFormatNames.FileDrop)]
+    [InlineData(nameof(Clipboard.GetData), "Custom")]
+    public void GetApi_GetDataFailsAndSwitchEnabled_Throws(string api, string format)
+    {
+        try
+        {
+            DataObject dataObject = new();
+            dataObject.SetData(format, data: null);
+            Clipboard.SetDataObject(dataObject, copy: true);
+
+            Action action = api switch
+            {
+                nameof(Clipboard.GetText) => () => Clipboard.GetText(),
+                nameof(Clipboard.GetAudioStream) => () => Clipboard.GetAudioStream(),
+                nameof(Clipboard.GetImage) => () => Clipboard.GetImage(),
+                nameof(Clipboard.GetFileDropList) => () => Clipboard.GetFileDropList(),
+                nameof(Clipboard.GetData) => () => Clipboard.GetData(format),
+                _ => throw new InvalidOperationException()
+            };
+
+            using (AppContextSwitchScope scope = new(
+                CoreAppContextSwitches.ClipboardThrowExceptionsForGetAPIsSwitchName,
+                getDefaultValue: () => false,
+                enable: false))
+            {
+                action.Should().NotThrow();
+            }
+
+            using (AppContextSwitchScope scope = new(
+                CoreAppContextSwitches.ClipboardThrowExceptionsForGetAPIsSwitchName,
+                getDefaultValue: () => false,
+                enable: true))
+            {
+                action.Should()
+                    .Throw<COMException>()
+                    .And.HResult.Should()
+                    .Be((int)HRESULT.CLIPBRD_E_BAD_DATA);
+            }
+        }
+        finally
+        {
+            Clipboard.Clear();
+        }
     }
 
     [WinFormsFact]

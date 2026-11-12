@@ -2032,6 +2032,35 @@ public partial class DataObjectTests
 
     private delegate void DAdviseCallback(ref FORMATETC pFormatetc, ADVF advf, IAdviseSink adviseSink, out int connection);
 
+    /// <summary>
+    ///  Provides matching runtime and native advise-sink interfaces for DAdvise ownership tests.
+    /// </summary>
+    private sealed unsafe class OwnershipDAdviseSink : IAdviseSink, Com.IAdviseSink.Interface,
+        Com.IManagedWrapper<Com.IAdviseSink>
+    {
+        public int OnSaveCallCount { get; private set; }
+
+        public void OnClose() { }
+
+        public void OnDataChange(ref FORMATETC format, ref STGMEDIUM stgmedium) { }
+
+        public void OnRename(IMoniker moniker) { }
+
+        public void OnSave() => OnSaveCallCount++;
+
+        public void OnViewChange(int aspect, int index) { }
+
+        void Com.IAdviseSink.Interface.OnClose() { }
+
+        void Com.IAdviseSink.Interface.OnDataChange(Com.FORMATETC* pFormatetc, Com.STGMEDIUM* pStgmed) { }
+
+        void Com.IAdviseSink.Interface.OnRename(Com.IMoniker* pMoniker) { }
+
+        void Com.IAdviseSink.Interface.OnSave() => OnSaveCallCount++;
+
+        void Com.IAdviseSink.Interface.OnViewChange(uint aspect, int index) { }
+    }
+
     [WinFormsTheory]
     [MemberData(nameof(DAdvise_TheoryData))]
     public void DAdvise_InvokeCustomComSuccess(ADVF advf, IAdviseSink adviseSink)
@@ -2052,6 +2081,226 @@ public partial class DataObjectTests
         connection.Should().Be(2);
         formatetc.cfFormat.Should().Be(3);
         mockComDataObject.Verify(o => o.DAdvise(ref It.Ref<FORMATETC>.IsAny, advf, adviseSink, out It.Ref<int>.IsAny), Times.Once());
+    }
+
+    [WinFormsFact]
+    public unsafe void DAdvise_DirectRuntimeControl_Ownership_DAdvise_DoesNotRetainBorrowedSink()
+    {
+        const int ExpectedConnection = 0xC3;
+        OwnershipDAdviseSink sink = new();
+        bool sawExpectedSink = false;
+        int callCount = 0;
+        Mock<IComDataObject> runtimeDataObject = new(MockBehavior.Strict);
+        runtimeDataObject
+            .Setup(dataObject => dataObject.DAdvise(
+                ref It.Ref<FORMATETC>.IsAny,
+                ADVF.ADVF_PRIMEFIRST,
+                It.IsAny<IAdviseSink>(),
+                out It.Ref<int>.IsAny))
+            .Callback((DAdviseCallback)((
+                ref FORMATETC format,
+                ADVF flags,
+                IAdviseSink adviseSink,
+                out int connection) =>
+            {
+                callCount++;
+                sawExpectedSink = ReferenceEquals(adviseSink, sink);
+                connection = ExpectedConnection;
+            }))
+            .Returns((int)HRESULT.S_OK);
+        using var nativeSink = ComHelpers.GetComScope<Com.IAdviseSink>(sink);
+        using var observer = nativeSink.Query<Com.IUnknown>();
+
+        uint referenceCountBefore = GetOwnershipDAdviseReferenceCount(observer.Value);
+        FORMATETC format = default;
+        int result = runtimeDataObject.Object.DAdvise(
+            ref format,
+            ADVF.ADVF_PRIMEFIRST,
+            sink,
+            out int connection);
+        uint referenceCountAfter = GetOwnershipDAdviseReferenceCount(observer.Value);
+        nativeSink.Value->OnSave();
+
+        ((HRESULT)result).Should().Be(HRESULT.S_OK);
+        connection.Should().Be(ExpectedConnection);
+        callCount.Should().Be(1);
+        sawExpectedSink.Should().BeTrue();
+        sink.OnSaveCallCount.Should().Be(1);
+        referenceCountAfter.Should().Be(referenceCountBefore);
+    }
+
+    [WinFormsFact]
+    public unsafe void DAdvise_NativeAdapter_Ownership_DAdvise_ReleasesTemporaryReference()
+    {
+        const int ExpectedConnection = 0xC3;
+        OwnershipDAdviseSink sink = new();
+        bool sawExpectedSink = false;
+        int callCount = 0;
+        Mock<IComDataObject> runtimeDataObject = new(MockBehavior.Strict);
+        runtimeDataObject
+            .Setup(dataObject => dataObject.DAdvise(
+                ref It.Ref<FORMATETC>.IsAny,
+                ADVF.ADVF_PRIMEFIRST,
+                It.IsAny<IAdviseSink>(),
+                out It.Ref<int>.IsAny))
+            .Callback((DAdviseCallback)((
+                ref FORMATETC format,
+                ADVF flags,
+                IAdviseSink adviseSink,
+                out int connection) =>
+            {
+                callCount++;
+                sawExpectedSink = ReferenceEquals(adviseSink, sink);
+                connection = ExpectedConnection;
+            }))
+            .Returns((int)HRESULT.S_OK);
+        DataObject dataObject = new(runtimeDataObject.Object);
+        using var nativeDataObject = ComHelpers.GetComScope<Com.IDataObject>(dataObject);
+        using var nativeSink = ComHelpers.GetComScope<Com.IAdviseSink>(sink);
+        using var observer = nativeSink.Query<Com.IUnknown>();
+
+        uint referenceCountBefore = GetOwnershipDAdviseReferenceCount(observer.Value);
+        Com.FORMATETC format = default;
+        uint connection = 0;
+        HRESULT result = nativeDataObject.Value->DAdvise(
+            &format,
+            (uint)ADVF.ADVF_PRIMEFIRST,
+            nativeSink.Value,
+            &connection);
+        uint referenceCountAfter = GetOwnershipDAdviseReferenceCount(observer.Value);
+        nativeSink.Value->OnSave();
+
+        result.Should().Be(HRESULT.S_OK);
+        connection.Should().Be((uint)ExpectedConnection);
+        callCount.Should().Be(1);
+        sawExpectedSink.Should().BeTrue();
+        sink.OnSaveCallCount.Should().Be(1);
+        referenceCountAfter.Should().Be(referenceCountBefore);
+    }
+
+    [WinFormsFact]
+    public unsafe void DAdvise_NativeAdapterFailure_Ownership_DAdvise_ReleasesTemporaryReference()
+    {
+        const int ExpectedConnection = 0xC3F;
+        OwnershipDAdviseSink sink = new();
+        bool sawExpectedSink = false;
+        int callCount = 0;
+        Mock<IComDataObject> runtimeDataObject = new(MockBehavior.Strict);
+        runtimeDataObject
+            .Setup(dataObject => dataObject.DAdvise(
+                ref It.Ref<FORMATETC>.IsAny,
+                ADVF.ADVF_NODATA,
+                It.IsAny<IAdviseSink>(),
+                out It.Ref<int>.IsAny))
+            .Callback((DAdviseCallback)((
+                ref FORMATETC format,
+                ADVF flags,
+                IAdviseSink adviseSink,
+                out int connection) =>
+            {
+                callCount++;
+                sawExpectedSink = ReferenceEquals(adviseSink, sink);
+                connection = ExpectedConnection;
+            }))
+            .Returns((int)HRESULT.E_FAIL);
+        DataObject dataObject = new(runtimeDataObject.Object);
+        using var nativeDataObject = ComHelpers.GetComScope<Com.IDataObject>(dataObject);
+        using var nativeSink = ComHelpers.GetComScope<Com.IAdviseSink>(sink);
+        using var observer = nativeSink.Query<Com.IUnknown>();
+
+        uint referenceCountBefore = GetOwnershipDAdviseReferenceCount(observer.Value);
+        Com.FORMATETC format = default;
+        uint connection = 0;
+        HRESULT result = nativeDataObject.Value->DAdvise(
+            &format,
+            (uint)ADVF.ADVF_NODATA,
+            nativeSink.Value,
+            &connection);
+        uint referenceCountAfter = GetOwnershipDAdviseReferenceCount(observer.Value);
+        nativeSink.Value->OnSave();
+
+        result.Should().Be(HRESULT.E_FAIL);
+        connection.Should().Be((uint)ExpectedConnection);
+        callCount.Should().Be(1);
+        sawExpectedSink.Should().BeTrue();
+        sink.OnSaveCallCount.Should().Be(1);
+        referenceCountAfter.Should().Be(referenceCountBefore);
+    }
+
+    [WinFormsFact]
+    public unsafe void DAdvise_NativeAdapterRetainedUntilDUnadvise_Ownership_DAdvise_ReleasesOnlySubscription()
+    {
+        const int ExpectedConnection = 0xC3A;
+        OwnershipDAdviseSink sink = new();
+        IAdviseSink retainedSink = null;
+        bool sawExpectedSink = false;
+        int adviseCallCount = 0;
+        int unadviseCallCount = 0;
+        Mock<IComDataObject> runtimeDataObject = new(MockBehavior.Strict);
+        runtimeDataObject
+            .Setup(dataObject => dataObject.DAdvise(
+                ref It.Ref<FORMATETC>.IsAny,
+                ADVF.ADVF_ONLYONCE,
+                It.IsAny<IAdviseSink>(),
+                out It.Ref<int>.IsAny))
+            .Callback((DAdviseCallback)((
+                ref FORMATETC format,
+                ADVF flags,
+                IAdviseSink adviseSink,
+                out int connection) =>
+            {
+                adviseCallCount++;
+                sawExpectedSink = ReferenceEquals(adviseSink, sink);
+                retainedSink = adviseSink;
+                connection = ExpectedConnection;
+            }))
+            .Returns((int)HRESULT.S_OK);
+        runtimeDataObject
+            .Setup(dataObject => dataObject.DUnadvise(ExpectedConnection))
+            .Callback(() =>
+            {
+                unadviseCallCount++;
+                retainedSink = null;
+            });
+        DataObject dataObject = new(runtimeDataObject.Object);
+        using var nativeDataObject = ComHelpers.GetComScope<Com.IDataObject>(dataObject);
+        using var nativeSink = ComHelpers.GetComScope<Com.IAdviseSink>(sink);
+        using var observer = nativeSink.Query<Com.IUnknown>();
+
+        uint referenceCountBefore = GetOwnershipDAdviseReferenceCount(observer.Value);
+        Com.FORMATETC format = default;
+        uint connection = 0;
+        HRESULT adviseResult = nativeDataObject.Value->DAdvise(
+            &format,
+            (uint)ADVF.ADVF_ONLYONCE,
+            nativeSink.Value,
+            &connection);
+        uint referenceCountWhileSubscribed = GetOwnershipDAdviseReferenceCount(observer.Value);
+        bool wasRetainedWhileSubscribed = ReferenceEquals(retainedSink, sink);
+        retainedSink?.OnSave();
+
+        HRESULT unadviseResult = nativeDataObject.Value->DUnadvise(connection);
+        uint referenceCountAfterUnadvise = GetOwnershipDAdviseReferenceCount(observer.Value);
+        bool wasReleasedOnUnadvise = retainedSink is null;
+        nativeSink.Value->OnSave();
+
+        adviseResult.Should().Be(HRESULT.S_OK);
+        unadviseResult.Should().Be(HRESULT.S_OK);
+        connection.Should().Be((uint)ExpectedConnection);
+        adviseCallCount.Should().Be(1);
+        unadviseCallCount.Should().Be(1);
+        sawExpectedSink.Should().BeTrue();
+        wasRetainedWhileSubscribed.Should().BeTrue();
+        wasReleasedOnUnadvise.Should().BeTrue();
+        sink.OnSaveCallCount.Should().Be(2);
+        referenceCountAfterUnadvise.Should().Be(referenceCountWhileSubscribed);
+        referenceCountWhileSubscribed.Should().Be(referenceCountBefore);
+    }
+
+    private static unsafe uint GetOwnershipDAdviseReferenceCount(Com.IUnknown* unknown)
+    {
+        unknown->AddRef();
+        return unknown->Release();
     }
 
     [WinFormsTheory]
@@ -2118,6 +2367,173 @@ public partial class DataObjectTests
         comDataObject.EnumDAdvise(out IEnumSTATDATA enumStatData).Should().Be(1);
         enumStatData.Should().BeSameAs(result);
         mockComDataObject.Verify(o => o.EnumDAdvise(out It.Ref<IEnumSTATDATA>.IsAny), Times.Once());
+    }
+
+    [WinFormsFact]
+    public unsafe void EnumFormatEtc_ComTypesFacade_Ownership_EnumFormatEtc_ReleasesTemporaryReferences()
+    {
+        DataObject dataObject = CreateOwnershipEnumFormatEtcDataObject();
+        IComDataObject comDataObject = dataObject;
+
+        IEnumFORMATETC enumerator = comDataObject.EnumFormatEtc(DATADIR.DATADIR_GET);
+
+        enumerator.Should().BeOfType<FormatEnumerator>();
+        AssertOwnershipEnumFormatEtcContentsAndReset(enumerator);
+
+        using var observer = ComHelpers.GetComScope<Com.IUnknown>(enumerator);
+        ComHelpers.WrapsManagedObject(enumerator, observer.Value).Should().BeTrue();
+
+        uint expectedObserverOnlyReferenceCount = 1;
+        GetOwnershipEnumFormatEtcReferenceCount(observer.Value).Should().Be(expectedObserverOnlyReferenceCount);
+    }
+
+    [WinFormsFact]
+    public unsafe void EnumFormatEtc_NativeControl_Ownership_EnumFormatEtc_ReleasesTemporaryReferences()
+    {
+        DataObject dataObject = CreateOwnershipEnumFormatEtcDataObject();
+        using var nativeDataObject = ComHelpers.GetComScope<Com.IDataObject>(dataObject);
+        using ComScope<Com.IUnknown> observer = new(null);
+        IEnumFORMATETC enumerator;
+        uint referenceCountWithNativeOwners;
+        {
+            using ComScope<Com.IEnumFORMATETC> nativeEnumerator = new(null);
+            nativeDataObject.Value->EnumFormatEtc((uint)DATADIR.DATADIR_GET, nativeEnumerator)
+                .Should().Be(HRESULT.S_OK);
+            using var queriedUnknown = nativeEnumerator.Query<Com.IUnknown>();
+
+            object managedEnumerator = ComHelpers.GetObjectForIUnknown(queriedUnknown);
+            enumerator = managedEnumerator.Should().BeOfType<FormatEnumerator>().Subject;
+            queriedUnknown.Value->QueryInterface(IID.Get<Com.IUnknown>(), observer).ThrowOnFailure();
+            ComHelpers.WrapsManagedObject(enumerator, observer.Value).Should().BeTrue();
+
+            referenceCountWithNativeOwners = GetOwnershipEnumFormatEtcReferenceCount(observer.Value);
+        }
+
+        uint observerOnlyReferenceCount = GetOwnershipEnumFormatEtcReferenceCount(observer.Value);
+        referenceCountWithNativeOwners.Should().Be(observerOnlyReferenceCount + 2);
+        observerOnlyReferenceCount.Should().Be(1);
+        AssertOwnershipEnumFormatEtcContentsAndReset(enumerator);
+    }
+
+    [WinFormsFact]
+    public unsafe void EnumFormatEtc_Clone_Ownership_EnumFormatEtc_ReleasesOriginalAndCloneReferences()
+    {
+        DataObject dataObject = CreateOwnershipEnumFormatEtcDataObject();
+        IComDataObject comDataObject = dataObject;
+        IEnumFORMATETC source = comDataObject.EnumFormatEtc(DATADIR.DATADIR_GET);
+        FORMATETC[] firstResult = new FORMATETC[1];
+        int[] firstFetched = new int[1];
+        ((HRESULT)source.Next(1, firstResult, firstFetched)).Should().Be(HRESULT.S_OK);
+        firstResult[0].cfFormat.Should().Be(
+            unchecked((short)(ushort)DataFormats.GetFormat(DataFormats.Text).Id));
+
+        using ComScope<Com.IUnknown> sourceObserver = new(null);
+        using ComScope<Com.IUnknown> cloneObserver = new(null);
+        IEnumFORMATETC clone;
+        uint sourceReferenceCountWithNativeOwner;
+        uint cloneReferenceCountWithNativeOwners;
+        {
+            using var nativeSource = ComHelpers.GetComScope<Com.IEnumFORMATETC>(source);
+            nativeSource.Value->QueryInterface(IID.Get<Com.IUnknown>(), sourceObserver).ThrowOnFailure();
+            using ComScope<Com.IEnumFORMATETC> nativeClone = new(null);
+            nativeSource.Value->Clone(nativeClone).Should().Be(HRESULT.S_OK);
+            using var cloneUnknown = nativeClone.Query<Com.IUnknown>();
+
+            object managedClone = ComHelpers.GetObjectForIUnknown(cloneUnknown);
+            clone = managedClone.Should().BeOfType<FormatEnumerator>().Subject;
+            clone.Should().NotBeSameAs(source);
+            cloneUnknown.Value->QueryInterface(IID.Get<Com.IUnknown>(), cloneObserver).ThrowOnFailure();
+            ComHelpers.WrapsManagedObject(source, sourceObserver.Value).Should().BeTrue();
+            ComHelpers.WrapsManagedObject(clone, cloneObserver.Value).Should().BeTrue();
+
+            sourceReferenceCountWithNativeOwner = GetOwnershipEnumFormatEtcReferenceCount(sourceObserver.Value);
+            cloneReferenceCountWithNativeOwners = GetOwnershipEnumFormatEtcReferenceCount(cloneObserver.Value);
+        }
+
+        uint sourceObserverOnlyReferenceCount = GetOwnershipEnumFormatEtcReferenceCount(sourceObserver.Value);
+        uint cloneObserverOnlyReferenceCount = GetOwnershipEnumFormatEtcReferenceCount(cloneObserver.Value);
+        sourceReferenceCountWithNativeOwner.Should().Be(sourceObserverOnlyReferenceCount + 1);
+        cloneReferenceCountWithNativeOwners.Should().Be(cloneObserverOnlyReferenceCount + 2);
+
+        uint[] expectedObserverOnlyReferenceCounts = [1, 1];
+        uint[] actualObserverOnlyReferenceCounts =
+        [
+            sourceObserverOnlyReferenceCount,
+            cloneObserverOnlyReferenceCount
+        ];
+        actualObserverOnlyReferenceCounts.Should().Equal(expectedObserverOnlyReferenceCounts);
+
+        FORMATETC[] sourceResult = new FORMATETC[1];
+        FORMATETC[] cloneResult = new FORMATETC[1];
+        int[] sourceFetched = new int[1];
+        int[] cloneFetched = new int[1];
+        ((HRESULT)source.Next(1, sourceResult, sourceFetched)).Should().Be(HRESULT.S_OK);
+        ((HRESULT)clone.Next(1, cloneResult, cloneFetched)).Should().Be(HRESULT.S_OK);
+        sourceResult[0].cfFormat.Should().Be(cloneResult[0].cfFormat);
+
+        ((HRESULT)source.Reset()).Should().Be(HRESULT.S_OK);
+        ((HRESULT)clone.Reset()).Should().Be(HRESULT.S_OK);
+        AssertOwnershipEnumFormatEtcContentsAndReset(source);
+        AssertOwnershipEnumFormatEtcContentsAndReset(clone);
+    }
+
+    [WinFormsFact]
+    public void EnumFormatEtc_UnsupportedDirection_Ownership_EnumFormatEtc_LeavesFacadeUsable()
+    {
+        DataObject dataObject = CreateOwnershipEnumFormatEtcDataObject();
+        IComDataObject comDataObject = dataObject;
+
+        Action action = () => comDataObject.EnumFormatEtc(DATADIR.DATADIR_SET);
+
+        action.Should().Throw<ExternalException>()
+            .Which.ErrorCode.Should().Be((int)HRESULT.E_NOTIMPL);
+        IEnumFORMATETC enumerator = comDataObject.EnumFormatEtc(DATADIR.DATADIR_GET);
+        AssertOwnershipEnumFormatEtcContentsAndReset(enumerator);
+    }
+
+    private static DataObject CreateOwnershipEnumFormatEtcDataObject()
+    {
+        DataObject dataObject = new();
+        dataObject.SetData(DataFormats.Text, autoConvert: false, "ansi text");
+        dataObject.SetData(DataFormats.UnicodeText, autoConvert: false, "Unicode text");
+        return dataObject;
+    }
+
+    private static void AssertOwnershipEnumFormatEtcContentsAndReset(IEnumFORMATETC enumerator)
+    {
+        short[] expectedFormats =
+        [
+            unchecked((short)(ushort)DataFormats.GetFormat(DataFormats.Text).Id),
+            unchecked((short)(ushort)DataFormats.GetFormat(DataFormats.UnicodeText).Id)
+        ];
+
+        ReadOwnershipEnumFormatEtcFormats(enumerator, expectedFormats.Length).Should().BeEquivalentTo(expectedFormats);
+        ((HRESULT)enumerator.Reset()).Should().Be(HRESULT.S_OK);
+        ReadOwnershipEnumFormatEtcFormats(enumerator, expectedFormats.Length).Should().BeEquivalentTo(expectedFormats);
+    }
+
+    private static short[] ReadOwnershipEnumFormatEtcFormats(IEnumFORMATETC enumerator, int expectedCount)
+    {
+        List<short> formats = [];
+        FORMATETC[] result = new FORMATETC[1];
+        int[] fetched = new int[1];
+
+        for (int formatIndex = 0; formatIndex < expectedCount; formatIndex++)
+        {
+            ((HRESULT)enumerator.Next(1, result, fetched)).Should().Be(HRESULT.S_OK);
+            fetched[0].Should().Be(1);
+            formats.Add(result[0].cfFormat);
+        }
+
+        ((HRESULT)enumerator.Next(1, result, fetched)).Should().Be(HRESULT.S_FALSE);
+        fetched[0].Should().Be(0);
+        return [.. formats];
+    }
+
+    private static unsafe uint GetOwnershipEnumFormatEtcReferenceCount(Com.IUnknown* unknown)
+    {
+        unknown->AddRef();
+        return unknown->Release();
     }
 
     public static TheoryData<int> EnumFormatEtc_Default_TheoryData() => new()

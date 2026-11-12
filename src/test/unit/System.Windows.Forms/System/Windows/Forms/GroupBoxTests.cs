@@ -144,6 +144,7 @@ public class GroupBoxTests
             VisualStylesMode = VisualStylesMode.Net11
         };
 
+        Font captionFont = control.ModernCaptionFont;
         Padding padding = control.Padding;
         int deviceDpi = control.DeviceDpi;
 
@@ -152,8 +153,12 @@ public class GroupBoxTests
         {
             case FlatStyle.Standard:
                 {
-                    // Card keeps the classic content rectangle while the renderer draws the modern surface.
-                    int top = control.Font.Height;
+                    // Card reserves only the caption band plus its gap at the top; no internal
+                    // horizontal or bottom inset, so a docked child can fill the card.
+                    int top = captionFont.Height
+                        + ScaleHelper.ScaleToDpi(
+                            ModernControlVisualStyles.GroupBoxCaptionGap,
+                            deviceDpi);
                     expectedInsets = new Padding(
                         padding.Left,
                         padding.Top + top,
@@ -181,13 +186,19 @@ public class GroupBoxTests
 
             case FlatStyle.Popup:
                 {
-                    // Popup keeps the classic content rectangle while the renderer draws the modern header.
-                    int top = control.Font.Height;
+                    // Content is flush to the header rectangle (0 top gap) with a 2px inset elsewhere.
+                    int headerHeight = captionFont.Height
+                        + (2 * ScaleHelper.ScaleToDpi(
+                            ModernControlVisualStyles.GroupBoxHeaderVerticalPadding,
+                            deviceDpi));
+                    int inset = ScaleHelper.ScaleToDpi(
+                        ModernControlVisualStyles.GroupBoxPopupContentInset,
+                        deviceDpi);
                     expectedInsets = new Padding(
-                        padding.Left,
-                        padding.Top + top,
-                        padding.Right,
-                        padding.Bottom);
+                        padding.Left + inset,
+                        padding.Top + headerHeight,
+                        padding.Right + inset,
+                        padding.Bottom + inset);
                     break;
                 }
 
@@ -220,7 +231,10 @@ public class GroupBoxTests
             VisualStylesMode = VisualStylesMode.Net11
         };
 
-        int top = control.Font.Height;
+        int top = control.ModernCaptionFont.Height
+            + ScaleHelper.ScaleToDpi(
+                ModernControlVisualStyles.GroupBoxCaptionGap,
+                control.DeviceDpi);
         Rectangle displayRectangle = control.DisplayRectangle;
 
         // With Padding = 0 the content area spans the full width and reaches the bottom edge, so a
@@ -229,31 +243,6 @@ public class GroupBoxTests
         Assert.Equal(top, displayRectangle.Top);
         Assert.Equal(control.ClientSize.Width, displayRectangle.Width);
         Assert.Equal(control.ClientSize.Height, displayRectangle.Bottom);
-    }
-
-    [WinFormsTheory]
-    [InlineData(FlatStyle.Standard)]
-    [InlineData(FlatStyle.Popup)]
-    public void GroupBox_ModernVisualStyles_ModeSwitchPreservesClassicDisplayRectangle(
-        FlatStyle flatStyle)
-    {
-        using SystemVisualSettingsTestScope settingsScope = new(
-            clientAreaAnimationEnabled: false,
-            highContrastEnabled: false);
-        using VisualStylesGroupBox control = new()
-        {
-            FlatStyle = flatStyle,
-            Padding = new Padding(7, 3, 11, 5),
-            Size = new Size(200, 100),
-            Text = "Modern group",
-            VisualStylesMode = VisualStylesMode.Classic
-        };
-        Rectangle classicDisplayRectangle = control.DisplayRectangle;
-
-        control.VisualStylesMode = VisualStylesMode.Net11;
-
-        Assert.Equal(classicDisplayRectangle, control.DisplayRectangle);
-        Assert.False(control.IsHandleCreated);
     }
 
     [WinFormsTheory]
@@ -316,14 +305,17 @@ public class GroupBoxTests
             Application.SystemVisualSettings.TextScaleFactor,
             1f,
             2.25f);
+        float expectedScale = flatStyle == FlatStyle.Flat
+            ? textScale
+            : ModernControlVisualStyles.GroupBoxCaptionFontScale * textScale;
         Assert.Equal(
-            originalFont.Size * textScale,
+            originalFont.Size * expectedScale,
             control.ModernCaptionFont.Size,
             precision: 3);
     }
 
     [WinFormsFact]
-    public void GroupBox_ModernVisualStyles_RegularFontPreservesFamilyAndStyle()
+    public void GroupBox_ModernVisualStyles_RegularFontUsesInstalledSemiBoldFaceWhenAvailable()
     {
         using SystemVisualSettingsTestScope settingsScope = new(
             clientAreaAnimationEnabled: false,
@@ -338,9 +330,13 @@ public class GroupBoxTests
             FlatStyle = FlatStyle.Standard,
             VisualStylesMode = VisualStylesMode.Net11
         };
+        string semiBoldFamilyName = GroupBox.FindSemiBoldFamilyName(
+            regularFont.FontFamily.Name);
 
         Assert.Equal(
-            regularFont.FontFamily.Name,
+            semiBoldFamilyName.Length == 0
+                ? regularFont.FontFamily.Name
+                : semiBoldFamilyName,
             control.ModernCaptionFont.FontFamily.Name,
             ignoreCase: true);
         Assert.Equal(FontStyle.Regular, control.ModernCaptionFont.Style);
@@ -368,6 +364,14 @@ public class GroupBoxTests
             control.ModernCaptionFont.FontFamily.Name,
             ignoreCase: true);
         Assert.Equal(styledFont.Style, control.ModernCaptionFont.Style);
+    }
+
+    [Fact]
+    public void GroupBox_FindSemiBoldFamilyName_MissingFamilyReturnsEmpty()
+    {
+        Assert.Empty(
+            GroupBox.FindSemiBoldFamilyName(
+                $"Missing-{Guid.NewGuid():N}"));
     }
 
     [WinFormsFact]
@@ -398,7 +402,10 @@ public class GroupBoxTests
             actual,
             new Rectangle(Point.Empty, control.Size));
 
-        int frameTop = control.Font.Height;
+        int frameTop = control.ModernCaptionFont.Height
+            + ScaleHelper.ScaleToDpi(
+                ModernControlVisualStyles.GroupBoxCaptionGap,
+                control.DeviceDpi);
         Color expected = PopupButtonColorMath.TowardsContrast(
             control.BackColor,
             0.035f);
@@ -457,7 +464,7 @@ public class GroupBoxTests
     }
 
     [WinFormsFact]
-    public void GroupBox_ModernPopup_PaintsSubtleAccentHeader()
+    public void GroupBox_ModernPopup_PaintsWindowsAccentHeader()
     {
         using SystemVisualSettingsTestScope settingsScope = new(
             clientAreaAnimationEnabled: false,
@@ -477,19 +484,13 @@ public class GroupBoxTests
             actual,
             new Rectangle(Point.Empty, control.Size));
 
-        int headerInteriorY = Math.Min(
-            actual.Height - 1,
-            control.ModernBorderThickness + 2);
-        Color expectedHeaderColor = PopupButtonColorMath.Blend(
-            control.BackColor,
-            Application.SystemVisualSettings.AccentColor,
-            0.12f);
-
         Assert.Equal(
-            expectedHeaderColor.ToArgb(),
+            Application.SystemVisualSettings.AccentColor.ToArgb(),
             actual.GetPixel(
                 actual.Width / 2,
-                headerInteriorY).ToArgb());
+                Math.Min(
+                    actual.Height - 1,
+                    control.ModernBorderThickness + 2)).ToArgb());
     }
 
     [WinFormsFact]
@@ -706,7 +707,7 @@ public class GroupBoxTests
     [WinFormsTheory]
     [InlineData(RightToLeft.No)]
     [InlineData(RightToLeft.Yes)]
-    public void GroupBox_ModernPopup_CaptionBoundsStayInsideHeader(
+    public void GroupBox_ModernPopup_CaptionBoundsApplyStandardPaddingBeforeHeaderInset(
         RightToLeft rightToLeft)
     {
         using SystemVisualSettingsTestScope settingsScope = new(
@@ -726,6 +727,9 @@ public class GroupBoxTests
         int horizontalPadding = ScaleHelper.ScaleToDpi(
             ModernControlVisualStyles.GroupBoxHeaderHorizontalPadding,
             control.DeviceDpi);
+        int verticalPadding = ScaleHelper.ScaleToDpi(
+            ModernControlVisualStyles.GroupBoxHeaderVerticalPadding,
+            control.DeviceDpi);
 
         Rectangle standardBounds = control.GetStandardCaptionBounds(
             bounds);
@@ -736,12 +740,11 @@ public class GroupBoxTests
             standardBounds.Left + horizontalPadding,
             popupBounds.Left);
         Assert.Equal(
-            standardBounds.Top,
+            standardBounds.Top + verticalPadding,
             popupBounds.Top);
         Assert.Equal(
             standardBounds.Right - horizontalPadding,
             popupBounds.Right);
-        Assert.Equal(standardBounds.Height, popupBounds.Height);
     }
 
     [WinFormsTheory]
@@ -913,7 +916,7 @@ public class GroupBoxTests
 
         control.FlatStyle = FlatStyle.Popup;
 
-        Assert.Equal(standardBounds, child.Bounds);
+        Assert.NotEqual(standardBounds, child.Bounds);
         Assert.Equal(control.DisplayRectangle, child.Bounds);
         Assert.False(control.IsHandleCreated);
     }
@@ -942,7 +945,7 @@ public class GroupBoxTests
     }
 
     [WinFormsFact]
-    public void GroupBox_ModernStandard_TextScaleChangeDoesNotRemeasureParent()
+    public void GroupBox_ModernVisualStyles_TextScaleChangeRemeasuresParent()
     {
         SystemVisualSettings previous = SystemVisualSettingsTracker.CurrentSettings;
         SystemVisualSettings initial = new(
@@ -981,8 +984,8 @@ public class GroupBoxTests
                     scaled,
                     SystemVisualSettingsCategories.TextScale));
 
-            Assert.Equal(originalTop, control.DisplayRectangle.Top);
-            Assert.Equal(0, layoutCallCount);
+            Assert.True(control.DisplayRectangle.Top > originalTop);
+            Assert.Equal(1, layoutCallCount);
             Assert.False(control.IsHandleCreated);
         }
         finally
@@ -3234,10 +3237,13 @@ public class GroupBoxTests
         public Rectangle GetPopupCaptionBounds(Rectangle bounds)
             => (Rectangle)this.TestAccessor.Dynamic.GetPopupCaptionBounds(
                 bounds,
+                ModernCaptionFont.Height,
                 ScaleHelper.ScaleToDpi(
                     ModernControlVisualStyles.GroupBoxHeaderHorizontalPadding,
                     DeviceDpi),
-                Math.Max(Font.Height, ModernCaptionFont.Height));
+                ScaleHelper.ScaleToDpi(
+                    ModernControlVisualStyles.GroupBoxHeaderVerticalPadding,
+                    DeviceDpi));
 
         public Rectangle GetFlatCaptionBounds(Rectangle bounds)
             => (Rectangle)this.TestAccessor.Dynamic.GetFlatCaptionBounds(

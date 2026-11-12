@@ -114,6 +114,31 @@ public class CheckBoxToggleSwitchTests
     }
 
     [WinFormsFact]
+    public void CheckBox_ToggleSwitch_PreferredSize_UseMnemonicFalse_MeasuresLiteralAmpersand()
+    {
+        using CheckBox literalAmpersand = new()
+        {
+            Appearance = Appearance.ToggleSwitch,
+            FlatStyle = FlatStyle.Standard,
+            Text = "A&B",
+            UseMnemonic = false,
+            VisualStylesMode = VisualStylesMode.Net11
+        };
+        using CheckBox escapedMnemonic = new()
+        {
+            Appearance = Appearance.ToggleSwitch,
+            FlatStyle = FlatStyle.Standard,
+            Text = "A&&B",
+            UseMnemonic = true,
+            VisualStylesMode = VisualStylesMode.Net11
+        };
+
+        Assert.Equal(
+            escapedMnemonic.GetPreferredSize(Size.Empty),
+            literalAmpersand.GetPreferredSize(Size.Empty));
+    }
+
+    [WinFormsFact]
     public void CheckBox_Appearance_ToggleSwitch_RoundTrips()
     {
         using CheckBox checkBox = new() { Appearance = Appearance.ToggleSwitch };

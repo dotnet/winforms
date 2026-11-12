@@ -4,7 +4,6 @@
 using System.Windows.Forms.Analyzers.Diagnostics;
 using System.Windows.Forms.CSharp.Analyzers.AvoidPassingTaskWithoutCancellationToken;
 using Microsoft.CodeAnalysis;
-using Microsoft.CodeAnalysis.CSharp.Testing;
 using Microsoft.CodeAnalysis.Testing;
 
 namespace System.Windows.Forms.Analyzers.Tests;
@@ -105,28 +104,27 @@ public sealed class AvoidPassingTaskWithoutCancellationTokenTests
 
         string diagnosticId = DiagnosticIDs.AvoidPassingFuncReturningTaskWithoutCancellationToken;
 
-        var context = new CSharpAnalyzerTest
-            <AvoidPassingTaskWithoutCancellationTokenAnalyzer,
-             DefaultVerifier>
+        AnalyzerTestCase testCase = new(
+            referenceAssemblies,
+            new AnalyzerTestSource("Test0.cs", TestCode))
         {
-            TestCode = TestCode,
-            TestState =
-                {
-                    OutputKind = OutputKind.WindowsApplication,
-                    ExpectedDiagnostics =
-                    {
-                        DiagnosticResult.CompilerWarning(diagnosticId).WithSpan(41, 21, 41, 97),
-                        DiagnosticResult.CompilerWarning(diagnosticId).WithSpan(44, 21, 44, 97),
-                        DiagnosticResult.CompilerWarning(diagnosticId).WithSpan(47, 21, 47, 98),
-                    }
-                },
-            ReferenceAssemblies = referenceAssemblies
+            OutputKind = OutputKind.WindowsApplication
         };
+
+        testCase.ExpectedDiagnostics.AddRange(
+        [
+            DiagnosticResult.CompilerWarning(diagnosticId).WithSpan(41, 21, 41, 97),
+            DiagnosticResult.CompilerWarning(diagnosticId).WithSpan(44, 21, 44, 97),
+            DiagnosticResult.CompilerWarning(diagnosticId).WithSpan(47, 21, 47, 98),
+        ]);
 
         if (pathToWinFormsAssembly != "")
         {
-            context.TestState.AdditionalReferences.Add(pathToWinFormsAssembly);
+            testCase.AdditionalReferences.Add(pathToWinFormsAssembly);
         }
+
+        var context = AnalyzerTestFactory.CreateCSharpAnalyzerTest
+            <AvoidPassingTaskWithoutCancellationTokenAnalyzer>(testCase);
 
         await context.RunAsync(TestContext.Current.CancellationToken);
     }

@@ -208,10 +208,7 @@ namespace SourceGenerated
 
         foreach (SyntaxNode argument in argumentsToValidate)
         {
-            if (cancellationToken.IsCancellationRequested)
-            {
-                yield break;
-            }
+            cancellationToken.ThrowIfCancellationRequested();
 
             SemanticModel semanticModel = GetSemanticModel(compilation, argument.SyntaxTree);
 

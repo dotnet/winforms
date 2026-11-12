@@ -585,6 +585,30 @@ internal abstract partial class ButtonBaseAdapter
         }
     }
 
+    internal void PaintModernBackground(PaintEventArgs e)
+    {
+        Color backColor = Control.BackColor;
+        bool useExplicitBackColor = Control.ShouldSerializeBackColor() || !Control.UseVisualStyleBackColor;
+        if (!backColor.HasTransparency())
+        {
+            using var backBrush = backColor.GetCachedSolidBrushScope();
+            e.GraphicsInternal.FillRectangle(backBrush, Control.ClientRectangle);
+            return;
+        }
+
+        ParentBackgroundRenderer.Paint(
+            Control,
+            e.GraphicsInternal,
+            Control.ClientRectangle,
+            backColor);
+
+        if (useExplicitBackColor && !backColor.IsFullyTransparent())
+        {
+            using var backBrush = backColor.GetCachedSolidBrushScope();
+            e.GraphicsInternal.FillRectangle(backBrush, Control.ClientRectangle);
+        }
+    }
+
     internal void PaintField(
         PaintEventArgs e,
         LayoutData layout,

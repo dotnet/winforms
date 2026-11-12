@@ -1,4 +1,4 @@
-// Licensed to the .NET Foundation under one or more agreements.
+﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
 using System.Drawing;
@@ -16,6 +16,15 @@ namespace System.Windows.Forms.Rendering.CheckBox;
 internal sealed class AnimatedToggleSwitchRenderer : AnimatedControlRenderer
 {
     private const int AnimationDuration = 300;
+    private const int ThumbHorizontalGapLogical = 1;
+    private const float MinimumThumbContrastRatio = 3f;
+    private const int ContrastSearchIterations = 10;
+
+    private static readonly Color s_darkModeUncheckedCircleColor = Color.FromArgb(0xCF, 0xCE, 0xCD);
+    private static readonly Color s_darkModeUncheckedBorderColor = Color.FromArgb(0x9E, 0x9E, 0x9E);
+    private static readonly Color s_lightModeUncheckedBorderColor = Color.FromArgb(0x89, 0x89, 0x89);
+    private static readonly Color s_lightModeUncheckedCircleColor = Color.FromArgb(0x5D, 0x5D, 0x5D);
+    private static readonly Color s_lightModeUncheckedTrackColor = Color.WhiteSmoke;
 
     private readonly ModernCheckBoxStyle _switchStyle;
     private float _focusCurrent;
@@ -77,16 +86,19 @@ internal sealed class AnimatedToggleSwitchRenderer : AnimatedControlRenderer
             focused: Control.Focused && ShowFocusCues);
 
         ToggleSwitchMetrics metrics = ToggleSwitchMetrics.Create(Control);
-        Size textSize = TextRenderer.MeasureText(Control.Text, Control.Font);
+        TextFormatFlags textFormatFlags = GetTextFormatFlags(Control);
+        Size textSize = MeasureText(Control, textFormatFlags);
         Rectangle contentBounds = ToggleSwitchMetrics.GetContentBounds(Control);
-        int totalHeight = Math.Max(textSize.Height, metrics.SwitchHeight);
-        int contentTop = contentBounds.Top + Math.Max(0, (contentBounds.Height - totalHeight) / 2);
-        int textY = contentTop + ((totalHeight - textSize.Height) / 2);
         Rectangle switchBounds = GetSwitchBounds(
             Control,
             RtlTranslatedCheckAlign,
             metrics,
             textSize);
+        Rectangle textBounds = GetTextBounds(
+            contentBounds,
+            switchBounds,
+            metrics,
+            RtlTranslatedCheckAlign);
 
         PaintControlBackground(graphics);
 
@@ -95,17 +107,8 @@ internal sealed class AnimatedToggleSwitchRenderer : AnimatedControlRenderer
             return;
         }
 
-        if (IsSwitchOnRight(RtlTranslatedCheckAlign))
-        {
-            int textX = Math.Max(contentBounds.Left, switchBounds.Left - metrics.TextGap - textSize.Width);
-            RenderSwitch(graphics, switchBounds, metrics);
-            RenderText(graphics, new Point(textX, textY));
-        }
-        else
-        {
-            RenderSwitch(graphics, switchBounds, metrics);
-            RenderText(graphics, new Point(contentBounds.Left + metrics.SwitchWidth + metrics.TextGap, textY));
-        }
+        RenderSwitch(graphics, switchBounds, metrics);
+        RenderText(graphics, textBounds, textFormatFlags);
 
         if (Control.Focused && ShowFocusCues)
         {
@@ -149,11 +152,14 @@ internal sealed class AnimatedToggleSwitchRenderer : AnimatedControlRenderer
         Control control,
         ContentAlignment checkAlign,
         ToggleSwitchMetrics metrics)
-        => GetSwitchBounds(
+    {
+        TextFormatFlags textFormatFlags = GetTextFormatFlags(control);
+        return GetSwitchBounds(
             control,
             checkAlign,
             metrics,
-            TextRenderer.MeasureText(control.Text, control.Font));
+            MeasureText(control, textFormatFlags));
+    }
 
     private static Rectangle GetSwitchBounds(
         Control control,
@@ -165,22 +171,101 @@ internal sealed class AnimatedToggleSwitchRenderer : AnimatedControlRenderer
         int totalHeight = Math.Max(textSize.Height, metrics.SwitchHeight);
         int contentTop = contentBounds.Top + Math.Max(0, (contentBounds.Height - totalHeight) / 2);
         int switchY = contentTop + ((totalHeight - metrics.SwitchHeight) / 2);
-        int switchX = IsSwitchOnRight(checkAlign)
-            ? Math.Max(contentBounds.Left, contentBounds.Right - metrics.SwitchWidth)
-            : contentBounds.Left;
+        int minimumSwitchX = contentBounds.Left;
+        int maximumSwitchX = Math.Max(minimumSwitchX, contentBounds.Right - metrics.SwitchWidth);
+        int edgeInset = Math.Max(1, (metrics.BorderThickness / 2) + 1);
+        int targetSwitchX = IsSwitchOnRight(checkAlign)
+            ? maximumSwitchX - edgeInset
+            : minimumSwitchX + edgeInset;
+        int switchX = Math.Max(minimumSwitchX, Math.Min(maximumSwitchX, targetSwitchX));
 
         return new Rectangle(switchX, switchY, metrics.SwitchWidth, metrics.SwitchHeight);
     }
 
-    private void RenderText(Graphics graphics, Point position)
+    internal static Rectangle GetTextBounds(
+        Control control,
+        ContentAlignment checkAlign,
+        ToggleSwitchMetrics metrics)
     {
+        TextFormatFlags textFormatFlags = GetTextFormatFlags(control);
+        Size textSize = MeasureText(control, textFormatFlags);
+        Rectangle contentBounds = ToggleSwitchMetrics.GetContentBounds(control);
+        Rectangle switchBounds = GetSwitchBounds(control, checkAlign, metrics, textSize);
+        return GetTextBounds(contentBounds, switchBounds, metrics, checkAlign);
+    }
+
+    private static Rectangle GetTextBounds(
+        Rectangle contentBounds,
+        Rectangle switchBounds,
+        ToggleSwitchMetrics metrics,
+        ContentAlignment checkAlign)
+    {
+        // Keep a small symmetric inset between the switch track and text to avoid visual collision
+        // with the rounded switch border in high DPI while preserving readability in narrow widths.
+        int textGapInset = GetSwitchTextInset(metrics);
+        int minimumTextGap = Math.Max(0, metrics.TextGap - textGapInset);
+
+        if (IsSwitchOnRight(checkAlign))
+        {
+            int right = Math.Min(
+                contentBounds.Right,
+                switchBounds.Left - minimumTextGap);
+            right = Math.Max(contentBounds.Left, right);
+            return Rectangle.FromLTRB(contentBounds.Left, contentBounds.Top, right, contentBounds.Bottom);
+        }
+
+        int left = Math.Max(
+            contentBounds.Left,
+            switchBounds.Right + minimumTextGap);
+        left = Math.Min(contentBounds.Right, left);
+        return Rectangle.FromLTRB(left, contentBounds.Top, contentBounds.Right, contentBounds.Bottom);
+    }
+
+    private static int GetSwitchTextInset(ToggleSwitchMetrics metrics)
+        => Math.Max(1, (metrics.BorderThickness / 2) + 1);
+
+    internal static Size MeasureText(Control control, TextFormatFlags textFormatFlags)
+        => TextRenderer.MeasureText(
+            text: control.Text,
+            font: control.Font,
+            proposedSize: new Size(int.MaxValue, int.MaxValue),
+            flags: textFormatFlags);
+
+    private void RenderText(
+        Graphics graphics,
+        Rectangle textBounds,
+        TextFormatFlags textFormatFlags)
+    {
+        if (textBounds.Width <= 0 || textBounds.Height <= 0)
+        {
+            return;
+        }
+
         TextRenderer.DrawText(
             graphics,
             Control.Text,
             Control.Font,
-            position,
-            GetTextColor());
+            textBounds,
+            GetTextColor(),
+            textFormatFlags);
     }
+
+    internal static TextFormatFlags GetTextFormatFlags(Control control) => control switch
+    {
+        Forms.CheckBox { FlatStyle: FlatStyle.System } checkBox => ControlPaint.CreateTextFormatFlags(
+            checkBox,
+            checkBox.TextAlign,
+            checkBox.ShowToolTip,
+            checkBox.UseMnemonic),
+        Forms.RadioButton { FlatStyle: FlatStyle.System } radioButton => ControlPaint.CreateTextFormatFlags(
+            radioButton,
+            radioButton.TextAlign,
+            radioButton.ShowToolTip,
+            radioButton.UseMnemonic),
+        Forms.CheckBox checkBox => checkBox.CreateTextFormatFlags(),
+        Forms.RadioButton radioButton => radioButton.CreateTextFormatFlags(),
+        _ => TextFormatFlags.WordBreak | TextFormatFlags.TextBoxControl
+    };
 
     internal Color GetTextColor()
         => Control.Enabled
@@ -197,10 +282,13 @@ internal sealed class AnimatedToggleSwitchRenderer : AnimatedControlRenderer
         }
 
         bool highContrast = SystemInformation.HighContrast;
+        bool darkMode = Application.IsDarkModeEnabled;
         Color onColor = highContrast
             ? SystemColors.Highlight
-            : WindowsAccentColor;
-        Color offColor = highContrast ? SystemColors.Window : SystemColors.ControlDark;
+            : GetCheckedTrackColor(WindowsAccentColor, darkMode);
+        Color offColor = highContrast
+            ? SystemColors.Window
+            : GetUncheckedTrackColor(darkMode);
         Color backgroundColor = Control.Enabled
             ? PopupButtonColorMath.Blend(offColor, onColor, _onAmountCurrent)
             : SystemColors.Control;
@@ -211,23 +299,26 @@ internal sealed class AnimatedToggleSwitchRenderer : AnimatedControlRenderer
         Color borderColor = Control.Enabled
             ? highContrast
                 ? highContrastForeground
-                : SystemColors.WindowFrame
+                : PopupButtonColorMath.Blend(
+                    GetUncheckedBorderColor(darkMode),
+                    onColor,
+                    _onAmountCurrent)
             : SystemColors.GrayText;
         float focus = Control.Enabled && !highContrast ? _focusCurrent : 0f;
         backgroundColor = ApplyInteractionShade(backgroundColor, focus);
         Color circleColor = Control.Enabled
             ? highContrast
                 ? highContrastForeground
-                : PopupButtonColorMath.GetReadableForeColor(backgroundColor)
+                : GetCircleColor(darkMode, _onAmountCurrent, focus)
             : SystemColors.GrayText;
-        circleColor = ApplyInteractionShade(circleColor, focus);
         borderColor = ApplyInteractionShade(borderColor, focus);
 
-        float thumbDiameter = Lerp(
-            metrics.ThumbDiameter,
-            metrics.HoverThumbDiameter,
+        RectangleF thumbBounds = GetThumbBounds(
+            Control,
+            rect,
+            metrics,
+            _positionCurrent,
             Control.Enabled ? _hoverCurrent : 0f);
-        float circlePosition = (rect.Width - thumbDiameter) * _positionCurrent;
 
         using var backgroundBrush = backgroundColor.GetCachedSolidBrushScope();
         using var circleBrush = circleColor.GetCachedSolidBrushScope();
@@ -258,19 +349,90 @@ internal sealed class AnimatedToggleSwitchRenderer : AnimatedControlRenderer
                 graphics.DrawRectangle(backgroundPen, rect);
             }
 
-            float circleTop = rect.Y + ((rect.Height - thumbDiameter) / 2f);
-            graphics.FillEllipse(
-                circleBrush,
-                rect.X + circlePosition,
-                circleTop,
-                thumbDiameter,
-                thumbDiameter);
+            graphics.FillEllipse(circleBrush, thumbBounds);
         }
         finally
         {
             graphics.SmoothingMode = previousSmoothingMode;
         }
     }
+
+    internal static RectangleF GetThumbBounds(
+        Control control,
+        Rectangle switchBounds,
+        ToggleSwitchMetrics metrics,
+        float position,
+        float hoverAmount)
+    {
+        float diameter = Lerp(metrics.ThumbDiameter, metrics.HoverThumbDiameter, hoverAmount);
+
+        // Keep track color between the thumb and the parent background to preserve contrast.
+        float inset = (metrics.BorderThickness / 2f) + control.LogicalToDeviceUnits(ThumbHorizontalGapLogical);
+        float travel = switchBounds.Width - diameter - (2 * inset);
+
+        return new RectangleF(
+            switchBounds.X + inset + (travel * position),
+            switchBounds.Y + ((switchBounds.Height - diameter) / 2f),
+            diameter,
+            diameter);
+    }
+
+    internal static Color GetUncheckedTrackColor(bool darkMode)
+        => darkMode ? SystemColors.ControlDark : s_lightModeUncheckedTrackColor;
+
+    internal static Color GetUncheckedBorderColor(bool darkMode)
+        => darkMode ? s_darkModeUncheckedBorderColor : s_lightModeUncheckedBorderColor;
+
+    internal static Color GetCircleColor(bool darkMode, float onAmount, float interactionAmount)
+    {
+        Color uncheckedColor = darkMode
+            ? s_darkModeUncheckedCircleColor
+            : s_lightModeUncheckedCircleColor;
+        Color checkedColor = darkMode ? Color.Black : Color.White;
+
+        return PopupButtonColorMath.Blend(
+            ApplyInteractionShade(uncheckedColor, interactionAmount),
+            checkedColor,
+            onAmount);
+    }
+
+    internal static Color GetCheckedTrackColor(Color accentColor, bool darkMode)
+    {
+        Color thumbColor = darkMode ? Color.Black : Color.White;
+        if (HasMinimumThumbContrast(accentColor, thumbColor))
+        {
+            return accentColor;
+        }
+
+        Color contrastColor = darkMode ? Color.White : Color.Black;
+        Color result = contrastColor;
+        float low = 0f;
+        float high = 1f;
+
+        for (int i = 0; i < ContrastSearchIterations; i++)
+        {
+            float amount = (low + high) / 2f;
+            Color candidate = PopupButtonColorMath.Blend(accentColor, contrastColor, amount);
+
+            if (HasMinimumThumbContrast(candidate, thumbColor))
+            {
+                result = candidate;
+                high = amount;
+            }
+            else
+            {
+                low = amount;
+            }
+        }
+
+        return result;
+    }
+
+    private static bool HasMinimumThumbContrast(Color trackColor, Color thumbColor)
+        => PopupButtonColorMath.GetContrastRatio(thumbColor, trackColor) >= MinimumThumbContrastRatio
+           && PopupButtonColorMath.GetContrastRatio(
+               thumbColor,
+               ApplyInteractionShade(trackColor, 1f)) >= MinimumThumbContrastRatio;
 
     internal void PrepareStateChange()
     {
@@ -455,7 +617,8 @@ internal readonly struct ToggleSwitchMetrics
 
     internal Size GetPreferredSize(Control control)
     {
-        Size textSize = TextRenderer.MeasureText(control.Text, control.Font);
+        TextFormatFlags textFormatFlags = AnimatedToggleSwitchRenderer.GetTextFormatFlags(control);
+        Size textSize = AnimatedToggleSwitchRenderer.MeasureText(control, textFormatFlags);
         return new Size(
             SwitchWidth + TextGap + textSize.Width + control.Padding.Horizontal,
             Math.Max(SwitchHeight, textSize.Height) + control.Padding.Vertical);

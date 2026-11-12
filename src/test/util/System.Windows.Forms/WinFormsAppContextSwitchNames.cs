@@ -50,4 +50,16 @@ public static class WinFormsAppContextSwitchNames
     /// </summary>
     public const string TreeNodeCollectionAddRangeRespectsSortOrder
         = "System.Windows.Forms.TreeNodeCollectionAddRangeRespectsSortOrder";
+
+    /// <summary>
+    ///  The switch that controls whether ToolStrip controls, including MenuStrip, use modern rendering.
+    /// </summary>
+    public const string ToolStripModernRendering
+        = "System.Windows.Forms.ToolStripModernRendering";
+
+    /// <summary>
+    ///  The switch that controls whether DataGridView controls use modern rendering.
+    /// </summary>
+    public const string DataGridViewModernRendering
+        = "System.Windows.Forms.DataGridViewModernRendering";
 }

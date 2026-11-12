@@ -5970,6 +5970,289 @@ public class ListBoxTests
         Assert.Equal(0, createdCallCount);
     }
 
+    [WinFormsTheory]
+    [InlineData(SelectionMode.None, false)]
+    [InlineData(SelectionMode.None, true)]
+    [InlineData(SelectionMode.One, false)]
+    [InlineData(SelectionMode.One, true)]
+    [InlineData(SelectionMode.MultiSimple, false)]
+    [InlineData(SelectionMode.MultiSimple, true)]
+    [InlineData(SelectionMode.MultiExtended, false)]
+    [InlineData(SelectionMode.MultiExtended, true)]
+    public void ListBox_RefreshItems_WithCachedSelection_PreservesSelection(SelectionMode selectionMode, bool createHandle)
+    {
+        // Every selection mode must retain its selection through cached-count refreshes, with or without a handle.
+        using SubListBox control = new()
+        {
+            SelectionMode = selectionMode
+        };
+        object item1 = "item1";
+        object item2 = "item2";
+        object item3 = "item3";
+        control.Items.AddRange([item1, item2]);
+
+        if (selectionMode == SelectionMode.One)
+        {
+            control.SelectedIndex = 0;
+        }
+        else if (selectionMode != SelectionMode.None)
+        {
+            control.SetSelected(0, true);
+            control.SetSelected(1, true);
+        }
+
+        (object Item, int Index)[] expectedSelection = selectionMode switch
+        {
+            SelectionMode.One => [(item1, 0)],
+            SelectionMode.MultiSimple or SelectionMode.MultiExtended => [(item1, 0), (item2, 1)],
+            _ => []
+        };
+        AssertSelection(control, expectedSelection);
+
+        if (createHandle)
+        {
+            Assert.NotEqual(IntPtr.Zero, control.Handle);
+        }
+
+        // Do not query selection between adding the item and the scrollbar-triggered refresh.
+        control.Items.Add(item3);
+        control.HorizontalScrollbar = true;
+
+        // Verify each rebuild separately and re-prime the count cache before the next refresh.
+        for (int refresh = 0; refresh < 3; refresh++)
+        {
+            if (refresh > 0)
+            {
+                control.RefreshItems();
+            }
+
+            AssertSelection(control, expectedSelection);
+            Assert.Equal(new object[] { item1, item2, item3 }, control.Items.Cast<object>());
+            Assert.Equal(createHandle, control.IsHandleCreated);
+        }
+
+        if (selectionMode == SelectionMode.One)
+        {
+            control.SelectedIndex = 1;
+            AssertSelection(control, (item2, 1));
+        }
+        else if (selectionMode != SelectionMode.None)
+        {
+            control.SetSelected(2, true);
+            control.SetSelected(0, false);
+            AssertSelection(control, (item2, 1), (item3, 2));
+        }
+
+        control.ClearSelected();
+        AssertSelection(control);
+        Assert.Equal(createHandle, control.IsHandleCreated);
+    }
+
+    [WinFormsTheory]
+    [InlineData(SelectionMode.None, false)]
+    [InlineData(SelectionMode.None, true)]
+    [InlineData(SelectionMode.One, false)]
+    [InlineData(SelectionMode.One, true)]
+    [InlineData(SelectionMode.MultiSimple, false)]
+    [InlineData(SelectionMode.MultiSimple, true)]
+    [InlineData(SelectionMode.MultiExtended, false)]
+    [InlineData(SelectionMode.MultiExtended, true)]
+    public void ListBox_RefreshItems_AfterMutatingItems_SynchronizesSelection(SelectionMode selectionMode, bool createHandle)
+    {
+        // Refresh must preserve selected identities and update indices after sorting, removal, and repopulation.
+        using SubListBox control = new()
+        {
+            SelectionMode = selectionMode
+        };
+        object bravo = "bravo";
+        object delta = "delta";
+        object foxtrot = "foxtrot";
+        object hotel = "hotel";
+        object alpha = "alpha";
+        control.Items.AddRange([bravo, delta, foxtrot, hotel]);
+
+        if (selectionMode == SelectionMode.One)
+        {
+            control.SelectedIndex = 0;
+        }
+        else if (selectionMode != SelectionMode.None)
+        {
+            control.SetSelected(0, true);
+            control.SetSelected(3, true);
+        }
+
+        if (createHandle)
+        {
+            Assert.NotEqual(IntPtr.Zero, control.Handle);
+        }
+
+        // Append an out-of-order item so enabling sorting actually moves the selected items.
+        control.Items.Add(alpha);
+        control.RefreshItems();
+        AssertSelection(control, selectionMode switch
+        {
+            SelectionMode.One => [(bravo, 0)],
+            SelectionMode.MultiSimple or SelectionMode.MultiExtended => [(bravo, 0), (hotel, 3)],
+            _ => []
+        });
+
+        control.Sorted = true;
+        control.RefreshItems();
+        AssertSelection(control, selectionMode switch
+        {
+            SelectionMode.One => [(bravo, 1)],
+            SelectionMode.MultiSimple or SelectionMode.MultiExtended => [(bravo, 1), (hotel, 4)],
+            _ => []
+        });
+
+        control.Items.Remove(delta);
+        control.RefreshItems();
+        AssertSelection(control, selectionMode switch
+        {
+            SelectionMode.One => [(bravo, 1)],
+            SelectionMode.MultiSimple or SelectionMode.MultiExtended => [(bravo, 1), (hotel, 3)],
+            _ => []
+        });
+
+        control.Items.Remove(bravo);
+        control.RefreshItems();
+        AssertSelection(control, selectionMode switch
+        {
+            SelectionMode.MultiSimple or SelectionMode.MultiExtended => [(hotel, 2)],
+            _ => []
+        });
+
+        control.Items.Clear();
+        control.RefreshItems();
+        AssertSelection(control);
+
+        object xray = "xray";
+        object yankee = "yankee";
+        object zulu = "zulu";
+        control.Items.AddRange([zulu, xray, yankee]);
+        if (selectionMode == SelectionMode.One)
+        {
+            control.SelectedIndex = 0;
+        }
+        else if (selectionMode != SelectionMode.None)
+        {
+            control.SetSelected(0, true);
+            control.SetSelected(2, true);
+        }
+
+        for (int refresh = 0; refresh < 2; refresh++)
+        {
+            control.RefreshItems();
+            Assert.Equal(new object[] { xray, yankee, zulu }, control.Items.Cast<object>());
+            AssertSelection(control, selectionMode switch
+            {
+                SelectionMode.One => [(xray, 0)],
+                SelectionMode.MultiSimple or SelectionMode.MultiExtended => [(xray, 0), (zulu, 2)],
+                _ => []
+            });
+            Assert.Equal(createHandle, control.IsHandleCreated);
+        }
+    }
+
+    [WinFormsTheory]
+    [InlineData(SelectionMode.None, false)]
+    [InlineData(SelectionMode.None, true)]
+    [InlineData(SelectionMode.One, false)]
+    [InlineData(SelectionMode.One, true)]
+    [InlineData(SelectionMode.MultiSimple, false)]
+    [InlineData(SelectionMode.MultiSimple, true)]
+    [InlineData(SelectionMode.MultiExtended, false)]
+    [InlineData(SelectionMode.MultiExtended, true)]
+    public void ListBox_RefreshItems_RejectedSelection_DoesNotMutateSelection(SelectionMode selectionMode, bool createHandle)
+    {
+        // Invalid indices and disabled selection must leave refreshed selection views unchanged.
+        using SubListBox control = new()
+        {
+            SelectionMode = selectionMode
+        };
+        object item1 = "item1";
+        object item2 = "item2";
+        object item3 = "item3";
+        control.Items.AddRange([item1, item2, item3]);
+
+        if (selectionMode == SelectionMode.One)
+        {
+            control.SelectedIndex = 1;
+        }
+        else if (selectionMode != SelectionMode.None)
+        {
+            control.SetSelected(1, true);
+            control.SetSelected(2, true);
+        }
+
+        (object Item, int Index)[] expectedSelection = selectionMode switch
+        {
+            SelectionMode.One => [(item2, 1)],
+            SelectionMode.MultiSimple or SelectionMode.MultiExtended => [(item2, 1), (item3, 2)],
+            _ => []
+        };
+        AssertSelection(control, expectedSelection);
+
+        if (createHandle)
+        {
+            Assert.NotEqual(IntPtr.Zero, control.Handle);
+        }
+
+        control.RefreshItems();
+        AssertSelection(control, expectedSelection);
+
+        foreach (int index in new[] { -1, control.Items.Count, int.MaxValue })
+        {
+            Assert.Throws<ArgumentOutOfRangeException>(() => control.SetSelected(index, true));
+            AssertSelection(control, expectedSelection);
+            Assert.Throws<ArgumentOutOfRangeException>(() => control.SetSelected(index, false));
+            AssertSelection(control, expectedSelection);
+        }
+
+        if (selectionMode == SelectionMode.None)
+        {
+            Assert.Throws<InvalidOperationException>(() => control.SetSelected(0, true));
+            AssertSelection(control, expectedSelection);
+            Assert.Throws<InvalidOperationException>(() => control.SetSelected(0, false));
+            AssertSelection(control, expectedSelection);
+        }
+
+        control.RefreshItems();
+        AssertSelection(control, expectedSelection);
+        Assert.Equal(createHandle, control.IsHandleCreated);
+    }
+
+    private static void AssertSelection(ListBox control, params (object Item, int Index)[] expectedSelection)
+    {
+        // Read Count before other selection views can repair a stale cache as a side effect.
+#pragma warning disable xUnit2013 // Do not use equality check to check for collection size.
+        Assert.Equal(expectedSelection.Length, control.SelectedItems.Count);
+        Assert.Equal(expectedSelection.Length, control.SelectedIndices.Count);
+#pragma warning restore xUnit2013 // Do not use equality check to check for collection size.
+
+        if (expectedSelection.Length == 0)
+        {
+            Assert.Null(control.SelectedItem);
+            Assert.Equal(-1, control.SelectedIndex);
+        }
+        else
+        {
+            Assert.Same(expectedSelection[0].Item, control.SelectedItem);
+            Assert.Equal(expectedSelection[0].Index, control.SelectedIndex);
+        }
+
+        for (int i = 0; i < expectedSelection.Length; i++)
+        {
+            Assert.Same(expectedSelection[i].Item, control.SelectedItems[i]);
+            Assert.Equal(expectedSelection[i].Index, control.SelectedIndices[i]);
+        }
+
+        for (int i = 0; i < control.Items.Count; i++)
+        {
+            Assert.Equal(expectedSelection.Any(selection => selection.Index == i), control.GetSelected(i));
+        }
+    }
+
     [WinFormsFact]
     public void ListBox_ResetBackColor_Invoke_Success()
     {

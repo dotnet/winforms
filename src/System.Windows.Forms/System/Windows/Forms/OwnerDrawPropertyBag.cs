@@ -12,6 +12,7 @@ namespace System.Windows.Forms;
 [Serializable] // This class is participating in resx serialization scenarios for listview/treeview items.
 public class OwnerDrawPropertyBag : MarshalByRefObject, ISerializable
 {
+    private Font? _font;
     private Control.FontHandleWrapper? _fontWrapper;
     private static readonly Lock s_internalSyncObject = new();
 
@@ -38,7 +39,19 @@ public class OwnerDrawPropertyBag : MarshalByRefObject, ISerializable
     {
     }
 
-    public Font? Font { get; set; }
+    public Font? Font
+    {
+        get => _font;
+        set
+        {
+            if (!ReferenceEquals(_font, value))
+            {
+                _font = value;
+                _fontWrapper?.Dispose();
+                _fontWrapper = null;
+            }
+        }
+    }
 
     public Color ForeColor { get; set; }
 

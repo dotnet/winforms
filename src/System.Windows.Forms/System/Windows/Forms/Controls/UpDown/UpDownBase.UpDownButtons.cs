@@ -33,6 +33,7 @@ public abstract partial class UpDownBase
         private Bitmap? _cachedBitmap;
 
         private bool _doubleClickFired;
+        private const double ModernArrowScaleFactor = 0.8;
 
         /// <summary>
         ///  Initializes a new instance of the <see cref="UpDownButtons"/> class.
@@ -156,9 +157,16 @@ public abstract partial class UpDownBase
         /// <param name="e">The mouse event arguments.</param>
         protected override void OnMouseDown(MouseEventArgs e)
         {
-            // Begin spinning the value
-            // Focus the parent
-            _parent.Focus();
+            // Avoid restarting the modern focus indicator when the edit already has focus.
+            if (!UseSideBySideButtons || !_parent.Focused)
+            {
+                _parent.Focus();
+            }
+            else if (_parent.UserEdit)
+            {
+                // Normalize pending edits even when spinning at a bound leaves Value unchanged.
+                _parent.ValidateEditText();
+            }
 
             if (!_parent.ValidationCancelled && e.Button == MouseButtons.Left)
             {
@@ -302,6 +310,12 @@ public abstract partial class UpDownBase
 
         protected override void OnPaint(PaintEventArgs e)
         {
+            if (ClientSize.Width <= 0 || ClientSize.Height <= 0)
+            {
+                base.OnPaint(e);
+                return;
+            }
+
             int half_height = ClientSize.Height / 2;
 
             // Draw the up and down buttons
@@ -319,14 +333,16 @@ public abstract partial class UpDownBase
                     GetButtonRectangle(ButtonID.Down),
                     ModernControlButtonStyle.Down,
                     GetButtonState(ButtonID.Down),
-                    isDarkMode);
+                    isDarkMode,
+                    ModernArrowScaleFactor);
 
                 DrawModernControlButton(
                     cachedGraphics,
                     GetButtonRectangle(ButtonID.Up),
                     ModernControlButtonStyle.Up,
                     GetButtonState(ButtonID.Up),
-                    isDarkMode);
+                    isDarkMode,
+                    ModernArrowScaleFactor);
 
                 e.GraphicsInternal.DrawImageUnscaled(_cachedBitmap, new Point(0, 0));
 
@@ -358,7 +374,8 @@ public abstract partial class UpDownBase
                         ? ModernControlButtonState.Pressed
                         : (Enabled ? (_mouseOver == ButtonID.Up ? ModernControlButtonState.Hover : ModernControlButtonState.Normal)
                                    : ModernControlButtonState.Disabled),
-                    true);
+                    true,
+                    ModernArrowScaleFactor);
 
                 DrawModernControlButton(
                     cachedGraphics,
@@ -368,7 +385,8 @@ public abstract partial class UpDownBase
                         ? ModernControlButtonState.Pressed
                         : (Enabled ? (_mouseOver == ButtonID.Down ? ModernControlButtonState.Hover : ModernControlButtonState.Normal)
                                    : ModernControlButtonState.Disabled),
-                    true);
+                    true,
+                    ModernArrowScaleFactor);
 
                 e.GraphicsInternal.DrawImageUnscaled(
                     _cachedBitmap,

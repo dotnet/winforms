@@ -16,6 +16,8 @@ public partial class ComboBox
 
         public int DeviceDpi { get; init; }
 
+        public int FontHeight { get; init; }
+
         public int SelectionFieldItemHeight { get; init; }
 
         public int SelectionFieldFrameHeight { get; init; }
