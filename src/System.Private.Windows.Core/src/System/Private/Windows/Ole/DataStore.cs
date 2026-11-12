@@ -14,9 +14,9 @@ internal sealed partial class DataStore<TOleServices>
     : IDataObjectInternal where TOleServices : IOleServices, new()
 #endif
 {
-#if NETFRAMEWORK
     public bool SupportsTypedData => true;
 
+#if NETFRAMEWORK
     private static readonly TOleServices s_oleServices = new();
 #endif
 

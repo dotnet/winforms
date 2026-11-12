@@ -17,9 +17,7 @@ internal unsafe class TestDataObject<TOleServices> :
 {
     private readonly Composition<TOleServices, CoreNrbfSerializer, TestFormat> _innerData;
 
-#if NETFRAMEWORK
     public bool SupportsTypedData => true;
-#endif
 
 #if NET
     static
