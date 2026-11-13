@@ -68,7 +68,7 @@ public class KioskModeManager : Component, ISupportInitialize
     private static readonly object s_fullScreenChangedEvent = new();
 
     private ContainerControl? _containerControl;
-    private WeakReference<ContainerControl>? _lastContainerControl;
+    private WeakReference<Control>? _lastContainerRoot;
     private bool _containerControlExplicitlySet;
     private Form? _targetForm;
     private bool _isFullScreen;
@@ -586,7 +586,7 @@ public class KioskModeManager : Component, ISupportInitialize
     {
         if (value is not null)
         {
-            _lastContainerControl = new(value);
+            _lastContainerRoot = new(GetRoot(value));
         }
 
         if (_containerControl == value)
@@ -621,11 +621,26 @@ public class KioskModeManager : Component, ISupportInitialize
         OnContainerControlChanged(EventArgs.Empty);
     }
 
+    private static Control GetRoot(Control control)
+    {
+        while (control.Parent is { } parent)
+        {
+            control = parent;
+        }
+
+        return control;
+    }
+
     private void AttachToForm()
     {
         if (_initializing || DesignMode || _containerControl is null)
         {
             return;
+        }
+
+        if (_containerControl.Parent is not null)
+        {
+            _lastContainerRoot = new(GetRoot(_containerControl));
         }
 
         UpdateParentChangedSubscriptions();
@@ -655,6 +670,11 @@ public class KioskModeManager : Component, ISupportInitialize
 
     private void OnContainerControlParentChanged(object? sender, EventArgs e)
     {
+        if (sender is Control { Parent: not null } && _containerControl is { } current)
+        {
+            _lastContainerRoot = new(GetRoot(current));
+        }
+
         UpdateParentChangedSubscriptions();
 
         Form? newTarget = _containerControl as Form ?? _containerControl?.FindForm();
@@ -982,8 +1002,9 @@ public class KioskModeManager : Component, ISupportInitialize
                 && result is string { Length: 0 }
                 && value is ContainerControl controlValue
                 && context?.Instance is KioskModeManager manager
+                && !IsDesignerContext(context, manager)
                 && !string.IsNullOrEmpty(controlValue.Name)
-                && ReferenceEquals(FindControl(context, manager, controlValue.Name, culture), controlValue))
+                && ReferenceEquals(FindControl(context, CreateControlIndex(context, manager), controlValue.Name, culture), controlValue))
             {
                 return controlValue.Name;
             }
@@ -997,7 +1018,8 @@ public class KioskModeManager : Component, ISupportInitialize
             if (result is null
                 && value is string text
                 && context?.Instance is KioskModeManager manager
-                && FindControl(context, manager, text, culture) is { } control)
+                && !IsDesignerContext(context, manager)
+                && FindControl(context, CreateControlIndex(context, manager), text, culture) is { } control)
             {
                 return control;
             }
@@ -1008,28 +1030,42 @@ public class KioskModeManager : Component, ISupportInitialize
         public override StandardValuesCollection GetStandardValues(ITypeDescriptorContext? context)
         {
             StandardValuesCollection values = base.GetStandardValues(context);
-            if (context?.Instance is not KioskModeManager manager)
+            if (context?.Instance is not KioskModeManager manager || IsDesignerContext(context, manager))
             {
                 return values;
             }
 
             List<object?> result = [];
+            HashSet<object?> seen = new(ReferenceEqualityComparer.Instance);
             foreach (object? value in values)
             {
                 result.Add(value);
+                seen.Add(value);
             }
 
-            foreach (ContainerControl control in GetControls(context, manager))
+            List<ContainerControl> controls = [.. GetControls(context, manager)];
+            Dictionary<string, ContainerControl?> index = CreateControlIndex(controls);
+            foreach (ContainerControl control in controls)
             {
-                if (result.Any(value => ReferenceEquals(value, control)))
+                if (seen.Contains(control))
                 {
                     continue;
                 }
 
-                string? name = ConvertToString(context, control);
-                if (!string.IsNullOrEmpty(name) && ReferenceEquals(ConvertFrom(context, null, name), control))
+                string? name = base.ConvertTo(context, CultureInfo.CurrentCulture, control, typeof(string)) as string;
+                if (string.IsNullOrEmpty(name)
+                    && ReferenceEquals(FindControl(context, index, control.Name, CultureInfo.CurrentCulture), control))
+                {
+                    name = control.Name;
+                }
+
+                if (!string.IsNullOrEmpty(name)
+                    && ReferenceEquals(
+                        base.ConvertFrom(context, null, name) ?? FindControl(context, index, name, null),
+                        control))
                 {
                     result.Add(control);
+                    seen.Add(control);
                 }
             }
 
@@ -1042,7 +1078,16 @@ public class KioskModeManager : Component, ISupportInitialize
         public override PropertyDescriptorCollection GetProperties(ITypeDescriptorContext? context, object value, Attribute[]? attributes)
             => TypeDescriptor.GetProperties(value, attributes);
 
-        private ContainerControl? FindControl(ITypeDescriptorContext context, KioskModeManager manager, string name, CultureInfo? culture)
+        private static bool IsDesignerContext(ITypeDescriptorContext context, KioskModeManager manager)
+            => manager.DesignMode
+                || manager.Site?.GetService(typeof(IDesignerHost)) is IDesignerHost
+                || context.GetService(typeof(IDesignerHost)) is IDesignerHost;
+
+        private ContainerControl? FindControl(
+            ITypeDescriptorContext context,
+            Dictionary<string, ContainerControl?> index,
+            string name,
+            CultureInfo? culture)
         {
             if (string.IsNullOrWhiteSpace(name)
                 || !string.Equals(name, name.Trim(), StringComparison.Ordinal)
@@ -1052,69 +1097,66 @@ public class KioskModeManager : Component, ISupportInitialize
                 return null;
             }
 
-            ContainerControl? match = null;
-            foreach (ContainerControl control in GetControls(context, manager))
-            {
-                if (string.Equals(control.Name, name, StringComparison.OrdinalIgnoreCase))
-                {
-                    if (match is not null)
-                    {
-                        return null;
-                    }
+            return index.TryGetValue(name, out ContainerControl? match) ? match : null;
+        }
 
-                    match = control;
+        private static Dictionary<string, ContainerControl?> CreateControlIndex(ITypeDescriptorContext context, KioskModeManager manager)
+            => CreateControlIndex(GetControls(context, manager));
+
+        private static Dictionary<string, ContainerControl?> CreateControlIndex(IEnumerable<ContainerControl> controls)
+        {
+            Dictionary<string, ContainerControl?> index = new(StringComparer.OrdinalIgnoreCase);
+            foreach (ContainerControl control in controls)
+            {
+                if (!string.IsNullOrEmpty(control.Name) && !index.TryAdd(control.Name, control))
+                {
+                    index[control.Name] = null;
                 }
             }
 
-            return match;
+            return index;
         }
 
         private static IEnumerable<ContainerControl> GetControls(ITypeDescriptorContext context, KioskModeManager manager)
         {
-            ContainerControl? current = GetContainerControl(manager);
             PropertyGrid? grid = (context as GridEntry)?.OwnerGrid;
             Control? page = (Control?)grid?.FindForm() ?? (grid?.Parent is not null ? grid : null);
-            Control? root = page ?? current;
-            while (root?.Parent is { } parent)
+            Control? targetRoot = manager.ContainerControl is { } current
+                ? GetRoot(current)
+                : manager._lastContainerRoot is { } reference && reference.TryGetTarget(out Control? root)
+                    ? root
+                    : null;
+
+            HashSet<Control> seen = [];
+            Stack<Control> pending = new();
+            if (targetRoot is not null && !targetRoot.IsDisposed)
             {
-                root = parent;
+                pending.Push(targetRoot);
             }
 
-            HashSet<ContainerControl> seen = [];
-            if (root is not null)
+            if (page is not null)
             {
-                Stack<Control> pending = new();
-                pending.Push(root);
-                while (pending.TryPop(out Control? control))
-                {
-                    if (control is ContainerControl container && !container.IsDisposed && seen.Add(container))
-                    {
-                        yield return container;
-                    }
+                pending.Push(GetRoot(page));
+            }
 
-                    foreach (Control child in control.Controls)
-                    {
-                        pending.Push(child);
-                    }
+            while (pending.TryPop(out Control? control))
+            {
+                if (control.IsDisposed || !seen.Add(control))
+                {
+                    continue;
+                }
+
+                if (control is ContainerControl container)
+                {
+                    yield return container;
+                }
+
+                foreach (Control child in control.Controls)
+                {
+                    pending.Push(child);
                 }
             }
-
-            if (current is not null
-                && !current.IsDisposed
-                && (manager.ContainerControl is not null || page is null)
-                && seen.Add(current))
-            {
-                yield return current;
-            }
         }
-
-        private static ContainerControl? GetContainerControl(KioskModeManager manager)
-            => manager.ContainerControl
-                ?? (manager._lastContainerControl is { } reference
-                    && reference.TryGetTarget(out ContainerControl? control)
-                    && !control.IsDisposed
-                        ? control
-                        : null);
     }
 
     /// <summary>

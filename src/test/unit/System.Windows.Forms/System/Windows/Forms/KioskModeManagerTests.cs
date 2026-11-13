@@ -147,7 +147,7 @@ public class KioskModeManagerTests
     {
         using Form form = new() { Name = "Form1" };
         using UserControl first = new() { Name = "duplicate" };
-        using UserControl second = new() { Name = "duplicate" };
+        using UserControl second = new() { Name = "DUPLICATE" };
         using KioskModeManager manager = new();
         using PropertyGrid grid = new() { Name = "propertyGrid1", SelectedObject = manager, PropertySort = PropertySort.Alphabetical };
         form.Controls.Add(grid);
@@ -187,6 +187,61 @@ public class KioskModeManagerTests
         control.Name = entry.GetPropertyTextValue(null);
         Assert.Single(entry.GetPropertyValueList());
         Assert.Null(entry.ConvertTextToValue(control.Name));
+    }
+
+    [WinFormsFact]
+    public void KioskModeManager_ContainerControl_PropertyGrid_ReselectsControlOnSeparateForm()
+    {
+        using Form targetForm = new() { Name = "targetForm" };
+        using UserControl target = new() { Name = "target" };
+        using UserControl sibling = new() { Name = "sibling" };
+        using Form inspector = new() { Name = "inspector" };
+        using KioskModeManager manager = new();
+        using PropertyGrid grid = new() { Name = "grid", SelectedObject = manager, PropertySort = PropertySort.Alphabetical };
+        targetForm.Controls.Add(target);
+        targetForm.Controls.Add(sibling);
+        inspector.Controls.Add(grid);
+        manager.ContainerControl = target;
+        PropertyGridView view = grid.Controls.OfType<PropertyGridView>().Single();
+        PropertyDescriptorGridEntry entry = view.TopLevelGridEntries
+            .OfType<PropertyDescriptorGridEntry>()
+            .Single(e => e.PropertyName == nameof(KioskModeManager.ContainerControl));
+
+        entry.SetPropertyTextValue(entry.GetPropertyTextValue(null));
+        Assert.Null(manager.ContainerControl);
+        Assert.Contains(target, entry.GetPropertyValueList());
+        Assert.Contains(sibling, entry.GetPropertyValueList());
+        Assert.Contains(inspector, entry.GetPropertyValueList());
+        Assert.Same(target, entry.ConvertTextToValue("target"));
+
+        entry.SetPropertyTextValue("target");
+        Assert.Same(target, manager.ContainerControl);
+        entry.SetPropertyTextValue(entry.GetPropertyTextValue(null));
+        targetForm.Controls.Remove(target);
+        Assert.DoesNotContain(target, entry.GetPropertyValueList());
+        Assert.Null(entry.ConvertTextToValue("target"));
+        entry.SetPropertyTextValue("sibling");
+        Assert.Same(sibling, manager.ContainerControl);
+        targetForm.Controls.Remove(sibling);
+        entry.SetPropertyTextValue(entry.GetPropertyTextValue(null));
+        Assert.DoesNotContain(sibling, entry.GetPropertyValueList());
+        Assert.Null(entry.ConvertTextToValue("sibling"));
+
+        manager.ContainerControl = target;
+        targetForm.Controls.Add(target);
+        targetForm.Controls.Remove(target);
+        entry.SetPropertyTextValue(entry.GetPropertyTextValue(null));
+        Assert.DoesNotContain(target, entry.GetPropertyValueList());
+        Assert.Null(entry.ConvertTextToValue("target"));
+
+        using Panel panel = new();
+        panel.Controls.Add(target);
+        targetForm.Controls.Add(panel);
+        manager.ContainerControl = target;
+        targetForm.Controls.Remove(panel);
+        entry.SetPropertyTextValue(entry.GetPropertyTextValue(null));
+        Assert.DoesNotContain(target, entry.GetPropertyValueList());
+        Assert.Null(entry.ConvertTextToValue("target"));
     }
 
     [WinFormsFact]
@@ -234,6 +289,80 @@ public class KioskModeManagerTests
         Assert.Equal(3, values.Count);
         Assert.Contains(current, values.Cast<object>());
         Assert.Contains(other, values.Cast<object>());
+    }
+
+    [WinFormsTheory]
+    [InlineData(0)]
+    [InlineData(1)]
+    [InlineData(2)]
+    public void KioskModeManager_ContainerControl_Converter_DesignerUsesOnlyReferences(int designerContext)
+    {
+        using Form root = new() { Name = "root" };
+        using UserControl privateChild = new() { Name = "privateChild" };
+        root.Controls.Add(privateChild);
+        using KioskModeManager manager = new() { ContainerControl = root };
+        Mock<IDesignerHost> host = new();
+        Mock<ISite> site = new();
+        site.Setup(s => s.DesignMode).Returns(designerContext == 0);
+        if (designerContext == 1)
+        {
+            site.Setup(s => s.GetService(typeof(IDesignerHost))).Returns(host.Object);
+        }
+
+        manager.Site = site.Object;
+        Mock<IReferenceService> references = new();
+        references.Setup(r => r.GetName(root)).Returns("designerRoot");
+        references.Setup(r => r.GetReference("designerRoot")).Returns(root);
+        references.Setup(r => r.GetReferences(typeof(ContainerControl))).Returns([root]);
+        Mock<ITypeDescriptorContext> context = new();
+        context.Setup(c => c.Instance).Returns(manager);
+        context.Setup(c => c.GetService(typeof(IReferenceService))).Returns(references.Object);
+        if (designerContext == 2)
+        {
+            context.Setup(c => c.GetService(typeof(IDesignerHost))).Returns(host.Object);
+        }
+
+        TypeConverter converter = TypeDescriptor.GetProperties(manager)[nameof(KioskModeManager.ContainerControl)].Converter;
+        Assert.Equal("designerRoot", converter.ConvertToString(context.Object, root));
+        Assert.Same(root, converter.ConvertFromString(context.Object, "designerRoot"));
+        Assert.Equal(string.Empty, converter.ConvertToString(context.Object, privateChild));
+        Assert.Null(converter.ConvertFromString(context.Object, "privateChild"));
+        object[] values = converter.GetStandardValues(context.Object).Cast<object>().ToArray();
+        Assert.Equal(2, values.Length);
+        Assert.Contains(root, values);
+        Assert.Contains(null, values);
+    }
+
+    [WinFormsFact]
+    public void KioskModeManager_ContainerControl_Converter_LargeTreeRespectsAmbiguityAndReferences()
+    {
+        using Form root = new() { Name = "root" };
+        using KioskModeManager manager = new() { ContainerControl = root };
+        for (int i = 0; i < 100; i++)
+        {
+            root.Controls.Add(new UserControl { Name = $"control{i}" });
+        }
+
+        using UserControl duplicate = new() { Name = "CONTROL0" };
+        using UserControl referenced = new() { Name = "control1" };
+        root.Controls.Add(duplicate);
+        Mock<IReferenceService> references = new();
+        references.Setup(r => r.GetReference("control1")).Returns(referenced);
+        references.Setup(r => r.GetReferences(typeof(ContainerControl))).Returns([referenced]);
+        Mock<ITypeDescriptorContext> context = new();
+        context.Setup(c => c.Instance).Returns(manager);
+        context.Setup(c => c.GetService(typeof(IReferenceService))).Returns(references.Object);
+        TypeConverter converter = TypeDescriptor.GetProperties(manager)[nameof(KioskModeManager.ContainerControl)].Converter;
+
+        object[] values = converter.GetStandardValues(context.Object).Cast<object>().ToArray();
+        Assert.Equal(101, values.Length);
+        Assert.Contains(referenced, values);
+        Assert.DoesNotContain(duplicate, values);
+        Assert.DoesNotContain(root.Controls[0], values);
+        Assert.DoesNotContain(root.Controls[1], values);
+        Assert.Null(converter.ConvertFromString(context.Object, "control0"));
+        Assert.Same(referenced, converter.ConvertFromString(context.Object, "control1"));
+        Assert.Same(root.Controls[99], converter.ConvertFromString(context.Object, "CONTROL99"));
     }
 
     [WinFormsFact]
