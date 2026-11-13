@@ -1,6 +1,7 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
+using System.ComponentModel;
 using System.Drawing.Imaging;
 using System.Runtime.InteropServices;
 using System.Text;
@@ -18,6 +19,52 @@ public class ImageTests
     private const int PropertyTagExifUserComment = 0x9286;
     private const int PropertyTagTypeASCII = 2;
     private const int PropertyTagTypeShort = 3;
+
+    [Theory]
+    [InlineData(nameof(Image.Width))]
+    [InlineData(nameof(Image.Height))]
+    public void ImageDimensionProperty_DefaultValueIsZero(string propertyName)
+    {
+        PropertyDescriptor? property = TypeDescriptor.GetProperties(typeof(Image))[propertyName];
+        Assert.NotNull(property);
+
+        DefaultValueAttribute defaultValue = Assert.IsType<DefaultValueAttribute>(
+            property.Attributes[typeof(DefaultValueAttribute)]);
+        Assert.Equal(0, defaultValue.Value);
+    }
+
+    [Fact]
+    public void Save_StreamImageFormat_DoesNotGrowNativeMemoryAcrossCollections()
+    {
+        if (PlatformDetection.IsNetFramework)
+        {
+            Assert.Skip("Regression is tracked for System.Drawing.Common 9+ path used in .NET.");
+        }
+
+        const int iterationCount = 500;
+        const long allowedGrowthBytes = 64L * 1024 * 1024;
+
+        static long NativeMemory() =>
+            Process.GetCurrentProcess().PrivateMemorySize64 - GC.GetGCMemoryInfo().TotalCommittedBytes;
+
+        GC.Collect();
+        GC.WaitForPendingFinalizers();
+        GC.Collect();
+
+        long before = NativeMemory();
+
+        for (int i = 0; i < iterationCount; i++)
+        {
+            new Bitmap(1500, 1500).Save(new MemoryStream(), ImageFormat.Bmp);
+        }
+
+        GC.Collect();
+        GC.WaitForPendingFinalizers();
+        GC.Collect();
+
+        long leakedBytes = NativeMemory() - before;
+        Assert.True(leakedBytes < allowedGrowthBytes, $"Unexpected native memory growth: {leakedBytes / 1024 / 1024} MB");
+    }
 
     [Fact]
     public void PropertyIdList_GetBitmapJpg_Success()

@@ -749,7 +749,7 @@ namespace System.Drawing
         [System.ComponentModel.BrowsableAttribute(false)]
         public System.Guid[] FrameDimensionsList { get { throw new System.PlatformNotSupportedException(System.SR.SystemDrawingCommon_PlatformNotSupported);  } }
         [System.ComponentModel.BrowsableAttribute(false)]
-        [System.ComponentModel.DefaultValueAttribute(false)]
+        [System.ComponentModel.DefaultValueAttribute(0)]
         [System.ComponentModel.DesignerSerializationVisibilityAttribute(System.ComponentModel.DesignerSerializationVisibility.Hidden)]
         public int Height { get { throw new System.PlatformNotSupportedException(System.SR.SystemDrawingCommon_PlatformNotSupported);  } }
         public float HorizontalResolution { get { throw new System.PlatformNotSupportedException(System.SR.SystemDrawingCommon_PlatformNotSupported);  } }
@@ -768,7 +768,7 @@ namespace System.Drawing
         public object? Tag { get { throw new System.PlatformNotSupportedException(System.SR.SystemDrawingCommon_PlatformNotSupported);  } set { throw new System.PlatformNotSupportedException(System.SR.SystemDrawingCommon_PlatformNotSupported);  } }
         public float VerticalResolution { get { throw new System.PlatformNotSupportedException(System.SR.SystemDrawingCommon_PlatformNotSupported);  } }
         [System.ComponentModel.BrowsableAttribute(false)]
-        [System.ComponentModel.DefaultValueAttribute(false)]
+        [System.ComponentModel.DefaultValueAttribute(0)]
         [System.ComponentModel.DesignerSerializationVisibilityAttribute(System.ComponentModel.DesignerSerializationVisibility.Hidden)]
         public int Width { get { throw new System.PlatformNotSupportedException(System.SR.SystemDrawingCommon_PlatformNotSupported);  } }
         public object Clone() { throw new System.PlatformNotSupportedException(System.SR.SystemDrawingCommon_PlatformNotSupported);  }

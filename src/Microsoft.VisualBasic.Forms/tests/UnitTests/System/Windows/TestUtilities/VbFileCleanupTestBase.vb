@@ -73,7 +73,7 @@ Namespace Microsoft.VisualBasic.Forms.Tests
                     stream.Close()
                 End Using
                 File.Delete(path)
-            Catch s As Security.SecurityException
+            Catch s As System.Security.SecurityException
                 Return False
             Catch
                 Return False
