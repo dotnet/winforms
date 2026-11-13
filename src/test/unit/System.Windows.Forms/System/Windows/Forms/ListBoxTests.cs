@@ -3328,6 +3328,25 @@ public class ListBoxTests
         }
     }
 
+    private class RedrawTrackingListBox : ListBox
+    {
+        public List<bool> RedrawMessages { get; } = [];
+
+        public void InvokeSetItemsCore(IList value) => SetItemsCore(value);
+
+        public void InvokeRecreateHandle() => RecreateHandle();
+
+        protected override void WndProc(ref Message m)
+        {
+            if (m.Msg == (int)PInvokeCore.WM_SETREDRAW)
+            {
+                RedrawMessages.Add(m.WParam != 0);
+            }
+
+            base.WndProc(ref m);
+        }
+    }
+
     private class CustomListBox : ListBox
     {
         public bool MakeCustom { get; set; }
@@ -4745,6 +4764,233 @@ public class ListBoxTests
         Assert.Equal(1, invalidatedCallCount);
         Assert.Equal(0, styleChangedCallCount);
         Assert.Equal(0, createdCallCount);
+    }
+
+    private static int GetNativeItemCount(ListBox control)
+        => (int)PInvokeCore.SendMessage(control, PInvoke.LB_GETCOUNT);
+
+    [WinFormsFact]
+    public void ListBox_BeginUpdate_NestedWithHandle_SuspendsRedrawUntilOutermostEndUpdate()
+    {
+        // Scenario: nested BeginUpdate calls suspend native redrawing once, items added meanwhile are
+        // already in the native control, and redrawing resumes (with one invalidation) only when the
+        // outermost EndUpdate balances the calls.
+        using RedrawTrackingListBox control = new();
+        Assert.NotEqual(IntPtr.Zero, control.Handle);
+        int invalidatedCallCount = 0;
+        control.Invalidated += (sender, e) => invalidatedCallCount++;
+        control.RedrawMessages.Clear();
+
+        control.BeginUpdate();
+        control.BeginUpdate();
+        control.Items.AddRange(["a", "b"]);
+        control.Items.Add("c");
+
+        Assert.Equal([false], control.RedrawMessages);
+        Assert.Equal(3, GetNativeItemCount(control));
+        Assert.Equal(0, invalidatedCallCount);
+
+        control.EndUpdate();
+        Assert.Equal([false], control.RedrawMessages);
+        Assert.Equal(0, invalidatedCallCount);
+
+        control.EndUpdate();
+        Assert.Equal([false, true], control.RedrawMessages);
+        Assert.Equal(1, invalidatedCallCount);
+        Assert.Equal(["a", "b", "c"], control.Items.Cast<object>());
+        Assert.Equal(3, GetNativeItemCount(control));
+    }
+
+    [WinFormsFact]
+    public void ListBox_EndUpdate_WithoutBeginUpdate_DoesNotAffectLaterBatch()
+    {
+        // Scenario: an unmatched EndUpdate sends no redraw message and does not unbalance a later batch,
+        // so a following BeginUpdate/EndUpdate pair still suspends and resumes redrawing exactly once.
+        using RedrawTrackingListBox control = new();
+        Assert.NotEqual(IntPtr.Zero, control.Handle);
+        control.RedrawMessages.Clear();
+
+        control.EndUpdate();
+        control.EndUpdate();
+        Assert.Empty(control.RedrawMessages);
+
+        control.BeginUpdate();
+        Assert.Equal([false], control.RedrawMessages);
+
+        control.EndUpdate();
+        Assert.Equal([false, true], control.RedrawMessages);
+    }
+
+    [WinFormsTheory]
+    [BoolData]
+    public void ListBox_BeginUpdate_ItemsAddedWithoutHandle_SynchronizedWhenHandleCreated(bool createHandleAfterBalanced)
+    {
+        // Scenario: items accumulated during a batch before the native control exists are all pushed to the
+        // handle once it is created, whether creation happens inside the batch or after it is balanced.
+        using RedrawTrackingListBox control = new();
+
+        control.BeginUpdate();
+        control.BeginUpdate();
+        control.Items.AddRange(["a", "b"]);
+        control.Items.Add("c");
+        Assert.False(control.IsHandleCreated);
+
+        if (createHandleAfterBalanced)
+        {
+            control.EndUpdate();
+            control.EndUpdate();
+            Assert.Empty(control.RedrawMessages);
+            Assert.NotEqual(IntPtr.Zero, control.Handle);
+        }
+        else
+        {
+            Assert.NotEqual(IntPtr.Zero, control.Handle);
+            control.EndUpdate();
+            control.EndUpdate();
+
+            // Creating the handle inside the batch suspends redrawing until the batch is balanced.
+            Assert.Equal([false, true], control.RedrawMessages);
+        }
+
+        Assert.Equal(3, GetNativeItemCount(control));
+        Assert.Equal(["a", "b", "c"], control.Items.Cast<object>());
+    }
+
+    [WinFormsTheory]
+    [BoolData]
+    public void ListBox_ItemsAddRange_NullItem_LeavesRedrawBalanced(bool createHandle)
+    {
+        // Scenario: an exception while adding a range of items inside AddRange keeps the items added so far,
+        // does not leave painting suspended, and leaves later batches working normally.
+        using RedrawTrackingListBox control = new();
+        if (createHandle)
+        {
+            Assert.NotEqual(IntPtr.Zero, control.Handle);
+            control.RedrawMessages.Clear();
+        }
+
+        Assert.Throws<ArgumentNullException>("item", () => control.Items.AddRange(["a", null, "b"]));
+
+        Assert.Equal(["a"], control.Items.Cast<object>());
+        if (createHandle)
+        {
+            Assert.Equal([false, true], control.RedrawMessages);
+            Assert.Equal(1, GetNativeItemCount(control));
+        }
+        else
+        {
+            Assert.Empty(control.RedrawMessages);
+            Assert.False(control.IsHandleCreated);
+        }
+
+        control.BeginUpdate();
+        control.Items.Add("c");
+        control.EndUpdate();
+        if (createHandle)
+        {
+            Assert.Equal([false, true, false, true], control.RedrawMessages);
+        }
+
+        Assert.Equal(["a", "c"], control.Items.Cast<object>());
+        Assert.NotEqual(IntPtr.Zero, control.Handle);
+        Assert.Equal(2, GetNativeItemCount(control));
+    }
+
+    [WinFormsFact]
+    public void ListBox_ItemsAddRange_NullItemInsideBatch_ResumesRedrawOnlyAtOutermostEndUpdate()
+    {
+        // Scenario: a failing AddRange inside a caller's batch must not resume painting early, and the
+        // caller's EndUpdate still resumes it after the exception is handled.
+        using RedrawTrackingListBox control = new();
+        Assert.NotEqual(IntPtr.Zero, control.Handle);
+        control.RedrawMessages.Clear();
+
+        control.BeginUpdate();
+        Assert.Throws<ArgumentNullException>("item", () => control.Items.AddRange(["a", null]));
+        Assert.Equal([false], control.RedrawMessages);
+
+        control.EndUpdate();
+        Assert.Equal([false, true], control.RedrawMessages);
+        Assert.Equal(["a"], control.Items.Cast<object>());
+        Assert.Equal(1, GetNativeItemCount(control));
+    }
+
+    [WinFormsFact]
+    public void ListBox_SetItemsCore_NullItem_LeavesRedrawBalanced()
+    {
+        // Scenario: a data-binding refresh that makes item addition throw does not leave painting suspended.
+        using RedrawTrackingListBox control = new();
+        Assert.NotEqual(IntPtr.Zero, control.Handle);
+        control.RedrawMessages.Clear();
+
+        Assert.Throws<ArgumentNullException>("item", () => control.InvokeSetItemsCore(new object[] { "a", null }));
+
+        Assert.Equal([false, true], control.RedrawMessages);
+    }
+
+    [WinFormsFact]
+    public void ListBox_RecreateHandle_DuringBatch_ResumesRedrawAtEndUpdate()
+    {
+        // Scenario: recreating the native control while a batch is open keeps the items and still resumes
+        // redrawing when the batch is balanced.
+        using RedrawTrackingListBox control = new();
+        Assert.NotEqual(IntPtr.Zero, control.Handle);
+        control.Items.AddRange(["a", "b"]);
+
+        control.BeginUpdate();
+        control.InvokeRecreateHandle();
+        control.RedrawMessages.Clear();
+        control.EndUpdate();
+
+        Assert.Equal([true], control.RedrawMessages);
+        Assert.True(control.IsHandleCreated);
+        Assert.Equal(2, GetNativeItemCount(control));
+        Assert.Equal(["a", "b"], control.Items.Cast<object>());
+    }
+
+    [WinFormsFact]
+    public void ListBox_Dispose_DuringBatch_DoesNotThrow()
+    {
+        // Scenario: disposing a control while a batch is still open (for example an exception unwound past
+        // EndUpdate) tears down the handle without throwing.
+        using RedrawTrackingListBox control = new();
+        Assert.NotEqual(IntPtr.Zero, control.Handle);
+        control.BeginUpdate();
+        control.Items.Add("a");
+
+        control.Dispose();
+
+        Assert.True(control.IsDisposed);
+        Assert.False(control.IsHandleCreated);
+    }
+
+    [WinFormsTheory]
+    [InlineData(SelectionMode.MultiSimple)]
+    [InlineData(SelectionMode.MultiExtended)]
+    public void ListBox_BatchUpdate_RemoveAddAndSelect_SelectionMatchesNativeControl(SelectionMode selectionMode)
+    {
+        // Scenario: a cached selection count primed before a batch is invalidated by items removed and
+        // added inside the batch, so item identity, indices and counts agree with the native control after
+        // EndUpdate.
+        using ListBox control = new() { SelectionMode = selectionMode };
+        control.Items.AddRange(["a", "b", "c", "d", "e"]);
+        Assert.NotEqual(IntPtr.Zero, control.Handle);
+        control.SetSelected(1, true);
+        control.SetSelected(3, true);
+        Assert.Equal(2, control.SelectedItems.Count);
+
+        control.BeginUpdate();
+        control.BeginUpdate();
+        control.Items.Remove("b");
+        int added = control.Items.Add("f");
+        control.SetSelected(added, true);
+        control.EndUpdate();
+        control.EndUpdate();
+
+        Assert.Equal(["d", "f"], control.SelectedItems.Cast<object>());
+        Assert.Equal([2, 4], control.SelectedIndices.Cast<int>());
+        Assert.Equal(2, control.SelectedItems.Count);
+        Assert.Equal(2, (int)PInvokeCore.SendMessage(control, PInvoke.LB_GETSELCOUNT));
     }
 
     [WinFormsTheory]
