@@ -362,6 +362,8 @@ public unsafe class NativeToManagedAdapterTests
             refCountAfterGetData.Should().Be(
                 refCountBeforeGetData,
                 "GetData should not leak or double-release the IDataObject");
+
+            GC.KeepAlive(composition);
         }
 
         // Note: Composition doesn't implement IDisposable, so refs are released via GC.
