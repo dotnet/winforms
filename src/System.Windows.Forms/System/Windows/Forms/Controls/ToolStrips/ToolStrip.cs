@@ -3782,7 +3782,7 @@ public partial class ToolStrip : ScrollableControl, IArrangedElement, ISupportTo
             controlHost.RescaleHostedControlBoundsForDpi(deviceDpiOld, deviceDpiNew, rescaleFont: !isDropDownChild);
         }
 
-        if (item is ToolStripDropDownItem dropDownItem && dropDownItem.HasDropDownItems)
+        if (item is ToolStripDropDownItem dropDownItem && dropDownItem.HasDropDown)
         {
             foreach (ToolStripItem dropDownChildItem in dropDownItem.DropDownItems)
             {

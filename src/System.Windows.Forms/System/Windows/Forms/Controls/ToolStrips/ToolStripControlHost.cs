@@ -557,6 +557,17 @@ public partial class ToolStripControlHost : ToolStripItem
         }
 
         Font currentFont = hostedControl.Font;
+        if (AppContextSwitches.ApplyParentFontToMenus)
+        {
+            if (hostedControl.DeviceDpi != deviceDpiNew && hostedControl.IsFontSet())
+            {
+                float factor = deviceDpiNew / (float)deviceDpiOld;
+                hostedControl.DeviceDpiInternal = deviceDpiNew;
+                ApplyHostedControlFont(hostedControl, currentFont.WithSize(currentFont.Size * factor));
+            }
+
+            return;
+        }
 
         // ToolStrip.RescaleConstantsForDpi sets CurrentDpi to the new DPI before this runs.
         // Compare with the default at the control's current DPI, which may already have changed.
@@ -585,7 +596,7 @@ public partial class ToolStripControlHost : ToolStripItem
                 hostedControl.DeviceDpiInternal = deviceDpiNew;
             }
 
-            ApplyToolStripDefaultFont(hostedControl, newDefaultFont);
+            ApplyHostedControlFont(hostedControl, newDefaultFont);
             return;
         }
 
@@ -600,24 +611,24 @@ public partial class ToolStripControlHost : ToolStripItem
     }
 
     /// <summary>
-    /// Update the hosted control's font to the new default font if it is still using the old default font.
+    /// Updates a locally set font while preserving the text box's default-font tracking.
     /// </summary>
-    private void ApplyToolStripDefaultFont(Control hostedControl, Font newDefaultFont)
+    private void ApplyHostedControlFont(Control hostedControl, Font font)
     {
         if (!hostedControl.IsFontSet())
         {
             return;
         }
 
-        if (!hostedControl.Font.Equals(newDefaultFont))
+        if (!hostedControl.Font.Equals(font))
         {
             if (this is ToolStripTextBox textBox)
             {
-                textBox.SetFontForDpi(newDefaultFont);
+                textBox.SetFontForDpi(font);
             }
             else
             {
-                hostedControl.Font = newDefaultFont;
+                hostedControl.Font = font;
             }
         }
     }
