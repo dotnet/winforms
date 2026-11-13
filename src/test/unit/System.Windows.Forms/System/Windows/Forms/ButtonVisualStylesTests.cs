@@ -386,6 +386,46 @@ public class ButtonVisualStylesTests
             actual.GetPixel(1, 0).ToArgb());
     }
 
+    [WinFormsTheory]
+    [InlineData(96, 3)]
+    [InlineData(144, 4)]
+    public void FlatButtonDarkModeRenderer_FocusIndicator_UsesDpiScaledInsetWithoutPaintingBlackPixels(
+        int deviceDpi,
+        int expectedInset)
+    {
+        FlatButtonDarkModeRenderer renderer = new() { DeviceDpi = deviceDpi };
+        Rectangle bounds = new(0, 0, 40, 22);
+        using Bitmap bitmap = CreateSolidBitmap(bounds.Size, Color.FromArgb(0x33, 0x33, 0x33));
+        using Graphics graphics = Graphics.FromImage(bitmap);
+
+        renderer.DrawFocusIndicator(graphics, bounds, isDefault: false);
+
+        Assert.Equal(
+            new Point(expectedInset, expectedInset),
+            FindColorBounds(bitmap, DarkModeButtonColors.DefaultColors.FocusBorderColor).Location);
+        Assert.Equal(Rectangle.Empty, FindColorBounds(bitmap, Color.Black));
+    }
+
+    [WinFormsTheory]
+    [InlineData(96, 3)]
+    [InlineData(144, 4)]
+    public void PopupButtonDarkModeRenderer_FocusIndicator_UsesDpiScaledInsetWithoutPaintingBlackPixels(
+        int deviceDpi,
+        int expectedInset)
+    {
+        PopupButtonDarkModeRenderer renderer = new() { DeviceDpi = deviceDpi };
+        Rectangle bounds = new(0, 0, 40, 22);
+        using Bitmap bitmap = CreateSolidBitmap(bounds.Size, Color.FromArgb(0x33, 0x33, 0x33));
+        using Graphics graphics = Graphics.FromImage(bitmap);
+
+        renderer.DrawFocusIndicator(graphics, bounds, isDefault: false);
+
+        Assert.Equal(
+            new Point(expectedInset, expectedInset),
+            FindColorBounds(bitmap, DarkModeButtonColors.DefaultColors.FocusBorderColor).Location);
+        Assert.Equal(Rectangle.Empty, FindColorBounds(bitmap, Color.Black));
+    }
+
     [WinFormsFact]
     public void ModernButtonDarkModeRenderer_HighDpi_CorrectsRingAndGapWithoutChangingBodyInset()
     {
