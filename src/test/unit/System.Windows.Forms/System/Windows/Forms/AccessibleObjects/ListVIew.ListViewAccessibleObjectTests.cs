@@ -203,15 +203,22 @@ public class ListView_ListViewAccessibleObjectTests
     }
 
     [WinFormsTheory]
-    [InlineData(false)]
-    [InlineData(true)]
-    public void ListViewAccessibleObject_GetItem_DetailsView_ReturnsSubItem(bool hasImage)
+    [InlineData(false, false, 0)]
+    [InlineData(false, false, 1)]
+    [InlineData(false, true, 0)]
+    [InlineData(false, true, 1)]
+    [InlineData(true, false, 0)]
+    [InlineData(true, false, 1)]
+    [InlineData(true, true, 0)]
+    [InlineData(true, true, 1)]
+    public void ListViewAccessibleObject_GetItem_DetailsView_ReturnsSubItem(bool hasImage, bool fullRowSelect, int column)
     {
         using ImageList imageList = new();
         imageList.Images.Add(Form.DefaultIcon);
         using ListView listView = new()
         {
             SmallImageList = imageList,
+            FullRowSelect = fullRowSelect,
             View = View.Details
         };
 
@@ -220,10 +227,12 @@ public class ListView_ListViewAccessibleObjectTests
         listView.Items.Add(item);
         listView.CreateControl();
 
-        AccessibleObject actual = (AccessibleObject)listView.AccessibilityObject.GetItem(0, 1);
+        AccessibleObject actual = (AccessibleObject)listView.AccessibilityObject.GetItem(0, column);
 
-        Assert.Same(item.SubItems[1].AccessibilityObject, actual);
-        Assert.Equal("Position 1", actual.Name);
+        Assert.Same(item.SubItems[column].AccessibilityObject, actual);
+        Assert.Equal(column == 0 ? "Item 1" : "Position 1", actual.Name);
+        Assert.Equal(column, actual.Column);
+        Assert.Equal(0, actual.Row);
         Assert.Equal(
             UIA_CONTROLTYPE_ID.UIA_TextControlTypeId,
             (UIA_CONTROLTYPE_ID)(int)actual.GetPropertyValue(UIA_PROPERTY_ID.UIA_ControlTypePropertyId));
@@ -231,6 +240,125 @@ public class ListView_ListViewAccessibleObjectTests
         Assert.Null(listView.AccessibilityObject.GetItem(0, -1));
         Assert.Null(listView.AccessibilityObject.GetItem(1, 0));
         Assert.Null(listView.AccessibilityObject.GetItem(0, 2));
+        Assert.True(listView.IsHandleCreated);
+    }
+
+    [WinFormsTheory]
+    [InlineData(false, false)]
+    [InlineData(false, true)]
+    [InlineData(true, false)]
+    [InlineData(true, true)]
+    public void ListViewAccessibleObject_GetItem_DetailsView_ReorderedColumns_ReturnsLogicalSubItem(bool hasImage, bool fullRowSelect)
+    {
+        using ImageList imageList = new();
+        imageList.Images.Add(Form.DefaultIcon);
+        using ListView listView = new()
+        {
+            SmallImageList = imageList,
+            FullRowSelect = fullRowSelect,
+            View = View.Details
+        };
+
+        listView.Columns.AddRange((ColumnHeader[])[new("Title"), new("Position"), new("Department")]);
+        ListViewItem item = new(["Item 1", "Position 1", "Department 1"], hasImage ? 0 : -1);
+        listView.Items.Add(item);
+        listView.CreateControl();
+
+        // Reordering changes display indices, not the logical GridItem column indices.
+        listView.Columns[0].DisplayIndex = 2;
+        var itemAccessibleObject = (ListViewItemDetailsAccessibleObject)item.AccessibilityObject;
+
+        for (int column = 0; column < listView.Columns.Count; column++)
+        {
+            AccessibleObject actual = Assert.IsType<ListViewItem.ListViewSubItem.ListViewSubItemAccessibleObject>(
+                listView.AccessibilityObject.GetItem(0, column));
+
+            Assert.NotEqual(column, listView.Columns[column].DisplayIndex);
+            Assert.Same(item.SubItems[column].AccessibilityObject, actual);
+            Assert.Equal(item.SubItems[column].Text, actual.Name);
+            Assert.Equal(column, actual.Column);
+            Assert.Equal(0, actual.Row);
+            Assert.Equal(column + (hasImage ? 1 : 0), itemAccessibleObject.GetChildIndex(actual));
+            Assert.Same(actual, itemAccessibleObject.GetChild(column + (hasImage ? 1 : 0)));
+            Assert.Same(listView.Columns[column].AccessibilityObject, Assert.Single(actual.GetColumnHeaderItems()));
+        }
+
+        Assert.True(listView.IsHandleCreated);
+    }
+
+    [WinFormsTheory]
+    [InlineData(false, false, 3, 1)]
+    [InlineData(false, true, 3, 1)]
+    [InlineData(true, false, 3, 1)]
+    [InlineData(true, true, 3, 1)]
+    [InlineData(false, false, 2, 3)]
+    [InlineData(false, true, 2, 3)]
+    [InlineData(true, false, 2, 3)]
+    [InlineData(true, true, 2, 3)]
+    public void ListViewAccessibleObject_GetItem_DetailsView_MismatchedCounts_ReturnsVisibleCells(
+        bool hasImage, bool fullRowSelect, int columnCount, int subItemCount)
+    {
+        using ImageList imageList = new();
+        imageList.Images.Add(Form.DefaultIcon);
+        using ListView listView = new()
+        {
+            SmallImageList = imageList,
+            FullRowSelect = fullRowSelect,
+            View = View.Details
+        };
+
+        for (int column = 0; column < columnCount; column++)
+        {
+            listView.Columns.Add($"Column {column}");
+        }
+
+        for (int row = 0; row < 2; row++)
+        {
+            ListViewItem item = new($"Item {row}", hasImage ? 0 : -1);
+            for (int subItem = 1; subItem < subItemCount; subItem++)
+            {
+                item.SubItems.Add($"Value {row}, {subItem}");
+            }
+
+            listView.Items.Add(item);
+        }
+
+        listView.CreateControl();
+        listView.Columns[0].DisplayIndex = columnCount - 1;
+
+        for (int row = 0; row < listView.Items.Count; row++)
+        {
+            ListViewItem item = listView.Items[row];
+            var itemAccessibleObject = (ListViewItemDetailsAccessibleObject)item.AccessibilityObject;
+            AccessibleObject previousCell = null;
+            for (int column = 0; column < columnCount; column++)
+            {
+                var actual = Assert.IsType<ListViewItem.ListViewSubItem.ListViewSubItemAccessibleObject>(
+                    listView.AccessibilityObject.GetItem(row, column));
+
+                if (column < subItemCount)
+                {
+                    Assert.Same(item.SubItems[column].AccessibilityObject, actual);
+                    Assert.Equal(item.SubItems[column].Text, actual.Name);
+                }
+                else
+                {
+                    Assert.Null(actual.OwningSubItem);
+                    Assert.Equal(string.Empty, actual.Name);
+                }
+
+                Assert.Same(actual, listView.AccessibilityObject.GetItem(row, column));
+                Assert.Same(actual, itemAccessibleObject.GetChild(column + (hasImage ? 1 : 0)));
+                Assert.NotSame(previousCell, actual);
+                Assert.Equal(column, actual.Column);
+                Assert.Equal(row, actual.Row);
+                Assert.Same(listView.Columns[column].AccessibilityObject, Assert.Single(actual.GetColumnHeaderItems()));
+                previousCell = actual;
+            }
+
+            Assert.Null(listView.AccessibilityObject.GetItem(row, columnCount));
+        }
+
         Assert.True(listView.IsHandleCreated);
     }
 
