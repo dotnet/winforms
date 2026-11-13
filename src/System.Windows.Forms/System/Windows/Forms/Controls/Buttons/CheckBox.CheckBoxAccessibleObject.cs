@@ -30,13 +30,24 @@ public partial class CheckBox
             };
 
         internal override ToggleState ToggleState => this.TryGetOwnerAs(out CheckBox? owner)
-            ? owner.CheckState switch
+            ? CheckStateToToggleState(owner.CheckState)
+            : ToggleState.ToggleState_Off;
+
+        internal void OnCheckStateChanged(CheckState oldValue, CheckState newValue)
+        {
+            RaiseAutomationPropertyChangedEvent(
+                UIA_PROPERTY_ID.UIA_ToggleToggleStatePropertyId,
+                (VARIANT)(int)CheckStateToToggleState(oldValue),
+                (VARIANT)(int)CheckStateToToggleState(newValue));
+        }
+
+        private static ToggleState CheckStateToToggleState(CheckState checkState)
+            => checkState switch
             {
                 CheckState.Checked => ToggleState.ToggleState_On,
                 CheckState.Unchecked => ToggleState.ToggleState_Off,
                 _ => ToggleState.ToggleState_Indeterminate,
-            }
-            : ToggleState.ToggleState_Off;
+            };
 
         internal override bool IsPatternSupported(UIA_PATTERN_ID patternId) => patternId switch
         {
