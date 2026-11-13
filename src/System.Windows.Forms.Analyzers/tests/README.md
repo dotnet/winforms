@@ -49,8 +49,10 @@ Use `AnalyzerConfigFiles` for `.editorconfig` or `.globalconfig` cases, `Additio
 non-source analyzer inputs, and `AdditionalReferences` for metadata paths. Tests that need the latest
 WinForms API surface should use `CurrentReferences.NetCoreAppReferences` and add
 `CurrentReferences.WinFormsRefPath`, following the existing WFO2001 tests.
-The helper reads the configured SDK's runtime metadata and requires its exact reference pack; an
-SDK version is not a runtime-pack version, and another installed preview is not a safe substitute.
+The helper reads the test assembly's `.runtimeconfig.json` for its target framework and configured
+runtime version, which matches the product targeting-pack version. Roslyn resolves that exact
+`Microsoft.NETCore.App.Ref` package through the repository's NuGet configuration and package cache;
+the bootstrap SDK's bundled reference pack and other installed previews are not substitutes.
 
 Designer diagnostics must include a concise supported repair in the emitted message, not only in
 the help page. Test representative rendered messages under an invariant culture as well as IDs,
