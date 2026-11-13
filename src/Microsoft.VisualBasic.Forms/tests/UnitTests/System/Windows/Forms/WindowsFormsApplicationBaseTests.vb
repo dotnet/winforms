@@ -1,6 +1,7 @@
 ﻿' Licensed to the .NET Foundation under one or more agreements.
 ' The .NET Foundation licenses this file to you under the MIT license.
 
+Imports System.Collections.Generic
 Imports System.ComponentModel
 Imports System.Diagnostics
 Imports System.Threading
@@ -154,7 +155,7 @@ Namespace Microsoft.VisualBasic.Forms.Tests
             Dim unhandledExceptionCallCount As Integer
             Dim observedException As Exception = Nothing
             Dim unhandledExceptionThreadId As Integer
-            Dim firstException As New InvalidOperationException("first launch failed")
+            Dim firstException As New InvalidOperationException("first launch failed", New ArgumentException("inner"))
 
             Dim app As New SubWindowsFormsApplicationBase
             Dim startupHandler As StartupNextInstanceEventHandler =
@@ -205,6 +206,74 @@ Namespace Microsoft.VisualBasic.Forms.Tests
         End Sub
 
         <WinFormsFact>
+        Public Sub StartupNextInstance_SecondLaunchFailsWhileFirstFailureIsReported_BothReportedInOrder()
+            Dim originalSynchronizationContext As SynchronizationContext = SynchronizationContext.Current
+            Dim deliveryContext As New WindowsFormsSynchronizationContext()
+            Dim firstException As New InvalidOperationException("first launch failed")
+            Dim secondException As New InvalidOperationException("second launch failed")
+            Dim observedExceptions As New List(Of Exception)
+            Dim startupCallCount As Integer
+            Dim reportingFirst As Boolean
+            Dim secondStartedDuringFirstReport As Boolean
+
+            Dim app As New SubWindowsFormsApplicationBase
+            Dim startupHandler As StartupNextInstanceEventHandler =
+                Sub(sender, e)
+                    startupCallCount += 1
+                    If e.CommandLine(0) = "first" Then
+                        Throw firstException
+                    End If
+
+                    secondStartedDuringFirstReport = reportingFirst
+                    Throw secondException
+                End Sub
+            Dim unhandledExceptionHandler As UnhandledExceptionEventHandler =
+                Sub(sender, e)
+                    observedExceptions.Add(e.Exception)
+                    e.ExitApplication = False
+
+                    If observedExceptions.Count = 1 Then
+                        reportingFirst = True
+                        Try
+                            Dim reportTimer As Stopwatch = Stopwatch.StartNew()
+                            While reportTimer.Elapsed < TimeSpan.FromMilliseconds(300)
+                                Application.DoEvents()
+                                Thread.Sleep(10)
+                            End While
+                        Finally
+                            reportingFirst = False
+                        End Try
+                    End If
+                End Sub
+
+            AddHandler app.StartupNextInstance, startupHandler
+            AddHandler app.UnhandledException, unhandledExceptionHandler
+
+            Try
+                app.CallEnableNextInstanceDelivery(deliveryContext)
+
+                Task.Run(Sub() app.CallOnStartupNextInstanceMarshallingAdaptor({"first"})).Wait()
+                Task.Run(Sub() app.CallOnStartupNextInstanceMarshallingAdaptor({"second"})).Wait()
+
+                Dim timer As Stopwatch = Stopwatch.StartNew()
+                While observedExceptions.Count < 2 AndAlso timer.Elapsed < TimeSpan.FromSeconds(5)
+                    Application.DoEvents()
+                    Thread.Sleep(10)
+                End While
+
+                Assert.False(secondStartedDuringFirstReport)
+                Assert.Equal(2, observedExceptions.Count)
+                Assert.Same(firstException, observedExceptions(0))
+                Assert.Same(secondException, observedExceptions(1))
+                Assert.Equal(2, startupCallCount)
+            Finally
+                RemoveHandler app.UnhandledException, unhandledExceptionHandler
+                RemoveHandler app.StartupNextInstance, startupHandler
+                SynchronizationContext.SetSynchronizationContext(originalSynchronizationContext)
+            End Try
+        End Sub
+
+        <WinFormsFact>
         Public Sub StartupNextInstance_BeforeDeliveryIsEnabled_IsDeliveredOnUIThreadOnceEnabled()
             Dim originalSynchronizationContext As SynchronizationContext = SynchronizationContext.Current
             Dim deliveryContext As New WindowsFormsSynchronizationContext()
@@ -244,6 +313,48 @@ Namespace Microsoft.VisualBasic.Forms.Tests
                 Assert.Equal(1, startupCallCount)
                 Assert.Equal("early", receivedLaunch)
                 Assert.Equal(testThreadId, receivedLaunchThreadId)
+            Finally
+                RemoveHandler app.StartupNextInstance, startupHandler
+                SynchronizationContext.SetSynchronizationContext(originalSynchronizationContext)
+            End Try
+        End Sub
+
+        <WinFormsFact>
+        Public Sub StartupNextInstance_MultipleBeforeDeliveryIsEnabled_AllDeliveredInOrder()
+            Dim originalSynchronizationContext As SynchronizationContext = SynchronizationContext.Current
+            Dim deliveryContext As New WindowsFormsSynchronizationContext()
+            Dim receivedLaunches As New List(Of String)
+
+            Dim app As New SubWindowsFormsApplicationBase
+            Dim startupHandler As StartupNextInstanceEventHandler =
+                Sub(sender, e)
+                    receivedLaunches.Add(e.CommandLine(0))
+                End Sub
+
+            AddHandler app.StartupNextInstance, startupHandler
+
+            Try
+                Task.Run(Sub() app.CallOnStartupNextInstanceMarshallingAdaptor({"early1"})).Wait()
+                Task.Run(Sub() app.CallOnStartupNextInstanceMarshallingAdaptor({"early2"})).Wait()
+
+                Dim waitTimer As Stopwatch = Stopwatch.StartNew()
+                While waitTimer.Elapsed < TimeSpan.FromMilliseconds(200)
+                    Application.DoEvents()
+                    Thread.Sleep(10)
+                End While
+
+                Assert.Empty(receivedLaunches)
+                app.CallEnableNextInstanceDelivery(deliveryContext)
+
+                Dim deliveryTimer As Stopwatch = Stopwatch.StartNew()
+                While receivedLaunches.Count < 2 AndAlso deliveryTimer.Elapsed < TimeSpan.FromSeconds(5)
+                    Application.DoEvents()
+                    Thread.Sleep(10)
+                End While
+
+                Assert.Equal(2, receivedLaunches.Count)
+                Assert.Equal("early1", receivedLaunches(0))
+                Assert.Equal("early2", receivedLaunches(1))
             Finally
                 RemoveHandler app.StartupNextInstance, startupHandler
                 SynchronizationContext.SetSynchronizationContext(originalSynchronizationContext)

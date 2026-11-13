@@ -67,9 +67,11 @@ Namespace Microsoft.VisualBasic.ApplicationServices
 
         Private _nextInstanceDeliveryContext As SynchronizationContext
 
-        Private ReadOnly _pendingNextInstanceArgs As New List(Of String())
+        Private ReadOnly _pendingNextInstanceArgs As New Queue(Of String())
 
         Private _nextInstanceDeliveryClosed As Boolean
+
+        Private _nextInstanceDispatchActive As Boolean
 
         ' The ColorMode (Classic/Light, System, Dark) the user assigned to the ApplyApplicationsDefault event.
         ' Note: We aim to expose this to the App Designer in later runtime/VS versions.
@@ -665,20 +667,15 @@ Namespace Microsoft.VisualBasic.ApplicationServices
             RaiseEvent NetworkAvailabilityChanged(sender, e)
         End Sub
 
-        ' Queue delivery on the UI context so handler failures use WinForms exception handling.
-        ' Hold requests received before setup until the context is ready.
+        ' Queue launches for delivery one at a time on the UI context.
         Friend Sub OnStartupNextInstanceMarshallingAdaptor(args As String())
             SyncLock _nextInstanceDeliveryLock
                 If _nextInstanceDeliveryClosed Then
                     Return
                 End If
 
-                If _nextInstanceDeliveryContext Is Nothing Then
-                    _pendingNextInstanceArgs.Add(args)
-                    Return
-                End If
-
-                PostStartupNextInstance(args, _nextInstanceDeliveryContext)
+                _pendingNextInstanceArgs.Enqueue(args)
+                PostNextStartupNextInstance()
             End SyncLock
         End Sub
 
@@ -691,25 +688,42 @@ Namespace Microsoft.VisualBasic.ApplicationServices
                 End If
 
                 _nextInstanceDeliveryContext = context
-
-                For Each args As String() In _pendingNextInstanceArgs
-                    PostStartupNextInstance(args, context)
-                Next
-
-                _pendingNextInstanceArgs.Clear()
+                PostNextStartupNextInstance()
             End SyncLock
         End Sub
 
-        Private Sub PostStartupNextInstance(args As String(), context As SynchronizationContext)
+        Private Sub PostNextStartupNextInstance()
+            If _nextInstanceDeliveryClosed OrElse
+                _nextInstanceDeliveryContext Is Nothing OrElse
+                _nextInstanceDispatchActive OrElse
+                _pendingNextInstanceArgs.Count = 0 Then
+                Return
+            End If
+
+            Dim args As String() = _pendingNextInstanceArgs.Dequeue()
+            _nextInstanceDispatchActive = True
             Try
-                context.Post(
+                _nextInstanceDeliveryContext.Post(
                     Sub(state)
-                        OnStartupNextInstance(New StartupNextInstanceEventArgs(
-                            New ReadOnlyCollection(Of String)(args),
-                            bringToForegroundFlag:=True))
+                        Try
+                            OnStartupNextInstance(New StartupNextInstanceEventArgs(
+                                New ReadOnlyCollection(Of String)(args),
+                                bringToForegroundFlag:=True))
+                        ' Report the original exception (WinForms uses GetBaseException); preserve debugger breaks.
+                        Catch ex As Exception When Not Debugger.IsAttached
+                            Application.OnThreadException(ex)
+                        ' Wait for reporting to finish before the next launch; nested reports can drop exceptions.
+                        Finally
+                            SyncLock _nextInstanceDeliveryLock
+                                _nextInstanceDispatchActive = False
+                                PostNextStartupNextInstance()
+                            End SyncLock
+                        End Try
                     End Sub,
                     Nothing)
+            ' A failed post during shutdown drops this launch, as before.
             Catch ex As Exception
+                _nextInstanceDispatchActive = False
             End Try
         End Sub
 
@@ -904,6 +918,7 @@ Namespace Microsoft.VisualBasic.ApplicationServices
                 SyncLock _nextInstanceDeliveryLock
                     _nextInstanceDeliveryContext = Nothing
                     _nextInstanceDeliveryClosed = True
+                    _nextInstanceDispatchActive = False
                     _pendingNextInstanceArgs.Clear()
                 End SyncLock
 
