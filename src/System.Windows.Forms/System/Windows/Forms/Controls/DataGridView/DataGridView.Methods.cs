@@ -20001,9 +20001,40 @@ public partial class DataGridView
                 case DataGridViewSelectionMode.FullRowSelect:
                 case DataGridViewSelectionMode.RowHeaderSelect:
                     int remainingSelectedRows = 0;
+                    bool deleteSelectedNewRow = _selectedBandIndexes.Contains(NewRowIndex);
+
                     try
                     {
                         _selectedBandSnapshotIndexes = new DataGridViewIntLinkedList(_selectedBandIndexes);
+
+                        if (deleteSelectedNewRow
+                            && DataConnection is { CurrencyManager.List: { } list, IsInAddNewTransaction: true }
+                            && !IsCurrentRowDirty)
+                        {
+                            int addNewItemIndex = NewRowIndex == list.Count ? NewRowIndex - 1 : NewRowIndex;
+                            if (addNewItemIndex >= 0 && addNewItemIndex < list.Count)
+                            {
+                                DataGridViewDataErrorEventArgs? dgvdee = null;
+                                try
+                                {
+                                    DataConnection.DeleteRow(addNewItemIndex);
+                                }
+                                catch (Exception exception) when (!exception.IsCriticalException())
+                                {
+                                    dgvdee = new(
+                                        exception,
+                                        -1,
+                                        addNewItemIndex,
+                                        DataGridViewDataErrorContexts.RowDeletion);
+                                    OnDataErrorInternal(dgvdee);
+                                    if (dgvdee.ThrowException)
+                                    {
+                                        throw dgvdee.Exception;
+                                    }
+                                }
+                            }
+                        }
+
                         while (_selectedBandSnapshotIndexes.Count > remainingSelectedRows)
                         {
                             int rowIndex = _selectedBandSnapshotIndexes[remainingSelectedRows];
