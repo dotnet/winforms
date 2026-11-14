@@ -259,6 +259,103 @@ public class CheckBoxBaseAdapterTests : IDisposable
         }
     }
 
+    [WinFormsFact]
+    public void FlatAdapter_AdjustFocusRectangle_TextAndImage_FocusesTextOnly()
+    {
+        using Bitmap image = new(16, 16);
+        using CheckBox checkBox = new() { Text = "Text", Image = image };
+        CheckBoxFlatAdapter adapter = new(checkBox);
+        ButtonBaseAdapter.LayoutData layout = adapter.GetLayoutData(checkBox.ClientRectangle);
+
+        adapter.TestAccessor.Dynamic.AdjustFocusRectangle(layout);
+
+        layout.Focus.Should().Be(layout.TextBounds);
+    }
+
+    [WinFormsFact]
+    public void FlatAdapter_AdjustFocusRectangle_TextWithoutImage_LeavesFocusUnchanged()
+    {
+        using CheckBox checkBox = new() { Text = "Text" };
+        CheckBoxFlatAdapter adapter = new(checkBox);
+        ButtonBaseAdapter.LayoutData layout = adapter.GetLayoutData(checkBox.ClientRectangle);
+        Rectangle initialFocus = layout.Focus;
+
+        adapter.TestAccessor.Dynamic.AdjustFocusRectangle(layout);
+
+        layout.Focus.Should().Be(initialFocus);
+    }
+
+    [WinFormsFact]
+    public void ModernAdapter_AdjustFocusRectangle_TextAndImage_FocusesTextOnly()
+    {
+        using Bitmap image = new(16, 16);
+        using CheckBox checkBox = new()
+        {
+            Text = "gypq",
+            Image = image,
+            VisualStylesMode = VisualStylesMode.Net11
+        };
+        CheckBoxModernAdapter adapter = new(checkBox, FlatStyle.Standard);
+        Rectangle textBounds = new(20, 20, 80, 20);
+        ButtonBaseAdapter.LayoutData layout = new(new ButtonBaseAdapter.LayoutOptions())
+        {
+            TextBounds = textBounds,
+            ImageBounds = new Rectangle(20, 20, 16, 16),
+            Focus = new Rectangle(20, 19, 81, 23)
+        };
+
+        adapter.TestAccessor.Dynamic.AdjustFocusRectangle(layout);
+
+        layout.Focus.Should().Be(textBounds);
+    }
+
+    [WinFormsFact]
+    public void StandardAdapter_AdjustFocusRectangle_TextAndImage_PreservesFullTextHeight()
+    {
+        using Bitmap image = new(16, 16);
+        using CheckBox checkBox = new()
+        {
+            Text = "gypq",
+            Image = image
+        };
+        CheckBoxStandardAdapter adapter = new(checkBox);
+        Rectangle textBounds = new(20, 20, 80, 20);
+        ButtonBaseAdapter.LayoutData layout = new(new ButtonBaseAdapter.LayoutOptions
+        {
+            Font = checkBox.Font,
+            UseCompatibleTextRendering = checkBox.UseCompatibleTextRendering
+        })
+        {
+            TextBounds = textBounds,
+            ImageBounds = new Rectangle(20, 20, 16, 16),
+            Focus = new Rectangle(20, 19, 81, 23)
+        };
+
+        adapter.TestAccessor.Dynamic.AdjustFocusRectangle(layout);
+
+        layout.Focus.Top.Should().Be(textBounds.Top);
+        layout.Focus.Bottom.Should().Be(textBounds.Bottom);
+        layout.Focus.Height.Should().Be(textBounds.Height);
+    }
+
+    [WinFormsTheory]
+    [InlineData(false)]
+    [InlineData(true)]
+    public void StandardAdapter_AdjustFocusRectangle_EmptyText_PreservesBaseAdjustment(bool autoSize)
+    {
+        using CheckBox checkBox = new() { AutoSize = autoSize };
+        CheckBoxStandardAdapter adapter = new(checkBox);
+        ButtonBaseAdapter.LayoutData layout = CreateLayoutData();
+        layout.Field = new Rectangle(20, 20, 80, 20);
+
+        adapter.TestAccessor.Dynamic.AdjustFocusRectangle(layout);
+
+        Rectangle expected = autoSize
+            ? Rectangle.Inflate(layout.CheckBounds, -2, -2)
+            : layout.Field;
+        layout.Focus.Should().Be(expected);
+    }
+
     [Theory]
     [InlineData(null, true, 2, 2, 10, 10)]
     [InlineData("", true, 2, 2, 10, 10)]
