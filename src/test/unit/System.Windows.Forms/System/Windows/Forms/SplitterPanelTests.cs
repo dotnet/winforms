@@ -1220,4 +1220,147 @@ public class SplitterPanelTests
         Assert.Equal(0, clientSizeChangedCallCount);
         Assert.False(control.IsHandleCreated);
     }
+
+    [WinFormsFact]
+    public void SplitContainer_Panel2MinSize_Horizontal_Issue3568_SplitterDistanceAndPanel2Height_Unchanged()
+    {
+        // Exact reproduction of https://github.com/dotnet/winforms/issues/3568
+        using Form form = new() { Size = new Size(200, 500) };
+        using SplitContainer splitContainer = new()
+        {
+            Orientation = Orientation.Horizontal,
+            Dock = DockStyle.Fill
+        };
+
+        form.Controls.Add(splitContainer);
+        form.Show();
+
+        int originalSplitterDistance = splitContainer.SplitterDistance;
+        int originalPanel2Height = splitContainer.Panel2.Height;
+        int panel2Width = splitContainer.Panel2.Width;
+
+        // Pre-condition: Panel2.Width < 205 <= Panel2.Height must hold
+        // (matches the reported environment: Width=182, Height=223).
+        // If this fails the test environment is too small to reproduce the issue.
+        Assert.True(panel2Width < 205 && originalPanel2Height >= 205,
+            $"Pre-condition failed: need Panel2.Width ({panel2Width}) < 205 <= Panel2.Height ({originalPanel2Height}).");
+
+        // Act – exact value from the issue report
+        splitContainer.Panel2MinSize = 205;
+
+        // Panel2MinSize must be stored as-is.
+        Assert.Equal(205, splitContainer.Panel2MinSize);
+
+        // SplitterDistance must NOT change: Panel2.Height already satisfies the minimum.
+        // Old code: checks Panel2.Width (182) → 205 > 182 → moves splitter to 186. FAILS here.
+        Assert.Equal(originalSplitterDistance, splitContainer.SplitterDistance);
+
+        // Panel2.Height must NOT change.
+        // Old code: splitter moved → Panel2.Height grows to ~263. FAILS here.
+        Assert.Equal(originalPanel2Height, splitContainer.Panel2.Height);
+    }
+
+    [WinFormsFact]
+    public void SplitContainer_Panel2MinSize_Vertical_SplitterAtCorrectPosition_WhenPanel1LargerThanPanel2()
+    {
+        // Regression test for https://github.com/dotnet/winforms/issues/3568
+        using Form form = new() { Size = new Size(600, 300) };
+        using SplitContainer splitContainer = new()
+        {
+            Orientation = Orientation.Vertical,
+            Dock = DockStyle.Fill
+        };
+
+        form.Controls.Add(splitContainer);
+        form.Show();
+
+        int containerWidth = splitContainer.Width;
+
+        // Bias the split toward Panel1 (splitter at 65%) so Panel2 is the smaller panel.
+        // This puts the splitter past the midpoint, which disables the SplitterDistance
+        // setter's clamping and exposes the old formula's wrong position.
+        splitContainer.SplitterDistance = (int)(containerWidth * 0.65);
+
+        int originalSplitterDistance = splitContainer.SplitterDistance;
+        int originalPanel2Width = splitContainer.Panel2.Width;
+
+        // Choose Panel2MinSize strictly between Panel2.Width and
+        // (originalSplitterDistance − SplitterWidth). This range guarantees:
+        //  • The old code's condition (value > Panel2.Width) fires.
+        //  • The SplitterDistance setter's upper-clamp does NOT fire for the old formula's
+        //    result, so the wrong position is committed.
+        int newPanel2MinSize = originalPanel2Width
+                             + (originalSplitterDistance - splitContainer.SplitterWidth - originalPanel2Width) / 2;
+
+        // Pre-condition: newPanel2MinSize must genuinely exceed Panel2.Width.
+        Assert.True(newPanel2MinSize > originalPanel2Width,
+            $"Pre-condition failed: newPanel2MinSize ({newPanel2MinSize}) must exceed Panel2.Width ({originalPanel2Width}).");
+
+        // Act
+        splitContainer.Panel2MinSize = newPanel2MinSize;
+
+        // Panel2MinSize must be stored as requested.
+        Assert.Equal(newPanel2MinSize, splitContainer.Panel2MinSize);
+
+        // The splitter must be at exactly containerWidth - newPanel2MinSize - SplitterWidth.
+        // This is the only position that gives Panel2 precisely the requested minimum.
+        //
+        // Old code: sets SplitterDistanceInternal = Panel2.Width + SplitterWidth
+        //           = containerWidth - originalSplitterDistance  (wrong — a completely different value).
+        // FAILS here with old code because (containerWidth - originalSplitterDistance)
+        //           ≠ (containerWidth - newPanel2MinSize - SplitterWidth).
+        int expectedSplitterDistance = containerWidth - newPanel2MinSize - splitContainer.SplitterWidth;
+        Assert.Equal(expectedSplitterDistance, splitContainer.SplitterDistance);
+
+        // Layout integrity: panels must fill the container width exactly.
+        Assert.Equal(
+            splitContainer.Width,
+            splitContainer.SplitterDistance + splitContainer.SplitterWidth + splitContainer.Panel2.Width);
+    }
+
+    [WinFormsFact]
+    public void SplitContainer_Panel2MinSize_Horizontal_SplitterDistance_Unchanged_WhenPanel2HeightAlreadySatisfiesMinSize()
+    {
+        // Regression test for https://github.com/dotnet/winforms/issues/3568
+        using Form form = new() { Size = new Size(200, 500) };
+        using SplitContainer splitContainer = new()
+        {
+            Orientation = Orientation.Horizontal,
+            Dock = DockStyle.Fill
+        };
+
+        form.Controls.Add(splitContainer);
+        form.Show();
+
+        int originalSplitterDistance = splitContainer.SplitterDistance;
+        int originalPanel2Height = splitContainer.Panel2.Height;
+        int panel2Width = splitContainer.Panel2.Width;
+
+        // Pre-conditions: in a tall narrow form with a horizontal split the height
+        // dimension of Panel2 is larger than the width dimension.
+        Assert.True(panel2Width < originalPanel2Height,
+            $"Pre-condition failed: Panel2.Width ({panel2Width}) must be < Panel2.Height ({originalPanel2Height}).");
+
+        // Choose a Panel2MinSize that is strictly between Panel2.Width and Panel2.Height.
+        // The old code checks Panel2.Width → sees the value as "too big" and moves the splitter.
+        // The fixed code checks Panel2.Height → sees Panel2 is already tall enough, no move needed.
+        int newPanel2MinSize = panel2Width + 1;
+        Assert.True(newPanel2MinSize <= originalPanel2Height,
+            $"Pre-condition failed: newPanel2MinSize ({newPanel2MinSize}) must be <= Panel2.Height ({originalPanel2Height}).");
+
+        // Act
+        splitContainer.Panel2MinSize = newPanel2MinSize;
+
+        // Assert – Panel2MinSize is stored correctly.
+        Assert.Equal(newPanel2MinSize, splitContainer.Panel2MinSize);
+
+        // Assert – SplitterDistance must NOT have moved: Panel2 height already satisfies the minimum.
+        // With the old (buggy) code this fails because SplitterDistanceInternal is set to
+        // Panel2.Width + SplitterWidth, which is a smaller, incorrect value.
+        Assert.Equal(originalSplitterDistance, splitContainer.SplitterDistance);
+
+        // Assert – Panel2.Height must be unchanged.
+        // With the old code Panel2.Height grows because the splitter is moved in the wrong direction.
+        Assert.Equal(originalPanel2Height, splitContainer.Panel2.Height);
+    }
 }
