@@ -280,7 +280,8 @@ public unsafe partial class Control :
     private byte _requiredScaling;
     private TRACKMOUSEEVENT _trackMouseEvent;
     private LayoutEventArgs? _cachedLayoutEventArgs;
-    private Queue<ThreadMethodEntry>? _threadCallbackList;
+    // Publish the lazily initialized queue to readers that do not take the initialization lock.
+    private volatile Queue<ThreadMethodEntry>? _threadCallbackList;
 
     // For keeping track of our ui state for focus and keyboard cues. Using a member
     // variable here because we hit this a lot
@@ -3776,7 +3777,7 @@ public unsafe partial class Control :
                 throw new InvalidAsynchronousStateException(SR.ThreadNoLongerValid);
             }
 
-            if (IsDisposed && _threadCallbackList is not null && _threadCallbackList.Count > 0)
+            if (IsDisposed && _threadCallbackList is not null)
             {
                 lock (_threadCallbackList)
                 {
