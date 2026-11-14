@@ -2941,6 +2941,158 @@ public class ComboBoxTests
         Assert.Equal("Second", control.Text);
     }
 
+    public static IEnumerable<object[]> DpiScaledAutoCompleteHandleCreation_TestData()
+    {
+        (ComboBoxStyle Style, AutoCompleteSource Source)[] configurations =
+        [
+            (ComboBoxStyle.DropDown, AutoCompleteSource.ListItems),
+            (ComboBoxStyle.DropDown, AutoCompleteSource.CustomSource),
+            (ComboBoxStyle.Simple, AutoCompleteSource.ListItems),
+            (ComboBoxStyle.Simple, AutoCompleteSource.CustomSource),
+            (ComboBoxStyle.DropDownList, AutoCompleteSource.ListItems),
+        ];
+
+        foreach ((ComboBoxStyle style, AutoCompleteSource source) in configurations)
+        {
+            foreach (AutoCompleteMode mode in new[] { AutoCompleteMode.Suggest, AutoCompleteMode.Append, AutoCompleteMode.SuggestAppend })
+            {
+                yield return new object[] { style, source, mode, true };
+                yield return new object[] { style, source, mode, false };
+            }
+        }
+    }
+
+    [WinFormsTheory]
+    [MemberData(nameof(DpiScaledAutoCompleteHandleCreation_TestData))]
+    public void ComboBox_DpiScaledDuringHandleCreation_NestedParent_InitializesAutoCompleteOnce(
+        ComboBoxStyle style,
+        AutoCompleteSource source,
+        AutoCompleteMode mode,
+        bool scaleDown)
+    {
+        // A combo box whose DPI differs from its nested parent chain is scaled while its handle is being
+        // created, in either direction. Autocomplete must be initialized once without recreating the handle
+        // or losing items, text and selection, and must still be rebuilt by a later explicit recreation.
+        using IDisposable dpiScope = ScaleHelper.EnterDpiAwarenessScope(DPI_AWARENESS_CONTEXT.DPI_AWARENESS_CONTEXT_PER_MONITOR_AWARE_V2);
+        using Form form = new() { AutoScaleMode = AutoScaleMode.None };
+        using Panel panel = new();
+        form.Controls.Add(panel);
+        Assert.NotEqual(IntPtr.Zero, form.Handle);
+        Assert.NotEqual(IntPtr.Zero, panel.Handle);
+
+        string[] items = ["First", "Second", "Third"];
+        using Font font = new("Arial", 12);
+        using ComboBox control = new()
+        {
+            Font = font,
+            DropDownStyle = style,
+            AutoCompleteSource = source,
+            AutoCompleteMode = mode
+        };
+
+        if (source == AutoCompleteSource.CustomSource)
+        {
+            control.AutoCompleteCustomSource.AddRange(items);
+        }
+
+        control.Items.AddRange(items);
+
+        int fontChangedCallCount = 0;
+        int handleCreatedCallCount = 0;
+        int handleDestroyedCallCount = 0;
+        control.FontChanged += (sender, e) => fontChangedCallCount++;
+        control.HandleCreated += (sender, e) => handleCreatedCallCount++;
+        control.HandleDestroyed += (sender, e) => handleDestroyedCallCount++;
+
+        panel.Controls.Add(control);
+        Assert.False(control.IsHandleCreated);
+
+        int parentDpi = (int)PInvoke.GetDpiForWindow(panel);
+        int originalDpi = scaleDown ? parentDpi * 2 : parentDpi / 2;
+        control.DeviceDpiInternal = originalDpi;
+        Assert.NotEqual(IntPtr.Zero, control.Handle);
+
+        Assert.True(control.IsHandleCreated);
+        Assert.Equal(panel.DeviceDpi, control.DeviceDpi);
+        Assert.Equal(font.Size * parentDpi / originalDpi, control.Font.Size);
+        Assert.Equal(1, fontChangedCallCount);
+        Assert.Equal(1, handleCreatedCallCount);
+        Assert.Equal(0, handleDestroyedCallCount);
+        Assert.Equal(mode, control.AutoCompleteMode);
+        Assert.Equal(source, control.AutoCompleteSource);
+        Assert.Equal(items, GetNativeItemTexts(control));
+
+        bool expectAutoCompleteBound = style != ComboBoxStyle.DropDownList;
+        Assert.Equal(expectAutoCompleteBound, control.TestAccessor.Dynamic._stringSource is not null);
+
+        control.SelectedIndex = 1;
+        Assert.Equal(1, control.SelectedIndex);
+        Assert.Equal("Second", control.Text);
+        Assert.Equal(1, (int)PInvokeCore.SendMessage(control, PInvoke.CB_GETCURSEL));
+
+        if (style != ComboBoxStyle.DropDownList)
+        {
+            control.Select(1, 3);
+            Assert.Equal(1, control.SelectionStart);
+            Assert.Equal(3, control.SelectionLength);
+            Assert.Equal("eco", control.SelectedText);
+        }
+
+        control.TestAccessor.Dynamic.RecreateHandle();
+
+        Assert.True(control.IsHandleCreated);
+        Assert.Equal(2, handleCreatedCallCount);
+        Assert.Equal(1, handleDestroyedCallCount);
+        Assert.Equal(1, fontChangedCallCount);
+        Assert.Equal(items, GetNativeItemTexts(control));
+        Assert.Equal(1, control.SelectedIndex);
+        Assert.Equal("Second", control.Text);
+        Assert.Equal(expectAutoCompleteBound, control.TestAccessor.Dynamic._stringSource is not null);
+    }
+
+    [WinFormsTheory]
+    [InlineData(true)]
+    [InlineData(false)]
+    public void ComboBox_DpiScaledDuringHandleCreation_FontChangedByHandler_DoesNotRecurse(bool scaleDown)
+    {
+        // A FontChanged handler that touches the Handle and the font while the handle is still being created
+        // by DPI scaling must not recurse into another handle creation or destroy the first handle.
+        using IDisposable dpiScope = ScaleHelper.EnterDpiAwarenessScope(DPI_AWARENESS_CONTEXT.DPI_AWARENESS_CONTEXT_PER_MONITOR_AWARE_V2);
+        using Form form = new() { AutoScaleMode = AutoScaleMode.None };
+        Assert.NotEqual(IntPtr.Zero, form.Handle);
+        using Font font = new("Arial", 12);
+        using ComboBox control = new()
+        {
+            Font = font,
+            AutoCompleteSource = AutoCompleteSource.ListItems,
+            AutoCompleteMode = AutoCompleteMode.SuggestAppend
+        };
+        control.Items.AddRange(["First", "Second"]);
+
+        int handleCreatedCallCount = 0;
+        int handleDestroyedCallCount = 0;
+        int fontChangedCallCount = 0;
+        control.HandleCreated += (sender, e) => handleCreatedCallCount++;
+        control.HandleDestroyed += (sender, e) => handleDestroyedCallCount++;
+        control.FontChanged += (sender, e) =>
+        {
+            fontChangedCallCount++;
+            Assert.NotEqual(IntPtr.Zero, control.Handle);
+            Assert.True(control.Font.Size > 0);
+        };
+
+        form.Controls.Add(control);
+        int parentDpi = (int)PInvoke.GetDpiForWindow(form);
+        control.DeviceDpiInternal = scaleDown ? parentDpi * 2 : parentDpi / 2;
+
+        Assert.NotEqual(IntPtr.Zero, control.Handle);
+        Assert.Equal(1, fontChangedCallCount);
+        Assert.Equal(1, handleCreatedCallCount);
+        Assert.Equal(0, handleDestroyedCallCount);
+        Assert.Equal(["First", "Second"], GetNativeItemTexts(control));
+        Assert.True(control.TestAccessor.Dynamic._stringSource is not null);
+    }
+
     public static IEnumerable<object[]> ForeColor_Set_TestData()
     {
         yield return new object[] { Color.Empty, SystemColors.WindowText };
@@ -4399,6 +4551,276 @@ public class ComboBoxTests
     }
 
     [WinFormsTheory]
+    [EnumData<ComboBoxStyle>]
+    public void ComboBox_Items_EditWithHandle_NativeListStaysSynchronized(ComboBoxStyle style)
+    {
+        // Add, Insert, indexer replacement, Remove, RemoveAt and Clear on a combo box that already has a
+        // handle keep the managed collection and the native list identical for every drop-down style,
+        // including items whose displayed text comes from ToString.
+        using ComboBox control = new() { DropDownStyle = style };
+        control.CreateControl();
+
+        Assert.Equal(0, control.Items.Add("a"));
+        Assert.Equal(1, control.Items.Add(new ItemWithToString("c")));
+        control.Items.Insert(1, "b");
+        Assert.Equal(["a", "b", "c"], GetNativeItemTexts(control));
+        Assert.Equal(3, control.Items.Count);
+        Assert.Equal(2, control.Items.IndexOf(control.Items[2]));
+
+        control.Items[0] = "z";
+        Assert.Equal(["z", "b", "c"], GetNativeItemTexts(control));
+
+        control.Items.RemoveAt(1);
+        Assert.Equal(["z", "c"], GetNativeItemTexts(control));
+
+        control.Items.Remove("z");
+        Assert.Equal(["c"], GetNativeItemTexts(control));
+
+        control.Items.Clear();
+        Assert.Empty(control.Items);
+        Assert.Empty(GetNativeItemTexts(control));
+        Assert.Equal(-1, control.SelectedIndex);
+        Assert.Equal(string.Empty, control.Text);
+    }
+
+    [WinFormsTheory]
+    [InlineData(ComboBoxStyle.DropDown, true)]
+    [InlineData(ComboBoxStyle.DropDown, false)]
+    [InlineData(ComboBoxStyle.Simple, true)]
+    [InlineData(ComboBoxStyle.Simple, false)]
+    [InlineData(ComboBoxStyle.DropDownList, true)]
+    [InlineData(ComboBoxStyle.DropDownList, false)]
+    public void ComboBox_Items_AddedBeforeHandle_SynchronizedWhenHandleCreated(ComboBoxStyle style, bool sorted)
+    {
+        // Items added before the handle exists, optionally with Sorted enabled, are pushed to the native list
+        // in the managed order when the handle is created.
+        using ComboBox control = new() { DropDownStyle = style, Sorted = sorted };
+        control.Items.AddRange(["pear", "apple", "mango"]);
+        control.Items.Insert(0, "banana");
+        Assert.False(control.IsHandleCreated);
+
+        string[] expected = sorted
+            ? ["apple", "banana", "mango", "pear"]
+            : ["banana", "pear", "apple", "mango"];
+        Assert.Equal(expected, control.Items.Cast<string>());
+
+        control.CreateControl();
+        Assert.Equal(expected, GetNativeItemTexts(control));
+    }
+
+    [WinFormsTheory]
+    [EnumData<ComboBoxStyle>]
+    public void ComboBox_Sorted_AddAndInsertWithHandle_KeepsNativeOrderAndIgnoresInsertIndex(ComboBoxStyle style)
+    {
+        // With Sorted enabled on a live handle, both Add and Insert place the item at its sorted position
+        // (the requested Insert index is ignored) and the native list reflects the same order.
+        using ComboBox control = new() { DropDownStyle = style, Sorted = true };
+        control.CreateControl();
+
+        Assert.Equal(0, control.Items.Add("m"));
+        Assert.Equal(0, control.Items.Add("c"));
+        Assert.Equal(2, control.Items.Add("x"));
+        control.Items.Insert(0, "p");
+        control.Items.Insert(3, "a");
+
+        string[] expected = ["a", "c", "m", "p", "x"];
+        Assert.Equal(expected, control.Items.Cast<string>());
+        Assert.Equal(expected, GetNativeItemTexts(control));
+
+        control.Sorted = false;
+        control.Items.Insert(0, "z");
+        Assert.Equal("z", control.Items[0]);
+    }
+
+    [WinFormsTheory]
+    [EnumData<ComboBoxStyle>]
+    public void ComboBox_Items_RemoveItemWithHandle_AdjustsSelection(ComboBoxStyle style)
+    {
+        // Removing the selected item clears the selection (and the text of a drop-down list), while removing
+        // an earlier item keeps the same item selected at its shifted index.
+        using ComboBox control = new() { DropDownStyle = style };
+        control.Items.AddRange(["First", "Second", "Third"]);
+        control.CreateControl();
+
+        control.SelectedIndex = 2;
+        control.Items.RemoveAt(0);
+        Assert.Equal(1, control.SelectedIndex);
+        Assert.Equal("Third", control.SelectedItem);
+        Assert.Equal("Third", control.Text);
+        Assert.Equal(1, (int)PInvokeCore.SendMessage(control, PInvoke.CB_GETCURSEL));
+
+        control.Items.Remove("Third");
+        Assert.Equal(-1, control.SelectedIndex);
+        Assert.Null(control.SelectedItem);
+        Assert.Equal(-1, (int)PInvokeCore.SendMessage(control, PInvoke.CB_GETCURSEL));
+        Assert.Equal(["Second"], GetNativeItemTexts(control));
+        if (style == ComboBoxStyle.DropDownList)
+        {
+            Assert.Equal(string.Empty, control.Text);
+        }
+    }
+
+    [WinFormsTheory]
+    [EnumData<ComboBoxStyle>]
+    public void ComboBox_Items_ClearWithSelectedItem_ResetsSelectionAndAllowsNewItems(ComboBoxStyle style)
+    {
+        // Clearing a combo box with a selected item resets the selection to none and leaves it usable for new items.
+        using ComboBox control = new() { DropDownStyle = style };
+        control.Items.AddRange(["First", "Second"]);
+        control.CreateControl();
+        control.SelectedIndex = 1;
+
+        control.Items.Clear();
+        Assert.Equal(-1, control.SelectedIndex);
+        Assert.Null(control.SelectedItem);
+        Assert.Equal(0, (int)PInvokeCore.SendMessage(control, PInvoke.CB_GETCOUNT));
+        if (style == ComboBoxStyle.DropDownList)
+        {
+            Assert.Equal(string.Empty, control.Text);
+        }
+
+        control.Items.Add("Again");
+        control.SelectedIndex = 0;
+        Assert.Equal("Again", control.Text);
+        Assert.Equal(["Again"], GetNativeItemTexts(control));
+    }
+
+    [WinFormsTheory]
+    [InlineData(ComboBoxStyle.DropDown, true, "Zzz", "Zzz", -1)]
+    [InlineData(ComboBoxStyle.DropDown, true, "Second", "Second", 1)]
+    [InlineData(ComboBoxStyle.DropDown, true, "second", "Second", 1)]
+    [InlineData(ComboBoxStyle.DropDown, false, "Zzz", "Zzz", -1)]
+    [InlineData(ComboBoxStyle.DropDown, false, "Second", "Second", 1)]
+    [InlineData(ComboBoxStyle.Simple, true, "Zzz", "Zzz", -1)]
+    [InlineData(ComboBoxStyle.Simple, true, "Second", "Second", 1)]
+    [InlineData(ComboBoxStyle.Simple, false, "Zzz", "Zzz", -1)]
+    [InlineData(ComboBoxStyle.DropDownList, true, "Zzz", "", -1)]
+    [InlineData(ComboBoxStyle.DropDownList, true, "Second", "Second", 1)]
+    [InlineData(ComboBoxStyle.DropDownList, true, "second", "Second", 1)]
+    [InlineData(ComboBoxStyle.DropDownList, false, "Second", "Second", 1)]
+    [InlineData(ComboBoxStyle.DropDownList, false, "Zzz", "", -1)]
+    [InlineData(ComboBoxStyle.DropDown, false, "second", "Second", 1)]
+    [InlineData(ComboBoxStyle.DropDownList, false, "second", "Second", 1)]
+    public void ComboBox_Text_SetPerDropDownStyle_EditableOnlyWhenNotDropDownList(
+        ComboBoxStyle style,
+        bool createHandle,
+        string text,
+        string expectedText,
+        int expectedIndex)
+    {
+        // DropDown and Simple keep arbitrary text and select an item when the text matches one
+        // (ignoring case, with or without a handle), whereas DropDownList accepts only text that matches an item.
+        using ComboBox control = new() { DropDownStyle = style };
+        control.Items.AddRange(["First", "Second", "Third"]);
+        if (createHandle)
+        {
+            control.CreateControl();
+        }
+
+        control.Text = text;
+
+        Assert.Equal(expectedText, control.Text);
+        Assert.Equal(expectedIndex, control.SelectedIndex);
+        Assert.Equal(expectedIndex >= 0 ? control.Items[expectedIndex] : null, control.SelectedItem);
+    }
+
+    [WinFormsFact]
+    public void ComboBox_Items_SelectItemChangesTextAndRaisesEventsOnce()
+    {
+        // Selecting an item raises one SelectedIndexChanged and one TextChanged with the item text, and
+        // reselecting the same index raises neither.
+        using ComboBox control = new();
+        control.Items.AddRange(["First", "Second"]);
+        control.CreateControl();
+
+        int selectedIndexChangedCallCount = 0;
+        int textChangedCallCount = 0;
+        control.SelectedIndexChanged += (sender, e) => selectedIndexChangedCallCount++;
+        control.TextChanged += (sender, e) => textChangedCallCount++;
+
+        control.SelectedIndex = 1;
+        Assert.Equal(1, selectedIndexChangedCallCount);
+        Assert.Equal(1, textChangedCallCount);
+        Assert.Equal("Second", control.Text);
+
+        control.SelectedIndex = 1;
+        Assert.Equal(1, selectedIndexChangedCallCount);
+        Assert.Equal(1, textChangedCallCount);
+    }
+
+    [WinFormsTheory]
+    [InlineData(true)]
+    [InlineData(false)]
+    public void ComboBox_Items_AddRangeWithNullElement_KeepsEarlierItemsSynchronized(bool createHandle)
+    {
+        // AddRange that fails on a null element throws ArgumentNullException, keeps the items added before
+        // the failure, leaves the managed and native lists identical, and leaves the control usable.
+        using ComboBox control = new();
+        if (createHandle)
+        {
+            control.CreateControl();
+        }
+
+        Assert.Throws<ArgumentNullException>(() => control.Items.AddRange(["First", null!, "Third"]));
+
+        Assert.Equal(["First"], control.Items.Cast<string>());
+        if (createHandle)
+        {
+            Assert.Equal(["First"], GetNativeItemTexts(control));
+        }
+
+        control.Items.Add("Second");
+        control.CreateControl();
+        Assert.Equal(["First", "Second"], GetNativeItemTexts(control));
+    }
+
+    [WinFormsFact]
+    public void ComboBox_DataSource_ClearedWithHandle_RestoresEditableItems()
+    {
+        // While a data source is bound the item list mirrors it and rejects direct edits; after the data
+        // source is cleared the Items collection can be edited again and stays synchronized with the handle.
+        using Form form = new();
+        using ComboBox control = new();
+        form.Controls.Add(control);
+        control.CreateControl();
+        control.DataSource = new List<string> { "one", "two" };
+
+        Assert.Equal(["one", "two"], GetNativeItemTexts(control));
+        Assert.Throws<ArgumentException>(() => control.Items.Add("three"));
+        Assert.Throws<ArgumentException>(() => control.Items.Clear());
+        Assert.Throws<ArgumentException>(() => control.Items.RemoveAt(0));
+        Assert.Throws<ArgumentException>(() => control.Items.Insert(0, "zero"));
+
+        control.DataSource = null;
+        Assert.Empty(control.Items);
+        Assert.Empty(GetNativeItemTexts(control));
+
+        control.Items.Add("three");
+        Assert.Equal(["three"], GetNativeItemTexts(control));
+    }
+
+    [WinFormsTheory]
+    [InlineData(ComboBoxStyle.DropDown)]
+    [InlineData(ComboBoxStyle.DropDownList)]
+    public void ComboBox_Items_EditsInsideBeginUpdate_SynchronizedAfterEndUpdate(ComboBoxStyle style)
+    {
+        // Items edited between BeginUpdate and EndUpdate on a live handle end up in the native list in the
+        // managed order once the update completes.
+        using ComboBox control = new() { DropDownStyle = style };
+        control.CreateControl();
+
+        control.BeginUpdate();
+        control.Items.Add("a");
+        control.Items.Insert(0, "b");
+        control.Items.AddRange(["c", "d"]);
+        control.Items.RemoveAt(1);
+        control.EndUpdate();
+
+        Assert.Equal(["b", "c", "d"], control.Items.Cast<string>());
+        Assert.Equal(["b", "c", "d"], GetNativeItemTexts(control));
+    }
+
+    [WinFormsTheory]
     [InlineData(1)]
     [InlineData(5)]
     public void ComboBox_SelectedIndex_DoesNotChange_SelectedItem_AndDoesNotFire_OnSelectedIndexChanged(int index)
@@ -4897,6 +5319,30 @@ public class ComboBoxTests
             => OnSystemVisualSettingsChanged(e);
 
         internal override bool IsHighContrast => false;
+    }
+
+    private static unsafe string[] GetNativeItemTexts(ComboBox control)
+    {
+        int count = (int)PInvokeCore.SendMessage(control, PInvoke.CB_GETCOUNT);
+        string[] texts = new string[count];
+        for (int i = 0; i < count; i++)
+        {
+            int length = (int)PInvokeCore.SendMessage(control, PInvoke.CB_GETLBTEXTLEN, (WPARAM)i);
+            char[] buffer = new char[length + 1];
+            fixed (char* b = buffer)
+            {
+                PInvokeCore.SendMessage(control, PInvoke.CB_GETLBTEXT, (WPARAM)i, (LPARAM)b);
+            }
+
+            texts[i] = new string(buffer, 0, length);
+        }
+
+        return texts;
+    }
+
+    private sealed class ItemWithToString(string text)
+    {
+        public override string ToString() => text;
     }
 
     private static int CountPixels(
