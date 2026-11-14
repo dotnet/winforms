@@ -4,6 +4,8 @@
 #nullable disable
 
 using System.ComponentModel;
+using System.Collections;
+using System.Reflection;
 using System.Windows.Forms.Design;
 using System.Windows.Forms.TestUtilities;
 using Moq;
@@ -73,5 +75,76 @@ public class CursorEditorTests
     {
         CursorEditor editor = new();
         Assert.False(editor.GetPaintValueSupported(context));
+    }
+
+    [WinFormsFact]
+    public void CursorEditor_CursorUI_CursorWidth_UsesWidestStandardCursor()
+    {
+        Type type = typeof(CursorEditor).GetNestedType("CursorUI", BindingFlags.NonPublic | BindingFlags.Instance)!;
+        using ListBox cursorUI = (ListBox)Activator.CreateInstance(type)!;
+        int dpi = cursorUI.DeviceDpi;
+
+        MethodInfo getCursorWidthForDpiMethod = type.GetMethod("GetCursorWidthForDpi", BindingFlags.NonPublic | BindingFlags.Instance)!;
+        FieldInfo cursorWidthField = type.GetField("_cursorWidth", BindingFlags.NonPublic | BindingFlags.Instance)!;
+
+        int expectedWidth = 0;
+        foreach (object item in cursorUI.Items)
+        {
+            if (item is Cursor cursor)
+            {
+                int width = (int)getCursorWidthForDpiMethod.Invoke(cursorUI, [cursor, dpi])!;
+                expectedWidth = Math.Max(expectedWidth, width);
+            }
+        }
+
+        Assert.NotEqual(0, expectedWidth);
+        Assert.Equal(expectedWidth, (int)cursorWidthField.GetValue(cursorUI)!);
+    }
+
+    [WinFormsFact]
+    public void CursorEditor_CursorUI_Start_RebuildsCursorWidthCache()
+    {
+        Type type = typeof(CursorEditor).GetNestedType("CursorUI", BindingFlags.NonPublic | BindingFlags.Instance)!;
+        using ListBox cursorUI = (ListBox)Activator.CreateInstance(type)!;
+
+        FieldInfo cursorWidthCacheField = type.GetField("_cursorWidthCache", BindingFlags.NonPublic | BindingFlags.Instance)!;
+        MethodInfo endMethod = type.GetMethod("End", BindingFlags.Public | BindingFlags.Instance)!;
+        MethodInfo startMethod = type.GetMethod("Start", BindingFlags.Public | BindingFlags.Instance)!;
+
+        IDictionary cache = (IDictionary)cursorWidthCacheField.GetValue(cursorUI)!;
+        Assert.NotEmpty(cache);
+
+        endMethod.Invoke(cursorUI, null);
+        Assert.Empty(cache);
+
+        Mock<IWindowsFormsEditorService> mockEditorService = new(MockBehavior.Strict);
+        startMethod.Invoke(cursorUI, [mockEditorService.Object, Cursors.Default]);
+        Assert.NotEmpty(cache);
+    }
+
+    [WinFormsFact]
+    public void CursorEditor_CursorUI_OnDrawItem_RestoresGraphicsClip()
+    {
+        Type type = typeof(CursorEditor).GetNestedType("CursorUI", BindingFlags.NonPublic | BindingFlags.Instance)!;
+        using ListBox cursorUI = (ListBox)Activator.CreateInstance(type)!;
+        MethodInfo onDrawItemMethod = type.GetMethod("OnDrawItem", BindingFlags.NonPublic | BindingFlags.Instance)!;
+
+        using Bitmap image = new(600, 400);
+        using Graphics graphics = Graphics.FromImage(image);
+        graphics.SetClip(new Rectangle(10, 10, 580, 380));
+        Rectangle initialClipBounds = Rectangle.Round(graphics.ClipBounds);
+
+        using DrawItemEventArgs args = new(
+            graphics,
+            SystemFonts.DefaultFont,
+            new Rectangle(0, 0, 500, cursorUI.ItemHeight),
+            index: 0,
+            DrawItemState.Default,
+            SystemColors.WindowText,
+            SystemColors.Window);
+
+        onDrawItemMethod.Invoke(cursorUI, [args]);
+
+        Assert.Equal(initialClipBounds, Rectangle.Round(graphics.ClipBounds));
     }
 }
