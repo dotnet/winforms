@@ -29,6 +29,8 @@ internal unsafe partial class Composition<TOleServices, TNrbfSerializer, TDataFo
     /// </remarks>
     private sealed unsafe class NativeToManagedAdapter : IDataObjectInternal, Com.IDataObject.Interface
     {
+        public bool SupportsTypedData => true;
+
         private readonly AgileComPointer<Com.IDataObject> _nativeDataObject;
 
         public NativeToManagedAdapter(Com.IDataObject* dataObject)
