@@ -1,4 +1,4 @@
-// Licensed to the .NET Foundation under one or more agreements.
+﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
 using System.Drawing;
@@ -12,7 +12,7 @@ namespace System.Windows.Forms.Rendering.CheckBox;
 /// </summary>
 internal sealed class AnimatedCheckGlyphRenderer : AnimatedControlRenderer
 {
-    private const int AnimationDuration = 220;
+    private const int AnimationDuration = 150;
 
     private float _checkAlphaCurrent;
     private float _checkAlphaStart;
