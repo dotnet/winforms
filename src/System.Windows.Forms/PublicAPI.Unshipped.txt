@@ -1,5 +1,6 @@
 #nullable enable
 override System.Windows.Forms.GroupBox.OnPaintBackground(System.Windows.Forms.PaintEventArgs! pevent) -> void
+override System.Windows.Forms.UpDownBase.OnParentFontChanged(System.EventArgs! e) -> void
 static System.Windows.Forms.Application.SystemVisualSettings.get -> System.Windows.Forms.SystemVisualSettings!
 static System.Windows.Forms.Application.SystemVisualSettingsChanged -> System.Windows.Forms.SystemVisualSettingsChangedEventHandler?
 System.Windows.Forms.PropertyGrid.VisualStylesModeChanged -> System.EventHandler?
@@ -97,6 +98,8 @@ override System.Windows.Forms.RadioButton.Dispose(bool disposing) -> void
 override System.Windows.Forms.RadioButton.OnPaint(System.Windows.Forms.PaintEventArgs! pevent) -> void
 override System.Windows.Forms.RadioButton.OnSystemColorsChanged(System.EventArgs! e) -> void
 override System.Windows.Forms.RadioButton.OnVisualStylesModeChanged(System.EventArgs! e) -> void
+override System.Windows.Forms.UpDownBase.DoubleBuffered.get -> bool
+override System.Windows.Forms.UpDownBase.DoubleBuffered.set -> void
 override System.Windows.Forms.UpDownBase.OnVisualStylesModeChanged(System.EventArgs! e) -> void
 static System.Windows.Forms.Application.DefaultVisualStylesMode.get -> System.Windows.Forms.VisualStylesMode
 static System.Windows.Forms.Application.SetDefaultVisualStylesMode(System.Windows.Forms.VisualStylesMode styleSetting) -> void
