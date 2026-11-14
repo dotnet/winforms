@@ -629,6 +629,16 @@ public abstract partial class UpDownBase : ContainerControl
     /// </summary>
     protected override void OnPaint(PaintEventArgs e)
     {
+        if (!UseSideBySideButtons && Padding != Padding.Empty)
+        {
+            // Opaque suppresses background painting, leaving the space around the child controls unpainted.
+            Color backgroundColor = !Enabled && !_upDownEdit.ShouldSerializeBackColor()
+                ? SystemColors.Control
+                : BackColor;
+            using var backgroundBrush = backgroundColor.GetCachedSolidBrushScope();
+            e.Graphics.FillRectangle(backgroundBrush, Rectangle.Intersect(ClientRectangle, e.ClipRectangle));
+        }
+
         base.OnPaint(e);
 
         if (UseSideBySideButtons)
