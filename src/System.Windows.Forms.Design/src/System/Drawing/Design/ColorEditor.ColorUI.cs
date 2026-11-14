@@ -274,7 +274,14 @@ public partial class ColorEditor
 
             _editor.PaintValue(value, graphics, new Rectangle(die.Bounds.X + 2, die.Bounds.Y + 2, 22, die.Bounds.Height - 4));
             graphics.DrawRectangle(SystemPens.WindowText, new Rectangle(die.Bounds.X + 2, die.Bounds.Y + 2, 22 - 1, die.Bounds.Height - 4 - 1));
-            Brush foreBrush = new SolidBrush(die.ForeColor);
+
+            Color textColor = die.ForeColor;
+            if (Application.IsDarkModeEnabled && die.State.HasFlag(DrawItemState.Selected))
+            {
+                textColor = SystemColors.ControlText;
+            }
+
+            Brush foreBrush = new SolidBrush(textColor);
             graphics.DrawString(value.Name, font, foreBrush, die.Bounds.X + 26, die.Bounds.Y);
             foreBrush.Dispose();
         }
