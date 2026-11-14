@@ -1362,6 +1362,11 @@
         <target state="translated">Родительская форма данного вмещающего элемента управления.</target>
         <note />
       </trans-unit>
+      <trans-unit id="ContextMenuStripDefaultAccessibleName">
+        <source>Context</source>
+        <target state="new">Context</target>
+        <note>Default accessible name of a context menu. Screen readers announce it followed by the role, as "Context menu", the same way they do for a native Windows context menu.</note>
+      </trans-unit>
       <trans-unit id="ContextMenuStripSourceControlDescr">
         <source>The last control that caused this context menu strip to be displayed.</source>
         <target state="translated">Последний элемент управления, вызвавший отображение полосы данного контекстного меню.</target>

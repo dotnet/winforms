@@ -1,4 +1,4 @@
-﻿// Licensed to the .NET Foundation under one or more agreements.
+// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
 using Windows.Win32.System.Variant;
@@ -28,8 +28,16 @@ public partial class ToolStripDropDown
                 // Special case: If an explicit name has been set in the AccessibleName property, use that.
                 // Note: Any non-null value in AccessibleName overrides the default accessible name logic,
                 // even an empty string (this is the only way to *force* the accessible name to be blank).
-                return this.TryGetOwnerAs(out ToolStripDropDown? owner)
-                    && owner.AccessibleName is { } name ? name : owner?.OwnerItem?.AccessibilityObject.Name;
+                if (this.TryGetOwnerAs(out ToolStripDropDown? owner) && owner.AccessibleName is { } name)
+                {
+                    return name;
+                }
+
+                // A context menu has no owner item to take the name from. Native Windows context menus are
+                // named "Context", which screen readers announce followed by the role: "Context menu".
+                return owner is ContextMenuStrip && owner.OwnerItem is null
+                    ? SR.ContextMenuStripDefaultAccessibleName
+                    : owner?.OwnerItem?.AccessibilityObject.Name;
             }
             set
             {
@@ -47,6 +55,7 @@ public partial class ToolStripDropDown
             IsInternal
             && this.TryGetOwnerAs(out ToolStripDropDown? owner)
             && owner.AccessibleName is null
+            && !(owner is ContextMenuStrip && owner.OwnerItem is null) // the default name comes from the Name property
             && (owner?.OwnerItem?.AccessibilityObject.CanGetNameInternal ?? true);
 
         internal override BSTR GetNameInternal()
