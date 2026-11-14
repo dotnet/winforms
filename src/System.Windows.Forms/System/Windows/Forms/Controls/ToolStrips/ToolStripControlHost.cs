@@ -17,6 +17,9 @@ public partial class ToolStripControlHost : ToolStripItem
     private int _suspendSyncSizeCount;
     private ContentAlignment _controlAlign = ContentAlignment.MiddleCenter;
     private bool _inSetVisibleCore;
+    private bool _isUpdatingHostedControlVisualStylesMode;
+    private bool _hostedControlVisualStylesModeForced;
+    private VisualStylesMode _hostedControlVisualStylesModeBeforeForce = VisualStylesMode.Inherit;
 
     internal static readonly object s_gotFocusEvent = new();
     internal static readonly object s_lostFocusEvent = new();
@@ -576,6 +579,31 @@ public partial class ToolStripControlHost : ToolStripItem
 
     private void HandleTextChanged(object? sender, EventArgs e) => OnTextChanged(e);
 
+    private void HandleVisualStylesModeChanged(object? sender, EventArgs e)
+    {
+        if (_isUpdatingHostedControlVisualStylesMode)
+        {
+            return;
+        }
+
+        // If the consumer explicitly requests a non-modern mode while hosted, stop tracking a prior
+        // forced Classic so we don't "restore" a stale modern mode when the host is removed.
+        if (_hostedControlVisualStylesModeForced
+            && _control is not null
+            && ShouldForceHostedControlClassicVisualStylesMode())
+        {
+            VisualStylesMode mode = _control.VisualStylesMode;
+            if (mode is VisualStylesMode.Classic or VisualStylesMode.Disabled)
+            {
+                _hostedControlVisualStylesModeBeforeForce = mode;
+                _hostedControlVisualStylesModeForced = false;
+                return;
+            }
+        }
+
+        ApplyHostedControlVisualStylesModePolicy();
+    }
+
     private void HandleControlVisibleChanged(object? sender, EventArgs e)
     {
         // check the STATE_VISIBLE flag rather than using Control.Visible.
@@ -684,6 +712,8 @@ public partial class ToolStripControlHost : ToolStripItem
     {
         if (oldParent is not null && Owner is null && newParent is null && _control is not null)
         {
+            RestoreHostedControlVisualStylesMode();
+
             // if we've really been removed from the item collection,
             // politely remove ourselves from the control collection
             ReadOnlyControlCollection? oldControlCollection
@@ -696,6 +726,20 @@ public partial class ToolStripControlHost : ToolStripItem
         }
 
         base.OnParentChanged(oldParent, newParent);
+    }
+
+    protected override void OnOwnerChanged(EventArgs e)
+    {
+        base.OnOwnerChanged(e);
+
+        if (Owner is null)
+        {
+            RestoreHostedControlVisualStylesMode();
+        }
+        else
+        {
+            ApplyHostedControlVisualStylesModePolicy();
+        }
     }
 
     /// <summary>
@@ -739,6 +783,7 @@ public partial class ToolStripControlHost : ToolStripItem
             control.RightToLeftChanged += HandleRightToLeftChanged;
             control.TextChanged += HandleTextChanged;
             control.VisibleChanged += HandleControlVisibleChanged;
+            control.VisualStylesModeChanged += HandleVisualStylesModeChanged;
             control.Validating += HandleValidating;
             control.Validated += HandleValidated;
         }
@@ -784,6 +829,7 @@ public partial class ToolStripControlHost : ToolStripItem
             control.RightToLeftChanged -= HandleRightToLeftChanged;
             control.TextChanged -= HandleTextChanged;
             control.VisibleChanged -= HandleControlVisibleChanged;
+            control.VisualStylesModeChanged -= HandleVisualStylesModeChanged;
             control.Validating -= HandleValidating;
             control.Validated -= HandleValidated;
         }
@@ -817,6 +863,52 @@ public partial class ToolStripControlHost : ToolStripItem
 
         ReadOnlyControlCollection? newControls = GetControlCollection(parent);
         newControls?.AddInternal(_control);
+        ApplyHostedControlVisualStylesModePolicy();
+    }
+
+    private bool ShouldForceHostedControlClassicVisualStylesMode()
+        => Owner is not null;
+
+    private void ApplyHostedControlVisualStylesModePolicy()
+    {
+        if (_control is null || !ShouldForceHostedControlClassicVisualStylesMode())
+        {
+            return;
+        }
+
+        VisualStylesMode mode = _control.VisualStylesMode;
+        if (mode is VisualStylesMode.Classic or VisualStylesMode.Disabled)
+        {
+            return;
+        }
+
+        _hostedControlVisualStylesModeBeforeForce = mode;
+        _hostedControlVisualStylesModeForced = true;
+        UpdateHostedControlVisualStylesMode(VisualStylesMode.Classic);
+    }
+
+    private void RestoreHostedControlVisualStylesMode()
+    {
+        if (!_hostedControlVisualStylesModeForced || _control is null)
+        {
+            return;
+        }
+
+        UpdateHostedControlVisualStylesMode(_hostedControlVisualStylesModeBeforeForce);
+        _hostedControlVisualStylesModeForced = false;
+    }
+
+    private void UpdateHostedControlVisualStylesMode(VisualStylesMode mode)
+    {
+        _isUpdatingHostedControlVisualStylesMode = true;
+        try
+        {
+            _control.VisualStylesMode = mode;
+        }
+        finally
+        {
+            _isUpdatingHostedControlVisualStylesMode = false;
+        }
     }
 
     protected virtual void OnHostedControlResize(EventArgs e)
