@@ -894,7 +894,9 @@ public partial class DataGridViewImageCell : DataGridViewCell
             && DataGridView.Focused)
         {
             // Draw focus rectangle
-            ControlPaint.DrawFocusRectangle(g, valBounds, Color.Empty, brushColor);
+            Color focusForeColor = cellSelected ? cellStyle.SelectionForeColor : cellStyle.ForeColor;
+            Color focusBackColor = cellSelected ? cellStyle.SelectionBackColor : cellStyle.BackColor;
+            DrawFocusRectangle(g, valBounds, focusForeColor, focusBackColor);
         }
 
         if (paint && DataGridView.ShowCellErrors && PaintErrorIcon(paintParts))
