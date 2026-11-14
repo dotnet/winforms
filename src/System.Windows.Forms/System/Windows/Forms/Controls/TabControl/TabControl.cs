@@ -1299,6 +1299,13 @@ public partial class TabControl : Control
         if (!_suspendDarkModeChange && Application.IsDarkModeEnabled)
         {
             PInvoke.SetWindowTheme(HWND, null, $"{DarkModeIdentifier}::{BannerContainerThemeIdentifier}");
+
+            HWND toolTipHandle = (HWND)PInvokeCore.SendMessage(this, PInvoke.TCM_GETTOOLTIPS);
+            if (!toolTipHandle.IsNull)
+            {
+                PInvoke.SetWindowTheme(toolTipHandle, $"{DarkModeIdentifier}_{ExplorerThemeIdentifier}", null);
+            }
+
             PInvokeCore.EnumChildWindows(this, StyleChildren);
         }
 
