@@ -12,6 +12,57 @@ namespace System.Windows.Forms.Tests;
 
 public class ToolStripItemDropDownTests
 {
+    [WinFormsTheory]
+    // Right edge: prefer left to avoid the neighboring monitor.
+    [InlineData(ToolStripDropDownDirection.Right, 1920, 1620, ToolStripDropDownDirection.Left)]
+    // Left edge: prefer right to avoid the neighboring monitor.
+    [InlineData(ToolStripDropDownDirection.Left, -220, 40, ToolStripDropDownDirection.Right)]
+    // Right-to-left: a left-opening submenu at the right edge should stay left.
+    [InlineData(ToolStripDropDownDirection.Left, 1620, 1920, ToolStripDropDownDirection.Left)]
+    // When both directions fit equally, retain the requested direction.
+    [InlineData(ToolStripDropDownDirection.Right, 500, 1000, ToolStripDropDownDirection.Right)]
+    // Vertical dropdowns are not changed by the horizontal placement helper.
+    [InlineData(ToolStripDropDownDirection.BelowLeft, -220, 40, ToolStripDropDownDirection.BelowLeft)]
+    public void ToolStripDropDownItem_GetPreferredHorizontalDropDownDirection_MonitorBoundary(
+        ToolStripDropDownDirection currentDirection,
+        int currentX,
+        int alternateX,
+        ToolStripDropDownDirection expectedDirection)
+    {
+        // Simulate two adjacent 1920px monitors without depending on the CI monitor layout.
+        Rectangle ownerMonitorBounds = new(0, 0, 1920, 1080);
+        Rectangle currentBounds = new(currentX, 200, 250, 300);
+        Rectangle alternateBounds = new(alternateX, 200, 250, 300);
+
+        ToolStripDropDownDirection direction = ToolStripDropDownItem.GetPreferredHorizontalDropDownDirection(
+            currentDirection,
+            currentBounds,
+            alternateBounds,
+            ownerMonitorBounds);
+
+        Assert.Equal(expectedDirection, direction);
+    }
+
+    [WinFormsFact]
+    public void ToolStripDropDownItem_GetPreferredHorizontalDropDownDirection_RespectsFullscreenOwnerBounds()
+    {
+        // A left-side taskbar reduces the working area, but a fullscreen owner may use the whole monitor.
+        Rectangle fullscreenBounds = new(0, 0, 1920, 1080);
+        Rectangle workingAreaBounds = new(80, 0, 1840, 1080);
+        Rectangle currentBounds = new(0, 200, 250, 300);
+        Rectangle alternateBounds = new(300, 200, 250, 300);
+
+        Assert.Equal(
+            ToolStripDropDownDirection.Right,
+            ToolStripDropDownItem.GetPreferredHorizontalDropDownDirection(
+                ToolStripDropDownDirection.Right, currentBounds, alternateBounds, fullscreenBounds));
+
+        Assert.Equal(
+            ToolStripDropDownDirection.Left,
+            ToolStripDropDownItem.GetPreferredHorizontalDropDownDirection(
+                ToolStripDropDownDirection.Right, currentBounds, alternateBounds, workingAreaBounds));
+    }
+
     [WinFormsFact]
     public void ToolStripDropDownItem_Ctor_Default()
     {

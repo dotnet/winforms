@@ -136,23 +136,51 @@ public abstract class ToolStripDropDownItem : ToolStripItem
 
                     if (IsOnDropDown)
                     {
-                        // we gotta make sure that we don't collide with the existing menu.
+                        // Make sure that we don't collide with the existing menu.
                         Rectangle bounds = GetDropDownBounds(dropDownDirection);
-                        Rectangle ownerItemBounds = new(TranslatePoint(Point.Empty, ToolStripPointType.ToolStripItemCoords, ToolStripPointType.ScreenCoords), Size);
+                        Rectangle ownerItemBounds = new(
+                            TranslatePoint(Point.Empty, ToolStripPointType.ToolStripItemCoords, ToolStripPointType.ScreenCoords),
+                            Size);
+
                         Rectangle intersectionBetweenChildAndParent = Rectangle.Intersect(bounds, ownerItemBounds);
 
-                        // grab the intersection
                         if (intersectionBetweenChildAndParent.Width >= 2)
                         {
-                            RightToLeft toggledRightToLeft = (RightToLeft == RightToLeft.Yes) ? RightToLeft.No : RightToLeft.Yes;
-                            ToolStripDropDownDirection newDropDownDirection = RTLTranslateDropDownDirection(dropDownDirection, toggledRightToLeft);
+                            RightToLeft toggledRightToLeft = RightToLeft == RightToLeft.Yes
+                                ? RightToLeft.No
+                                : RightToLeft.Yes;
 
-                            // verify that changing the dropdown direction actually causes less intersection.
-                            int newIntersectionWidth = Rectangle.Intersect(GetDropDownBounds(newDropDownDirection), ownerItemBounds).Width;
+                            ToolStripDropDownDirection newDropDownDirection =
+                                RTLTranslateDropDownDirection(dropDownDirection, toggledRightToLeft);
+
+                            // Verify that changing the dropdown direction actually causes less intersection.
+                            int newIntersectionWidth =
+                                Rectangle.Intersect(GetDropDownBounds(newDropDownDirection), ownerItemBounds).Width;
+
                             if (newIntersectionWidth < intersectionBetweenChildAndParent.Width)
                             {
                                 dropDownDirection = newDropDownDirection;
+                                bounds = GetDropDownBounds(dropDownDirection);
                             }
+                        }
+
+                        // Keep horizontal submenus on the same monitor as their owner item.
+                        if (dropDownDirection is ToolStripDropDownDirection.Left or ToolStripDropDownDirection.Right)
+                        {
+                            Rectangle availableBounds = WindowsFormsUtils.GetAvailableScreenBounds(
+                                ownerItemBounds,
+                                Owner?.GetToplevelOwnerToolStrip());
+
+                            ToolStripDropDownDirection alternateDirection =
+                                dropDownDirection == ToolStripDropDownDirection.Right
+                                    ? ToolStripDropDownDirection.Left
+                                    : ToolStripDropDownDirection.Right;
+
+                            dropDownDirection = GetPreferredHorizontalDropDownDirection(
+                                dropDownDirection,
+                                bounds,
+                                GetDropDownBounds(alternateDirection),
+                                availableBounds);
                         }
                     }
 
@@ -295,6 +323,32 @@ public abstract class ToolStripDropDownItem : ToolStripItem
     {
         // AutoGenerate a ToolStrip DropDown - set the property so we hook events
         return new ToolStripDropDown(this, true);
+    }
+
+    // This geometry-only helper allows monitor-boundary cases to be tested without changing the CI display setup.
+    internal static ToolStripDropDownDirection GetPreferredHorizontalDropDownDirection(
+        ToolStripDropDownDirection currentDirection,
+        Rectangle currentBounds,
+        Rectangle alternateBounds,
+        Rectangle availableBounds)
+    {
+        if (currentDirection is not ToolStripDropDownDirection.Left and not ToolStripDropDownDirection.Right)
+        {
+            return currentDirection;
+        }
+
+        Rectangle currentVisibleBounds = Rectangle.Intersect(availableBounds, currentBounds);
+        Rectangle alternateVisibleBounds = Rectangle.Intersect(availableBounds, alternateBounds);
+
+        long currentVisibleArea = (long)currentVisibleBounds.Width * currentVisibleBounds.Height;
+        long alternateVisibleArea = (long)alternateVisibleBounds.Width * alternateVisibleBounds.Height;
+
+        // Preserve the current direction when the two choices have equal visible area.
+        return alternateVisibleArea > currentVisibleArea
+            ? currentDirection == ToolStripDropDownDirection.Right
+                ? ToolStripDropDownDirection.Left
+                : ToolStripDropDownDirection.Right
+            : currentDirection;
     }
 
     private Rectangle DropDownDirectionToDropDownBounds(ToolStripDropDownDirection dropDownDirection, Rectangle dropDownBounds)
