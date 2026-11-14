@@ -6,6 +6,32 @@
 configurations](https://aka.ms/applicationconfiguration) capabilities that are defined via MSBuils properties and are emitted into source code using source
 generators at compile time. This document outlines expansion of those application-wide configurations further to cover runtime config options for .NET Windows Forms applications.
 
+### Windows Forms compatibility switches
+
+The following switches configure Windows Forms compatibility behavior. Create a `runtimeconfig.template.json` file next to the project file and add a switch when an application needs to override its default behavior. During the build, its settings are included in the generated `<ProjectName>.runtimeconfig.json` file:
+
+```json
+{
+  "configProperties": {
+    "System.Windows.Forms.ScaleTopLevelFormMinMaxSizeForDpi": true
+  }
+}
+```
+
+| Switch | Behavior when `true` |
+| --- | --- |
+| `System.Windows.Forms.DataGridViewDarkModeTheming` | Applies Windows Forms dark mode theming to `DataGridView` when application dark mode is enabled. Defaults to `true` for applications targeting .NET 10 or later. Set to `false` to preserve the appearance from earlier target frameworks. |
+| `System.Windows.Forms.ApplyParentFontToMenus` | Applies a form or parent control's font, including the font specified by `Application.SetDefaultFont`, to menus. |
+| `System.Windows.Forms.ServicePointManagerCheckCrl` | Configures `PictureBox` image downloads to check certificate revocation lists. Defaults to `true` for applications targeting .NET 8 or later. |
+| `System.Windows.Forms.TrackBarModernRendering` | Uses the modern TrackBar rendering behavior. Defaults to `true` for applications targeting .NET 8 or later. |
+| `System.Windows.Forms.DoNotCatchUnhandledExceptions` | Rethrows unhandled exceptions on Windows Forms threads instead of presenting them in a dialog or swallowing them when the application is not interactive. |
+| `System.Windows.Forms.DataGridViewUIAStartRowCountAtZero` | Uses zero-based row indexes in DataGridView UI Automation providers. |
+| `Switch.System.Windows.Forms.AccessibleObject.NoClientNotifications` | Prevents accessible objects from sending notifications to UI Automation clients. |
+| `Switch.System.Windows.Forms.EnableMsoComponentManager` | Registers Windows Forms threads with existing `IMsoComponentManager` instances. |
+| `System.Windows.Forms.TreeNodeCollectionAddRangeRespectsSortOrder` | Makes `TreeNodeCollection.AddRange` insert nodes in sorted order when its owning TreeView has `Sorted` set to `true`. Defaults to `true`. Set to `false` for the previous .NET and .NET Framework behavior. |
+| `System.Windows.Forms.TreeView.MoveTreeViewTextLocationOnePixel` | Moves TreeView node text one pixel to the right. |
+
+
 ## .NET Framework runtime configuration
 
 .NET Framework Windows Forms applications use `app.config` to define runtime configurations and application-wide settings. The following are the various sections in the app.config that define the application's runtime behavior.
