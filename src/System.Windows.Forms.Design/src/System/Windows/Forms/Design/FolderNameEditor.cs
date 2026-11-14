@@ -12,19 +12,19 @@ namespace System.Windows.Forms.Design;
 [CLSCompliant(false)]
 public partial class FolderNameEditor : UITypeEditor
 {
-    private FolderBrowser? _folderBrowser;
-
     public override object? EditValue(ITypeDescriptorContext? context, IServiceProvider provider, object? value)
     {
-        if (_folderBrowser is null)
-        {
-            _folderBrowser = new FolderBrowser();
-            InitializeDialog(_folderBrowser);
-        }
+        // The dialog is created locally and disposed at the end of the call so its
+        // native resources (Component/CommonDialog state) are released, and no stale
+        // configuration leaks between successive invocations of EditValue.
+        using FolderBrowserDialog folderBrowserDialog = new();
+        InitializeDialog(folderBrowserDialog);
 
-        if (_folderBrowser.ShowDialog() == DialogResult.OK)
+        folderBrowserDialog.SelectedPath = value as string ?? string.Empty;
+
+        if (folderBrowserDialog.ShowDialog() == DialogResult.OK)
         {
-            return _folderBrowser.DirectoryPath;
+            return folderBrowserDialog.SelectedPath;
         }
 
         return value;
@@ -37,7 +37,17 @@ public partial class FolderNameEditor : UITypeEditor
     ///  Initializes the folder browser dialog when it is created. This gives you an opportunity
     ///  to configure the dialog as you please. The default implementation provides a generic folder browser.
     /// </summary>
+    [Obsolete]
+    [EditorBrowsable(EditorBrowsableState.Never)]
     protected virtual void InitializeDialog(FolderBrowser folderBrowser)
+    {
+    }
+
+    /// <summary>
+    ///  Initializes the folder browser dialog when it is created. This gives you an opportunity
+    ///  to configure the dialog as you please. The default implementation provides a generic folder browser.
+    /// </summary>
+    protected virtual void InitializeDialog(FolderBrowserDialog folderBrowserDialog)
     {
     }
 }
