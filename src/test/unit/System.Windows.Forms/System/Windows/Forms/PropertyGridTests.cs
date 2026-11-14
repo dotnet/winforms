@@ -2448,6 +2448,54 @@ public partial class PropertyGridTests
     }
 
     [WinFormsFact]
+    public void PropertyGrid_PropertyTabCollection_ComponentWithDocumentScope()
+    {
+        using PropertyGrid grid = new();
+
+        var container = new Container();
+        var component = new TestComponent();
+        container.Add(component);
+
+        var mockComponentChangeService = new Mock<IComponentChangeService>(MockBehavior.Strict);
+        var mockPropertyValueUIService = new Mock<IPropertyValueUIService>(MockBehavior.Strict);
+        var mockDesignerHost = new Mock<IDesignerHost>(MockBehavior.Strict);
+        mockDesignerHost
+          .Setup(h => h.Container)
+          .Returns(container);
+        mockDesignerHost
+          .Setup(h => h.GetService(typeof(IComponentChangeService)))
+          .Returns(mockComponentChangeService.Object);
+        mockDesignerHost
+            .Setup(h => h.GetService(typeof(IPropertyValueUIService)))
+            .Returns(mockPropertyValueUIService.Object);
+
+        grid.ActiveDesigner = mockDesignerHost.Object;
+        Assert.Equal(2, grid.PropertyTabs.Count);
+
+        grid.SelectedObjects = Array.Empty<object>();
+
+        container.Remove(component);
+        mockComponentChangeService.Raise(x => x.ComponentRemoved += null, mockComponentChangeService.Object, new ComponentEventArgs(component));
+        Assert.Single(grid.PropertyTabs);
+
+        container.Add(component);
+        mockComponentChangeService.Raise(x => x.ComponentAdded += null, mockComponentChangeService.Object, new ComponentEventArgs(component));
+        Assert.Equal(2, grid.PropertyTabs.Count);
+    }
+
+    [PropertyTab(typeof(TestPropertyTab), PropertyTabScope.Document)]
+    private class TestComponent : IComponent
+    {
+        public ISite Site { get; set; }
+
+#pragma warning disable CS0067 // Required by Interface
+        public event EventHandler Disposed;
+#pragma warning restore
+
+        public void Dispose() {}
+    }
+
+    [WinFormsFact]
     public void PropertyGrid_SelectedGridItem_SetNull_ThrowsArgumentNullException()
     {
         using PropertyGrid control = new();
