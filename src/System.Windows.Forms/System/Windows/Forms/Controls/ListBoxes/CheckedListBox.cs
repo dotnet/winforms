@@ -935,6 +935,10 @@ public partial class CheckedListBox : ListBox
     {
         switch (m.MsgInternal)
         {
+            case PInvokeCore.WM_CHAR when (char)(uint)m.WParamInternal == ' ':
+                LbnSelChange();
+                m.ResultInternal = (LRESULT)0;
+                break;
             case MessageId.WM_REFLECT_CHARTOITEM:
                 m.ResultInternal = (LRESULT)(-1);
                 break;
