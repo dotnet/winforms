@@ -52,6 +52,7 @@ public unsafe class ClipboardCoreTests
         static bool IOleServices.TryGetObjectFromDataObject<T>(IDataObject* dataObject, string requestedFormat, [NotNullWhen(true)] out T data) => throw new NotImplementedException();
         static void IOleServices.ValidateDataStoreData(ref string format, bool autoConvert, object? data) => throw new NotImplementedException();
 #else
+        bool IOleServices.UseNativeClipboardTextFallback => false;
         TYMED IOleServices.AllowedTymeds => throw new NotImplementedException();
         bool IOleServices.AllowTypeWithoutResolver<T>() => throw new NotImplementedException();
         IComVisibleDataObject IOleServices.CreateDataObject() => throw new NotImplementedException();
