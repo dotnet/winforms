@@ -31,6 +31,8 @@ public partial class FormTests
             _ = panel.Handle;
             _ = button.Handle;
 
+            form.PerformAutoScale();
+            SizeF dimensions = form.CurrentAutoScaleDimensions;
             int oldDpi = form.DeviceDpi;
             int newDpi = oldDpi * 2;
             Rectangle oldBounds = form.Bounds;
@@ -91,10 +93,12 @@ public partial class FormTests
             panel.DeviceDpi.Should().Be(newDpi);
             button.DeviceDpi.Should().Be(newDpi);
             form.Bounds.Should().Be(suggested);
-            panel.Width.Should().BeGreaterThan(panelBounds.Width);
-            panel.Height.Should().BeGreaterThan(panelBounds.Height);
-            button.Width.Should().BeGreaterThan(buttonBounds.Width);
-            button.Height.Should().BeGreaterThan(buttonBounds.Height);
+            // Children are scaled exactly once by the font autoscale factor, not twice.
+            SizeF factor = ContainerControl.GetCurrentAutoScaleFactor(form.CurrentAutoScaleDimensions, dimensions);
+            factor.Width.Should().BeGreaterThan(1);
+            factor.Height.Should().BeGreaterThan(1);
+            panel.Bounds.Should().Be(Scale(panelBounds, factor));
+            button.Bounds.Should().Be(Scale(buttonBounds, factor));
             form.IsHandleCreated.Should().BeTrue();
             panel.IsHandleCreated.Should().BeTrue();
             button.IsHandleCreated.Should().BeTrue();
@@ -230,6 +234,12 @@ public partial class FormTests
         handle.ExitCode.Should().Be(RemoteExecutor.SuccessExitCode);
     }
 
+    private static Rectangle Scale(Rectangle bounds, SizeF factor) => new(
+        (int)Math.Round(bounds.X * factor.Width),
+        (int)Math.Round(bounds.Y * factor.Height),
+        (int)Math.Round(bounds.Width * factor.Width),
+        (int)Math.Round(bounds.Height * factor.Height));
+
     private static void AssertWithin(Rectangle actual, Rectangle expected, int tolerance)
     {
         Math.Abs(actual.X - expected.X).Should().BeLessThanOrEqualTo(tolerance);
@@ -242,7 +252,7 @@ public partial class FormTests
     private static unsafe Size GetDpiScaledSize(DpiTestForm form, int dpi)
     {
         SIZE size = default;
-        Message m = Message.Create(form.Handle, (int)PInvokeCore.WM_GETDPISCALEDSIZE, (nint)PARAM.FromLowHigh(dpi, dpi), (nint)(&size));
+        Message m = Message.Create(form.Handle, (int)PInvokeCore.WM_GETDPISCALEDSIZE, dpi, (nint)(&size));
         form.WndProc(ref m);
         ((nint)m.Result).Should().Be(1);
         return new Size(size.cx, size.cy);
