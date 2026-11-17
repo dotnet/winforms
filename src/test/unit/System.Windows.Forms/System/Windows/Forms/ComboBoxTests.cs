@@ -3014,7 +3014,7 @@ public class ComboBoxTests
 
         Assert.True(control.IsHandleCreated);
         Assert.Equal(panel.DeviceDpi, control.DeviceDpi);
-        Assert.Equal(font.Size * parentDpi / originalDpi, control.Font.Size);
+        Assert.Equal(font.Size * parentDpi / originalDpi, control.Font.Size, 0.01f);
         Assert.Equal(1, fontChangedCallCount);
         Assert.Equal(1, handleCreatedCallCount);
         Assert.Equal(0, handleDestroyedCallCount);
@@ -3038,6 +3038,7 @@ public class ComboBoxTests
             Assert.Equal("eco", control.SelectedText);
         }
 
+        object originalStringSource = control.TestAccessor.Dynamic._stringSource;
         control.TestAccessor.Dynamic.RecreateHandle();
 
         Assert.True(control.IsHandleCreated);
@@ -3047,7 +3048,12 @@ public class ComboBoxTests
         Assert.Equal(items, GetNativeItemTexts(control));
         Assert.Equal(1, control.SelectedIndex);
         Assert.Equal("Second", control.Text);
-        Assert.Equal(expectAutoCompleteBound, control.TestAccessor.Dynamic._stringSource is not null);
+        object recreatedStringSource = control.TestAccessor.Dynamic._stringSource;
+        Assert.Equal(expectAutoCompleteBound, recreatedStringSource is not null);
+        if (expectAutoCompleteBound)
+        {
+            Assert.NotSame(originalStringSource, recreatedStringSource);
+        }
     }
 
     [WinFormsTheory]
@@ -3055,8 +3061,8 @@ public class ComboBoxTests
     [InlineData(false)]
     public void ComboBox_DpiScaledDuringHandleCreation_FontChangedByHandler_DoesNotRecurse(bool scaleDown)
     {
-        // A FontChanged handler that touches the Handle and the font while the handle is still being created
-        // by DPI scaling must not recurse into another handle creation or destroy the first handle.
+        // A FontChanged handler that touches the Handle and assigns another font while the handle is still being
+        // created by DPI scaling must not recurse into another handle creation or destroy the first handle.
         using IDisposable dpiScope = ScaleHelper.EnterDpiAwarenessScope(DPI_AWARENESS_CONTEXT.DPI_AWARENESS_CONTEXT_PER_MONITOR_AWARE_V2);
         using Form form = new() { AutoScaleMode = AutoScaleMode.None };
         Assert.NotEqual(IntPtr.Zero, form.Handle);
@@ -3074,19 +3080,26 @@ public class ComboBoxTests
         int fontChangedCallCount = 0;
         control.HandleCreated += (sender, e) => handleCreatedCallCount++;
         control.HandleDestroyed += (sender, e) => handleDestroyedCallCount++;
+        bool restoredFont = false;
         control.FontChanged += (sender, e) =>
         {
             fontChangedCallCount++;
             Assert.NotEqual(IntPtr.Zero, control.Handle);
-            Assert.True(control.Font.Size > 0);
+            if (!restoredFont)
+            {
+                restoredFont = true;
+                control.Font = font;
+            }
         };
 
         form.Controls.Add(control);
         int parentDpi = (int)PInvoke.GetDpiForWindow(form);
-        control.DeviceDpiInternal = scaleDown ? parentDpi * 2 : parentDpi / 2;
+        int originalDpi = scaleDown ? parentDpi * 2 : parentDpi / 2;
+        control.DeviceDpiInternal = originalDpi;
 
         Assert.NotEqual(IntPtr.Zero, control.Handle);
-        Assert.Equal(1, fontChangedCallCount);
+        Assert.Equal(2, fontChangedCallCount);
+        Assert.Equal(font.Size * parentDpi / originalDpi, control.Font.Size, 0.01f);
         Assert.Equal(1, handleCreatedCallCount);
         Assert.Equal(0, handleDestroyedCallCount);
         Assert.Equal(["First", "Second"], GetNativeItemTexts(control));
@@ -4717,8 +4730,10 @@ public class ComboBoxTests
             control.CreateControl();
         }
 
+        Assert.Equal(createHandle, control.IsHandleCreated);
         control.Text = text;
 
+        Assert.Equal(createHandle, control.IsHandleCreated);
         Assert.Equal(expectedText, control.Text);
         Assert.Equal(expectedIndex, control.SelectedIndex);
         Assert.Equal(expectedIndex >= 0 ? control.Items[expectedIndex] : null, control.SelectedItem);
@@ -4761,7 +4776,9 @@ public class ComboBoxTests
             control.CreateControl();
         }
 
+        Assert.Equal(createHandle, control.IsHandleCreated);
         Assert.Throws<ArgumentNullException>(() => control.Items.AddRange(["First", null!, "Third"]));
+        Assert.Equal(createHandle, control.IsHandleCreated);
 
         Assert.Equal(["First"], control.Items.Cast<string>());
         if (createHandle)
@@ -4770,6 +4787,7 @@ public class ComboBoxTests
         }
 
         control.Items.Add("Second");
+        Assert.Equal(createHandle, control.IsHandleCreated);
         control.CreateControl();
         Assert.Equal(["First", "Second"], GetNativeItemTexts(control));
     }
