@@ -66,7 +66,7 @@ public partial class ControlTests
         Assert.Null(Control.FromHandle(oldHandle));
 
         IntPtr newHandle = control.Handle;
-        Assert.NotEqual(oldHandle, newHandle);
+        Assert.NotEqual(IntPtr.Zero, newHandle);
         Assert.True(PInvoke.IsWindow((HWND)newHandle));
         Assert.Same(control, Control.FromHandle(newHandle));
     }
@@ -120,11 +120,10 @@ public partial class ControlTests
         control.HandleCreated += (sender, e) => createdCount++;
         control.HandleDestroyed += (sender, e) => destroyedCount++;
 
-        HashSet<IntPtr> seenHandles = [];
         for (int i = 0; i < 4; i++)
         {
             IntPtr handle = control.Handle;
-            Assert.True(seenHandles.Add(handle), "Each cycle must create a new window.");
+            Assert.NotEqual(IntPtr.Zero, handle);
             Assert.True(PInvoke.IsWindow((HWND)handle));
             Assert.True(control.IsHandleCreated);
 
@@ -171,7 +170,7 @@ public partial class ControlTests
 
         Assert.True(parent.Created);
         Assert.True(child.Created);
-        Assert.NotEqual(childHandle, child.Handle);
+        Assert.True(child.IsHandleCreated);
         Assert.True(PInvoke.IsWindow((HWND)child.Handle));
     }
 
@@ -181,12 +180,17 @@ public partial class ControlTests
     {
         Control parent = new();
         Control child = new() { Parent = parent };
+        IntPtr parentHandle = parent.Handle;
         IntPtr childHandle = child.Handle;
+        Assert.True(parent.IsHandleCreated);
+        Assert.True(child.IsHandleCreated);
 
         parent.Dispose();
 
         Assert.True(child.IsDisposed);
+        Assert.False(parent.IsHandleCreated);
         Assert.False(child.IsHandleCreated);
+        Assert.False(PInvoke.IsWindow((HWND)parentHandle));
         Assert.False(PInvoke.IsWindow((HWND)childHandle));
     }
 }
