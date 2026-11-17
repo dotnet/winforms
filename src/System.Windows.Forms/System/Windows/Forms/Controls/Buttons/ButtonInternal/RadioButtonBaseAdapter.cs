@@ -226,6 +226,10 @@ internal abstract class RadioButtonBaseAdapter : CheckableControlBaseAdapter
             // Otherwise, it should encircle all the available space next to the box (like it's done in WPF and ComCtl32).
             layout.Focus = Control.AutoSize ? layout.CheckBounds : layout.Field;
         }
+        else if (Control.Image is not null)
+        {
+            layout.Focus = layout.TextBounds;
+        }
     }
 
     internal override LayoutOptions CommonLayout()

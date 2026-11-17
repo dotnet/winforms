@@ -25,6 +25,17 @@ The primary shared component is **`System.Private.Windows.Core`**, which contain
 
 **Why this matters:** These classes handle fundamental clipboard and drag-and-drop operations. Bugs in this code can manifest in both WinForms and WPF applications, and fixes here benefit both stacks.
 
+### DataStore synchronization
+
+[DataStore](../src/System.Private.Windows.Core/src/System/Private/Windows/Ole/DataStore.cs) can be accessed by managed callers and COM callbacks on different threads.
+All accesses to its format dictionary use a private per-store gate.
+Retrieval copies an entry under the gate, and format enumeration snapshots keys and entries together before performing format mapping.
+The serializable format's conditional insertion checks again after validation so a reentrant or concurrent insertion is not overwritten.
+
+Do not hold this gate across validation, deserialization, type or service callbacks, stream operations, or native/COM calls.
+The gate protects dictionary structure and entry publication, not mutable payloads such as [DragDropFormat](../src/System.Private.Windows.Core/src/System/Private/Windows/Ole/DragDropFormat.cs) or their storage-medium ownership.
+Those lifetimes retain their existing rules.
+
 ## How Sharing Works
 
 The sharing mechanism involves packaging, transport, and ingestion into the Windows Desktop shared framework:

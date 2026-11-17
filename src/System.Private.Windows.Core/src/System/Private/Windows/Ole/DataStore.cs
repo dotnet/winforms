@@ -19,6 +19,12 @@ internal sealed partial class DataStore<TOleServices>
 #endif
 
     private readonly Dictionary<string, DataStoreEntry> _mappedData = new(BackCompatibleStringComparer.Default);
+    // Protect dictionary state only. Validation, conversion and other callouts must run outside this gate.
+#if NET9_0_OR_GREATER
+    private readonly Lock _syncRoot = new();
+#else
+    private readonly object _syncRoot = new();
+#endif
 
     private bool TryGetDataInternal<T>(
         string format,
@@ -57,7 +63,14 @@ internal sealed partial class DataStore<TOleServices>
 
         bool TryGetData(string format, ref bool autoConvert, [NotNullWhen(true)] out T? data)
         {
-            if (_mappedData.TryGetValue(format, out DataStoreEntry entry))
+            DataStoreEntry entry;
+            bool found;
+            lock (_syncRoot)
+            {
+                found = _mappedData.TryGetValue(format, out entry);
+            }
+
+            if (found)
             {
                 autoConvert |= entry.AutoConvert;
 
@@ -92,13 +105,22 @@ internal sealed partial class DataStore<TOleServices>
 
     public void SetData(string format, bool autoConvert, object? data)
     {
+        DataStoreEntry entry = CreateEntry(ref format, autoConvert, data);
+        lock (_syncRoot)
+        {
+            _mappedData[format] = entry;
+        }
+    }
+
+    private static DataStoreEntry CreateEntry(ref string format, bool autoConvert, object? data)
+    {
         ArgumentException.ThrowIfNullOrWhiteSpace(format, nameof(format));
 #if NET
         TOleServices.ValidateDataStoreData(ref format, autoConvert, data);
 #else
         s_oleServices.ValidateDataStoreData(ref format, autoConvert, data);
 #endif
-        _mappedData[format] = new DataStoreEntry(data, autoConvert);
+        return new DataStoreEntry(data, autoConvert);
     }
 
     public void SetData(string format, object? data) => SetData(format, autoConvert: true, data);
@@ -119,9 +141,18 @@ internal sealed partial class DataStore<TOleServices>
     {
         ArgumentNullException.ThrowIfNull(data);
 
-        if (data is ISerializable && !_mappedData.ContainsKey(DataFormatNames.Serializable))
+        if (data is ISerializable && !GetDataPresent(DataFormatNames.Serializable, autoConvert: false))
         {
-            SetData(DataFormatNames.Serializable, data);
+            string format = DataFormatNames.Serializable;
+            DataStoreEntry entry = CreateEntry(ref format, autoConvert: true, data);
+            lock (_syncRoot)
+            {
+                // Validation can reenter this store or allow another writer to publish the first entry.
+                if (!_mappedData.ContainsKey(DataFormatNames.Serializable))
+                {
+                    _mappedData[format] = entry;
+                }
+            }
         }
 
         SetData(data.GetType(), data);
@@ -138,7 +169,10 @@ internal sealed partial class DataStore<TOleServices>
 
         if (!autoConvert)
         {
-            return _mappedData.ContainsKey(format);
+            lock (_syncRoot)
+            {
+                return _mappedData.ContainsKey(format);
+            }
         }
 
         string[] formats = GetFormats(autoConvert);
@@ -158,38 +192,38 @@ internal sealed partial class DataStore<TOleServices>
 
     public string[] GetFormats(bool autoConvert)
     {
-        string[] definedFormats = new string[_mappedData.Keys.Count];
-        _mappedData.Keys.CopyTo(definedFormats, 0);
-
-        if (autoConvert)
+        KeyValuePair<string, DataStoreEntry>[] entries;
+        lock (_syncRoot)
         {
-            // Since we are only adding elements to the HashSet, the order will be preserved.
-            int definedCount = definedFormats.Length;
-            HashSet<string> distinctFormats =
-#if NET
-                new(definedCount);
-#else
-                new();
-#endif
-
-            for (int i = 0; i < definedCount; i++)
+            if (!autoConvert)
             {
-                string current = definedFormats[i];
-                if (_mappedData[current].AutoConvert)
-                {
-                    distinctFormats.Add(current);
-                    DataFormatNames.AddMappedFormats(current, distinctFormats);
-                }
-                else
-                {
-                    distinctFormats.Add(current);
-                }
+                string[] definedFormats = new string[_mappedData.Count];
+                _mappedData.Keys.CopyTo(definedFormats, 0);
+                return definedFormats;
             }
 
-            definedFormats = [.. distinctFormats];
+            entries = new KeyValuePair<string, DataStoreEntry>[_mappedData.Count];
+            ((ICollection<KeyValuePair<string, DataStoreEntry>>)_mappedData).CopyTo(entries, 0);
         }
 
-        return definedFormats;
+        // Since we are only adding elements to the HashSet, the order will be preserved.
+        HashSet<string> distinctFormats =
+#if NET
+            new(entries.Length);
+#else
+            new();
+#endif
+
+        foreach (KeyValuePair<string, DataStoreEntry> entry in entries)
+        {
+            distinctFormats.Add(entry.Key);
+            if (entry.Value.AutoConvert)
+            {
+                DataFormatNames.AddMappedFormats(entry.Key, distinctFormats);
+            }
+        }
+
+        return [.. distinctFormats];
     }
 
     public string[] GetFormats() => GetFormats(autoConvert: true);

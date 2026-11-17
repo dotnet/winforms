@@ -2739,7 +2739,13 @@ public partial class TreeView : Control
                 if (_drawMode == TreeViewDrawMode.OwnerDrawText)
                 {
                     nmtvcd->clrText = nmtvcd->clrTextBk;
-                    m.ResultInternal = (LRESULT)(nint)(PInvoke.CDRF_NEWFONT | PInvoke.CDRF_NOTIFYPOSTPAINT);
+
+                    bool hasPaintArea = nmtvcd->nmcd.rc.right > nmtvcd->nmcd.rc.left &&
+                        nmtvcd->nmcd.rc.bottom > nmtvcd->nmcd.rc.top;
+
+                    m.ResultInternal = (LRESULT)(nint)(hasPaintArea
+                        ? PInvoke.CDRF_NEWFONT | PInvoke.CDRF_NOTIFYPOSTPAINT
+                        : PInvoke.CDRF_NEWFONT);
                     return;
                 }
                 else if (_drawMode == TreeViewDrawMode.OwnerDrawAll)
@@ -3176,6 +3182,17 @@ public partial class TreeView : Control
                 if (_treeViewState[TREEVIEWSTATE_stopResizeWindowMsgs])
                 {
                     DefWndProc(ref m);
+                }
+                else
+                {
+                    base.WndProc(ref m);
+                }
+
+                break;
+            case PInvokeCore.WM_CTLCOLOREDIT:
+                if (_labelEdit is not null && (HWND)m.LParamInternal == _labelEdit.HWND)
+                {
+                    m.ResultInternal = (LRESULT)(nint)InitializeDCForWmCtlColor((HDC)(nint)m.WParamInternal, m.MsgInternal);
                 }
                 else
                 {

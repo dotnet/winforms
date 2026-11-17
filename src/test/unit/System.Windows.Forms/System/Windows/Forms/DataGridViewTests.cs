@@ -2991,6 +2991,8 @@ public partial class DataGridViewTests : IDisposable
         public new void OnColumnHeaderMouseClick(DataGridViewCellMouseEventArgs e) => base.OnColumnHeaderMouseClick(e);
 
         public new void OnColumnHeaderMouseDoubleClick(DataGridViewCellMouseEventArgs e) => base.OnColumnHeaderMouseDoubleClick(e);
+
+        public new bool ProcessDeleteKey(Keys keyData) => base.ProcessDeleteKey(keyData);
     }
 
     [WinFormsFact]
@@ -3472,6 +3474,77 @@ public partial class DataGridViewTests : IDisposable
         _dataGridView.CurrentCellChanged -= handler;
         _dataGridView.CurrentCell = _dataGridView[0, 1];
         callCount.Should().Be(1);
+    }
+
+    [WinFormsTheory]
+    [InlineData(0, 0)]
+    [InlineData(1, 1)]
+    [InlineData(2, 1)]
+    public void DataGridView_Rows_RemoveAt_UpdatesCurrentCell(
+        int currentRowIndex,
+        int expectedRowIndex)
+    {
+        using DataGridView control = new()
+        {
+            AllowUserToAddRows = false,
+            SelectionMode = DataGridViewSelectionMode.FullRowSelect,
+            ColumnCount = 2,
+            RowCount = 3
+        };
+        control.CurrentCell = control[1, currentRowIndex];
+
+        control.Rows.RemoveAt(currentRowIndex);
+
+        Assert.Same(control[1, expectedRowIndex], control.CurrentCell);
+        Assert.Same(control.Rows[expectedRowIndex], control.CurrentRow);
+        Assert.Same(control.CurrentRow, Assert.Single(control.SelectedRows));
+    }
+
+    [WinFormsTheory]
+    [InlineData(false)]
+    [InlineData(true)]
+    public void DataGridView_ProcessDeleteKey_RestoresCurrentCell(bool bound)
+    {
+        using SubDataGridView control = new()
+        {
+            AllowUserToAddRows = false,
+            SelectionMode = DataGridViewSelectionMode.FullRowSelect,
+            BindingContext = new BindingContext()
+        };
+        using DataTable table = new();
+        if (bound)
+        {
+            table.Columns.Add("Name");
+            table.Rows.Add("A");
+            table.Rows.Add("B");
+            table.Rows.Add("C");
+            control.DataSource = table;
+        }
+        else
+        {
+            control.Columns.Add("Name", "Name");
+            control.Rows.Add("A");
+            control.Rows.Add("B");
+            control.Rows.Add("C");
+        }
+
+        control.CurrentCell = control[0, 1];
+
+        Assert.True(control.ProcessDeleteKey(Keys.Delete));
+
+        Assert.Equal(2, control.Rows.Count);
+        Assert.Same(control[0, 1], control.CurrentCell);
+        Assert.Same(control.Rows[1], control.CurrentRow);
+        Assert.Equal("C", control.CurrentCell.Value);
+        Assert.Same(control.CurrentRow, Assert.Single(control.SelectedRows));
+
+        Assert.True(control.ProcessDeleteKey(Keys.Delete));
+
+        Assert.Single(control.Rows);
+        Assert.Same(control[0, 0], control.CurrentCell);
+        Assert.Same(control.Rows[0], control.CurrentRow);
+        Assert.Equal("A", control.CurrentCell.Value);
+        Assert.Same(control.CurrentRow, Assert.Single(control.SelectedRows));
     }
 
     [WinFormsFact]

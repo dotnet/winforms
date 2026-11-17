@@ -60,6 +60,69 @@ public class NumericUpDownTests
         Assert.Equal(textBox.PreferredHeight, nud.Height);
     }
 
+    [WinFormsTheory]
+    [InlineData(true, 100, "999", "100")]
+    [InlineData(false, 0, "-999", "0")]
+    public void NumericUpDown_ModernVisualStylesMode_ButtonPressAtBound_NormalizesPendingEditWithoutChangingFocus(
+        bool upButton, int value, string editText, string expectedText)
+    {
+        using Form form = new();
+        using SubNumericUpDown upDown = new()
+        {
+            VisualStylesMode = VisualStylesMode.Net11,
+            Minimum = 0,
+            Maximum = 100,
+            Value = value
+        };
+        using Button otherControl = new() { Dock = DockStyle.Bottom };
+        form.Controls.Add(upDown);
+        form.Controls.Add(otherControl);
+
+        if (!upDown.UseSideBySideButtons)
+        {
+            return;
+        }
+
+        form.Show();
+        Assert.True(upDown.Focus());
+        Assert.True(upDown.Focused);
+        Assert.True(upDown.TextBox.Focused);
+
+        upDown.TextBox.Text = editText;
+        Assert.True(upDown.PublicUserEdit);
+        Assert.Equal(editText, upDown.Text);
+
+        int gotFocusCount = 0;
+        int lostFocusCount = 0;
+        int valueChangedCount = 0;
+        upDown.GotFocus += (sender, e) => gotFocusCount++;
+        upDown.LostFocus += (sender, e) => lostFocusCount++;
+        upDown.ValueChanged += (sender, e) => valueChangedCount++;
+
+        UpDownBase.UpDownButtons buttons = upDown.UpDownButtonsInternal;
+        Rectangle bounds = buttons.GetButtonRectangle(upButton ? UpDownBase.ButtonID.Up : UpDownBase.ButtonID.Down);
+        MouseEventArgs mouseEvent = new(
+            MouseButtons.Left, 1, bounds.Left + bounds.Width / 2, bounds.Top + bounds.Height / 2, 0);
+
+        buttons.TestAccessor.Dynamic.OnMouseDown(mouseEvent);
+        buttons.TestAccessor.Dynamic.OnMouseUp(mouseEvent);
+
+        Assert.Equal(expectedText, upDown.Text);
+        Assert.False(upDown.PublicUserEdit);
+        Assert.Equal(value, upDown.Value);
+        Assert.True(upDown.TextBox.Focused);
+        Assert.Equal(0, gotFocusCount);
+        Assert.Equal(0, lostFocusCount);
+        Assert.Equal(0, valueChangedCount);
+
+        Assert.True(otherControl.Focus());
+        Assert.False(upDown.Focused);
+        Assert.Equal(expectedText, upDown.Text);
+        Assert.Equal(value, upDown.Value);
+        Assert.Equal(1, lostFocusCount);
+        Assert.Equal(0, valueChangedCount);
+    }
+
     [WinFormsFact]
     public void NumericUpDown_VisualStyles_off_BasicRendering_ControlEnabled()
     {

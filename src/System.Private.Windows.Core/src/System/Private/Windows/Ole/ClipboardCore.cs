@@ -6,6 +6,104 @@ using Windows.Win32.System.Com;
 
 namespace System.Private.Windows.Ole;
 
+internal static unsafe class ClipboardRetry
+{
+    [ThreadStatic]
+    private static bool s_blockReentrancy;
+
+    internal delegate HRESULT Operation(in ComScope<IDataObject> dataObject);
+
+    internal static HRESULT Execute(
+        Operation operation,
+        in ComScope<IDataObject> dataObject,
+        int retryTimes,
+        int retryDelay)
+    {
+        if (s_blockReentrancy)
+        {
+            // Sent-message handlers run before the outer clipboard operation can resume.
+            // A nested call can replace its data. Retrying inside a delayed-render callback
+            // also stalls the reader, which cannot release the clipboard until the callback returns.
+            // Only our dispatch is guarded; native OLE callbacks outside it remain unchanged.
+            return HRESULT.CLIPBRD_E_CANT_OPEN;
+        }
+
+        HRESULT result;
+        while ((result = operation(in dataObject)).Failed)
+        {
+            if (--retryTimes < 0)
+            {
+                return result;
+            }
+
+            HRESULT waitResult = WaitForRetry(retryDelay);
+            if (waitResult.Failed)
+            {
+                return waitResult;
+            }
+        }
+
+        return result;
+    }
+
+    private static HRESULT WaitForRetry(int millisecondsTimeout)
+    {
+        if (millisecondsTimeout <= 0)
+        {
+            Thread.Sleep(millisecondsTimeout);
+            return HRESULT.S_OK;
+        }
+
+        uint start = unchecked((uint)Environment.TickCount);
+        uint remaining = (uint)millisecondsTimeout;
+        while (true)
+        {
+            // A clipboard reader can hold the clipboard open while sending us a delayed-render request.
+            uint result = (uint)PInvokeCore.MsgWaitForMultipleObjectsEx(
+                0,
+                null,
+                remaining,
+                QUEUE_STATUS_FLAGS.QS_SENDMESSAGE,
+                MSG_WAIT_FOR_MULTIPLE_OBJECTS_EX_FLAGS.MWMO_INPUTAVAILABLE);
+            if (result == (uint)WAIT_EVENT.WAIT_FAILED)
+            {
+                return HRESULT.FromWin32((WIN32_ERROR)Marshal.GetLastWin32Error());
+            }
+
+            if (result == (uint)WAIT_EVENT.WAIT_TIMEOUT)
+            {
+                return HRESULT.S_OK;
+            }
+
+            s_blockReentrancy = true;
+            try
+            {
+                // PeekMessage dispatches all pending sent messages, not just clipboard-render requests.
+                // Posted messages stay queued; reentrant clipboard operations are rejected.
+                MSG message;
+                PInvokeCore.PeekMessage(
+                    &message,
+                    HWND.Null,
+                    0,
+                    0,
+                    PEEK_MESSAGE_REMOVE_TYPE.PM_NOREMOVE | PEEK_MESSAGE_REMOVE_TYPE.PM_QS_SENDMESSAGE);
+            }
+            finally
+            {
+                s_blockReentrancy = false;
+            }
+
+            uint elapsed = unchecked((uint)Environment.TickCount - start);
+            if (elapsed >= (uint)millisecondsTimeout)
+            {
+                return HRESULT.S_OK;
+            }
+
+            remaining = (uint)millisecondsTimeout - elapsed;
+        }
+    }
+}
+
 /// <summary>
 ///  Contains platform-agnostic clipboard operations.
 /// </summary>
@@ -30,6 +128,33 @@ internal static unsafe class ClipboardCore<TOleServices>
     /// </summary>
     private const int OleRetryDelay = 100;
 
+    private static HRESULT OleSetClipboard(in ComScope<IDataObject> dataObject)
+    {
+#if NET
+        return TOleServices.OleSetClipboard(dataObject);
+#else
+        return s_oleServices.OleSetClipboard(dataObject);
+#endif
+    }
+
+    private static HRESULT OleFlushClipboard(in ComScope<IDataObject> _)
+    {
+#if NET
+        return TOleServices.OleFlushClipboard();
+#else
+        return s_oleServices.OleFlushClipboard();
+#endif
+    }
+
+    private static HRESULT OleGetClipboard(in ComScope<IDataObject> dataObject)
+    {
+#if NET
+        return TOleServices.OleGetClipboard(dataObject);
+#else
+        return s_oleServices.OleGetClipboard(dataObject);
+#endif
+    }
+
     /// <summary>
     ///  Removes all data from the Clipboard.
     /// </summary>
@@ -44,24 +169,7 @@ internal static unsafe class ClipboardCore<TOleServices>
         s_oleServices.EnsureThreadState();
 #endif
 
-        HRESULT result;
-        int retryCount = retryTimes;
-
-#if NET
-        while ((result = TOleServices.OleSetClipboard(null)).Failed)
-#else
-        while ((result = s_oleServices.OleSetClipboard(null)).Failed)
-#endif
-        {
-            if (--retryCount < 0)
-            {
-                break;
-            }
-
-            Thread.Sleep(millisecondsTimeout: retryDelay);
-        }
-
-        return result;
+        return ClipboardRetry.Execute(OleSetClipboard, default, retryTimes, retryDelay);
     }
 
     /// <summary>
@@ -78,24 +186,7 @@ internal static unsafe class ClipboardCore<TOleServices>
         s_oleServices.EnsureThreadState();
 #endif
 
-        HRESULT result;
-        int retryCount = retryTimes;
-
-#if NET
-        while ((result = TOleServices.OleFlushClipboard()).Failed)
-#else
-        while ((result = s_oleServices.OleFlushClipboard()).Failed)
-#endif
-        {
-            if (--retryCount < 0)
-            {
-                break;
-            }
-
-            Thread.Sleep(millisecondsTimeout: retryDelay);
-        }
-
-        return result;
+        return ClipboardRetry.Execute(OleFlushClipboard, default, retryTimes, retryDelay);
     }
 
     /// <summary>
@@ -123,41 +214,13 @@ internal static unsafe class ClipboardCore<TOleServices>
 
         using var iDataObject = ComHelpers.GetComScope<IDataObject>(dataObject);
 
-        HRESULT result;
-        int retryCount = retryTimes;
-#if NET
-        while ((result = TOleServices.OleSetClipboard(iDataObject)).Failed)
-#else
-        while ((result = s_oleServices.OleSetClipboard(iDataObject)).Failed)
-#endif
+        HRESULT result = ClipboardRetry.Execute(OleSetClipboard, in iDataObject, retryTimes, retryDelay);
+        if (result.Failed || !copy)
         {
-            if (--retryCount < 0)
-            {
-                return result;
-            }
-
-            Thread.Sleep(millisecondsTimeout: retryDelay);
+            return result;
         }
 
-        if (copy)
-        {
-            retryCount = retryTimes;
-#if NET
-            while ((result = TOleServices.OleFlushClipboard()).Failed)
-#else
-            while ((result = s_oleServices.OleFlushClipboard()).Failed)
-#endif
-            {
-                if (--retryCount < 0)
-                {
-                    return result;
-                }
-
-                Thread.Sleep(millisecondsTimeout: retryDelay);
-            }
-        }
-
-        return result;
+        return ClipboardRetry.Execute(OleFlushClipboard, default, retryTimes, retryDelay);
     }
 
     /// <summary>
@@ -182,21 +245,10 @@ internal static unsafe class ClipboardCore<TOleServices>
         proxyDataObject = new(null);
         originalObject = null;
 
-        int retryCount = retryTimes;
-        HRESULT result;
-
-#if NET
-        while ((result = TOleServices.OleGetClipboard(proxyDataObject)).Failed)
-#else
-        while ((result = s_oleServices.OleGetClipboard(proxyDataObject)).Failed)
-#endif
+        HRESULT result = ClipboardRetry.Execute(OleGetClipboard, in proxyDataObject, retryTimes, retryDelay);
+        if (result.Failed)
         {
-            if (--retryCount < 0)
-            {
-                return result;
-            }
-
-            Thread.Sleep(millisecondsTimeout: retryDelay);
+            return result;
         }
 
 #if NETFRAMEWORK

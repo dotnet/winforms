@@ -10492,11 +10492,14 @@ public unsafe partial class Control :
         for (int i = 0; i < children.Count; i++)
         {
             Control child = children[i];
+            bool receivesFontChanged = !child.IsFontSet()
+                || child is ContainerControl { IsDpiChangeScalingRequired: true };
 
-            // ContainerControls get their own OnFontChanged Events and scale.
-            // If this scaling is caused by ResumeLayout instead of OnFontChanged,
-            // We would be scaling all container controls.
-            if (child is ContainerControl && causedByFontChanged)
+            // Skip containers that will scale through OnParentFontChanged. Containers with an explicit
+            // font do not receive that notification unless DPI scaling requires it.
+            if (causedByFontChanged
+                && child is ContainerControl
+                && receivesFontChanged)
             {
                 continue;
             }
@@ -10510,7 +10513,10 @@ public unsafe partial class Control :
                 }
             }
 
-            child.Scale(includedFactor, excludedFactor, requestingControl, causedByFontChanged);
+            // An explicit font also stops notifications at non-container controls (for example, Panel).
+            // Scale their descendants recursively instead of waiting for a font change that will not arrive.
+            bool scaleDescendantsThroughFontChanged = causedByFontChanged && receivesFontChanged;
+            child.Scale(includedFactor, excludedFactor, requestingControl, scaleDescendantsThroughFontChanged);
         }
     }
 

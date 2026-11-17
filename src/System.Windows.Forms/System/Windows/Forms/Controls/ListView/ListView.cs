@@ -6990,6 +6990,18 @@ public partial class ListView : Control
                 WmReflectNotify(ref m);
                 break;
 
+            case PInvokeCore.WM_CTLCOLOREDIT:
+                if (_labelEdit is not null && (HWND)m.LParamInternal == _labelEdit.HWND)
+                {
+                    m.ResultInternal = (LRESULT)(nint)InitializeDCForWmCtlColor((HDC)(nint)m.WParamInternal, m.MsgInternal);
+                }
+                else
+                {
+                    base.WndProc(ref m);
+                }
+
+                break;
+
             case PInvokeCore.WM_KEYUP:
                 var key = (VIRTUAL_KEY)(uint)m.WParamInternal;
 

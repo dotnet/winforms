@@ -11,6 +11,10 @@ public class RadioButtonBaseAdapterTests
 {
     private class TestRadioButton : RadioButton
     {
+        public bool TestFocused { get; set; }
+
+        public override bool Focused => TestFocused;
+
         public TestRadioButton()
         {
         }
@@ -282,10 +286,15 @@ public class RadioButtonBaseAdapterTests
         anyPixelChanged.Should().BeTrue("DrawCheckBox should modify the bitmap.");
     }
 
-    [WinFormsFact]
-    public void AdjustFocusRectangle_AutoSizeAndNoText_ChangesFocus()
+    [WinFormsTheory]
+    [InlineData(false)]
+    [InlineData(true)]
+    public void AdjustFocusRectangle_AutoSizeAndNoText_ChangesFocus(bool hasImage)
     {
-        (TestRadioButton radioButton, TestRadioButtonBaseAdapter radioButtonBaseAdapter) = CreateAdapter();
+        using TestRadioButton radioButton = new();
+        using Bitmap image = new(256, 256);
+        radioButton.Image = hasImage ? image : null;
+        TestRadioButtonBaseAdapter radioButtonBaseAdapter = new(radioButton);
         LayoutData layoutData = new(new LayoutOptions())
         {
             CheckBounds = new Rectangle(1, 2, 3, 4),
@@ -310,5 +319,109 @@ public class RadioButtonBaseAdapterTests
         LayoutOptions layoutOptions = radioButtonBaseAdapter.CommonLayout();
 
         layoutOptions.CheckAlign.Should().Be(ContentAlignment.BottomRight);
+    }
+
+    [WinFormsTheory]
+    [InlineData(false, false)]
+    [InlineData(false, true)]
+    [InlineData(true, false)]
+    [InlineData(true, true)]
+    public void AdjustFocusRectangle_WithTextAndImage_FocusesTextOnly(bool autoSize, bool hasImage)
+    {
+        using TestRadioButton radioButton = new()
+        {
+            AutoSize = autoSize,
+            Text = "RadioButton"
+        };
+        using Bitmap image = new(256, 256);
+        radioButton.Image = hasImage ? image : null;
+        TestRadioButtonBaseAdapter adapter = new(radioButton);
+        Rectangle originalFocus = new(-50, -50, 256, 256);
+        LayoutData layout = new(new LayoutOptions())
+        {
+            Field = new Rectangle(14, 0, 90, 24),
+            TextBounds = new Rectangle(20, 5, 70, 13),
+            Focus = originalFocus
+        };
+
+        adapter.AdjustFocusRectangleMark(layout);
+
+        layout.Focus.Should().Be(hasImage
+            ? layout.TextBounds
+            : originalFocus);
+    }
+
+    [WinFormsTheory]
+    [InlineData(FlatStyle.Standard, false, 256)]
+    [InlineData(FlatStyle.Flat, false, 256)]
+    [InlineData(FlatStyle.Popup, false, 256)]
+    [InlineData(FlatStyle.Standard, false, 16)]
+    [InlineData(FlatStyle.Flat, false, 16)]
+    [InlineData(FlatStyle.Popup, false, 16)]
+    [InlineData(FlatStyle.Standard, true, 256)]
+    [InlineData(FlatStyle.Flat, true, 256)]
+    [InlineData(FlatStyle.Popup, true, 256)]
+    public void PaintUp_WithImage_DrawsFocusRectangleAroundTextOnly(FlatStyle flatStyle, bool autoSize, int imageSize)
+    {
+        using Bitmap image = new(imageSize, imageSize);
+        using (Graphics imageGraphics = Graphics.FromImage(image))
+        {
+            imageGraphics.Clear(Color.Fuchsia);
+        }
+
+        using TestRadioButton radioButton = new()
+        {
+            AutoSize = autoSize,
+            BackColor = Color.White,
+            ForeColor = Color.Black,
+            FlatStyle = flatStyle,
+            Image = image,
+            Size = new Size(104, 24),
+            Text = "RadioButton",
+            VisualStylesMode = VisualStylesMode.Classic
+        };
+        if (autoSize)
+        {
+            radioButton.Size = radioButton.GetPreferredSize(Size.Empty);
+        }
+
+        ButtonBaseAdapter adapter = flatStyle switch
+        {
+            FlatStyle.Flat => new RadioButtonFlatAdapter(radioButton),
+            FlatStyle.Popup => new RadioButtonPopupAdapter(radioButton),
+            _ => new RadioButtonStandardAdapter(radioButton)
+        };
+        using Bitmap unfocused = new(radioButton.Width, radioButton.Height);
+        using Bitmap focused = new(radioButton.Width, radioButton.Height);
+        Rectangle textBounds;
+        using (Graphics graphics = Graphics.FromImage(unfocused))
+        using (PaintEventArgs e = new(graphics, radioButton.ClientRectangle))
+        {
+            LayoutOptions options = adapter.TestAccessor.Dynamic.Layout(e);
+            textBounds = options.Layout().TextBounds;
+            adapter.PaintUp(e, CheckState.Unchecked);
+        }
+
+        radioButton.TestFocused = true;
+        using (Graphics graphics = Graphics.FromImage(focused))
+        using (PaintEventArgs e = new(graphics, radioButton.ClientRectangle))
+        {
+            adapter.PaintUp(e, CheckState.Unchecked);
+        }
+
+        int changedPixels = 0;
+        for (int y = 0; y < focused.Height; y++)
+        {
+            for (int x = 0; x < focused.Width; x++)
+            {
+                if (focused.GetPixel(x, y) != unfocused.GetPixel(x, y))
+                {
+                    textBounds.Contains(x, y).Should().BeTrue("the focus rectangle must only surround the text");
+                    changedPixels++;
+                }
+            }
+        }
+
+        changedPixels.Should().BeGreaterThan(0, "the focus rectangle must remain visible over the image");
     }
 }

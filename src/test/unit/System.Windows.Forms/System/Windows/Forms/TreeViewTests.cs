@@ -1456,6 +1456,56 @@ public class TreeViewTests
         Assert.Throws<InvalidEnumArgumentException>("value", () => treeView.DrawMode = value);
     }
 
+    [WinFormsTheory]
+    [InlineData(0, 0, 0, 10, false)]
+    [InlineData(0, 0, 10, 0, false)]
+    [InlineData(10, 0, 0, 10, false)]
+    [InlineData(0, 10, 10, 0, false)]
+    [InlineData(0, 0, 10, 10, true)]
+    public unsafe void TreeView_WndProc_CustomDrawOwnerDrawText_ReturnsExpected(
+        int left,
+        int top,
+        int right,
+        int bottom,
+        bool expectPostPaint)
+    {
+        using SubTreeView treeView = new()
+        {
+            DrawMode = TreeViewDrawMode.OwnerDrawText
+        };
+
+        TreeNode node = treeView.Nodes.Add("Node");
+        treeView.CreateControl();
+
+        NMTVCUSTOMDRAW customDraw = new()
+        {
+            nmcd = new()
+            {
+                hdr = new()
+                {
+                    code = PInvoke.NM_CUSTOMDRAW
+                },
+                dwDrawStage = NMCUSTOMDRAW_DRAW_STAGE.CDDS_ITEMPREPAINT,
+                dwItemSpec = (nuint)(nint)node.Handle,
+                rc = new RECT(left, top, right, bottom)
+            }
+        };
+
+        Message message = new()
+        {
+            HWnd = treeView.Handle,
+            Msg = (int)MessageId.WM_REFLECT_NOTIFY,
+            LParam = (nint)(&customDraw)
+        };
+
+        treeView.WndProc(ref message);
+
+        nint expected = expectPostPaint
+            ? (nint)(PInvoke.CDRF_NEWFONT | PInvoke.CDRF_NOTIFYPOSTPAINT)
+            : (nint)PInvoke.CDRF_NEWFONT;
+        Assert.Equal(expected, message.Result);
+    }
+
     public static IEnumerable<object[]> ForeColor_Set_TestData()
     {
         yield return new object[] { Color.Empty, SystemColors.WindowText };
@@ -7569,6 +7619,57 @@ public class TreeViewTests
         treeView.VisibleCount.Should().Be(5);
     }
 
+    [WinFormsTheory]
+    [InlineData(0x1E, 0x1E, 0x1E, 0xFF, 0xFF, 0xFF)]  // Dark mode: dark bg, white text
+    [InlineData(0xFF, 0xFF, 0xFF, 0x00, 0x00, 0x00)]  // Light mode: white bg, black text
+    public void TreeView_WmCtlColorEdit_WithMatchingLabelEditHwnd_SetsDCColorsAndReturnsNonZeroBrush(int backR, int backG, int backB, int foreR, int foreG, int foreB)
+    {
+        // Regression test for issue #12042
+        Color expectedBackColor = Color.FromArgb(backR, backG, backB);
+        Color expectedForeColor = Color.FromArgb(foreR, foreG, foreB);
+
+        using SubTreeView treeView = new()
+        {
+            LabelEdit = true,
+            Size = new Size(200, 200),
+            BackColor = expectedBackColor,
+            ForeColor = expectedForeColor
+        };
+
+        treeView.Nodes.Add("Node0");
+        treeView.CreateControl();
+
+        treeView.Nodes[0].BeginEdit();
+        HWND editHwnd = (HWND)(nint)PInvokeCore.SendMessage(treeView, PInvoke.TVM_GETEDITCONTROL);
+        Assert.NotEqual(HWND.Null, editHwnd);
+
+        using GetDcScope hdc = new(editHwnd);
+        Message msg = Message.Create(
+            treeView.Handle,
+            (int)PInvokeCore.WM_CTLCOLOREDIT,
+            (nint)(HDC)hdc,
+            (nint)editHwnd);
+
+        treeView.WndProc(ref msg);
+
+        // 1. A valid (non-null) brush handle must be returned.
+        Assert.NotEqual(IntPtr.Zero, (nint)msg.ResultInternal);
+
+        // 2. DC text color must match the ForeColor we set on the control.
+        Color actualTextColor = PInvoke.GetTextColor(hdc);
+        Assert.Equal(
+            ColorTranslator.ToWin32(expectedForeColor),
+            ColorTranslator.ToWin32(actualTextColor));
+
+        // 3. DC background color must match the BackColor we set on the control.
+        Color actualBkColor = PInvoke.GetBkColor(hdc);
+        Assert.Equal(
+            ColorTranslator.ToWin32(expectedBackColor),
+            ColorTranslator.ToWin32(actualBkColor));
+
+        treeView.Nodes[0].EndEdit(cancel: true);
+    }
+
     private class SubTreeView : TreeView
     {
         public new bool CanEnableIme => base.CanEnableIme;
@@ -7674,5 +7775,7 @@ public class TreeViewTests
         public new void OnNodeMouseHover(TreeNodeMouseHoverEventArgs e) => base.OnNodeMouseHover(e);
 
         public new void OnRightToLeftLayoutChanged(EventArgs e) => base.OnRightToLeftLayoutChanged(e);
+
+        public new void WndProc(ref Message m) => base.WndProc(ref m);
     }
 }

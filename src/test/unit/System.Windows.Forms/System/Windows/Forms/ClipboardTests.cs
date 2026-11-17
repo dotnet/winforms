@@ -274,17 +274,27 @@ public class ClipboardTests
         action.Should().Throw<ArgumentNullException>().WithParameterName("data");
     }
 
-    [WinFormsFact]
-    public void SetDataObject_NegativeRetryTimes_ThrowsArgumentOutOfRangeException()
+    [WinFormsTheory]
+    [InlineData(false, -1)]
+    [InlineData(true, -1)]
+    [InlineData(false, int.MinValue)]
+    [InlineData(true, int.MinValue)]
+    public void SetDataObject_NegativeRetryTimes_ThrowsArgumentOutOfRangeException(bool copy, int retryTimes)
     {
-        Action action = () => Clipboard.SetDataObject(new object(), copy: true, retryTimes: -1, retryDelay: 0);
+        // OLE-006: both copy modes reject negative retry budgets, including the integer boundary.
+        Action action = () => Clipboard.SetDataObject(new object(), copy, retryTimes, retryDelay: 0);
         action.Should().Throw<ArgumentOutOfRangeException>().WithParameterName("retryTimes");
     }
 
-    [WinFormsFact]
-    public void SetDataObject_NegativeRetryDelay_ThrowsArgumentOutOfRangeException()
+    [WinFormsTheory]
+    [InlineData(false, -1)]
+    [InlineData(true, -1)]
+    [InlineData(false, int.MinValue)]
+    [InlineData(true, int.MinValue)]
+    public void SetDataObject_NegativeRetryDelay_ThrowsArgumentOutOfRangeException(bool copy, int retryDelay)
     {
-        Action action = () => Clipboard.SetDataObject(new object(), copy: true, retryTimes: 10, retryDelay: -1);
+        // OLE-006: both copy modes reject negative delays before any wait or native clipboard mutation.
+        Action action = () => Clipboard.SetDataObject(new object(), copy, retryTimes: 10, retryDelay);
         action.Should().Throw<ArgumentOutOfRangeException>().WithParameterName("retryDelay");
     }
 
@@ -305,6 +315,7 @@ public class ClipboardTests
     [MemberData(nameof(NotAnStaTheoryData))]
     public void NotSta_ThrowsThreadStateException(Action action)
     {
+        // OLE-006: clipboard-writing APIs require STA/OLE initialization on the calling thread.
         action.Should().Throw<ThreadStateException>();
     }
 
