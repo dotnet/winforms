@@ -76,7 +76,7 @@ public partial class ControlTests
     [WinFormsFact]
     public void Control_Dispose_WithHandle_DestroysWindowAndBlocksRecreation()
     {
-        SubControl control = new();
+        using SubControl control = new();
         IntPtr handle = control.Handle;
         int destroyedCount = 0;
         control.HandleDestroyed += (sender, e) => destroyedCount++;
@@ -178,8 +178,8 @@ public partial class ControlTests
     [WinFormsFact]
     public void Control_Dispose_Parent_DestroysChildWindows()
     {
-        Control parent = new();
-        Control child = new() { Parent = parent };
+        using Control parent = new();
+        using Control child = new() { Parent = parent };
         IntPtr parentHandle = parent.Handle;
         IntPtr childHandle = child.Handle;
         Assert.True(parent.IsHandleCreated);
