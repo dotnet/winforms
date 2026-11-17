@@ -18,6 +18,16 @@ namespace System.Private.Windows.Ole;
 internal interface IDataObjectInternal
 {
     /// <summary>
+    ///  Indicates whether the managed source implements typed retrieval rather than a legacy-only adapter.
+    /// </summary>
+    /// <remarks>
+    ///  <para>Currently used only to select the typed clipboard fallback for plain-text formats.
+    ///  Adapters must report the wrapped source's capability. Clipboard text reads use this to avoid unsupported
+    ///  typed calls without falling back to legacy GetData, which may deserialize before returning.</para>
+    /// </remarks>
+    bool SupportsTypedData => true;
+
+    /// <summary>
     ///  Retrieves the data associated with the specified data format, using
     ///  <paramref name="autoConvert"/> to determine whether to convert the data to the format.
     /// </summary>
@@ -164,6 +174,24 @@ internal unsafe interface IDataObjectInternal<TDataObject, TIDataObject> : IData
     static abstract TDataObject Create();
     static abstract TDataObject Create(IDataObject* dataObject);
     static abstract TDataObject Create(object data);
+
+    /// <summary>
+    ///  Combines a captured clipboard proxy with managed-first retrieval without changing the original object.
+    /// </summary>
+    /// <param name="clipboardData">
+    ///  The platform data object wrapping the captured native OLE clipboard proxy. Its owning adapters are
+    ///  shared with the result and supply Windows' synthesized Text, UnicodeText, and OEMText formats.
+    /// </param>
+    /// <param name="managedData">
+    ///  The original managed data object recovered from the clipboard. Its retrieval takes precedence so
+    ///  custom payloads retain their in-process identity without being serialized through the native proxy.
+    /// </param>
+    /// <returns>
+    ///  A new platform data object that reads managed data first and falls back to the captured proxy only
+    ///  for plain-text formats. Neither input object is modified.
+    /// </returns>
+    static abstract TDataObject Create(TDataObject clipboardData, TIDataObject managedData);
+
     static abstract IDataObjectInternal Wrap(TIDataObject data);
 
     /// <summary>
