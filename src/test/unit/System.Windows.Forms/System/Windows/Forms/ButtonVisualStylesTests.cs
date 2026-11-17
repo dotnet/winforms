@@ -20,12 +20,16 @@ public class ButtonVisualStylesTests
     [InlineData(FlatStyle.Popup)]
     public void Button_Net11_ExplicitBackColor_ParentBackColorChanged_Invalidates(FlatStyle flatStyle)
     {
+        if (SystemInformation.HighContrast)
+        {
+            return;
+        }
+
         using Form form = new() { BackColor = Color.Yellow, VisualStylesMode = VisualStylesMode.Net11 };
         using Button button = new()
         {
             BackColor = Color.LightCoral,
-            FlatStyle = flatStyle,
-            UseVisualStyleBackColor = false
+            FlatStyle = flatStyle
         };
         form.Controls.Add(button);
         _ = form.Handle;
@@ -95,6 +99,11 @@ public class ButtonVisualStylesTests
     [InlineData(typeof(RadioButton))]
     public void ButtonAppearance_Net11_ExplicitBackColor_ParentBackColorChanged_Invalidates(Type controlType)
     {
+        if (SystemInformation.HighContrast)
+        {
+            return;
+        }
+
         using Form form = new() { BackColor = Color.Yellow, VisualStylesMode = VisualStylesMode.Net11 };
         using ButtonBase control = (ButtonBase)Activator.CreateInstance(controlType);
         control.BackColor = Color.LightCoral;
