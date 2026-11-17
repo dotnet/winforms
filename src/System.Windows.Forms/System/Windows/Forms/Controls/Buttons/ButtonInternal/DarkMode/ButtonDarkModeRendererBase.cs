@@ -44,7 +44,7 @@ internal abstract partial class ButtonDarkModeRendererBase : IButtonRenderer
     /// </summary>
     internal FlatButtonAppearance? FlatAppearance { get; set; }
 
-    internal bool UseFlatAppearanceColors { get; set; } = true;
+    internal bool UseFlatAppearance { get; set; } = true;
 
     /// <summary>
     ///  Scales a logical (96-DPI) value to the current <see cref="DeviceDpi"/>.
@@ -53,7 +53,7 @@ internal abstract partial class ButtonDarkModeRendererBase : IButtonRenderer
 
     private protected int ScaleBorderThickness(int scaledThickness)
     {
-        int borderSize = FlatAppearance?.BorderSize ?? 1;
+        int borderSize = UseFlatAppearance ? FlatAppearance?.BorderSize ?? 1 : 1;
         if (borderSize == 0)
         {
             return 0;
@@ -66,7 +66,7 @@ internal abstract partial class ButtonDarkModeRendererBase : IButtonRenderer
     }
 
     private protected Color ResolveBorderColor(Color designColor)
-        => UseFlatAppearanceColors && FlatAppearance is { BorderColor.IsEmpty: false } appearance
+        => UseFlatAppearance && FlatAppearance is { BorderColor.IsEmpty: false } appearance
             ? appearance.BorderColor
             : designColor;
 
@@ -172,14 +172,14 @@ internal abstract partial class ButtonDarkModeRendererBase : IButtonRenderer
 
     public Color GetBackgroundColor(PushButtonState state, bool isDefault, Color customBaseColor)
     {
-        if (UseFlatAppearanceColors
+        if (UseFlatAppearance
             && state == PushButtonState.Hot
             && FlatAppearance is { MouseOverBackColorCore.IsEmpty: false } hoverAppearance)
         {
             return hoverAppearance.MouseOverBackColorCore;
         }
 
-        if (UseFlatAppearanceColors
+        if (UseFlatAppearance
             && state == PushButtonState.Pressed
             && FlatAppearance is { MouseDownBackColorCore.IsEmpty: false } pressedAppearance)
         {

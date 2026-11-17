@@ -1,4 +1,4 @@
-﻿// Licensed to the .NET Foundation under one or more agreements.
+// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
 using System.Drawing;
@@ -130,7 +130,7 @@ internal sealed class PopupButtonDarkModeRenderer : ButtonDarkModeRendererBase
         Color topLeftColor;
         Color bottomRightColor;
 
-        if (UseFlatAppearanceColors
+        if (UseFlatAppearance
             && FlatAppearance is { BorderColor.IsEmpty: false } appearance)
         {
             topLeftColor = appearance.BorderColor;

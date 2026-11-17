@@ -1,4 +1,4 @@
-﻿// Licensed to the .NET Foundation under one or more agreements.
+// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
 #nullable disable
@@ -200,6 +200,44 @@ public class PopupButtonVisualStylesTests
         }
 
         Assert.Equal(beforeColors, afterColors);
+        for (int y = 0; y < before.Height; y++)
+        {
+            for (int x = 0; x < before.Width; x++)
+            {
+                Assert.Equal(before.GetPixel(x, y), after.GetPixel(x, y));
+            }
+        }
+    }
+
+    [WinFormsTheory]
+    [InlineData(typeof(Button), 0)]
+    [InlineData(typeof(Button), 4)]
+    [InlineData(typeof(CheckBox), 4)]
+    [InlineData(typeof(RadioButton), 4)]
+    public void AnimatedPopupButtonRenderer_IgnoresFlatAppearanceBorderSize(Type controlType, int borderSize)
+    {
+        using ButtonBase control = CreateAppearanceButton(controlType);
+        control.Size = new Size(120, 40);
+        control.Text = "Popup";
+        ButtonInternal.ButtonDarkModeAdapter adapter = new(control);
+        Size preferredBefore = adapter.GetPreferredSizeCore(Size.Empty);
+        using AnimatedPopupButtonRenderer renderer = new(control);
+        using Bitmap before = new(control.Width, control.Height);
+        using (Graphics graphics = Graphics.FromImage(before))
+        {
+            renderer.RenderControl(graphics);
+        }
+
+        control.FlatAppearance.BorderSize = borderSize;
+        Size preferredAfter = adapter.GetPreferredSizeCore(Size.Empty);
+        using Bitmap after = new(control.Width, control.Height);
+        using (Graphics graphics = Graphics.FromImage(after))
+        {
+            renderer.RenderControl(graphics);
+        }
+
+        Assert.Equal(preferredBefore, preferredAfter);
+        Assert.Equal(borderSize, control.FlatAppearance.BorderSize);
         for (int y = 0; y < before.Height; y++)
         {
             for (int x = 0; x < before.Width; x++)

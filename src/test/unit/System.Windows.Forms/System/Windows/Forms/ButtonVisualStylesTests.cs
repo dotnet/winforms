@@ -505,6 +505,102 @@ public class ButtonVisualStylesTests
         Assert.Equal(applyColors, FindDifferenceBounds(before, after) != Rectangle.Empty);
     }
 
+    [WinFormsTheory]
+    [InlineData(VisualStylesMode.Classic, FlatStyle.Standard, 0, false)]
+    [InlineData(VisualStylesMode.Classic, FlatStyle.Popup, 4, false)]
+    [InlineData(VisualStylesMode.Classic, FlatStyle.Flat, 4, true)]
+    [InlineData(VisualStylesMode.Net11, FlatStyle.Standard, 0, false)]
+    [InlineData(VisualStylesMode.Net11, FlatStyle.Standard, 4, false)]
+    [InlineData(VisualStylesMode.Net11, FlatStyle.Popup, 4, false)]
+    [InlineData(VisualStylesMode.Net11, FlatStyle.Flat, 0, true)]
+    [InlineData(VisualStylesMode.Net11, FlatStyle.Flat, 4, true)]
+    public void ButtonDarkModeAdapter_BorderSize_FollowsStyle(
+        VisualStylesMode mode,
+        FlatStyle style,
+        int borderSize,
+        bool applyBorderSize)
+    {
+        using Button button = new()
+        {
+            FlatStyle = style,
+            VisualStylesMode = mode,
+            Size = new Size(120, 40),
+            Text = "Button"
+        };
+        ButtonInternal.ButtonDarkModeAdapter adapter = new(button);
+        ButtonDarkModeRendererBase renderer = adapter.TestAccessor.Dynamic._buttonDarkModeRenderer;
+        Size preferredBefore = adapter.GetPreferredSizeCore(Size.Empty);
+        using Bitmap before = new(button.Width, button.Height);
+        using (Graphics graphics = Graphics.FromImage(before))
+        {
+            renderer.RenderButton(
+                graphics, button, button.ClientRectangle, style, VisualStyles.PushButtonState.Normal,
+                isDefault: false, focused: true, showFocusCues: true,
+                parentBackgroundColor: Color.Black, backColor: Color.Gray, paintContent: _ => { });
+        }
+
+        button.FlatAppearance.BorderSize = borderSize;
+        Size preferredAfter = adapter.GetPreferredSizeCore(Size.Empty);
+        using Bitmap after = new(button.Width, button.Height);
+        using (Graphics graphics = Graphics.FromImage(after))
+        {
+            renderer.RenderButton(
+                graphics, button, button.ClientRectangle, style, VisualStyles.PushButtonState.Normal,
+                isDefault: false, focused: true, showFocusCues: true,
+                parentBackgroundColor: Color.Black, backColor: Color.Gray, paintContent: _ => { });
+        }
+
+        Assert.Equal(applyBorderSize, FindDifferenceBounds(before, after) != Rectangle.Empty);
+        if (!applyBorderSize)
+        {
+            Assert.Equal(preferredBefore, preferredAfter);
+        }
+
+        Assert.Equal(borderSize, button.FlatAppearance.BorderSize);
+    }
+
+    [WinFormsTheory]
+    [InlineData(typeof(CheckBox), FlatStyle.Standard, false)]
+    [InlineData(typeof(CheckBox), FlatStyle.Popup, false)]
+    [InlineData(typeof(CheckBox), FlatStyle.Flat, true)]
+    [InlineData(typeof(RadioButton), FlatStyle.Standard, false)]
+    [InlineData(typeof(RadioButton), FlatStyle.Popup, false)]
+    [InlineData(typeof(RadioButton), FlatStyle.Flat, true)]
+    public void ModernGlyphControl_BorderColor_FollowsFlatStyle(Type controlType, FlatStyle style, bool applyColor)
+    {
+        if (SystemInformation.HighContrast)
+        {
+            return;
+        }
+
+        using ButtonBase control = (ButtonBase)Activator.CreateInstance(controlType);
+        control.FlatStyle = style;
+        control.VisualStylesMode = VisualStylesMode.Net11;
+        control.Size = new Size(120, 40);
+        ButtonInternal.ButtonBaseAdapter adapter = style switch
+        {
+            FlatStyle.Flat => control.CreateFlatAdapter(),
+            FlatStyle.Popup => control.CreatePopupAdapter(),
+            _ => control.CreateStandardAdapter()
+        };
+        using Bitmap before = new(control.Width, control.Height);
+        using (Graphics graphics = Graphics.FromImage(before))
+        using (PaintEventArgs e = new(graphics, control.ClientRectangle))
+        {
+            adapter.PaintUp(e, CheckState.Unchecked);
+        }
+
+        control.FlatAppearance.BorderColor = Color.Lime;
+        using Bitmap after = new(control.Width, control.Height);
+        using (Graphics graphics = Graphics.FromImage(after))
+        using (PaintEventArgs e = new(graphics, control.ClientRectangle))
+        {
+            adapter.PaintUp(e, CheckState.Unchecked);
+        }
+
+        Assert.Equal(applyColor, FindDifferenceBounds(before, after) != Rectangle.Empty);
+    }
+
     [WinFormsFact]
     public void Button_ClassicDarkMode_Standard_IgnoresFlatAppearanceColors()
     {
@@ -559,6 +655,7 @@ public class ButtonVisualStylesTests
         button.DrawToBitmap(before, button.ClientRectangle);
 
         button.FlatAppearance.BorderColor = Color.Lime;
+        button.FlatAppearance.BorderSize = 4;
         button.FlatStyle = FlatStyle.Flat;
         using Bitmap flat = new(button.Width, button.Height);
         button.DrawToBitmap(flat, button.ClientRectangle);
@@ -569,6 +666,7 @@ public class ButtonVisualStylesTests
 
         Assert.True(ContainsPixel(flat, Color.Lime));
         Assert.Equal(Rectangle.Empty, FindDifferenceBounds(before, after));
+        Assert.Equal(4, button.FlatAppearance.BorderSize);
     }
 
     [WinFormsFact]
@@ -1569,7 +1667,6 @@ public class ButtonVisualStylesTests
                 Bounds = control.ClientRectangle,
                 Text = control.Text,
                 Font = control.Font,
-                BorderWidth = control.FlatAppearance.BorderSize,
                 Enabled = control.Enabled,
                 ImageSize = control.Image?.Size ?? Size.Empty,
                 ImageAlign = control.ImageAlign,

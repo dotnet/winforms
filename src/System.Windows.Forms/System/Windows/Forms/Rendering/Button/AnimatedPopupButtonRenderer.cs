@@ -106,7 +106,6 @@ internal sealed class AnimatedPopupButtonRenderer : AnimatedControlRenderer
     {
         Forms.ButtonBase button = Button;
 
-        FlatButtonAppearance flatAppearance = button.FlatAppearance;
         _baseColorRenderer.DeviceDpi = button.DeviceDpi;
 
         PushButtonState state = _pressTarget > 0f
@@ -156,7 +155,6 @@ internal sealed class AnimatedPopupButtonRenderer : AnimatedControlRenderer
             SurfaceColor = button.Parent?.BackColor ?? button.BackColor,
             UseAutomaticForeColor = useAutomaticForeColor,
             BorderColor = borderColor,
-            BorderWidth = flatAppearance.BorderSize,
             Enabled = button.Enabled,
             Focused = button.Focused && button.ShowFocusCues,
             Pressed = button.MouseIsDown || _pressTarget > 0f,

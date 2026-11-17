@@ -17,6 +17,8 @@ namespace System.Windows.Forms.Rendering.Button;
 /// </remarks>
 internal sealed class PopupButtonRenderContext
 {
+    internal const int DefaultBorderWidth = 1;
+
     /// <summary>
     ///  Gets the bounds to render into, in device pixels of the target <see cref="Graphics"/>.
     /// </summary>
@@ -60,7 +62,7 @@ internal sealed class PopupButtonRenderContext
     /// <summary>
     ///  Gets the border width in device pixels. <c>0</c> renders no border.
     /// </summary>
-    public int BorderWidth { get; init; } = 1;
+    public int BorderWidth { get; init; } = DefaultBorderWidth;
 
     /// <summary>
     ///  Gets a value indicating whether the key is enabled.

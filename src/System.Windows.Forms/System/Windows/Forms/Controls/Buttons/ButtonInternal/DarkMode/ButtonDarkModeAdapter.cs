@@ -29,7 +29,7 @@ internal class ButtonDarkModeAdapter : ButtonBaseAdapter
 
         _buttonDarkModeRenderer.DeviceDpi = control.DeviceDpi;
         _buttonDarkModeRenderer.FlatAppearance = control.FlatAppearance;
-        _buttonDarkModeRenderer.UseFlatAppearanceColors = control.FlatStyle == FlatStyle.Flat;
+        _buttonDarkModeRenderer.UseFlatAppearance = control.FlatStyle == FlatStyle.Flat;
     }
 
     private ButtonDarkModeRendererBase ButtonDarkModeRenderer
@@ -188,7 +188,7 @@ internal class ButtonDarkModeAdapter : ButtonBaseAdapter
                 CommonLayout(),
                 proposedSize,
                 Control.DeviceDpi,
-                Control.FlatAppearance.BorderSize)
+                PopupButtonRenderContext.DefaultBorderWidth)
             : _modern
                 ? GetModernPreferredSizeCore(
                     CommonLayout(),
