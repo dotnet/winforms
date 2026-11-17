@@ -12,7 +12,7 @@ public partial class FormTests
     // DPI awareness is process wide and must be set before any window is created, so these tests
     // run in a child process (RemoteExecutor) and do not alter the test host's awareness mode.
 
-    [Fact]
+    [WinFormsFact]
     public void Form_WmDpiChanged_RaisesEventsInOrderAndAppliesSuggestedRectangle()
     {
         // A top-level form receives a DPI change to a higher-DPI monitor. Children are notified
@@ -107,7 +107,7 @@ public partial class FormTests
         handle.ExitCode.Should().Be(RemoteExecutor.SuccessExitCode);
     }
 
-    [Fact]
+    [WinFormsFact]
     public void Form_WmDpiChanged_ReturnTripRestoresBoundsWithoutDrift()
     {
         // A form moves to a higher-DPI monitor and back, several times. Each return trip must
@@ -170,7 +170,7 @@ public partial class FormTests
         handle.ExitCode.Should().Be(RemoteExecutor.SuccessExitCode);
     }
 
-    [Fact]
+    [WinFormsFact]
     public void Form_WmDpiChanged_CancelledByHandler_DoesNotApplySuggestedRectangle()
     {
         // A DpiChanged handler cancels the change: the form is not moved or resized to the
@@ -207,7 +207,7 @@ public partial class FormTests
         handle.ExitCode.Should().Be(RemoteExecutor.SuccessExitCode);
     }
 
-    [Fact]
+    [WinFormsFact]
     public void Form_WmDpiChanged_SameDpi_DoesNotRaiseEventOrChangeBounds()
     {
         // A DPI notification that reports the current DPI is ignored: no DpiChanged event
