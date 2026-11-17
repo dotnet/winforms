@@ -17,6 +17,9 @@ internal sealed class WinFormsOleServices : IOleServices
     // Prevent instantiation
     private WinFormsOleServices() { }
 
+    // WinForms already unwrapped managed sources in .NET 9; opting in would change its existing text behavior.
+    static bool IOleServices.UseNativeClipboardTextFallback => false;
+
     public static void EnsureThreadState()
     {
         // There were some cases historically where we would try not to throw to avoid user code crashing from

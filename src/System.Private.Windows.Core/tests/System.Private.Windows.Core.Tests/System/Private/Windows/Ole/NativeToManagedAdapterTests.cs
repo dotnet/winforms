@@ -337,6 +337,10 @@ public unsafe class NativeToManagedAdapterTests
             var composition = Composition.Create(pDataObject);
 
             // After Create: original(1) + our AddRef(1) + Composition's two AddRefs(2) = 4
+            // Finalizers of temporary wrappers can release references at any time, so settle them first.
+            GC.Collect();
+            GC.WaitForPendingFinalizers();
+
             refCountBeforeGetData = pDataObject->AddRef();
             pDataObject->Release(); // Undo our test AddRef
 
@@ -349,12 +353,17 @@ public unsafe class NativeToManagedAdapterTests
 
             // Check ref count after GetData - should be unchanged from before
             // (the IStream from GetData should be properly released by ReleaseStgMedium only once)
+            GC.Collect();
+            GC.WaitForPendingFinalizers();
+
             refCountAfterGetData = pDataObject->AddRef();
             pDataObject->Release(); // Undo our test AddRef
 
             refCountAfterGetData.Should().Be(
                 refCountBeforeGetData,
                 "GetData should not leak or double-release the IDataObject");
+
+            GC.KeepAlive(composition);
         }
 
         // Note: Composition doesn't implement IDisposable, so refs are released via GC.
