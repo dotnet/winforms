@@ -29,6 +29,7 @@ internal class ButtonDarkModeAdapter : ButtonBaseAdapter
 
         _buttonDarkModeRenderer.DeviceDpi = control.DeviceDpi;
         _buttonDarkModeRenderer.FlatAppearance = control.FlatAppearance;
+        _buttonDarkModeRenderer.UseFlatAppearanceColors = control.FlatStyle == FlatStyle.Flat;
     }
 
     private ButtonDarkModeRendererBase ButtonDarkModeRenderer

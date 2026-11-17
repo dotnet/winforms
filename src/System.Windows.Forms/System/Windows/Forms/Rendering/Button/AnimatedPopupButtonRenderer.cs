@@ -108,7 +108,6 @@ internal sealed class AnimatedPopupButtonRenderer : AnimatedControlRenderer
 
         FlatButtonAppearance flatAppearance = button.FlatAppearance;
         _baseColorRenderer.DeviceDpi = button.DeviceDpi;
-        _baseColorRenderer.FlatAppearance = flatAppearance;
 
         PushButtonState state = _pressTarget > 0f
             ? PushButtonState.Pressed
@@ -144,9 +143,7 @@ internal sealed class AnimatedPopupButtonRenderer : AnimatedControlRenderer
             foreColor = !useAutomaticForeColor
                 ? button.ForeColor
                 : _baseColorRenderer.GetTextColor(state, button.IsDefault, faceColor);
-            borderColor = flatAppearance.BorderColor.IsEmpty
-                ? PopupButtonColorMath.TowardsContrast(faceColor, 0.35f)
-                : flatAppearance.BorderColor;
+            borderColor = PopupButtonColorMath.TowardsContrast(faceColor, 0.35f);
         }
 
         PopupButtonRenderContext context = new()
@@ -232,9 +229,7 @@ internal sealed class AnimatedPopupButtonRenderer : AnimatedControlRenderer
     internal (Color BaseColor, Color HoverColor, Color PressedColor) GetStateColors()
     {
         ButtonBase button = Button;
-        FlatButtonAppearance flatAppearance = button.FlatAppearance;
         _baseColorRenderer.DeviceDpi = button.DeviceDpi;
-        _baseColorRenderer.FlatAppearance = flatAppearance;
 
         bool hasCustomBackColor = button.EffectiveVisualStylesModeInternal >= VisualStylesMode.Net11
             ? button.ShouldSerializeBackColor()
@@ -242,16 +237,12 @@ internal sealed class AnimatedPopupButtonRenderer : AnimatedControlRenderer
         Color baseColor = hasCustomBackColor
             ? button.BackColor
             : _baseColorRenderer.GetBackgroundColor(PushButtonState.Normal, isDefault: false);
-        Color hoverColor = !flatAppearance.MouseOverBackColorCore.IsEmpty
-            ? flatAppearance.MouseOverBackColorCore
-            : hasCustomBackColor
-                ? PopupButtonColorMath.TowardsContrast(baseColor, CustomHoverShadeAmount)
-                : _baseColorRenderer.GetBackgroundColor(PushButtonState.Hot, isDefault: false);
-        Color pressedColor = !flatAppearance.MouseDownBackColorCore.IsEmpty
-            ? flatAppearance.MouseDownBackColorCore
-            : hasCustomBackColor
-                ? PopupButtonColorMath.TowardsContrast(baseColor, CustomPressedShadeAmount)
-                : _baseColorRenderer.GetBackgroundColor(PushButtonState.Pressed, isDefault: false);
+        Color hoverColor = hasCustomBackColor
+            ? PopupButtonColorMath.TowardsContrast(baseColor, CustomHoverShadeAmount)
+            : _baseColorRenderer.GetBackgroundColor(PushButtonState.Hot, isDefault: false);
+        Color pressedColor = hasCustomBackColor
+            ? PopupButtonColorMath.TowardsContrast(baseColor, CustomPressedShadeAmount)
+            : _baseColorRenderer.GetBackgroundColor(PushButtonState.Pressed, isDefault: false);
 
         return (baseColor, hoverColor, pressedColor);
     }

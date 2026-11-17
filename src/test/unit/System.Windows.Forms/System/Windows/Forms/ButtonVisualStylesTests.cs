@@ -6,6 +6,7 @@
 using System.ComponentModel;
 using System.Drawing;
 using System.Windows.Forms.Rendering.Button;
+using Microsoft.DotNet.RemoteExecutor;
 
 namespace System.Windows.Forms.Tests;
 
@@ -444,6 +445,130 @@ public class ButtonVisualStylesTests
 
         Assert.Equal(Color.Blue, background);
         Assert.True(ContainsPixel(bitmap, Color.Lime));
+    }
+
+    [WinFormsTheory]
+    [InlineData(VisualStylesMode.Net11, FlatStyle.Standard, false, false, false)]
+    [InlineData(VisualStylesMode.Net11, FlatStyle.Standard, true, true, false)]
+    [InlineData(VisualStylesMode.Net11, FlatStyle.Popup, true, false, false)]
+    [InlineData(VisualStylesMode.Net11, FlatStyle.System, true, false, false)]
+    [InlineData(VisualStylesMode.Net11, FlatStyle.Flat, false, false, true)]
+    [InlineData(VisualStylesMode.Net11, FlatStyle.Flat, true, true, true)]
+    [InlineData(VisualStylesMode.Classic, FlatStyle.Standard, false, false, false)]
+    [InlineData(VisualStylesMode.Classic, FlatStyle.Standard, true, true, false)]
+    [InlineData(VisualStylesMode.Classic, FlatStyle.Flat, true, false, true)]
+    [InlineData(VisualStylesMode.Classic, FlatStyle.Popup, true, false, false)]
+    public void ButtonDarkModeAdapter_FlatAppearanceColors_FollowStyle(
+        VisualStylesMode visualStylesMode,
+        FlatStyle flatStyle,
+        bool focused,
+        bool isDefault,
+        bool applyColors)
+    {
+        using Button button = new()
+        {
+            FlatStyle = flatStyle,
+            VisualStylesMode = visualStylesMode,
+            Size = new Size(120, 40)
+        };
+        ButtonInternal.ButtonDarkModeAdapter adapter = new(button);
+        ButtonDarkModeRendererBase renderer = adapter.TestAccessor.Dynamic._buttonDarkModeRenderer;
+        Color hoverBefore = renderer.GetBackgroundColor(VisualStyles.PushButtonState.Hot, isDefault, Color.Empty);
+        Color pressedBefore = renderer.GetBackgroundColor(VisualStyles.PushButtonState.Pressed, isDefault, Color.Empty);
+
+        using Bitmap before = new(button.Width, button.Height);
+        using (Graphics graphics = Graphics.FromImage(before))
+        {
+            renderer.RenderButton(
+                graphics, button, button.ClientRectangle, flatStyle, VisualStyles.PushButtonState.Normal,
+                isDefault, focused, showFocusCues: true,
+                parentBackgroundColor: Color.Black, backColor: Color.Gray, paintContent: _ => { });
+        }
+
+        button.FlatAppearance.BorderColor = Color.Lime;
+        button.FlatAppearance.MouseOverBackColor = Color.Fuchsia;
+        button.FlatAppearance.MouseDownBackColor = Color.Cyan;
+
+        Color hoverAfter = renderer.GetBackgroundColor(VisualStyles.PushButtonState.Hot, isDefault, Color.Empty);
+        Color pressedAfter = renderer.GetBackgroundColor(VisualStyles.PushButtonState.Pressed, isDefault, Color.Empty);
+        using Bitmap after = new(button.Width, button.Height);
+        using (Graphics graphics = Graphics.FromImage(after))
+        {
+            renderer.RenderButton(
+                graphics, button, button.ClientRectangle, flatStyle, VisualStyles.PushButtonState.Normal,
+                isDefault, focused, showFocusCues: true,
+                parentBackgroundColor: Color.Black, backColor: Color.Gray, paintContent: _ => { });
+        }
+
+        Assert.Equal(applyColors ? Color.Fuchsia : hoverBefore, hoverAfter);
+        Assert.Equal(applyColors ? Color.Cyan : pressedBefore, pressedAfter);
+        Assert.Equal(applyColors, FindDifferenceBounds(before, after) != Rectangle.Empty);
+    }
+
+    [WinFormsFact]
+    public void Button_ClassicDarkMode_Standard_IgnoresFlatAppearanceColors()
+    {
+        using RemoteInvokeHandle handle = RemoteExecutor.Invoke(() =>
+        {
+            if (SystemInformation.HighContrast)
+            {
+                return;
+            }
+
+            Application.SetColorMode(SystemColorMode.Dark);
+            Assert.True(Application.IsDarkModeEnabled);
+            using Button button = new()
+            {
+                FlatStyle = FlatStyle.Standard,
+                VisualStylesMode = VisualStylesMode.Classic,
+                Size = new Size(120, 40)
+            };
+            Assert.IsType<ButtonInternal.ButtonDarkModeAdapter>(button.CreateStandardAdapter());
+            button.CreateControl();
+            using Bitmap before = new(button.Width, button.Height);
+            button.DrawToBitmap(before, button.ClientRectangle);
+
+            button.FlatAppearance.BorderColor = Color.Lime;
+            button.FlatAppearance.MouseOverBackColor = Color.Fuchsia;
+            button.FlatAppearance.MouseDownBackColor = Color.Cyan;
+            using Bitmap after = new(button.Width, button.Height);
+            button.DrawToBitmap(after, button.ClientRectangle);
+
+            Assert.Equal(Rectangle.Empty, FindDifferenceBounds(before, after));
+        });
+
+        Assert.Equal(RemoteExecutor.SuccessExitCode, handle.ExitCode);
+    }
+
+    [WinFormsFact]
+    public void Button_Net11_ChangingFlatStyle_AppliesAndIgnoresFlatAppearanceColors()
+    {
+        if (SystemInformation.HighContrast)
+        {
+            return;
+        }
+
+        using Button button = new()
+        {
+            FlatStyle = FlatStyle.Standard,
+            VisualStylesMode = VisualStylesMode.Net11,
+            Size = new Size(120, 40)
+        };
+        button.CreateControl();
+        using Bitmap before = new(button.Width, button.Height);
+        button.DrawToBitmap(before, button.ClientRectangle);
+
+        button.FlatAppearance.BorderColor = Color.Lime;
+        button.FlatStyle = FlatStyle.Flat;
+        using Bitmap flat = new(button.Width, button.Height);
+        button.DrawToBitmap(flat, button.ClientRectangle);
+
+        button.FlatStyle = FlatStyle.Standard;
+        using Bitmap after = new(button.Width, button.Height);
+        button.DrawToBitmap(after, button.ClientRectangle);
+
+        Assert.True(ContainsPixel(flat, Color.Lime));
+        Assert.Equal(Rectangle.Empty, FindDifferenceBounds(before, after));
     }
 
     [WinFormsFact]
