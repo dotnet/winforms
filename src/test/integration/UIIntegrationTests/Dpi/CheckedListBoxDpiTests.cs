@@ -17,6 +17,32 @@ public class CheckedListBoxDpiTests : ControlTestBase
     {
     }
 
+    private sealed class DpiTestScope : IDisposable
+    {
+        private readonly dynamic _scaleHelper = typeof(ScaleHelper).TestAccessor.Dynamic;
+        private readonly bool _originalProcessPerMonitorAware;
+        private readonly int _originalInitialSystemDpi;
+        private readonly DPI_AWARENESS_CONTEXT _originalAwarenessContext;
+
+        public DpiTestScope()
+        {
+            _originalProcessPerMonitorAware = _scaleHelper.s_processPerMonitorAware;
+            _originalInitialSystemDpi = ScaleHelper.InitialSystemDpi;
+            _originalAwarenessContext =
+                PInvoke.SetThreadDpiAwarenessContextInternal(
+                    DPI_AWARENESS_CONTEXT.DPI_AWARENESS_CONTEXT_PER_MONITOR_AWARE_V2);
+
+            _scaleHelper.InitializeStatics();
+        }
+
+        public void Dispose()
+        {
+            _scaleHelper.s_processPerMonitorAware = _originalProcessPerMonitorAware;
+            _scaleHelper.InitialSystemDpi = _originalInitialSystemDpi;
+            PInvoke.SetThreadDpiAwarenessContextInternal(_originalAwarenessContext);
+        }
+    }
+
     [WinFormsFact]
     public void CheckedListBox_FontChanged_HandlerSeesUpdatedNativeItemHeight()
     {
@@ -50,31 +76,9 @@ public class CheckedListBoxDpiTests : ControlTestBase
             return;
         }
 
-        dynamic scaleHelper = typeof(ScaleHelper).TestAccessor.Dynamic;
-        bool originalProcessPerMonitorAware = scaleHelper.s_processPerMonitorAware;
-        int originalInitialSystemDpi = ScaleHelper.InitialSystemDpi;
-        DPI_AWARENESS_CONTEXT originalAwarenessContext =
-            PInvoke.SetThreadDpiAwarenessContextInternal(DPI_AWARENESS_CONTEXT.DPI_AWARENESS_CONTEXT_PER_MONITOR_AWARE_V2);
-
-        try
+        using (new DpiTestScope())
         {
-            scaleHelper.InitializeStatics();
-
-            using Form form = new()
-            {
-                AutoScaleMode = AutoScaleMode.None
-            };
-            form.Show();
-
-            if (form.DeviceDpi != ScaleHelper.OneHundredPercentLogicalDpi)
-            {
-                DpiMessageHelper.TriggerDpiMessage(
-                    PInvokeCore.WM_DPICHANGED,
-                    form,
-                    ScaleHelper.OneHundredPercentLogicalDpi);
-            }
-
-            Assert.Equal(ScaleHelper.OneHundredPercentLogicalDpi, form.DeviceDpi);
+            using Form form = CreateFormAtOneHundredPercent();
 
             using CheckedListBox checkedListBox = new()
             {
@@ -111,9 +115,7 @@ public class CheckedListBoxDpiTests : ControlTestBase
             int originalTopIndex = checkedListBox.TopIndex;
 
             int newDpi = 3 * ScaleHelper.OneHundredPercentLogicalDpi / 2;
-            DpiMessageHelper.TriggerDpiMessage(PInvokeCore.WM_DPICHANGED_BEFOREPARENT, checkedListBox, newDpi);
-            DpiMessageHelper.TriggerDpiMessage(PInvokeCore.WM_DPICHANGED, form, newDpi);
-            DpiMessageHelper.TriggerDpiMessage(PInvokeCore.WM_DPICHANGED_AFTERPARENT, checkedListBox, newDpi);
+            TriggerDpiTransition(checkedListBox, form, newDpi);
 
             Assert.True(HasScrollableContent(checkedListBox));
             Assert.True(IsVerticalScrollBarVisible(checkedListBox));
@@ -124,12 +126,6 @@ public class CheckedListBoxDpiTests : ControlTestBase
             Assert.True(checkedListBox.GetItemChecked(itemCount - 1));
             Assert.Equal(0, itemCheckEvents);
             Assert.Equal(0, selectedIndexChangedEvents);
-        }
-        finally
-        {
-            scaleHelper.s_processPerMonitorAware = originalProcessPerMonitorAware;
-            scaleHelper.InitialSystemDpi = originalInitialSystemDpi;
-            PInvoke.SetThreadDpiAwarenessContextInternal(originalAwarenessContext);
         }
     }
 
@@ -143,29 +139,9 @@ public class CheckedListBoxDpiTests : ControlTestBase
             return;
         }
 
-        dynamic scaleHelper = typeof(ScaleHelper).TestAccessor.Dynamic;
-        bool originalProcessPerMonitorAware = scaleHelper.s_processPerMonitorAware;
-        int originalInitialSystemDpi = ScaleHelper.InitialSystemDpi;
-        DPI_AWARENESS_CONTEXT originalAwarenessContext =
-            PInvoke.SetThreadDpiAwarenessContextInternal(DPI_AWARENESS_CONTEXT.DPI_AWARENESS_CONTEXT_PER_MONITOR_AWARE_V2);
-
-        try
+        using (new DpiTestScope())
         {
-            scaleHelper.InitializeStatics();
-
-            using Form form = new()
-            {
-                AutoScaleMode = AutoScaleMode.None
-            };
-            form.Show();
-
-            if (form.DeviceDpi != ScaleHelper.OneHundredPercentLogicalDpi)
-            {
-                DpiMessageHelper.TriggerDpiMessage(
-                    PInvokeCore.WM_DPICHANGED,
-                    form,
-                    ScaleHelper.OneHundredPercentLogicalDpi);
-            }
+            using Form form = CreateFormAtOneHundredPercent();
 
             using CheckedListBox checkedListBox = new()
             {
@@ -202,9 +178,7 @@ public class CheckedListBoxDpiTests : ControlTestBase
             int newDpi = 3 * ScaleHelper.OneHundredPercentLogicalDpi / 2;
             foreach (int dpi in new[] { newDpi, ScaleHelper.OneHundredPercentLogicalDpi })
             {
-                DpiMessageHelper.TriggerDpiMessage(PInvokeCore.WM_DPICHANGED_BEFOREPARENT, checkedListBox, dpi);
-                DpiMessageHelper.TriggerDpiMessage(PInvokeCore.WM_DPICHANGED, form, dpi);
-                DpiMessageHelper.TriggerDpiMessage(PInvokeCore.WM_DPICHANGED_AFTERPARENT, checkedListBox, dpi);
+                TriggerDpiTransition(checkedListBox, form, dpi);
 
                 Assert.Equal(originalHandle, checkedListBox.Handle);
                 Assert.Equal(originalTopIndex, checkedListBox.TopIndex);
@@ -214,12 +188,42 @@ public class CheckedListBoxDpiTests : ControlTestBase
                 Assert.Equal(originalCheckStates[2], checkedListBox.GetItemCheckState(15));
             }
         }
-        finally
+    }
+
+    private static Form CreateFormAtOneHundredPercent()
+    {
+        Form form = new()
         {
-            scaleHelper.s_processPerMonitorAware = originalProcessPerMonitorAware;
-            scaleHelper.InitialSystemDpi = originalInitialSystemDpi;
-            PInvoke.SetThreadDpiAwarenessContextInternal(originalAwarenessContext);
+            AutoScaleMode = AutoScaleMode.None
+        };
+
+        try
+        {
+            form.Show();
+
+            if (form.DeviceDpi != ScaleHelper.OneHundredPercentLogicalDpi)
+            {
+                DpiMessageHelper.TriggerDpiMessage(
+                    PInvokeCore.WM_DPICHANGED,
+                    form,
+                    ScaleHelper.OneHundredPercentLogicalDpi);
+            }
+
+            Assert.Equal(ScaleHelper.OneHundredPercentLogicalDpi, form.DeviceDpi);
+            return form;
         }
+        catch
+        {
+            form.Dispose();
+            throw;
+        }
+    }
+
+    private static void TriggerDpiTransition(Control control, Form form, int newDpi)
+    {
+        DpiMessageHelper.TriggerDpiMessage(PInvokeCore.WM_DPICHANGED_BEFOREPARENT, control, newDpi);
+        DpiMessageHelper.TriggerDpiMessage(PInvokeCore.WM_DPICHANGED, form, newDpi);
+        DpiMessageHelper.TriggerDpiMessage(PInvokeCore.WM_DPICHANGED_AFTERPARENT, control, newDpi);
     }
 
     private static bool HasScrollableContent(CheckedListBox listBox)
