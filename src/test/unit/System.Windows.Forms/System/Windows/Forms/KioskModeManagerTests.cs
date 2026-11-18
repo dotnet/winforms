@@ -97,6 +97,37 @@ public class KioskModeManagerTests
     }
 
     [WinFormsFact]
+    public void KioskModeManager_ContainerControl_PropertyGrid_MultipleManagersShareUnsitedForm()
+    {
+        using Form form = new() { Name = "Form1" };
+        using KioskModeManager firstManager = new() { ContainerControl = form };
+        using KioskModeManager secondManager = new() { ContainerControl = form };
+        using PropertyGrid grid = new()
+        {
+            PropertySort = PropertySort.Alphabetical,
+            SelectedObjects = [firstManager, secondManager]
+        };
+        PropertyGridView view = grid.Controls.OfType<PropertyGridView>().Single();
+        GridEntry entry = view.TopLevelGridEntries
+            .Single(e => e.PropertyName == nameof(KioskModeManager.ContainerControl));
+
+        Assert.Equal("Form1", entry.GetPropertyTextValue());
+        Assert.Equal([null, form], entry.GetPropertyValueList());
+        Assert.Same(form, entry.ConvertTextToValue("Form1"));
+
+        entry.SetPropertyTextValue(entry.GetPropertyTextValue(null));
+        Assert.Null(firstManager.ContainerControl);
+        Assert.Null(secondManager.ContainerControl);
+        Assert.Equal([null, form], entry.GetPropertyValueList());
+        Assert.Same(form, entry.ConvertTextToValue("Form1"));
+
+        entry.SetPropertyTextValue("Form1");
+        Assert.Same(form, firstManager.ContainerControl);
+        Assert.Same(form, secondManager.ContainerControl);
+        Assert.Equal("Form1", entry.GetPropertyTextValue());
+    }
+
+    [WinFormsFact]
     public void KioskModeManager_ContainerControl_PropertyGrid_ListsFormControlsAndRefreshesProperties()
     {
         using Form form = new() { Name = "Form1" };
@@ -292,15 +323,19 @@ public class KioskModeManagerTests
     }
 
     [WinFormsTheory]
-    [InlineData(0)]
-    [InlineData(1)]
-    [InlineData(2)]
-    public void KioskModeManager_ContainerControl_Converter_DesignerUsesOnlyReferences(int designerContext)
+    [InlineData(0, false)]
+    [InlineData(1, false)]
+    [InlineData(2, false)]
+    [InlineData(0, true)]
+    [InlineData(1, true)]
+    [InlineData(2, true)]
+    public void KioskModeManager_ContainerControl_Converter_DesignerUsesOnlyReferences(int designerContext, bool multipleManagers)
     {
         using Form root = new() { Name = "root" };
         using UserControl privateChild = new() { Name = "privateChild" };
         root.Controls.Add(privateChild);
         using KioskModeManager manager = new() { ContainerControl = root };
+        using KioskModeManager runtimeManager = new() { ContainerControl = root };
         Mock<IDesignerHost> host = new();
         Mock<ISite> site = new();
         site.Setup(s => s.DesignMode).Returns(designerContext == 0);
@@ -315,7 +350,7 @@ public class KioskModeManagerTests
         references.Setup(r => r.GetReference("designerRoot")).Returns(root);
         references.Setup(r => r.GetReferences(typeof(ContainerControl))).Returns([root]);
         Mock<ITypeDescriptorContext> context = new();
-        context.Setup(c => c.Instance).Returns(manager);
+        context.Setup(c => c.Instance).Returns(multipleManagers ? new object[] { runtimeManager, manager } : manager);
         context.Setup(c => c.GetService(typeof(IReferenceService))).Returns(references.Object);
         if (designerContext == 2)
         {

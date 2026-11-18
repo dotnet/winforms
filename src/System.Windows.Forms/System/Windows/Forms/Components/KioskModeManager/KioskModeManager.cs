@@ -1001,10 +1001,10 @@ public class KioskModeManager : Component, ISupportInitialize
             if (destinationType == typeof(string)
                 && result is string { Length: 0 }
                 && value is ContainerControl controlValue
-                && context?.Instance is KioskModeManager manager
-                && !IsDesignerContext(context, manager)
+                && context is not null
+                && GetRuntimeManagers(context) is { } managers
                 && !string.IsNullOrEmpty(controlValue.Name)
-                && ReferenceEquals(FindControl(context, CreateControlIndex(context, manager), controlValue.Name, culture), controlValue))
+                && ReferenceEquals(FindControl(context, CreateControlIndex(context, managers), controlValue.Name, culture), controlValue))
             {
                 return controlValue.Name;
             }
@@ -1017,9 +1017,9 @@ public class KioskModeManager : Component, ISupportInitialize
             object? result = base.ConvertFrom(context, culture, value);
             if (result is null
                 && value is string text
-                && context?.Instance is KioskModeManager manager
-                && !IsDesignerContext(context, manager)
-                && FindControl(context, CreateControlIndex(context, manager), text, culture) is { } control)
+                && context is not null
+                && GetRuntimeManagers(context) is { } managers
+                && FindControl(context, CreateControlIndex(context, managers), text, culture) is { } control)
             {
                 return control;
             }
@@ -1030,7 +1030,7 @@ public class KioskModeManager : Component, ISupportInitialize
         public override StandardValuesCollection GetStandardValues(ITypeDescriptorContext? context)
         {
             StandardValuesCollection values = base.GetStandardValues(context);
-            if (context?.Instance is not KioskModeManager manager || IsDesignerContext(context, manager))
+            if (context is null || GetRuntimeManagers(context) is not { } managers)
             {
                 return values;
             }
@@ -1043,7 +1043,7 @@ public class KioskModeManager : Component, ISupportInitialize
                 seen.Add(value);
             }
 
-            List<ContainerControl> controls = [.. GetControls(context, manager)];
+            List<ContainerControl> controls = [.. GetControls(context, managers)];
             Dictionary<string, ContainerControl?> index = CreateControlIndex(controls);
             foreach (ContainerControl control in controls)
             {
@@ -1083,6 +1083,33 @@ public class KioskModeManager : Component, ISupportInitialize
                 || manager.Site?.GetService(typeof(IDesignerHost)) is IDesignerHost
                 || context.GetService(typeof(IDesignerHost)) is IDesignerHost;
 
+        private static KioskModeManager[]? GetRuntimeManagers(ITypeDescriptorContext context)
+        {
+            object[] instances = context.Instance switch
+            {
+                object[] selected => selected,
+                { } instance => [instance],
+                _ => []
+            };
+            if (instances.Length == 0)
+            {
+                return null;
+            }
+
+            KioskModeManager[] managers = new KioskModeManager[instances.Length];
+            for (int i = 0; i < instances.Length; i++)
+            {
+                if (instances[i] is not KioskModeManager manager || IsDesignerContext(context, manager))
+                {
+                    return null;
+                }
+
+                managers[i] = manager;
+            }
+
+            return managers;
+        }
+
         private ContainerControl? FindControl(
             ITypeDescriptorContext context,
             Dictionary<string, ContainerControl?> index,
@@ -1100,8 +1127,8 @@ public class KioskModeManager : Component, ISupportInitialize
             return index.TryGetValue(name, out ContainerControl? match) ? match : null;
         }
 
-        private static Dictionary<string, ContainerControl?> CreateControlIndex(ITypeDescriptorContext context, KioskModeManager manager)
-            => CreateControlIndex(GetControls(context, manager));
+        private static Dictionary<string, ContainerControl?> CreateControlIndex(ITypeDescriptorContext context, KioskModeManager[] managers)
+            => CreateControlIndex(GetControls(context, managers));
 
         private static Dictionary<string, ContainerControl?> CreateControlIndex(IEnumerable<ContainerControl> controls)
         {
@@ -1117,21 +1144,23 @@ public class KioskModeManager : Component, ISupportInitialize
             return index;
         }
 
-        private static IEnumerable<ContainerControl> GetControls(ITypeDescriptorContext context, KioskModeManager manager)
+        private static IEnumerable<ContainerControl> GetControls(ITypeDescriptorContext context, KioskModeManager[] managers)
         {
             PropertyGrid? grid = (context as GridEntry)?.OwnerGrid;
             Control? page = (Control?)grid?.FindForm() ?? (grid?.Parent is not null ? grid : null);
-            Control? targetRoot = manager.ContainerControl is { } current
-                ? GetRoot(current)
-                : manager._lastContainerRoot is { } reference && reference.TryGetTarget(out Control? root)
-                    ? root
-                    : null;
-
             HashSet<Control> seen = [];
             Stack<Control> pending = new();
-            if (targetRoot is not null && !targetRoot.IsDisposed)
+            foreach (KioskModeManager manager in managers)
             {
-                pending.Push(targetRoot);
+                Control? targetRoot = manager.ContainerControl is { } current
+                    ? GetRoot(current)
+                    : manager._lastContainerRoot is { } reference && reference.TryGetTarget(out Control? root)
+                        ? root
+                        : null;
+                if (targetRoot is not null && !targetRoot.IsDisposed)
+                {
+                    pending.Push(targetRoot);
+                }
             }
 
             if (page is not null)
