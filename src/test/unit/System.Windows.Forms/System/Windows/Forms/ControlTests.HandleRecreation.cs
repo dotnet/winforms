@@ -179,9 +179,9 @@ public partial class ControlTests
             Size = new Size(120, 20),
             Parent = parent
         };
+        _ = textBox.Handle;
         textBox.SelectionStart = 2;
         textBox.SelectionLength = 4;
-        _ = textBox.Handle;
 
         int createdCount = 0;
         int destroyedCount = 0;
@@ -222,9 +222,9 @@ public partial class ControlTests
     {
         using ListBox listBox = new() { SelectionMode = SelectionMode.MultiExtended };
         listBox.Items.AddRange(["a", "b", "c", "d"]);
+        _ = listBox.Handle;
         listBox.SetSelected(1, true);
         listBox.SetSelected(3, true);
-        _ = listBox.Handle;
         int destroyedCount = 0;
         listBox.HandleDestroyed += (sender, e) => destroyedCount++;
 
@@ -246,8 +246,8 @@ public partial class ControlTests
         listView.Items.Add(new ListViewItem("one"));
         listView.Items.Add(new ListViewItem("two"));
         listView.Items.Add(new ListViewItem("three"));
-        listView.Items[1].Selected = true;
         _ = listView.Handle;
+        listView.Items[1].Selected = true;
         listView.Items[2].Checked = true;
         int destroyedCount = 0;
         listView.HandleDestroyed += (sender, e) => destroyedCount++;
