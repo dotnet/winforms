@@ -1,4 +1,4 @@
-// Licensed to the .NET Foundation under one or more agreements.
+﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
 #nullable disable
@@ -90,6 +90,17 @@ public class KioskModeManagerTests
         manager.ContainerControlChanged -= handler;
         manager.ContainerControl = form;
         Assert.Equal(2, callCount);
+    }
+
+    [WinFormsFact]
+    public void KioskModeManager_ContainerControl_PropertyDescriptor_RefreshesAndIsExpandable()
+    {
+        PropertyDescriptor descriptor = TypeDescriptor.GetProperties(typeof(KioskModeManager))[nameof(KioskModeManager.ContainerControl)];
+        Assert.NotNull(descriptor);
+        Assert.True(descriptor.Converter.GetPropertiesSupported());
+
+        RefreshPropertiesAttribute refreshAttribute = descriptor.Attributes.OfType<RefreshPropertiesAttribute>().Single();
+        Assert.Equal(RefreshProperties.All, refreshAttribute.RefreshProperties);
     }
 
     [WinFormsTheory]
