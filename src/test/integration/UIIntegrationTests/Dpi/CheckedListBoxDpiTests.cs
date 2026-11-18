@@ -132,6 +132,40 @@ public class CheckedListBoxDpiTests : ControlTestBase
         }
     }
 
+    [WinFormsFact]
+    public void CheckedListBox_DpiChangedToHigh_PreservesVerticalScrollBar()
+    {
+        if (!PlatformDetection.IsWindows10Version1803OrGreater)
+        {
+            return;
+        }
+
+        using (new DpiTestScope())
+        using (Form form = new()
+        {
+            AutoScaleMode = AutoScaleMode.Font
+        })
+        using (CheckedListBox checkedListBox = new()
+        {
+            Size = new Size(120, 94)
+        })
+        {
+            for (int i = 1; i <= 10; i++)
+            {
+                checkedListBox.Items.Add($"test{i}");
+            }
+
+            form.Controls.Add(checkedListBox);
+            form.Show();
+            Assert.True(IsVerticalScrollBarVisible(checkedListBox));
+
+            int newDPI = 300 * form.DeviceDpi / 100;
+            TriggerDpiTransition(checkedListBox, form, newDPI);
+
+            Assert.True(IsVerticalScrollBarVisible(checkedListBox));
+        }
+    }
+
     [WinFormsTheory]
     [InlineData(false)]
     [InlineData(true)]
