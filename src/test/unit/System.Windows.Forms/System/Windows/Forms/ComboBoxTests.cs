@@ -3099,7 +3099,8 @@ public class ComboBoxTests
 
         Assert.NotEqual(IntPtr.Zero, control.Handle);
         Assert.Equal(2, fontChangedCallCount);
-        Assert.Equal(font.Size * parentDpi / originalDpi, control.Font.Size, 0.01f);
+        float expectedFontSize = ScaleHelper.IsThreadPerMonitorV2Aware ? font.Size : font.Size * parentDpi / originalDpi;
+        Assert.Equal(expectedFontSize, control.Font.Size, 0.01f);
         Assert.Equal(1, handleCreatedCallCount);
         Assert.Equal(0, handleDestroyedCallCount);
         Assert.Equal(["First", "Second"], GetNativeItemTexts(control));
