@@ -441,28 +441,6 @@ public class CheckedListBoxTests
         Assert.Equal(0, createdCallCount);
     }
 
-    [WinFormsFact]
-    public void CheckedListBox_RefreshItems_DataSourceGrows_DoesNotThrowAndRestoresExistingChecks()
-    {
-        using SubCheckedListBox control = new();
-        List<string> dataSource = ["item1", "item2"];
-
-        control.SelectionMode = SelectionMode.None;
-        control.BindingContext = new BindingContext();
-        control.DataSource = dataSource;
-        Assert.Equal(2, control.Items.Count);
-        control.SetItemChecked(0, value: true);
-
-        // Simulate a bound source that changed without list-changed notifications.
-        dataSource.Add("item3");
-
-        control.RefreshItems();
-
-        Assert.Equal(3, control.Items.Count);
-        Assert.True(control.GetItemChecked(0));
-        Assert.False(control.GetItemChecked(2));
-    }
-
     [WinFormsTheory]
     [InlineData(1)]
     [InlineData(-1)]

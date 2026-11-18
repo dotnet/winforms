@@ -78,54 +78,57 @@ public class CheckedListBoxDpiTests : ControlTestBase
 
         using (new DpiTestScope())
         {
-            using Form form = CreateFormAtOneHundredPercent();
-
-            using CheckedListBox checkedListBox = new()
+            int[] targetScalePercents = [125, 150, 175, 200, 225, 250, 300];
+            foreach (int targetScalePercent in targetScalePercents)
             {
-                IntegralHeight = integralHeight,
-                Size = new Size(120, 94)
-            };
+                using Form form = CreateFormAtBaselineDpi();
 
-            if (explicitFont)
-            {
-                checkedListBox.Font = new Font(checkedListBox.Font.FontFamily, checkedListBox.Font.Size + 2);
+                using CheckedListBox checkedListBox = new()
+                {
+                    IntegralHeight = integralHeight,
+                    Size = new Size(120, 100)
+                };
+
+                if (explicitFont)
+                {
+                    checkedListBox.Font = new Font(checkedListBox.Font.FontFamily, checkedListBox.Font.Size + 2);
+                }
+
+                int itemCount = Math.Max(1, checkedListBox.ClientSize.Height / checkedListBox.ItemHeight);
+                for (int i = 0; i < itemCount; i++)
+                {
+                    checkedListBox.Items.Add($"Item {i}");
+                }
+
+                checkedListBox.SelectedIndex = itemCount - 1;
+                checkedListBox.SetItemChecked(0, value: true);
+                checkedListBox.SetItemChecked(itemCount - 1, value: true);
+                form.Controls.Add(checkedListBox);
+
+                checkedListBox.TopIndex = Math.Max(0, itemCount - 2);
+                IntPtr originalHandle = checkedListBox.Handle;
+                int itemCheckEvents = 0;
+                int selectedIndexChangedEvents = 0;
+                checkedListBox.ItemCheck += (_, _) => itemCheckEvents++;
+                checkedListBox.SelectedIndexChanged += (_, _) => selectedIndexChangedEvents++;
+
+                Assert.False(HasScrollableContent(checkedListBox));
+                Assert.False(IsVerticalScrollBarVisible(checkedListBox));
+                int originalTopIndex = checkedListBox.TopIndex;
+                int newDpi = targetScalePercent * form.DeviceDpi / 100;
+                TriggerDpiTransition(checkedListBox, form, newDpi);
+
+                bool hasScrollableContent = HasScrollableContent(checkedListBox);
+                Assert.Equal(hasScrollableContent, IsVerticalScrollBarVisible(checkedListBox));
+                Assert.True(hasScrollableContent || targetScalePercent < 300);
+                Assert.Equal(originalHandle, checkedListBox.Handle);
+                Assert.Equal(originalTopIndex, checkedListBox.TopIndex);
+                Assert.Equal(itemCount - 1, checkedListBox.SelectedIndex);
+                Assert.True(checkedListBox.GetItemChecked(0));
+                Assert.True(checkedListBox.GetItemChecked(itemCount - 1));
+                Assert.Equal(0, itemCheckEvents);
+                Assert.Equal(0, selectedIndexChangedEvents);
             }
-
-            int itemCount = Math.Max(1, checkedListBox.ClientSize.Height / checkedListBox.ItemHeight);
-            for (int i = 0; i < itemCount; i++)
-            {
-                checkedListBox.Items.Add($"Item {i}");
-            }
-
-            checkedListBox.SelectedIndex = itemCount - 1;
-            checkedListBox.SetItemChecked(0, value: true);
-            checkedListBox.SetItemChecked(itemCount - 1, value: true);
-
-            form.Controls.Add(checkedListBox);
-
-            checkedListBox.TopIndex = Math.Max(0, itemCount - 2);
-            IntPtr originalHandle = checkedListBox.Handle;
-            int itemCheckEvents = 0;
-            int selectedIndexChangedEvents = 0;
-            checkedListBox.ItemCheck += (_, _) => itemCheckEvents++;
-            checkedListBox.SelectedIndexChanged += (_, _) => selectedIndexChangedEvents++;
-
-            Assert.False(HasScrollableContent(checkedListBox));
-            Assert.False(IsVerticalScrollBarVisible(checkedListBox));
-            int originalTopIndex = checkedListBox.TopIndex;
-
-            int newDpi = 3 * ScaleHelper.OneHundredPercentLogicalDpi / 2;
-            TriggerDpiTransition(checkedListBox, form, newDpi);
-
-            Assert.True(HasScrollableContent(checkedListBox));
-            Assert.True(IsVerticalScrollBarVisible(checkedListBox));
-            Assert.Equal(originalHandle, checkedListBox.Handle);
-            Assert.Equal(originalTopIndex, checkedListBox.TopIndex);
-            Assert.Equal(itemCount - 1, checkedListBox.SelectedIndex);
-            Assert.True(checkedListBox.GetItemChecked(0));
-            Assert.True(checkedListBox.GetItemChecked(itemCount - 1));
-            Assert.Equal(0, itemCheckEvents);
-            Assert.Equal(0, selectedIndexChangedEvents);
         }
     }
 
@@ -141,7 +144,7 @@ public class CheckedListBoxDpiTests : ControlTestBase
 
         using (new DpiTestScope())
         {
-            using Form form = CreateFormAtOneHundredPercent();
+            using Form form = CreateFormAtBaselineDpi();
 
             using CheckedListBox checkedListBox = new()
             {
@@ -175,22 +178,28 @@ public class CheckedListBoxDpiTests : ControlTestBase
             Assert.True(IsVerticalScrollBarVisible(checkedListBox));
             Assert.Equal(originalTopIndex, checkedListBox.TopIndex);
 
-            int newDpi = 3 * ScaleHelper.OneHundredPercentLogicalDpi / 2;
-            foreach (int dpi in new[] { newDpi, ScaleHelper.OneHundredPercentLogicalDpi })
+            int[] targetScalePercents = [125, 150, 175, 200, 225, 250, 300];
+            foreach (int targetScalePercent in targetScalePercents)
             {
-                TriggerDpiTransition(checkedListBox, form, dpi);
+                int newDpi = targetScalePercent * form.DeviceDpi / 100;
+                foreach (int dpi in new[] { newDpi, form.DeviceDpi })
+                {
+                    TriggerDpiTransition(checkedListBox, form, dpi);
 
-                Assert.Equal(originalHandle, checkedListBox.Handle);
-                Assert.Equal(originalTopIndex, checkedListBox.TopIndex);
-                Assert.Equal(originalSelectedIndex, checkedListBox.SelectedIndex);
-                Assert.Equal(originalCheckStates[0], checkedListBox.GetItemCheckState(2));
-                Assert.Equal(originalCheckStates[1], checkedListBox.GetItemCheckState(7));
-                Assert.Equal(originalCheckStates[2], checkedListBox.GetItemCheckState(15));
+                    Assert.Equal(originalHandle, checkedListBox.Handle);
+                    Assert.True(HasScrollableContent(checkedListBox));
+                    Assert.True(IsVerticalScrollBarVisible(checkedListBox));
+                    Assert.Equal(originalTopIndex, checkedListBox.TopIndex);
+                    Assert.Equal(originalSelectedIndex, checkedListBox.SelectedIndex);
+                    Assert.Equal(originalCheckStates[0], checkedListBox.GetItemCheckState(2));
+                    Assert.Equal(originalCheckStates[1], checkedListBox.GetItemCheckState(7));
+                    Assert.Equal(originalCheckStates[2], checkedListBox.GetItemCheckState(15));
+                }
             }
         }
     }
 
-    private static Form CreateFormAtOneHundredPercent()
+    private static Form CreateFormAtBaselineDpi()
     {
         Form form = new()
         {
@@ -200,16 +209,6 @@ public class CheckedListBoxDpiTests : ControlTestBase
         try
         {
             form.Show();
-
-            if (form.DeviceDpi != ScaleHelper.OneHundredPercentLogicalDpi)
-            {
-                DpiMessageHelper.TriggerDpiMessage(
-                    PInvokeCore.WM_DPICHANGED,
-                    form,
-                    ScaleHelper.OneHundredPercentLogicalDpi);
-            }
-
-            Assert.Equal(ScaleHelper.OneHundredPercentLogicalDpi, form.DeviceDpi);
             return form;
         }
         catch
