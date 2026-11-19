@@ -2102,36 +2102,41 @@ public partial class ListBox : ListControl
         ArgumentNullException.ThrowIfNull(value);
 
         BeginUpdate();
-        Items.ClearInternal();
-        Items.AddRangeInternal(value);
-
-        SelectedItems.Dirty();
-
-        // if the list changed, we want to keep the same selected index
-        // CurrencyManager will provide the PositionChanged event
-        // it will be provided before changing the list though...
-        if (DataManager is not null)
+        try
         {
-            if (DataSource is ICurrencyManagerProvider)
-            {
-                _selectedValueChangedFired = false;
-            }
+            Items.ClearInternal();
+            Items.AddRangeInternal(value);
 
-            if (IsHandleCreated)
-            {
-                PInvokeCore.SendMessage(this, PInvoke.LB_SETCURSEL, (WPARAM)DataManager.Position);
-            }
+            SelectedItems.Dirty();
 
-            // if the list changed and we still did not fire the
-            // onSelectedChanged event, then fire it now;
-            if (!_selectedValueChangedFired)
+            // if the list changed, we want to keep the same selected index
+            // CurrencyManager will provide the PositionChanged event
+            // it will be provided before changing the list though...
+            if (DataManager is not null)
             {
-                OnSelectedValueChanged(EventArgs.Empty);
-                _selectedValueChangedFired = false;
+                if (DataSource is ICurrencyManagerProvider)
+                {
+                    _selectedValueChangedFired = false;
+                }
+
+                if (IsHandleCreated)
+                {
+                    PInvokeCore.SendMessage(this, PInvoke.LB_SETCURSEL, (WPARAM)DataManager.Position);
+                }
+
+                // if the list changed and we still did not fire the
+                // onSelectedChanged event, then fire it now;
+                if (!_selectedValueChangedFired)
+                {
+                    OnSelectedValueChanged(EventArgs.Empty);
+                    _selectedValueChangedFired = false;
+                }
             }
         }
-
-        EndUpdate();
+        finally
+        {
+            EndUpdate();
+        }
     }
 
     protected override void SetItemCore(int index, object value)

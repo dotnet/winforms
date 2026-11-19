@@ -11,6 +11,22 @@ namespace System.Private.Windows.Ole;
 internal unsafe interface IOleServices
 {
     /// <summary>
+    ///  Enables native text synthesis for clipboard results while retaining managed retrieval for other formats.
+    ///  Platforms must opt in so existing managed-object unwrapping behavior is preserved by default.
+    /// </summary>
+    /// <value>
+    ///  <see langword="true"/> to supplement an unwrapped managed clipboard object with Text, UnicodeText,
+    ///  and OEMText retrieved from its captured native proxy; <see langword="false"/> to return the managed
+    ///  object unchanged. WPF opts in to preserve its .NET 9 behavior; WinForms keeps the default of
+    ///  <see langword="false"/>.
+    /// </value>
+#if NET
+    static virtual bool UseNativeClipboardTextFallback => false;
+#else
+    bool UseNativeClipboardTextFallback { get; }
+#endif
+
+    /// <summary>
     ///  This method is called to validate that OLE is initialized and
     ///  that the current thread is a single-threaded apartment (STA).
     /// </summary>

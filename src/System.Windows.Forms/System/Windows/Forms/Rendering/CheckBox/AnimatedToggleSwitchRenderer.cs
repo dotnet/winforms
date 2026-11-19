@@ -15,7 +15,7 @@ namespace System.Windows.Forms.Rendering.CheckBox;
 /// </summary>
 internal sealed class AnimatedToggleSwitchRenderer : AnimatedControlRenderer
 {
-    private const int AnimationDuration = 300;
+    private const int AnimationDuration = 150;
     private const int ThumbHorizontalGapLogical = 1;
     private const float MinimumThumbContrastRatio = 3f;
     private const int ContrastSearchIterations = 10;

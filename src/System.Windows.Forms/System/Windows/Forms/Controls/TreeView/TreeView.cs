@@ -2739,7 +2739,13 @@ public partial class TreeView : Control
                 if (_drawMode == TreeViewDrawMode.OwnerDrawText)
                 {
                     nmtvcd->clrText = nmtvcd->clrTextBk;
-                    m.ResultInternal = (LRESULT)(nint)(PInvoke.CDRF_NEWFONT | PInvoke.CDRF_NOTIFYPOSTPAINT);
+
+                    bool hasPaintArea = nmtvcd->nmcd.rc.right > nmtvcd->nmcd.rc.left &&
+                        nmtvcd->nmcd.rc.bottom > nmtvcd->nmcd.rc.top;
+
+                    m.ResultInternal = (LRESULT)(nint)(hasPaintArea
+                        ? PInvoke.CDRF_NEWFONT | PInvoke.CDRF_NOTIFYPOSTPAINT
+                        : PInvoke.CDRF_NEWFONT);
                     return;
                 }
                 else if (_drawMode == TreeViewDrawMode.OwnerDrawAll)

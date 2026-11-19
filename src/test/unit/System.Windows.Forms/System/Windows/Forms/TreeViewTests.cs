@@ -1456,6 +1456,56 @@ public class TreeViewTests
         Assert.Throws<InvalidEnumArgumentException>("value", () => treeView.DrawMode = value);
     }
 
+    [WinFormsTheory]
+    [InlineData(0, 0, 0, 10, false)]
+    [InlineData(0, 0, 10, 0, false)]
+    [InlineData(10, 0, 0, 10, false)]
+    [InlineData(0, 10, 10, 0, false)]
+    [InlineData(0, 0, 10, 10, true)]
+    public unsafe void TreeView_WndProc_CustomDrawOwnerDrawText_ReturnsExpected(
+        int left,
+        int top,
+        int right,
+        int bottom,
+        bool expectPostPaint)
+    {
+        using SubTreeView treeView = new()
+        {
+            DrawMode = TreeViewDrawMode.OwnerDrawText
+        };
+
+        TreeNode node = treeView.Nodes.Add("Node");
+        treeView.CreateControl();
+
+        NMTVCUSTOMDRAW customDraw = new()
+        {
+            nmcd = new()
+            {
+                hdr = new()
+                {
+                    code = PInvoke.NM_CUSTOMDRAW
+                },
+                dwDrawStage = NMCUSTOMDRAW_DRAW_STAGE.CDDS_ITEMPREPAINT,
+                dwItemSpec = (nuint)(nint)node.Handle,
+                rc = new RECT(left, top, right, bottom)
+            }
+        };
+
+        Message message = new()
+        {
+            HWnd = treeView.Handle,
+            Msg = (int)MessageId.WM_REFLECT_NOTIFY,
+            LParam = (nint)(&customDraw)
+        };
+
+        treeView.WndProc(ref message);
+
+        nint expected = expectPostPaint
+            ? (nint)(PInvoke.CDRF_NEWFONT | PInvoke.CDRF_NOTIFYPOSTPAINT)
+            : (nint)PInvoke.CDRF_NEWFONT;
+        Assert.Equal(expected, message.Result);
+    }
+
     public static IEnumerable<object[]> ForeColor_Set_TestData()
     {
         yield return new object[] { Color.Empty, SystemColors.WindowText };
