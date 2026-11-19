@@ -59,20 +59,20 @@ public partial class StatusStripTests
         Assert.Equal(Padding.Empty, control.DefaultMargin);
         Assert.Equal(Size.Empty, control.DefaultMaximumSize);
         Assert.Equal(Size.Empty, control.DefaultMinimumSize);
-        Assert.Equal(new Padding(1, 0, 14, 0), control.DefaultPadding);
+        Assert.Equal(new Padding(1, 0, 17, 0), control.DefaultPadding);
         Assert.Equal(new Size(200, 22), control.DefaultSize);
         Assert.False(control.DefaultShowItemToolTips);
         Assert.False(control.DesignMode);
         Assert.Empty(control.DisplayedItems);
         Assert.Same(control.DisplayedItems, control.DisplayedItems);
-        Assert.Equal(new Rectangle(1, 0, 185, 22), control.DisplayRectangle);
+        Assert.Equal(new Rectangle(1, 0, 182, 22), control.DisplayRectangle);
         Assert.Equal(DockStyle.Bottom, control.Dock);
         Assert.NotNull(control.DockPadding);
         Assert.Same(control.DockPadding, control.DockPadding);
         Assert.Equal(0, control.DockPadding.Top);
         Assert.Equal(0, control.DockPadding.Bottom);
         Assert.Equal(1, control.DockPadding.Left);
-        Assert.Equal(14, control.DockPadding.Right);
+        Assert.Equal(17, control.DockPadding.Right);
         Assert.True(control.DoubleBuffered);
         Assert.True(control.Enabled);
         Assert.NotNull(control.Events);
@@ -108,13 +108,13 @@ public partial class StatusStripTests
         Assert.Equal(Point.Empty, control.Location);
         Assert.Equal(Padding.Empty, control.Margin);
         Assert.Equal(Size.Empty, control.MaximumSize);
-        Assert.Equal(new Size(185, 22), control.MaxItemSize);
+        Assert.Equal(new Size(182, 22), control.MaxItemSize);
         Assert.Equal(Size.Empty, control.MinimumSize);
         Assert.Equal(Orientation.Horizontal, control.Orientation);
         Assert.NotNull(control.OverflowButton);
         Assert.Same(control.OverflowButton, control.OverflowButton);
         Assert.Same(control, control.OverflowButton.GetCurrentParent());
-        Assert.Equal(new Padding(1, 0, 14, 0), control.Padding);
+        Assert.Equal(new Padding(1, 0, 17, 0), control.Padding);
         Assert.Null(control.Parent);
         Assert.True(control.PreferredSize.Width > 0);
         Assert.True(control.PreferredSize.Height > 0);
@@ -136,7 +136,7 @@ public partial class StatusStripTests
         Assert.Null(control.Site);
         Assert.Equal(new Size(200, 22), control.Size);
         Assert.True(control.SizingGrip);
-        Assert.Equal(new Rectangle(188, 0, 12, 22), control.SizeGripBounds);
+        Assert.Equal(new Rectangle(185, 0, 15, 22), control.SizeGripBounds);
         Assert.True(control.Stretch);
         Assert.Equal(0, control.TabIndex);
         Assert.False(control.TabStop);
@@ -202,21 +202,21 @@ public partial class StatusStripTests
 
     public static IEnumerable<object[]> DefaultPadding_Get_TestData()
     {
-        yield return new object[] { ToolStripLayoutStyle.Flow, RightToLeft.Yes, new Padding(14, 0, 1, 0) };
-        yield return new object[] { ToolStripLayoutStyle.Flow, RightToLeft.No, new Padding(1, 0, 14, 0) };
-        yield return new object[] { ToolStripLayoutStyle.Flow, RightToLeft.Inherit, new Padding(1, 0, 14, 0) };
+        yield return new object[] { ToolStripLayoutStyle.Flow, RightToLeft.Yes, new Padding(17, 0, 1, 0) };
+        yield return new object[] { ToolStripLayoutStyle.Flow, RightToLeft.No, new Padding(1, 0, 17, 0) };
+        yield return new object[] { ToolStripLayoutStyle.Flow, RightToLeft.Inherit, new Padding(1, 0, 17, 0) };
 
-        yield return new object[] { ToolStripLayoutStyle.HorizontalStackWithOverflow, RightToLeft.Yes, new Padding(14, 0, 1, 0) };
-        yield return new object[] { ToolStripLayoutStyle.HorizontalStackWithOverflow, RightToLeft.No, new Padding(1, 0, 14, 0) };
-        yield return new object[] { ToolStripLayoutStyle.HorizontalStackWithOverflow, RightToLeft.Inherit, new Padding(1, 0, 14, 0) };
+        yield return new object[] { ToolStripLayoutStyle.HorizontalStackWithOverflow, RightToLeft.Yes, new Padding(17, 0, 1, 0) };
+        yield return new object[] { ToolStripLayoutStyle.HorizontalStackWithOverflow, RightToLeft.No, new Padding(1, 0, 17, 0) };
+        yield return new object[] { ToolStripLayoutStyle.HorizontalStackWithOverflow, RightToLeft.Inherit, new Padding(1, 0, 17, 0) };
 
-        yield return new object[] { ToolStripLayoutStyle.StackWithOverflow, RightToLeft.Yes, new Padding(14, 0, 1, 0) };
-        yield return new object[] { ToolStripLayoutStyle.StackWithOverflow, RightToLeft.No, new Padding(1, 0, 14, 0) };
-        yield return new object[] { ToolStripLayoutStyle.StackWithOverflow, RightToLeft.Inherit, new Padding(1, 0, 14, 0) };
+        yield return new object[] { ToolStripLayoutStyle.StackWithOverflow, RightToLeft.Yes, new Padding(17, 0, 1, 0) };
+        yield return new object[] { ToolStripLayoutStyle.StackWithOverflow, RightToLeft.No, new Padding(1, 0, 17, 0) };
+        yield return new object[] { ToolStripLayoutStyle.StackWithOverflow, RightToLeft.Inherit, new Padding(1, 0, 17, 0) };
 
-        yield return new object[] { ToolStripLayoutStyle.Table, RightToLeft.Yes, new Padding(14, 0, 1, 0) };
-        yield return new object[] { ToolStripLayoutStyle.Table, RightToLeft.No, new Padding(1, 0, 14, 0) };
-        yield return new object[] { ToolStripLayoutStyle.Table, RightToLeft.Inherit, new Padding(1, 0, 14, 0) };
+        yield return new object[] { ToolStripLayoutStyle.Table, RightToLeft.Yes, new Padding(17, 0, 1, 0) };
+        yield return new object[] { ToolStripLayoutStyle.Table, RightToLeft.No, new Padding(1, 0, 17, 0) };
+        yield return new object[] { ToolStripLayoutStyle.Table, RightToLeft.Inherit, new Padding(1, 0, 17, 0) };
 
         yield return new object[] { ToolStripLayoutStyle.VerticalStackWithOverflow, RightToLeft.Yes, new Padding(1, 3, 1, 22) };
         yield return new object[] { ToolStripLayoutStyle.VerticalStackWithOverflow, RightToLeft.No, new Padding(1, 3, 1, 22) };
@@ -396,7 +396,7 @@ public partial class StatusStripTests
     public static IEnumerable<object[]> Padding_Set_TestData()
     {
         yield return new object[] { default(Padding), default(Padding), 1, 1 };
-        yield return new object[] { new Padding(1, 0, 14, 0), new Padding(1, 0, 14, 0), 0, 0 };
+        yield return new object[] { new Padding(1, 0, 17, 0), new Padding(1, 0, 17, 0), 0, 0 };
         yield return new object[] { new Padding(1, 2, 3, 4), new Padding(1, 2, 3, 4), 1, 1 };
         yield return new object[] { new Padding(1), new Padding(1), 1, 1 };
         yield return new object[] { new Padding(-1, -2, -3, -4), Padding.Empty, 1, 2 };
@@ -620,9 +620,9 @@ public partial class StatusStripTests
     {
         foreach (ToolStripLayoutStyle layoutStyle in Enum.GetValues(typeof(ToolStripLayoutStyle)))
         {
-            yield return new object[] { true, layoutStyle, RightToLeft.Yes, new Rectangle(0, 0, 12, 22) };
-            yield return new object[] { true, layoutStyle, RightToLeft.No, new Rectangle(188, 0, 12, 22) };
-            yield return new object[] { true, layoutStyle, RightToLeft.Inherit, new Rectangle(188, 0, 12, 22) };
+            yield return new object[] { true, layoutStyle, RightToLeft.Yes, new Rectangle(0, 0, 15, 22) };
+            yield return new object[] { true, layoutStyle, RightToLeft.No, new Rectangle(185, 0, 15, 22) };
+            yield return new object[] { true, layoutStyle, RightToLeft.Inherit, new Rectangle(185, 0, 15, 22) };
             yield return new object[] { false, layoutStyle, RightToLeft.Yes, Rectangle.Empty };
             yield return new object[] { false, layoutStyle, RightToLeft.No, Rectangle.Empty };
             yield return new object[] { false, layoutStyle, RightToLeft.Inherit, Rectangle.Empty };
@@ -646,9 +646,9 @@ public partial class StatusStripTests
     {
         foreach (ToolStripLayoutStyle layoutStyle in Enum.GetValues(typeof(ToolStripLayoutStyle)))
         {
-            yield return new object[] { true, layoutStyle, RightToLeft.Yes, new Rectangle(0, 10, 12, 22) };
-            yield return new object[] { true, layoutStyle, RightToLeft.No, new Rectangle(198, 10, 12, 22) };
-            yield return new object[] { true, layoutStyle, RightToLeft.Inherit, new Rectangle(198, 10, 12, 22) };
+            yield return new object[] { true, layoutStyle, RightToLeft.Yes, new Rectangle(0, 10, 15, 22) };
+            yield return new object[] { true, layoutStyle, RightToLeft.No, new Rectangle(195, 10, 15, 22) };
+            yield return new object[] { true, layoutStyle, RightToLeft.Inherit, new Rectangle(195, 10, 15, 22) };
             yield return new object[] { false, layoutStyle, RightToLeft.Yes, Rectangle.Empty };
             yield return new object[] { false, layoutStyle, RightToLeft.No, Rectangle.Empty };
             yield return new object[] { false, layoutStyle, RightToLeft.Inherit, Rectangle.Empty };
@@ -673,9 +673,9 @@ public partial class StatusStripTests
     {
         foreach (ToolStripLayoutStyle layoutStyle in Enum.GetValues(typeof(ToolStripLayoutStyle)))
         {
-            yield return new object[] { true, layoutStyle, RightToLeft.Yes, new Rectangle(0, 0, 12, 12) };
-            yield return new object[] { true, layoutStyle, RightToLeft.No, new Rectangle(178, 0, 12, 12) };
-            yield return new object[] { true, layoutStyle, RightToLeft.Inherit, new Rectangle(178, 0, 12, 12) };
+            yield return new object[] { true, layoutStyle, RightToLeft.Yes, new Rectangle(0, 0, 15, 12) };
+            yield return new object[] { true, layoutStyle, RightToLeft.No, new Rectangle(175, 0, 15, 12) };
+            yield return new object[] { true, layoutStyle, RightToLeft.Inherit, new Rectangle(175, 0, 15, 12) };
             yield return new object[] { false, layoutStyle, RightToLeft.Yes, Rectangle.Empty };
             yield return new object[] { false, layoutStyle, RightToLeft.No, Rectangle.Empty };
             yield return new object[] { false, layoutStyle, RightToLeft.Inherit, Rectangle.Empty };
