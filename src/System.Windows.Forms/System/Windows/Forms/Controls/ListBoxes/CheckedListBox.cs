@@ -757,14 +757,32 @@ public partial class CheckedListBox : ListBox
 
     protected override void OnFontChanged(EventArgs e)
     {
-        // Update the item height
         if (IsHandleCreated)
         {
-            PInvokeCore.SendMessage(this, PInvoke.LB_SETITEMHEIGHT, (WPARAM)0, (LPARAM)ItemHeight);
+            UpdateItemHeightAndScrollBar();
         }
 
-        // The base OnFontChanged will adjust the height of the CheckedListBox accordingly
         base.OnFontChanged(e);
+    }
+
+    protected override void RescaleConstantsForDpi(int deviceDpiOld, int deviceDpiNew)
+    {
+        base.RescaleConstantsForDpi(deviceDpiOld, deviceDpiNew);
+
+        if (IsHandleCreated && deviceDpiOld != deviceDpiNew)
+        {
+            UpdateItemHeightAndScrollBar();
+        }
+    }
+
+    private void UpdateItemHeightAndScrollBar()
+    {
+        PInvokeCore.SendMessage(this, PInvoke.LB_SETITEMHEIGHT, (WPARAM)0, (LPARAM)ItemHeight);
+        PInvokeCore.SendMessage(
+            this,
+            PInvokeCore.WM_SIZE,
+            default,
+            LPARAM.MAKELPARAM(ClientSize.Width, ClientSize.Height));
     }
 
     /// <summary>
