@@ -140,29 +140,52 @@ public class CheckedListBoxDpiTests : ControlTestBase
             return;
         }
 
-        using (new DpiTestScope())
-        using (Form form = new()
+        DPI_AWARENESS_CONTEXT originalAwarenessContext =
+            PInvoke.SetThreadDpiAwarenessContextInternal(
+                DPI_AWARENESS_CONTEXT.DPI_AWARENESS_CONTEXT_PER_MONITOR_AWARE_V2);
+
+        try
         {
-            AutoScaleMode = AutoScaleMode.Font
-        })
-        using (CheckedListBox checkedListBox = new()
-        {
-            Size = new Size(120, 94)
-        })
-        {
+            using Form form = new()
+            {
+                AutoScaleMode = AutoScaleMode.Font
+            };
+
+            using CheckedListBox checkedListBox = new()
+            {
+                Size = new Size(120, 94)
+            };
+
+            form.Controls.Add(checkedListBox);
+            form.Show();
+
+            int initialDpi = ScaleHelper.OneHundredPercentLogicalDpi;
+            int highDpi = initialDpi * 3;
+            TriggerDpiTransition(checkedListBox, form, initialDpi);
+
+            Assert.Equal(initialDpi, form.DeviceDpiInternal);
+            Assert.Equal(initialDpi, checkedListBox.DeviceDpiInternal);
+
             for (int i = 1; i <= 10; i++)
             {
                 checkedListBox.Items.Add($"test{i}");
             }
 
-            form.Controls.Add(checkedListBox);
-            form.Show();
+            // Verify the scrollbar in the simulated 96-DPI state.
             Assert.True(IsVerticalScrollBarVisible(checkedListBox));
 
-            int newDPI = 300 * form.DeviceDpi / 100;
-            TriggerDpiTransition(checkedListBox, form, newDPI);
+            // Simulate a transition from 96 DPI to 288 DPI.
+            TriggerDpiTransition(checkedListBox, form, highDpi);
 
+            Assert.Equal(highDpi, form.DeviceDpiInternal);
+            Assert.Equal(highDpi, checkedListBox.DeviceDpiInternal);
+
+            // Verify the scrollbar remains visible at the simulated 300% DPI.
             Assert.True(IsVerticalScrollBarVisible(checkedListBox));
+        }
+        finally
+        {
+            PInvoke.SetThreadDpiAwarenessContextInternal(originalAwarenessContext);
         }
     }
 
