@@ -1,4 +1,4 @@
-// Licensed to the .NET Foundation under one or more agreements.
+﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
 #nullable disable
@@ -876,6 +876,59 @@ public class KioskModeManagerTests
         Assert.False(manager.TestAccessor.Dynamic._isCursorHidden);
         Assert.True(timer.Enabled);
         Assert.Equal(1, timer.Interval);
+    }
+
+    [WinFormsFact]
+    public void KioskModeManager_ProcessMessage_SameShortcutAcrossManagers_OnlyFirstManagerHandles()
+    {
+        using Form form = new()
+        {
+            Bounds = new Rectangle(10, 20, 300, 200),
+            FormBorderStyle = FormBorderStyle.FixedDialog,
+            WindowState = FormWindowState.Normal,
+            TopMost = false
+        };
+
+        using KioskModeManager manager1 = new()
+        {
+            ContainerControl = form,
+            ToggleFullScreenKeys = Keys.F11
+        };
+
+        using KioskModeManager manager2 = new()
+        {
+            ContainerControl = form,
+            ToggleFullScreenKeys = Keys.F11
+        };
+
+        _ = form.Handle;
+        Rectangle expectedBounds = form.Bounds;
+
+        Message keyDownMessage = Message.Create(form.Handle, (int)PInvokeCore.WM_KEYDOWN, (nint)Keys.F11, 0);
+
+        bool handled = manager1.TestAccessor.Dynamic.ProcessMessage(keyDownMessage);
+        if (!handled)
+        {
+            handled = manager2.TestAccessor.Dynamic.ProcessMessage(keyDownMessage);
+        }
+
+        Assert.True(handled);
+        Assert.True(manager1.FullScreen);
+        Assert.False(manager2.FullScreen);
+
+        handled = manager1.TestAccessor.Dynamic.ProcessMessage(keyDownMessage);
+        if (!handled)
+        {
+            handled = manager2.TestAccessor.Dynamic.ProcessMessage(keyDownMessage);
+        }
+
+        Assert.True(handled);
+        Assert.False(manager1.FullScreen);
+        Assert.False(manager2.FullScreen);
+        Assert.Equal(FormBorderStyle.FixedDialog, form.FormBorderStyle);
+        Assert.Equal(FormWindowState.Normal, form.WindowState);
+        Assert.Equal(expectedBounds, form.Bounds);
+        Assert.False(form.TopMost);
     }
 
     private class SubKioskModeManager : KioskModeManager

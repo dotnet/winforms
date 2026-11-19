@@ -807,22 +807,27 @@ public class KioskModeManager : Component, ISupportInitialize
         }
     }
 
-    private void ProcessKeyboardActivity(Keys keyData, bool isRepeat)
+    private bool ProcessKeyboardActivity(Keys keyData, bool isRepeat)
     {
         // Key repeats must not toggle fullscreen mode again while the key is held down.
         if (isRepeat)
         {
-            return;
+            return false;
         }
 
         if (_toggleFullScreenKeys != Keys.None && keyData == _toggleFullScreenKeys)
         {
             ToggleFullScreen();
+            return true;
         }
-        else if (keyData == Keys.Escape && _escapeExitsFullScreen && _isFullScreen)
+
+        if (keyData == Keys.Escape && _escapeExitsFullScreen && _isFullScreen)
         {
             ExitFullScreen();
+            return true;
         }
+
+        return false;
     }
 
     private void ProcessMouseActivity()
@@ -946,7 +951,7 @@ public class KioskModeManager : Component, ISupportInitialize
             bool isRepeat = ((nuint)(nint)message.LParamInternal & (1u << 30)) != 0;
             Keys keyData = ((Keys)(nint)message.WParamInternal & Keys.KeyCode)
                 | (Control.ModifierKeys & Keys.Modifiers);
-            ProcessKeyboardActivity(keyData, isRepeat);
+            return ProcessKeyboardActivity(keyData, isRepeat);
         }
         else if (message.MsgInternal >= PInvokeCore.WM_MOUSEFIRST
             && message.MsgInternal <= PInvokeCore.WM_MOUSELAST)
