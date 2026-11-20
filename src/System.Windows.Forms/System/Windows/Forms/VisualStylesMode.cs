@@ -56,6 +56,9 @@ public enum VisualStylesMode : short
     ///   Controls opt into the .NET 11 rendering changes they support. For example, support for
     ///   <see cref="Appearance.ToggleSwitch"/> depends on the control and its current state.
     ///  </para>
+    ///  <para>
+    ///   For controls hosted through <see cref="ToolStripControlHost"/>, this mode is not applied.
+    ///  </para>
     /// </remarks>
     Net11 = 2,
 
