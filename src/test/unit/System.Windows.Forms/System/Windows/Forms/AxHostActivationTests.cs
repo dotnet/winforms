@@ -77,7 +77,7 @@ public class AxHostActivationTests
     public void AxHost_Dispose_AfterActivation_ReleasesOcxAndDestroysWindow()
     {
         // Disposing the host releases the native OCX reference and destroys the hosted window.
-        ActivationAxHost control = new(WebBrowserClsidString);
+        using ActivationAxHost control = new(WebBrowserClsidString);
         control.CreateControl();
         HWND hwnd = (HWND)control.Handle;
         Assert.NotNull(control.GetOcx());
