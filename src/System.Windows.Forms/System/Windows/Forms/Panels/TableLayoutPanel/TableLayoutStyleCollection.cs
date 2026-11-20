@@ -68,7 +68,11 @@ public abstract class TableLayoutStyleCollection : IList
             EnsureNotOwned(tableLayoutStyle);
             TableLayoutStyle previous = _innerList[index];
             _innerList[index] = tableLayoutStyle;
-            previous.Owner = null;
+            if (ReferenceEquals(previous.Owner, Owner))
+            {
+                previous.Owner = null;
+            }
+
             tableLayoutStyle.Owner = Owner;
             PerformLayoutIfOwned();
         }

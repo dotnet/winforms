@@ -4,6 +4,7 @@
 #nullable disable
 
 using System.Collections;
+using System.ComponentModel;
 
 namespace System.Windows.Forms.Tests;
 
@@ -179,6 +180,37 @@ public class TableLayoutStyleCollectionTests
         Assert.Same(previous, Assert.Single(otherCollection));
         Assert.False(first.IsHandleCreated);
         Assert.False(second.IsHandleCreated);
+    }
+
+    [WinFormsTheory]
+    [BoolData]
+    public void TableLayoutStyleCollection_Item_ReplaceInUnownedCollection_PreservesOtherOwner(bool columns)
+    {
+        TypeConverter converter = TypeDescriptor.GetConverter(typeof(TableLayoutSettings));
+        TableLayoutSettings settings = Assert.IsType<TableLayoutSettings>(converter.ConvertFromInvariantString("<TableLayoutSettings />"));
+        using TableLayoutPanel owner = new();
+        using TableLayoutPanel other = new();
+        TableLayoutStyleCollection unownedCollection = columns ? settings.ColumnStyles : settings.RowStyles;
+        TableLayoutStyleCollection ownedCollection = columns ? owner.ColumnStyles : owner.RowStyles;
+        TableLayoutStyleCollection otherCollection = columns ? other.ColumnStyles : other.RowStyles;
+        TableLayoutStyle previous = columns ? new ColumnStyle() : new RowStyle();
+        TableLayoutStyle replacement = columns ? new ColumnStyle() : new RowStyle();
+        unownedCollection.Add(previous);
+        ownedCollection.Add(previous);
+
+        unownedCollection[0] = replacement;
+
+        int layoutCount = 0;
+        owner.Layout += (sender, e) => layoutCount++;
+        previous.SizeType = SizeType.Absolute;
+
+        Assert.Equal(1, layoutCount);
+        Assert.Same(replacement, Assert.Single(unownedCollection));
+        Assert.Same(previous, Assert.Single(ownedCollection));
+        Assert.Throws<ArgumentException>("style", () => otherCollection.Add(previous));
+        Assert.Empty(otherCollection);
+        Assert.False(owner.IsHandleCreated);
+        Assert.False(other.IsHandleCreated);
     }
 
     [WinFormsTheory]
