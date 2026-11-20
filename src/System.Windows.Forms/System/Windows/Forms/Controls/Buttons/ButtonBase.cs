@@ -1254,6 +1254,18 @@ public abstract partial class ButtonBase : Control, ICommandBindingTargetProvide
         base.OnPaint(pevent);
     }
 
+    protected override void OnParentBackColorChanged(EventArgs e)
+    {
+        base.OnParentBackColorChanged(e);
+
+        if (OwnerDraw
+            && EffectiveVisualStylesMode >= VisualStylesMode.Net11
+            && ShouldSerializeBackColor())
+        {
+            Invalidate();
+        }
+    }
+
     /// <inheritdoc/>
     protected override void OnVisualStylesModeChanged(EventArgs e)
     {
