@@ -109,7 +109,8 @@ public class HtmlEventObservationTests
         Assert.True(snapshot.Alt);
 
         Subscribe(element, eventName, handler, add: false);
-        document.InvokeScript("fireMouse", ["inner", $"on{eventName}", nativeButton, 12, 34, true, false, true]);
+        // fireEvent returns false for some events (for example mouseover); a null result means the script call failed.
+        Assert.IsType<bool>(document.InvokeScript("fireMouse", ["inner", $"on{eventName}", nativeButton, 12, 34, true, false, true]));
         Assert.Single(events);
     }
 
@@ -139,7 +140,7 @@ public class HtmlEventObservationTests
         Assert.Equal(alt, snapshot.Alt);
 
         Subscribe(element, eventName, handler, add: false);
-        document.InvokeScript("fireKey", ["inner", $"on{eventName}", keyCode, shift, ctrl, alt]);
+        Assert.Equal(true, document.InvokeScript("fireKey", ["inner", $"on{eventName}", keyCode, shift, ctrl, alt]));
         Assert.Single(events);
     }
 
@@ -341,7 +342,7 @@ public class HtmlEventObservationTests
         Assert.Same(EventArgs.Empty, args);
 
         detach("onclick", handler);
-        document.InvokeScript("fire", [target, "onclick"]);
+        Assert.Equal(true, document.InvokeScript("fire", [target, "onclick"]));
         Assert.Single(calls);
     }
 
@@ -400,8 +401,8 @@ public class HtmlEventObservationTests
         };
         element.Click += handler;
 
-        document.InvokeScript("fire", ["inner", "onclick"]);
-        document.InvokeScript("fire", ["inner", "onclick"]);
+        Assert.Equal(true, document.InvokeScript("fire", ["inner", "onclick"]));
+        Assert.Equal(true, document.InvokeScript("fire", ["inner", "onclick"]));
 
         Assert.Equal(1, calls);
     }
