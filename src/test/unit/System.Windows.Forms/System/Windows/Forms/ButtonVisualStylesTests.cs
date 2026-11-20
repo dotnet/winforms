@@ -70,6 +70,7 @@ public class ButtonVisualStylesTests
         parent.Controls.Add(button);
         parent.Controls.Add(reference);
         button.ResetBackColor();
+        Assert.False(button.UseVisualStyleBackColor);
         button.UseVisualStyleBackColor = useVisualStyleBackColor;
         if (!useVisualStyleBackColor)
         {
