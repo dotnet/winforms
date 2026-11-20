@@ -210,7 +210,8 @@ public class PopupButtonVisualStylesTests
         using Button button = new()
         {
             FlatStyle = FlatStyle.Popup,
-            VisualStylesMode = VisualStylesMode.Net11
+            VisualStylesMode = VisualStylesMode.Net11,
+            UseVisualStyleBackColor = true
         };
         parent.Controls.Add(button);
         using AnimatedPopupButtonRenderer renderer = new(button);

@@ -96,7 +96,7 @@ internal class ButtonDarkModeAdapter : ButtonBaseAdapter
         else
         {
             bool hasCustomBackColor = _modern
-                ? Control.ShouldSerializeBackColor()
+                ? Control.ShouldSerializeBackColor() || !Control.UseVisualStyleBackColor
                 : Control.BackColor != Forms.Control.DefaultBackColor;
 
             if (hasCustomBackColor)
