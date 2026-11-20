@@ -164,7 +164,19 @@ public class TestAccessor<T> : ITestAccessor
                     case FieldInfo fieldInfo:
                         fieldInfo.SetValue(_instance, value);
                         break;
+                    case PropertyInfo { CanWrite: true } propertyInfo:
+                        propertyInfo.SetValue(_instance, value);
+                        break;
                     case PropertyInfo propertyInfo:
+                        // Non-public auto property without a setter (e.g. get-only). Fall back to the
+                        // compiler-generated backing field so tests can still set up state directly.
+                        if (GetAutoPropertyBackingField(propertyInfo.DeclaringType!, propertyInfo.Name) is { } backingField)
+                        {
+                            backingField.SetValue(_instance, value);
+                            break;
+                        }
+
+                        // Preserve prior behavior/exception for non-auto get-only properties.
                         propertyInfo.SetValue(_instance, value);
                         break;
                     default:
@@ -234,6 +246,12 @@ public class TestAccessor<T> : ITestAccessor
             while (true);
 
             return info;
+        }
+
+        private static FieldInfo? GetAutoPropertyBackingField(Type type, string propertyName)
+        {
+            string backingFieldName = $"<{propertyName}>k__BackingField";
+            return type.GetField(backingFieldName, BindingFlags.Static | BindingFlags.Instance | BindingFlags.NonPublic);
         }
     }
 }
