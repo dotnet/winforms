@@ -49,8 +49,8 @@ public abstract class TableLayoutStyleCollection : IList
         }
 
         EnsureNotOwned(tableLayoutStyle);
-        tableLayoutStyle.Owner = Owner;
         _innerList.Insert(index, tableLayoutStyle);
+        tableLayoutStyle.Owner = Owner;
         PerformLayoutIfOwned();
     }
 
@@ -66,8 +66,10 @@ public abstract class TableLayoutStyleCollection : IList
             }
 
             EnsureNotOwned(tableLayoutStyle);
-            tableLayoutStyle.Owner = Owner;
+            TableLayoutStyle previous = _innerList[index];
             _innerList[index] = tableLayoutStyle;
+            previous.Owner = null;
+            tableLayoutStyle.Owner = Owner;
             PerformLayoutIfOwned();
         }
     }

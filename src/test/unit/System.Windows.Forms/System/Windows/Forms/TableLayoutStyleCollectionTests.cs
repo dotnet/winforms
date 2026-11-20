@@ -149,6 +149,97 @@ public class TableLayoutStyleCollectionTests
     }
 
     [WinFormsTheory]
+    [BoolData]
+    public void TableLayoutStyleCollection_Item_Replace_ReleasesPreviousStyle(bool columns)
+    {
+        using TableLayoutPanel first = new();
+        using TableLayoutPanel second = new();
+        TableLayoutStyleCollection collection = columns ? first.ColumnStyles : first.RowStyles;
+        TableLayoutStyleCollection otherCollection = columns ? second.ColumnStyles : second.RowStyles;
+        TableLayoutStyle previous = columns ? new ColumnStyle() : new RowStyle();
+        TableLayoutStyle replacement = columns ? new ColumnStyle() : new RowStyle();
+        collection.Add(previous);
+
+        collection[0] = replacement;
+
+        int firstLayoutCount = 0;
+        int secondLayoutCount = 0;
+        first.Layout += (sender, e) => firstLayoutCount++;
+        previous.SizeType = SizeType.Absolute;
+        Assert.Equal(0, firstLayoutCount);
+        otherCollection.Add(previous);
+        second.Layout += (sender, e) => secondLayoutCount++;
+
+        replacement.SizeType = SizeType.Absolute;
+        previous.SizeType = SizeType.Percent;
+
+        Assert.Equal(1, firstLayoutCount);
+        Assert.Equal(1, secondLayoutCount);
+        Assert.Same(replacement, Assert.Single(collection));
+        Assert.Same(previous, Assert.Single(otherCollection));
+        Assert.False(first.IsHandleCreated);
+        Assert.False(second.IsHandleCreated);
+    }
+
+    [WinFormsTheory]
+    [InlineData(false, -1)]
+    [InlineData(false, 1)]
+    [InlineData(false, int.MaxValue)]
+    [InlineData(true, -1)]
+    [InlineData(true, 1)]
+    [InlineData(true, int.MaxValue)]
+    public void TableLayoutStyleCollection_Insert_InvalidIndex_DoesNotTakeOwnership(bool columns, int index)
+    {
+        using TableLayoutPanel first = new();
+        using TableLayoutPanel second = new();
+        TableLayoutStyleCollection collection = columns ? first.ColumnStyles : first.RowStyles;
+        TableLayoutStyleCollection otherCollection = columns ? second.ColumnStyles : second.RowStyles;
+        TableLayoutStyle style = columns ? new ColumnStyle() : new RowStyle();
+
+        Assert.Throws<ArgumentOutOfRangeException>("index", () => ((IList)collection).Insert(index, style));
+
+        int layoutCount = 0;
+        first.Layout += (sender, e) => layoutCount++;
+        style.SizeType = SizeType.Absolute;
+        Assert.Equal(0, layoutCount);
+        otherCollection.Add(style);
+
+        Assert.Empty(collection);
+        Assert.Same(style, Assert.Single(otherCollection));
+        Assert.False(first.IsHandleCreated);
+        Assert.False(second.IsHandleCreated);
+    }
+
+    [WinFormsTheory]
+    [InlineData(false, -1)]
+    [InlineData(false, 0)]
+    [InlineData(false, int.MaxValue)]
+    [InlineData(true, -1)]
+    [InlineData(true, 0)]
+    [InlineData(true, int.MaxValue)]
+    public void TableLayoutStyleCollection_Item_InvalidIndex_DoesNotTakeOwnership(bool columns, int index)
+    {
+        using TableLayoutPanel first = new();
+        using TableLayoutPanel second = new();
+        TableLayoutStyleCollection collection = columns ? first.ColumnStyles : first.RowStyles;
+        TableLayoutStyleCollection otherCollection = columns ? second.ColumnStyles : second.RowStyles;
+        TableLayoutStyle style = columns ? new ColumnStyle() : new RowStyle();
+
+        Assert.Throws<ArgumentOutOfRangeException>("index", () => collection[index] = style);
+
+        int layoutCount = 0;
+        first.Layout += (sender, e) => layoutCount++;
+        style.SizeType = SizeType.Absolute;
+        Assert.Equal(0, layoutCount);
+        otherCollection.Add(style);
+
+        Assert.Empty(collection);
+        Assert.Same(style, Assert.Single(otherCollection));
+        Assert.False(first.IsHandleCreated);
+        Assert.False(second.IsHandleCreated);
+    }
+
+    [WinFormsTheory]
     [InlineData(-1)]
     [InlineData(0)]
     public void TableLayoutStyleCollection_Item_SetNull_ThrowsArgumentNullException(int index)
