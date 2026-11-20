@@ -19,6 +19,11 @@ public partial class ToolStripPanel
 
         internal override void AddInternal(Control? value)
         {
+            if (value is ToolStripDropDown { TopLevel: false })
+            {
+                throw new ArgumentException(SR.ToolStripDropDownsCantBeRafted, nameof(value));
+            }
+
             if (value is not null)
             {
                 using (new LayoutTransaction(value, value, PropertyNames.Parent))

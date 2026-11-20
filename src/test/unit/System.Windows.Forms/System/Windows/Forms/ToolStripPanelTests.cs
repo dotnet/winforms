@@ -354,6 +354,102 @@ public class ToolStripPanelTests
         Assert.Null(exception);
     }
 
+    [WinFormsTheory]
+    [InlineData(typeof(ToolStripDropDown))]
+    [InlineData(typeof(ToolStripDropDownMenu))]
+    [InlineData(typeof(ContextMenuStrip))]
+    public void ToolStripPanel_Controls_AddDropDown_ThrowsArgumentException(Type dropDownType)
+    {
+        using ToolStripPanel panel = new();
+        using ToolStripDropDown dropDown = (ToolStripDropDown)Activator.CreateInstance(dropDownType);
+        dropDown.TopLevel = false;
+
+        ArgumentException exception = Assert.Throws<ArgumentException>("value", () => panel.Controls.Add(dropDown));
+
+        Assert.StartsWith(SR.ToolStripDropDownsCantBeRafted, exception.Message);
+        Assert.Empty(panel.Controls);
+        Assert.Empty(panel.Rows);
+        Assert.Null(dropDown.Parent);
+        Assert.False(panel.IsHandleCreated);
+        Assert.False(dropDown.IsHandleCreated);
+
+        using ToolStrip toolStrip = new();
+        panel.Controls.Add(toolStrip);
+
+        Assert.Same(toolStrip, Assert.Single(panel.Controls));
+        Assert.Same(toolStrip, Assert.Single(Assert.Single(panel.Rows).Controls));
+        Assert.False(panel.IsHandleCreated);
+        Assert.False(toolStrip.IsHandleCreated);
+    }
+
+    [WinFormsFact]
+    public void ToolStripPanel_Controls_AddTopLevelDropDown_ThrowsArgumentException()
+    {
+        using ToolStripPanel panel = new();
+        using ToolStripDropDown dropDown = new();
+
+        ArgumentException exception = Assert.Throws<ArgumentException>(() => panel.Controls.Add(dropDown));
+
+        Assert.Equal(SR.TopLevelControlAdd, exception.Message);
+        Assert.Null(exception.ParamName);
+        Assert.Empty(panel.Controls);
+        Assert.Empty(panel.Rows);
+        Assert.Null(dropDown.Parent);
+        Assert.False(panel.IsHandleCreated);
+        Assert.False(dropDown.IsHandleCreated);
+    }
+
+    [WinFormsFact]
+    public void ToolStripPanel_Controls_AddDropDownWithParent_PreservesCollections()
+    {
+        using ToolStripPanel panel = new();
+        using ToolStrip toolStrip = new();
+        panel.Controls.Add(toolStrip);
+        ToolStripPanelRow row = Assert.Single(panel.Rows);
+
+        using Panel originalParent = new();
+        using ToolStripDropDown dropDown = new() { TopLevel = false };
+        originalParent.Controls.Add(dropDown);
+
+        Assert.Throws<ArgumentException>("value", () => panel.Controls.Add(dropDown));
+
+        Assert.Same(originalParent, dropDown.Parent);
+        Assert.Same(dropDown, Assert.Single(originalParent.Controls));
+        Assert.Same(toolStrip, Assert.Single(panel.Controls));
+        Assert.Same(row, Assert.Single(panel.Rows));
+        Assert.Same(toolStrip, Assert.Single(row.Controls));
+        Assert.False(panel.IsHandleCreated);
+        Assert.False(toolStrip.IsHandleCreated);
+        Assert.False(originalParent.IsHandleCreated);
+        Assert.False(dropDown.IsHandleCreated);
+    }
+
+    [WinFormsFact]
+    public void ToolStripPanel_Join_DropDown_ThrowsArgumentException()
+    {
+        using ToolStripPanel panel = new();
+        using ToolStripDropDown dropDown = new() { TopLevel = false };
+
+        Assert.Throws<ArgumentException>("value", () => panel.Join(dropDown));
+        Assert.Throws<ArgumentException>("value", () => panel.Join(dropDown, 0));
+        Assert.Throws<ArgumentException>("value", () => panel.Join(dropDown, 0, 0));
+        Assert.Throws<ArgumentException>("value", () => panel.Join(dropDown, Point.Empty));
+
+        Assert.Empty(panel.Controls);
+        Assert.Empty(panel.Rows);
+        Assert.Null(dropDown.Parent);
+        Assert.False(panel.IsHandleCreated);
+        Assert.False(dropDown.IsHandleCreated);
+
+        using ToolStrip toolStrip = new();
+        panel.Join(toolStrip);
+
+        Assert.Same(toolStrip, Assert.Single(panel.Controls));
+        Assert.Same(toolStrip, Assert.Single(Assert.Single(panel.Rows).Controls));
+        Assert.False(panel.IsHandleCreated);
+        Assert.False(toolStrip.IsHandleCreated);
+    }
+
     private class SubToolStripPanel : ToolStripPanel
     {
         public new SizeF AutoScaleFactor => base.AutoScaleFactor;
