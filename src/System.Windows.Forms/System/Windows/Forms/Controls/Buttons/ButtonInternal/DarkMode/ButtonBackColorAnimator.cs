@@ -1,4 +1,4 @@
-// Licensed to the .NET Foundation under one or more agreements.
+﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
 using System.Drawing;
@@ -11,7 +11,7 @@ namespace System.Windows.Forms.ButtonInternal;
 /// </summary>
 internal sealed class ButtonBackColorAnimator : AnimatedControlRenderer
 {
-    private const int AnimationDuration = 350;
+    private const int AnimationDuration = 200;
 
     private Color _fromColor;
     private Color _toColor;

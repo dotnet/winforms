@@ -1972,6 +1972,10 @@ public partial class ListBox : ListControl
 
         // Clear the items.
         _itemsCollection = null;
+
+        // RefreshItems replaces the backing ItemArray, and its version can match the old array's version,
+        // making a previously cached SelectedItems.Count stale.
+        _selectedItems?.Dirty();
         _selectedIndices = null;
 
         if (IsHandleCreated)
