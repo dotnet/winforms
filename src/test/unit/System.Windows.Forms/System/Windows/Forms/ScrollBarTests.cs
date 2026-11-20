@@ -721,6 +721,46 @@ public class ScrollBarTests
     }
 
     [WinFormsTheory]
+    [InlineData(0, int.MaxValue, 10, 10)]
+    [InlineData(0, int.MaxValue, int.MaxValue, int.MaxValue)]
+    [InlineData(int.MinValue, int.MaxValue, 10, 10)]
+    [InlineData(int.MinValue, 0, int.MaxValue, int.MaxValue)]
+    [InlineData(-1, int.MaxValue, 0, 0)]
+    public void ScrollBar_LargeChange_WideRange_DoesNotOverflow(int minimum, int maximum, int largeChange, int expected)
+    {
+        using SubScrollBar control = new()
+        {
+            Minimum = minimum,
+            Maximum = maximum,
+            LargeChange = largeChange
+        };
+
+        Assert.Equal(expected, control.LargeChange);
+        Assert.Equal(expected == 0 ? 0 : 1, control.SmallChange);
+        Assert.False(control.IsHandleCreated);
+    }
+
+    [WinFormsFact]
+    public void ScrollBar_LargeChange_WideRange_PreservesStoredValue()
+    {
+        using SubScrollBar control = new()
+        {
+            Maximum = int.MaxValue,
+            LargeChange = int.MaxValue
+        };
+        Assert.Equal(int.MaxValue, control.LargeChange);
+
+        control.Minimum = int.MaxValue - 5;
+        Assert.Equal(6, control.LargeChange);
+        control.Minimum = int.MaxValue;
+        Assert.Equal(1, control.LargeChange);
+        control.Minimum = 0;
+        Assert.Equal(int.MaxValue, control.LargeChange);
+        Assert.Equal(1, control.SmallChange);
+        Assert.False(control.IsHandleCreated);
+    }
+
+    [WinFormsTheory]
     [InlineData(0)]
     [InlineData(1)]
     [InlineData(5)]

@@ -206,7 +206,7 @@ public abstract partial class ScrollBar : Control
             // get the value of this property, make sure it's within the maximum allowable value.
             // This way we ensure that we don't depend on the order of property sets when
             // code is generated at design-time.
-            return Math.Min(_largeChange, _maximum - _minimum + 1);
+            return (int)Math.Min(_largeChange, (long)_maximum - _minimum + 1);
         }
         set
         {
