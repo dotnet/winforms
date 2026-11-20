@@ -148,6 +148,140 @@ public class ToolStripItemCollectionTests
         toolStrip.Items[1].Text.Should().Be("Button 2");
     }
 
+    [WinFormsTheory]
+    [InlineData(-1)]
+    [InlineData(2)]
+    [InlineData(int.MaxValue)]
+    public void ToolStripItemCollection_Insert_InvalidIndex_PreservesOwner(int index)
+    {
+        using ToolStrip source = new();
+        using ToolStrip destination = new();
+        using ToolStripButton item = new();
+        using ToolStripButton existing = new();
+        source.Items.Add(item);
+        destination.Items.Add(existing);
+        int removedCount = 0;
+        int addedCount = 0;
+        source.ItemRemoved += (sender, e) => removedCount++;
+        destination.ItemAdded += (sender, e) => addedCount++;
+
+        try
+        {
+            Assert.Throws<ArgumentOutOfRangeException>("index", () => destination.Items.Insert(index, item));
+
+            Assert.Same(source, item.Owner);
+            Assert.Same(item, Assert.Single(source.Items));
+            Assert.Same(existing, Assert.Single(destination.Items));
+            Assert.Equal(0, removedCount);
+            Assert.Equal(0, addedCount);
+            Assert.False(source.IsHandleCreated);
+            Assert.False(destination.IsHandleCreated);
+        }
+        finally
+        {
+            // Restore ownership after a failed assertion so a broken Debug build can dispose the item.
+            if (item.Owner is ToolStrip owner && !owner.Items.Contains(item))
+            {
+                owner.Items.Add(item);
+            }
+        }
+    }
+
+    [WinFormsTheory]
+    [InlineData(0)]
+    [InlineData(1)]
+    public void ToolStripItemCollection_Insert_ExistingItemAtCount_MovesToEnd(int itemIndex)
+    {
+        using ToolStrip toolStrip = new();
+        using ToolStripButton first = new();
+        using ToolStripButton second = new();
+        toolStrip.Items.AddRange([first, second]);
+        ToolStripItem item = toolStrip.Items[itemIndex];
+        ToolStripItem other = toolStrip.Items[1 - itemIndex];
+
+        try
+        {
+            toolStrip.Items.Insert(toolStrip.Items.Count, item);
+
+            Assert.Equal(new[] { other, item }, toolStrip.Items.Cast<ToolStripItem>());
+            Assert.Same(toolStrip, item.Owner);
+            Assert.False(toolStrip.IsHandleCreated);
+        }
+        finally
+        {
+            if (item.Owner is ToolStrip owner && !owner.Items.Contains(item))
+            {
+                owner.Items.Add(item);
+            }
+        }
+    }
+
+    [WinFormsTheory]
+    [InlineData(0)]
+    [InlineData(1)]
+    [InlineData(2)]
+    public void ToolStripItemCollection_Insert_ItemFromOtherOwner_Success(int index)
+    {
+        using ToolStrip source = new();
+        using ToolStrip destination = new();
+        using ToolStripButton item = new();
+        using ToolStripButton first = new();
+        using ToolStripButton second = new();
+        source.Items.Add(item);
+        destination.Items.AddRange([first, second]);
+
+        destination.Items.Insert(index, item);
+
+        Assert.Empty(source.Items);
+        Assert.Equal(3, destination.Items.Count);
+        Assert.Same(item, destination.Items[index]);
+        Assert.Same(destination, item.Owner);
+        Assert.Equal(new[] { first, second }, destination.Items.Cast<ToolStripItem>().Where(value => value != item));
+        Assert.False(source.IsHandleCreated);
+        Assert.False(destination.IsHandleCreated);
+    }
+
+    [WinFormsFact]
+    public void ToolStripItemCollection_Insert_NullItemAndInvalidIndex_ThrowsArgumentNullException()
+    {
+        using ToolStrip toolStrip = new();
+
+        Assert.Throws<ArgumentNullException>("value", () => toolStrip.Items.Insert(-1, null!));
+
+        Assert.Empty(toolStrip.Items);
+        Assert.False(toolStrip.IsHandleCreated);
+    }
+
+    [WinFormsFact]
+    public void ToolStripItemCollection_Insert_ReadOnlyAndInvalidIndex_ThrowsNotSupportedException()
+    {
+        using ToolStrip toolStrip = new();
+        using ToolStripButton item = new();
+        ToolStripItemCollection collection = new(toolStrip, itemsCollection: true, isReadOnly: true);
+
+        Assert.Throws<NotSupportedException>(() => collection.Insert(-1, item));
+
+        Assert.Empty(collection);
+        Assert.Null(item.Owner);
+        Assert.False(toolStrip.IsHandleCreated);
+    }
+
+    [WinFormsFact]
+    public void ToolStripItemCollection_Insert_NonOwningCollectionAtCount_PreservesOwner()
+    {
+        using ToolStrip toolStrip = new();
+        using ToolStripButton item = new();
+        toolStrip.Items.Add(item);
+        ToolStripItemCollection collection = new(toolStrip, [item]);
+
+        collection.Insert(collection.Count, item);
+
+        Assert.Equal(new[] { item, item }, collection.Cast<ToolStripItem>());
+        Assert.Same(item, Assert.Single(toolStrip.Items));
+        Assert.Same(toolStrip, item.Owner);
+        Assert.False(toolStrip.IsHandleCreated);
+    }
+
     private ToolStripItem[] CreateToolStripItems(params (string Key, string Name)[] items) =>
         items.Select(item => new ToolStripButton(item.Name) { Name = item.Key }).ToArray();
 

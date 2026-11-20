@@ -312,6 +312,15 @@ public class ToolStripItemCollection : ArrangedElementCollection, IList
     public void Insert(int index, ToolStripItem value)
     {
         CheckCanAddOrInsertItem(value);
+        ArgumentOutOfRangeException.ThrowIfNegative(index);
+        ArgumentOutOfRangeException.ThrowIfGreaterThan(index, Count);
+
+        if (_itemsCollection && index == Count && value.Owner == _owner)
+        {
+            Add(value);
+            return;
+        }
+
         SetOwner(value);
         InnerList.Insert(index, value);
         if (_itemsCollection && _owner is not null)
