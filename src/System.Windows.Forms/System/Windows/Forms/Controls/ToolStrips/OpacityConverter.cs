@@ -33,13 +33,14 @@ public class OpacityConverter : TypeConverter
     {
         if (value is string valueString)
         {
+            CultureInfo effectiveCulture = culture ?? CultureInfo.CurrentCulture;
             string text = valueString.Replace('%', ' ').Trim();
-            double val = double.Parse(text, CultureInfo.CurrentCulture);
+            double val = double.Parse(text, effectiveCulture);
             int indexOfPercent = valueString.IndexOf('%');
             if (indexOfPercent > 0 && (val >= 0.0 && val <= 1.0))
             {
                 val /= 100.0;
-                text = val.ToString(CultureInfo.CurrentCulture);
+                text = val.ToString(effectiveCulture);
             }
 
             double percent;

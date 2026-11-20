@@ -4,6 +4,7 @@
 #nullable disable
 
 using System.ComponentModel.Design.Serialization;
+using System.Globalization;
 
 namespace System.Windows.Forms.Tests;
 
@@ -42,6 +43,70 @@ public class OpacityConverterTests
         OpacityConverter converter = new();
         Assert.Equal(expected, Assert.IsType<double>(converter.ConvertFrom(value)), 5);
         Assert.Equal(expected, Assert.IsType<double>(converter.ConvertFrom(null, null, value)), 5);
+    }
+
+    [Theory]
+    [InlineData("en-US", "fr-FR", "0,5%", 0.005)]
+    [InlineData("fr-FR", "en-US", "0.5%", 0.005)]
+    [InlineData("de-DE", "en-US", "0.5%", 0.005)]
+    [InlineData("fr-FR", "", "0.5%", 0.005)]
+    [InlineData("fr-FR", "en-US", "0.5", 0.5)]
+    public void OpacityConverter_ConvertFrom_DifferentCurrentCulture_UsesSpecifiedCulture(
+        string currentCultureName, string cultureName, string value, double expected)
+    {
+        CultureInfo originalCulture = CultureInfo.CurrentCulture;
+        try
+        {
+            CultureInfo.CurrentCulture = CultureInfo.GetCultureInfo(currentCultureName);
+            OpacityConverter converter = new();
+
+            object result = converter.ConvertFrom(null, CultureInfo.GetCultureInfo(cultureName), value);
+
+            Assert.Equal(expected, Assert.IsType<double>(result), 5);
+        }
+        finally
+        {
+            CultureInfo.CurrentCulture = originalCulture;
+        }
+    }
+
+    [Theory]
+    [InlineData("fr-FR")]
+    [InlineData("de-DE")]
+    public void OpacityConverter_ConvertFromInvariantString_DifferentCurrentCulture_UsesInvariantCulture(string cultureName)
+    {
+        CultureInfo originalCulture = CultureInfo.CurrentCulture;
+        try
+        {
+            CultureInfo.CurrentCulture = CultureInfo.GetCultureInfo(cultureName);
+            OpacityConverter converter = new();
+
+            Assert.Equal(0.005, Assert.IsType<double>(converter.ConvertFromInvariantString("0.5%")), 5);
+        }
+        finally
+        {
+            CultureInfo.CurrentCulture = originalCulture;
+        }
+    }
+
+    [Theory]
+    [InlineData("en-US", "0.5%")]
+    [InlineData("fr-FR", "0,5%")]
+    [InlineData("de-DE", "0,5%")]
+    public void OpacityConverter_ConvertFrom_NullCulture_UsesCurrentCulture(string cultureName, string value)
+    {
+        CultureInfo originalCulture = CultureInfo.CurrentCulture;
+        try
+        {
+            CultureInfo.CurrentCulture = CultureInfo.GetCultureInfo(cultureName);
+            OpacityConverter converter = new();
+
+            Assert.Equal(0.005, Assert.IsType<double>(converter.ConvertFrom(null, null, value)), 5);
+        }
+        finally
+        {
+            CultureInfo.CurrentCulture = originalCulture;
+        }
     }
 
     [Theory]
