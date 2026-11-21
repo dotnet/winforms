@@ -68,6 +68,50 @@ public class RadioButtonTests : AbstractButtonBaseTests
     }
 
     [WinFormsFact]
+    public void RadioButton_ToggleSwitch_Image_FillsControlBehindUnchangedSwitchAndIsExcludedFromPreferredSize()
+    {
+        using Bitmap image = new(12, 8);
+        using (Graphics imageGraphics = Graphics.FromImage(image))
+        {
+            imageGraphics.Clear(Color.Magenta);
+        }
+
+        using RadioButton control = new()
+        {
+            Appearance = Appearance.ToggleSwitch,
+            BackColor = Color.Lime,
+            Image = image,
+            Size = new Size(120, 30),
+            Text = "radioButton4",
+            VisualStylesMode = VisualStylesMode.Net11
+        };
+        using RadioButton controlWithoutImage = new()
+        {
+            Appearance = Appearance.ToggleSwitch,
+            Text = control.Text,
+            VisualStylesMode = VisualStylesMode.Net11
+        };
+        using Bitmap bitmap = new(control.Width, control.Height);
+
+        control.DrawToBitmap(bitmap, control.ClientRectangle);
+
+        Rendering.CheckBox.ToggleSwitchMetrics metrics = Rendering.CheckBox.ToggleSwitchMetrics.Create(control);
+        Rectangle switchBounds = Rendering.CheckBox.AnimatedToggleSwitchRenderer.GetSwitchBounds(
+            control,
+            control.RtlTranslatedCheckAlign,
+            metrics);
+        Point switchPixel = new(
+            switchBounds.Right - (switchBounds.Height / 2),
+            switchBounds.Top + (switchBounds.Height / 2));
+
+        Assert.True(CountPixels(bitmap, Color.Magenta) > 0);
+        Assert.NotEqual(Color.Magenta.ToArgb(), bitmap.GetPixel(switchPixel.X, switchPixel.Y).ToArgb());
+        Assert.Equal(Color.Magenta.ToArgb(), bitmap.GetPixel(0, 0).ToArgb());
+        Assert.True(Rendering.CheckBox.ToggleSwitchMetrics.GetContentBounds(control).Contains(switchBounds));
+        Assert.Equal(controlWithoutImage.GetPreferredSize(Size.Empty), control.GetPreferredSize(Size.Empty));
+    }
+
+    [WinFormsFact]
     public void RadioButton_ToggleSwitch_RetainsMutualExclusion()
     {
         using Panel parent = new();
@@ -271,6 +315,30 @@ public class RadioButtonTests : AbstractButtonBaseTests
 
         Color backgroundPixel = bitmap.GetPixel(control.Width - 2, control.Height / 2);
         Assert.Equal(Color.Aqua.ToArgb(), backgroundPixel.ToArgb());
+    }
+
+    [WinFormsFact]
+    public void RadioButton_ModernGlyph_ImageDoesNotCoverGlyph()
+    {
+        using Bitmap image = new(80, 24);
+        using (Graphics imageGraphics = Graphics.FromImage(image))
+        {
+            imageGraphics.Clear(Color.Magenta);
+        }
+
+        using RadioButton control = new()
+        {
+            Image = image,
+            Size = new Size(40, 24),
+            VisualStylesMode = VisualStylesMode.Net11
+        };
+        using Bitmap bitmap = new(control.Width, control.Height);
+        using Graphics graphics = Graphics.FromImage(bitmap);
+        PaintEventArgs e = new(graphics, control.ClientRectangle);
+
+        control.CreateStandardAdapter().PaintUp(e, CheckState.Unchecked);
+
+        Assert.NotEqual(Color.Magenta.ToArgb(), bitmap.GetPixel(6, control.Height / 2).ToArgb());
     }
 
     [WinFormsFact]

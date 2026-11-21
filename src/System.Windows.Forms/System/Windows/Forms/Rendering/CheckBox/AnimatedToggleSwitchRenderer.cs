@@ -48,6 +48,8 @@ internal sealed class AnimatedToggleSwitchRenderer : AnimatedControlRenderer
         _switchStyle = switchStyle;
     }
 
+    private ButtonBase Button => (ButtonBase)Control;
+
     public override void AnimationProc(float animationProgress)
     {
         base.AnimationProc(animationProgress);
@@ -101,6 +103,7 @@ internal sealed class AnimatedToggleSwitchRenderer : AnimatedControlRenderer
             RtlTranslatedCheckAlign);
 
         PaintControlBackground(graphics);
+        RenderControlImage(graphics, Button.Image, Control.ClientRectangle);
 
         if (contentBounds.Width <= 0 || contentBounds.Height <= 0)
         {
@@ -161,16 +164,20 @@ internal sealed class AnimatedToggleSwitchRenderer : AnimatedControlRenderer
             MeasureText(control, textFormatFlags));
     }
 
-    private static Rectangle GetSwitchBounds(
+    internal static Rectangle GetSwitchBounds(
         Control control,
         ContentAlignment checkAlign,
         ToggleSwitchMetrics metrics,
-        Size textSize)
+        Size contentSize)
     {
         Rectangle contentBounds = ToggleSwitchMetrics.GetContentBounds(control);
-        int totalHeight = Math.Max(textSize.Height, metrics.SwitchHeight);
+        int totalHeight = Math.Min(
+            contentBounds.Height,
+            Math.Max(contentSize.Height, metrics.SwitchHeight));
         int contentTop = contentBounds.Top + Math.Max(0, (contentBounds.Height - totalHeight) / 2);
-        int switchY = contentTop + ((totalHeight - metrics.SwitchHeight) / 2);
+        int switchY = Math.Max(
+            contentBounds.Top,
+            contentTop + ((totalHeight - metrics.SwitchHeight) / 2));
         int minimumSwitchX = contentBounds.Left;
         int maximumSwitchX = Math.Max(minimumSwitchX, contentBounds.Right - metrics.SwitchWidth);
         int edgeInset = Math.Max(1, (metrics.BorderThickness / 2) + 1);
@@ -434,6 +441,28 @@ internal sealed class AnimatedToggleSwitchRenderer : AnimatedControlRenderer
                thumbColor,
                ApplyInteractionShade(trackColor, 1f)) >= MinimumThumbContrastRatio;
 
+    private void RenderControlImage(
+        Graphics graphics,
+        Image? image,
+        Rectangle bounds)
+    {
+        if (image is null)
+        {
+            return;
+        }
+
+        ImageAnimator.UpdateFrames(image);
+
+        if (Control.Enabled)
+        {
+            graphics.DrawImage(image, bounds);
+        }
+        else
+        {
+            ControlPaint.DrawImageDisabled(graphics, image, bounds, unscaledImage: false);
+        }
+    }
+
     internal void PrepareStateChange()
     {
         EnsurePositionInitialized();
@@ -618,9 +647,9 @@ internal readonly struct ToggleSwitchMetrics
     internal Size GetPreferredSize(Control control)
     {
         TextFormatFlags textFormatFlags = AnimatedToggleSwitchRenderer.GetTextFormatFlags(control);
-        Size textSize = AnimatedToggleSwitchRenderer.MeasureText(control, textFormatFlags);
+        Size contentSize = AnimatedToggleSwitchRenderer.MeasureText(control, textFormatFlags);
         return new Size(
-            SwitchWidth + TextGap + textSize.Width + control.Padding.Horizontal,
-            Math.Max(SwitchHeight, textSize.Height) + control.Padding.Vertical);
+            SwitchWidth + TextGap + contentSize.Width + control.Padding.Horizontal,
+            Math.Max(SwitchHeight, contentSize.Height) + control.Padding.Vertical);
     }
 }
