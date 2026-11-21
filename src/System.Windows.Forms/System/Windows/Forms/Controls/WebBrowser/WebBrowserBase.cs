@@ -339,7 +339,7 @@ public unsafe partial class WebBrowserBase : Control
 
             PInvoke.GetCursorPos(out Point p);
             msg.pt = p;
-            if (!PInvoke.IsAccelerator(new HandleRef<HACCEL>(this, controlInfo.hAccel), controlInfo.cAccel, &msg, lpwCmd: null))
+            if (PInvoke.IsAccelerator(new HandleRef<HACCEL>(this, controlInfo.hAccel), controlInfo.cAccel, &msg, lpwCmd: null))
             {
                 _axOleControl.OnMnemonic(&msg);
                 Focus();
