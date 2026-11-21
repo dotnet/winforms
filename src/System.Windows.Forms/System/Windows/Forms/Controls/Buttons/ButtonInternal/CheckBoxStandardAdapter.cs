@@ -33,31 +33,38 @@ internal sealed class CheckBoxStandardAdapter : CheckBoxBaseAdapter
 
             AdjustFocusRectangle(layout);
 
-            if (!string.IsNullOrEmpty(Control.Text))
-            {
-                // Minor adjustment to make sure the appearance is exactly the same as Win32 app.
-                int focusRectFixup = layout.Focus.X & 0x1; // if it's odd, subtract one pixel for fixup.
-                if (!Application.RenderWithVisualStyles)
-                {
-                    focusRectFixup = 1 - focusRectFixup;
-                }
-
-                layout.Focus.Offset(-(focusRectFixup + 1), -2);
-                layout.Focus.Width = layout.TextBounds.Width + layout.ImageBounds.Width - 1;
-                layout.Focus.Intersect(layout.TextBounds);
-
-                if (layout.Options.TextAlign != LayoutUtils.AnyLeft
-                    && layout.Options.UseCompatibleTextRendering
-                    && layout.Options.Font.Italic)
-                {
-                    // Fixup for GDI+ text rendering.
-                    layout.Focus.Width += 2;
-                }
-            }
-
             PaintImage(e, layout);
             DrawCheckBox(e, layout);
             PaintField(e, layout, colors, colors.WindowText, drawFocus: true);
+        }
+    }
+
+    protected override void AdjustFocusRectangle(LayoutData layout)
+    {
+        if (string.IsNullOrEmpty(Control.Text))
+        {
+            base.AdjustFocusRectangle(layout);
+            return;
+        }
+
+        // Preserve the padded focus bounds required by the legacy Standard adjustments.
+        // Minor adjustment to make sure the appearance is exactly the same as Win32 app.
+        int focusRectFixup = layout.Focus.X & 0x1; // if it's odd, subtract one pixel for fixup.
+        if (!Application.RenderWithVisualStyles)
+        {
+            focusRectFixup = 1 - focusRectFixup;
+        }
+
+        layout.Focus.Offset(-(focusRectFixup + 1), -2);
+        layout.Focus.Width = layout.TextBounds.Width + layout.ImageBounds.Width - 1;
+        layout.Focus.Intersect(layout.TextBounds);
+
+        if (layout.Options.TextAlign != LayoutUtils.AnyLeft
+            && layout.Options.UseCompatibleTextRendering
+            && layout.Options.Font.Italic)
+        {
+            // Fixup for GDI+ text rendering.
+            layout.Focus.Width += 2;
         }
     }
 
