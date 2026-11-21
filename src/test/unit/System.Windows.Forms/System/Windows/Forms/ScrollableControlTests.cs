@@ -2547,6 +2547,73 @@ public class ScrollableControlTests
         control.Controls.Clear();
     }
 
+    [WinFormsFact]
+    public unsafe void ScrollableControl_SetDisplayFromScrollProps_InvokeHorizontalOffset_SyncsManagedAndNativeScrollPositions()
+    {
+        using SubScrollableControl control = CreateScrollableControlWithHorizontalOverflow();
+
+        Assert.True(control.IsHandleCreated);
+        Assert.True(control.HorizontalScroll.Visible);
+        Assert.Equal(0, control.DisplayRectangle.X);
+        Assert.Equal(0, control.HorizontalScroll.Value);
+        Assert.Equal(0, GetNativeHorizontalScrollPosition(control));
+
+        control.SetDisplayFromScrollPropsPublic(-120, 0);
+
+        Assert.Equal(-120, control.DisplayRectangle.X);
+        Assert.Equal(120, control.HorizontalScroll.Value);
+        Assert.Equal(120, GetNativeHorizontalScrollPosition(control));
+    }
+
+    [WinFormsFact]
+    public unsafe void ScrollableControl_SetDisplayFromScrollProps_InvokeRepeatedHorizontalOffsets_SyncsOnEachUpdate()
+    {
+        using SubScrollableControl control = CreateScrollableControlWithHorizontalOverflow();
+
+        control.SetDisplayFromScrollPropsPublic(-160, 0);
+
+        Assert.Equal(-160, control.DisplayRectangle.X);
+        Assert.Equal(160, control.HorizontalScroll.Value);
+        Assert.Equal(160, GetNativeHorizontalScrollPosition(control));
+
+        control.SetDisplayFromScrollPropsPublic(-40, 0);
+
+        Assert.Equal(-40, control.DisplayRectangle.X);
+        Assert.Equal(40, control.HorizontalScroll.Value);
+        Assert.Equal(40, GetNativeHorizontalScrollPosition(control));
+    }
+
+    private static unsafe int GetNativeHorizontalScrollPosition(ScrollableControl control)
+    {
+        SCROLLINFO info = new()
+        {
+            cbSize = (uint)sizeof(SCROLLINFO),
+            fMask = SCROLLINFO_MASK.SIF_POS
+        };
+
+        Assert.True(PInvoke.GetScrollInfo(control, SCROLLBAR_CONSTANTS.SB_HORZ, ref info));
+        return info.nPos;
+    }
+
+    private static SubScrollableControl CreateScrollableControlWithHorizontalOverflow()
+    {
+        SubScrollableControl control = new()
+        {
+            AutoScroll = true,
+            Size = new Size(200, 200)
+        };
+
+        control.Controls.Add(new Button
+        {
+            Bounds = new Rectangle(900, 0, 100, 30)
+        });
+
+        control.CreateControl();
+        control.PerformLayout();
+
+        return control;
+    }
+
     private class LargeControl : Control
     {
         protected override Size DefaultSize => new(100, 150);
@@ -2662,5 +2729,7 @@ public class ScrollableControlTests
         public new void SetScrollState(int bit, bool value) => base.SetScrollState(bit, value);
 
         public new void SetStyle(ControlStyles flag, bool value) => base.SetStyle(flag, value);
+
+        public void SetDisplayFromScrollPropsPublic(int x, int y) => SetDisplayFromScrollProps(x, y);
     }
 }
