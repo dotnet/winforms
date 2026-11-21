@@ -38,6 +38,60 @@ public class ButtonVisualStylesTests
     }
 
     [WinFormsTheory]
+    [InlineData(FlatStyle.Standard, false)]
+    [InlineData(FlatStyle.Standard, true)]
+    [InlineData(FlatStyle.Flat, false)]
+    [InlineData(FlatStyle.Flat, true)]
+    [InlineData(FlatStyle.Popup, false)]
+    [InlineData(FlatStyle.Popup, true)]
+    public void Button_VisualStylesMode_Net11_ResetBackColor_RespectsUseVisualStyleBackColor(
+        FlatStyle flatStyle,
+        bool useVisualStyleBackColor)
+    {
+        if (SystemInformation.HighContrast)
+        {
+            return;
+        }
+
+        using Panel parent = new() { BackColor = Color.LightSkyBlue };
+        using Button button = new()
+        {
+            FlatStyle = flatStyle,
+            VisualStylesMode = VisualStylesMode.Net11,
+            BackColor = Color.Coral,
+            Size = new Size(120, 40)
+        };
+        using Button reference = new()
+        {
+            FlatStyle = flatStyle,
+            VisualStylesMode = VisualStylesMode.Net11,
+            Size = button.Size
+        };
+        parent.Controls.Add(button);
+        parent.Controls.Add(reference);
+        button.ResetBackColor();
+        Assert.False(button.UseVisualStyleBackColor);
+        button.UseVisualStyleBackColor = useVisualStyleBackColor;
+        if (!useVisualStyleBackColor)
+        {
+            reference.BackColor = parent.BackColor;
+        }
+
+        reference.UseVisualStyleBackColor = useVisualStyleBackColor;
+        using Bitmap actual = new(button.Width, button.Height);
+        using Bitmap expected = new(reference.Width, reference.Height);
+
+        button.DrawToBitmap(actual, button.ClientRectangle);
+        reference.DrawToBitmap(expected, reference.ClientRectangle);
+
+        Assert.False(button.ShouldSerializeBackColor());
+        Assert.Equal(parent.BackColor, button.BackColor);
+        Assert.Equal(
+            expected.GetPixel(reference.Width / 2, reference.Height / 2).ToArgb(),
+            actual.GetPixel(button.Width / 2, button.Height / 2).ToArgb());
+    }
+
+    [WinFormsTheory]
     [InlineData(FlatStyle.Standard)]
     [InlineData(FlatStyle.Flat)]
     [InlineData(FlatStyle.Popup)]
@@ -822,7 +876,8 @@ public class ButtonVisualStylesTests
         using Button button = new()
         {
             FlatStyle = FlatStyle.Standard,
-            VisualStylesMode = VisualStylesMode.Net11
+            VisualStylesMode = VisualStylesMode.Net11,
+            UseVisualStyleBackColor = true
         };
         parent.Controls.Add(button);
         ButtonInternal.ButtonDarkModeAdapter adapter = new(button);
