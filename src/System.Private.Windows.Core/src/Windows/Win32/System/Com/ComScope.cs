@@ -60,7 +60,12 @@ internal readonly unsafe ref struct ComScope<T> where T : unmanaged, IComIID
     public ComScope<TTo> TryQuery<TTo>(out HRESULT hr) where TTo : unmanaged, IComIID
     {
         ComScope<TTo> scope = new(null);
-        hr = ((ComUnknown*)Value)->QueryInterface(IID.Get<TTo>(), scope);
+        // On .NET Framework, the IID can be backed by a movable managed static.
+        fixed (Guid* iid = &IID.GetRef<TTo>())
+        {
+            hr = ((ComUnknown*)Value)->QueryInterface(iid, scope);
+        }
+
         return scope;
     }
 
@@ -70,7 +75,11 @@ internal readonly unsafe ref struct ComScope<T> where T : unmanaged, IComIID
     public ComScope<TTo> Query<TTo>() where TTo : unmanaged, IComIID
     {
         ComScope<TTo> scope = new(null);
-        ((ComUnknown*)Value)->QueryInterface(IID.Get<TTo>(), scope).ThrowOnFailure();
+        fixed (Guid* iid = &IID.GetRef<TTo>())
+        {
+            ((ComUnknown*)Value)->QueryInterface(iid, scope).ThrowOnFailure();
+        }
+
         return scope;
     }
 
@@ -80,7 +89,11 @@ internal readonly unsafe ref struct ComScope<T> where T : unmanaged, IComIID
     public static ComScope<T> TryQueryFrom<TFrom>(TFrom* from, out HRESULT hr) where TFrom : unmanaged, IComIID
     {
         ComScope<T> scope = new(null);
-        hr = from is null ? HRESULT.E_POINTER : ((ComUnknown*)from)->QueryInterface(IID.Get<T>(), scope);
+        fixed (Guid* iid = &IID.GetRef<T>())
+        {
+            hr = from is null ? HRESULT.E_POINTER : ((ComUnknown*)from)->QueryInterface(iid, scope);
+        }
+
         return scope;
     }
 
@@ -95,7 +108,11 @@ internal readonly unsafe ref struct ComScope<T> where T : unmanaged, IComIID
         }
 
         ComScope<T> scope = new(null);
-        ((ComUnknown*)from)->QueryInterface(IID.Get<T>(), scope).ThrowOnFailure();
+        fixed (Guid* iid = &IID.GetRef<T>())
+        {
+            ((ComUnknown*)from)->QueryInterface(iid, scope).ThrowOnFailure();
+        }
+
         return scope;
     }
 
@@ -111,7 +128,11 @@ internal readonly unsafe ref struct ComScope<T> where T : unmanaged, IComIID
         }
 
         ComUnknown* unknown;
-        HRESULT hr = AsUnknown->QueryInterface(IID.Get<TInterface>(), (void**)&unknown);
+        HRESULT hr;
+        fixed (Guid* iid = &IID.GetRef<TInterface>())
+        {
+            hr = AsUnknown->QueryInterface(iid, (void**)&unknown);
+        }
 
         if (hr.Succeeded)
         {
