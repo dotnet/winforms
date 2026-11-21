@@ -1138,6 +1138,13 @@ public partial class Binding
         bool newBound = IsBindable && ComponentCreated && _bindingManagerBase.IsBinding;
         if (IsBinding != newBound)
         {
+            if (newBound)
+            {
+                // A shared manager can activate this binding during control creation,
+                // before its source-property metadata has been initialized.
+                _bindToObject.CheckBinding();
+            }
+
             IsBinding = newBound;
             BindTarget(newBound);
             if (IsBinding)
