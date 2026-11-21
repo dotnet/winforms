@@ -165,24 +165,86 @@ public class PopupButtonVisualStylesTests
             pressedColor);
     }
 
-    [WinFormsFact]
-    public void AnimatedPopupButtonRenderer_ExplicitStateColorsWin()
+    [WinFormsTheory]
+    [InlineData(typeof(Button), false)]
+    [InlineData(typeof(Button), true)]
+    [InlineData(typeof(CheckBox), false)]
+    [InlineData(typeof(RadioButton), false)]
+    public void AnimatedPopupButtonRenderer_IgnoresFlatAppearanceColors(Type controlType, bool customBackColor)
     {
-        using Button button = new()
+        using ButtonBase button = (ButtonBase)Activator.CreateInstance(controlType);
+        button.FlatStyle = FlatStyle.Popup;
+        button.VisualStylesMode = VisualStylesMode.Net11;
+        button.Size = new Size(120, 40);
+        if (customBackColor)
         {
-            BackColor = Color.Red,
-            FlatStyle = FlatStyle.Popup,
-            VisualStylesMode = VisualStylesMode.Net11
-        };
+            button.BackColor = Color.Red;
+        }
+
+        using AnimatedPopupButtonRenderer renderer = new(button);
+        var beforeColors = renderer.GetStateColors();
+        using Bitmap before = new(button.Width, button.Height);
+        using (Graphics graphics = Graphics.FromImage(before))
+        {
+            renderer.RenderControl(graphics);
+        }
+
+        button.FlatAppearance.BorderColor = Color.Lime;
         button.FlatAppearance.MouseOverBackColor = Color.Green;
         button.FlatAppearance.MouseDownBackColor = Color.Blue;
-        using AnimatedPopupButtonRenderer renderer = new(button);
+        var afterColors = renderer.GetStateColors();
+        using Bitmap after = new(button.Width, button.Height);
+        using (Graphics graphics = Graphics.FromImage(after))
+        {
+            renderer.RenderControl(graphics);
+        }
 
-        (Color baseColor, Color hoverColor, Color pressedColor) = renderer.GetStateColors();
+        Assert.Equal(beforeColors, afterColors);
+        for (int y = 0; y < before.Height; y++)
+        {
+            for (int x = 0; x < before.Width; x++)
+            {
+                Assert.Equal(before.GetPixel(x, y), after.GetPixel(x, y));
+            }
+        }
+    }
 
-        Assert.Equal(Color.Red, baseColor);
-        Assert.Equal(Color.Green, hoverColor);
-        Assert.Equal(Color.Blue, pressedColor);
+    [WinFormsTheory]
+    [InlineData(typeof(Button), 0)]
+    [InlineData(typeof(Button), 4)]
+    [InlineData(typeof(CheckBox), 4)]
+    [InlineData(typeof(RadioButton), 4)]
+    public void AnimatedPopupButtonRenderer_IgnoresFlatAppearanceBorderSize(Type controlType, int borderSize)
+    {
+        using ButtonBase control = CreateAppearanceButton(controlType);
+        control.Size = new Size(120, 40);
+        control.Text = "Popup";
+        ButtonInternal.ButtonDarkModeAdapter adapter = new(control);
+        Size preferredBefore = adapter.GetPreferredSizeCore(Size.Empty);
+        using AnimatedPopupButtonRenderer renderer = new(control);
+        using Bitmap before = new(control.Width, control.Height);
+        using (Graphics graphics = Graphics.FromImage(before))
+        {
+            renderer.RenderControl(graphics);
+        }
+
+        control.FlatAppearance.BorderSize = borderSize;
+        Size preferredAfter = adapter.GetPreferredSizeCore(Size.Empty);
+        using Bitmap after = new(control.Width, control.Height);
+        using (Graphics graphics = Graphics.FromImage(after))
+        {
+            renderer.RenderControl(graphics);
+        }
+
+        Assert.Equal(preferredBefore, preferredAfter);
+        Assert.Equal(borderSize, control.FlatAppearance.BorderSize);
+        for (int y = 0; y < before.Height; y++)
+        {
+            for (int x = 0; x < before.Width; x++)
+            {
+                Assert.Equal(before.GetPixel(x, y), after.GetPixel(x, y));
+            }
+        }
     }
 
     [WinFormsFact]
