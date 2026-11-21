@@ -2537,6 +2537,85 @@ public class UpDownBaseTests
         Assert.Throws<NullReferenceException>(() => control.OnMouseWheel(null));
     }
 
+    public static IEnumerable<object[]> ClassicPadding_TestData()
+    {
+        foreach (bool numeric in new[] { false, true })
+        {
+            foreach (VisualStylesMode visualStylesMode in new[] { VisualStylesMode.Classic, VisualStylesMode.Disabled })
+            {
+                foreach (BorderStyle borderStyle in Enum.GetValues<BorderStyle>())
+                {
+                    foreach (bool enabled in new[] { false, true })
+                    {
+                        foreach (bool customBackColor in new[] { false, true })
+                        {
+                            yield return new object[] { numeric, visualStylesMode, borderStyle, enabled, customBackColor };
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    [WinFormsTheory]
+    [MemberData(nameof(ClassicPadding_TestData))]
+    public void UpDownBase_DrawToBitmap_WithClassicPadding_PaintsBackground(
+        bool numeric,
+        VisualStylesMode visualStylesMode,
+        BorderStyle borderStyle,
+        bool enabled,
+        bool customBackColor)
+    {
+        using UpDownBase control = numeric ? new NumericUpDown() : new DomainUpDown();
+        control.VisualStylesMode = visualStylesMode;
+        control.BorderStyle = borderStyle;
+        control.Enabled = enabled;
+        control.AutoSize = true;
+        control.Padding = new Padding(15);
+        control.Width = 120;
+
+        if (customBackColor)
+        {
+            control.BackColor = Color.Red;
+        }
+
+        using Bitmap bitmap = new(control.Width, control.Height);
+        control.DrawToBitmap(bitmap, new Rectangle(Point.Empty, control.Size));
+
+        Color expected = !enabled && !customBackColor ? SystemColors.Control : control.BackColor;
+        Assert.Equal(expected.ToArgb(), bitmap.GetPixel(5, control.Height / 2).ToArgb());
+        Assert.Equal(expected.ToArgb(), bitmap.GetPixel(control.Width - 6, control.Height / 2).ToArgb());
+        Assert.Equal(expected.ToArgb(), bitmap.GetPixel(control.Width / 2, 5).ToArgb());
+        Assert.Equal(expected.ToArgb(), bitmap.GetPixel(control.Width / 2, control.Height - 6).ToArgb());
+    }
+
+    [WinFormsFact]
+    public void UpDownBase_OnPaint_WithClassicPadding_RespectsClipAndPaintEvent()
+    {
+        using SubUpDownBase control = new()
+        {
+            VisualStylesMode = VisualStylesMode.Classic,
+            BorderStyle = BorderStyle.None,
+            AutoSize = true,
+            Padding = new Padding(15),
+            BackColor = Color.Red
+        };
+        using Bitmap bitmap = new(control.Width, control.Height);
+        using Graphics graphics = Graphics.FromImage(bitmap);
+        graphics.Clear(Color.Lime);
+        Rectangle clipRectangle = new(4, 4, 8, 6);
+        graphics.SetClip(clipRectangle);
+        using PaintEventArgs eventArgs = new(graphics, clipRectangle);
+        control.Paint += (sender, e) => e.Graphics.FillRectangle(Brushes.Blue, new Rectangle(6, 6, 1, 1));
+
+        control.OnPaint(eventArgs);
+
+        Assert.Equal(Color.Red.ToArgb(), bitmap.GetPixel(5, 5).ToArgb());
+        Assert.Equal(Color.Blue.ToArgb(), bitmap.GetPixel(6, 6).ToArgb());
+        Assert.Equal(Color.Lime.ToArgb(), bitmap.GetPixel(3, 5).ToArgb());
+        Assert.Equal(Color.Lime.ToArgb(), bitmap.GetPixel(5, 3).ToArgb());
+    }
+
     public static IEnumerable<object[]> OnPaint_TestData()
     {
         foreach (bool enabled in new bool[] { true, false })
