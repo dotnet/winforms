@@ -467,6 +467,172 @@ public partial class ToolStripControlHost : ToolStripItem
         }
     }
 
+    /// <summary>
+    /// Rescales the hosted control's bounds for a DPI change and optionally synchronizes font scaling.
+    /// </summary>
+    internal void RescaleHostedControlBoundsForDpi(int deviceDpiOld, int deviceDpiNew, bool rescaleFont = true)
+    {
+        Control? hostedControl = Control;
+        if (hostedControl is null || hostedControl.IsDisposed || deviceDpiOld == deviceDpiNew)
+        {
+            return;
+        }
+
+        // Capture item width before font/layout mutations; ToolStripItem sizes are not OS-scaled with the form.
+        int baseWidth = Width > 0 ? Width : hostedControl.Width;
+        int baseHeight = Height;
+        if (baseWidth <= 0)
+        {
+            Rectangle specified = CommonProperties.GetSpecifiedBounds(hostedControl);
+            baseWidth = specified.Width > 0 ? specified.Width : hostedControl.PreferredSize.Width;
+        }
+
+        // Sync the hosted control font to the ToolStrip menu font (or scale a truly user-set font) for the new DPI.
+        if (rescaleFont)
+        {
+            SyncHostedControlFontForDpiChange(hostedControl, deviceDpiOld, deviceDpiNew);
+        }
+
+        // Sync the hosted control DeviceDpi to the new DPI so that any synchronous handle recreation from OnFontChanged cannot treat MenuFont-at-new-DPI as still living at the old DPI and WithSize it again.
+        if (hostedControl.DeviceDpi != deviceDpiNew)
+        {
+            hostedControl.DeviceDpiInternal = deviceDpiNew;
+        }
+
+        // An autoscaling container will scale this control through ToolStrip.Controls after
+        // WM_DPICHANGED_BEFOREPARENT. Leave its bounds to that pass to avoid scaling them twice.
+        for (Control? parent = hostedControl.ParentInternal; parent is not null; parent = parent.ParentInternal)
+        {
+            if (parent is not ContainerControl container || container.AutoScaleMode == AutoScaleMode.Inherit)
+            {
+                continue;
+            }
+
+            if (container.AutoScaleMode != AutoScaleMode.None)
+            {
+                InvalidateItemLayout(PropertyNames.Font);
+                return;
+            }
+
+            break;
+        }
+
+        // Return early if we cannot determine a base width to scale from; this can happen if the hosted control has not yet been laid out and has no preferred size.
+        if (baseWidth <= 0)
+        {
+            return;
+        }
+
+        // Calculate the new width of the hosted control at the new DPI.
+        int newWidth = Math.Max(1, (int)Math.Round(baseWidth * (double)deviceDpiNew / deviceDpiOld));
+        // Only autosized items should replace their configured height with the preferred height.
+        int newHeight = AutoSize
+            ? Math.Max(1, hostedControl.PreferredSize.Height)
+            : Math.Max(1, (int)Math.Round(baseHeight * (double)deviceDpiNew / deviceDpiOld));
+        Size newSize = new(newWidth, newHeight);
+
+        // If the item size is already set to the new size, we still need to call OnBoundsChanged to ensure the hosted control is aligned correctly.
+        if (Size != newSize)
+        {
+            Size = newSize;
+        }
+        else if (hostedControl.Size != newSize)
+        {
+            OnBoundsChanged();
+        }
+
+        InvalidateItemLayout(PropertyNames.Font);
+        InvalidateItemLayout(PropertyNames.Bounds);
+    }
+
+    /// <summary>
+    /// Update the hosted control's font to the new default font if it is still using the old default font,
+    /// or scale a truly user-set font if the hosted control has not already applied DPI font scaling for this jump.
+    /// </summary>
+    private void SyncHostedControlFontForDpiChange(Control hostedControl, int deviceDpiOld, int deviceDpiNew)
+    {
+        if (deviceDpiOld == deviceDpiNew)
+        {
+            return;
+        }
+
+        Font currentFont = hostedControl.Font;
+        if (AppContextSwitches.ApplyParentFontToMenus)
+        {
+            if (hostedControl.DeviceDpi != deviceDpiNew && hostedControl.IsFontSet())
+            {
+                float factor = deviceDpiNew / (float)deviceDpiOld;
+                hostedControl.DeviceDpiInternal = deviceDpiNew;
+                ApplyHostedControlFont(hostedControl, currentFont.WithSize(currentFont.Size * factor));
+            }
+
+            return;
+        }
+
+        // ToolStrip.RescaleConstantsForDpi sets CurrentDpi to the new DPI before this runs.
+        // Compare with the default at the control's current DPI, which may already have changed.
+        // A custom font can coincide with the default at the other DPI.
+        int previousCurrentDpi = ToolStripManager.CurrentDpi;
+        Font currentDefaultFont;
+        Font newDefaultFont;
+        try
+        {
+            ToolStripManager.CurrentDpi = hostedControl.DeviceDpi;
+            currentDefaultFont = ToolStripManager.DefaultFont;
+            ToolStripManager.CurrentDpi = deviceDpiNew;
+            newDefaultFont = ToolStripManager.DefaultFont;
+        }
+        finally
+        {
+            ToolStripManager.CurrentDpi = previousCurrentDpi;
+        }
+
+        if (currentFont.Equals(currentDefaultFont))
+        {
+            // Align DeviceDpi first so a synchronous handle recreate from OnFontChanged cannot
+            // treat MenuFont-at-new-DPI as still living at the old DPI and WithSize it again.
+            if (hostedControl.DeviceDpi != deviceDpiNew)
+            {
+                hostedControl.DeviceDpiInternal = deviceDpiNew;
+            }
+
+            ApplyHostedControlFont(hostedControl, newDefaultFont);
+            return;
+        }
+
+        // Truly user-specified font: scale only if Control has not already applied DPI font scaling for this jump.
+        if (hostedControl.DeviceDpi != deviceDpiNew && hostedControl.IsFontSet())
+        {
+            float factor = deviceDpiNew / (float)deviceDpiOld;
+            hostedControl.Font = currentFont.WithSize(currentFont.Size * factor);
+        }
+
+        return;
+    }
+
+    /// <summary>
+    /// Updates a locally set font while preserving the text box's default-font tracking.
+    /// </summary>
+    private void ApplyHostedControlFont(Control hostedControl, Font font)
+    {
+        if (!hostedControl.IsFontSet())
+        {
+            return;
+        }
+
+        if (!hostedControl.Font.Equals(font))
+        {
+            if (this is ToolStripTextBox textBox)
+            {
+                textBox.SetFontForDpi(font);
+            }
+            else
+            {
+                hostedControl.Font = font;
+            }
+        }
+    }
+
     [EditorBrowsable(EditorBrowsableState.Advanced)]
     public void Focus() => ControlInternal.Focus();
 
