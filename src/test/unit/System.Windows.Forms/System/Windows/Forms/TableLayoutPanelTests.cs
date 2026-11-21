@@ -1316,6 +1316,43 @@ public class TableLayoutPanelTests
         Assert.True(control.IsHandleCreated);
     }
 
+    [WinFormsFact]
+    public void TableLayoutPanel_Layout_LargeRowIndexWithRowSpans_PositionsControls()
+    {
+        using Panel spanningControl = new() { Size = new Size(10, 10) };
+        using Panel highRowControl = new() { Size = new Size(10, 10) };
+        using TableLayoutPanel control = new()
+        {
+            ColumnCount = 2,
+            RowCount = 10,
+            GrowStyle = TableLayoutPanelGrowStyle.FixedSize,
+            Size = new Size(300, 300)
+        };
+        control.SuspendLayout();
+        control.Controls.Add(spanningControl, 0, 0);
+        control.SetRowSpan(spanningControl, 8);
+        control.Controls.Add(highRowControl, 1, int.MaxValue - 1);
+        control.SetRowSpan(highRowControl, 3);
+        for (int i = 0; i < 4; i++)
+        {
+            control.Controls.Add(new Panel { Size = new Size(10, 10) });
+        }
+
+        control.ResumeLayout(true);
+
+        Assert.Equal(new TableLayoutPanelCellPosition(0, 0), control.GetPositionFromControl(spanningControl));
+        Assert.Equal(new TableLayoutPanelCellPosition(1, 9), control.GetPositionFromControl(highRowControl));
+        for (int i = 0; i < 4; i++)
+        {
+            Assert.Equal(new TableLayoutPanelCellPosition(1, i), control.GetPositionFromControl(control.Controls[i + 2]));
+        }
+
+        Assert.Equal(2, control.ColumnCount);
+        Assert.Equal(10, control.RowCount);
+        Assert.Equal(new int[] { 16, 284 }, control.GetColumnWidths());
+        Assert.Equal(new int[] { 16, 16, 16, 16, 0, 0, 0, 0, 0, 236 }, control.GetRowHeights());
+    }
+
     public static IEnumerable<object[]> OnLayout_TestData()
     {
         yield return new object[] { new LayoutEventArgs(null, null) };
