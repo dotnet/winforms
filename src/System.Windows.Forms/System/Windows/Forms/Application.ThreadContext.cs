@@ -62,7 +62,14 @@ public sealed partial class Application
         // A private field on Application that stores the callback delegate
         private MessageLoopCallback? _messageLoopCallback;
 
-        protected Form? CurrentForm { get; private set; }
+        private Form? _currentFormOverride;
+
+        protected Form? CurrentForm
+        {
+            get => _currentFormOverride ?? ApplicationContext?.MainForm;
+            private set => _currentFormOverride = value;
+        }
+
         protected bool PostedQuit { get; private set; }
 
         /// <summary>
@@ -719,8 +726,8 @@ public sealed partial class Application
                 ApplicationContext.MainForm?.Visible = true;
             }
 
-            Form? oldForm = CurrentForm;
-            if (context is not null)
+            Form? oldFormOverride = _currentFormOverride;
+            if (context is not null && reason != msoloop.Main)
             {
                 CurrentForm = context.MainForm;
             }
@@ -804,7 +811,7 @@ public sealed partial class Application
                     }
                 }
 
-                CurrentForm = oldForm;
+                _currentFormOverride = oldFormOverride;
                 s_totalMessageLoopCount--;
                 _messageLoopCount--;
 
