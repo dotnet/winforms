@@ -61,9 +61,16 @@ public class KioskModeManager : Component, ISupportInitialize
     private const uint PowerRequestContextVersion = 0;
     private const POWER_REQUEST_CONTEXT_FLAGS PowerRequestContextSimpleString = (POWER_REQUEST_CONTEXT_FLAGS)0x00000001;
     private const string PowerRequestReason = "WinForms KioskModeManager: Preventing screen saver and sleep";
+    private const int MousePointerPollInterval = 100;
 
     private static readonly object s_containerControlChangedEvent = new();
     private static readonly object s_fullScreenChangedEvent = new();
+    private static readonly HOOKPROC s_mouseMessageHookCallback = MouseMessageHookProc;
+
+    [ThreadStatic]
+    private static HHOOK s_mouseMessageHook;
+    [ThreadStatic]
+    private static List<KioskModeManager>? s_mouseMessageOwners;
 
     private ContainerControl? _containerControl;
     private bool _containerControlExplicitlySet;
@@ -72,10 +79,13 @@ public class KioskModeManager : Component, ISupportInitialize
     private bool _pendingFullScreen;
     private bool _initializing;
     private bool _isCursorHidden;
+    private bool _monitoringMouseMessages;
     private readonly List<Control> _parentChain = [];
     private KioskModeMessageFilter? _messageFilter;
     private KioskModeFormObserver? _formObserver;
     private Timer? _mousePointerAutoHideTimer;
+    private Timer? _mousePointerPollTimer;
+    private Point _lastMousePointerPosition;
 
     private FormBorderStyle _savedBorderStyle;
     private FormWindowState _savedWindowState;
@@ -346,12 +356,16 @@ public class KioskModeManager : Component, ISupportInitialize
     /// <remarks>
     ///  <para>
     ///   The timer is active only while the component is in fullscreen mode.
-    ///   When the user moves the mouse after the component hid the pointer, the
-    ///   pointer is shown immediately and the timer starts again. Mouse activity
-    ///   is observed from the application's message queue; the component does not
-    ///   install a mouse or keyboard hook to restore the pointer.
+    ///   Mouse messages retrieved on the component's UI thread, including messages
+    ///   for other windows and native modal loops on that thread, restore the pointer
+    ///   and restart the timer. A thread-specific message hook is installed while
+    ///   fullscreen pointer hiding is enabled. The pointer position is also sampled
+    ///   periodically, including when it moves over other applications or displays.
     ///  </para>
     /// </remarks>
+    /// <exception cref="Win32Exception">
+    ///  Windows could not install or remove the thread message hook, or read the pointer position.
+    /// </exception>
     /// <exception cref="ArgumentOutOfRangeException">
     ///  <paramref name="value"/> is less than 0.
     /// </exception>
@@ -368,6 +382,18 @@ public class KioskModeManager : Component, ISupportInitialize
             if (_mousePointerAutoHideDelay == value)
             {
                 return;
+            }
+
+            if (_isFullScreen)
+            {
+                if (value == 0)
+                {
+                    StopMonitoringMouseMessages();
+                }
+                else
+                {
+                    StartMonitoringMouseMessages();
+                }
             }
 
             _mousePointerAutoHideDelay = value;
@@ -405,6 +431,9 @@ public class KioskModeManager : Component, ISupportInitialize
     ///   the taskbar.
     ///  </para>
     /// </remarks>
+    /// <exception cref="Win32Exception">
+    ///  Windows could not install or remove the thread message hook used for pointer hiding.
+    /// </exception>
     [SRCategory(nameof(SR.CatBehavior))]
     [SRDescription(nameof(SR.KioskModeManagerFullScreenDescr))]
     [Bindable(true)]
@@ -485,11 +514,28 @@ public class KioskModeManager : Component, ISupportInitialize
             : targetForm.RestoreBounds;
         _savedTopMost = targetForm.TopMost;
 
-        ApplyFullScreen(targetForm);
-        SetFullScreenState(true);
-        _pendingFullScreen = false;
-        RestartMousePointerAutoHideTimer();
-        return true;
+        if (_mousePointerAutoHideDelay > 0)
+        {
+            StartMonitoringMouseMessages();
+        }
+
+        try
+        {
+            ApplyFullScreen(targetForm);
+            SetFullScreenState(true);
+            _pendingFullScreen = false;
+            RestartMousePointerAutoHideTimer();
+            return true;
+        }
+        catch
+        {
+            if (!_isFullScreen)
+            {
+                StopMonitoringMouseMessages();
+            }
+
+            throw;
+        }
     }
 
     /// <summary>
@@ -503,6 +549,7 @@ public class KioskModeManager : Component, ISupportInitialize
             return;
         }
 
+        StopMonitoringMouseMessages();
         StopMousePointerAutoHideTimer();
         ShowMousePointerIfHidden();
 
@@ -572,6 +619,8 @@ public class KioskModeManager : Component, ISupportInitialize
             DetachFromForm();
             _mousePointerAutoHideTimer?.Dispose();
             _mousePointerAutoHideTimer = null;
+            _mousePointerPollTimer?.Dispose();
+            _mousePointerPollTimer = null;
             ReleasePowerRequest();
         }
 
@@ -639,6 +688,7 @@ public class KioskModeManager : Component, ISupportInitialize
         }
 
         _formObserver?.Detach();
+        StopMonitoringMouseMessages();
         StopMousePointerAutoHideTimer();
         ShowMousePointerIfHidden();
         _targetForm = null;
@@ -706,10 +756,8 @@ public class KioskModeManager : Component, ISupportInitialize
 
     private void EnsureMessageMonitoring()
     {
-        // IMessageFilter observes the input this application already receives, so keys
-        // stay focus driven: messages are only acted on when they target the managed
-        // form or one of its child controls. This changes neither Form.KeyPreview nor
-        // installs a global keyboard or mouse hook.
+        // Keyboard shortcuts remain limited to the managed form and its children.
+        // Mouse activity is monitored across the UI thread, including popup windows.
         if (_messageFilter is null)
         {
             _messageFilter = new KioskModeMessageFilter(this);
@@ -782,6 +830,18 @@ public class KioskModeManager : Component, ISupportInitialize
             return;
         }
 
+        if (_mousePointerPollTimer is null)
+        {
+            _mousePointerPollTimer = new Timer { Interval = MousePointerPollInterval };
+            _mousePointerPollTimer.Tick += OnMousePointerPollTimerTick;
+        }
+
+        if (!_mousePointerPollTimer.Enabled)
+        {
+            _lastMousePointerPosition = GetMousePointerPosition();
+            _mousePointerPollTimer.Start();
+        }
+
         _mousePointerAutoHideTimer ??= new Timer();
         _mousePointerAutoHideTimer.Stop();
         _mousePointerAutoHideTimer.Interval = _mousePointerAutoHideDelay;
@@ -793,15 +853,47 @@ public class KioskModeManager : Component, ISupportInitialize
     private void StopMousePointerAutoHideTimer()
     {
         _mousePointerAutoHideTimer?.Stop();
+        _mousePointerPollTimer?.Stop();
+    }
+
+    private static Point GetMousePointerPosition()
+    {
+        if (!PInvoke.GetCursorPos(out Point position))
+        {
+            throw new Win32Exception();
+        }
+
+        return position;
+    }
+
+    private bool ObserveMousePointerMovement()
+    {
+        Point position = GetMousePointerPosition();
+        if (position == _lastMousePointerPosition)
+        {
+            return false;
+        }
+
+        _lastMousePointerPosition = position;
+        ProcessMouseActivity();
+        return true;
+    }
+
+    private void OnMousePointerPollTimerTick(object? sender, EventArgs e)
+    {
+        if (_isFullScreen && _mousePointerAutoHideDelay > 0)
+        {
+            ObserveMousePointerMovement();
+        }
     }
 
     private void OnMousePointerAutoHideTimerTick(object? sender, EventArgs e)
     {
-        StopMousePointerAutoHideTimer();
-
         // A timer message can already be queued when the timer is stopped.
-        if (_isFullScreen && _mousePointerAutoHideDelay > 0 && !_isCursorHidden)
+        if (_isFullScreen && _mousePointerAutoHideDelay > 0 && !_isCursorHidden
+            && !ObserveMousePointerMovement())
         {
+            _mousePointerAutoHideTimer?.Stop();
             Cursor.Hide();
             _isCursorHidden = true;
         }
@@ -824,6 +916,79 @@ public class KioskModeManager : Component, ISupportInitialize
             ExitFullScreen();
         }
     }
+
+    private unsafe void StartMonitoringMouseMessages()
+    {
+        if (_monitoringMouseMessages)
+        {
+            return;
+        }
+
+        s_mouseMessageOwners ??= [];
+        s_mouseMessageOwners.EnsureCapacity(s_mouseMessageOwners.Count + 1);
+
+        if (s_mouseMessageHook.IsNull)
+        {
+            nint callback = Marshal.GetFunctionPointerForDelegate(s_mouseMessageHookCallback);
+            s_mouseMessageHook = PInvoke.SetWindowsHookEx(
+                WINDOWS_HOOK_ID.WH_GETMESSAGE,
+                (delegate* unmanaged[Stdcall]<int, WPARAM, LPARAM, LRESULT>)callback,
+                HINSTANCE.Null,
+                PInvokeCore.GetCurrentThreadId());
+
+            if (s_mouseMessageHook.IsNull)
+            {
+                throw new Win32Exception();
+            }
+        }
+
+        s_mouseMessageOwners.Add(this);
+        _monitoringMouseMessages = true;
+    }
+
+    private void StopMonitoringMouseMessages()
+    {
+        if (!_monitoringMouseMessages)
+        {
+            return;
+        }
+
+        Debug.Assert(s_mouseMessageOwners is not null);
+        if (s_mouseMessageOwners.Count == 1)
+        {
+            if (!PInvoke.UnhookWindowsHookEx(s_mouseMessageHook))
+            {
+                throw new Win32Exception();
+            }
+
+            s_mouseMessageHook = default;
+        }
+
+        s_mouseMessageOwners.Remove(this);
+        _monitoringMouseMessages = false;
+    }
+
+    private static unsafe LRESULT MouseMessageHookProc(int code, WPARAM wParam, LPARAM lParam)
+    {
+        MSG* message = (MSG*)(nint)lParam;
+        if (code == PInvoke.HC_ACTION
+            && (PEEK_MESSAGE_REMOVE_TYPE)(nuint)wParam == PEEK_MESSAGE_REMOVE_TYPE.PM_REMOVE
+            && message is not null
+            && IsMouseActivity(message->message)
+            && s_mouseMessageOwners is { } owners)
+        {
+            foreach (KioskModeManager owner in owners)
+            {
+                owner.ProcessMouseActivity();
+            }
+        }
+
+        return PInvoke.CallNextHookEx(s_mouseMessageHook, code, wParam, lParam);
+    }
+
+    private static bool IsMouseActivity(uint message)
+        => (message >= PInvokeCore.WM_MOUSEFIRST && message <= PInvokeCore.WM_MOUSELAST)
+            || (message >= PInvokeCore.WM_NCMOUSEMOVE && message <= PInvokeCore.WM_NCXBUTTONDBLCLK);
 
     private void ProcessMouseActivity()
     {
@@ -935,31 +1100,26 @@ public class KioskModeManager : Component, ISupportInitialize
             }
         }
 
-        if (!IsMessageFromMonitoredControl(message.HWND))
+        if (IsMouseActivity((uint)message.MsgInternal))
         {
-            return false;
+            ProcessMouseActivity();
         }
-
-        if (message.MsgInternal == PInvokeCore.WM_KEYDOWN
-            || message.MsgInternal == PInvokeCore.WM_SYSKEYDOWN)
+        else if ((message.MsgInternal == PInvokeCore.WM_KEYDOWN
+                || message.MsgInternal == PInvokeCore.WM_SYSKEYDOWN)
+            && IsMessageFromMonitoredControl(message.HWND))
         {
             bool isRepeat = ((nuint)(nint)message.LParamInternal & (1u << 30)) != 0;
             Keys keyData = ((Keys)(nint)message.WParamInternal & Keys.KeyCode)
                 | (Control.ModifierKeys & Keys.Modifiers);
             ProcessKeyboardActivity(keyData, isRepeat);
         }
-        else if (message.MsgInternal >= PInvokeCore.WM_MOUSEFIRST
-            && message.MsgInternal <= PInvokeCore.WM_MOUSELAST)
-        {
-            ProcessMouseActivity();
-        }
 
         return false;
     }
 
     /// <summary>
-    ///  Observes keyboard and mouse messages that are dispatched to the target form
-    ///  or to one of its child controls.
+    ///  Observes UI-thread mouse messages and keyboard messages for the target form
+    ///  or one of its child controls.
     /// </summary>
     private sealed class KioskModeMessageFilter : IMessageFilter
     {

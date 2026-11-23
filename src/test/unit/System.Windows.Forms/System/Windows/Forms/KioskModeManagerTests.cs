@@ -1,4 +1,4 @@
-// Licensed to the .NET Foundation under one or more agreements.
+﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
 #nullable disable
@@ -129,9 +129,12 @@ public class KioskModeManagerTests
         };
 
         Timer timer = manager.TestAccessor.Dynamic._mousePointerAutoHideTimer;
+        Timer pollTimer = manager.TestAccessor.Dynamic._mousePointerPollTimer;
 
         Assert.True(timer.Enabled);
         Assert.Equal(3000, timer.Interval);
+        Assert.True(pollTimer.Enabled);
+        Assert.Equal(100, pollTimer.Interval);
     }
 
     [WinFormsFact]
@@ -166,9 +169,75 @@ public class KioskModeManagerTests
 
         manager.MousePointerAutoHideDelay = 0;
         Timer timer = manager.TestAccessor.Dynamic._mousePointerAutoHideTimer;
+        Timer pollTimer = manager.TestAccessor.Dynamic._mousePointerPollTimer;
 
         Assert.False(manager.TestAccessor.Dynamic._isCursorHidden);
         Assert.False(timer.Enabled);
+        Assert.False(pollTimer.Enabled);
+    }
+
+    [WinFormsFact]
+    public void KioskModeManager_MousePointerPoll_MovementWithoutMessage_ShowsPointerAndRestartsTimer()
+    {
+        using Form form = new();
+        using KioskModeManager manager = new()
+        {
+            ContainerControl = form,
+            MousePointerAutoHideDelay = 3000,
+            FullScreen = true
+        };
+
+        manager.TestAccessor.Dynamic.OnMousePointerAutoHideTimerTick(null, EventArgs.Empty);
+        Assert.True(manager.TestAccessor.Dynamic._isCursorHidden);
+        Point currentPosition = Cursor.Position;
+        manager.TestAccessor.Dynamic._lastMousePointerPosition = new Point(currentPosition.X + 1, currentPosition.Y);
+
+        manager.TestAccessor.Dynamic.OnMousePointerPollTimerTick(null, EventArgs.Empty);
+
+        Assert.False(manager.TestAccessor.Dynamic._isCursorHidden);
+        Assert.Equal(currentPosition, (Point)manager.TestAccessor.Dynamic._lastMousePointerPosition);
+        Assert.True(((Timer)manager.TestAccessor.Dynamic._mousePointerAutoHideTimer).Enabled);
+    }
+
+    [WinFormsFact]
+    public void KioskModeManager_MousePointerPoll_NoMovement_DoesNotRestartTimer()
+    {
+        using Form form = new();
+        using KioskModeManager manager = new()
+        {
+            ContainerControl = form,
+            MousePointerAutoHideDelay = 3000,
+            FullScreen = true
+        };
+
+        Timer timer = manager.TestAccessor.Dynamic._mousePointerAutoHideTimer;
+        timer.Stop();
+        manager.TestAccessor.Dynamic._lastMousePointerPosition = Cursor.Position;
+        manager.TestAccessor.Dynamic.OnMousePointerPollTimerTick(null, EventArgs.Empty);
+
+        Assert.False(timer.Enabled);
+        manager.FullScreen = false;
+        Assert.False(((Timer)manager.TestAccessor.Dynamic._mousePointerPollTimer).Enabled);
+    }
+
+    [WinFormsFact]
+    public void KioskModeManager_MousePointerAutoHideTimerTick_MovementBeforePoll_DoesNotHidePointer()
+    {
+        using Form form = new();
+        using KioskModeManager manager = new()
+        {
+            ContainerControl = form,
+            MousePointerAutoHideDelay = 3000,
+            FullScreen = true
+        };
+
+        Point currentPosition = Cursor.Position;
+        manager.TestAccessor.Dynamic._lastMousePointerPosition = new Point(currentPosition.X + 1, currentPosition.Y);
+        manager.TestAccessor.Dynamic.OnMousePointerAutoHideTimerTick(null, EventArgs.Empty);
+
+        Assert.False(manager.TestAccessor.Dynamic._isCursorHidden);
+        Assert.Equal(currentPosition, (Point)manager.TestAccessor.Dynamic._lastMousePointerPosition);
+        Assert.True(((Timer)manager.TestAccessor.Dynamic._mousePointerAutoHideTimer).Enabled);
     }
 
     [WinFormsTheory]
@@ -876,6 +945,261 @@ public class KioskModeManagerTests
         Assert.False(manager.TestAccessor.Dynamic._isCursorHidden);
         Assert.True(timer.Enabled);
         Assert.Equal(1, timer.Interval);
+    }
+
+    [WinFormsTheory]
+    [InlineData((int)PInvokeCore.WM_MOUSEMOVE)]
+    [InlineData((int)PInvokeCore.WM_LBUTTONDOWN)]
+    [InlineData((int)PInvokeCore.WM_NCMOUSEMOVE)]
+    [InlineData((int)PInvokeCore.WM_NCXBUTTONDBLCLK)]
+    public void KioskModeManager_MessageFilter_OtherWindowMouseActivity_ShowsPointerAndRestartsTimer(int messageId)
+    {
+        using Form form = new();
+        using Form otherWindow = new();
+        using KioskModeManager manager = new()
+        {
+            ContainerControl = form,
+            MousePointerAutoHideDelay = 3000,
+            FullScreen = true
+        };
+
+        Application.DoEvents();
+        manager.TestAccessor.Dynamic.OnMousePointerAutoHideTimerTick(null, EventArgs.Empty);
+        Assert.True(manager.TestAccessor.Dynamic._isCursorHidden);
+
+        Message message = Message.Create(otherWindow.Handle, messageId, 0, 0);
+        Assert.False(Application.FilterMessage(ref message));
+
+        Timer timer = manager.TestAccessor.Dynamic._mousePointerAutoHideTimer;
+        Assert.False(manager.TestAccessor.Dynamic._isCursorHidden);
+        Assert.True(timer.Enabled);
+        Assert.Equal(3000, timer.Interval);
+
+        timer.Stop();
+        Assert.False(Application.FilterMessage(ref message));
+        Assert.True(timer.Enabled);
+    }
+
+    [WinFormsFact]
+    public void KioskModeManager_MessageLoop_OtherWindowMouseMove_ShowsPointer()
+    {
+        using Form form = new();
+        using Form otherWindow = new();
+        using KioskModeManager manager = new()
+        {
+            ContainerControl = form,
+            MousePointerAutoHideDelay = 3000,
+            FullScreen = true
+        };
+
+        _ = otherWindow.Handle;
+        Application.DoEvents();
+        manager.TestAccessor.Dynamic.OnMousePointerAutoHideTimerTick(null, EventArgs.Empty);
+        Assert.True(manager.TestAccessor.Dynamic._isCursorHidden);
+
+        Assert.True(PInvokeCore.PostMessage(otherWindow, PInvokeCore.WM_MOUSEMOVE, 0, 0));
+        Application.DoEvents();
+
+        Assert.False(manager.TestAccessor.Dynamic._isCursorHidden);
+        Assert.True(((Timer)manager.TestAccessor.Dynamic._mousePointerAutoHideTimer).Enabled);
+    }
+
+    [WinFormsFact]
+    public unsafe void KioskModeManager_NativeMessageLoop_MouseMove_ShowsPointerOnlyWhenRemoved()
+    {
+        using Form form = new();
+        using Form otherWindow = new();
+        using KioskModeManager manager = new()
+        {
+            ContainerControl = form,
+            MousePointerAutoHideDelay = 3000,
+            FullScreen = true
+        };
+
+        _ = otherWindow.Handle;
+        Application.DoEvents();
+        manager.TestAccessor.Dynamic.OnMousePointerAutoHideTimerTick(null, EventArgs.Empty);
+        Assert.True(manager.TestAccessor.Dynamic._isCursorHidden);
+        Assert.True(PInvokeCore.PostMessage(otherWindow, PInvokeCore.WM_MOUSEMOVE, 0, 0));
+
+        MSG message = default;
+        Assert.True(PInvokeCore.PeekMessage(&message, otherWindow, PInvokeCore.WM_MOUSEMOVE, PInvokeCore.WM_MOUSEMOVE, PEEK_MESSAGE_REMOVE_TYPE.PM_NOREMOVE));
+        Assert.True(manager.TestAccessor.Dynamic._isCursorHidden);
+        Assert.True(PInvokeCore.PeekMessage(&message, otherWindow, PInvokeCore.WM_MOUSEMOVE, PInvokeCore.WM_MOUSEMOVE, PEEK_MESSAGE_REMOVE_TYPE.PM_REMOVE));
+        Assert.False(manager.TestAccessor.Dynamic._isCursorHidden);
+        Assert.True(((Timer)manager.TestAccessor.Dynamic._mousePointerAutoHideTimer).Enabled);
+    }
+
+    [WinFormsFact]
+    public void KioskModeManager_NativeMessageBox_MouseMove_ShowsPointer()
+    {
+        using Form form = new();
+        using KioskModeManager manager = new()
+        {
+            ContainerControl = form,
+            MousePointerAutoHideDelay = 3000,
+            FullScreen = true
+        };
+        using Timer timer = new() { Interval = 50 };
+        int tick = 0;
+        bool posted = false;
+        bool hiddenBeforeMove = false;
+        bool hiddenAfterMove = true;
+        HWND dialog = default;
+        timer.Tick += (_, _) =>
+        {
+            if (tick++ == 0)
+            {
+                dialog = PInvoke.GetActiveWindow();
+                manager.TestAccessor.Dynamic.OnMousePointerAutoHideTimerTick(null, EventArgs.Empty);
+                hiddenBeforeMove = manager.TestAccessor.Dynamic._isCursorHidden;
+                posted = PInvokeCore.PostMessage(dialog, PInvokeCore.WM_MOUSEMOVE, 0, 0);
+            }
+            else
+            {
+                hiddenAfterMove = manager.TestAccessor.Dynamic._isCursorHidden;
+                timer.Stop();
+                PInvokeCore.PostMessage(dialog, PInvokeCore.WM_CLOSE, 0, 0);
+            }
+        };
+
+        timer.Start();
+        MessageBox.Show(form, "Native modal loop test", "KioskModeManager test");
+
+        Assert.False(dialog.IsNull);
+        Assert.True(posted);
+        Assert.True(hiddenBeforeMove);
+        Assert.False(hiddenAfterMove);
+    }
+
+    [WinFormsFact]
+    public void KioskModeManager_EarlierFilterConsumesMouseMove_ShowsPointer()
+    {
+        using Form form = new();
+        using Form otherWindow = new();
+        MouseMoveFilter filter = new(otherWindow.Handle);
+        Application.AddMessageFilter(filter);
+        try
+        {
+            using KioskModeManager manager = new()
+            {
+                ContainerControl = form,
+                MousePointerAutoHideDelay = 3000,
+                FullScreen = true
+            };
+
+            Application.DoEvents();
+            manager.TestAccessor.Dynamic.OnMousePointerAutoHideTimerTick(null, EventArgs.Empty);
+            Assert.True(manager.TestAccessor.Dynamic._isCursorHidden);
+            Assert.True(PInvokeCore.PostMessage(otherWindow, PInvokeCore.WM_MOUSEMOVE, 0, 0));
+            Application.DoEvents();
+
+            Assert.True(filter.Consumed);
+            Assert.False(manager.TestAccessor.Dynamic._isCursorHidden);
+            Assert.True(((Timer)manager.TestAccessor.Dynamic._mousePointerAutoHideTimer).Enabled);
+        }
+        finally
+        {
+            Application.RemoveMessageFilter(filter);
+        }
+    }
+
+    [WinFormsFact]
+    public unsafe void KioskModeManager_MultipleManagers_DisablingOneKeepsOtherHooked()
+    {
+        using Form form = new();
+        using Form otherForm = new();
+        using KioskModeManager first = new() { ContainerControl = form, MousePointerAutoHideDelay = 3000, FullScreen = true };
+        using KioskModeManager second = new() { ContainerControl = otherForm, MousePointerAutoHideDelay = 3000, FullScreen = true };
+
+        _ = otherForm.Handle;
+        Application.DoEvents();
+        first.MousePointerAutoHideDelay = 0;
+        second.TestAccessor.Dynamic.OnMousePointerAutoHideTimerTick(null, EventArgs.Empty);
+        Assert.True(second.TestAccessor.Dynamic._isCursorHidden);
+        Assert.True(PInvokeCore.PostMessage(otherForm, PInvokeCore.WM_MOUSEMOVE, 0, 0));
+
+        MSG message = default;
+        Assert.True(PInvokeCore.PeekMessage(&message, otherForm, PInvokeCore.WM_MOUSEMOVE, PInvokeCore.WM_MOUSEMOVE, PEEK_MESSAGE_REMOVE_TYPE.PM_REMOVE));
+        Assert.False(second.TestAccessor.Dynamic._isCursorHidden);
+        Assert.True(((Timer)second.TestAccessor.Dynamic._mousePointerAutoHideTimer).Enabled);
+        second.FullScreen = false;
+        Assert.False(second.TestAccessor.Dynamic._monitoringMouseMessages);
+    }
+
+    [WinFormsFact]
+    public void KioskModeManager_MouseMonitoring_EnabledAndDisposedWhileFullScreen_Unhooks()
+    {
+        using Form form = new();
+        KioskModeManager manager = new() { ContainerControl = form, FullScreen = true };
+        Assert.False(manager.TestAccessor.Dynamic._monitoringMouseMessages);
+
+        manager.MousePointerAutoHideDelay = 3000;
+        Assert.True(manager.TestAccessor.Dynamic._monitoringMouseMessages);
+
+        manager.MousePointerAutoHideDelay = 0;
+        Assert.False(manager.TestAccessor.Dynamic._monitoringMouseMessages);
+
+        manager.MousePointerAutoHideDelay = 3000;
+        Assert.True(manager.TestAccessor.Dynamic._monitoringMouseMessages);
+        manager.Dispose();
+        Assert.False(manager.TestAccessor.Dynamic._monitoringMouseMessages);
+    }
+
+    [WinFormsFact]
+    public void KioskModeManager_MessageFilter_OtherWindowKeyboardActivity_DoesNotToggleFullScreen()
+    {
+        using Form form = new();
+        using Form otherWindow = new();
+        using KioskModeManager manager = new()
+        {
+            ContainerControl = form
+        };
+
+        Application.DoEvents();
+        Message message = Message.Create(otherWindow.Handle, (int)PInvokeCore.WM_KEYDOWN, (nint)Keys.F11, 0);
+        Assert.False(Application.FilterMessage(ref message));
+        Assert.False(manager.FullScreen);
+
+        message = Message.Create(form.Handle, (int)PInvokeCore.WM_KEYDOWN, (nint)Keys.F11, 0);
+        Assert.False(Application.FilterMessage(ref message));
+        Assert.True(manager.FullScreen);
+    }
+
+    [WinFormsFact]
+    public void KioskModeManager_MessageFilter_OtherWindowNonMouseMessage_DoesNotShowPointer()
+    {
+        using Form form = new();
+        using Form otherWindow = new();
+        using KioskModeManager manager = new()
+        {
+            ContainerControl = form,
+            MousePointerAutoHideDelay = 3000,
+            FullScreen = true
+        };
+
+        Application.DoEvents();
+        manager.TestAccessor.Dynamic.OnMousePointerAutoHideTimerTick(null, EventArgs.Empty);
+        Message message = Message.Create(otherWindow.Handle, (int)PInvokeCore.WM_KEYDOWN, (nint)Keys.A, 0);
+        Assert.False(Application.FilterMessage(ref message));
+        Assert.True(manager.TestAccessor.Dynamic._isCursorHidden);
+        Assert.False(((Timer)manager.TestAccessor.Dynamic._mousePointerAutoHideTimer).Enabled);
+    }
+
+    private sealed class MouseMoveFilter(nint target) : IMessageFilter
+    {
+        public bool Consumed { get; private set; }
+
+        public bool PreFilterMessage(ref Message message)
+        {
+            if (message.HWnd == target && message.Msg == (int)PInvokeCore.WM_MOUSEMOVE)
+            {
+                Consumed = true;
+                return true;
+            }
+
+            return false;
+        }
     }
 
     private class SubKioskModeManager : KioskModeManager
