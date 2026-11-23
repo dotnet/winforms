@@ -415,26 +415,17 @@ public unsafe class Com2IPerPropertyBrowsingHandlerTests
         public HRESULT MapPropertyToPage(int dispID, Guid* pClsid)
         {
             MapPropertyToPageDispIds.Add(dispID);
-            if (MapPropertyToPageResult.Failed)
-            {
-                return MapPropertyToPageResult;
-            }
-
+            // The output is written even on failure so a failed HRESULT must be what hides the page.
             *pClsid = PageGuid;
-            return HRESULT.S_OK;
+            return MapPropertyToPageResult;
         }
 
         public HRESULT GetDisplayString(int dispID, BSTR* pBstr)
         {
             GetDisplayStringDispIds.Add(dispID);
-            if (GetDisplayStringResult.Failed)
-            {
-                return GetDisplayStringResult;
-            }
-
-            // Ownership of the allocated string transfers to the caller.
+            // Ownership of the allocated string transfers to the caller, even when the call reports failure.
             *pBstr = new BSTR(DisplayString);
-            return HRESULT.S_OK;
+            return GetDisplayStringResult;
         }
 
         public HRESULT GetPredefinedStrings(int dispID, CALPOLESTR* pCaStringsOut, CADWORD* pCaCookiesOut)
