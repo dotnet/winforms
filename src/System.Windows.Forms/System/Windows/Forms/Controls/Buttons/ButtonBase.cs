@@ -1389,7 +1389,7 @@ public abstract partial class ButtonBase : Control, ICommandBindingTargetProvide
         Invalidate();
     }
 
-    private bool ShouldSerializeUseVisualStyleBackColor() => _isEnableVisualStyleBackgroundSet;
+    internal bool ShouldSerializeUseVisualStyleBackColor() => _isEnableVisualStyleBackgroundSet;
 
     protected override void WndProc(ref Message m)
     {
