@@ -86,7 +86,6 @@ public class KioskModeManager : Component, ISupportInitialize
     private Timer? _mousePointerAutoHideTimer;
     private Timer? _mousePointerPollTimer;
     private Point? _lastMousePointerPosition;
-    private Func<Point?> _mousePointerPositionProvider = GetMousePointerPosition;
     private bool _mousePointerPositionUnavailable;
 
     private FormBorderStyle _savedBorderStyle;
@@ -869,7 +868,7 @@ public class KioskModeManager : Component, ISupportInitialize
 
     private Point? SampleMousePointerPosition()
     {
-        Point? position = _mousePointerPositionProvider();
+        Point? position = GetMousePointerPosition();
         if (position is null && !_mousePointerPositionUnavailable)
         {
             Debug.WriteLine("KioskModeManager could not read the mouse pointer position; sampling will be retried.");
@@ -1005,8 +1004,8 @@ public class KioskModeManager : Component, ISupportInitialize
     }
 
     private static bool IsMouseActivity(uint message)
-        => (message >= PInvokeCore.WM_MOUSEFIRST && message <= PInvokeCore.WM_MOUSELAST)
-            || (message >= PInvokeCore.WM_NCMOUSEMOVE && message <= PInvokeCore.WM_NCXBUTTONDBLCLK);
+        => message is >= PInvokeCore.WM_MOUSEFIRST and <= PInvokeCore.WM_MOUSELAST
+            or >= PInvokeCore.WM_NCMOUSEMOVE and <= PInvokeCore.WM_NCXBUTTONDBLCLK;
 
     private void ProcessMouseActivity()
     {
