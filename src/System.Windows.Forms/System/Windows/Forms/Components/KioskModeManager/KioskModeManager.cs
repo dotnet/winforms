@@ -85,7 +85,9 @@ public class KioskModeManager : Component, ISupportInitialize
     private KioskModeFormObserver? _formObserver;
     private Timer? _mousePointerAutoHideTimer;
     private Timer? _mousePointerPollTimer;
-    private Point _lastMousePointerPosition;
+    private Point? _lastMousePointerPosition;
+    private Func<Point?> _mousePointerPositionProvider = GetMousePointerPosition;
+    private bool _mousePointerPositionUnavailable;
 
     private FormBorderStyle _savedBorderStyle;
     private FormWindowState _savedWindowState;
@@ -361,10 +363,12 @@ public class KioskModeManager : Component, ISupportInitialize
     ///   and restart the timer. A thread-specific message hook is installed while
     ///   fullscreen pointer hiding is enabled. The pointer position is also sampled
     ///   periodically, including when it moves over other applications or displays.
+    ///   If the pointer position is temporarily unavailable, sampling is retried and
+    ///   the pointer is not hidden until its position can be read again.
     ///  </para>
     /// </remarks>
     /// <exception cref="Win32Exception">
-    ///  Windows could not install or remove the thread message hook, or read the pointer position.
+    ///  Windows could not install or remove the thread message hook.
     /// </exception>
     /// <exception cref="ArgumentOutOfRangeException">
     ///  <paramref name="value"/> is less than 0.
@@ -838,7 +842,11 @@ public class KioskModeManager : Component, ISupportInitialize
 
         if (!_mousePointerPollTimer.Enabled)
         {
-            _lastMousePointerPosition = GetMousePointerPosition();
+            if (SampleMousePointerPosition() is Point position)
+            {
+                _lastMousePointerPosition = position;
+            }
+
             _mousePointerPollTimer.Start();
         }
 
@@ -856,19 +864,29 @@ public class KioskModeManager : Component, ISupportInitialize
         _mousePointerPollTimer?.Stop();
     }
 
-    private static Point GetMousePointerPosition()
+    private static Point? GetMousePointerPosition()
+        => PInvoke.GetCursorPos(out Point position) ? position : null;
+
+    private Point? SampleMousePointerPosition()
     {
-        if (!PInvoke.GetCursorPos(out Point position))
+        Point? position = _mousePointerPositionProvider();
+        if (position is null && !_mousePointerPositionUnavailable)
         {
-            throw new Win32Exception();
+            Debug.WriteLine("KioskModeManager could not read the mouse pointer position; sampling will be retried.");
         }
 
+        _mousePointerPositionUnavailable = position is null;
         return position;
     }
 
-    private bool ObserveMousePointerMovement()
+    private bool? ObserveMousePointerMovement()
     {
-        Point position = GetMousePointerPosition();
+        Point? position = SampleMousePointerPosition();
+        if (position is null)
+        {
+            return null;
+        }
+
         if (position == _lastMousePointerPosition)
         {
             return false;
@@ -891,7 +909,7 @@ public class KioskModeManager : Component, ISupportInitialize
     {
         // A timer message can already be queued when the timer is stopped.
         if (_isFullScreen && _mousePointerAutoHideDelay > 0 && !_isCursorHidden
-            && !ObserveMousePointerMovement())
+            && ObserveMousePointerMovement() is false)
         {
             _mousePointerAutoHideTimer?.Stop();
             Cursor.Hide();
