@@ -387,6 +387,17 @@ public unsafe class Com2IPerPropertyBrowsingHandlerTests
 
     private sealed class PerPropertyBrowsingFixture : IPerPropertyBrowsing.Interface, IManagedWrapper<IPerPropertyBrowsing>
     {
+        // CALPOLESTR.ConvertAndFree releases the strings but not the pointer table, so the fixture frees the tables.
+        private readonly List<nint> _stringTables = [];
+
+        ~PerPropertyBrowsingFixture()
+        {
+            foreach (nint table in _stringTables)
+            {
+                Marshal.FreeCoTaskMem(table);
+            }
+        }
+
         public Guid PageGuid { get; set; }
         public HRESULT MapPropertyToPageResult { get; set; } = HRESULT.S_OK;
         public string? DisplayString { get; set; }
@@ -436,6 +447,7 @@ public unsafe class Com2IPerPropertyBrowsingHandlerTests
 
             pCaStringsOut->cElems = (uint)Names.Length;
             pCaStringsOut->pElems = (PWSTR*)Marshal.AllocCoTaskMem(Names.Length * sizeof(nint));
+            _stringTables.Add((nint)pCaStringsOut->pElems);
             for (int i = 0; i < Names.Length; i++)
             {
                 pCaStringsOut->pElems[i] = new PWSTR((char*)Marshal.StringToCoTaskMemUni(Names[i]));

@@ -356,14 +356,10 @@ public unsafe class Com2IProvidePropertyBuilderHandlerTests
             ExecuteBuilderGuid = bstrGuidBldr->ToString();
             ExecuteBuilderOwner = hwndBldrOwner;
 
-            if (ExecuteBuilderResult.Failed)
-            {
-                return ExecuteBuilderResult;
-            }
-
+            // Outputs are written even on failure so a failed HRESULT must override a reported commit.
             *pvarValue = VARIANT.FromObject(NewValue);
             *pbActionCommitted = Commit ? VARIANT_BOOL.VARIANT_TRUE : VARIANT_BOOL.VARIANT_FALSE;
-            return HRESULT.S_OK;
+            return ExecuteBuilderResult;
         }
     }
 }
