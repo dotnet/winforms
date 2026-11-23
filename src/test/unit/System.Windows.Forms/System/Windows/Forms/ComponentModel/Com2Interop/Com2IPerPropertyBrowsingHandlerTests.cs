@@ -395,7 +395,6 @@ public unsafe class Com2IPerPropertyBrowsingHandlerTests
         public uint[] Cookies { get; set; } = [];
         public HRESULT GetPredefinedStringsResult { get; set; } = HRESULT.S_OK;
         public Dictionary<uint, object> PredefinedValues { get; } = [];
-        public Dictionary<uint, HRESULT> PredefinedValueFailures { get; } = [];
 
         public List<int> MapPropertyToPageDispIds { get; } = [];
         public List<int> GetDisplayStringDispIds { get; } = [];
@@ -455,11 +454,6 @@ public unsafe class Com2IPerPropertyBrowsingHandlerTests
         public HRESULT GetPredefinedValue(int dispID, uint dwCookie, VARIANT* pVarOut)
         {
             GetPredefinedValueCookies.Add(dwCookie);
-            if (PredefinedValueFailures.TryGetValue(dwCookie, out HRESULT failure))
-            {
-                return failure;
-            }
-
             if (!PredefinedValues.TryGetValue(dwCookie, out object? value))
             {
                 return HRESULT.E_FAIL;
