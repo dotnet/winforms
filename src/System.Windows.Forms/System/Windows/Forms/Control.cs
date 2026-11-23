@@ -10330,7 +10330,16 @@ public unsafe partial class Control :
                 for (int i = 0; i < children.Count; i++)
                 {
                     Control child = children[i];
-                    LayoutEngine.InitLayout(child, BoundsSpecified.All);
+                    // ResumeLayout(false) must not overwrite anchor distances scaled for a DPI change.
+                    if (this is not ContainerControl { IsScaledByDpiChangedEvent: true }
+                        || LayoutEngine != DefaultLayout.Instance
+                        || !ScaleHelper.IsScalingRequirementMet
+                        || DefaultLayout.UseAnchorLayoutV2(child)
+                        || DefaultLayout.GetAnchorInfo(child) is null)
+                    {
+                        LayoutEngine.InitLayout(child, BoundsSpecified.All);
+                    }
+
                     CommonProperties.xClearPreferredSizeCache(child);
                 }
             }

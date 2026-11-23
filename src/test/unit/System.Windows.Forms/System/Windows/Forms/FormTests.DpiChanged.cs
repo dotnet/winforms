@@ -170,6 +170,53 @@ public partial class FormTests
         handle.ExitCode.Should().Be(RemoteExecutor.SuccessExitCode);
     }
 
+    [Theory]
+    [InlineData(false)]
+    [InlineData(true)]
+    public void Form_WmDpiChanged_FontAutoScalePreservesAnchoredBounds(bool anchorLayoutV2)
+    {
+        using RemoteInvokeHandle handle = RemoteExecutor.Invoke((useV2) =>
+        {
+            Application.SetHighDpiMode(HighDpiMode.PerMonitorV2).Should().BeTrue();
+            using AnchorLayoutV2Scope scope = new(bool.Parse(useV2));
+            using DpiTestForm form = new()
+            {
+                AutoScaleMode = AutoScaleMode.Font,
+                FormBorderStyle = FormBorderStyle.None,
+                ClientSize = new Size(250, 150)
+            };
+            using DpiTestPanel panel = new()
+            {
+                Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right,
+                Bounds = new Rectangle(20, 10, 150, 100)
+            };
+            form.Controls.Add(panel);
+            _ = form.Handle;
+            _ = panel.Handle;
+            form.PerformAutoScale();
+            SizeF dimensions = form.CurrentAutoScaleDimensions;
+            Rectangle formBounds = form.Bounds;
+            Rectangle panelBounds = panel.Bounds;
+            int dpi = form.DeviceDpi;
+
+            SendDpiChange(form, panel, button: null, dpi * 2,
+                new Rectangle(formBounds.Location, new Size(formBounds.Width * 2, formBounds.Height * 2)));
+            SizeF factor = bool.Parse(useV2)
+                ? new SizeF(2, 2)
+                : ContainerControl.GetCurrentAutoScaleFactor(form.CurrentAutoScaleDimensions, dimensions);
+            int left = (int)Math.Round(panelBounds.Left * factor.Width);
+            int top = (int)Math.Round(panelBounds.Top * factor.Height);
+            int right = (int)Math.Round((formBounds.Width - panelBounds.Right) * factor.Width);
+            int bottom = (int)Math.Round((formBounds.Height - panelBounds.Bottom) * factor.Height);
+            AssertWithin(panel.Bounds, new Rectangle(left, top, form.ClientSize.Width - left - right, form.ClientSize.Height - top - bottom), 1);
+
+            SendDpiChange(form, panel, button: null, dpi, formBounds);
+            AssertWithin(panel.Bounds, panelBounds, 1);
+        }, anchorLayoutV2.ToString());
+
+        handle.ExitCode.Should().Be(RemoteExecutor.SuccessExitCode);
+    }
+
     [WinFormsFact]
     public void Form_WmDpiChanged_CancelledByHandler_DoesNotApplySuggestedRectangle()
     {

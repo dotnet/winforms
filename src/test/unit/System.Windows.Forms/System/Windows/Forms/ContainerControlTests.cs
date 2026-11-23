@@ -630,6 +630,168 @@ public class ContainerControlTests
         handle.ExitCode.Should().Be(RemoteExecutor.SuccessExitCode);
     }
 
+    [Theory]
+    [InlineData(false)]
+    [InlineData(true)]
+    public void Form_DpiChanged_RoundTripPreservesAnchoredBounds(bool anchorLayoutV2)
+    {
+        using RemoteInvokeHandle handle = RemoteExecutor.Invoke((useV2) =>
+        {
+            Application.SetHighDpiMode(HighDpiMode.PerMonitorV2).Should().BeTrue();
+            using AnchorLayoutV2Scope scope = new(bool.Parse(useV2));
+
+            for (int anchors = 0; anchors < 16; anchors++)
+            {
+                using Form form = new()
+                {
+                    AutoScaleMode = AutoScaleMode.Dpi,
+                    FormBorderStyle = FormBorderStyle.None,
+                    ClientSize = new Size(250, 150)
+                };
+                using Panel panel = new()
+                {
+                    Anchor = (AnchorStyles)anchors,
+                    Bounds = new Rectangle(20, 10, 150, 100)
+                };
+                using Panel nestedPanel = new()
+                {
+                    Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right,
+                    Bounds = new Rectangle(10, 10, 40, 30)
+                };
+                panel.Controls.Add(nestedPanel);
+                form.Controls.Add(panel);
+                Assert.NotEqual(IntPtr.Zero, form.Handle);
+                Assert.NotEqual(IntPtr.Zero, panel.Handle);
+                Assert.NotEqual(IntPtr.Zero, nestedPanel.Handle);
+                form.PerformAutoScale();
+
+                int initialDpi = form.DeviceDpi;
+                Rectangle initialFormBounds = form.Bounds;
+                Rectangle initialPanelBounds = panel.Bounds;
+                Rectangle initialNestedBounds = nestedPanel.Bounds;
+                Rectangle scaledPanelBounds = new(
+                    initialPanelBounds.X * 2,
+                    initialPanelBounds.Y * 2,
+                    initialPanelBounds.Width * 2,
+                    initialPanelBounds.Height * 2);
+                Rectangle scaledNestedBounds = new(
+                    initialNestedBounds.X * 2,
+                    initialNestedBounds.Y * 2,
+                    initialNestedBounds.Width * 2,
+                    initialNestedBounds.Height * 2);
+
+                for (int i = 0; i < 2; i++)
+                {
+                    ChangeDpi(initialDpi * 2, initialFormBounds.Width * 2, initialFormBounds.Height * 2);
+                    Assert.Equal(scaledPanelBounds, panel.Bounds);
+                    Assert.Equal(scaledNestedBounds, nestedPanel.Bounds);
+                    ChangeDpi(initialDpi, initialFormBounds.Width, initialFormBounds.Height);
+                    Assert.Equal(initialPanelBounds, panel.Bounds);
+                    Assert.Equal(initialNestedBounds, nestedPanel.Bounds);
+                }
+
+                const int extra = 20;
+                AnchorStyles anchor = panel.Anchor;
+                bool left = (anchor & AnchorStyles.Left) != 0;
+                bool right = (anchor & AnchorStyles.Right) != 0;
+                bool top = (anchor & AnchorStyles.Top) != 0;
+                bool bottom = (anchor & AnchorStyles.Bottom) != 0;
+                Rectangle expected;
+                if (bool.Parse(useV2) && anchor != (AnchorStyles.Top | AnchorStyles.Left))
+                {
+                    expected = new Rectangle(
+                        left ? 42 : right ? 54 : 48,
+                        top ? 21 : bottom ? 35 : 28,
+                        left && right ? 312 : 300,
+                        top && bottom ? 214 : 200);
+                }
+                else
+                {
+                    expected = scaledPanelBounds;
+                    expected.X += left ? 0 : right ? extra : extra / 2;
+                    expected.Y += top ? 0 : bottom ? extra : extra / 2;
+                    expected.Width += left && right ? extra : 0;
+                    expected.Height += top && bottom ? extra : 0;
+                }
+
+                ChangeDpi(initialDpi * 2, initialFormBounds.Width * 2 + extra, initialFormBounds.Height * 2 + extra);
+                Assert.Equal(expected, panel.Bounds);
+                ChangeDpi(initialDpi, initialFormBounds.Width, initialFormBounds.Height);
+                Assert.Equal(initialPanelBounds, panel.Bounds);
+
+                AnchorStyles finalAnchor = panel.Anchor;
+                bool anchoredLeft = (finalAnchor & AnchorStyles.Left) != 0;
+                bool anchoredRight = (finalAnchor & AnchorStyles.Right) != 0;
+                bool anchoredTop = (finalAnchor & AnchorStyles.Top) != 0;
+                bool anchoredBottom = (finalAnchor & AnchorStyles.Bottom) != 0;
+                Rectangle resizedBounds = initialPanelBounds;
+                resizedBounds.X += anchoredLeft ? 0 : anchoredRight ? 20 : 10;
+                resizedBounds.Y += anchoredTop ? 0 : anchoredBottom ? 20 : 10;
+                resizedBounds.Width += anchoredLeft && anchoredRight ? 20 : 0;
+                resizedBounds.Height += anchoredTop && anchoredBottom ? 20 : 0;
+                form.ClientSize += new Size(20, 20);
+                Assert.Equal(resizedBounds, panel.Bounds);
+
+                void ChangeDpi(int dpi, int width, int height)
+                {
+                    WPARAM dpiParam = WPARAM.MAKEWPARAM(dpi, dpi);
+                    PInvokeCore.SendMessage(nestedPanel, PInvokeCore.WM_DPICHANGED_BEFOREPARENT, dpiParam);
+                    PInvokeCore.SendMessage(panel, PInvokeCore.WM_DPICHANGED_BEFOREPARENT, dpiParam);
+                    RECT suggestedBounds = new(initialFormBounds.X, initialFormBounds.Y, initialFormBounds.X + width, initialFormBounds.Y + height);
+                    PInvokeCore.SendMessage(form, PInvokeCore.WM_DPICHANGED, dpiParam, ref suggestedBounds);
+                    PInvokeCore.SendMessage(panel, PInvokeCore.WM_DPICHANGED_AFTERPARENT);
+                    PInvokeCore.SendMessage(nestedPanel, PInvokeCore.WM_DPICHANGED_AFTERPARENT);
+                }
+            }
+        }, anchorLayoutV2.ToString());
+
+        handle.ExitCode.Should().Be(RemoteExecutor.SuccessExitCode);
+    }
+
+    [Theory]
+    [InlineData(false)]
+    [InlineData(true)]
+    public void Form_DpiChanged_AutoScaleNone_StillLaysOutAnchoredControls(bool anchorLayoutV2)
+    {
+        using RemoteInvokeHandle handle = RemoteExecutor.Invoke((useV2) =>
+        {
+            Application.SetHighDpiMode(HighDpiMode.PerMonitorV2).Should().BeTrue();
+            using AnchorLayoutV2Scope scope = new(bool.Parse(useV2));
+            using Form form = new()
+            {
+                AutoScaleMode = AutoScaleMode.None,
+                FormBorderStyle = FormBorderStyle.None,
+                ClientSize = new Size(250, 150)
+            };
+            using Panel panel = new()
+            {
+                Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right,
+                Bounds = new Rectangle(20, 10, 150, 100)
+            };
+            form.Controls.Add(panel);
+            Assert.NotEqual(IntPtr.Zero, form.Handle);
+            Assert.NotEqual(IntPtr.Zero, panel.Handle);
+            int initialDpi = form.DeviceDpi;
+            Rectangle initialBounds = form.Bounds;
+
+            ChangeDpi(initialDpi * 2, initialBounds.Width * 2, initialBounds.Height * 2);
+            Assert.Equal(new Rectangle(20, 10, 400, 250), panel.Bounds);
+            ChangeDpi(initialDpi, initialBounds.Width, initialBounds.Height);
+            Assert.Equal(new Rectangle(20, 10, 150, 100), panel.Bounds);
+
+            void ChangeDpi(int dpi, int width, int height)
+            {
+                WPARAM dpiParam = WPARAM.MAKEWPARAM(dpi, dpi);
+                PInvokeCore.SendMessage(panel, PInvokeCore.WM_DPICHANGED_BEFOREPARENT, dpiParam);
+                RECT suggestedBounds = new(initialBounds.X, initialBounds.Y, initialBounds.X + width, initialBounds.Y + height);
+                PInvokeCore.SendMessage(form, PInvokeCore.WM_DPICHANGED, dpiParam, ref suggestedBounds);
+                PInvokeCore.SendMessage(panel, PInvokeCore.WM_DPICHANGED_AFTERPARENT);
+            }
+        }, anchorLayoutV2.ToString());
+
+        handle.ExitCode.Should().Be(RemoteExecutor.SuccessExitCode);
+    }
+
     [WinFormsTheory]
     [InlineData(AutoScaleMode.Font, false)]
     [InlineData(AutoScaleMode.Font, true)]

@@ -1100,6 +1100,15 @@ internal partial class DefaultLayout : LayoutEngine
         Debug.Assert(specified == BoundsSpecified.None || GetCachedBounds(element) == element.Bounds,
             "Attempt to InitLayout while element has active cached bounds.");
 
+        if (element is Control { ScalingInProgress: true, ParentInternal: ContainerControl { IsScaledByDpiChangedEvent: true } }
+            && ScaleHelper.IsScalingRequirementMet
+            && !UseAnchorLayoutV2(element)
+            && GetAnchorInfo(element) is not null)
+        {
+            // Keep the scaled anchor distances until the DPI change's layout runs.
+            return;
+        }
+
         if (specified != BoundsSpecified.None &&
             (CommonProperties.GetNeedsAnchorLayout(element) || (UseAnchorLayoutV2(element) && ((Control)element)._childControlsNeedAnchorLayout)))
         {

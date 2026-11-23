@@ -44,6 +44,8 @@ public class ContainerControl : ScrollableControl, IContainerControl
     /// </summary>
     private bool _isScaledByDpiChangedEvent;
 
+    internal bool IsScaledByDpiChangedEvent => _isScaledByDpiChangedEvent;
+
     private BitVector32 _state;
 
     /// <summary>
@@ -1400,18 +1402,8 @@ public class ContainerControl : ScrollableControl, IContainerControl
 
             Font fontForDpi = GetScaledFont(Font, deviceDpiNew, deviceDpiOld);
             ScaledControlFont = fontForDpi;
-            if (IsFontSet())
-            {
-                SetScaledFont(fontForDpi);
-            }
-            else
-            {
-                using (new LayoutTransaction(ParentInternal, this, PropertyNames.Font))
-                {
-                    OnFontChanged(EventArgs.Empty);
-                }
-            }
 
+            // Scale children against the new display rectangle, not the old one.
             if (IsHandleCreated)
             {
                 PInvoke.SetWindowPos(
@@ -1422,6 +1414,18 @@ public class ContainerControl : ScrollableControl, IContainerControl
                     suggestedRectangle.Width,
                     suggestedRectangle.Height,
                     SET_WINDOW_POS_FLAGS.SWP_NOZORDER | SET_WINDOW_POS_FLAGS.SWP_NOACTIVATE);
+            }
+
+            if (IsFontSet())
+            {
+                SetScaledFont(fontForDpi);
+            }
+            else
+            {
+                using (new LayoutTransaction(ParentInternal, this, PropertyNames.Font))
+                {
+                    OnFontChanged(EventArgs.Empty);
+                }
             }
         }
         finally
