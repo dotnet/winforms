@@ -30,6 +30,12 @@ internal class RelatedPropertyManager : PropertyManager
         Refresh();
     }
 
+    internal void Unbind()
+    {
+        _parentManager.CurrentItemChanged -= ParentManager_CurrentItemChanged;
+        SetDataSource(null);
+    }
+
     internal override string GetListName()
     {
         string name = GetListName([]);
