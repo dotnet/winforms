@@ -48,6 +48,7 @@ public partial class NumericUpDown : UpDownBase, ISupportInitialize
     // Internal storage of the current value
     private decimal _currentValue = DefaultValue;
     private bool _currentValueChanged;
+    private bool _restoringValueText;
 
     // Event handler for the onValueChanged event
     private EventHandler? _onValueChanged;
@@ -328,6 +329,20 @@ public partial class NumericUpDown : UpDownBase, ISupportInitialize
                     OnValueChanged(EventArgs.Empty);
                     _currentValueChanged = true;
                     UpdateEditText();
+                }
+            }
+            else if (!_restoringValueText && string.IsNullOrEmpty(Text))
+            {
+                // Restore a cleared display, but do not repeat restoration if a TextChanged handler clears it again.
+                _restoringValueText = true;
+                try
+                {
+                    _currentValueChanged = true;
+                    UpdateEditText();
+                }
+                finally
+                {
+                    _restoringValueText = false;
                 }
             }
         }
