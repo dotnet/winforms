@@ -40,6 +40,10 @@ public class CollectionEditorEditValueTests
         Assert.Equal(4, list.Count);
         Assert.Same(first, list[0]);
         Assert.Same(second, list[1]);
+        Assert.Equal(2, editor.CreatedInstances.Count);
+        Assert.Same(editor.CreatedInstances[0], list[2]);
+        Assert.Same(editor.CreatedInstances[1], list[3]);
+        Assert.NotSame(list[2], list[3]);
         Assert.All(list, item => Assert.False(item.IsDisposed));
         harness.Transaction.Protected().Verify("OnCommit", Times.Once());
         harness.Transaction.Protected().Verify("OnCancel", Times.Never());
