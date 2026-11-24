@@ -2179,6 +2179,7 @@ public sealed unsafe partial class Graphics : MarshalByRefObject, IDisposable, I
         if (count is not 3 and not 4)
             throw new ArgumentException(SR.GdiplusDestPointsInvalidLength);
 
+        DrawImageAbortAdapter? callbackAdapter = callback is null ? null : new(callback);
         fixed (PointF* p = destPoints)
         {
             Status status = PInvokeGdiPlus.GdipDrawImagePointsRect(
@@ -2188,11 +2189,11 @@ public sealed unsafe partial class Graphics : MarshalByRefObject, IDisposable, I
                 srcRect.X, srcRect.Y, srcRect.Width, srcRect.Height,
                 (Unit)srcUnit,
                 imageAttr.Pointer(),
-                callback is null ? 0 : Marshal.GetFunctionPointerForDelegate(callback),
+                callbackAdapter?.NativeCallback ?? 0,
                 (void*)(nint)callbackData);
 
             GC.KeepAlive(imageAttr);
-            GC.KeepAlive(callback);
+            GC.KeepAlive(callbackAdapter);
             IgnoreMetafileErrors(image, ref status);
             CheckErrorStatus(status);
         }
@@ -2232,6 +2233,7 @@ public sealed unsafe partial class Graphics : MarshalByRefObject, IDisposable, I
         if (count is not 3 and not 4)
             throw new ArgumentException(SR.GdiplusDestPointsInvalidLength);
 
+        DrawImageAbortAdapter? callbackAdapter = callback is null ? null : new(callback);
         fixed (Point* p = destPoints)
         {
             Status status = PInvokeGdiPlus.GdipDrawImagePointsRectI(
@@ -2241,11 +2243,11 @@ public sealed unsafe partial class Graphics : MarshalByRefObject, IDisposable, I
                 srcRect.X, srcRect.Y, srcRect.Width, srcRect.Height,
                 (Unit)srcUnit,
                 imageAttr.Pointer(),
-                callback is null ? 0 : Marshal.GetFunctionPointerForDelegate(callback),
+                callbackAdapter?.NativeCallback ?? 0,
                 (void*)(nint)callbackData);
 
             GC.KeepAlive(imageAttr);
-            GC.KeepAlive(callback);
+            GC.KeepAlive(callbackAdapter);
 
             IgnoreMetafileErrors(image, ref status);
             CheckErrorStatus(status);
@@ -2296,6 +2298,7 @@ public sealed unsafe partial class Graphics : MarshalByRefObject, IDisposable, I
     {
         ArgumentNullException.ThrowIfNull(image);
 
+        DrawImageAbortAdapter? callbackAdapter = callback is null ? null : new(callback);
         Status status = PInvokeGdiPlus.GdipDrawImageRectRect(
             NativeGraphics,
             image.Pointer(),
@@ -2303,11 +2306,11 @@ public sealed unsafe partial class Graphics : MarshalByRefObject, IDisposable, I
             srcX, srcY, srcWidth, srcHeight,
             (Unit)srcUnit,
             imageAttrs.Pointer(),
-            callback is null ? 0 : Marshal.GetFunctionPointerForDelegate(callback),
+            callbackAdapter?.NativeCallback ?? 0,
             (void*)callbackData);
 
         GC.KeepAlive(imageAttrs);
-        GC.KeepAlive(callback);
+        GC.KeepAlive(callbackAdapter);
         IgnoreMetafileErrors(image, ref status);
         CheckErrorStatus(status);
     }
