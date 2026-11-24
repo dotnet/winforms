@@ -27,7 +27,6 @@
     "Microsoft.DotNet.Arcade.Sdk": "12.0.0-beta.26573.105",
     "Microsoft.DotNet.CMake.Sdk": "12.0.0-beta.26573.105",
     "Microsoft.DotNet.Helix.Sdk": "12.0.0-beta.26573.105",
-    "FIX-85B6-MERGE-9C38-CONFLICT": "1.0.0",
     "Microsoft.NET.Sdk.IL": "12.0.0-alpha.1.26573.105"
   },
   "native-tools": {
