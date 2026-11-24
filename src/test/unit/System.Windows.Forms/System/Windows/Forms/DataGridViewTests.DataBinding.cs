@@ -272,9 +272,12 @@ public partial class DataGridViewTests
         using DataGridView control = CreateBindingGrid();
         control.DataSource = items;
         DataGridViewRow row = control.Rows[0];
+        List<ListChangedType> changes = [];
+        control.DataBindingComplete += (sender, e) => changes.Add(e.ListChangedType);
 
         item.Name = "Changed";
 
+        Assert.Equal([ListChangedType.ItemChanged], changes);
         Assert.Equal("Changed", control[0, 0].Value);
         Assert.Same(row, control.Rows[0]);
     }
@@ -316,10 +319,15 @@ public partial class DataGridViewTests
         control.DataSource = source;
         Assert.Equal(["A"], control.Columns.Cast<DataGridViewColumn>().Select(c => c.DataPropertyName));
 
+        // Suppress notifications so only the explicit reset can make the grid see the new column.
+        source.RaiseListChangedEvents = false;
         table.Columns.Add("B");
+        source.RaiseListChangedEvents = true;
+        Assert.Equal(["A"], control.Columns.Cast<DataGridViewColumn>().Select(c => c.DataPropertyName));
+
         source.ResetBindings(metadataChanged: true);
 
-        Assert.Equal(["A", "B"], control.Columns.Cast<DataGridViewColumn>().Select(c => c.DataPropertyName));
+        Assert.Equal(["A", "B"],  control.Columns.Cast<DataGridViewColumn>().Select(c => c.DataPropertyName));
         Assert.Equal(1, control.Rows.Count);
     }
 
