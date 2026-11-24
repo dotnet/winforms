@@ -143,7 +143,7 @@ public class AnchorEditorEdgeToggleTests
         };
 
         object? result = editor.EditValue(null, new FakeServiceProvider(service), AnchorStyles.Top | AnchorStyles.Left);
-
+        service.LastControl?.Dispose();
         Assert.Equal(AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Bottom, result);
         Assert.Equal(1, service.CloseCount);
         Assert.Equal(1, service.DropDownCount);
@@ -255,8 +255,6 @@ public class AnchorEditorEdgeToggleTests
             Assert.True(edges[3].Focused);
             Assert.True(ProcessDialogKey(edges[3], Keys.Tab | Keys.Shift));
             Assert.True(edges[2].Focused);
-
-            form.Controls.Remove(ui);
         });
     }
 
@@ -289,11 +287,11 @@ public class AnchorEditorEdgeToggleTests
 
                 bool solid = i == 1;
                 Assert.Equal(solid, edge.AccessibilityObject.State.HasFlag(AccessibleStates.Checked));
-                string? initialAction = edge.AccessibilityObject.DefaultAction;
+                Assert.Equal(solid ? SR.AccessibleActionUncheck : SR.AccessibleActionCheck, edge.AccessibilityObject.DefaultAction);
 
                 Click(edge);
                 Assert.Equal(!solid, edge.AccessibilityObject.State.HasFlag(AccessibleStates.Checked));
-                Assert.NotEqual(initialAction, edge.AccessibilityObject.DefaultAction);
+                Assert.Equal(solid ? SR.AccessibleActionCheck : SR.AccessibleActionUncheck, edge.AccessibilityObject.DefaultAction);
             }
         });
     }
@@ -335,6 +333,7 @@ public class AnchorEditorEdgeToggleTests
         service.OnDropDown = ui => Press(ui, 0, Keys.Escape);
         Assert.Equal(AnchorStyles.Top, editor.EditValue(null, new FakeServiceProvider(service), AnchorStyles.Top));
         Assert.Equal(3, service.DropDownCount);
+        firstUi?.Dispose();
     }
 
     // Scenario: After an earlier edit changed the edges, cancelling a later edit that starts from a non-anchor value
@@ -349,6 +348,7 @@ public class AnchorEditorEdgeToggleTests
 
         service.OnDropDown = ui => Press(ui, 0, Keys.Escape);
         Assert.Equal(AnchorStyles.Top | AnchorStyles.Left, editor.EditValue(null, new FakeServiceProvider(service), null));
+        service.LastControl?.Dispose();
     }
 
     // Scenario: If the editor service cannot provide the drop-down host, the value is returned unchanged and no drop-down is shown.
@@ -365,6 +365,7 @@ public class AnchorEditorEdgeToggleTests
         AnchorEditor editor = new();
         FakeEditorService service = new() { OnDropDown = drive };
         object? result = editor.EditValue(null, new FakeServiceProvider(service), value);
+        service.LastControl?.Dispose();
         return (result, service);
     }
 
