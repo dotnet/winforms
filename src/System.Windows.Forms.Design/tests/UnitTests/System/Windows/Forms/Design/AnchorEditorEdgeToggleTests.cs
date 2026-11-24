@@ -230,11 +230,11 @@ public class AnchorEditorEdgeToggleTests
     }
 
     // Scenario: Tab and Shift+Tab walk the edges in left, top, right, bottom order and wrap around at both ends;
-    // the Tab key is consumed by the editor.
+    // the Tab key is consumed by the editor, and moving focus alone does not change the anchor value.
     [WinFormsFact]
-    public void AnchorEditor_TabAndShiftTab_CycleEdgesInOrder()
+    public void AnchorEditor_TabAndShiftTab_CycleEdgesInOrderWithoutChangingValue()
     {
-        Edit(AnchorStyles.Top | AnchorStyles.Left, ui =>
+        (object? result, _) = Edit(AnchorStyles.Top | AnchorStyles.Left, ui =>
         {
             using Form form = new() { ShowInTaskbar = false };
             form.Controls.Add(ui);
@@ -255,21 +255,11 @@ public class AnchorEditorEdgeToggleTests
             Assert.True(edges[3].Focused);
             Assert.True(ProcessDialogKey(edges[3], Keys.Tab | Keys.Shift));
             Assert.True(edges[2].Focused);
-        });
-    }
 
-    // Scenario: Moving focus with Tab does not change the anchor value; only toggling does.
-    [WinFormsFact]
-    public void AnchorEditor_Tab_DoesNotChangeValue()
-    {
-        (object? result, _) = Edit(AnchorStyles.Left, ui =>
-        {
-            ProcessDialogKey(GetEdge(ui, 0), Keys.Tab);
-            ProcessDialogKey(GetEdge(ui, 1), Keys.Tab);
-            Press(ui, 2, Keys.Enter);
+            Assert.True(ProcessDialogKey(edges[2], Keys.Enter));
         });
 
-        Assert.Equal(AnchorStyles.Left, result);
+        Assert.Equal(AnchorStyles.Top | AnchorStyles.Left, result);
     }
 
     // Scenario: The accessible object of each edge reports the Checked state and the Check/Uncheck default action
