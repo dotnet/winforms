@@ -546,8 +546,8 @@ public class CollectionEditorSubclassContractTests : CollectionEditor
         Assert.Equal(0, changeService.ChangedHandlerCount);
     }
 
-    // Scenario: Notifications about the edited instance itself are not echoed back to the context, which
-    // prevents a feedback loop.
+    // Scenario: Notifications whose sender is the edited instance itself are not echoed back to the context,
+    // which prevents a feedback loop.
     [WinFormsFact]
     public void EditValue_ComponentChangeNotificationsFromEditedInstance_AreNotForwarded()
     {
@@ -559,8 +559,8 @@ public class CollectionEditorSubclassContractTests : CollectionEditor
 
         harness.Edit(editor, new List<Animal>(), form =>
         {
-            changeService.RaiseChanging(instance);
-            changeService.RaiseChanged(instance);
+            changeService.RaiseChanging(instance, sender: instance);
+            changeService.RaiseChanged(instance, sender: instance);
             Click(form, "cancelButton");
         });
 
@@ -694,9 +694,12 @@ public class CollectionEditorSubclassContractTests : CollectionEditor
         {
         }
 
-        public void RaiseChanged(object sender) => _changed?.Invoke(sender, new ComponentChangedEventArgs(sender, null, null, null));
+        // Like the designer host, the service itself is the sender unless a sender is given explicitly.
+        public void RaiseChanged(object component, object sender = null) =>
+            _changed?.Invoke(sender ?? this, new ComponentChangedEventArgs(component, null, null, null));
 
-        public void RaiseChanging(object sender) => _changing?.Invoke(sender, new ComponentChangingEventArgs(sender, null));
+        public void RaiseChanging(object component, object sender = null) =>
+            _changing?.Invoke(sender ?? this, new ComponentChangingEventArgs(component, null));
     }
 
     private sealed class ContractEditor : CollectionEditor
