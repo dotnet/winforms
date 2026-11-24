@@ -81,6 +81,9 @@ public class KioskModeManager : Component, ISupportInitialize
     private FormWindowState _savedWindowState;
     private Rectangle _savedBounds;
     private bool _savedTopMost;
+    private WINDOWPLACEMENT _savedPlacement;
+    private Rectangle _savedWindowBounds;
+    private bool _useNativeTransition;
 
     private bool _topMostInFullScreen;
     private Keys _toggleFullScreenKeys = Keys.F11;
@@ -460,9 +463,9 @@ public class KioskModeManager : Component, ISupportInitialize
     /// </summary>
     /// <remarks>
     ///  <para>
-///   The component saves the form's border style, window state, bounds, and
-///   topmost state before applying fullscreen mode. Call
-///   <see cref="ToggleFullScreen"/> again to restore the saved state.
+    ///   The component saves the form's border style, window state, bounds, and
+    ///   topmost state before applying fullscreen mode. Call
+    ///   <see cref="ToggleFullScreen"/> again to restore the saved state.
     ///  </para>
     /// </remarks>
     private bool EnterFullScreen()
@@ -484,8 +487,24 @@ public class KioskModeManager : Component, ISupportInitialize
             ? targetForm.Bounds
             : targetForm.RestoreBounds;
         _savedTopMost = targetForm.TopMost;
+        _savedWindowBounds = targetForm.Bounds;
+        _useNativeTransition = targetForm.IsHandleCreated && targetForm.Visible && targetForm.TopLevel
+            && !targetForm.IsMdiChild && targetForm.WindowState != FormWindowState.Minimized;
 
-        ApplyFullScreen(targetForm);
+        if (_useNativeTransition)
+        {
+            _savedPlacement = targetForm.GetKioskWindowPlacement();
+            targetForm.SetKioskWindowState(
+                FormBorderStyle.None,
+                FormWindowState.Normal,
+                _topMostInFullScreen,
+                Screen.FromRectangle(_savedBounds).Bounds);
+        }
+        else
+        {
+            ApplyFullScreen(targetForm);
+        }
+
         SetFullScreenState(true);
         _pendingFullScreen = false;
         RestartMousePointerAutoHideTimer();
@@ -506,12 +525,21 @@ public class KioskModeManager : Component, ISupportInitialize
         StopMousePointerAutoHideTimer();
         ShowMousePointerIfHidden();
 
-        _targetForm.FormBorderStyle = _savedBorderStyle;
-        _targetForm.TopMost = _savedTopMost;
-        _targetForm.WindowState = FormWindowState.Normal;
-        _targetForm.Bounds = _savedBounds;
-        _targetForm.WindowState = _savedWindowState;
+        if (_useNativeTransition && _targetForm.IsHandleCreated && _targetForm.Visible && _targetForm.TopLevel)
+        {
+            _targetForm.SetKioskWindowState(_savedBorderStyle, _savedWindowState, _savedTopMost, _savedWindowBounds);
+            _targetForm.RestoreKioskWindowPlacement(_savedPlacement, _savedBounds);
+        }
+        else
+        {
+            _targetForm.FormBorderStyle = _savedBorderStyle;
+            _targetForm.TopMost = _savedTopMost;
+            _targetForm.WindowState = FormWindowState.Normal;
+            _targetForm.Bounds = _savedBounds;
+            _targetForm.WindowState = _savedWindowState;
+        }
 
+        _useNativeTransition = false;
         SetFullScreenState(false);
     }
 
@@ -741,7 +769,11 @@ public class KioskModeManager : Component, ISupportInitialize
         if (_isFullScreen
             && _targetForm is { IsDisposed: false } form)
         {
-            ApplyFullScreen(form);
+            Rectangle bounds = Screen.FromRectangle(form.Bounds).Bounds;
+            if (form.Bounds != bounds)
+            {
+                form.Bounds = bounds;
+            }
         }
     }
 

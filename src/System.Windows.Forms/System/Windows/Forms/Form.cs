@@ -6305,6 +6305,82 @@ public partial class Form : ContainerControl
         _formStateEx[s_formStateExUpdateMenuHandlesDeferred] = 0;
     }
 
+#if NET11_0_OR_GREATER
+    internal unsafe WINDOWPLACEMENT GetKioskWindowPlacement()
+    {
+        WINDOWPLACEMENT placement = new() { length = (uint)sizeof(WINDOWPLACEMENT) };
+        if (!PInvoke.GetWindowPlacement(HWND, &placement))
+        {
+            throw new Win32Exception();
+        }
+
+        return placement;
+    }
+
+    internal void SetKioskWindowState(FormBorderStyle borderStyle, FormWindowState windowState, bool topMost, Rectangle bounds)
+    {
+        CreateParams previousParams = CreateParams;
+        FormBorderStyle previousBorderStyle = FormBorderStyle;
+        FormWindowState previousWindowState = WindowState;
+        bool previousTopMost = TopMost;
+        WINDOW_STYLE previousStyle = WindowStyle;
+        WINDOW_EX_STYLE previousExtendedStyle = ExtendedWindowStyle;
+        _formState[s_formStateBorderStyle] = (int)borderStyle;
+        _formState[s_formStateWindowState] = (int)windowState;
+        _formState[s_formStateTopMost] = topMost ? 1 : 0;
+        CreateParams newParams = CreateParams;
+
+        // Preserve unrelated native styles while applying the Form's changed styles and window state.
+        WINDOW_STYLE styleChanges = (WINDOW_STYLE)(previousParams.Style ^ newParams.Style)
+            | WINDOW_STYLE.WS_MAXIMIZE | WINDOW_STYLE.WS_MINIMIZE;
+        WINDOW_EX_STYLE exStyleChanges = (WINDOW_EX_STYLE)(previousParams.ExStyle ^ newParams.ExStyle);
+        WindowStyle = (previousStyle & ~styleChanges) | ((WINDOW_STYLE)newParams.Style & styleChanges);
+        ExtendedWindowStyle = (previousExtendedStyle & ~exStyleChanges) | ((WINDOW_EX_STYLE)newParams.ExStyle & exStyleChanges);
+
+        if (!PInvoke.SetWindowPos(
+            this,
+            topMost ? HWND.HWND_TOPMOST : HWND.HWND_NOTOPMOST,
+            bounds.X, bounds.Y, bounds.Width, bounds.Height,
+            SET_WINDOW_POS_FLAGS.SWP_FRAMECHANGED | SET_WINDOW_POS_FLAGS.SWP_NOACTIVATE))
+        {
+            Win32Exception exception = new();
+            _formState[s_formStateBorderStyle] = (int)previousBorderStyle;
+            _formState[s_formStateWindowState] = (int)previousWindowState;
+            _formState[s_formStateTopMost] = previousTopMost ? 1 : 0;
+            if (IsHandleCreated)
+            {
+                WindowStyle = previousStyle;
+                ExtendedWindowStyle = previousExtendedStyle;
+            }
+
+            throw exception;
+        }
+
+        if (previousWindowState != windowState)
+        {
+            AdjustSystemMenu();
+        }
+
+        OnStyleChanged(EventArgs.Empty);
+        if (_formState[s_formStateIconSet] == 0)
+        {
+            UpdateWindowIcon(false);
+        }
+
+        Invalidate(true);
+    }
+
+    internal unsafe void RestoreKioskWindowPlacement(WINDOWPLACEMENT placement, Rectangle restoreBounds)
+    {
+        if (!PInvoke.SetWindowPlacement(HWND, &placement))
+        {
+            throw new Win32Exception();
+        }
+
+        _restoreBounds = restoreBounds;
+    }
+#endif
+
     // Call this function instead of UpdateStyles() when the form's client-size must
     // be preserved e.g. when changing the border style.
     //
