@@ -637,12 +637,10 @@ public class CollectionEditorSubclassContractTests : CollectionEditor
         {
             add
             {
-                ChangedHandlerCount++;
                 _changed += value;
             }
             remove
             {
-                ChangedHandlerCount--;
                 _changed -= value;
             }
         }
@@ -651,12 +649,10 @@ public class CollectionEditorSubclassContractTests : CollectionEditor
         {
             add
             {
-                ChangingHandlerCount++;
                 _changing += value;
             }
             remove
             {
-                ChangingHandlerCount--;
                 _changing -= value;
             }
         }
@@ -682,9 +678,9 @@ public class CollectionEditorSubclassContractTests : CollectionEditor
         private ComponentChangedEventHandler _changed;
         private ComponentChangingEventHandler _changing;
 
-        public int ChangedHandlerCount { get; private set; }
+        public int ChangedHandlerCount => _changed?.GetInvocationList().Length ?? 0;
 
-        public int ChangingHandlerCount { get; private set; }
+        public int ChangingHandlerCount => _changing?.GetInvocationList().Length ?? 0;
 
         public void OnComponentChanged(object component, MemberDescriptor member, object oldValue, object newValue)
         {
