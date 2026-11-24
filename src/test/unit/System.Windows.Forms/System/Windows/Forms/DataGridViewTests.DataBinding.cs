@@ -159,13 +159,14 @@ public partial class DataGridViewTests
 
         using DataGridView control = CreateBindingGrid();
         control.AutoGenerateColumns = false;
-        control.Columns.Add(new DataGridViewTextBoxColumn { Name = "Column", DataPropertyName = "A" });
+        DataGridViewTextBoxColumn explicitColumn = new() { Name = "Column", DataPropertyName = "A" };
+        control.Columns.Add(explicitColumn);
         control.DataSource = table;
         Assert.Equal(1, control.Rows.Count);
 
         control.DataSource = null;
 
-        Assert.Same(control.Columns["Column"], Assert.Single(control.Columns));
+        Assert.Same(explicitColumn, Assert.Single(control.Columns));
         Assert.Empty(control.Rows);
     }
 
