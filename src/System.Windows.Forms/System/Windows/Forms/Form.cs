@@ -6403,7 +6403,10 @@ public partial class Form : ContainerControl
             UpdateWindowIcon(false);
         }
 
-        Invalidate(true);
+        // SetWindowPos with SWP_FRAMECHANGED has already applied the final style and bounds.
+        // Avoid forcing child-control invalidation here because fullscreen transitions can involve
+        // large control trees; let normal paint invalidation propagate naturally.
+        Invalidate();
     }
 
     internal unsafe void RestoreKioskWindowPlacement(WINDOWPLACEMENT placement, Rectangle restoreBounds)
