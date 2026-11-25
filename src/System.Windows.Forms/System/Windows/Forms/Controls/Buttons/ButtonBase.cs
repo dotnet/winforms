@@ -1391,6 +1391,10 @@ public abstract partial class ButtonBase : Control, ICommandBindingTargetProvide
 
     private bool ShouldSerializeUseVisualStyleBackColor() => _isEnableVisualStyleBackgroundSet;
 
+    // An inherited color can make UseVisualStyleBackColor false without an explicit theme opt-out.
+    internal bool HasCustomBackColor
+        => ShouldSerializeBackColor() || (_isEnableVisualStyleBackgroundSet && !_enableVisualStyleBackground);
+
     protected override void WndProc(ref Message m)
     {
         switch (m.MsgInternal)

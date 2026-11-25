@@ -237,7 +237,7 @@ internal sealed class AnimatedPopupButtonRenderer : AnimatedControlRenderer
         _baseColorRenderer.FlatAppearance = flatAppearance;
 
         bool hasCustomBackColor = button.EffectiveVisualStylesModeInternal >= VisualStylesMode.Net11
-            ? button.ShouldSerializeBackColor() || !button.UseVisualStyleBackColor
+            ? button.HasCustomBackColor
             : button.BackColor != Control.DefaultBackColor;
         Color baseColor = hasCustomBackColor
             ? button.BackColor
