@@ -2,6 +2,7 @@
 
   <PropertyGroup>
     <TargetFrameworks>$(NetCurrent);net481</TargetFrameworks>
+    <TargetFrameworks Condition="'$(BundledNETCoreAppTargetFramework)' != '$(NetCurrent)'">$(TargetFrameworks);$(BundledNETCoreAppTargetFramework)</TargetFrameworks>
     <AssemblyName>System.Private.Windows.Core.TestUtilities</AssemblyName>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <RootNamespace>System</RootNamespace>

@@ -20,6 +20,154 @@ public class NumericUpDownTests
         Assert.Equal("0", nud.Text);
     }
 
+    [WinFormsTheory]
+    [InlineData(1, false)]
+    [InlineData(1, true)]
+    [InlineData(50, false)]
+    [InlineData(50, true)]
+    public void NumericUpDown_ResetText_ClearsTextWithoutChangingValue(int value, bool createHandle)
+    {
+        using NumericUpDown upDown = new()
+        {
+            Minimum = 1,
+            Value = value
+        };
+        if (createHandle)
+        {
+            _ = upDown.Handle;
+        }
+
+        int valueChangedCallCount = 0;
+        int textChangedCallCount = 0;
+        upDown.ValueChanged += (_, _) => valueChangedCallCount++;
+        upDown.TextChanged += (_, _) => textChangedCallCount++;
+
+        upDown.ResetText();
+
+        upDown.Text.Should().BeEmpty();
+        upDown.Value.Should().Be(value);
+        upDown.Text.Should().BeEmpty();
+        valueChangedCallCount.Should().Be(0);
+        textChangedCallCount.Should().Be(1);
+        upDown.IsHandleCreated.Should().Be(createHandle);
+    }
+
+    [WinFormsTheory]
+    [InlineData(false)]
+    [InlineData(true)]
+    public void NumericUpDown_ResetTextThenSetValueToMinimum_RestoresDisplayedValue(bool createHandle)
+    {
+        using NumericUpDown upDown = new()
+        {
+            Minimum = 1,
+            Value = 1
+        };
+        if (createHandle)
+        {
+            _ = upDown.Handle;
+        }
+
+        int valueChangedCallCount = 0;
+        List<string> textChanges = [];
+        upDown.ValueChanged += (_, _) => valueChangedCallCount++;
+        upDown.TextChanged += (_, _) => textChanges.Add(upDown.Text);
+
+        upDown.ResetText();
+        upDown.Text.Should().BeEmpty();
+        textChanges.Should().Equal(string.Empty);
+        upDown.Value = upDown.Minimum;
+
+        upDown.Text.Should().Be("1");
+        upDown.Value.Should().Be(1);
+        textChanges.Should().Equal(string.Empty, "1");
+
+        upDown.Value = upDown.Minimum;
+
+        textChanges.Should().Equal(string.Empty, "1");
+        valueChangedCallCount.Should().Be(0);
+        upDown.IsHandleCreated.Should().Be(createHandle);
+    }
+
+    [WinFormsTheory]
+    [InlineData(false, false)]
+    [InlineData(false, true)]
+    [InlineData(true, false)]
+    [InlineData(true, true)]
+    public void NumericUpDown_Value_SetSameValueInTextChanged_DoesNotRecurse(bool createHandle, bool clearOnRestore)
+    {
+        using NumericUpDown upDown = new()
+        {
+            Minimum = 1,
+            Value = 1
+        };
+        if (createHandle)
+        {
+            _ = upDown.Handle;
+        }
+
+        int valueChangedCallCount = 0;
+        List<string> textChanges = [];
+        upDown.ValueChanged += (_, _) => valueChangedCallCount++;
+        EventHandler handler = (_, _) =>
+        {
+            textChanges.Add(upDown.Text);
+
+            // Bound recursion so a regression fails an assertion instead of overflowing the stack.
+            if (textChanges.Count >= 8)
+            {
+                return;
+            }
+
+            if (clearOnRestore && upDown.Text.Length > 0)
+            {
+                upDown.ResetText();
+            }
+            else
+            {
+                upDown.Value = upDown.Minimum;
+            }
+        };
+        upDown.TextChanged += handler;
+
+        upDown.ResetText();
+
+        if (clearOnRestore)
+        {
+            textChanges.Should().Equal(string.Empty, "1", string.Empty);
+            upDown.Text.Should().BeEmpty();
+        }
+        else
+        {
+            textChanges.Should().Equal(string.Empty, "1");
+            upDown.Text.Should().Be("1");
+        }
+
+        upDown.TextChanged -= handler;
+        upDown.ResetText();
+        upDown.Value = upDown.Minimum;
+
+        upDown.Text.Should().Be("1");
+        upDown.Value.Should().Be(1);
+        valueChangedCallCount.Should().Be(0);
+        upDown.IsHandleCreated.Should().Be(createHandle);
+    }
+
+    [WinFormsTheory]
+    [InlineData("01")]
+    [InlineData("-")]
+    public void NumericUpDown_Value_SetSameValueWithNonEmptyText_PreservesText(string text)
+    {
+        using NumericUpDown upDown = new()
+        {
+            Value = 1
+        };
+        upDown.Controls.OfType<TextBox>().Single().Text = text;
+
+        upDown.Value = 1;
+
+        upDown.Text.Should().Be(text);
+    }
+
     [WinFormsFact]
     public void NumericUpDown_ModernVisualStylesMode_PreferredSizeIncludesButtonGroup()
     {
@@ -58,6 +206,69 @@ public class NumericUpDownTests
 
         Assert.Equal(textBox.PreferredHeight, nud.PreferredHeight);
         Assert.Equal(textBox.PreferredHeight, nud.Height);
+    }
+
+    [WinFormsTheory]
+    [InlineData(true, 100, "999", "100")]
+    [InlineData(false, 0, "-999", "0")]
+    public void NumericUpDown_ModernVisualStylesMode_ButtonPressAtBound_NormalizesPendingEditWithoutChangingFocus(
+        bool upButton, int value, string editText, string expectedText)
+    {
+        using Form form = new();
+        using SubNumericUpDown upDown = new()
+        {
+            VisualStylesMode = VisualStylesMode.Net11,
+            Minimum = 0,
+            Maximum = 100,
+            Value = value
+        };
+        using Button otherControl = new() { Dock = DockStyle.Bottom };
+        form.Controls.Add(upDown);
+        form.Controls.Add(otherControl);
+
+        if (!upDown.UseSideBySideButtons)
+        {
+            return;
+        }
+
+        form.Show();
+        Assert.True(upDown.Focus());
+        Assert.True(upDown.Focused);
+        Assert.True(upDown.TextBox.Focused);
+
+        upDown.TextBox.Text = editText;
+        Assert.True(upDown.PublicUserEdit);
+        Assert.Equal(editText, upDown.Text);
+
+        int gotFocusCount = 0;
+        int lostFocusCount = 0;
+        int valueChangedCount = 0;
+        upDown.GotFocus += (sender, e) => gotFocusCount++;
+        upDown.LostFocus += (sender, e) => lostFocusCount++;
+        upDown.ValueChanged += (sender, e) => valueChangedCount++;
+
+        UpDownBase.UpDownButtons buttons = upDown.UpDownButtonsInternal;
+        Rectangle bounds = buttons.GetButtonRectangle(upButton ? UpDownBase.ButtonID.Up : UpDownBase.ButtonID.Down);
+        MouseEventArgs mouseEvent = new(
+            MouseButtons.Left, 1, bounds.Left + bounds.Width / 2, bounds.Top + bounds.Height / 2, 0);
+
+        buttons.TestAccessor.Dynamic.OnMouseDown(mouseEvent);
+        buttons.TestAccessor.Dynamic.OnMouseUp(mouseEvent);
+
+        Assert.Equal(expectedText, upDown.Text);
+        Assert.False(upDown.PublicUserEdit);
+        Assert.Equal(value, upDown.Value);
+        Assert.True(upDown.TextBox.Focused);
+        Assert.Equal(0, gotFocusCount);
+        Assert.Equal(0, lostFocusCount);
+        Assert.Equal(0, valueChangedCount);
+
+        Assert.True(otherControl.Focus());
+        Assert.False(upDown.Focused);
+        Assert.Equal(expectedText, upDown.Text);
+        Assert.Equal(value, upDown.Value);
+        Assert.Equal(1, lostFocusCount);
+        Assert.Equal(0, valueChangedCount);
     }
 
     [WinFormsFact]

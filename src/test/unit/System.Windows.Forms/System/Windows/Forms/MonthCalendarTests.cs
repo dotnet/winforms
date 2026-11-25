@@ -1312,19 +1312,21 @@ public class MonthCalendarTests
     {
         yield return new object[] { new DateTime(1753, 1, 1), new DateTime(1753, 1, 1), new DateTime(1753, 1, 1) };
         yield return new object[] { new DateTime(2019, 1, 29), new DateTime(2019, 1, 29), new DateTime(2019, 1, 29) };
-        yield return new object[] { new DateTime(9998, 12, 31), new DateTime(9998, 12, 31), DateTime.Now.Date };
-        yield return new object[] { new DateTime(9999, 1, 1), new DateTime(9998, 12, 31), DateTime.Now.Date };
-        yield return new object[] { DateTime.MaxValue, new DateTime(9998, 12, 31), DateTime.Now.Date };
+        yield return new object[] { new DateTime(9998, 12, 31), new DateTime(9998, 12, 31), null };
+        yield return new object[] { new DateTime(9999, 1, 1), new DateTime(9998, 12, 31), null };
+        yield return new object[] { DateTime.MaxValue, new DateTime(9998, 12, 31), null };
     }
 
     [WinFormsTheory]
     [MemberData(nameof(MaxDate_Set_TestData))]
-    public void MonthCalendar_MaxDate_Set_GetReturnsExpected(DateTime value, DateTime expected, DateTime expectedSelection)
+    public void MonthCalendar_MaxDate_Set_GetReturnsExpected(DateTime value, DateTime expected, DateTime? expectedSelectionOrNull)
     {
-        using MonthCalendar calendar = new()
-        {
-            MaxDate = value
-        };
+        using MonthCalendar calendar = new();
+
+        // A null expected selection means the selection is unchanged. Use the calendar's own initial selection
+        // rather than DateTime.Now so the test cannot fail when it runs across midnight.
+        DateTime expectedSelection = expectedSelectionOrNull ?? calendar.SelectionStart;
+        calendar.MaxDate = value;
         Assert.Equal(expected, calendar.MaxDate);
         Assert.Equal(expectedSelection, calendar.SelectionStart);
         Assert.Equal(expectedSelection, calendar.SelectionEnd);
@@ -1340,9 +1342,10 @@ public class MonthCalendarTests
 
     [WinFormsTheory]
     [MemberData(nameof(MaxDate_Set_TestData))]
-    public void MonthCalendar_MaxDate_SetWithHandle_GetReturnsExpected(DateTime value, DateTime expected, DateTime expectedSelection)
+    public void MonthCalendar_MaxDate_SetWithHandle_GetReturnsExpected(DateTime value, DateTime expected, DateTime? expectedSelectionOrNull)
     {
         using MonthCalendar calendar = new();
+        DateTime expectedSelection = expectedSelectionOrNull ?? calendar.SelectionStart;
         Assert.NotEqual(IntPtr.Zero, calendar.Handle);
         int invalidatedCallCount = 0;
         calendar.Invalidated += (sender, e) => invalidatedCallCount++;
@@ -1444,20 +1447,22 @@ public class MonthCalendarTests
 
     public static IEnumerable<object[]> MinDate_Set_TestData()
     {
-        yield return new object[] { DateTime.MinValue, new DateTime(1753, 1, 1), DateTime.Now.Date };
-        yield return new object[] { new DateTime(1753, 1, 1), new DateTime(1753, 1, 1), DateTime.Now.Date };
-        yield return new object[] { new DateTime(2019, 1, 29), new DateTime(2019, 1, 29), DateTime.Now.Date };
+        yield return new object[] { DateTime.MinValue, new DateTime(1753, 1, 1), null };
+        yield return new object[] { new DateTime(1753, 1, 1), new DateTime(1753, 1, 1), null };
+        yield return new object[] { new DateTime(2019, 1, 29), new DateTime(2019, 1, 29), null };
         yield return new object[] { new DateTime(9998, 12, 31), new DateTime(9998, 12, 31), new DateTime(9998, 12, 31) };
     }
 
     [WinFormsTheory]
     [MemberData(nameof(MinDate_Set_TestData))]
-    public void MonthCalendar_MinDate_Set_GetReturnsExpected(DateTime value, DateTime expected, DateTime expectedSelection)
+    public void MonthCalendar_MinDate_Set_GetReturnsExpected(DateTime value, DateTime expected, DateTime? expectedSelectionOrNull)
     {
-        using MonthCalendar calendar = new()
-        {
-            MinDate = value
-        };
+        using MonthCalendar calendar = new();
+
+        // A null expected selection means the selection is unchanged. Use the calendar's own initial selection
+        // rather than DateTime.Now so the test cannot fail when it runs across midnight.
+        DateTime expectedSelection = expectedSelectionOrNull ?? calendar.SelectionStart;
+        calendar.MinDate = value;
         Assert.Equal(expected, calendar.MinDate);
         Assert.Equal(expectedSelection, calendar.SelectionStart);
         Assert.Equal(expectedSelection, calendar.SelectionEnd);
@@ -1473,9 +1478,10 @@ public class MonthCalendarTests
 
     [WinFormsTheory]
     [MemberData(nameof(MinDate_Set_TestData))]
-    public void MonthCalendar_MinDate_SetWithHandle_GetReturnsExpected(DateTime value, DateTime expected, DateTime expectedSelection)
+    public void MonthCalendar_MinDate_SetWithHandle_GetReturnsExpected(DateTime value, DateTime expected, DateTime? expectedSelectionOrNull)
     {
         using MonthCalendar calendar = new();
+        DateTime expectedSelection = expectedSelectionOrNull ?? calendar.SelectionStart;
         Assert.NotEqual(IntPtr.Zero, calendar.Handle);
         int invalidatedCallCount = 0;
         calendar.Invalidated += (sender, e) => invalidatedCallCount++;
@@ -1946,8 +1952,6 @@ public class MonthCalendarTests
         yield return new object[] { new DateTime(1753, 1, 1), new DateTime(1753, 1, 7) };
         yield return new object[] { new DateTime(1753, 1, 1).AddHours(1), new DateTime(1753, 1, 7).AddHours(1) };
         yield return new object[] { new DateTime(2019, 1, 29), new DateTime(2019, 2, 4) };
-        yield return new object[] { DateTime.Now.Date.AddDays(-1), DateTime.Now.Date };
-        yield return new object[] { DateTime.Now.Date, DateTime.Now.Date };
         yield return new object[] { new DateTime(9998, 12, 31), new DateTime(9998, 12, 31) };
         yield return new object[] { DateTime.MaxValue, DateTime.MaxValue };
     }
@@ -2002,6 +2006,69 @@ public class MonthCalendarTests
         Assert.Equal(0, createdCallCount);
     }
 
+    // Verifies setting SelectionStart relative to the calendar's initial selection without creating a handle.
+    [WinFormsTheory]
+    [InlineData(-1, 0)]
+    [InlineData(0, 0)]
+    public void MonthCalendar_SelectionStart_SetRelativeToToday_GetReturnsExpected(int valueDayOffset, int expectedSelectionEndDayOffset)
+    {
+        using MonthCalendar calendar = new();
+
+        // Compute "today" from the calendar itself rather than in test data so the test cannot fail
+        // when it runs across midnight.
+        DateTime today = calendar.SelectionStart;
+        DateTime value = today.AddDays(valueDayOffset);
+        DateTime expectedSelectionEnd = today.AddDays(expectedSelectionEndDayOffset);
+
+        calendar.SelectionStart = value;
+        Assert.Equal(value, calendar.SelectionStart);
+        Assert.Equal(expectedSelectionEnd, calendar.SelectionEnd);
+        Assert.False(calendar.IsHandleCreated);
+
+        // Set same.
+        calendar.SelectionStart = value;
+        Assert.Equal(value, calendar.SelectionStart);
+        Assert.Equal(expectedSelectionEnd, calendar.SelectionEnd);
+        Assert.False(calendar.IsHandleCreated);
+    }
+
+    // Verifies setting SelectionStart relative to the calendar's initial selection with a handle.
+    [WinFormsTheory]
+    [InlineData(-1, 0)]
+    [InlineData(0, 0)]
+    public void MonthCalendar_SelectionStart_SetRelativeToTodayWithHandle_GetReturnsExpected(int valueDayOffset, int expectedSelectionEndDayOffset)
+    {
+        using MonthCalendar calendar = new();
+        DateTime today = calendar.SelectionStart;
+        DateTime value = today.AddDays(valueDayOffset);
+        DateTime expectedSelectionEnd = today.AddDays(expectedSelectionEndDayOffset);
+
+        Assert.NotEqual(IntPtr.Zero, calendar.Handle);
+        int invalidatedCallCount = 0;
+        calendar.Invalidated += (sender, e) => invalidatedCallCount++;
+        int styleChangedCallCount = 0;
+        calendar.StyleChanged += (sender, e) => styleChangedCallCount++;
+        int createdCallCount = 0;
+        calendar.HandleCreated += (sender, e) => createdCallCount++;
+
+        calendar.SelectionStart = value;
+        Assert.Equal(value, calendar.SelectionStart);
+        Assert.Equal(expectedSelectionEnd, calendar.SelectionEnd);
+        Assert.True(calendar.IsHandleCreated);
+        Assert.Equal(0, invalidatedCallCount);
+        Assert.Equal(0, styleChangedCallCount);
+        Assert.Equal(0, createdCallCount);
+
+        // Set same.
+        calendar.SelectionStart = value;
+        Assert.Equal(value, calendar.SelectionStart);
+        Assert.Equal(expectedSelectionEnd, calendar.SelectionEnd);
+        Assert.True(calendar.IsHandleCreated);
+        Assert.Equal(0, invalidatedCallCount);
+        Assert.Equal(0, styleChangedCallCount);
+        Assert.Equal(0, createdCallCount);
+    }
+
     [WinFormsFact]
     public void MonthCalendar_SelectionStart_SetLessThanMinDate_ThrowsArgumentOutOfRangeException()
     {
@@ -2029,8 +2096,6 @@ public class MonthCalendarTests
         yield return new object[] { new DateTime(1753, 1, 1), new DateTime(1753, 1, 1) };
         yield return new object[] { new DateTime(1753, 1, 1).AddHours(1), new DateTime(1753, 1, 1).AddHours(1) };
         yield return new object[] { new DateTime(2019, 1, 29), new DateTime(2019, 1, 29) };
-        yield return new object[] { DateTime.Now.Date.AddDays(1), DateTime.Now.Date };
-        yield return new object[] { DateTime.Now.Date, DateTime.Now.Date };
         yield return new object[] { new DateTime(9998, 12, 31), new DateTime(9998, 12, 25) };
     }
 
@@ -2058,6 +2123,69 @@ public class MonthCalendarTests
     public void MonthCalendar_SelectionEnd_SetWithHandle_GetReturnsExpected(DateTime value, DateTime expectedSelectionStart)
     {
         using MonthCalendar calendar = new();
+        Assert.NotEqual(IntPtr.Zero, calendar.Handle);
+        int invalidatedCallCount = 0;
+        calendar.Invalidated += (sender, e) => invalidatedCallCount++;
+        int styleChangedCallCount = 0;
+        calendar.StyleChanged += (sender, e) => styleChangedCallCount++;
+        int createdCallCount = 0;
+        calendar.HandleCreated += (sender, e) => createdCallCount++;
+
+        calendar.SelectionEnd = value;
+        Assert.Equal(value, calendar.SelectionEnd);
+        Assert.Equal(expectedSelectionStart, calendar.SelectionStart);
+        Assert.True(calendar.IsHandleCreated);
+        Assert.Equal(0, invalidatedCallCount);
+        Assert.Equal(0, styleChangedCallCount);
+        Assert.Equal(0, createdCallCount);
+
+        // Set same.
+        calendar.SelectionEnd = value;
+        Assert.Equal(value, calendar.SelectionEnd);
+        Assert.Equal(expectedSelectionStart, calendar.SelectionStart);
+        Assert.True(calendar.IsHandleCreated);
+        Assert.Equal(0, invalidatedCallCount);
+        Assert.Equal(0, styleChangedCallCount);
+        Assert.Equal(0, createdCallCount);
+    }
+
+    // Verifies setting SelectionEnd relative to the calendar's initial selection without creating a handle.
+    [WinFormsTheory]
+    [InlineData(1, 0)]
+    [InlineData(0, 0)]
+    public void MonthCalendar_SelectionEnd_SetRelativeToToday_GetReturnsExpected(int valueDayOffset, int expectedSelectionStartDayOffset)
+    {
+        using MonthCalendar calendar = new();
+
+        // Compute "today" from the calendar itself rather than in test data so the test cannot fail
+        // when it runs across midnight.
+        DateTime today = calendar.SelectionStart;
+        DateTime value = today.AddDays(valueDayOffset);
+        DateTime expectedSelectionStart = today.AddDays(expectedSelectionStartDayOffset);
+
+        calendar.SelectionEnd = value;
+        Assert.Equal(value, calendar.SelectionEnd);
+        Assert.Equal(expectedSelectionStart, calendar.SelectionStart);
+        Assert.False(calendar.IsHandleCreated);
+
+        // Set same.
+        calendar.SelectionEnd = value;
+        Assert.Equal(value, calendar.SelectionEnd);
+        Assert.Equal(expectedSelectionStart, calendar.SelectionStart);
+        Assert.False(calendar.IsHandleCreated);
+    }
+
+    // Verifies setting SelectionEnd relative to the calendar's initial selection with a handle.
+    [WinFormsTheory]
+    [InlineData(1, 0)]
+    [InlineData(0, 0)]
+    public void MonthCalendar_SelectionEnd_SetRelativeToTodayWithHandle_GetReturnsExpected(int valueDayOffset, int expectedSelectionStartDayOffset)
+    {
+        using MonthCalendar calendar = new();
+        DateTime today = calendar.SelectionStart;
+        DateTime value = today.AddDays(valueDayOffset);
+        DateTime expectedSelectionStart = today.AddDays(expectedSelectionStartDayOffset);
+
         Assert.NotEqual(IntPtr.Zero, calendar.Handle);
         int invalidatedCallCount = 0;
         calendar.Invalidated += (sender, e) => invalidatedCallCount++;
@@ -2118,13 +2246,6 @@ public class MonthCalendarTests
         yield return new object[] { new SelectionRange(new DateTime(2019, 9, 1), new DateTime(2019, 9, 7)), new DateTime(2019, 9, 1), new DateTime(2019, 9, 7) };
         yield return new object[] { new SelectionRange(new DateTime(2019, 9, 1), new DateTime(2019, 9, 8)), new DateTime(2019, 9, 1), new DateTime(2019, 9, 7) };
 
-        yield return new object[] { new SelectionRange(DateTime.Now.Date, DateTime.Now.Date), DateTime.Now.Date, DateTime.Now.Date };
-        yield return new object[] { new SelectionRange(DateTime.Now.Date, DateTime.Now.Date.AddDays(1)), DateTime.Now.Date, DateTime.Now.Date.AddDays(1) };
-        yield return new object[] { new SelectionRange(DateTime.Now.Date.AddHours(1), DateTime.Now.Date.AddHours(1)), DateTime.Now.Date, DateTime.Now.Date };
-        yield return new object[] { new SelectionRange(DateTime.Now.Date.AddDays(1), DateTime.Now.Date), DateTime.Now.Date, DateTime.Now.Date.AddDays(1) };
-        yield return new object[] { new SelectionRange(DateTime.Now.Date, DateTime.Now.Date.AddDays(6)), DateTime.Now.Date, DateTime.Now.Date.AddDays(6) };
-        yield return new object[] { new SelectionRange(DateTime.Now.Date, DateTime.Now.Date.AddDays(7)), DateTime.Now.Date.AddDays(1), DateTime.Now.Date.AddDays(7) };
-
         yield return new object[] { new SelectionRange(new DateTime(9998, 12, 30), new DateTime(9998, 12, 31)), new DateTime(9998, 12, 30), new DateTime(9998, 12, 31) };
         yield return new object[] { new SelectionRange(new DateTime(9998, 12, 31), new DateTime(9998, 12, 31)), new DateTime(9998, 12, 31), new DateTime(9998, 12, 31) };
         yield return new object[] { new SelectionRange(new DateTime(9998, 12, 31).AddTicks(1), new DateTime(9998, 12, 31).AddTicks(1)), new DateTime(9998, 12, 31), new DateTime(9998, 12, 31) };
@@ -2161,6 +2282,92 @@ public class MonthCalendarTests
     public void MonthCalendar_SelectionRange_SetWithHandle_GetReturnsExpected(SelectionRange value, DateTime expectedSelectionStart, DateTime expectedSelectionEnd)
     {
         using MonthCalendar calendar = new();
+        Assert.NotEqual(IntPtr.Zero, calendar.Handle);
+        int invalidatedCallCount = 0;
+        calendar.Invalidated += (sender, e) => invalidatedCallCount++;
+        int styleChangedCallCount = 0;
+        calendar.StyleChanged += (sender, e) => styleChangedCallCount++;
+        int createdCallCount = 0;
+        calendar.HandleCreated += (sender, e) => createdCallCount++;
+
+        calendar.SelectionRange = value;
+        Assert.Equal(expectedSelectionStart, calendar.SelectionRange.Start);
+        Assert.Equal(expectedSelectionEnd, calendar.SelectionRange.End);
+        Assert.Equal(expectedSelectionStart, calendar.SelectionStart);
+        Assert.Equal(expectedSelectionEnd, calendar.SelectionEnd);
+        Assert.NotSame(value, calendar.SelectionRange);
+        Assert.True(calendar.IsHandleCreated);
+        Assert.Equal(0, invalidatedCallCount);
+        Assert.Equal(0, styleChangedCallCount);
+        Assert.Equal(0, createdCallCount);
+
+        // Set same.
+        calendar.SelectionRange = new SelectionRange(expectedSelectionStart, expectedSelectionEnd);
+        Assert.Equal(expectedSelectionStart, calendar.SelectionRange.Start);
+        Assert.Equal(expectedSelectionEnd, calendar.SelectionRange.End);
+        Assert.Equal(expectedSelectionStart, calendar.SelectionStart);
+        Assert.Equal(expectedSelectionEnd, calendar.SelectionEnd);
+        Assert.NotSame(value, calendar.SelectionRange);
+        Assert.True(calendar.IsHandleCreated);
+        Assert.Equal(0, invalidatedCallCount);
+        Assert.Equal(0, styleChangedCallCount);
+        Assert.Equal(0, createdCallCount);
+    }
+
+    // Verifies SelectionRange normalization, reversed-range handling, and MaxSelectionCount clamping without a handle.
+    [WinFormsTheory]
+    [InlineData(0, 0, 0, 0)]
+    [InlineData(0, 24, 0, 24)]
+    [InlineData(1, 1, 0, 0)]
+    [InlineData(24, 0, 0, 24)]
+    [InlineData(0, 144, 0, 144)]
+    [InlineData(0, 168, 24, 168)]
+    public void MonthCalendar_SelectionRange_SetRelativeToToday_GetReturnsExpected(int startHourOffset, int endHourOffset, int expectedSelectionStartHourOffset, int expectedSelectionEndHourOffset)
+    {
+        using MonthCalendar calendar = new();
+
+        // Compute "today" from the calendar's initial selection rather than in test data so the test cannot fail
+        // when it runs across midnight. Setting SelectionRange compares against the current selection start when
+        // clamping to MaxSelectionCount, so the offsets must be relative to that exact value.
+        DateTime today = calendar.SelectionStart;
+        SelectionRange value = new(today.AddHours(startHourOffset), today.AddHours(endHourOffset));
+        DateTime expectedSelectionStart = today.AddHours(expectedSelectionStartHourOffset);
+        DateTime expectedSelectionEnd = today.AddHours(expectedSelectionEndHourOffset);
+
+        calendar.SelectionRange = value;
+        Assert.Equal(expectedSelectionStart, calendar.SelectionRange.Start);
+        Assert.Equal(expectedSelectionEnd, calendar.SelectionRange.End);
+        Assert.Equal(expectedSelectionStart, calendar.SelectionStart);
+        Assert.Equal(expectedSelectionEnd, calendar.SelectionEnd);
+        Assert.NotSame(value, calendar.SelectionRange);
+        Assert.False(calendar.IsHandleCreated);
+
+        // Set same.
+        calendar.SelectionRange = new SelectionRange(expectedSelectionStart, expectedSelectionEnd);
+        Assert.Equal(expectedSelectionStart, calendar.SelectionRange.Start);
+        Assert.Equal(expectedSelectionEnd, calendar.SelectionRange.End);
+        Assert.Equal(expectedSelectionStart, calendar.SelectionStart);
+        Assert.Equal(expectedSelectionEnd, calendar.SelectionEnd);
+        Assert.NotSame(value, calendar.SelectionRange);
+        Assert.False(calendar.IsHandleCreated);
+    }
+
+    // Verifies SelectionRange normalization, reversed-range handling, and MaxSelectionCount clamping with a handle.
+    [WinFormsTheory]
+    [InlineData(0, 0, 0, 0)]
+    [InlineData(0, 24, 0, 24)]
+    [InlineData(1, 1, 0, 0)]
+    [InlineData(24, 0, 0, 24)]
+    [InlineData(0, 144, 0, 144)]
+    [InlineData(0, 168, 24, 168)]
+    public void MonthCalendar_SelectionRange_SetRelativeToTodayWithHandle_GetReturnsExpected(int startHourOffset, int endHourOffset, int expectedSelectionStartHourOffset, int expectedSelectionEndHourOffset)
+    {
+        using MonthCalendar calendar = new();
+        DateTime today = calendar.SelectionStart;
+        SelectionRange value = new(today.AddHours(startHourOffset), today.AddHours(endHourOffset));
+        DateTime expectedSelectionStart = today.AddHours(expectedSelectionStartHourOffset);
+        DateTime expectedSelectionEnd = today.AddHours(expectedSelectionEndHourOffset);
+
         Assert.NotEqual(IntPtr.Zero, calendar.Handle);
         int invalidatedCallCount = 0;
         calendar.Invalidated += (sender, e) => invalidatedCallCount++;
@@ -4055,13 +4262,6 @@ public class MonthCalendarTests
         yield return new object[] { new DateTime(2019, 9, 1), new DateTime(2019, 9, 7), new DateTime(2019, 9, 1), new DateTime(2019, 9, 7) };
         yield return new object[] { new DateTime(2019, 9, 1), new DateTime(2019, 9, 8), new DateTime(2019, 9, 1), new DateTime(2019, 9, 7) };
 
-        yield return new object[] { DateTime.Now.Date, DateTime.Now.Date, DateTime.Now.Date, DateTime.Now.Date };
-        yield return new object[] { DateTime.Now.Date, DateTime.Now.Date.AddDays(1), DateTime.Now.Date, DateTime.Now.Date.AddDays(1) };
-        yield return new object[] { DateTime.Now.Date.AddHours(1), DateTime.Now.Date.AddHours(1), DateTime.Now.Date.AddHours(1), DateTime.Now.Date.AddHours(1) };
-        yield return new object[] { DateTime.Now.Date.AddDays(1), DateTime.Now.Date, DateTime.Now.Date.AddDays(1), DateTime.Now.Date.AddDays(1) };
-        yield return new object[] { DateTime.Now.Date, DateTime.Now.Date.AddDays(6), DateTime.Now.Date, DateTime.Now.Date.AddDays(6) };
-        yield return new object[] { DateTime.Now.Date, DateTime.Now.Date.AddDays(7), DateTime.Now.Date.AddDays(1), DateTime.Now.Date.AddDays(7) };
-
         yield return new object[] { new DateTime(9998, 12, 30), new DateTime(9998, 12, 31), new DateTime(9998, 12, 30), new DateTime(9998, 12, 31) };
         yield return new object[] { new DateTime(9998, 12, 31), new DateTime(9998, 12, 31), new DateTime(9998, 12, 31), new DateTime(9998, 12, 31) };
         yield return new object[] { new DateTime(9998, 12, 31).AddTicks(1), new DateTime(9998, 12, 31).AddTicks(1), new DateTime(9998, 12, 31).AddTicks(1), new DateTime(9998, 12, 31).AddTicks(1) };
@@ -4103,6 +4303,86 @@ public class MonthCalendarTests
         calendar.HandleCreated += (sender, e) => createdCallCount++;
 
         calendar.SetSelectionRange(date1, date2);
+        Assert.Equal(expectedSelectionStart.Date, calendar.SelectionRange.Start);
+        Assert.Equal(expectedSelectionEnd.Date, calendar.SelectionRange.End);
+        Assert.Equal(expectedSelectionStart, calendar.SelectionStart);
+        Assert.Equal(expectedSelectionEnd, calendar.SelectionEnd);
+        Assert.True(calendar.IsHandleCreated);
+        Assert.Equal(0, invalidatedCallCount);
+        Assert.Equal(0, styleChangedCallCount);
+        Assert.Equal(0, createdCallCount);
+
+        // Call again.
+        calendar.SetSelectionRange(expectedSelectionStart, expectedSelectionEnd);
+        Assert.Equal(expectedSelectionStart.Date, calendar.SelectionRange.Start);
+        Assert.Equal(expectedSelectionEnd.Date, calendar.SelectionRange.End);
+        Assert.Equal(expectedSelectionStart, calendar.SelectionStart);
+        Assert.Equal(expectedSelectionEnd, calendar.SelectionEnd);
+        Assert.True(calendar.IsHandleCreated);
+        Assert.Equal(0, invalidatedCallCount);
+        Assert.Equal(0, styleChangedCallCount);
+        Assert.Equal(0, createdCallCount);
+    }
+
+    // Verifies SetSelectionRange's MaxSelectionCount clamping relative to the initial selection without a handle.
+    [WinFormsTheory]
+    [InlineData(0, 0, 0, 0)]
+    [InlineData(0, 24, 0, 24)]
+    [InlineData(1, 1, 1, 1)]
+    [InlineData(24, 0, 24, 24)]
+    [InlineData(0, 144, 0, 144)]
+    [InlineData(0, 168, 24, 168)]
+    public void MonthCalendar_SetSelectionRange_InvokeRelativeToToday_GetReturnsExpected(int date1HourOffset, int date2HourOffset, int expectedSelectionStartHourOffset, int expectedSelectionEndHourOffset)
+    {
+        using MonthCalendar calendar = new();
+
+        // Compute "today" from the calendar's initial selection rather than in test data so the test cannot fail
+        // when it runs across midnight. SetSelectionRange compares against the current selection start when
+        // clamping to MaxSelectionCount, so the offsets must be relative to that exact value.
+        DateTime today = calendar.SelectionStart;
+        DateTime expectedSelectionStart = today.AddHours(expectedSelectionStartHourOffset);
+        DateTime expectedSelectionEnd = today.AddHours(expectedSelectionEndHourOffset);
+
+        calendar.SetSelectionRange(today.AddHours(date1HourOffset), today.AddHours(date2HourOffset));
+        Assert.Equal(expectedSelectionStart.Date, calendar.SelectionRange.Start);
+        Assert.Equal(expectedSelectionEnd.Date, calendar.SelectionRange.End);
+        Assert.Equal(expectedSelectionStart, calendar.SelectionStart);
+        Assert.Equal(expectedSelectionEnd, calendar.SelectionEnd);
+        Assert.False(calendar.IsHandleCreated);
+
+        // Call again.
+        calendar.SetSelectionRange(expectedSelectionStart, expectedSelectionEnd);
+        Assert.Equal(expectedSelectionStart.Date, calendar.SelectionRange.Start);
+        Assert.Equal(expectedSelectionEnd.Date, calendar.SelectionRange.End);
+        Assert.Equal(expectedSelectionStart, calendar.SelectionStart);
+        Assert.Equal(expectedSelectionEnd, calendar.SelectionEnd);
+        Assert.False(calendar.IsHandleCreated);
+    }
+
+    // Verifies SetSelectionRange's MaxSelectionCount clamping relative to the initial selection with a handle.
+    [WinFormsTheory]
+    [InlineData(0, 0, 0, 0)]
+    [InlineData(0, 24, 0, 24)]
+    [InlineData(1, 1, 1, 1)]
+    [InlineData(24, 0, 24, 24)]
+    [InlineData(0, 144, 0, 144)]
+    [InlineData(0, 168, 24, 168)]
+    public void MonthCalendar_SetSelectionRange_InvokeRelativeToTodayWithHandle_GetReturnsExpected(int date1HourOffset, int date2HourOffset, int expectedSelectionStartHourOffset, int expectedSelectionEndHourOffset)
+    {
+        using MonthCalendar calendar = new();
+        DateTime today = calendar.SelectionStart;
+        DateTime expectedSelectionStart = today.AddHours(expectedSelectionStartHourOffset);
+        DateTime expectedSelectionEnd = today.AddHours(expectedSelectionEndHourOffset);
+
+        Assert.NotEqual(IntPtr.Zero, calendar.Handle);
+        int invalidatedCallCount = 0;
+        calendar.Invalidated += (sender, e) => invalidatedCallCount++;
+        int styleChangedCallCount = 0;
+        calendar.StyleChanged += (sender, e) => styleChangedCallCount++;
+        int createdCallCount = 0;
+        calendar.HandleCreated += (sender, e) => createdCallCount++;
+
+        calendar.SetSelectionRange(today.AddHours(date1HourOffset), today.AddHours(date2HourOffset));
         Assert.Equal(expectedSelectionStart.Date, calendar.SelectionRange.Start);
         Assert.Equal(expectedSelectionEnd.Date, calendar.SelectionRange.End);
         Assert.Equal(expectedSelectionStart, calendar.SelectionStart);

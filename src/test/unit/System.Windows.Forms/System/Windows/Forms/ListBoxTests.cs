@@ -3328,6 +3328,25 @@ public class ListBoxTests
         }
     }
 
+    private class RedrawTrackingListBox : ListBox
+    {
+        public List<bool> RedrawMessages { get; } = [];
+
+        public void InvokeSetItemsCore(IList value) => SetItemsCore(value);
+
+        public void InvokeRecreateHandle() => RecreateHandle();
+
+        protected override void WndProc(ref Message m)
+        {
+            if (m.Msg == (int)PInvokeCore.WM_SETREDRAW)
+            {
+                RedrawMessages.Add(m.WParam != 0);
+            }
+
+            base.WndProc(ref m);
+        }
+    }
+
     private class CustomListBox : ListBox
     {
         public bool MakeCustom { get; set; }
@@ -4747,6 +4766,233 @@ public class ListBoxTests
         Assert.Equal(0, createdCallCount);
     }
 
+    private static int GetNativeItemCount(ListBox control)
+        => (int)PInvokeCore.SendMessage(control, PInvoke.LB_GETCOUNT);
+
+    [WinFormsFact]
+    public void ListBox_BeginUpdate_NestedWithHandle_SuspendsRedrawUntilOutermostEndUpdate()
+    {
+        // Scenario: nested BeginUpdate calls suspend native redrawing once, items added meanwhile are
+        // already in the native control, and redrawing resumes (with one invalidation) only when the
+        // outermost EndUpdate balances the calls.
+        using RedrawTrackingListBox control = new();
+        Assert.NotEqual(IntPtr.Zero, control.Handle);
+        int invalidatedCallCount = 0;
+        control.Invalidated += (sender, e) => invalidatedCallCount++;
+        control.RedrawMessages.Clear();
+
+        control.BeginUpdate();
+        control.BeginUpdate();
+        control.Items.AddRange(["a", "b"]);
+        control.Items.Add("c");
+
+        Assert.Equal([false], control.RedrawMessages);
+        Assert.Equal(3, GetNativeItemCount(control));
+        Assert.Equal(0, invalidatedCallCount);
+
+        control.EndUpdate();
+        Assert.Equal([false], control.RedrawMessages);
+        Assert.Equal(0, invalidatedCallCount);
+
+        control.EndUpdate();
+        Assert.Equal([false, true], control.RedrawMessages);
+        Assert.Equal(1, invalidatedCallCount);
+        Assert.Equal(["a", "b", "c"], control.Items.Cast<object>());
+        Assert.Equal(3, GetNativeItemCount(control));
+    }
+
+    [WinFormsFact]
+    public void ListBox_EndUpdate_WithoutBeginUpdate_DoesNotAffectLaterBatch()
+    {
+        // Scenario: an unmatched EndUpdate sends no redraw message and does not unbalance a later batch,
+        // so a following BeginUpdate/EndUpdate pair still suspends and resumes redrawing exactly once.
+        using RedrawTrackingListBox control = new();
+        Assert.NotEqual(IntPtr.Zero, control.Handle);
+        control.RedrawMessages.Clear();
+
+        control.EndUpdate();
+        control.EndUpdate();
+        Assert.Empty(control.RedrawMessages);
+
+        control.BeginUpdate();
+        Assert.Equal([false], control.RedrawMessages);
+
+        control.EndUpdate();
+        Assert.Equal([false, true], control.RedrawMessages);
+    }
+
+    [WinFormsTheory]
+    [BoolData]
+    public void ListBox_BeginUpdate_ItemsAddedWithoutHandle_SynchronizedWhenHandleCreated(bool createHandleAfterBalanced)
+    {
+        // Scenario: items accumulated during a batch before the native control exists are all pushed to the
+        // handle once it is created, whether creation happens inside the batch or after it is balanced.
+        using RedrawTrackingListBox control = new();
+
+        control.BeginUpdate();
+        control.BeginUpdate();
+        control.Items.AddRange(["a", "b"]);
+        control.Items.Add("c");
+        Assert.False(control.IsHandleCreated);
+
+        if (createHandleAfterBalanced)
+        {
+            control.EndUpdate();
+            control.EndUpdate();
+            Assert.Empty(control.RedrawMessages);
+            Assert.NotEqual(IntPtr.Zero, control.Handle);
+        }
+        else
+        {
+            Assert.NotEqual(IntPtr.Zero, control.Handle);
+            control.EndUpdate();
+            control.EndUpdate();
+
+            // Creating the handle inside the batch suspends redrawing until the batch is balanced.
+            Assert.Equal([false, true], control.RedrawMessages);
+        }
+
+        Assert.Equal(3, GetNativeItemCount(control));
+        Assert.Equal(["a", "b", "c"], control.Items.Cast<object>());
+    }
+
+    [WinFormsTheory]
+    [BoolData]
+    public void ListBox_ItemsAddRange_NullItem_LeavesRedrawBalanced(bool createHandle)
+    {
+        // Scenario: an exception while adding a range of items inside AddRange keeps the items added so far,
+        // does not leave painting suspended, and leaves later batches working normally.
+        using RedrawTrackingListBox control = new();
+        if (createHandle)
+        {
+            Assert.NotEqual(IntPtr.Zero, control.Handle);
+            control.RedrawMessages.Clear();
+        }
+
+        Assert.Throws<ArgumentNullException>("item", () => control.Items.AddRange(["a", null, "b"]));
+
+        Assert.Equal(["a"], control.Items.Cast<object>());
+        if (createHandle)
+        {
+            Assert.Equal([false, true], control.RedrawMessages);
+            Assert.Equal(1, GetNativeItemCount(control));
+        }
+        else
+        {
+            Assert.Empty(control.RedrawMessages);
+            Assert.False(control.IsHandleCreated);
+        }
+
+        control.BeginUpdate();
+        control.Items.Add("c");
+        control.EndUpdate();
+        if (createHandle)
+        {
+            Assert.Equal([false, true, false, true], control.RedrawMessages);
+        }
+
+        Assert.Equal(["a", "c"], control.Items.Cast<object>());
+        Assert.NotEqual(IntPtr.Zero, control.Handle);
+        Assert.Equal(2, GetNativeItemCount(control));
+    }
+
+    [WinFormsFact]
+    public void ListBox_ItemsAddRange_NullItemInsideBatch_ResumesRedrawOnlyAtOutermostEndUpdate()
+    {
+        // Scenario: a failing AddRange inside a caller's batch must not resume painting early, and the
+        // caller's EndUpdate still resumes it after the exception is handled.
+        using RedrawTrackingListBox control = new();
+        Assert.NotEqual(IntPtr.Zero, control.Handle);
+        control.RedrawMessages.Clear();
+
+        control.BeginUpdate();
+        Assert.Throws<ArgumentNullException>("item", () => control.Items.AddRange(["a", null]));
+        Assert.Equal([false], control.RedrawMessages);
+
+        control.EndUpdate();
+        Assert.Equal([false, true], control.RedrawMessages);
+        Assert.Equal(["a"], control.Items.Cast<object>());
+        Assert.Equal(1, GetNativeItemCount(control));
+    }
+
+    [WinFormsFact]
+    public void ListBox_SetItemsCore_NullItem_LeavesRedrawBalanced()
+    {
+        // Scenario: a data-binding refresh that makes item addition throw does not leave painting suspended.
+        using RedrawTrackingListBox control = new();
+        Assert.NotEqual(IntPtr.Zero, control.Handle);
+        control.RedrawMessages.Clear();
+
+        Assert.Throws<ArgumentNullException>("item", () => control.InvokeSetItemsCore(new object[] { "a", null }));
+
+        Assert.Equal([false, true], control.RedrawMessages);
+    }
+
+    [WinFormsFact]
+    public void ListBox_RecreateHandle_DuringBatch_ResumesRedrawAtEndUpdate()
+    {
+        // Scenario: recreating the native control while a batch is open keeps the items and still resumes
+        // redrawing when the batch is balanced.
+        using RedrawTrackingListBox control = new();
+        Assert.NotEqual(IntPtr.Zero, control.Handle);
+        control.Items.AddRange(["a", "b"]);
+
+        control.BeginUpdate();
+        control.InvokeRecreateHandle();
+        control.RedrawMessages.Clear();
+        control.EndUpdate();
+
+        Assert.Equal([true], control.RedrawMessages);
+        Assert.True(control.IsHandleCreated);
+        Assert.Equal(2, GetNativeItemCount(control));
+        Assert.Equal(["a", "b"], control.Items.Cast<object>());
+    }
+
+    [WinFormsFact]
+    public void ListBox_Dispose_DuringBatch_DoesNotThrow()
+    {
+        // Scenario: disposing a control while a batch is still open (for example an exception unwound past
+        // EndUpdate) tears down the handle without throwing.
+        using RedrawTrackingListBox control = new();
+        Assert.NotEqual(IntPtr.Zero, control.Handle);
+        control.BeginUpdate();
+        control.Items.Add("a");
+
+        control.Dispose();
+
+        Assert.True(control.IsDisposed);
+        Assert.False(control.IsHandleCreated);
+    }
+
+    [WinFormsTheory]
+    [InlineData(SelectionMode.MultiSimple)]
+    [InlineData(SelectionMode.MultiExtended)]
+    public void ListBox_BatchUpdate_RemoveAddAndSelect_SelectionMatchesNativeControl(SelectionMode selectionMode)
+    {
+        // Scenario: a cached selection count primed before a batch is invalidated by items removed and
+        // added inside the batch, so item identity, indices and counts agree with the native control after
+        // EndUpdate.
+        using ListBox control = new() { SelectionMode = selectionMode };
+        control.Items.AddRange(["a", "b", "c", "d", "e"]);
+        Assert.NotEqual(IntPtr.Zero, control.Handle);
+        control.SetSelected(1, true);
+        control.SetSelected(3, true);
+        Assert.Equal(2, control.SelectedItems.Count);
+
+        control.BeginUpdate();
+        control.BeginUpdate();
+        control.Items.Remove("b");
+        int added = control.Items.Add("f");
+        control.SetSelected(added, true);
+        control.EndUpdate();
+        control.EndUpdate();
+
+        Assert.Equal(["d", "f"], control.SelectedItems.Cast<object>());
+        Assert.Equal([2, 4], control.SelectedIndices.Cast<int>());
+        Assert.Equal(2, control.SelectedItems.Count);
+        Assert.Equal(2, (int)PInvokeCore.SendMessage(control, PInvoke.LB_GETSELCOUNT));
+    }
+
     [WinFormsTheory]
     [InlineData(true, AccessibleRole.List)]
     [InlineData(false, AccessibleRole.None)]
@@ -5968,6 +6214,289 @@ public class ListBoxTests
         Assert.Equal(2, invalidatedCallCount);
         Assert.Equal(0, styleChangedCallCount);
         Assert.Equal(0, createdCallCount);
+    }
+
+    [WinFormsTheory]
+    [InlineData(SelectionMode.None, false)]
+    [InlineData(SelectionMode.None, true)]
+    [InlineData(SelectionMode.One, false)]
+    [InlineData(SelectionMode.One, true)]
+    [InlineData(SelectionMode.MultiSimple, false)]
+    [InlineData(SelectionMode.MultiSimple, true)]
+    [InlineData(SelectionMode.MultiExtended, false)]
+    [InlineData(SelectionMode.MultiExtended, true)]
+    public void ListBox_RefreshItems_WithCachedSelection_PreservesSelection(SelectionMode selectionMode, bool createHandle)
+    {
+        // Every selection mode must retain its selection through cached-count refreshes, with or without a handle.
+        using SubListBox control = new()
+        {
+            SelectionMode = selectionMode
+        };
+        object item1 = "item1";
+        object item2 = "item2";
+        object item3 = "item3";
+        control.Items.AddRange([item1, item2]);
+
+        if (selectionMode == SelectionMode.One)
+        {
+            control.SelectedIndex = 0;
+        }
+        else if (selectionMode != SelectionMode.None)
+        {
+            control.SetSelected(0, true);
+            control.SetSelected(1, true);
+        }
+
+        (object Item, int Index)[] expectedSelection = selectionMode switch
+        {
+            SelectionMode.One => [(item1, 0)],
+            SelectionMode.MultiSimple or SelectionMode.MultiExtended => [(item1, 0), (item2, 1)],
+            _ => []
+        };
+        AssertSelection(control, expectedSelection);
+
+        if (createHandle)
+        {
+            Assert.NotEqual(IntPtr.Zero, control.Handle);
+        }
+
+        // Do not query selection between adding the item and the scrollbar-triggered refresh.
+        control.Items.Add(item3);
+        control.HorizontalScrollbar = true;
+
+        // Verify each rebuild separately and re-prime the count cache before the next refresh.
+        for (int refresh = 0; refresh < 3; refresh++)
+        {
+            if (refresh > 0)
+            {
+                control.RefreshItems();
+            }
+
+            AssertSelection(control, expectedSelection);
+            Assert.Equal(new object[] { item1, item2, item3 }, control.Items.Cast<object>());
+            Assert.Equal(createHandle, control.IsHandleCreated);
+        }
+
+        if (selectionMode == SelectionMode.One)
+        {
+            control.SelectedIndex = 1;
+            AssertSelection(control, (item2, 1));
+        }
+        else if (selectionMode != SelectionMode.None)
+        {
+            control.SetSelected(2, true);
+            control.SetSelected(0, false);
+            AssertSelection(control, (item2, 1), (item3, 2));
+        }
+
+        control.ClearSelected();
+        AssertSelection(control);
+        Assert.Equal(createHandle, control.IsHandleCreated);
+    }
+
+    [WinFormsTheory]
+    [InlineData(SelectionMode.None, false)]
+    [InlineData(SelectionMode.None, true)]
+    [InlineData(SelectionMode.One, false)]
+    [InlineData(SelectionMode.One, true)]
+    [InlineData(SelectionMode.MultiSimple, false)]
+    [InlineData(SelectionMode.MultiSimple, true)]
+    [InlineData(SelectionMode.MultiExtended, false)]
+    [InlineData(SelectionMode.MultiExtended, true)]
+    public void ListBox_RefreshItems_AfterMutatingItems_SynchronizesSelection(SelectionMode selectionMode, bool createHandle)
+    {
+        // Refresh must preserve selected identities and update indices after sorting, removal, and repopulation.
+        using SubListBox control = new()
+        {
+            SelectionMode = selectionMode
+        };
+        object bravo = "bravo";
+        object delta = "delta";
+        object foxtrot = "foxtrot";
+        object hotel = "hotel";
+        object alpha = "alpha";
+        control.Items.AddRange([bravo, delta, foxtrot, hotel]);
+
+        if (selectionMode == SelectionMode.One)
+        {
+            control.SelectedIndex = 0;
+        }
+        else if (selectionMode != SelectionMode.None)
+        {
+            control.SetSelected(0, true);
+            control.SetSelected(3, true);
+        }
+
+        if (createHandle)
+        {
+            Assert.NotEqual(IntPtr.Zero, control.Handle);
+        }
+
+        // Append an out-of-order item so enabling sorting actually moves the selected items.
+        control.Items.Add(alpha);
+        control.RefreshItems();
+        AssertSelection(control, selectionMode switch
+        {
+            SelectionMode.One => [(bravo, 0)],
+            SelectionMode.MultiSimple or SelectionMode.MultiExtended => [(bravo, 0), (hotel, 3)],
+            _ => []
+        });
+
+        control.Sorted = true;
+        control.RefreshItems();
+        AssertSelection(control, selectionMode switch
+        {
+            SelectionMode.One => [(bravo, 1)],
+            SelectionMode.MultiSimple or SelectionMode.MultiExtended => [(bravo, 1), (hotel, 4)],
+            _ => []
+        });
+
+        control.Items.Remove(delta);
+        control.RefreshItems();
+        AssertSelection(control, selectionMode switch
+        {
+            SelectionMode.One => [(bravo, 1)],
+            SelectionMode.MultiSimple or SelectionMode.MultiExtended => [(bravo, 1), (hotel, 3)],
+            _ => []
+        });
+
+        control.Items.Remove(bravo);
+        control.RefreshItems();
+        AssertSelection(control, selectionMode switch
+        {
+            SelectionMode.MultiSimple or SelectionMode.MultiExtended => [(hotel, 2)],
+            _ => []
+        });
+
+        control.Items.Clear();
+        control.RefreshItems();
+        AssertSelection(control);
+
+        object xray = "xray";
+        object yankee = "yankee";
+        object zulu = "zulu";
+        control.Items.AddRange([zulu, xray, yankee]);
+        if (selectionMode == SelectionMode.One)
+        {
+            control.SelectedIndex = 0;
+        }
+        else if (selectionMode != SelectionMode.None)
+        {
+            control.SetSelected(0, true);
+            control.SetSelected(2, true);
+        }
+
+        for (int refresh = 0; refresh < 2; refresh++)
+        {
+            control.RefreshItems();
+            Assert.Equal(new object[] { xray, yankee, zulu }, control.Items.Cast<object>());
+            AssertSelection(control, selectionMode switch
+            {
+                SelectionMode.One => [(xray, 0)],
+                SelectionMode.MultiSimple or SelectionMode.MultiExtended => [(xray, 0), (zulu, 2)],
+                _ => []
+            });
+            Assert.Equal(createHandle, control.IsHandleCreated);
+        }
+    }
+
+    [WinFormsTheory]
+    [InlineData(SelectionMode.None, false)]
+    [InlineData(SelectionMode.None, true)]
+    [InlineData(SelectionMode.One, false)]
+    [InlineData(SelectionMode.One, true)]
+    [InlineData(SelectionMode.MultiSimple, false)]
+    [InlineData(SelectionMode.MultiSimple, true)]
+    [InlineData(SelectionMode.MultiExtended, false)]
+    [InlineData(SelectionMode.MultiExtended, true)]
+    public void ListBox_RefreshItems_RejectedSelection_DoesNotMutateSelection(SelectionMode selectionMode, bool createHandle)
+    {
+        // Invalid indices and disabled selection must leave refreshed selection views unchanged.
+        using SubListBox control = new()
+        {
+            SelectionMode = selectionMode
+        };
+        object item1 = "item1";
+        object item2 = "item2";
+        object item3 = "item3";
+        control.Items.AddRange([item1, item2, item3]);
+
+        if (selectionMode == SelectionMode.One)
+        {
+            control.SelectedIndex = 1;
+        }
+        else if (selectionMode != SelectionMode.None)
+        {
+            control.SetSelected(1, true);
+            control.SetSelected(2, true);
+        }
+
+        (object Item, int Index)[] expectedSelection = selectionMode switch
+        {
+            SelectionMode.One => [(item2, 1)],
+            SelectionMode.MultiSimple or SelectionMode.MultiExtended => [(item2, 1), (item3, 2)],
+            _ => []
+        };
+        AssertSelection(control, expectedSelection);
+
+        if (createHandle)
+        {
+            Assert.NotEqual(IntPtr.Zero, control.Handle);
+        }
+
+        control.RefreshItems();
+        AssertSelection(control, expectedSelection);
+
+        foreach (int index in new[] { -1, control.Items.Count, int.MaxValue })
+        {
+            Assert.Throws<ArgumentOutOfRangeException>(() => control.SetSelected(index, true));
+            AssertSelection(control, expectedSelection);
+            Assert.Throws<ArgumentOutOfRangeException>(() => control.SetSelected(index, false));
+            AssertSelection(control, expectedSelection);
+        }
+
+        if (selectionMode == SelectionMode.None)
+        {
+            Assert.Throws<InvalidOperationException>(() => control.SetSelected(0, true));
+            AssertSelection(control, expectedSelection);
+            Assert.Throws<InvalidOperationException>(() => control.SetSelected(0, false));
+            AssertSelection(control, expectedSelection);
+        }
+
+        control.RefreshItems();
+        AssertSelection(control, expectedSelection);
+        Assert.Equal(createHandle, control.IsHandleCreated);
+    }
+
+    private static void AssertSelection(ListBox control, params (object Item, int Index)[] expectedSelection)
+    {
+        // Read Count before other selection views can repair a stale cache as a side effect.
+#pragma warning disable xUnit2013 // Do not use equality check to check for collection size.
+        Assert.Equal(expectedSelection.Length, control.SelectedItems.Count);
+        Assert.Equal(expectedSelection.Length, control.SelectedIndices.Count);
+#pragma warning restore xUnit2013 // Do not use equality check to check for collection size.
+
+        if (expectedSelection.Length == 0)
+        {
+            Assert.Null(control.SelectedItem);
+            Assert.Equal(-1, control.SelectedIndex);
+        }
+        else
+        {
+            Assert.Same(expectedSelection[0].Item, control.SelectedItem);
+            Assert.Equal(expectedSelection[0].Index, control.SelectedIndex);
+        }
+
+        for (int i = 0; i < expectedSelection.Length; i++)
+        {
+            Assert.Same(expectedSelection[i].Item, control.SelectedItems[i]);
+            Assert.Equal(expectedSelection[i].Index, control.SelectedIndices[i]);
+        }
+
+        for (int i = 0; i < control.Items.Count; i++)
+        {
+            Assert.Equal(expectedSelection.Any(selection => selection.Index == i), control.GetSelected(i));
+        }
     }
 
     [WinFormsFact]

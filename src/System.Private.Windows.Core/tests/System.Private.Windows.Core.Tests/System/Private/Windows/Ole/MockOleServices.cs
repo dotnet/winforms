@@ -20,6 +20,14 @@ internal unsafe class MockOleServices<TTestClass> : IOleServices
     /// </summary>
     internal static TYMED SupportedTymeds { get; set; } = TYMED.TYMED_HGLOBAL | TYMED.TYMED_ISTREAM | TYMED.TYMED_GDI;
 
+    internal static Func<HRESULT>? OleSetClipboardResult { get; set; }
+    internal static Func<HRESULT>? OleGetClipboardResult { get; set; }
+    internal static Func<HRESULT>? OleFlushClipboardResult { get; set; }
+
+#if NETFRAMEWORK
+    public virtual bool UseNativeClipboardTextFallback => false;
+#endif
+
 #if NET
     static
 #endif
@@ -69,6 +77,11 @@ internal unsafe class MockOleServices<TTestClass> : IOleServices
 #endif
     HRESULT IOleServices.OleFlushClipboard()
     {
+        if (OleFlushClipboardResult is { } result)
+        {
+            return result();
+        }
+
         // Would need to implement copying the raw TYMED data into a new object to mimic the real behavior.
         throw new NotImplementedException();
     }
@@ -81,6 +94,13 @@ internal unsafe class MockOleServices<TTestClass> : IOleServices
         if (dataObject is null)
         {
             return HRESULT.E_POINTER;
+        }
+
+        HRESULT result = OleGetClipboardResult?.Invoke() ?? HRESULT.S_OK;
+        if (result.Failed)
+        {
+            *dataObject = null;
+            return result;
         }
 
         if (s_dataObjectProxy is null)
@@ -99,6 +119,12 @@ internal unsafe class MockOleServices<TTestClass> : IOleServices
 #endif
     HRESULT IOleServices.OleSetClipboard(IDataObject* dataObject)
     {
+        HRESULT result = OleSetClipboardResult?.Invoke() ?? HRESULT.S_OK;
+        if (result.Failed)
+        {
+            return result;
+        }
+
         if (dataObject is null)
         {
             // Clears the clipboard

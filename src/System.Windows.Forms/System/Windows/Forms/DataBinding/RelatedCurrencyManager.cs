@@ -46,6 +46,12 @@ internal class RelatedCurrencyManager : CurrencyManager
         ParentManager_CurrentItemChanged(parentManager, EventArgs.Empty);
     }
 
+    internal void Unbind()
+    {
+        UnwireParentManager(_parentManager);
+        Release();
+    }
+
     private void UnwireParentManager(BindingManagerBase? bmb)
     {
         if (bmb is not null)

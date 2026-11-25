@@ -271,15 +271,32 @@ public partial class BindingContext : ICollection
                 : new RelatedPropertyManager(formerManager, dataField);
         }
 
-        // if wRef is null, then it is the first time we want this bindingManagerBase: so add it
-        // if wRef is not null, then the bindingManagerBase was GC'd at some point: keep the old wRef and change its target
-        if (wRef is null)
+        // Creating a manager can run user code that registers a manager for the same key.
+        if (_listManagers.TryGetValue(key, out wRef) && wRef is not null)
         {
-            _listManagers.Add(key, new WeakReference(bindingManagerBase, false));
+            if (wRef.Target is BindingManagerBase registeredManager)
+            {
+                switch (bindingManagerBase)
+                {
+                    case RelatedCurrencyManager relatedCurrencyManager:
+                        relatedCurrencyManager.Unbind();
+                        break;
+                    case CurrencyManager currencyManager:
+                        currencyManager.Release();
+                        break;
+                    case RelatedPropertyManager relatedPropertyManager:
+                        relatedPropertyManager.Unbind();
+                        break;
+                }
+
+                return registeredManager;
+            }
+
+            wRef.Target = bindingManagerBase;
         }
         else
         {
-            wRef.Target = bindingManagerBase;
+            _listManagers.Add(key, new WeakReference(bindingManagerBase, false));
         }
 
         ScrubWeakRefs();

@@ -2221,7 +2221,7 @@ public partial class DataGridViewRowCollection : ICollection, IList
 
         dataGridViewRow = SharedRow(index);
         Debug.Assert(DataGridView is not null);
-        DataGridView.OnRemovingRow(index, out _, force);
+        DataGridView.OnRemovingRow(index, out Point newCurrentCell, force);
         UpdateRowCaches(index, ref dataGridViewRow, adding: false);
         if (dataGridViewRow.Index != -1)
         {
@@ -2234,7 +2234,7 @@ public partial class DataGridViewRowCollection : ICollection, IList
         // Note: cannot set dataGridViewRow.DataGridView to null because this row may be shared and still be used.
         // Note that OnCollectionChanged takes care of calling _items.RemoveAt(index) &
         // _rowStates.RemoveAt(index). Can't do it here since OnCollectionChanged uses the arrays.
-        OnCollectionChanged(new CollectionChangeEventArgs(CollectionChangeAction.Remove, dataGridViewRow), index, 1, true, false, false, new Point(-1, -1));
+        OnCollectionChanged(new CollectionChangeEventArgs(CollectionChangeAction.Remove, dataGridViewRow), index, 1, true, false, false, newCurrentCell);
     }
 
     private static bool RowHasValueOrToolTipText(DataGridViewRow dataGridViewRow)

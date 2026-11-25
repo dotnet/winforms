@@ -274,6 +274,29 @@ public abstract partial class UpDownBase : ContainerControl
     [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public new DockPaddingEdges DockPadding => base.DockPadding;
 
+    /// <inheritdoc/>
+    /// <remarks>
+    ///  <para>
+    ///   Modern visual styles always use double buffering. Explicit settings are retained for classic visual styles.
+    ///  </para>
+    /// </remarks>
+    protected override bool DoubleBuffered
+    {
+        get => UseSideBySideButtons || base.DoubleBuffered;
+        set
+        {
+            // The base setter compares against the effective value, which is always true in modern mode.
+            if (value)
+            {
+                SetStyle(ControlStyles.OptimizedDoubleBuffer | ControlStyles.AllPaintingInWmPaint, true);
+            }
+            else
+            {
+                SetStyle(ControlStyles.OptimizedDoubleBuffer, false);
+            }
+        }
+    }
+
     /// <summary>
     ///  Returns true if this control has focus.
     /// </summary>
@@ -497,9 +520,7 @@ public abstract partial class UpDownBase : ContainerControl
     {
         int height = AutoSize
             ? PreferredHeight + Padding.Vertical
-            : UseSideBySideButtons
-                ? proposedHeight
-                : PreferredHeight;
+            : PreferredHeight;
 
         return base.ApplyBoundsConstraints(suggestedX, suggestedY, proposedWidth, height);
     }
@@ -594,6 +615,13 @@ public abstract partial class UpDownBase : ContainerControl
         {
             Invalidate(true);
         }
+    }
+
+    protected override void OnParentFontChanged(EventArgs e)
+    {
+        base.OnParentFontChanged(e);
+        Height = PreferredHeight;
+        _defaultButtonsWidth = LogicalToDeviceUnits(DefaultButtonsWidth);
     }
 
     /// <summary>
@@ -904,11 +932,7 @@ public abstract partial class UpDownBase : ContainerControl
         // Clear the font height cache
         FontHeight = -1;
 
-        if (!UseSideBySideButtons || AutoSize)
-        {
-            Height = PreferredHeight;
-        }
-
+        Height = PreferredHeight;
         PositionControls();
 
         base.OnFontChanged(e);

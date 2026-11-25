@@ -708,6 +708,75 @@ public class BindingContextTests
     }
 
     [Fact]
+    public void BindingContext_Item_ParentPositionChangedReentersLookup_ReturnsCachedManager()
+    {
+        const string ChildrenPath = "Parents.Children";
+        const string GrandChildrenPath = "Parents.Children.GrandChildren";
+        BindingContext context = [];
+        var root = new { Parents = new BindingList<ReentrantParent>() };
+        CurrencyManager parents = Assert.IsAssignableFrom<CurrencyManager>(context[root, "Parents"]);
+        BindingManagerBase nestedChildren = null;
+        BindingManagerBase grandChildren = null;
+        bool reentered = false;
+
+        parents.PositionChanged += (_, _) =>
+        {
+            if (!reentered && parents.Count > 0)
+            {
+                reentered = true;
+                grandChildren = context[root, GrandChildrenPath];
+                nestedChildren = context[root, ChildrenPath];
+            }
+        };
+
+        BindingManagerBase children = context[root, ChildrenPath];
+
+        Assert.NotNull(nestedChildren);
+        Assert.Same(nestedChildren, children);
+        Assert.Same(children, context[root, ChildrenPath]);
+        Assert.NotNull(grandChildren);
+        Assert.Same(grandChildren, context[root, GrandChildrenPath]);
+        Assert.Empty(root.Parents);
+    }
+
+    [Theory]
+    [InlineData(false)]
+    [InlineData(true)]
+    public void BindingContext_Item_ListGetterReentersLookup_DetachesDuplicate(bool staleCacheEntry)
+    {
+        BindingContext context = [];
+        BindingList<ReentrantParent> parents = [new(), new()];
+        CurrencyManager parentManager = Assert.IsType<CurrencyManager>(context[parents]);
+        string member = nameof(ReentrantParent.Children);
+        if (staleCacheEntry)
+        {
+            _ = context[parents, member];
+            WeakReference reference = Assert.IsType<WeakReference>(context.Cast<DictionaryEntry>()
+                .Single(entry => !ReferenceEquals(((WeakReference)entry.Value).Target, parentManager)).Value);
+            reference.Target = null;
+        }
+
+        BindingManagerBase nested = null;
+        parents[0].OnGetChildren = () =>
+        {
+            parents[0].OnGetChildren = null;
+            nested = context[parents, member];
+        };
+
+        BindingManagerBase outer = context[parents, member];
+        Assert.NotNull(nested);
+        Assert.Same(nested, outer);
+        Assert.Same(outer, context[parents, member]);
+
+        // The discarded manager must not query the next parent's child list.
+        // Clearing the weak reference by hand leaves the original manager subscribed.
+        int getterCalls = 0;
+        parents[1].OnGetChildren = () => getterCalls++;
+        parentManager.Position = 1;
+        Assert.Equal(staleCacheEntry ? 2 : 1, getterCalls);
+    }
+
+    [Fact]
     public void BindingContext_Item_GetWithNullWeakReferenceTarget_Success()
     {
         BindingContext context = [];
@@ -1043,6 +1112,33 @@ public class BindingContextTests
     private class ObjectDataSource
     {
         public object Property { get; set; }
+    }
+
+    /// <summary>
+    ///  A parent whose child-list getter can re-enter binding.
+    /// </summary>
+    private class ReentrantParent
+    {
+        private readonly BindingList<ReentrantChild> _children = [];
+
+        public Action OnGetChildren { get; set; }
+
+        public BindingList<ReentrantChild> Children
+        {
+            get
+            {
+                OnGetChildren?.Invoke();
+                return _children;
+            }
+        }
+    }
+
+    /// <summary>
+    ///  A child with a list that can be bound through its parent.
+    /// </summary>
+    private class ReentrantChild
+    {
+        public BindingList<string> GrandChildren { get; } = [];
     }
 
     private class SubBindingContext : BindingContext
