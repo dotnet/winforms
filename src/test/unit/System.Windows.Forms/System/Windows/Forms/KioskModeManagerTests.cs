@@ -1,4 +1,4 @@
-// Licensed to the .NET Foundation under one or more agreements.
+﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
 #nullable disable
@@ -662,6 +662,31 @@ public class KioskModeManagerTests
         manager.TestAccessor.Dynamic.RefreshFullScreenBounds();
 
         Assert.Equal(screenBounds, form.Bounds);
+    }
+
+    [WinFormsFact]
+    public void KioskModeManager_FullScreen_RefreshBounds_WhenMinimized_DoesNotQueueRestoreBounds()
+    {
+        using Form form = new()
+        {
+            Bounds = new Rectangle(10, 20, 300, 200),
+            StartPosition = FormStartPosition.Manual
+        };
+        form.Show();
+        using KioskModeManager manager = new()
+        {
+            ContainerControl = form,
+            FullScreen = true
+        };
+        form.WindowState = FormWindowState.Minimized;
+        Form.KioskRestoreBoundsState before = form.SuspendKioskRestoreBounds();
+        form.RestoreKioskRestoreBounds(before);
+
+        manager.TestAccessor.Dynamic.RefreshFullScreenBounds();
+
+        Form.KioskRestoreBoundsState after = form.SuspendKioskRestoreBounds();
+        Assert.Equal(before, after);
+        form.RestoreKioskRestoreBounds(after);
     }
 
     [WinFormsFact]

@@ -794,6 +794,11 @@ public class KioskModeManager : Component, ISupportInitialize
         if (_isFullScreen
             && _targetForm is { IsDisposed: false } form)
         {
+            if (form.WindowState == FormWindowState.Minimized)
+            {
+                return;
+            }
+
             Rectangle bounds = Screen.FromRectangle(form.Bounds).Bounds;
             if (form.Bounds != bounds)
             {
