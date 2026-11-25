@@ -75,6 +75,17 @@ public partial class TabPage
 
         private int CurrentIndex => OwningTabControl?.TabPages.IndexOf(_owningTabPage) ?? -1;
 
+        private bool HasKeyboardFocus()
+        {
+            if (OwningTabControl is not { IsHandleCreated: true, Focused: true } owner)
+            {
+                return false;
+            }
+
+            int index = CurrentIndex;
+            return index >= 0 && index == (int)PInvokeCore.SendMessage(owner, PInvoke.TCM_GETCURFOCUS);
+        }
+
         private AgileComPointer<IAccessible>? SystemIAccessibleInternal
             => OwningTabControl?.AccessibilityObject.SystemIAccessible;
 
@@ -119,7 +130,8 @@ public partial class TabPage
             => propertyID switch
             {
                 UIA_PROPERTY_ID.UIA_ControlTypePropertyId => (VARIANT)(int)UIA_CONTROLTYPE_ID.UIA_TabItemControlTypeId,
-                UIA_PROPERTY_ID.UIA_HasKeyboardFocusPropertyId => (VARIANT)State.HasFlag(AccessibleStates.Focused),
+                UIA_PROPERTY_ID.UIA_HasKeyboardFocusPropertyId =>
+                    (VARIANT)HasKeyboardFocus(),
                 UIA_PROPERTY_ID.UIA_IsEnabledPropertyId => (VARIANT)(OwningTabControl?.Enabled ?? false),
                 UIA_PROPERTY_ID.UIA_IsKeyboardFocusablePropertyId
                     // This is necessary for compatibility with MSAA proxy:
