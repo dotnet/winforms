@@ -83,6 +83,7 @@ public class KioskModeManager : Component, ISupportInitialize
     private bool _savedTopMost;
     private WINDOWPLACEMENT _savedPlacement;
     private Rectangle _savedWindowBounds;
+    private Form.KioskRestoreBoundsState _savedRestoreBoundsState;
     private bool _useNativeTransition;
 
     private bool _topMostInFullScreen;
@@ -494,11 +495,25 @@ public class KioskModeManager : Component, ISupportInitialize
         if (_useNativeTransition)
         {
             _savedPlacement = targetForm.GetKioskWindowPlacement();
-            targetForm.SetKioskWindowState(
-                FormBorderStyle.None,
-                FormWindowState.Normal,
-                _topMostInFullScreen,
-                Screen.FromRectangle(_savedBounds).Bounds);
+            _savedRestoreBoundsState = targetForm.SuspendKioskRestoreBounds();
+            bool applied = false;
+            try
+            {
+                targetForm.SetKioskWindowState(
+                    FormBorderStyle.None,
+                    FormWindowState.Normal,
+                    _topMostInFullScreen,
+                    Screen.FromRectangle(_savedBounds).Bounds);
+                applied = true;
+            }
+            finally
+            {
+                if (!applied)
+                {
+                    targetForm.RestoreKioskRestoreBounds(_savedRestoreBoundsState);
+                    _useNativeTransition = false;
+                }
+            }
         }
         else
         {
@@ -525,18 +540,28 @@ public class KioskModeManager : Component, ISupportInitialize
         StopMousePointerAutoHideTimer();
         ShowMousePointerIfHidden();
 
-        if (_useNativeTransition && _targetForm.IsHandleCreated && _targetForm.Visible && _targetForm.TopLevel)
+        try
         {
-            _targetForm.SetKioskWindowState(_savedBorderStyle, _savedWindowState, _savedTopMost, _savedWindowBounds);
-            _targetForm.RestoreKioskWindowPlacement(_savedPlacement, _savedBounds);
+            if (_useNativeTransition && _targetForm.IsHandleCreated && _targetForm.Visible && _targetForm.TopLevel)
+            {
+                _targetForm.SetKioskWindowState(_savedBorderStyle, _savedWindowState, _savedTopMost, _savedWindowBounds);
+                _targetForm.RestoreKioskWindowPlacement(_savedPlacement, _savedBounds);
+            }
+            else
+            {
+                _targetForm.FormBorderStyle = _savedBorderStyle;
+                _targetForm.TopMost = _savedTopMost;
+                _targetForm.WindowState = FormWindowState.Normal;
+                _targetForm.Bounds = _savedBounds;
+                _targetForm.WindowState = _savedWindowState;
+            }
         }
-        else
+        finally
         {
-            _targetForm.FormBorderStyle = _savedBorderStyle;
-            _targetForm.TopMost = _savedTopMost;
-            _targetForm.WindowState = FormWindowState.Normal;
-            _targetForm.Bounds = _savedBounds;
-            _targetForm.WindowState = _savedWindowState;
+            if (_useNativeTransition)
+            {
+                _targetForm.RestoreKioskRestoreBounds(_savedRestoreBoundsState);
+            }
         }
 
         _useNativeTransition = false;

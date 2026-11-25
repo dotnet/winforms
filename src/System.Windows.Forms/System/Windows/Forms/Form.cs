@@ -6306,6 +6306,40 @@ public partial class Form : ContainerControl
     }
 
 #if NET11_0_OR_GREATER
+    /// <summary>
+    ///  Stores a bounds request deferred while a form is maximized or minimized.
+    /// </summary>
+    internal readonly record struct KioskRestoreBoundsState(
+        Rectangle Bounds,
+        BoundsSpecified Specified,
+        int WidthIsClientSize,
+        int HeightIsClientSize);
+
+    internal KioskRestoreBoundsState SuspendKioskRestoreBounds()
+    {
+        KioskRestoreBoundsState state = new(
+            _restoredWindowBounds,
+            _restoredWindowBoundsSpecified,
+            _formStateEx[s_formStateExWindowBoundsWidthIsClientSize],
+            _formStateEx[s_formStateExWindowBoundsHeightIsClientSize]);
+
+        // Fullscreen uses Normal state, but must not consume a pending restore request.
+        _restoredWindowBounds = new Rectangle(-1, -1, -1, -1);
+        _restoredWindowBoundsSpecified = BoundsSpecified.None;
+        _formStateEx[s_formStateExWindowBoundsWidthIsClientSize] = 0;
+        _formStateEx[s_formStateExWindowBoundsHeightIsClientSize] = 0;
+
+        return state;
+    }
+
+    internal void RestoreKioskRestoreBounds(KioskRestoreBoundsState state)
+    {
+        _restoredWindowBounds = state.Bounds;
+        _restoredWindowBoundsSpecified = state.Specified;
+        _formStateEx[s_formStateExWindowBoundsWidthIsClientSize] = state.WidthIsClientSize;
+        _formStateEx[s_formStateExWindowBoundsHeightIsClientSize] = state.HeightIsClientSize;
+    }
+
     internal unsafe WINDOWPLACEMENT GetKioskWindowPlacement()
     {
         WINDOWPLACEMENT placement = new() { length = (uint)sizeof(WINDOWPLACEMENT) };
@@ -6320,6 +6354,8 @@ public partial class Form : ContainerControl
     internal void SetKioskWindowState(FormBorderStyle borderStyle, FormWindowState windowState, bool topMost, Rectangle bounds)
     {
         CreateParams previousParams = CreateParams;
+        int previousCreateStyle = previousParams.Style;
+        int previousCreateExStyle = previousParams.ExStyle;
         FormBorderStyle previousBorderStyle = FormBorderStyle;
         FormWindowState previousWindowState = WindowState;
         bool previousTopMost = TopMost;
@@ -6331,9 +6367,9 @@ public partial class Form : ContainerControl
         CreateParams newParams = CreateParams;
 
         // Preserve unrelated native styles while applying the Form's changed styles and window state.
-        WINDOW_STYLE styleChanges = (WINDOW_STYLE)(previousParams.Style ^ newParams.Style)
+        WINDOW_STYLE styleChanges = (WINDOW_STYLE)(previousCreateStyle ^ newParams.Style)
             | WINDOW_STYLE.WS_MAXIMIZE | WINDOW_STYLE.WS_MINIMIZE;
-        WINDOW_EX_STYLE exStyleChanges = (WINDOW_EX_STYLE)(previousParams.ExStyle ^ newParams.ExStyle);
+        WINDOW_EX_STYLE exStyleChanges = (WINDOW_EX_STYLE)(previousCreateExStyle ^ newParams.ExStyle);
         WindowStyle = (previousStyle & ~styleChanges) | ((WINDOW_STYLE)newParams.Style & styleChanges);
         ExtendedWindowStyle = (previousExtendedStyle & ~exStyleChanges) | ((WINDOW_EX_STYLE)newParams.ExStyle & exStyleChanges);
 
