@@ -503,7 +503,9 @@ public class KioskModeManagerTests
         Rectangle screenBounds = Screen.FromRectangle(form.RestoreBounds).Bounds;
         using KioskModeManager manager = new() { ContainerControl = form };
         List<Rectangle> sizes = [];
+        List<int> layoutsAtStyleChange = [];
         form.SizeChanged += (_, _) => sizes.Add(form.Bounds);
+        form.StyleChanged += (_, _) => layoutsAtStyleChange.Add(layoutCount);
         form.NativeSizes.Clear();
         layoutCount = 0;
 
@@ -512,6 +514,7 @@ public class KioskModeManagerTests
         Assert.True(manager.FullScreen);
         Assert.Equal(new[] { screenBounds }, sizes);
         Assert.Equal(new[] { screenBounds.Size }, form.NativeSizes);
+        Assert.Equal(new[] { 0 }, layoutsAtStyleChange);
         Assert.Equal(singleResizeLayouts, layoutCount);
         Assert.Equal(FormBorderStyle.None, form.FormBorderStyle);
         Assert.Equal(FormWindowState.Normal, form.WindowState);
@@ -521,6 +524,7 @@ public class KioskModeManagerTests
         Assert.Equal(SHOW_WINDOW_CMD.SW_NORMAL, form.GetKioskWindowPlacement().showCmd);
 
         sizes.Clear();
+        layoutsAtStyleChange.Clear();
         form.NativeSizes.Clear();
         layoutCount = 0;
         manager.FullScreen = false;
@@ -528,6 +532,7 @@ public class KioskModeManagerTests
         Assert.False(manager.FullScreen);
         Assert.Equal(new[] { originalBounds }, sizes);
         Assert.Equal(new[] { originalBounds.Size }, form.NativeSizes);
+        Assert.Equal(new[] { 0 }, layoutsAtStyleChange);
         Assert.Equal(singleResizeLayouts, layoutCount);
         Assert.Equal(borderStyle, form.FormBorderStyle);
         Assert.Equal(initialState, form.WindowState);

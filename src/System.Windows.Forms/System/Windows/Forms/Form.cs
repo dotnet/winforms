@@ -6353,6 +6353,8 @@ public partial class Form : ContainerControl
 
     internal void SetKioskWindowState(FormBorderStyle borderStyle, FormWindowState windowState, bool topMost, Rectangle bounds)
     {
+        // Defer child layout until the native style and bounds changes and their notifications finish.
+        using SuspendLayoutScope scope = new(this);
         CreateParams previousParams = CreateParams;
         int previousCreateStyle = previousParams.Style;
         int previousCreateExStyle = previousParams.ExStyle;
@@ -6403,10 +6405,7 @@ public partial class Form : ContainerControl
             UpdateWindowIcon(false);
         }
 
-        // SetWindowPos with SWP_FRAMECHANGED has already applied the final style and bounds.
-        // Avoid forcing child-control invalidation here because fullscreen transitions can involve
-        // large control trees; let normal paint invalidation propagate naturally.
-        Invalidate();
+        Invalidate(true);
     }
 
     internal unsafe void RestoreKioskWindowPlacement(WINDOWPLACEMENT placement, Rectangle restoreBounds)
