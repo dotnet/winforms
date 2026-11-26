@@ -1007,6 +1007,59 @@ internal partial class DefaultLayout : LayoutEngine
         }
     }
 
+    internal static void MatchScaledAnchorSize(Control control)
+    {
+        if (UseAnchorLayoutV2(control)
+            || !CommonProperties.GetNeedsAnchorLayout(control)
+            || GetAnchorInfo(control) is not { } anchorInfo)
+        {
+            return;
+        }
+
+        // Legacy anchor info stores both edges even when the control should not stretch.
+        // Preserve the anchored edge (or center) while respecting the control's scaled size.
+        AnchorStyles anchor = GetAnchor(control);
+        bool left = IsAnchored(anchor, AnchorStyles.Left);
+        bool right = IsAnchored(anchor, AnchorStyles.Right);
+        if (!left || !right)
+        {
+            int difference = control.Width - (anchorInfo.Right - anchorInfo.Left);
+            if (right)
+            {
+                anchorInfo.Left -= difference;
+            }
+            else if (!left)
+            {
+                anchorInfo.Left -= difference / 2;
+                anchorInfo.Right = anchorInfo.Left + control.Width;
+            }
+            else
+            {
+                anchorInfo.Right += difference;
+            }
+        }
+
+        bool top = IsAnchored(anchor, AnchorStyles.Top);
+        bool bottom = IsAnchored(anchor, AnchorStyles.Bottom);
+        if (!top || !bottom)
+        {
+            int difference = control.Height - (anchorInfo.Bottom - anchorInfo.Top);
+            if (bottom)
+            {
+                anchorInfo.Top -= difference;
+            }
+            else if (!top)
+            {
+                anchorInfo.Top -= difference / 2;
+                anchorInfo.Bottom = anchorInfo.Top + control.Height;
+            }
+            else
+            {
+                anchorInfo.Bottom += difference;
+            }
+        }
+    }
+
     private static Rectangle GetCachedBounds(IArrangedElement element)
     {
         if (element.Container is { } container)

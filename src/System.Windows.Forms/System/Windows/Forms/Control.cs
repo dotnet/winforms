@@ -10579,6 +10579,13 @@ public unsafe partial class Control :
             {
                 RequiredScaling = BoundsSpecified.None;
             }
+
+            if (ScaleHelper.IsScalingRequirementMet
+                && ParentInternal is ContainerControl { IsScaledByDpiChangedEvent: true } parent
+                && parent.LayoutEngine == DefaultLayout.Instance)
+            {
+                DefaultLayout.MatchScaledAnchorSize(this);
+            }
         }
         finally
         {
@@ -11710,15 +11717,19 @@ public unsafe partial class Control :
         _clientWidth = clientWidth;
         _clientHeight = clientHeight;
 
-        if (newLocation)
+        bool deferEvents = this is ContainerControl container && container.DeferBoundsChangedEvents(newLocation, newSize);
+        if (newLocation && !deferEvents)
         {
             OnLocationChanged(EventArgs.Empty);
         }
 
         if (newSize)
         {
-            OnSizeChanged(EventArgs.Empty);
-            OnClientSizeChanged(EventArgs.Empty);
+            if (!deferEvents)
+            {
+                OnSizeChanged(EventArgs.Empty);
+                OnClientSizeChanged(EventArgs.Empty);
+            }
 
             // Clear PreferredSize cache for this control
             CommonProperties.xClearPreferredSizeCache(this);

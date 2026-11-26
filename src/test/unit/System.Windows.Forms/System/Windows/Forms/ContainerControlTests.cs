@@ -667,6 +667,7 @@ public class ContainerControlTests
 
                 int initialDpi = form.DeviceDpi;
                 Rectangle initialFormBounds = form.Bounds;
+                Rectangle initialDisplayRectangle = form.DisplayRectangle;
                 Rectangle initialPanelBounds = panel.Bounds;
                 Rectangle initialNestedBounds = nestedPanel.Bounds;
                 Rectangle scaledPanelBounds = new(
@@ -691,6 +692,8 @@ public class ContainerControlTests
                 }
 
                 const int extra = 20;
+                ChangeDpi(initialDpi * 2, initialFormBounds.Width * 2 + extra, initialFormBounds.Height * 2 + extra);
+
                 AnchorStyles anchor = panel.Anchor;
                 bool left = (anchor & AnchorStyles.Left) != 0;
                 bool right = (anchor & AnchorStyles.Right) != 0;
@@ -699,11 +702,31 @@ public class ContainerControlTests
                 Rectangle expected;
                 if (bool.Parse(useV2) && anchor != (AnchorStyles.Top | AnchorStyles.Left))
                 {
+                    Rectangle displayRectangle = form.DisplayRectangle;
+                    double widthFactor = (double)displayRectangle.Width / initialDisplayRectangle.Width;
+                    double heightFactor = (double)displayRectangle.Height / initialDisplayRectangle.Height;
+                    int leftDistance = (int)Math.Round(initialPanelBounds.Left * widthFactor);
+                    int rightDistance = (int)Math.Round((initialDisplayRectangle.Width - initialPanelBounds.Right) * widthFactor);
+                    int topDistance = (int)Math.Round(initialPanelBounds.Top * heightFactor);
+                    int bottomDistance = (int)Math.Round((initialDisplayRectangle.Height - initialPanelBounds.Bottom) * heightFactor);
+                    int width = left && right ? displayRectangle.Width - leftDistance - rightDistance : scaledPanelBounds.Width;
+                    int height = top && bottom ? displayRectangle.Height - topDistance - bottomDistance : scaledPanelBounds.Height;
+                    int x = left
+                        ? leftDistance
+                        : right
+                            ? displayRectangle.Width - rightDistance - width
+                            : leftDistance + (displayRectangle.Width - leftDistance - rightDistance - width) / 2;
+                    int y = top
+                        ? topDistance
+                        : bottom
+                            ? displayRectangle.Height - bottomDistance - height
+                            : topDistance + (displayRectangle.Height - topDistance - bottomDistance - height) / 2;
+
                     expected = new Rectangle(
-                        left ? 42 : right ? 54 : 48,
-                        top ? 21 : bottom ? 35 : 28,
-                        left && right ? 312 : 300,
-                        top && bottom ? 214 : 200);
+                        x,
+                        y,
+                        width,
+                        height);
                 }
                 else
                 {
@@ -714,7 +737,6 @@ public class ContainerControlTests
                     expected.Height += top && bottom ? extra : 0;
                 }
 
-                ChangeDpi(initialDpi * 2, initialFormBounds.Width * 2 + extra, initialFormBounds.Height * 2 + extra);
                 Assert.Equal(expected, panel.Bounds);
                 ChangeDpi(initialDpi, initialFormBounds.Width, initialFormBounds.Height);
                 Assert.Equal(initialPanelBounds, panel.Bounds);
@@ -730,7 +752,14 @@ public class ContainerControlTests
                 resizedBounds.Width += anchoredLeft && anchoredRight ? 20 : 0;
                 resizedBounds.Height += anchoredTop && anchoredBottom ? 20 : 0;
                 form.ClientSize += new Size(20, 20);
-                Assert.Equal(resizedBounds, panel.Bounds);
+                if (bool.Parse(useV2))
+                {
+                    AssertBoundsWithinOnePixel(resizedBounds);
+                }
+                else
+                {
+                    Assert.Equal(resizedBounds, panel.Bounds);
+                }
 
                 void ChangeDpi(int dpi, int width, int height)
                 {
@@ -742,8 +771,255 @@ public class ContainerControlTests
                     PInvokeCore.SendMessage(panel, PInvokeCore.WM_DPICHANGED_AFTERPARENT);
                     PInvokeCore.SendMessage(nestedPanel, PInvokeCore.WM_DPICHANGED_AFTERPARENT);
                 }
+
+                void AssertBoundsWithinOnePixel(Rectangle expectedBounds)
+                {
+                    Rectangle actualBounds = panel.Bounds;
+                    Assert.InRange(Math.Abs(actualBounds.X - expectedBounds.X), 0, 1);
+                    Assert.InRange(Math.Abs(actualBounds.Y - expectedBounds.Y), 0, 1);
+                    Assert.InRange(Math.Abs(actualBounds.Width - expectedBounds.Width), 0, 1);
+                    Assert.InRange(Math.Abs(actualBounds.Height - expectedBounds.Height), 0, 1);
+                }
             }
         }, anchorLayoutV2.ToString());
+
+        handle.ExitCode.Should().Be(RemoteExecutor.SuccessExitCode);
+    }
+
+    [Theory]
+    [InlineData(false, nameof(Control.Resize))]
+    [InlineData(false, nameof(Control.SizeChanged))]
+    [InlineData(false, nameof(Control.ClientSizeChanged))]
+    [InlineData(false, nameof(Control.Move))]
+    [InlineData(false, nameof(Control.LocationChanged))]
+    [InlineData(true, nameof(Control.Resize))]
+    [InlineData(true, nameof(Control.SizeChanged))]
+    [InlineData(true, nameof(Control.ClientSizeChanged))]
+    [InlineData(true, nameof(Control.Move))]
+    [InlineData(true, nameof(Control.LocationChanged))]
+    public void Form_DpiChanged_BoundsChangedHandlerKeepsChildBounds(bool anchorLayoutV2, string eventName)
+    {
+        using RemoteInvokeHandle handle = RemoteExecutor.Invoke((useV2, resizeEvent) =>
+        {
+            Application.SetHighDpiMode(HighDpiMode.PerMonitorV2).Should().BeTrue();
+            using AnchorLayoutV2Scope scope = new(bool.Parse(useV2));
+            using Form form = new()
+            {
+                AutoScaleMode = AutoScaleMode.Dpi,
+                FormBorderStyle = FormBorderStyle.None,
+                ClientSize = new Size(250, 150)
+            };
+            using Panel panel = new() { Bounds = form.ClientRectangle };
+            form.Controls.Add(panel);
+            Assert.NotEqual(IntPtr.Zero, form.Handle);
+            Assert.NotEqual(IntPtr.Zero, panel.Handle);
+            form.PerformAutoScale();
+
+            int calls = 0;
+            EventHandler handler = (_, _) =>
+            {
+                calls++;
+                panel.Bounds = form.ClientRectangle;
+            };
+
+            switch (resizeEvent)
+            {
+                case nameof(Control.Resize):
+                    form.Resize += handler;
+                    break;
+                case nameof(Control.SizeChanged):
+                    form.SizeChanged += handler;
+                    break;
+                case nameof(Control.ClientSizeChanged):
+                    form.ClientSizeChanged += handler;
+                    break;
+                case nameof(Control.Move):
+                    form.Move += handler;
+                    break;
+                case nameof(Control.LocationChanged):
+                    form.LocationChanged += handler;
+                    break;
+            }
+
+            Rectangle bounds = form.Bounds;
+            int initialDpi = form.DeviceDpi;
+            ChangeDpi(initialDpi * 2, new Rectangle(bounds.X + 10, bounds.Y + 20, bounds.Width * 2, bounds.Height * 2));
+            Assert.Equal(1, calls);
+            Assert.Equal(form.ClientRectangle, panel.Bounds);
+            ChangeDpi(initialDpi, bounds);
+            Assert.Equal(2, calls);
+            Assert.Equal(form.ClientRectangle, panel.Bounds);
+
+            if (resizeEvent is nameof(Control.Move) or nameof(Control.LocationChanged))
+            {
+                form.Left += 10;
+            }
+            else
+            {
+                form.Width += 10;
+            }
+
+            Assert.Equal(3, calls);
+            Assert.Equal(form.ClientRectangle, panel.Bounds);
+
+            void ChangeDpi(int dpi, Rectangle newBounds)
+            {
+                WPARAM dpiParam = WPARAM.MAKEWPARAM(dpi, dpi);
+                RECT suggested = new(newBounds);
+                PInvokeCore.SendMessage(panel, PInvokeCore.WM_DPICHANGED_BEFOREPARENT, dpiParam);
+                PInvokeCore.SendMessage(form, PInvokeCore.WM_DPICHANGED, dpiParam, ref suggested);
+                PInvokeCore.SendMessage(panel, PInvokeCore.WM_DPICHANGED_AFTERPARENT);
+            }
+        }, anchorLayoutV2.ToString(), eventName);
+
+        handle.ExitCode.Should().Be(RemoteExecutor.SuccessExitCode);
+    }
+
+    [Fact]
+    public void Form_DpiChanged_BoundsEventsKeepOrderAndCount()
+    {
+        using RemoteInvokeHandle handle = RemoteExecutor.Invoke(() =>
+        {
+            Application.SetHighDpiMode(HighDpiMode.PerMonitorV2).Should().BeTrue();
+            using Form form = new()
+            {
+                AutoScaleMode = AutoScaleMode.Dpi,
+                FormBorderStyle = FormBorderStyle.None,
+                ClientSize = new Size(250, 150)
+            };
+            Assert.NotEqual(IntPtr.Zero, form.Handle);
+            form.PerformAutoScale();
+
+            List<string> events = [];
+            form.Move += (_, _) => events.Add(nameof(Control.Move));
+            form.LocationChanged += (_, _) => events.Add(nameof(Control.LocationChanged));
+            form.Resize += (_, _) => events.Add(nameof(Control.Resize));
+            form.SizeChanged += (_, _) => events.Add(nameof(Control.SizeChanged));
+            form.ClientSizeChanged += (_, _) => events.Add(nameof(Control.ClientSizeChanged));
+
+            form.SetBounds(form.Left + 10, form.Top + 20, form.Width + 10, form.Height + 20);
+            string[] ordinaryEvents = [.. events];
+            Assert.Equal(
+                [nameof(Control.Move), nameof(Control.LocationChanged), nameof(Control.Resize),
+                    nameof(Control.SizeChanged), nameof(Control.ClientSizeChanged)],
+                ordinaryEvents);
+            events.Clear();
+
+            int dpi = form.DeviceDpi * 2;
+            WPARAM dpiParam = WPARAM.MAKEWPARAM(dpi, dpi);
+            RECT suggested = new(form.Left + 10, form.Top + 20, form.Right + form.Width + 10, form.Bottom + form.Height + 20);
+            PInvokeCore.SendMessage(form, PInvokeCore.WM_DPICHANGED, dpiParam, ref suggested);
+            Assert.Equal(ordinaryEvents, events);
+
+            events.Clear();
+            form.FontChanged += (_, _) => form.Width += 10;
+            dpi /= 2;
+            dpiParam = WPARAM.MAKEWPARAM(dpi, dpi);
+            suggested = new(form.Left, form.Top, form.Left + form.Width / 2, form.Top + form.Height / 2);
+            PInvokeCore.SendMessage(form, PInvokeCore.WM_DPICHANGED, dpiParam, ref suggested);
+            Assert.Equal(2, events.Count(eventName => eventName == nameof(Control.Resize)));
+            Assert.Equal(2, events.Count(eventName => eventName == nameof(Control.SizeChanged)));
+            Assert.Equal(2, events.Count(eventName => eventName == nameof(Control.ClientSizeChanged)));
+        });
+
+        handle.ExitCode.Should().Be(RemoteExecutor.SuccessExitCode);
+    }
+
+    [Theory]
+    [InlineData(false, false, false, AnchorStyles.Top | AnchorStyles.Right)]
+    [InlineData(false, false, false, AnchorStyles.None)]
+    [InlineData(false, false, true, AnchorStyles.Top | AnchorStyles.Right)]
+    [InlineData(false, true, false, AnchorStyles.Top | AnchorStyles.Right)]
+    [InlineData(false, true, true, AnchorStyles.Top | AnchorStyles.Right)]
+    [InlineData(true, false, false, AnchorStyles.Top | AnchorStyles.Right)]
+    [InlineData(true, false, false, AnchorStyles.None)]
+    [InlineData(true, false, true, AnchorStyles.Top | AnchorStyles.Right)]
+    [InlineData(true, true, false, AnchorStyles.Top | AnchorStyles.Right)]
+    [InlineData(true, true, true, AnchorStyles.Top | AnchorStyles.Right)]
+    public void Form_DpiChanged_ScrollbarAnchorsRespectFixedDimension(
+        bool vertical, bool stretch, bool anchorLayoutV2, AnchorStyles anchor)
+    {
+        using RemoteInvokeHandle handle = RemoteExecutor.Invoke((isVertical, stretchFixedDimension, useV2, initialAnchor) =>
+        {
+            Application.SetHighDpiMode(HighDpiMode.PerMonitorV2).Should().BeTrue();
+            using AnchorLayoutV2Scope scope = new(bool.Parse(useV2));
+            bool verticalScrollBar = bool.Parse(isVertical);
+            bool stretchDimension = bool.Parse(stretchFixedDimension);
+            using Form form = new()
+            {
+                AutoScaleMode = AutoScaleMode.Dpi,
+                FormBorderStyle = FormBorderStyle.None,
+                ClientSize = new Size(250, 150)
+            };
+            using ScrollBar scrollBar = verticalScrollBar ? new VScrollBar() : new HScrollBar();
+            scrollBar.Bounds = verticalScrollBar
+                ? new Rectangle(30, 40, 18, 80)
+                : new Rectangle(30, 40, 120, 18);
+            scrollBar.Anchor = Enum.Parse<AnchorStyles>(initialAnchor);
+            if (stretchDimension)
+            {
+                scrollBar.Anchor |= verticalScrollBar
+                    ? AnchorStyles.Left | AnchorStyles.Right
+                    : AnchorStyles.Top | AnchorStyles.Bottom;
+            }
+
+            form.Controls.Add(scrollBar);
+            Assert.NotEqual(IntPtr.Zero, form.Handle);
+            Assert.NotEqual(IntPtr.Zero, scrollBar.Handle);
+            form.PerformAutoScale();
+            Rectangle initialBounds = scrollBar.Bounds;
+            Rectangle initialFormBounds = form.Bounds;
+            int initialDpi = form.DeviceDpi;
+
+            ChangeDpi(initialDpi * 2, initialFormBounds.Width * 2, initialFormBounds.Height * 2);
+            int initialFixedDimension = verticalScrollBar ? initialBounds.Width : initialBounds.Height;
+            int actualFixedDimension = verticalScrollBar ? scrollBar.Width : scrollBar.Height;
+            Assert.Equal(initialFixedDimension * (stretchDimension ? 2 : 1), actualFixedDimension);
+            if (!stretchDimension && verticalScrollBar)
+            {
+                if (scrollBar.Anchor == AnchorStyles.None)
+                {
+                    int originalOffset = initialBounds.X + initialBounds.Width / 2 - initialFormBounds.Width / 2;
+                    Assert.Equal(form.ClientSize.Width / 2 + originalOffset * 2, scrollBar.Left + scrollBar.Width / 2);
+                }
+                else
+                {
+                    Assert.Equal(form.ClientSize.Width - (initialFormBounds.Width - initialBounds.Right) * 2, scrollBar.Right);
+                }
+            }
+            else if (!stretchDimension)
+            {
+                if (scrollBar.Anchor == AnchorStyles.None)
+                {
+                    int originalOffset = initialBounds.Y + initialBounds.Height / 2 - initialFormBounds.Height / 2;
+                    Assert.Equal(form.ClientSize.Height / 2 + originalOffset * 2, scrollBar.Top + scrollBar.Height / 2);
+                }
+                else
+                {
+                    Assert.Equal(initialBounds.Top * 2, scrollBar.Top);
+                }
+            }
+
+            ChangeDpi(initialDpi, initialFormBounds.Width, initialFormBounds.Height);
+            Assert.Equal(initialBounds, scrollBar.Bounds);
+
+            ChangeDpi(initialDpi * 3 / 2, initialFormBounds.Width * 3 / 2, initialFormBounds.Height * 3 / 2);
+            actualFixedDimension = verticalScrollBar ? scrollBar.Width : scrollBar.Height;
+            Assert.Equal(stretchDimension ? initialFixedDimension * 3 / 2 : initialFixedDimension, actualFixedDimension);
+            ChangeDpi(initialDpi, initialFormBounds.Width, initialFormBounds.Height);
+            Assert.InRange(Math.Abs(initialBounds.X - scrollBar.Left), 0, 1);
+            Assert.InRange(Math.Abs(initialBounds.Y - scrollBar.Top), 0, 1);
+            Assert.Equal(initialBounds.Size, scrollBar.Size);
+
+            void ChangeDpi(int dpi, int width, int height)
+            {
+                WPARAM dpiParam = WPARAM.MAKEWPARAM(dpi, dpi);
+                RECT suggested = new(initialFormBounds.X, initialFormBounds.Y, initialFormBounds.X + width, initialFormBounds.Y + height);
+                PInvokeCore.SendMessage(scrollBar, PInvokeCore.WM_DPICHANGED_BEFOREPARENT, dpiParam);
+                PInvokeCore.SendMessage(form, PInvokeCore.WM_DPICHANGED, dpiParam, ref suggested);
+                PInvokeCore.SendMessage(scrollBar, PInvokeCore.WM_DPICHANGED_AFTERPARENT);
+            }
+        }, vertical.ToString(), stretch.ToString(), anchorLayoutV2.ToString(), anchor.ToString());
 
         handle.ExitCode.Should().Be(RemoteExecutor.SuccessExitCode);
     }

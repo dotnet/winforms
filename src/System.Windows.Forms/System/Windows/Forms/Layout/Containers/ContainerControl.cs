@@ -46,6 +46,10 @@ public class ContainerControl : ScrollableControl, IContainerControl
 
     internal bool IsScaledByDpiChangedEvent => _isScaledByDpiChangedEvent;
 
+    private int _boundsChangeDeferralCount;
+
+    private List<(bool LocationChanged, bool SizeChanged)>? _deferredBoundsChanges;
+
     private BitVector32 _state;
 
     /// <summary>
@@ -1374,6 +1378,49 @@ public class ContainerControl : ScrollableControl, IContainerControl
         }
     }
 
+    internal bool DeferBoundsChangedEvents(bool locationChanged, bool sizeChanged)
+    {
+        if (_boundsChangeDeferralCount == 0)
+        {
+            return false;
+        }
+
+        if (locationChanged || sizeChanged)
+        {
+            (_deferredBoundsChanges ??= []).Add((locationChanged, sizeChanged));
+        }
+
+        return true;
+    }
+
+    private void ResumeBoundsChangedEvents()
+    {
+        if (--_boundsChangeDeferralCount != 0)
+        {
+            return;
+        }
+
+        List<(bool LocationChanged, bool SizeChanged)>? changes = _deferredBoundsChanges;
+        _deferredBoundsChanges = null;
+
+        if (changes is not null)
+        {
+            foreach ((bool locationChanged, bool sizeChanged) in changes)
+            {
+                if (locationChanged)
+                {
+                    OnLocationChanged(EventArgs.Empty);
+                }
+
+                if (sizeChanged)
+                {
+                    OnSizeChanged(EventArgs.Empty);
+                    OnClientSizeChanged(EventArgs.Empty);
+                }
+            }
+        }
+    }
+
     internal void ScaleContainerForDpi(int deviceDpiNew, int deviceDpiOld, Rectangle suggestedRectangle)
     {
         CommonProperties.xClearAllPreferredSizeCaches(this);
@@ -1403,29 +1450,38 @@ public class ContainerControl : ScrollableControl, IContainerControl
             Font fontForDpi = GetScaledFont(Font, deviceDpiNew, deviceDpiOld);
             ScaledControlFont = fontForDpi;
 
-            // Scale children against the new display rectangle, not the old one.
-            if (IsHandleCreated)
+            // Update the display rectangle before scaling children, but preserve the previous
+            // ordering of bounds notifications so event handlers see scaled children.
+            _boundsChangeDeferralCount++;
+            try
             {
-                PInvoke.SetWindowPos(
-                    this,
-                    HWND.HWND_TOP,
-                    suggestedRectangle.X,
-                    suggestedRectangle.Y,
-                    suggestedRectangle.Width,
-                    suggestedRectangle.Height,
-                    SET_WINDOW_POS_FLAGS.SWP_NOZORDER | SET_WINDOW_POS_FLAGS.SWP_NOACTIVATE);
-            }
-
-            if (IsFontSet())
-            {
-                SetScaledFont(fontForDpi);
-            }
-            else
-            {
-                using (new LayoutTransaction(ParentInternal, this, PropertyNames.Font))
+                if (IsHandleCreated)
                 {
-                    OnFontChanged(EventArgs.Empty);
+                    PInvoke.SetWindowPos(
+                        this,
+                        HWND.HWND_TOP,
+                        suggestedRectangle.X,
+                        suggestedRectangle.Y,
+                        suggestedRectangle.Width,
+                        suggestedRectangle.Height,
+                        SET_WINDOW_POS_FLAGS.SWP_NOZORDER | SET_WINDOW_POS_FLAGS.SWP_NOACTIVATE);
                 }
+
+                if (IsFontSet())
+                {
+                    SetScaledFont(fontForDpi);
+                }
+                else
+                {
+                    using (new LayoutTransaction(ParentInternal, this, PropertyNames.Font))
+                    {
+                        OnFontChanged(EventArgs.Empty);
+                    }
+                }
+            }
+            finally
+            {
+                ResumeBoundsChangedEvents();
             }
         }
         finally
