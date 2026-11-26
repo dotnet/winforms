@@ -98,6 +98,9 @@ public partial class Form : ContainerControl
     private static readonly BitVector32.Section s_formStateExWindowBoundsHeightIsClientSize = BitVector32.CreateSection(1, s_formStateExWindowBoundsWidthIsClientSize);
     private static readonly BitVector32.Section s_formStateExWindowClosing = BitVector32.CreateSection(1, s_formStateExWindowBoundsHeightIsClientSize);
     private static readonly BitVector32.Section s_formStateExInCloseEventDispatch = BitVector32.CreateSection(1, s_formStateExWindowClosing);
+#if NET11_0_OR_GREATER
+    private static readonly BitVector32.Section s_formStateExApplyingKioskStyles = BitVector32.CreateSection(1, s_formStateExInCloseEventDispatch);
+#endif
 
     private const int SizeGripSize = 16;
 
@@ -6372,8 +6375,18 @@ public partial class Form : ContainerControl
         WINDOW_STYLE styleChanges = (WINDOW_STYLE)(previousCreateStyle ^ newParams.Style)
             | WINDOW_STYLE.WS_MAXIMIZE | WINDOW_STYLE.WS_MINIMIZE;
         WINDOW_EX_STYLE exStyleChanges = (WINDOW_EX_STYLE)(previousCreateExStyle ^ newParams.ExStyle);
-        WindowStyle = (previousStyle & ~styleChanges) | ((WINDOW_STYLE)newParams.Style & styleChanges);
-        ExtendedWindowStyle = (previousExtendedStyle & ~exStyleChanges) | ((WINDOW_EX_STYLE)newParams.ExStyle & exStyleChanges);
+        // A style write can synchronously recalculate the client area at the old outer bounds.
+        // Keep the managed bounds unchanged until SetWindowPos applies the final rectangle.
+        _formStateEx[s_formStateExApplyingKioskStyles] = 1;
+        try
+        {
+            WindowStyle = (previousStyle & ~styleChanges) | ((WINDOW_STYLE)newParams.Style & styleChanges);
+            ExtendedWindowStyle = (previousExtendedStyle & ~exStyleChanges) | ((WINDOW_EX_STYLE)newParams.ExStyle & exStyleChanges);
+        }
+        finally
+        {
+            _formStateEx[s_formStateExApplyingKioskStyles] = 0;
+        }
 
         if (!PInvoke.SetWindowPos(
             this,
@@ -7423,6 +7436,12 @@ public partial class Form : ContainerControl
             case PInvokeCore.WM_GETMINMAXINFO:
                 WmGetMinMaxInfo(ref m);
                 break;
+#if NET11_0_OR_GREATER
+            case PInvokeCore.WM_MOVE or PInvokeCore.WM_WINDOWPOSCHANGED
+                when _formStateEx[s_formStateExApplyingKioskStyles] != 0:
+                DefWndProc(ref m);
+                break;
+#endif
             case PInvokeCore.WM_WINDOWPOSCHANGED:
                 WmWindowPosChanged(ref m);
                 break;

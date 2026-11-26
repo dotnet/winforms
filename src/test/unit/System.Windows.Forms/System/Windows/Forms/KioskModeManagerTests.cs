@@ -551,6 +551,47 @@ public class KioskModeManagerTests
     }
 
     [WinFormsFact]
+    public void KioskModeManager_FullScreen_VisibleForm_RepeatedEntryOnlyNotifiesFinalBounds()
+    {
+        using WindowPositionForm form = new()
+        {
+            Bounds = new Rectangle(100, 100, 1400, 600),
+            StartPosition = FormStartPosition.Manual
+        };
+        form.Show();
+        using KioskModeManager manager = new() { ContainerControl = form };
+        Rectangle normalBounds = form.Bounds;
+        Size normalClientSize = form.ClientSize;
+        Rectangle fullscreenBounds = Screen.FromRectangle(normalBounds).Bounds;
+        List<(Rectangle Bounds, Size ClientSize)> sizes = [];
+        form.SizeChanged += (_, _) => sizes.Add((form.Bounds, form.ClientSize));
+
+        // The extra notification can occur after a maximized fullscreen round trip and a restore to Normal.
+        form.WindowState = FormWindowState.Maximized;
+        manager.FullScreen = true;
+        manager.FullScreen = false;
+        form.WindowState = FormWindowState.Normal;
+        Application.DoEvents();
+
+        for (int i = 0; i < 3; i++)
+        {
+            sizes.Clear();
+            form.NativeSizes.Clear();
+            manager.FullScreen = true;
+            Application.DoEvents();
+            Assert.Equal(new[] { fullscreenBounds.Size }, form.NativeSizes);
+            Assert.Equal(new[] { (fullscreenBounds, fullscreenBounds.Size) }, sizes);
+
+            sizes.Clear();
+            form.NativeSizes.Clear();
+            manager.FullScreen = false;
+            Application.DoEvents();
+            Assert.Equal(new[] { normalBounds.Size }, form.NativeSizes);
+            Assert.Equal(new[] { (normalBounds, normalClientSize) }, sizes);
+        }
+    }
+
+    [WinFormsFact]
     public void KioskModeManager_FullScreen_RefreshBounds_WhenUnchanged_DoesNotReapplyStyle()
     {
         using WindowPositionForm form = new();
