@@ -92,19 +92,19 @@ public class ListBoxIntegerCollectionTests
 
         // Set first.
         collection[0] = 4;
-        Assert.Equal(new int[] { 4, 2, 3 }, collection.Cast<int>());
+        Assert.Equal(new int[] { 2, 3, 4 }, collection.Cast<int>());
         Assert.Empty(owner.CustomTabOffsets);
         Assert.False(owner.IsHandleCreated);
 
         // Set middle.
         collection[1] = 1;
-        Assert.Equal(new int[] { 4, 1, 3 }, collection.Cast<int>());
+        Assert.Equal(new int[] { 1, 2, 4 }, collection.Cast<int>());
         Assert.Empty(owner.CustomTabOffsets);
         Assert.False(owner.IsHandleCreated);
 
         // Set last.
-        collection[2] = 4;
-        Assert.Equal(new int[] { 4, 1, 4 }, collection.Cast<int>());
+        collection[2] = 1;
+        Assert.Equal(new int[] { 1, 2 }, collection.Cast<int>());
         Assert.Empty(owner.CustomTabOffsets);
         Assert.False(owner.IsHandleCreated);
     }
@@ -118,20 +118,20 @@ public class ListBoxIntegerCollectionTests
 
         // Set first.
         collection[0] = 4;
-        Assert.Equal(new int[] { 4, 2, 3 }, collection.Cast<int>());
-        Assert.Equal(new int[] { 4, 2, 3 }, owner.CustomTabOffsets.Cast<int>());
+        Assert.Equal(new int[] { 2, 3, 4 }, collection.Cast<int>());
+        Assert.Equal(new int[] { 2, 3, 4 }, owner.CustomTabOffsets.Cast<int>());
         Assert.False(owner.IsHandleCreated);
 
         // Set middle.
         collection[1] = 1;
-        Assert.Equal(new int[] { 4, 1, 3 }, collection.Cast<int>());
-        Assert.Equal(new int[] { 4, 1, 3 }, owner.CustomTabOffsets.Cast<int>());
+        Assert.Equal(new int[] { 1, 2, 4 }, collection.Cast<int>());
+        Assert.Equal(new int[] { 1, 2, 4 }, owner.CustomTabOffsets.Cast<int>());
         Assert.False(owner.IsHandleCreated);
 
         // Set last.
-        collection[2] = 4;
-        Assert.Equal(new int[] { 4, 1, 4 }, collection.Cast<int>());
-        Assert.Equal(new int[] { 4, 1, 4 }, owner.CustomTabOffsets.Cast<int>());
+        collection[2] = 1;
+        Assert.Equal(new int[] { 1, 2 }, collection.Cast<int>());
+        Assert.Equal(new int[] { 1, 2 }, owner.CustomTabOffsets.Cast<int>());
         Assert.False(owner.IsHandleCreated);
     }
 
@@ -151,7 +151,7 @@ public class ListBoxIntegerCollectionTests
 
         // Set first.
         collection[0] = 4;
-        Assert.Equal(new int[] { 4, 2, 3 }, collection.Cast<int>());
+        Assert.Equal(new int[] { 2, 3, 4 }, collection.Cast<int>());
         Assert.Empty(owner.CustomTabOffsets);
         Assert.True(owner.IsHandleCreated);
         Assert.Equal(0, invalidatedCallCount);
@@ -160,7 +160,7 @@ public class ListBoxIntegerCollectionTests
 
         // Set middle.
         collection[1] = 1;
-        Assert.Equal(new int[] { 4, 1, 3 }, collection.Cast<int>());
+        Assert.Equal(new int[] { 1, 2, 4 }, collection.Cast<int>());
         Assert.Empty(owner.CustomTabOffsets);
         Assert.True(owner.IsHandleCreated);
         Assert.Equal(0, invalidatedCallCount);
@@ -168,8 +168,8 @@ public class ListBoxIntegerCollectionTests
         Assert.Equal(0, createdCallCount);
 
         // Set last.
-        collection[2] = 4;
-        Assert.Equal(new int[] { 4, 1, 4 }, collection.Cast<int>());
+        collection[2] = 1;
+        Assert.Equal(new int[] { 1, 2 }, collection.Cast<int>());
         Assert.Empty(owner.CustomTabOffsets);
         Assert.True(owner.IsHandleCreated);
         Assert.Equal(0, invalidatedCallCount);
@@ -193,8 +193,8 @@ public class ListBoxIntegerCollectionTests
 
         // Set first.
         collection[0] = 4;
-        Assert.Equal(new int[] { 4, 2, 3 }, collection.Cast<int>());
-        Assert.Equal(new int[] { 4, 2, 3 }, owner.CustomTabOffsets.Cast<int>());
+        Assert.Equal(new int[] { 2, 3, 4 }, collection.Cast<int>());
+        Assert.Equal(new int[] { 2, 3, 4 }, owner.CustomTabOffsets.Cast<int>());
         Assert.True(owner.IsHandleCreated);
         Assert.Equal(0, invalidatedCallCount);
         Assert.Equal(0, styleChangedCallCount);
@@ -202,21 +202,43 @@ public class ListBoxIntegerCollectionTests
 
         // Set middle.
         collection[1] = 1;
-        Assert.Equal(new int[] { 4, 1, 3 }, collection.Cast<int>());
-        Assert.Equal(new int[] { 4, 1, 3 }, owner.CustomTabOffsets.Cast<int>());
+        Assert.Equal(new int[] { 1, 2, 4 }, collection.Cast<int>());
+        Assert.Equal(new int[] { 1, 2, 4 }, owner.CustomTabOffsets.Cast<int>());
         Assert.True(owner.IsHandleCreated);
         Assert.Equal(0, invalidatedCallCount);
         Assert.Equal(0, styleChangedCallCount);
         Assert.Equal(0, createdCallCount);
 
         // Set last.
-        collection[2] = 4;
-        Assert.Equal(new int[] { 4, 1, 4 }, collection.Cast<int>());
-        Assert.Equal(new int[] { 4, 1, 4 }, owner.CustomTabOffsets.Cast<int>());
+        collection[2] = 1;
+        Assert.Equal(new int[] { 1, 2 }, collection.Cast<int>());
+        Assert.Equal(new int[] { 1, 2 }, owner.CustomTabOffsets.Cast<int>());
         Assert.True(owner.IsHandleCreated);
         Assert.Equal(0, invalidatedCallCount);
         Assert.Equal(0, styleChangedCallCount);
         Assert.Equal(0, createdCallCount);
+    }
+
+    [WinFormsTheory]
+    [InlineData(false)]
+    [InlineData(true)]
+    public void ListBoxIntegerCollection_Item_SetExistingValue_DoesNotDuplicate(bool useIList)
+    {
+        using ListBox owner = new();
+        ListBox.IntegerCollection collection = owner.CustomTabOffsets;
+        collection.AddRange(1, 2, 3);
+
+        if (useIList)
+        {
+            ((IList)collection)[1] = 3;
+        }
+        else
+        {
+            collection[1] = 3;
+        }
+
+        Assert.Equal(new int[] { 1, 3 }, collection.Cast<int>());
+        Assert.False(owner.IsHandleCreated);
     }
 
     [WinFormsTheory]
@@ -1565,19 +1587,19 @@ public class ListBoxIntegerCollectionTests
 
         // Set first.
         collection[0] = 4;
-        Assert.Equal(new int[] { 4, 2, 3 }, collection.Cast<int>());
+        Assert.Equal(new int[] { 2, 3, 4 }, collection.Cast<int>());
         Assert.Empty(owner.CustomTabOffsets);
         Assert.False(owner.IsHandleCreated);
 
         // Set middle.
         collection[1] = 1;
-        Assert.Equal(new int[] { 4, 1, 3 }, collection.Cast<int>());
+        Assert.Equal(new int[] { 1, 2, 4 }, collection.Cast<int>());
         Assert.Empty(owner.CustomTabOffsets);
         Assert.False(owner.IsHandleCreated);
 
         // Set last.
-        collection[2] = 4;
-        Assert.Equal(new int[] { 4, 1, 4 }, collection.Cast<int>());
+        collection[2] = 1;
+        Assert.Equal(new int[] { 1, 2 }, collection.Cast<int>());
         Assert.Empty(owner.CustomTabOffsets);
         Assert.False(owner.IsHandleCreated);
     }
@@ -1594,20 +1616,20 @@ public class ListBoxIntegerCollectionTests
 
         // Set first.
         collection[0] = 4;
-        Assert.Equal(new int[] { 4, 2, 3 }, collection.Cast<int>());
-        Assert.Equal(new int[] { 4, 2, 3 }, owner.CustomTabOffsets.Cast<int>());
+        Assert.Equal(new int[] { 2, 3, 4 }, collection.Cast<int>());
+        Assert.Equal(new int[] { 2, 3, 4 }, owner.CustomTabOffsets.Cast<int>());
         Assert.False(owner.IsHandleCreated);
 
         // Set middle.
         collection[1] = 1;
-        Assert.Equal(new int[] { 4, 1, 3 }, collection.Cast<int>());
-        Assert.Equal(new int[] { 4, 1, 3 }, owner.CustomTabOffsets.Cast<int>());
+        Assert.Equal(new int[] { 1, 2, 4 }, collection.Cast<int>());
+        Assert.Equal(new int[] { 1, 2, 4 }, owner.CustomTabOffsets.Cast<int>());
         Assert.False(owner.IsHandleCreated);
 
         // Set last.
-        collection[2] = 4;
-        Assert.Equal(new int[] { 4, 1, 4 }, collection.Cast<int>());
-        Assert.Equal(new int[] { 4, 1, 4 }, owner.CustomTabOffsets.Cast<int>());
+        collection[2] = 1;
+        Assert.Equal(new int[] { 1, 2 }, collection.Cast<int>());
+        Assert.Equal(new int[] { 1, 2 }, owner.CustomTabOffsets.Cast<int>());
         Assert.False(owner.IsHandleCreated);
     }
 
@@ -1632,7 +1654,7 @@ public class ListBoxIntegerCollectionTests
 
         // Set first.
         collection[0] = 4;
-        Assert.Equal(new int[] { 4, 2, 3 }, collection.Cast<int>());
+        Assert.Equal(new int[] { 2, 3, 4 }, collection.Cast<int>());
         Assert.Empty(owner.CustomTabOffsets);
         Assert.True(owner.IsHandleCreated);
         Assert.Equal(0, invalidatedCallCount);
@@ -1641,7 +1663,7 @@ public class ListBoxIntegerCollectionTests
 
         // Set middle.
         collection[1] = 1;
-        Assert.Equal(new int[] { 4, 1, 3 }, collection.Cast<int>());
+        Assert.Equal(new int[] { 1, 2, 4 }, collection.Cast<int>());
         Assert.Empty(owner.CustomTabOffsets);
         Assert.True(owner.IsHandleCreated);
         Assert.Equal(0, invalidatedCallCount);
@@ -1649,8 +1671,8 @@ public class ListBoxIntegerCollectionTests
         Assert.Equal(0, createdCallCount);
 
         // Set last.
-        collection[2] = 4;
-        Assert.Equal(new int[] { 4, 1, 4 }, collection.Cast<int>());
+        collection[2] = 1;
+        Assert.Equal(new int[] { 1, 2 }, collection.Cast<int>());
         Assert.Empty(owner.CustomTabOffsets);
         Assert.True(owner.IsHandleCreated);
         Assert.Equal(0, invalidatedCallCount);
@@ -1677,8 +1699,8 @@ public class ListBoxIntegerCollectionTests
 
         // Set first.
         collection[0] = 4;
-        Assert.Equal(new int[] { 4, 2, 3 }, collection.Cast<int>());
-        Assert.Equal(new int[] { 4, 2, 3 }, owner.CustomTabOffsets.Cast<int>());
+        Assert.Equal(new int[] { 2, 3, 4 }, collection.Cast<int>());
+        Assert.Equal(new int[] { 2, 3, 4 }, owner.CustomTabOffsets.Cast<int>());
         Assert.True(owner.IsHandleCreated);
         Assert.Equal(0, invalidatedCallCount);
         Assert.Equal(0, styleChangedCallCount);
@@ -1686,17 +1708,17 @@ public class ListBoxIntegerCollectionTests
 
         // Set middle.
         collection[1] = 1;
-        Assert.Equal(new int[] { 4, 1, 3 }, collection.Cast<int>());
-        Assert.Equal(new int[] { 4, 1, 3 }, owner.CustomTabOffsets.Cast<int>());
+        Assert.Equal(new int[] { 1, 2, 4 }, collection.Cast<int>());
+        Assert.Equal(new int[] { 1, 2, 4 }, owner.CustomTabOffsets.Cast<int>());
         Assert.True(owner.IsHandleCreated);
         Assert.Equal(0, invalidatedCallCount);
         Assert.Equal(0, styleChangedCallCount);
         Assert.Equal(0, createdCallCount);
 
         // Set last.
-        collection[2] = 4;
-        Assert.Equal(new int[] { 4, 1, 4 }, collection.Cast<int>());
-        Assert.Equal(new int[] { 4, 1, 4 }, owner.CustomTabOffsets.Cast<int>());
+        collection[2] = 1;
+        Assert.Equal(new int[] { 1, 2 }, collection.Cast<int>());
+        Assert.Equal(new int[] { 1, 2 }, owner.CustomTabOffsets.Cast<int>());
         Assert.True(owner.IsHandleCreated);
         Assert.Equal(0, invalidatedCallCount);
         Assert.Equal(0, styleChangedCallCount);
