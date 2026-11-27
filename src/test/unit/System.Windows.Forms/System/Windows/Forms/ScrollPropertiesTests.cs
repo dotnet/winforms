@@ -113,6 +113,29 @@ public class ScrollPropertiesTests
     }
 
     [WinFormsTheory]
+    [InlineData(false, 10, 10, 6)]
+    [InlineData(false, 0, 0, 0)]
+    [InlineData(false, int.MaxValue, int.MaxValue, 6)]
+    [InlineData(true, 10, 10, 6)]
+    [InlineData(true, 0, 0, 0)]
+    [InlineData(true, int.MaxValue, int.MaxValue, 6)]
+    public void ScrollProperties_LargeChange_WideRange_PreservesStoredValue(bool vertical, int value, int expected, int restricted)
+    {
+        using ScrollableControl container = new();
+        ScrollProperties properties = vertical ? container.VerticalScroll : container.HorizontalScroll;
+        properties.Maximum = int.MaxValue;
+        properties.LargeChange = value;
+
+        Assert.Equal(expected, properties.LargeChange);
+        Assert.Equal(expected == 0 ? 0 : 1, properties.SmallChange);
+        properties.Maximum = 5;
+        Assert.Equal(restricted, properties.LargeChange);
+        properties.Maximum = int.MaxValue;
+        Assert.Equal(expected, properties.LargeChange);
+        Assert.False(container.IsHandleCreated);
+    }
+
+    [WinFormsTheory]
     [MemberData(nameof(LargeChange_Set_TestData))]
     public void ScrollProperties_LargeChange_SetAutoScrollContainer_GetReturnsExpected(int value)
     {
