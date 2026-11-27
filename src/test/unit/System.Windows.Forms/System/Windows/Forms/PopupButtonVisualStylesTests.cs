@@ -235,6 +235,27 @@ public class PopupButtonVisualStylesTests
     }
 
     [WinFormsFact]
+    public void AnimatedPopupButtonRenderer_ResetBackColor_UsesAmbientAsCustomBaseInNet11()
+    {
+        using Panel parent = new() { BackColor = Color.FromArgb(31, 63, 95) };
+        using Button button = new()
+        {
+            FlatStyle = FlatStyle.Popup,
+            VisualStylesMode = VisualStylesMode.Net11,
+            BackColor = Color.FromArgb(10, 20, 30)
+        };
+        button.ResetBackColor();
+        parent.Controls.Add(button);
+        using AnimatedPopupButtonRenderer renderer = new(button);
+
+        var (baseColor, _, _) = renderer.GetStateColors();
+
+        Assert.False(button.ShouldSerializeBackColor());
+        Assert.False(button.UseVisualStyleBackColor);
+        Assert.Equal(parent.BackColor, baseColor);
+    }
+
+    [WinFormsFact]
     public void PopupButtonKeyCapRenderer_FocusedDefault_RendersWithoutThrow()
     {
         PopupButtonRenderContext context = CreateContext(

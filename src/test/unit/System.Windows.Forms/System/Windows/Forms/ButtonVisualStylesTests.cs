@@ -841,6 +841,30 @@ public class ButtonVisualStylesTests
         Assert.False(button.ShouldSerializeBackColor());
     }
 
+    [WinFormsTheory]
+    [InlineData(FlatStyle.Standard)]
+    [InlineData(FlatStyle.Flat)]
+    public void ButtonDarkModeAdapter_ResetBackColor_UsesAmbientAsCustomBaseInNet11(FlatStyle flatStyle)
+    {
+        using Panel parent = new() { BackColor = Color.FromArgb(31, 63, 95) };
+        using Button button = new()
+        {
+            FlatStyle = flatStyle,
+            VisualStylesMode = VisualStylesMode.Net11,
+            BackColor = Color.FromArgb(10, 20, 30)
+        };
+        button.ResetBackColor();
+        parent.Controls.Add(button);
+        ButtonInternal.ButtonDarkModeAdapter adapter = new(button);
+        dynamic accessor = adapter.TestAccessor.Dynamic;
+
+        Color actual = (Color)accessor.GetButtonBackColor(VisualStyles.PushButtonState.Normal);
+
+        Assert.False(button.ShouldSerializeBackColor());
+        Assert.False(button.UseVisualStyleBackColor);
+        Assert.Equal(parent.BackColor, actual);
+    }
+
     public static TheoryData<Type, FlatStyle, ContentAlignment, TextImageRelation> ModernImageLayoutData
     {
         get
