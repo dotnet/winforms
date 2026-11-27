@@ -351,6 +351,7 @@ public partial class ToolStripLabel : ToolStripItem
         {
             Font font = Font;
             Color textColor = ForeColor;
+            Rectangle textRect = InternalLayout.TextRectangle;
             if (IsLink)
             {
                 LinkUtilities.EnsureLinkFonts(font, LinkBehavior, ref _linkFont, ref _hoverLinkFont);
@@ -370,9 +371,17 @@ public partial class ToolStripLabel : ToolStripItem
                     font = _linkFont;
                     textColor = (LinkVisited) ? VisitedLinkColor : LinkColor;
                 }
+
+                if (Pressed || Selected)
+                {
+                    if (DisplayInformation.HighContrast)
+                    {
+                        g.FillRectangle(SystemBrushes.Highlight, textRect);
+                        textColor = SystemColors.HighlightText;
+                    }
+                }
             }
 
-            Rectangle textRect = InternalLayout.TextRectangle;
             renderer.DrawItemText(new ToolStripItemTextRenderEventArgs(g, this, Text, textRect, textColor, font, InternalLayout.TextFormat));
         }
     }
