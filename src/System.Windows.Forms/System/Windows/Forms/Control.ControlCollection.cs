@@ -66,8 +66,15 @@ public partial class Control
                 return;
             }
 
+            Control? oldParent = value._parent;
+            int oldParentChildIndex = oldParent?.Controls.GetChildIndex(value, throwException: false) ?? -1;
+            int oldParentTabPageIndex = oldParent is TabControl parentTabControl && value is TabPage parentTabPage
+                ? parentTabControl.TabPages.IndexOf(parentTabPage)
+                : -1;
+            int savedTabIndex = value._tabIndex;
+
             // Remove the new control from its old parent (if any)
-            value._parent?.Controls.Remove(value);
+            oldParent?.Controls.Remove(value);
 
             // Add the control
             InnerList.Add(value);
@@ -93,13 +100,40 @@ public partial class Control
 
             using (SuspendLayoutScope scope = new(Owner, performLayout: false))
             {
-                Control? oldParent = value._parent;
                 try
                 {
                     // AssignParent calls into user code - this could throw, which
                     // would make us short-circuit the rest of the reparenting logic.
                     // you could end up with a control half reparented.
                     value.AssignParent(Owner);
+                }
+                catch when (value._parent is null)
+                {
+                    // Only roll back a rejected parent assignment, not exceptions from later callbacks.
+                    InnerList.Remove(value);
+                    value._tabIndex = savedTabIndex;
+
+                    if (oldParent is not null)
+                    {
+                        if (oldParent is TabControl previousTabControl
+                            && value is TabPage previousTabPage
+                            && oldParentTabPageIndex >= 0)
+                        {
+                            previousTabControl.TabPages.Insert(oldParentTabPageIndex, previousTabPage);
+                        }
+                        else
+                        {
+                            oldParent.Controls.Add(value);
+                            if (oldParentChildIndex >= 0)
+                            {
+                                oldParent.Controls.SetChildIndex(value, oldParentChildIndex);
+                            }
+                        }
+
+                        value._tabIndex = savedTabIndex;
+                    }
+
+                    throw;
                 }
                 finally
                 {
