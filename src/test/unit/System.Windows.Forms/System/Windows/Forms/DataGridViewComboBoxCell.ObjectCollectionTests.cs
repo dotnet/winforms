@@ -108,6 +108,26 @@ public class DataGridViewComboBoxCell_ObjectCollectionTests : IDisposable
         _collection[2].Should().Be("Item3");
     }
 
+    [WinFormsTheory]
+    [InlineData(false)]
+    [InlineData(true)]
+    public void ObjectCollection_AddRange_Self_AppendsAllItems(bool sorted)
+    {
+        _comboBoxCell.Sorted = sorted;
+        DataGridViewComboBoxCell.ObjectCollection items = _comboBoxCell.Items;
+        items.AddRange("B", "A");
+
+        items.AddRange(items);
+
+        Assert.Equal(sorted ? new[] { "A", "A", "B", "B" } : new[] { "B", "A", "B", "A" }, items.Cast<string>());
+    }
+
+    [WinFormsFact]
+    public void ObjectCollection_AddRange_NullObjectCollection_ThrowsArgumentNullException()
+    {
+        Assert.Throws<ArgumentNullException>("items", () => _collection.AddRange((DataGridViewComboBoxCell.ObjectCollection)null!));
+    }
+
     [WinFormsFact]
     public void ObjectCollection_AddRange_DoesNotAddItems_WhenExceptionIsThrown()
     {
