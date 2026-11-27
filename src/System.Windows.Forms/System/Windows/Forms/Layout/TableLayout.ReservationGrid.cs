@@ -12,41 +12,45 @@ internal partial class TableLayout
     {
         private int _numColumns = 1;
         private readonly List<BitArray> _rows = [];
+        private int _startIndex;
 
         public bool IsReserved(int column, int rowOffset)
         {
-            if (rowOffset >= _rows.Count)
+            // Check the logical offset before adding the head to avoid integer overflow.
+            if (rowOffset >= _rows.Count - _startIndex)
             {
                 return false;
             }
 
-            if (column >= _rows[rowOffset].Length)
+            int rowIndex = _startIndex + rowOffset;
+            if (column >= _rows[rowIndex].Length)
             {
                 return false;
             }
 
-            return _rows[rowOffset][column];
+            return _rows[rowIndex][column];
         }
 
         public void Reserve(int column, int rowOffset)
         {
             Debug.Assert(!IsReserved(column, rowOffset), "we should not be reserving already reserved space.");
-            while (rowOffset >= _rows.Count)
+            int rowIndex = _startIndex + rowOffset;
+            while (rowIndex >= _rows.Count)
             {
                 _rows.Add(new BitArray(_numColumns));
             }
 
-            // increase the length of the _rows[rowOffset] if necessary
-            if (column >= _rows[rowOffset].Length)
+            // increase the length of the row if necessary
+            if (column >= _rows[rowIndex].Length)
             {
-                _rows[rowOffset].Length = column + 1;
+                _rows[rowIndex].Length = column + 1;
                 if (column >= _numColumns)
                 {
                     _numColumns = column + 1;
                 }
             }
 
-            _rows[rowOffset][column] = true;
+            _rows[rowIndex][column] = true;
             Debug.Assert(IsReserved(column, rowOffset), "IsReserved/Reserved mismatch.");
         }
 
@@ -64,9 +68,24 @@ internal partial class TableLayout
 
         public void AdvanceRow()
         {
-            if (_rows.Count > 0)
+            if (_startIndex >= _rows.Count)
             {
-                _rows.RemoveAt(0);
+                return;
+            }
+
+            _startIndex++;
+
+            if (_startIndex == _rows.Count)
+            {
+                _rows.Clear();
+                _startIndex = 0;
+            }
+            else if (_startIndex >= _rows.Count - _startIndex)
+            {
+                // Compact once discarded rows are at least as numerous as live rows. This bounds retained
+                // storage while keeping row advancement amortized constant time.
+                _rows.RemoveRange(0, _startIndex);
+                _startIndex = 0;
             }
         }
     }
