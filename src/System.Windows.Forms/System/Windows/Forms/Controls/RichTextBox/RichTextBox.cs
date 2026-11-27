@@ -3535,9 +3535,10 @@ public partial class RichTextBox : TextBoxBase
                 // renderer first in the case of the RTF control.
                 base.WndProc(ref m);
 
+                bool shouldPaintDisabledModernBackColor = EffectiveVisualStylesMode >= VisualStylesMode.Net11;
                 if (Handle == m.HWND
                     && !Enabled
-                    && Application.IsDarkModeEnabled)
+                    && (shouldPaintDisabledModernBackColor || Application.IsDarkModeEnabled))
                 {
                     // If the control is disabled, we don't want to let the RTF control
                     // paint anything else. We will paint the background and the unformatted
@@ -3546,7 +3547,15 @@ public partial class RichTextBox : TextBoxBase
                     using Graphics g = Graphics.FromHwndInternal(Handle);
 
                     // Paint the background
-                    g.FillRectangle(SystemBrushes.ControlDark, ClientRectangle);
+                    Color backgroundColor = shouldPaintDisabledModernBackColor
+                        ? ShouldSerializeBackColor()
+                            ? BackColor
+                            : Application.IsDarkModeEnabled && DarkModeRequestState is true
+                                ? SystemColors.ControlDark
+                                : SystemColors.Control
+                        : SystemColors.ControlDark;
+                    using var backgroundBrush = backgroundColor.GetCachedSolidBrushScope();
+                    g.FillRectangle(backgroundBrush, ClientRectangle);
 
                     // Use EM_GETRECT to get the text formatting rectangle, which accounts
                     // for internal borders and padding, rather than using ClientRectangle.
