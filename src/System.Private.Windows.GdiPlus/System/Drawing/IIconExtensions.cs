@@ -7,7 +7,7 @@ using Windows.Win32.System.Ole;
 
 namespace System.Drawing;
 
-public static unsafe class IIconExtensions
+internal static unsafe class IIconExtensions
 {
     internal static unsafe PICTDESC CreatePICTDESC(this IIcon icon, bool copy)
     {
