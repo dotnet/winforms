@@ -19,7 +19,8 @@
     <PublishSingleFile>false</PublishSingleFile>
     <SelfContained>false</SelfContained>
     <!-- don't set RID when building from the VMR to avoid circular runtime pack dependencies -->
-    <RuntimeIdentifier Condition="'$(DotNetBuild)' != 'true'">win-x64</RuntimeIdentifier>
+    <RuntimeIdentifier Condition="'$(DotNetBuild)' != 'true' and '$(TargetArchitecture)' != ''">win-$(TargetArchitecture)</RuntimeIdentifier>
+    <RuntimeIdentifier Condition="'$(DotNetBuild)' != 'true' and '$(RuntimeIdentifier)' == ''">win-x64</RuntimeIdentifier>
   </PropertyGroup>
 
   <!-- These normally come from $(UseWindowsForms) when $(ImplicitUsings) is enabled -->
