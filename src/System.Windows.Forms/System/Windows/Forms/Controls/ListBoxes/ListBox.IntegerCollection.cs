@@ -287,11 +287,8 @@ public partial class ListBox
 
             set
             {
-                ArgumentOutOfRangeException.ThrowIfNegative(index);
-                ArgumentOutOfRangeException.ThrowIfGreaterThanOrEqual(index, _count);
-
-                _innerArray![index] = value;
-                _owner.UpdateCustomTabOffsets();
+                RemoveAt(index);
+                Add(value);
             }
         }
 
