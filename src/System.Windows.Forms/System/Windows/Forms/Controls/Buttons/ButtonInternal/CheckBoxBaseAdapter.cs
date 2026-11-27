@@ -325,7 +325,7 @@ internal abstract class CheckBoxBaseAdapter : CheckableControlBaseAdapter
         return cacheCheckImage;
     }
 
-    protected void AdjustFocusRectangle(LayoutData layout)
+    protected virtual void AdjustFocusRectangle(LayoutData layout)
     {
         if (string.IsNullOrEmpty(Control.Text))
         {
@@ -334,6 +334,10 @@ internal abstract class CheckBoxBaseAdapter : CheckableControlBaseAdapter
             // inside the box. Otherwise, it should encircle all the available space next to the box (like it's
             // done in WPF and ComCtl32).
             layout.Focus = Control.AutoSize ? Rectangle.Inflate(layout.CheckBounds, -2, -2) : layout.Field;
+        }
+        else if (Control.Image is not null)
+        {
+            layout.Focus = layout.TextBounds;
         }
     }
 
