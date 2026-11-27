@@ -241,6 +241,7 @@ public class HelpProvider : Component, IExtenderProvider
         ArgumentNullException.ThrowIfNull(ctl);
 
         _showHelp.Remove(ctl);
+        UpdateEventBinding(ctl);
     }
 
     /// <summary>

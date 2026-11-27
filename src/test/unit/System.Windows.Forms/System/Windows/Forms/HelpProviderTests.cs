@@ -154,6 +154,25 @@ public class HelpProviderTests
     }
 
     [WinFormsFact]
+    public void HelpProvider_ResetShowHelp_RemovesAccessibilityHelp()
+    {
+        using HelpProvider provider = new();
+        using Control control = new();
+        const string helpString = "Help text";
+        provider.SetHelpString(control, helpString);
+        Assert.Equal(helpString, control.AccessibilityObject.Help);
+
+        provider.ResetShowHelp(control);
+
+        Assert.False(provider.GetShowHelp(control));
+        Assert.Null(control.AccessibilityObject.Help);
+        Assert.Equal(helpString, provider.GetHelpString(control));
+
+        provider.SetShowHelp(control, true);
+        Assert.Equal(helpString, control.AccessibilityObject.Help);
+    }
+
+    [WinFormsFact]
     public void HelpProvider_ResetShowHelp_NoSuchControl_Success()
     {
         using HelpProvider provider = new();
