@@ -70,6 +70,13 @@ internal class TableLayoutPanelCellPositionTypeConverter : TypeConverter
                 new object[] { cellPosition.Column, cellPosition.Row });
         }
 
+        if (destinationType == typeof(string) && value is TableLayoutPanelCellPosition position)
+        {
+            culture ??= CultureInfo.CurrentCulture;
+            char separator = culture.TextInfo.ListSeparator[0];
+            return string.Create(culture, $"{position.Column}{separator}{position.Row}");
+        }
+
         return base.ConvertTo(context, culture, value, destinationType);
     }
 

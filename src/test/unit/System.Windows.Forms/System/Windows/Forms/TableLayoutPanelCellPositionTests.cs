@@ -6,6 +6,7 @@
 using System.Collections;
 using System.ComponentModel;
 using System.ComponentModel.Design.Serialization;
+using System.Globalization;
 
 namespace System.Windows.Forms.Tests;
 
@@ -168,6 +169,20 @@ public class TableLayoutPanelCellPositionTests
     {
         TypeConverter converter = TypeDescriptor.GetConverter(typeof(TableLayoutPanelCellPosition));
         Assert.Equal(expected, converter.CanConvertTo(destinationType));
+    }
+
+    [Fact]
+    public void TableLayoutPanelCellPosition_ConverterRoundTrip_UsesSpecifiedListSeparator()
+    {
+        TypeConverter converter = TypeDescriptor.GetConverter(typeof(TableLayoutPanelCellPosition));
+        TableLayoutPanelCellPosition position = new(2, -1);
+        CultureInfo culture = CultureInfo.GetCultureInfo("fr-FR");
+
+        string text = converter.ConvertToString(null, culture, position);
+
+        Assert.Equal("2;-1", text);
+        Assert.Equal(position, Assert.IsType<TableLayoutPanelCellPosition>(converter.ConvertFromString(null, culture, text)));
+        Assert.Equal("2,-1", converter.ConvertToInvariantString(position));
     }
 
     [Fact]
