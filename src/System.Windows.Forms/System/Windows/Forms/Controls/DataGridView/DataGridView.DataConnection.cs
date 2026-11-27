@@ -141,6 +141,9 @@ public partial class DataGridView
         public bool ProcessingMetaDataChanges =>
             _dataConnectionState[DATACONNECTIONSTATE_processingMetaDataChanges];
 
+        internal bool IsInAddNewTransaction =>
+            !_dataConnectionState[DATACONNECTIONSTATE_finishedAddNew];
+
         public bool RestoreRow
         {
             get
@@ -1114,6 +1117,11 @@ public partial class DataGridView
 
         public string GetError(int rowIndex)
         {
+            if (CurrencyManager is null || (uint)rowIndex >= (uint)CurrencyManager.Count)
+            {
+                return string.Empty;
+            }
+
             IDataErrorInfo? errInfo = null;
             try
             {
@@ -1139,6 +1147,11 @@ public partial class DataGridView
         public string GetError(int boundColumnIndex, int columnIndex, int rowIndex)
         {
             Debug.Assert(rowIndex >= 0);
+
+            if (CurrencyManager is null || (uint)rowIndex >= (uint)CurrencyManager.Count)
+            {
+                return string.Empty;
+            }
 
             IDataErrorInfo? errInfo = null;
             try
