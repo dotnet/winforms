@@ -18,6 +18,119 @@ public class ButtonVisualStylesTests
     [InlineData(FlatStyle.Standard)]
     [InlineData(FlatStyle.Flat)]
     [InlineData(FlatStyle.Popup)]
+    public void Button_Net11_ExplicitBackColor_ParentBackColorChanged_Invalidates(FlatStyle flatStyle)
+    {
+        if (SystemInformation.HighContrast)
+        {
+            return;
+        }
+
+        using Form form = new() { BackColor = Color.Yellow, VisualStylesMode = VisualStylesMode.Net11 };
+        using Button button = new()
+        {
+            BackColor = Color.LightCoral,
+            FlatStyle = flatStyle
+        };
+        form.Controls.Add(button);
+        _ = form.Handle;
+        _ = button.Handle;
+        using Bitmap before = new(button.Width, button.Height);
+        button.DrawToBitmap(before, button.ClientRectangle);
+        int invalidatedCount = 0;
+        int backColorChangedCount = 0;
+        Rectangle invalidatedRectangle = Rectangle.Empty;
+        button.Invalidated += (sender, e) =>
+        {
+            invalidatedCount++;
+            invalidatedRectangle = e.InvalidRect;
+        };
+        button.BackColorChanged += (sender, e) => backColorChangedCount++;
+
+        form.BackColor = Color.Red;
+
+        Assert.Equal(1, invalidatedCount);
+        Assert.Equal(button.ClientRectangle, invalidatedRectangle);
+        Assert.Equal(0, backColorChangedCount);
+        Assert.Equal(Color.LightCoral, button.BackColor);
+
+        if (flatStyle != FlatStyle.Flat)
+        {
+            using Bitmap after = new(button.Width, button.Height);
+            button.DrawToBitmap(after, button.ClientRectangle);
+            Assert.Equal(Color.Yellow.ToArgb(), before.GetPixel(0, 0).ToArgb());
+            Assert.Equal(Color.Red.ToArgb(), after.GetPixel(0, 0).ToArgb());
+        }
+    }
+
+    [WinFormsTheory]
+    [InlineData(VisualStylesMode.Classic, true, FlatStyle.Standard, 0)]
+    [InlineData(VisualStylesMode.Net11, false, FlatStyle.Standard, 1)]
+    [InlineData(VisualStylesMode.Net11, true, FlatStyle.System, 0)]
+    public void Button_ParentBackColorChanged_PreservesAmbientBehavior(
+        VisualStylesMode visualStylesMode,
+        bool explicitBackColor,
+        FlatStyle flatStyle,
+        int expectedInvalidatedCount)
+    {
+        using Form form = new() { BackColor = Color.Yellow, VisualStylesMode = visualStylesMode };
+        using Button button = new() { FlatStyle = flatStyle };
+        if (explicitBackColor)
+        {
+            button.BackColor = Color.LightCoral;
+        }
+
+        form.Controls.Add(button);
+        _ = form.Handle;
+        _ = button.Handle;
+        int invalidatedCount = 0;
+        int backColorChangedCount = 0;
+        button.Invalidated += (sender, e) => invalidatedCount++;
+        button.BackColorChanged += (sender, e) => backColorChangedCount++;
+
+        form.BackColor = Color.Red;
+
+        Assert.Equal(expectedInvalidatedCount, invalidatedCount);
+        Assert.Equal(explicitBackColor ? 0 : 1, backColorChangedCount);
+        Assert.Equal(explicitBackColor ? Color.LightCoral : Color.Red, button.BackColor);
+    }
+
+    [WinFormsTheory]
+    [InlineData(typeof(CheckBox))]
+    [InlineData(typeof(RadioButton))]
+    public void ButtonAppearance_Net11_ExplicitBackColor_ParentBackColorChanged_Invalidates(Type controlType)
+    {
+        if (SystemInformation.HighContrast)
+        {
+            return;
+        }
+
+        using Form form = new() { BackColor = Color.Yellow, VisualStylesMode = VisualStylesMode.Net11 };
+        using ButtonBase control = (ButtonBase)Activator.CreateInstance(controlType);
+        control.BackColor = Color.LightCoral;
+        if (control is CheckBox checkBox)
+        {
+            checkBox.Appearance = Appearance.Button;
+        }
+        else if (control is RadioButton radioButton)
+        {
+            radioButton.Appearance = Appearance.Button;
+        }
+
+        form.Controls.Add(control);
+        _ = form.Handle;
+        _ = control.Handle;
+        int invalidatedCount = 0;
+        control.Invalidated += (sender, e) => invalidatedCount++;
+
+        form.BackColor = Color.Red;
+
+        Assert.Equal(1, invalidatedCount);
+    }
+
+    [WinFormsTheory]
+    [InlineData(FlatStyle.Standard)]
+    [InlineData(FlatStyle.Flat)]
+    [InlineData(FlatStyle.Popup)]
     [InlineData(FlatStyle.System)]
     public void Button_VisualStylesMode_Net11_DoesNotThrowOnPaint(FlatStyle flatStyle)
     {
