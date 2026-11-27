@@ -276,6 +276,60 @@ public class DataGridViewComboBoxCellTests : IDisposable
         result.Should().Be(new Size(-1, -1));
     }
 
+    [WinFormsTheory]
+    [InlineData(false, KnownColor.Lime)]
+    [InlineData(true, KnownColor.Yellow)]
+    public void Paint_DarkMode_UsesCellStyleTextColor(bool selected, KnownColor expectedColor)
+    {
+        if (SystemInformation.HighContrast)
+        {
+            return;
+        }
+
+        var applicationAccessor = typeof(Application).TestAccessor.Dynamic;
+        SystemColorMode? previousColorMode = applicationAccessor.s_colorMode;
+
+        try
+        {
+            applicationAccessor.s_colorMode = SystemColorMode.Dark;
+            using AppContextSwitchScope scope = new(
+                "System.Windows.Forms.DataGridViewDarkModeTheming",
+                enable: true);
+            using DataGridView dataGridView = new();
+            using DataGridViewComboBoxColumn column = new();
+            column.Items.Add("MMMM");
+            column.DefaultCellStyle.BackColor = Color.Black;
+            column.DefaultCellStyle.ForeColor = Color.Lime;
+            column.DefaultCellStyle.SelectionBackColor = Color.Black;
+            column.DefaultCellStyle.SelectionForeColor = Color.Yellow;
+            dataGridView.Columns.Add(column);
+            dataGridView.Rows.Add("MMMM");
+
+            DataGridViewComboBoxCell cell = (DataGridViewComboBoxCell)dataGridView[0, 0];
+            using Bitmap bitmap = new(120, 30);
+            using Graphics graphics = Graphics.FromImage(bitmap);
+            graphics.Clear(Color.Black);
+            cell.TestAccessor.Dynamic.Paint(
+                graphics,
+                new Rectangle(0, 0, bitmap.Width, bitmap.Height),
+                new Rectangle(0, 0, bitmap.Width, bitmap.Height),
+                0,
+                selected ? DataGridViewElementStates.Selected : DataGridViewElementStates.None,
+                "MMMM",
+                "MMMM",
+                null,
+                cell.InheritedStyle,
+                new DataGridViewAdvancedBorderStyle(),
+                DataGridViewPaintParts.ContentForeground);
+
+            ContainsPixel(bitmap, Color.FromKnownColor(expectedColor)).Should().BeTrue();
+        }
+        finally
+        {
+            applicationAccessor.s_colorMode = previousColorMode;
+        }
+    }
+
     [Theory]
     [InlineData(Keys.A, false, false, false, true)]
     [InlineData(Keys.F4, false, false, false, true)]
@@ -325,6 +379,23 @@ public class DataGridViewComboBoxCellTests : IDisposable
             TypeDescriptor.GetConverter(typeof(string)));
 
         result.Should().Be("test");
+    }
+
+    private static bool ContainsPixel(Bitmap bitmap, Color color)
+    {
+        int argb = color.ToArgb();
+        for (int y = 0; y < bitmap.Height; y++)
+        {
+            for (int x = 0; x < bitmap.Width; x++)
+            {
+                if (bitmap.GetPixel(x, y).ToArgb() == argb)
+                {
+                    return true;
+                }
+            }
+        }
+
+        return false;
     }
 
     [Fact]
