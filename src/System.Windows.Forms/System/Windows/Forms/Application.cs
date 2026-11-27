@@ -262,8 +262,7 @@ public sealed partial class Application
     /// <remarks>
     ///  <para>
     ///   If no mode has been configured with <see cref="SetDefaultFormRevealMode(FormRevealMode)"/>, this
-    ///   returns <see cref="FormRevealMode.Inherit"/>. Unlike <see cref="Form.FormRevealMode"/>, this
-    ///   getter may return the unresolved <see cref="FormRevealMode.Inherit"/> sentinel; use
+    ///   returns the unresolved <see cref="FormRevealMode.Inherit"/> sentinel; use
     ///   <see cref="IsFormRevealDeferred"/> for the fully resolved answer.
     ///  </para>
     /// </remarks>
