@@ -130,7 +130,8 @@ internal sealed class PopupButtonDarkModeRenderer : ButtonDarkModeRendererBase
         Color topLeftColor;
         Color bottomRightColor;
 
-        if (FlatAppearance is { BorderColor.IsEmpty: false } appearance)
+        if (UseFlatAppearance
+            && FlatAppearance is { BorderColor.IsEmpty: false } appearance)
         {
             topLeftColor = appearance.BorderColor;
             bottomRightColor = appearance.BorderColor;

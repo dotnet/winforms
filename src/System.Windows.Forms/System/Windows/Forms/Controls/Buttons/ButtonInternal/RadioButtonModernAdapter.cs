@@ -86,9 +86,9 @@ internal sealed class RadioButtonModernAdapter : RadioButtonBaseAdapter
         AdjustFocusRectangle(layout);
         PaintBackgroundImage(e);
 
-        Color? customBorderColor = Control.FlatAppearance.BorderColor.IsEmpty
-            ? null
-            : Control.FlatAppearance.BorderColor;
+        Color? customBorderColor = _flatStyle == FlatStyle.Flat && !Control.FlatAppearance.BorderColor.IsEmpty
+            ? Control.FlatAppearance.BorderColor
+            : null;
 
         Control.RadioGlyphRenderer.NotifyCheckedChanged(Control.Checked);
         Control.RadioGlyphRenderer.DrawGlyph(
