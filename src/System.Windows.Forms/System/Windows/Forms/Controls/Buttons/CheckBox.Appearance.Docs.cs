@@ -19,6 +19,11 @@ public partial class CheckBox
     ///   classic check-box behavior instead.
     ///  </para>
     ///  <para>
+    ///   In toggle-switch mode, <see cref="ButtonBase.Image"/> is scaled to fill the control's client area and does not
+    ///   affect the preferred size. The switch and text are rendered over the image. <see cref="ButtonBase.ImageAlign"/>
+    ///   and <see cref="ButtonBase.TextImageRelation"/> do not affect the background image.
+    ///  </para>
+    ///  <para>
     ///   High Contrast resolves to classic rendering. Modern toggle metrics can increase preferred size; see the
     ///   <see href="https://github.com/dotnet/winforms/blob/main/docs/net11-visualstyles-layout-guidance.md">
     ///   .NET 11 VisualStyles layout guidance</see>.
