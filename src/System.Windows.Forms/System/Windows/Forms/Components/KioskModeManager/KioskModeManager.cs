@@ -85,6 +85,8 @@ public class KioskModeManager : Component, ISupportInitialize
     private WINDOWPLACEMENT _savedPlacement;
     private Rectangle _savedWindowBounds;
     private Form.KioskRestoreBoundsState _savedRestoreBoundsState;
+    private Rectangle _refreshRestoreBounds;
+    private BoundsSpecified _refreshRestoreBoundsSpecified;
     private bool _useNativeTransition;
 
     private bool _topMostInFullScreen;
@@ -593,6 +595,14 @@ public class KioskModeManager : Component, ISupportInitialize
                 _pendingFullScreenBoundsRefresh = false;
                 StopMousePointerAutoHideTimer();
                 ShowMousePointerIfHidden();
+
+                BoundsSpecified specified = _refreshRestoreBoundsSpecified;
+                _refreshRestoreBoundsSpecified = BoundsSpecified.None;
+                if (specified != BoundsSpecified.None)
+                {
+                    Rectangle bounds = _refreshRestoreBounds;
+                    targetForm.SetBounds(bounds.X, bounds.Y, bounds.Width, bounds.Height, specified);
+                }
             }
         }
 
@@ -820,22 +830,31 @@ public class KioskModeManager : Component, ISupportInitialize
             Rectangle bounds = Screen.FromRectangle(form.Bounds).Bounds;
             if (form.WindowState == FormWindowState.Maximized)
             {
-                if (!form.IsHandleCreated || !form.Visible || !form.TopLevel || form.IsMdiChild)
-                {
-                    ApplyFullScreen(form);
-                    return;
-                }
-
                 Form.KioskRestoreBoundsState restoreBounds = form.SuspendKioskRestoreBounds();
+                bool applied = false;
                 try
                 {
-                    using Control.SuspendLayoutScope scope = new(form);
-                    form.SetKioskWindowState(FormBorderStyle.None, FormWindowState.Normal, _topMostInFullScreen, bounds);
-                    form.NotifyKioskWindowStyleChanged();
+                    if (form.IsHandleCreated && form.Visible && form.TopLevel && !form.IsMdiChild)
+                    {
+                        using Control.SuspendLayoutScope scope = new(form);
+                        form.SetKioskWindowState(FormBorderStyle.None, FormWindowState.Normal, _topMostInFullScreen, bounds);
+                        applied = true;
+                        DeferRefreshRestoreBounds(restoreBounds);
+                        form.NotifyKioskWindowStyleChanged();
+                    }
+                    else
+                    {
+                        ApplyFullScreen(form);
+                        applied = true;
+                        DeferRefreshRestoreBounds(restoreBounds);
+                    }
                 }
                 finally
                 {
-                    form.RestoreKioskRestoreBounds(restoreBounds);
+                    if (!applied)
+                    {
+                        form.RestoreKioskRestoreBounds(restoreBounds);
+                    }
                 }
             }
             else if (form.Bounds != bounds)
@@ -843,6 +862,33 @@ public class KioskModeManager : Component, ISupportInitialize
                 form.Bounds = bounds;
             }
         }
+    }
+
+    private void DeferRefreshRestoreBounds(Form.KioskRestoreBoundsState state)
+    {
+        // Windows 10 can cache the fullscreen rectangle on maximize. Only carry explicit requests past exit.
+        BoundsSpecified specified = state.Specified & ~state.ImplicitlySpecified;
+        if ((specified & BoundsSpecified.X) != 0)
+        {
+            _refreshRestoreBounds.X = state.Bounds.X;
+        }
+
+        if ((specified & BoundsSpecified.Y) != 0)
+        {
+            _refreshRestoreBounds.Y = state.Bounds.Y;
+        }
+
+        if ((specified & BoundsSpecified.Width) != 0)
+        {
+            _refreshRestoreBounds.Width = state.Bounds.Width;
+        }
+
+        if ((specified & BoundsSpecified.Height) != 0)
+        {
+            _refreshRestoreBounds.Height = state.Bounds.Height;
+        }
+
+        _refreshRestoreBoundsSpecified |= specified;
     }
 
     private void UpdateFormObserver()

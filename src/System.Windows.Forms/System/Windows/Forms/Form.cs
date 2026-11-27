@@ -100,6 +100,7 @@ public partial class Form : ContainerControl
     private static readonly BitVector32.Section s_formStateExInCloseEventDispatch = BitVector32.CreateSection(1, s_formStateExWindowClosing);
 #if NET11_0_OR_GREATER
     private static readonly BitVector32.Section s_formStateExApplyingKioskStyles = BitVector32.CreateSection(1, s_formStateExInCloseEventDispatch);
+    private static readonly BitVector32.Section s_formStateExImplicitRestoreBounds = BitVector32.CreateSection((short)BoundsSpecified.All, s_formStateExApplyingKioskStyles);
 #endif
 
     private const int SizeGripSize = 16;
@@ -685,6 +686,9 @@ public partial class Form : ContainerControl
             BoundsSpecified preClientUpdateRestoredWindowBoundsSpecified = _restoredWindowBoundsSpecified;
             int preWindowBoundsWidthIsClientSize = _formStateEx[s_formStateExWindowBoundsWidthIsClientSize];
             int preWindowBoundsHeightIsClientSize = _formStateEx[s_formStateExWindowBoundsHeightIsClientSize];
+#if NET11_0_OR_GREATER
+        int preImplicitRestoreBounds = _formStateEx[s_formStateExImplicitRestoreBounds];
+#endif
 
             UpdateFormStyles();
 
@@ -703,6 +707,9 @@ public partial class Form : ContainerControl
                 _restoredWindowBoundsSpecified = preClientUpdateRestoredWindowBoundsSpecified;
                 _formStateEx[s_formStateExWindowBoundsWidthIsClientSize] = preWindowBoundsWidthIsClientSize;
                 _formStateEx[s_formStateExWindowBoundsHeightIsClientSize] = preWindowBoundsHeightIsClientSize;
+#if NET11_0_OR_GREATER
+                _formStateEx[s_formStateExImplicitRestoreBounds] = preImplicitRestoreBounds;
+#endif
             }
         }
     }
@@ -5164,6 +5171,9 @@ public partial class Form : ContainerControl
             _restoredWindowBounds = new Rectangle(-1, -1, -1, -1);
             _formStateEx[s_formStateExWindowBoundsHeightIsClientSize] = 0;
             _formStateEx[s_formStateExWindowBoundsWidthIsClientSize] = 0;
+#if NET11_0_OR_GREATER
+            _formStateEx[s_formStateExImplicitRestoreBounds] = 0;
+#endif
         }
     }
 
@@ -5319,9 +5329,15 @@ public partial class Form : ContainerControl
             if (x != -1 || y != -1)
             {
                 _restoredWindowBoundsSpecified |= (specified & (BoundsSpecified.X | BoundsSpecified.Y));
+#if NET11_0_OR_GREATER
+                _formStateEx[s_formStateExImplicitRestoreBounds] &= ~(int)(specified & BoundsSpecified.Location);
+#endif
             }
 
             _restoredWindowBoundsSpecified |= (specified & (BoundsSpecified.Width | BoundsSpecified.Height));
+#if NET11_0_OR_GREATER
+            _formStateEx[s_formStateExImplicitRestoreBounds] &= ~(int)(specified & BoundsSpecified.Size);
+#endif
 
             if ((specified & BoundsSpecified.X) != 0)
             {
@@ -6316,7 +6332,8 @@ public partial class Form : ContainerControl
         Rectangle Bounds,
         BoundsSpecified Specified,
         int WidthIsClientSize,
-        int HeightIsClientSize);
+        int HeightIsClientSize,
+        BoundsSpecified ImplicitlySpecified = BoundsSpecified.None);
 
     internal KioskRestoreBoundsState SuspendKioskRestoreBounds()
     {
@@ -6324,13 +6341,15 @@ public partial class Form : ContainerControl
             _restoredWindowBounds,
             _restoredWindowBoundsSpecified,
             _formStateEx[s_formStateExWindowBoundsWidthIsClientSize],
-            _formStateEx[s_formStateExWindowBoundsHeightIsClientSize]);
+            _formStateEx[s_formStateExWindowBoundsHeightIsClientSize],
+            (BoundsSpecified)_formStateEx[s_formStateExImplicitRestoreBounds]);
 
         // Fullscreen uses Normal state, but must not consume a pending restore request.
         _restoredWindowBounds = new Rectangle(-1, -1, -1, -1);
         _restoredWindowBoundsSpecified = BoundsSpecified.None;
         _formStateEx[s_formStateExWindowBoundsWidthIsClientSize] = 0;
         _formStateEx[s_formStateExWindowBoundsHeightIsClientSize] = 0;
+        _formStateEx[s_formStateExImplicitRestoreBounds] = 0;
 
         return state;
     }
@@ -6341,6 +6360,7 @@ public partial class Form : ContainerControl
         _restoredWindowBoundsSpecified = state.Specified;
         _formStateEx[s_formStateExWindowBoundsWidthIsClientSize] = state.WidthIsClientSize;
         _formStateEx[s_formStateExWindowBoundsHeightIsClientSize] = state.HeightIsClientSize;
+        _formStateEx[s_formStateExImplicitRestoreBounds] = (int)state.ImplicitlySpecified;
     }
 
     internal unsafe WINDOWPLACEMENT GetKioskWindowPlacement()
@@ -6766,6 +6786,9 @@ public partial class Form : ContainerControl
                 _restoredWindowBoundsSpecified = BoundsSpecified.Size;
                 _restoredWindowBounds.Location = Location;
                 _restoredWindowBoundsSpecified |= BoundsSpecified.Location;
+#if NET11_0_OR_GREATER
+                _formStateEx[s_formStateExImplicitRestoreBounds] = (int)BoundsSpecified.All;
+#endif
             }
 
             // stash off restoreBounds As well...
