@@ -47,9 +47,8 @@ public class PaddingConverter : TypeConverter
             if (destinationType == typeof(string))
             {
                 culture ??= CultureInfo.CurrentCulture;
-                return string.Join(
-                    $"{culture.TextInfo.ListSeparator} ",
-                    new object[] { padding.Left, padding.Top, padding.Right, padding.Bottom });
+                string separator = culture.TextInfo.ListSeparator;
+                return string.Create(culture, $"{padding.Left}{separator} {padding.Top}{separator} {padding.Right}{separator} {padding.Bottom}");
             }
             else if (destinationType == typeof(InstanceDescriptor))
             {

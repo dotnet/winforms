@@ -84,6 +84,22 @@ public class PaddingConverterTests
     }
 
     [Fact]
+    [UseDefaultXunitCulture]
+    public void PaddingConverter_ConvertTo_String_UsesSpecifiedCultureForNumbers()
+    {
+        PaddingConverter converter = new();
+        CultureInfo culture = (CultureInfo)CultureInfo.InvariantCulture.Clone();
+        culture.NumberFormat.NegativeSign = "~";
+        culture.TextInfo.ListSeparator = ";";
+        Padding padding = new(-1, 2, -3, 4);
+
+        string serialized = converter.ConvertToString(null, culture, padding);
+
+        Assert.Equal("~1; 2; ~3; 4", serialized);
+        Assert.Equal(padding, converter.ConvertFromString(null, culture, serialized));
+    }
+
+    [Fact]
     public void PaddingConverter_ConvertTo_InstanceDescriptor_ReturnsExpected()
     {
         PaddingConverter converter = new();
