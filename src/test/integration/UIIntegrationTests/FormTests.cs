@@ -2,16 +2,16 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 
 using System.Drawing;
+using System.Runtime.InteropServices;
+using System.Windows.Forms.UITests.Input;
 using Windows.Win32.UI.Input.KeyboardAndMouse;
 
 namespace System.Windows.Forms.UITests;
 
 public class FormTests : ControlTestBase
 {
-    // When using the keyboard for snap layout menu, there are various times when
-    // a delay is needed. This value may need to be adjusted if tests fail
-    // in CI/different environment
-    private const int SnapLayoutDelayMS = 500;
+    private static readonly TimeSpan s_snapTimeout = TimeSpan.FromSeconds(5);
+    private static readonly TimeSpan s_pollInterval = TimeSpan.FromMilliseconds(50);
 
     public FormTests(ITestOutputHelper testOutputHelper)
         : base(testOutputHelper)
@@ -21,121 +21,129 @@ public class FormTests : ControlTestBase
     [WinFormsTheory]
     [InlineData(FormWindowState.Normal)]
     [InlineData(FormWindowState.Maximized)]
-    public async Task Form_SnapsLeftAsync(FormWindowState windowState)
-    {
-        if (!OsVersion.IsWindows11_OrGreater())
-        {
-            return;
-        }
-
-        await RunEmptyFormTestAsync(async form =>
-        {
-            form.Location = new Point(20, 21);
-            form.Size = new Size(300, 310);
-
-            form.WindowState = windowState;
-
-            // Snap left using Win+Left shortcut. This directly snaps the window
-            // to the left half of the screen without requiring snap layout panel navigation.
-            await InputSimulator.SendAsync(
-                form,
-                inputSimulator => inputSimulator.Keyboard
-                    .ModifiedKeyStroke(VIRTUAL_KEY.VK_LWIN, VIRTUAL_KEY.VK_LEFT));
-
-            await Task.Delay(SnapLayoutDelayMS);
-
-            // After snapping left, Windows may display a panel containing all running
-            // applications so the user can select one to dock next to our form. It also
-            // takes the keyboard focus away. Dismiss it with Escape.
-            await InputSimulator.SendAsync(
-                form,
-                inputSimulator => inputSimulator.Keyboard.KeyPress(VIRTUAL_KEY.VK_ESCAPE));
-
-            await Task.Delay(SnapLayoutDelayMS);
-
-            var screenWorkingArea = Screen.FromControl(form).WorkingArea;
-            int borderSize = (form.Width - form.ClientRectangle.Width) / 2;
-
-            Assert.True(form.Left <= screenWorkingArea.X);
-            Assert.True(form.Left >= screenWorkingArea.X - borderSize);
-
-            Assert.True(form.Top <= screenWorkingArea.Y);
-            Assert.True(form.Top >= screenWorkingArea.Y - borderSize);
-
-            Assert.True(form.Height >= screenWorkingArea.Height);
-            Assert.True(form.Height <= screenWorkingArea.Height + (borderSize * 2));
-
-            Assert.True(form.Width >= screenWorkingArea.Width / 2);
-            Assert.True(form.Width <= (screenWorkingArea.Width / 2) + (borderSize * 2));
-        });
-    }
+    public Task Form_SnapsLeftAsync(FormWindowState windowState)
+        => VerifySnapAsync(windowState, VIRTUAL_KEY.VK_LEFT);
 
     [WinFormsTheory]
     [InlineData(FormWindowState.Normal)]
     [InlineData(FormWindowState.Maximized)]
-    public async Task Form_SnapsRightAsync(FormWindowState windowState)
+    public Task Form_SnapsRightAsync(FormWindowState windowState)
+        => VerifySnapAsync(windowState, VIRTUAL_KEY.VK_RIGHT);
+
+    private async Task VerifySnapAsync(FormWindowState windowState, VIRTUAL_KEY direction)
     {
         if (!OsVersion.IsWindows11_OrGreater())
         {
             return;
         }
 
-        await RunEmptyFormTestAsync(async form =>
-        {
-            form.Location = new Point(20, 21);
-            form.Size = new Size(300, 310);
+        await RunFormWithoutControlAsync(
+            () => new Form
+            {
+                StartPosition = FormStartPosition.Manual,
+                Bounds = new Rectangle(20, 21, 300, 310),
+                TopMost = true
+            },
+            async form =>
+            {
+                form.WindowState = windowState;
+                form.TopMost = false;
+                Rectangle startingBounds = form.Bounds;
+                Rectangle workingArea = Screen.FromControl(form).WorkingArea;
+                HWND handle = form.HWND;
+                Assert.False(HasSnappedBounds(form, workingArea, direction), "The test form is already at the expected snap bounds.");
 
-            form.WindowState = windowState;
+                // Send the shortcut only while the form is the foreground window. It is
+                // handled by the shell, so an idle WinForms message loop is insufficient.
+                bool active = await WaitForAsync(() =>
+                {
+                    HWND current = PInvokeCore.GetForegroundWindow();
+                    if (current == handle)
+                    {
+                        return true;
+                    }
 
-            // Snap right using Win+Right shortcut. This directly snaps the window
-            // to the right half of the screen without requiring snap layout panel navigation.
-            await InputSimulator.SendAsync(
-                form,
-                inputSimulator => inputSimulator.Keyboard
-                    .ModifiedKeyStroke(VIRTUAL_KEY.VK_LWIN, VIRTUAL_KEY.VK_RIGHT));
+                    form.Activate();
+                    return PInvokeCore.GetForegroundWindow() == handle;
+                });
 
-            await Task.Delay(SnapLayoutDelayMS);
+                HWND foreground = PInvokeCore.GetForegroundWindow();
+                Assert.True(active && foreground == handle,
+                    $"Form {handle} did not acquire the foreground. Foreground window: {foreground}.");
 
-            // After snapping right, Windows may display a panel containing all running
-            // applications so the user can select one to dock next to our form. It also
-            // takes the keyboard focus away. Dismiss it with Escape.
-            await InputSimulator.SendAsync(
-                form,
-                inputSimulator => inputSimulator.Keyboard.KeyPress(VIRTUAL_KEY.VK_ESCAPE));
+                SendSnapShortcut(direction);
 
-            await Task.Delay(SnapLayoutDelayMS);
-
-            var screenWorkingArea = Screen.FromControl(form).WorkingArea;
-            int screenMiddleX = screenWorkingArea.X + (screenWorkingArea.Width / 2);
-            int borderSize = (form.Width - form.ClientRectangle.Width) / 2;
-
-            Assert.True(form.Left <= screenMiddleX);
-            Assert.True(form.Left >= screenMiddleX - borderSize);
-
-            Assert.True(form.Top <= screenWorkingArea.Y);
-            Assert.True(form.Top >= screenWorkingArea.Y - borderSize);
-
-            Assert.True(form.Height >= screenWorkingArea.Height);
-            Assert.True(form.Height <= screenWorkingArea.Height + (borderSize * 2));
-
-            Assert.True(form.Width >= screenWorkingArea.Width / 2);
-            Assert.True(form.Width <= (screenWorkingArea.Width / 2) + (borderSize * 2));
-        });
+                // Let the shell finish arranging the window without taking focus back.
+                // RunFormWithoutControlAsync closes the test dialog after the assertion.
+                bool snapped = await WaitForAsync(() => HasSnappedBounds(form, workingArea, direction));
+                Assert.True(snapped,
+                    $"Win+{direction} did not snap the {windowState} form within {s_snapTimeout}. "
+                    + $"Starting bounds: {startingBounds}. Actual bounds: {form.Bounds}. "
+                    + $"Client size: {form.ClientSize}. Working area: {workingArea}. "
+                    + $"Foreground window: {PInvokeCore.GetForegroundWindow()}.");
+            });
     }
 
-    private async Task RunEmptyFormTestAsync(Func<Form, Task> testDriverAsync)
+    private static void SendSnapShortcut(VIRTUAL_KEY direction)
     {
-        await RunFormWithoutControlAsync(
-            () =>
-            {
-                Form form = new()
-                {
-                    TopMost = true
-                };
+        Span<INPUT> inputs =
+        [
+            InputBuilder.KeyDown(VIRTUAL_KEY.VK_LWIN),
+            InputBuilder.KeyDown(direction),
+            InputBuilder.KeyUp(direction),
+            InputBuilder.KeyUp(VIRTUAL_KEY.VK_LWIN)
+        ];
 
-                return form;
-            },
-            testDriverAsync);
+        uint inserted = PInvoke.SendInput(inputs, Marshal.SizeOf<INPUT>());
+        int error = Marshal.GetLastPInvokeError();
+        if (inserted == (uint)inputs.Length)
+        {
+            return;
+        }
+
+        string message = $"SendInput inserted {inserted} of {inputs.Length} events for Win+{direction}. Win32 error: {error}.";
+        if (inserted > 0)
+        {
+            // Do not leave a modifier or arrow pressed if only part of the chord was sent.
+            Span<INPUT> releases = inputs[(inserted == 2 ? 2 : 3)..];
+            uint released = PInvoke.SendInput(releases, Marshal.SizeOf<INPUT>());
+            message += $" Inserted {released} of {releases.Length} recovery key-up events.";
+        }
+
+        Assert.Fail(message);
+    }
+
+    private static bool HasSnappedBounds(Form form, Rectangle workingArea, VIRTUAL_KEY direction)
+    {
+        Rectangle bounds = form.Bounds;
+        int borderSize = (bounds.Width - form.ClientSize.Width) / 2;
+        int halfWidth = workingArea.Width / 2;
+        int expectedLeft = direction == VIRTUAL_KEY.VK_LEFT ? workingArea.Left : workingArea.Left + halfWidth;
+
+        return bounds.Left <= expectedLeft
+            && bounds.Left >= expectedLeft - borderSize
+            && bounds.Top <= workingArea.Top
+            && bounds.Top >= workingArea.Top - borderSize
+            && bounds.Height >= workingArea.Height
+            && bounds.Height <= workingArea.Height + (borderSize * 2)
+            && bounds.Width >= halfWidth
+            && bounds.Width <= halfWidth + (borderSize * 2);
+    }
+
+    private static async Task<bool> WaitForAsync(Func<bool> condition)
+    {
+        Stopwatch stopwatch = Stopwatch.StartNew();
+        while (!condition())
+        {
+            if (stopwatch.Elapsed >= s_snapTimeout)
+            {
+                return false;
+            }
+
+            await Task.Delay(s_pollInterval);
+        }
+
+        return true;
     }
 
     [WinFormsFact]
