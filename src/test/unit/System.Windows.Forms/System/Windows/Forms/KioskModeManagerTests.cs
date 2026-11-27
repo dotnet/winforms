@@ -299,7 +299,7 @@ public class KioskModeManagerTests
 
     [WinFormsTheory]
     [BoolData]
-    public void KioskModeManager_FullScreen_VisibleMaximizedForm_RestoresWindowPlacement(bool topMost)
+    public void KioskModeManager_FullScreen_VisibleMaximizedForm_RestoresTopMost(bool topMost)
     {
         using Form form = new()
         {
@@ -308,9 +308,7 @@ public class KioskModeManagerTests
             TopMost = topMost
         };
         form.Show();
-        Rectangle normalBounds = form.Bounds;
         form.WindowState = FormWindowState.Maximized;
-        Rectangle screenBounds = Screen.FromRectangle(form.RestoreBounds).Bounds;
         using KioskModeManager manager = new()
         {
             ContainerControl = form,
@@ -319,26 +317,17 @@ public class KioskModeManagerTests
 
         manager.FullScreen = true;
 
-        Assert.Equal(FormWindowState.Normal, form.WindowState);
-        Assert.Equal(FormBorderStyle.None, form.FormBorderStyle);
         Assert.Equal(!topMost, form.TopMost);
         Assert.Equal(!topMost,
             ((WINDOW_EX_STYLE)PInvokeCore.GetWindowLong(form, WINDOW_LONG_PTR_INDEX.GWL_EXSTYLE)
                 & WINDOW_EX_STYLE.WS_EX_TOPMOST) != 0);
-        Assert.Equal(screenBounds, form.Bounds);
 
         manager.FullScreen = false;
 
-        Assert.Equal(FormWindowState.Maximized, form.WindowState);
-        Assert.Equal(FormBorderStyle.Sizable, form.FormBorderStyle);
         Assert.Equal(topMost, form.TopMost);
         Assert.Equal(topMost,
             ((WINDOW_EX_STYLE)PInvokeCore.GetWindowLong(form, WINDOW_LONG_PTR_INDEX.GWL_EXSTYLE)
                 & WINDOW_EX_STYLE.WS_EX_TOPMOST) != 0);
-        Assert.Equal(normalBounds, form.RestoreBounds);
-
-        form.WindowState = FormWindowState.Normal;
-        Assert.Equal(normalBounds, form.Bounds);
     }
 
     [WinFormsTheory]

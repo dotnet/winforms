@@ -501,7 +501,9 @@ public class KioskModeManager : Component, ISupportInitialize
 
         if (_useNativeTransition)
         {
-            _savedPlacement = targetForm.GetKioskWindowPlacement();
+            _savedPlacement = _savedWindowState == FormWindowState.Maximized
+                ? targetForm.GetKioskWindowPlacement()
+                : default;
             _savedRestoreBoundsState = targetForm.SuspendKioskRestoreBounds();
             bool applied = false;
             try
