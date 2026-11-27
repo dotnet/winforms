@@ -6356,8 +6356,6 @@ public partial class Form : ContainerControl
 
     internal void SetKioskWindowState(FormBorderStyle borderStyle, FormWindowState windowState, bool topMost, Rectangle bounds)
     {
-        // Defer child layout until the native style and bounds changes and their notifications finish.
-        using SuspendLayoutScope scope = new(this);
         CreateParams previousParams = CreateParams;
         int previousCreateStyle = previousParams.Style;
         int previousCreateExStyle = previousParams.ExStyle;
@@ -6411,7 +6409,11 @@ public partial class Form : ContainerControl
         {
             AdjustSystemMenu();
         }
+    }
 
+    // Call after applying the native transition and restoring any saved placement.
+    internal void NotifyKioskWindowStyleChanged()
+    {
         OnStyleChanged(EventArgs.Empty);
         if (_formState[s_formStateIconSet] == 0)
         {

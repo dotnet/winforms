@@ -427,13 +427,25 @@ public class KioskModeManagerTests
     }
 
     [WinFormsTheory]
-    [BoolData]
-    public void KioskModeManager_FullScreen_TransitionThrows_PreservesDeferredRestoreBounds(bool entering)
+    [InlineData(false, false)]
+    [InlineData(false, true)]
+    [InlineData(true, false)]
+    [InlineData(true, true)]
+    public void KioskModeManager_FullScreen_StyleChangedThrows_KeepsAppliedState(bool entering, bool maximized)
     {
-        using Form form = new() { StartPosition = FormStartPosition.Manual };
+        Rectangle normalBounds = new(100, 100, 600, 400);
+        using Form form = new() { StartPosition = FormStartPosition.Manual, Bounds = normalBounds, TopMost = true };
         form.Show();
-        form.WindowState = FormWindowState.Maximized;
-        form.Bounds = new Rectangle(150, 150, 900, 650);
+        Rectangle deferredBounds = new(150, 150, 650, 450);
+        FormWindowState originalState = maximized ? FormWindowState.Maximized : FormWindowState.Normal;
+        if (maximized)
+        {
+            form.WindowState = originalState;
+            form.Bounds = deferredBounds;
+        }
+
+        Rectangle originalBounds = form.Bounds;
+        Rectangle fullscreenBounds = Screen.FromRectangle(maximized ? form.RestoreBounds : form.Bounds).Bounds;
         Form.KioskRestoreBoundsState expected = form.SuspendKioskRestoreBounds();
         form.RestoreKioskRestoreBounds(expected);
         using KioskModeManager manager = new() { ContainerControl = form };
@@ -454,9 +466,27 @@ public class KioskModeManagerTests
             form.StyleChanged -= handler;
         }
 
+        Assert.Equal(entering, manager.FullScreen);
+        Assert.Equal(entering ? fullscreenBounds : originalBounds, form.Bounds);
+        Assert.Equal(entering ? FormBorderStyle.None : FormBorderStyle.Sizable, form.FormBorderStyle);
+        Assert.Equal(entering ? FormWindowState.Normal : originalState, form.WindowState);
+        Assert.Equal(!entering, form.TopMost);
+
+        // Retrying the applied value must not replace the original restore state.
+        manager.FullScreen = entering;
+        manager.FullScreen = false;
+        Assert.False(manager.FullScreen);
+        Assert.Equal(originalBounds, form.Bounds);
+        Assert.Equal(originalState, form.WindowState);
+
         Form.KioskRestoreBoundsState actual = form.SuspendKioskRestoreBounds();
         Assert.Equal(expected, actual);
         form.RestoreKioskRestoreBounds(actual);
+        if (maximized)
+        {
+            form.WindowState = FormWindowState.Normal;
+            Assert.Equal(deferredBounds, form.Bounds);
+        }
     }
 
     [WinFormsTheory]
