@@ -4591,6 +4591,52 @@ public class ToolStripControlHostTests
         Assert.Equal(2, callCount);
     }
 
+    [WinFormsFact]
+    public void ToolStripControlHost_HostedControlVisualStylesMode_Net11_IsForcedToClassic()
+    {
+        using Control control = new()
+        {
+            VisualStylesMode = VisualStylesMode.Net11
+        };
+        using ToolStripControlHost host = new(control);
+        using ToolStrip toolStrip = new();
+
+        toolStrip.Items.Add(host);
+
+        Assert.Equal(VisualStylesMode.Classic, control.VisualStylesMode);
+    }
+
+    [WinFormsFact]
+    public void ToolStripControlHost_HostedControlVisualStylesMode_SetToNet11WhileHosted_RemainsClassic()
+    {
+        using Control control = new();
+        using ToolStripControlHost host = new(control);
+        using ToolStrip toolStrip = new();
+
+        toolStrip.Items.Add(host);
+        control.VisualStylesMode = VisualStylesMode.Net11;
+
+        Assert.Equal(VisualStylesMode.Classic, control.VisualStylesMode);
+    }
+
+    [WinFormsFact]
+    public void ToolStripControlHost_HostedControlVisualStylesMode_RemovingHost_RestoresRequestedMode()
+    {
+        using Control control = new()
+        {
+            VisualStylesMode = VisualStylesMode.Net11
+        };
+        using ToolStripControlHost host = new(control);
+        using ToolStrip toolStrip = new();
+
+        toolStrip.Items.Add(host);
+        Assert.Equal(VisualStylesMode.Classic, control.VisualStylesMode);
+
+        toolStrip.Items.Remove(host);
+
+        Assert.Equal(VisualStylesMode.Net11, control.VisualStylesMode);
+    }
+
     private class SubControl : Control
     {
         public new void CreateControl() => base.CreateControl();
