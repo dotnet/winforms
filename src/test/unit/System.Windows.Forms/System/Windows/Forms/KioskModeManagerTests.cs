@@ -1,4 +1,4 @@
-// Licensed to the .NET Foundation under one or more agreements.
+﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
 #nullable disable
@@ -297,6 +297,371 @@ public class KioskModeManagerTests
         Assert.Equal(new Rectangle(10, 20, 300, 200), form.Bounds);
     }
 
+    [WinFormsTheory]
+    [BoolData]
+    public void KioskModeManager_FullScreen_VisibleMaximizedForm_RestoresTopMost(bool topMost)
+    {
+        using Form form = new()
+        {
+            Bounds = new Rectangle(100, 100, 800, 600),
+            StartPosition = FormStartPosition.Manual,
+            TopMost = topMost
+        };
+        form.Show();
+        form.WindowState = FormWindowState.Maximized;
+        using KioskModeManager manager = new()
+        {
+            ContainerControl = form,
+            TopMostInFullScreen = !topMost
+        };
+
+        manager.FullScreen = true;
+
+        Assert.Equal(!topMost, form.TopMost);
+        Assert.Equal(!topMost,
+            ((WINDOW_EX_STYLE)PInvokeCore.GetWindowLong(form, WINDOW_LONG_PTR_INDEX.GWL_EXSTYLE)
+                & WINDOW_EX_STYLE.WS_EX_TOPMOST) != 0);
+
+        manager.FullScreen = false;
+
+        Assert.Equal(topMost, form.TopMost);
+        Assert.Equal(topMost,
+            ((WINDOW_EX_STYLE)PInvokeCore.GetWindowLong(form, WINDOW_LONG_PTR_INDEX.GWL_EXSTYLE)
+                & WINDOW_EX_STYLE.WS_EX_TOPMOST) != 0);
+    }
+
+    [WinFormsTheory]
+    [InlineData(BoundsSpecified.All, false)]
+    [InlineData(BoundsSpecified.Location, false)]
+    [InlineData(BoundsSpecified.Size, false)]
+    [InlineData(BoundsSpecified.All, true)]
+    [InlineData(BoundsSpecified.Location, true)]
+    [InlineData(BoundsSpecified.Size, true)]
+    public void KioskModeManager_FullScreen_WithDeferredRestoreBounds_PreservesRequestedBounds(
+        BoundsSpecified specified,
+        bool recreateHandle)
+    {
+        using WindowPositionForm form = new()
+        {
+            Bounds = new Rectangle(100, 100, 800, 600),
+            StartPosition = FormStartPosition.Manual
+        };
+        form.Show();
+        Rectangle expectedBounds = form.Bounds;
+        Rectangle requestedBounds = new(150, 150, 900, 650);
+        form.WindowState = FormWindowState.Maximized;
+        form.SetBounds(requestedBounds.X, requestedBounds.Y, requestedBounds.Width, requestedBounds.Height, specified);
+        if ((specified & BoundsSpecified.Location) != 0)
+        {
+            expectedBounds.Location = requestedBounds.Location;
+        }
+
+        if ((specified & BoundsSpecified.Size) != 0)
+        {
+            expectedBounds.Size = requestedBounds.Size;
+        }
+
+        Rectangle screenBounds = Screen.FromRectangle(expectedBounds).Bounds;
+        using KioskModeManager manager = new() { ContainerControl = form };
+        form.NativeSizes.Clear();
+
+        manager.FullScreen = true;
+
+        Assert.Equal(screenBounds, form.Bounds);
+        Assert.Equal(new[] { screenBounds.Size }, form.NativeSizes);
+
+        // A later position notification must not consume the saved restore request either.
+        form.TopMost = !form.TopMost;
+        Assert.Equal(screenBounds, form.Bounds);
+        if (recreateHandle)
+        {
+            form.RecreateWindow();
+            Assert.Equal(screenBounds, form.Bounds);
+        }
+
+        manager.FullScreen = false;
+
+        Assert.Equal(FormWindowState.Maximized, form.WindowState);
+        Assert.Equal(expectedBounds, form.RestoreBounds);
+        form.WindowState = FormWindowState.Normal;
+        Assert.Equal(expectedBounds, form.Bounds);
+    }
+
+    [WinFormsTheory]
+    [InlineData(0, 0)]
+    [InlineData(1, 0)]
+    [InlineData(0, 1)]
+    [InlineData(1, 1)]
+    public void KioskModeManager_FullScreen_PreservesClientSizeRestoreFlags(int widthIsClientSize, int heightIsClientSize)
+    {
+        using Form form = new() { StartPosition = FormStartPosition.Manual };
+        form.Show();
+        Size frameSize = form.Size - form.ClientSize;
+        form.WindowState = FormWindowState.Maximized;
+        Form.KioskRestoreBoundsState state = new(new Rectangle(100, 100, 600, 400), BoundsSpecified.All,
+            widthIsClientSize, heightIsClientSize);
+        form.RestoreKioskRestoreBounds(state);
+        using KioskModeManager manager = new() { ContainerControl = form };
+
+        manager.FullScreen = true;
+        Assert.Equal(Screen.FromRectangle(form.Bounds).Bounds, form.Bounds);
+        manager.FullScreen = false;
+
+        Form.KioskRestoreBoundsState restoredState = form.SuspendKioskRestoreBounds();
+        Assert.Equal(state, restoredState);
+        form.RestoreKioskRestoreBounds(restoredState);
+        form.WindowState = FormWindowState.Normal;
+        Assert.Equal(new Size(600 + widthIsClientSize * frameSize.Width, 400 + heightIsClientSize * frameSize.Height), form.Size);
+        Assert.Equal(new Point(100, 100), form.Location);
+    }
+
+    [WinFormsTheory]
+    [InlineData(false, false)]
+    [InlineData(false, true)]
+    [InlineData(true, false)]
+    [InlineData(true, true)]
+    public void KioskModeManager_FullScreen_StyleChangedThrows_KeepsAppliedState(bool entering, bool maximized)
+    {
+        Rectangle normalBounds = new(100, 100, 600, 400);
+        using Form form = new() { StartPosition = FormStartPosition.Manual, Bounds = normalBounds, TopMost = true };
+        form.Show();
+        Rectangle deferredBounds = new(150, 150, 650, 450);
+        FormWindowState originalState = maximized ? FormWindowState.Maximized : FormWindowState.Normal;
+        if (maximized)
+        {
+            form.WindowState = originalState;
+            form.Bounds = deferredBounds;
+        }
+
+        Rectangle originalBounds = form.Bounds;
+        Rectangle fullscreenBounds = Screen.FromRectangle(maximized ? form.RestoreBounds : form.Bounds).Bounds;
+        Form.KioskRestoreBoundsState expected = form.SuspendKioskRestoreBounds();
+        form.RestoreKioskRestoreBounds(expected);
+        using KioskModeManager manager = new() { ContainerControl = form };
+        if (!entering)
+        {
+            manager.FullScreen = true;
+        }
+
+        InvalidOperationException exception = new("Transition failed.");
+        EventHandler handler = (_, _) => throw exception;
+        form.StyleChanged += handler;
+        try
+        {
+            Assert.Same(exception, Assert.Throws<InvalidOperationException>(() => manager.FullScreen = entering));
+        }
+        finally
+        {
+            form.StyleChanged -= handler;
+        }
+
+        Assert.Equal(entering, manager.FullScreen);
+        Assert.Equal(entering ? fullscreenBounds : originalBounds, form.Bounds);
+        Assert.Equal(entering ? FormBorderStyle.None : FormBorderStyle.Sizable, form.FormBorderStyle);
+        Assert.Equal(entering ? FormWindowState.Normal : originalState, form.WindowState);
+        Assert.Equal(!entering, form.TopMost);
+
+        // Retrying the applied value must not replace the original restore state.
+        manager.FullScreen = entering;
+        manager.FullScreen = false;
+        Assert.False(manager.FullScreen);
+        Assert.Equal(originalBounds, form.Bounds);
+        Assert.Equal(originalState, form.WindowState);
+
+        Form.KioskRestoreBoundsState actual = form.SuspendKioskRestoreBounds();
+        Assert.Equal(expected, actual);
+        form.RestoreKioskRestoreBounds(actual);
+        if (maximized)
+        {
+            form.WindowState = FormWindowState.Normal;
+            Assert.Equal(deferredBounds, form.Bounds);
+        }
+    }
+
+    [WinFormsTheory]
+    [InlineData(FormBorderStyle.Sizable, FormWindowState.Normal)]
+    [InlineData(FormBorderStyle.Sizable, FormWindowState.Maximized)]
+    [InlineData(FormBorderStyle.FixedDialog, FormWindowState.Normal)]
+    [InlineData(FormBorderStyle.Fixed3D, FormWindowState.Normal)]
+    [InlineData(FormBorderStyle.FixedSingle, FormWindowState.Normal)]
+    [InlineData(FormBorderStyle.FixedToolWindow, FormWindowState.Normal)]
+    [InlineData(FormBorderStyle.SizableToolWindow, FormWindowState.Normal)]
+    [InlineData(FormBorderStyle.None, FormWindowState.Normal)]
+    public void KioskModeManager_FullScreen_VisibleForm_ResizesOnlyToFinalBounds(
+        FormBorderStyle borderStyle,
+        FormWindowState initialState)
+    {
+        using WindowPositionForm form = new()
+        {
+            Bounds = new Rectangle(100, 100, 800, 600),
+            StartPosition = FormStartPosition.Manual,
+            FormBorderStyle = borderStyle
+        };
+        using TableLayoutPanel table = new() { Dock = DockStyle.Fill };
+        using TextBox textBox = new() { Dock = DockStyle.Fill };
+        table.Controls.Add(textBox);
+        form.Controls.Add(table);
+        form.Show();
+        Rectangle normalBounds = form.Bounds;
+        int layoutCount = 0;
+        table.Layout += (_, _) => layoutCount++;
+
+        // Compare with one ordinary resize using the same control tree.
+        form.Size += new Size(20, 20);
+        int singleResizeLayouts = layoutCount;
+        Assert.True(singleResizeLayouts > 0);
+        form.Bounds = normalBounds;
+        form.WindowState = initialState;
+        Rectangle originalBounds = form.Bounds;
+        WINDOWPLACEMENT originalPlacement = form.GetKioskWindowPlacement();
+        WINDOW_STYLE originalStyle = form.WindowStyle;
+        WINDOW_EX_STYLE originalExStyle = (WINDOW_EX_STYLE)PInvokeCore.GetWindowLong(form, WINDOW_LONG_PTR_INDEX.GWL_EXSTYLE);
+        const WINDOW_STYLE borderMask = WINDOW_STYLE.WS_CAPTION | WINDOW_STYLE.WS_THICKFRAME;
+        const WINDOW_EX_STYLE extendedBorderMask = WINDOW_EX_STYLE.WS_EX_CLIENTEDGE
+            | WINDOW_EX_STYLE.WS_EX_DLGMODALFRAME | WINDOW_EX_STYLE.WS_EX_TOOLWINDOW;
+        Rectangle screenBounds = Screen.FromRectangle(form.RestoreBounds).Bounds;
+        using KioskModeManager manager = new() { ContainerControl = form };
+        List<Rectangle> sizes = [];
+        List<int> layoutsAtStyleChange = [];
+        form.SizeChanged += (_, _) => sizes.Add(form.Bounds);
+        form.StyleChanged += (_, _) => layoutsAtStyleChange.Add(layoutCount);
+        form.NativeSizes.Clear();
+        layoutCount = 0;
+
+        manager.FullScreen = true;
+
+        Assert.True(manager.FullScreen);
+        Assert.Equal(new[] { screenBounds }, sizes);
+        Assert.Equal(new[] { screenBounds.Size }, form.NativeSizes);
+        Assert.Equal(new[] { 0 }, layoutsAtStyleChange);
+        Assert.Equal(singleResizeLayouts, layoutCount);
+        Assert.Equal(FormBorderStyle.None, form.FormBorderStyle);
+        Assert.Equal(FormWindowState.Normal, form.WindowState);
+        Assert.Equal((WINDOW_STYLE)0, form.WindowStyle & (borderMask | WINDOW_STYLE.WS_MAXIMIZE | WINDOW_STYLE.WS_MINIMIZE));
+        Assert.Equal((WINDOW_EX_STYLE)0,
+            (WINDOW_EX_STYLE)PInvokeCore.GetWindowLong(form, WINDOW_LONG_PTR_INDEX.GWL_EXSTYLE) & extendedBorderMask);
+        Assert.Equal(SHOW_WINDOW_CMD.SW_NORMAL, form.GetKioskWindowPlacement().showCmd);
+
+        sizes.Clear();
+        layoutsAtStyleChange.Clear();
+        form.NativeSizes.Clear();
+        layoutCount = 0;
+        manager.FullScreen = false;
+
+        Assert.False(manager.FullScreen);
+        Assert.Equal(new[] { originalBounds }, sizes);
+        Assert.Equal(new[] { originalBounds.Size }, form.NativeSizes);
+        Assert.Equal(new[] { 0 }, layoutsAtStyleChange);
+        Assert.Equal(singleResizeLayouts, layoutCount);
+        Assert.Equal(borderStyle, form.FormBorderStyle);
+        Assert.Equal(initialState, form.WindowState);
+        Assert.Equal(originalBounds, form.Bounds);
+        Assert.Equal(normalBounds, form.RestoreBounds);
+        Assert.Equal(originalStyle & (borderMask | WINDOW_STYLE.WS_MAXIMIZE | WINDOW_STYLE.WS_MINIMIZE),
+            form.WindowStyle & (borderMask | WINDOW_STYLE.WS_MAXIMIZE | WINDOW_STYLE.WS_MINIMIZE));
+        Assert.Equal(originalExStyle & extendedBorderMask,
+            (WINDOW_EX_STYLE)PInvokeCore.GetWindowLong(form, WINDOW_LONG_PTR_INDEX.GWL_EXSTYLE) & extendedBorderMask);
+        WINDOWPLACEMENT restoredPlacement = form.GetKioskWindowPlacement();
+        Assert.Equal(originalPlacement.showCmd, restoredPlacement.showCmd);
+        Assert.Equal(originalPlacement.rcNormalPosition, restoredPlacement.rcNormalPosition);
+
+        form.WindowState = FormWindowState.Normal;
+        Assert.Equal(normalBounds, form.Bounds);
+    }
+
+    [WinFormsFact]
+    public void KioskModeManager_FullScreen_VisibleForm_RepeatedEntryOnlyNotifiesFinalBounds()
+    {
+        using WindowPositionForm form = new()
+        {
+            Bounds = new Rectangle(100, 100, 1400, 600),
+            StartPosition = FormStartPosition.Manual
+        };
+        form.Show();
+        using KioskModeManager manager = new() { ContainerControl = form };
+        Rectangle normalBounds = form.Bounds;
+        Size normalClientSize = form.ClientSize;
+        Rectangle fullscreenBounds = Screen.FromRectangle(normalBounds).Bounds;
+        List<(Rectangle Bounds, Size ClientSize)> sizes = [];
+        form.SizeChanged += (_, _) => sizes.Add((form.Bounds, form.ClientSize));
+
+        // The extra notification can occur after a maximized fullscreen round trip and a restore to Normal.
+        form.WindowState = FormWindowState.Maximized;
+        manager.FullScreen = true;
+        manager.FullScreen = false;
+        form.WindowState = FormWindowState.Normal;
+        Application.DoEvents();
+
+        for (int i = 0; i < 3; i++)
+        {
+            sizes.Clear();
+            form.NativeSizes.Clear();
+            manager.FullScreen = true;
+            Application.DoEvents();
+            Assert.Equal(new[] { fullscreenBounds.Size }, form.NativeSizes);
+            Assert.Equal(new[] { (fullscreenBounds, fullscreenBounds.Size) }, sizes);
+
+            sizes.Clear();
+            form.NativeSizes.Clear();
+            manager.FullScreen = false;
+            Application.DoEvents();
+            Assert.Equal(new[] { normalBounds.Size }, form.NativeSizes);
+            Assert.Equal(new[] { (normalBounds, normalClientSize) }, sizes);
+        }
+    }
+
+    [WinFormsFact]
+    public void KioskModeManager_FullScreen_RefreshBounds_WhenUnchanged_DoesNotReapplyStyle()
+    {
+        using WindowPositionForm form = new();
+        form.Show();
+        using KioskModeManager manager = new() { ContainerControl = form, FullScreen = true };
+        Rectangle bounds = form.Bounds;
+        int styleChangedCount = 0;
+        int sizeChangedCount = 0;
+        int layoutCount = 0;
+        form.StyleChanged += (_, _) => styleChangedCount++;
+        form.SizeChanged += (_, _) => sizeChangedCount++;
+        form.Layout += (_, _) => layoutCount++;
+        form.NativeSizes.Clear();
+
+        PInvokeCore.SendMessage(form, PInvokeCore.WM_DISPLAYCHANGE);
+
+        Assert.Equal(bounds, form.Bounds);
+        Assert.True(manager.FullScreen);
+        Assert.Equal(0, styleChangedCount);
+        Assert.Equal(0, sizeChangedCount);
+        Assert.Equal(0, layoutCount);
+        Assert.Empty(form.NativeSizes);
+    }
+
+    [WinFormsTheory]
+    [BoolData]
+    public void KioskModeManager_FullScreen_HandleRecreated_RestoresOriginalState(bool maximized)
+    {
+        using WindowPositionForm form = new()
+        {
+            Bounds = new Rectangle(100, 100, 800, 600),
+            StartPosition = FormStartPosition.Manual
+        };
+        form.Show();
+        Rectangle normalBounds = form.Bounds;
+        if (maximized)
+        {
+            form.WindowState = FormWindowState.Maximized;
+        }
+
+        using KioskModeManager manager = new() { ContainerControl = form, FullScreen = true };
+        form.RecreateWindow();
+
+        manager.FullScreen = false;
+
+        Assert.Equal(FormBorderStyle.Sizable, form.FormBorderStyle);
+        Assert.Equal(maximized ? FormWindowState.Maximized : FormWindowState.Normal, form.WindowState);
+        form.WindowState = FormWindowState.Normal;
+        Assert.Equal(normalBounds, form.Bounds);
+    }
+
     [WinFormsFact]
     public void KioskModeManager_FullScreen_CoversCompleteScreenBounds()
     {
@@ -362,6 +727,124 @@ public class KioskModeManagerTests
         manager.TestAccessor.Dynamic.RefreshFullScreenBounds();
 
         Assert.Equal(screenBounds, form.Bounds);
+    }
+
+    [WinFormsFact]
+    public void KioskModeManager_FullScreen_RefreshBounds_WhenMinimized_ReappliesBoundsAfterRestore()
+    {
+        using Form form = new()
+        {
+            Bounds = new Rectangle(10, 20, 300, 200),
+            StartPosition = FormStartPosition.Manual
+        };
+        form.Show();
+        using KioskModeManager manager = new()
+        {
+            ContainerControl = form,
+            FullScreen = true
+        };
+        Rectangle screenBounds = form.Bounds;
+        // Model the old fullscreen rectangle without changing the desktop resolution.
+        form.Size = screenBounds.Size - new Size(50, 50);
+        form.WindowState = FormWindowState.Minimized;
+        Form.KioskRestoreBoundsState before = form.SuspendKioskRestoreBounds();
+        form.RestoreKioskRestoreBounds(before);
+
+        PInvokeCore.SendMessage(form, PInvokeCore.WM_DISPLAYCHANGE);
+
+        Form.KioskRestoreBoundsState after = form.SuspendKioskRestoreBounds();
+        form.RestoreKioskRestoreBounds(after);
+        Assert.Equal(before, after);
+        Assert.Equal(FormWindowState.Minimized, form.WindowState);
+
+        form.WindowState = FormWindowState.Normal;
+        Application.DoEvents();
+
+        Assert.True(manager.FullScreen);
+        Assert.Equal(screenBounds, form.Bounds);
+    }
+
+    [WinFormsTheory]
+    [InlineData(false, false)]
+    [InlineData(false, true)]
+    [InlineData(true, true)]
+    public void KioskModeManager_FullScreen_RefreshBounds_WhenMaximized_DefersBoundsUntilExit(
+        bool initiallyMaximized,
+        bool requestSize)
+    {
+        Rectangle normalBounds = new(100, 100, 600, 400);
+        using WindowPositionForm form = new() { StartPosition = FormStartPosition.Manual, Bounds = normalBounds };
+        form.Show();
+        if (initiallyMaximized)
+        {
+            form.WindowState = FormWindowState.Maximized;
+        }
+
+        Rectangle originalBounds = form.Bounds;
+        using KioskModeManager manager = new() { ContainerControl = form, FullScreen = true };
+        Rectangle screenBounds = form.Bounds;
+        form.SetMaximizedBounds(new Rectangle(screenBounds.Location, screenBounds.Size - new Size(50, 50)));
+        form.WindowState = FormWindowState.Maximized;
+        Assert.Equal(FormWindowState.Maximized, form.WindowState);
+        Assert.NotEqual(screenBounds.Size, form.Size);
+        // Model the implicit restore rectangle generated by the legacy Windows maximize path.
+        form.RestoreKioskRestoreBounds(new(screenBounds, BoundsSpecified.All, 1, 1, BoundsSpecified.All));
+        Size requestedSize = new(400, 300);
+        if (requestSize)
+        {
+            form.Size = requestedSize;
+        }
+
+        form.NativeSizes.Clear();
+
+        PInvokeCore.SendMessage(form, PInvokeCore.WM_DISPLAYCHANGE);
+
+        Assert.True(manager.FullScreen);
+        Assert.Equal(FormWindowState.Normal, form.WindowState);
+        Assert.Equal(screenBounds, form.Bounds);
+        Assert.Equal(new[] { screenBounds.Size }, form.NativeSizes);
+
+        form.NativeSizes.Clear();
+        manager.TopMostInFullScreen = true;
+
+        Assert.True(form.TopMost);
+        Assert.True(manager.FullScreen);
+        Assert.Equal(screenBounds, form.Bounds);
+        Assert.Empty(form.NativeSizes);
+
+        manager.FullScreen = false;
+
+        Assert.False(manager.FullScreen);
+        if (initiallyMaximized)
+        {
+            Assert.Equal(FormWindowState.Maximized, form.WindowState);
+            Assert.Equal(originalBounds, form.Bounds);
+            form.WindowState = FormWindowState.Normal;
+        }
+
+        Assert.Equal(FormWindowState.Normal, form.WindowState);
+        Assert.Equal(new Rectangle(normalBounds.Location, requestSize ? requestedSize : normalBounds.Size), form.Bounds);
+    }
+
+    [WinFormsFact]
+    public void KioskModeManager_FullScreen_ExitNormalForm_PreservesActualBoundsOverPlacement()
+    {
+        using WindowPositionForm form = new() { StartPosition = FormStartPosition.Manual };
+        form.Show();
+        Rectangle bounds = form.Bounds;
+        using KioskModeManager manager = new() { ContainerControl = form, FullScreen = true };
+
+        // Model a snapped window, whose placement retains its pre-snap rectangle.
+        WINDOWPLACEMENT placement = manager.TestAccessor.Dynamic._savedPlacement;
+        placement.rcNormalPosition.right += 50;
+        manager.TestAccessor.Dynamic._savedPlacement = placement;
+        form.NativeSizes.Clear();
+
+        manager.FullScreen = false;
+
+        Assert.Equal(FormWindowState.Normal, form.WindowState);
+        Assert.Equal(bounds, form.Bounds);
+        Assert.Equal(new[] { bounds.Size }, form.NativeSizes);
     }
 
     [WinFormsFact]
@@ -876,6 +1359,32 @@ public class KioskModeManagerTests
         Assert.False(manager.TestAccessor.Dynamic._isCursorHidden);
         Assert.True(timer.Enabled);
         Assert.Equal(1, timer.Interval);
+    }
+
+    /// <summary>
+    ///  Records native window size changes during fullscreen transitions.
+    /// </summary>
+    private class WindowPositionForm : Form
+    {
+        public List<Size> NativeSizes { get; } = [];
+
+        public void SetMaximizedBounds(Rectangle bounds) => MaximizedBounds = bounds;
+
+        public void RecreateWindow() => RecreateHandle();
+
+        protected override unsafe void WndProc(ref Message m)
+        {
+            if (m.MsgInternal == PInvokeCore.WM_WINDOWPOSCHANGED)
+            {
+                WINDOWPOS* position = (WINDOWPOS*)(nint)m.LParamInternal;
+                if ((position->flags & SET_WINDOW_POS_FLAGS.SWP_NOSIZE) == 0)
+                {
+                    NativeSizes.Add(new Size(position->cx, position->cy));
+                }
+            }
+
+            base.WndProc(ref m);
+        }
     }
 
     private class SubKioskModeManager : KioskModeManager

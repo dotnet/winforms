@@ -98,6 +98,10 @@ public partial class Form : ContainerControl
     private static readonly BitVector32.Section s_formStateExWindowBoundsHeightIsClientSize = BitVector32.CreateSection(1, s_formStateExWindowBoundsWidthIsClientSize);
     private static readonly BitVector32.Section s_formStateExWindowClosing = BitVector32.CreateSection(1, s_formStateExWindowBoundsHeightIsClientSize);
     private static readonly BitVector32.Section s_formStateExInCloseEventDispatch = BitVector32.CreateSection(1, s_formStateExWindowClosing);
+#if NET11_0_OR_GREATER
+    private static readonly BitVector32.Section s_formStateExApplyingKioskStyles = BitVector32.CreateSection(1, s_formStateExInCloseEventDispatch);
+    private static readonly BitVector32.Section s_formStateExImplicitRestoreBounds = BitVector32.CreateSection((short)BoundsSpecified.All, s_formStateExApplyingKioskStyles);
+#endif
 
     private const int SizeGripSize = 16;
 
@@ -682,6 +686,9 @@ public partial class Form : ContainerControl
             BoundsSpecified preClientUpdateRestoredWindowBoundsSpecified = _restoredWindowBoundsSpecified;
             int preWindowBoundsWidthIsClientSize = _formStateEx[s_formStateExWindowBoundsWidthIsClientSize];
             int preWindowBoundsHeightIsClientSize = _formStateEx[s_formStateExWindowBoundsHeightIsClientSize];
+#if NET11_0_OR_GREATER
+        int preImplicitRestoreBounds = _formStateEx[s_formStateExImplicitRestoreBounds];
+#endif
 
             UpdateFormStyles();
 
@@ -700,6 +707,9 @@ public partial class Form : ContainerControl
                 _restoredWindowBoundsSpecified = preClientUpdateRestoredWindowBoundsSpecified;
                 _formStateEx[s_formStateExWindowBoundsWidthIsClientSize] = preWindowBoundsWidthIsClientSize;
                 _formStateEx[s_formStateExWindowBoundsHeightIsClientSize] = preWindowBoundsHeightIsClientSize;
+#if NET11_0_OR_GREATER
+                _formStateEx[s_formStateExImplicitRestoreBounds] = preImplicitRestoreBounds;
+#endif
             }
         }
     }
@@ -5161,6 +5171,9 @@ public partial class Form : ContainerControl
             _restoredWindowBounds = new Rectangle(-1, -1, -1, -1);
             _formStateEx[s_formStateExWindowBoundsHeightIsClientSize] = 0;
             _formStateEx[s_formStateExWindowBoundsWidthIsClientSize] = 0;
+#if NET11_0_OR_GREATER
+            _formStateEx[s_formStateExImplicitRestoreBounds] = 0;
+#endif
         }
     }
 
@@ -5316,9 +5329,15 @@ public partial class Form : ContainerControl
             if (x != -1 || y != -1)
             {
                 _restoredWindowBoundsSpecified |= (specified & (BoundsSpecified.X | BoundsSpecified.Y));
+#if NET11_0_OR_GREATER
+                _formStateEx[s_formStateExImplicitRestoreBounds] &= ~(int)(specified & BoundsSpecified.Location);
+#endif
             }
 
             _restoredWindowBoundsSpecified |= (specified & (BoundsSpecified.Width | BoundsSpecified.Height));
+#if NET11_0_OR_GREATER
+            _formStateEx[s_formStateExImplicitRestoreBounds] &= ~(int)(specified & BoundsSpecified.Size);
+#endif
 
             if ((specified & BoundsSpecified.X) != 0)
             {
@@ -6305,6 +6324,136 @@ public partial class Form : ContainerControl
         _formStateEx[s_formStateExUpdateMenuHandlesDeferred] = 0;
     }
 
+#if NET11_0_OR_GREATER
+    /// <summary>
+    ///  Stores a bounds request deferred while a form is maximized or minimized.
+    /// </summary>
+    internal readonly record struct KioskRestoreBoundsState(
+        Rectangle Bounds,
+        BoundsSpecified Specified,
+        int WidthIsClientSize,
+        int HeightIsClientSize,
+        BoundsSpecified ImplicitlySpecified = BoundsSpecified.None);
+
+    internal KioskRestoreBoundsState SuspendKioskRestoreBounds()
+    {
+        KioskRestoreBoundsState state = new(
+            _restoredWindowBounds,
+            _restoredWindowBoundsSpecified,
+            _formStateEx[s_formStateExWindowBoundsWidthIsClientSize],
+            _formStateEx[s_formStateExWindowBoundsHeightIsClientSize],
+            (BoundsSpecified)_formStateEx[s_formStateExImplicitRestoreBounds]);
+
+        // Fullscreen uses Normal state, but must not consume a pending restore request.
+        _restoredWindowBounds = new Rectangle(-1, -1, -1, -1);
+        _restoredWindowBoundsSpecified = BoundsSpecified.None;
+        _formStateEx[s_formStateExWindowBoundsWidthIsClientSize] = 0;
+        _formStateEx[s_formStateExWindowBoundsHeightIsClientSize] = 0;
+        _formStateEx[s_formStateExImplicitRestoreBounds] = 0;
+
+        return state;
+    }
+
+    internal void RestoreKioskRestoreBounds(KioskRestoreBoundsState state)
+    {
+        _restoredWindowBounds = state.Bounds;
+        _restoredWindowBoundsSpecified = state.Specified;
+        _formStateEx[s_formStateExWindowBoundsWidthIsClientSize] = state.WidthIsClientSize;
+        _formStateEx[s_formStateExWindowBoundsHeightIsClientSize] = state.HeightIsClientSize;
+        _formStateEx[s_formStateExImplicitRestoreBounds] = (int)state.ImplicitlySpecified;
+    }
+
+    internal unsafe WINDOWPLACEMENT GetKioskWindowPlacement()
+    {
+        WINDOWPLACEMENT placement = new() { length = (uint)sizeof(WINDOWPLACEMENT) };
+        if (!PInvoke.GetWindowPlacement(HWND, &placement))
+        {
+            throw new Win32Exception();
+        }
+
+        return placement;
+    }
+
+    internal void SetKioskWindowState(FormBorderStyle borderStyle, FormWindowState windowState, bool topMost, Rectangle bounds)
+    {
+        CreateParams previousParams = CreateParams;
+        int previousCreateStyle = previousParams.Style;
+        int previousCreateExStyle = previousParams.ExStyle;
+        FormBorderStyle previousBorderStyle = FormBorderStyle;
+        FormWindowState previousWindowState = WindowState;
+        bool previousTopMost = TopMost;
+        WINDOW_STYLE previousStyle = WindowStyle;
+        WINDOW_EX_STYLE previousExtendedStyle = ExtendedWindowStyle;
+        _formState[s_formStateBorderStyle] = (int)borderStyle;
+        _formState[s_formStateWindowState] = (int)windowState;
+        _formState[s_formStateTopMost] = topMost ? 1 : 0;
+        CreateParams newParams = CreateParams;
+
+        // Preserve unrelated native styles while applying the Form's changed styles and window state.
+        WINDOW_STYLE styleChanges = (WINDOW_STYLE)(previousCreateStyle ^ newParams.Style)
+            | WINDOW_STYLE.WS_MAXIMIZE | WINDOW_STYLE.WS_MINIMIZE;
+        WINDOW_EX_STYLE exStyleChanges = (WINDOW_EX_STYLE)(previousCreateExStyle ^ newParams.ExStyle);
+        // A style write can synchronously recalculate the client area at the old outer bounds.
+        // Keep the managed bounds unchanged until SetWindowPos applies the final rectangle.
+        _formStateEx[s_formStateExApplyingKioskStyles] = 1;
+        try
+        {
+            WindowStyle = (previousStyle & ~styleChanges) | ((WINDOW_STYLE)newParams.Style & styleChanges);
+            ExtendedWindowStyle = (previousExtendedStyle & ~exStyleChanges) | ((WINDOW_EX_STYLE)newParams.ExStyle & exStyleChanges);
+        }
+        finally
+        {
+            _formStateEx[s_formStateExApplyingKioskStyles] = 0;
+        }
+
+        if (!PInvoke.SetWindowPos(
+            this,
+            topMost ? HWND.HWND_TOPMOST : HWND.HWND_NOTOPMOST,
+            bounds.X, bounds.Y, bounds.Width, bounds.Height,
+            SET_WINDOW_POS_FLAGS.SWP_FRAMECHANGED | SET_WINDOW_POS_FLAGS.SWP_NOACTIVATE))
+        {
+            Win32Exception exception = new();
+            _formState[s_formStateBorderStyle] = (int)previousBorderStyle;
+            _formState[s_formStateWindowState] = (int)previousWindowState;
+            _formState[s_formStateTopMost] = previousTopMost ? 1 : 0;
+            if (IsHandleCreated)
+            {
+                WindowStyle = previousStyle;
+                ExtendedWindowStyle = previousExtendedStyle;
+            }
+
+            throw exception;
+        }
+
+        if (previousWindowState != windowState)
+        {
+            AdjustSystemMenu();
+        }
+    }
+
+    // Call after applying the native transition and restoring any saved placement.
+    internal void NotifyKioskWindowStyleChanged()
+    {
+        OnStyleChanged(EventArgs.Empty);
+        if (_formState[s_formStateIconSet] == 0)
+        {
+            UpdateWindowIcon(false);
+        }
+
+        Invalidate(true);
+    }
+
+    internal unsafe void RestoreKioskWindowPlacement(WINDOWPLACEMENT? placement, Rectangle restoreBounds)
+    {
+        if (placement is { } savedPlacement && !PInvoke.SetWindowPlacement(HWND, &savedPlacement))
+        {
+            throw new Win32Exception();
+        }
+
+        _restoreBounds = restoreBounds;
+    }
+#endif
+
     // Call this function instead of UpdateStyles() when the form's client-size must
     // be preserved e.g. when changing the border style.
     //
@@ -6637,6 +6786,9 @@ public partial class Form : ContainerControl
                 _restoredWindowBoundsSpecified = BoundsSpecified.Size;
                 _restoredWindowBounds.Location = Location;
                 _restoredWindowBoundsSpecified |= BoundsSpecified.Location;
+#if NET11_0_OR_GREATER
+                _formStateEx[s_formStateExImplicitRestoreBounds] = (int)BoundsSpecified.All;
+#endif
             }
 
             // stash off restoreBounds As well...
@@ -7309,6 +7461,12 @@ public partial class Form : ContainerControl
             case PInvokeCore.WM_GETMINMAXINFO:
                 WmGetMinMaxInfo(ref m);
                 break;
+#if NET11_0_OR_GREATER
+            case PInvokeCore.WM_MOVE or PInvokeCore.WM_WINDOWPOSCHANGED
+                when _formStateEx[s_formStateExApplyingKioskStyles] != 0:
+                DefWndProc(ref m);
+                break;
+#endif
             case PInvokeCore.WM_WINDOWPOSCHANGED:
                 WmWindowPosChanged(ref m);
                 break;
