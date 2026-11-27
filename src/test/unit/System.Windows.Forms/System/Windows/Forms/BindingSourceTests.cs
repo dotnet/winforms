@@ -57,6 +57,33 @@ public class BindingSourceTests
         Assert.Same(source.List.SyncRoot, source.SyncRoot);
     }
 
+    [WinFormsTheory]
+    [BoolData]
+    public void Ctor_EnumerableWithNullFirstItem_PreservesItems(bool includeSecondItem)
+    {
+        IEnumerable<object> values = GetValues(includeSecondItem);
+
+        using BindingSource source = new(values, string.Empty);
+
+        Assert.Same(values, source.DataSource);
+        Assert.IsType<BindingList<object>>(source.List);
+        Assert.Equal(includeSecondItem ? 2 : 1, source.Count);
+        Assert.Null(source[0]);
+        if (includeSecondItem)
+        {
+            Assert.Equal("value", source[1]);
+        }
+
+        static IEnumerable<object> GetValues(bool includeSecondItem)
+        {
+            yield return null;
+            if (includeSecondItem)
+            {
+                yield return "value";
+            }
+        }
+    }
+
     public static IEnumerable<object[]> Ctor_Object_String_Null_TestData()
     {
         yield return new object[] { null, null, typeof(BindingList<object>) };
