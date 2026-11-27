@@ -4,6 +4,7 @@
 using System.ComponentModel;
 using System.ComponentModel.Design.Serialization;
 using System.Drawing;
+using System.Drawing.Imaging;
 using System.Globalization;
 using System.Runtime.InteropServices;
 using System.Windows.Forms.Design;
@@ -712,7 +713,35 @@ public partial class ToolStripMenuItem : ToolStripDropDownItem
             g.DrawRectangle(SystemPens.Control, 0, 0, image.Width - 1, image.Height - 1);
         }
 
-        image.MakeTransparent(SystemColors.Control);
+#pragma warning disable WFO5001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
+        image.MakeTransparent(Application.IsDarkModeEnabled
+            ? ColorTranslator.FromWin32((int)PInvokeCore.GetSysColor(SYS_COLOR_INDEX.COLOR_BTNFACE))
+            : SystemColors.Control);
+        if (Application.IsDarkModeEnabled)
+        {
+            Bitmap bmpDest = new Bitmap(image.Width, image.Height);
+            ColorMatrix clrMatrix = new ColorMatrix
+                ([
+                    [-1, 0, 0, 0, 0],
+                    [0, -1, 0, 0, 0],
+                    [0, 0, -1, 0, 0],
+                    [0, 0, 0, 1, 0],
+                    [1, 1, 1, 0, 1]
+                ]);
+
+            using (ImageAttributes attrImage = new ImageAttributes())
+            {
+                attrImage.SetColorMatrix(clrMatrix);
+                using Graphics g = Graphics.FromImage(bmpDest);
+                g.DrawImage(image, new Rectangle(0, 0,
+                image.Width, image.Height), 0, 0,
+                image.Width, image.Height, GraphicsUnit.Pixel,
+                attrImage);
+            }
+
+            return bmpDest;
+        }
+#pragma warning restore WFO5001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
         return image;
     }
 
