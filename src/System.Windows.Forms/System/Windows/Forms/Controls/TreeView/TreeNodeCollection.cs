@@ -213,6 +213,11 @@ public class TreeNodeCollection : IList
             return;
         }
 
+        foreach (TreeNode node in nodes)
+        {
+            ArgumentNullException.ThrowIfNull(node);
+        }
+
         TreeView? tv = _owner.TreeView;
         if (tv is not null && nodes.Length > TreeNode.MAX_TREENODES_OPS)
         {

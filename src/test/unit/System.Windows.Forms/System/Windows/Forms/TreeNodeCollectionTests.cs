@@ -10,6 +10,42 @@ namespace System.Windows.Forms.Tests;
 public class TreeNodeCollectionTests
 {
     [WinFormsTheory]
+    [InlineData(0)]
+    [InlineData(1)]
+    [InlineData(2)]
+    public void TreeNodeCollection_AddRange_NullElement_PreservesCollection(int nullIndex)
+    {
+        TreeNode existing = new("existing");
+        TreeNode parent = new("parent", [existing]);
+        TreeNode[] nodes = [new("first"), new("middle"), new("last")];
+        nodes[nullIndex] = null;
+
+        Assert.Throws<ArgumentNullException>("node", () => parent.Nodes.AddRange(nodes));
+
+        Assert.Same(existing, Assert.Single(parent.Nodes));
+        Assert.Same(parent, existing.Parent);
+        Assert.Equal(0, existing.Index);
+        foreach (TreeNode node in nodes)
+        {
+            if (node is not null)
+            {
+                Assert.Null(node.Parent);
+                Assert.Null(node.TreeView);
+            }
+        }
+
+        TreeNode firstAdded = parent.Nodes.Add("first added");
+        TreeNode secondAdded = parent.Nodes.Add("second added");
+
+        Assert.Equal([existing, firstAdded, secondAdded], parent.Nodes.Cast<TreeNode>());
+        Assert.Same(parent, firstAdded.Parent);
+        Assert.Same(parent, secondAdded.Parent);
+        Assert.Equal(1, firstAdded.Index);
+        Assert.Equal(2, secondAdded.Index);
+        Assert.Null(parent.TreeView);
+    }
+
+    [WinFormsTheory]
     [NormalizedStringData]
     public void TreeNodeCollection_Add_String_Success(string text, string expectedText)
     {
