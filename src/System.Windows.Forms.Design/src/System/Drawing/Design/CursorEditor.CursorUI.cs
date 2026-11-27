@@ -69,7 +69,14 @@ public partial class CursorEditor
                 Cursor cursor = (Cursor)Items[e.Index];
                 string? text = _cursorConverter.ConvertToString(cursor);
                 Font font = e.Font!;
-                using var brushText = e.ForeColor.GetCachedSolidBrushScope();
+
+                Color textColor = e.ForeColor;
+                if (Application.IsDarkModeEnabled && e.State.HasFlag(DrawItemState.Selected))
+                {
+                    textColor = SystemColors.ControlText;
+                }
+
+                using var brushText = textColor.GetCachedSolidBrushScope();
 
                 e.DrawBackground();
                 e.Graphics.FillRectangle(SystemBrushes.Control, new Rectangle(e.Bounds.X + 2, e.Bounds.Y + 2, _cursorWidth, e.Bounds.Height - 4));
