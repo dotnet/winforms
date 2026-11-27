@@ -8014,6 +8014,13 @@ public unsafe partial class Control :
                 SetWindowFont();
             }
 
+            // Set the window text from the Text property before handling DPI changes, which can raise events that
+            // update the text.
+            if (_text is not null && _text.Length != 0)
+            {
+                PInvoke.SetWindowText(this, _text);
+            }
+
             HandleHighDpi();
 
             // Restore drag drop status. Ole Initialize happens when the ThreadContext in Application is created.
@@ -8039,12 +8046,6 @@ public unsafe partial class Control :
             if (Properties.TryGetValue(s_ncAccessibilityProperty, out ControlAccessibleObject? nonClientAccessibleObject))
             {
                 nonClientAccessibleObject.Handle = handle;
-            }
-
-            // Set the window text from the Text property.
-            if (_text is not null && _text.Length != 0)
-            {
-                PInvoke.SetWindowText(this, _text);
             }
 
             if (this is not ScrollableControl
