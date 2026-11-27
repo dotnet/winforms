@@ -48,7 +48,7 @@ public class ContainerControl : ScrollableControl, IContainerControl
 
     private int _boundsChangeDeferralCount;
 
-    private List<(bool LocationChanged, bool SizeChanged)>? _deferredBoundsChanges;
+    private List<(bool LocationChanged, bool SizeChanged, bool ClientSizeChanged)>? _deferredBoundsChanges;
 
     private BitVector32 _state;
 
@@ -1378,16 +1378,16 @@ public class ContainerControl : ScrollableControl, IContainerControl
         }
     }
 
-    internal bool DeferBoundsChangedEvents(bool locationChanged, bool sizeChanged)
+    internal bool DeferBoundsChangedEvents(bool locationChanged, bool sizeChanged, bool clientSizeChanged)
     {
         if (_boundsChangeDeferralCount == 0)
         {
             return false;
         }
 
-        if (locationChanged || sizeChanged)
+        if (locationChanged || sizeChanged || clientSizeChanged)
         {
-            (_deferredBoundsChanges ??= []).Add((locationChanged, sizeChanged));
+            (_deferredBoundsChanges ??= []).Add((locationChanged, sizeChanged, clientSizeChanged));
         }
 
         return true;
@@ -1400,12 +1400,12 @@ public class ContainerControl : ScrollableControl, IContainerControl
             return;
         }
 
-        List<(bool LocationChanged, bool SizeChanged)>? changes = _deferredBoundsChanges;
+        List<(bool LocationChanged, bool SizeChanged, bool ClientSizeChanged)>? changes = _deferredBoundsChanges;
         _deferredBoundsChanges = null;
 
         if (changes is not null)
         {
-            foreach ((bool locationChanged, bool sizeChanged) in changes)
+            foreach ((bool locationChanged, bool sizeChanged, bool clientSizeChanged) in changes)
             {
                 if (locationChanged)
                 {
@@ -1415,6 +1415,10 @@ public class ContainerControl : ScrollableControl, IContainerControl
                 if (sizeChanged)
                 {
                     OnSizeChanged(EventArgs.Empty);
+                }
+
+                if (clientSizeChanged)
+                {
                     OnClientSizeChanged(EventArgs.Empty);
                 }
             }

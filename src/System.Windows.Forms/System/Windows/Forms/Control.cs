@@ -11042,7 +11042,11 @@ public unsafe partial class Control :
         Size = SizeFromClientSizeInternal(new(x, y));
         _clientWidth = x;
         _clientHeight = y;
-        OnClientSizeChanged(EventArgs.Empty);
+        if (this is not ContainerControl container
+            || !container.DeferBoundsChangedEvents(locationChanged: false, sizeChanged: false, clientSizeChanged: true))
+        {
+            OnClientSizeChanged(EventArgs.Empty);
+        }
     }
 
     [EditorBrowsable(EditorBrowsableState.Advanced)]
@@ -11717,7 +11721,8 @@ public unsafe partial class Control :
         _clientWidth = clientWidth;
         _clientHeight = clientHeight;
 
-        bool deferEvents = this is ContainerControl container && container.DeferBoundsChangedEvents(newLocation, newSize);
+        bool deferEvents = this is ContainerControl container
+            && container.DeferBoundsChangedEvents(newLocation, newSize, clientSizeChanged: newSize);
         if (newLocation && !deferEvents)
         {
             OnLocationChanged(EventArgs.Empty);

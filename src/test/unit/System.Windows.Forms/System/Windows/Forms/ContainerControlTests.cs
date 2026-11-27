@@ -926,6 +926,53 @@ public class ContainerControlTests
     }
 
     [Theory]
+    [InlineData(false)]
+    [InlineData(true)]
+    public void Form_DpiChanged_ClientSizeSetInFontChanged_KeepsEventOrder(bool changeClientSize)
+    {
+        using RemoteInvokeHandle handle = RemoteExecutor.Invoke(changeSize =>
+        {
+            Application.SetHighDpiMode(HighDpiMode.PerMonitorV2).Should().BeTrue();
+            using Form form = new()
+            {
+                AutoScaleMode = AutoScaleMode.Dpi,
+                FormBorderStyle = FormBorderStyle.None,
+                ClientSize = new Size(250, 150)
+            };
+            Assert.NotEqual(IntPtr.Zero, form.Handle);
+            form.PerformAutoScale();
+
+            List<string> events = [];
+            form.Resize += (_, _) => events.Add(nameof(Control.Resize));
+            form.SizeChanged += (_, _) => events.Add(nameof(Control.SizeChanged));
+            form.ClientSizeChanged += (_, _) => events.Add(nameof(Control.ClientSizeChanged));
+
+            Size increment = bool.Parse(changeSize) ? new Size(10, 10) : Size.Empty;
+            form.ClientSize += increment;
+            string[] ordinaryEvents = [.. events];
+            Assert.Equal(
+                bool.Parse(changeSize)
+                    ? [nameof(Control.Resize), nameof(Control.SizeChanged), nameof(Control.ClientSizeChanged),
+                        nameof(Control.ClientSizeChanged)]
+                    : [nameof(Control.ClientSizeChanged)],
+                ordinaryEvents);
+            events.Clear();
+
+            form.FontChanged += (_, _) => form.ClientSize += increment;
+            int dpi = form.DeviceDpi * 2;
+            WPARAM dpiParam = WPARAM.MAKEWPARAM(dpi, dpi);
+            RECT suggested = new(form.Left, form.Top, form.Left + form.Width * 2, form.Top + form.Height * 2);
+            PInvokeCore.SendMessage(form, PInvokeCore.WM_DPICHANGED, dpiParam, ref suggested);
+
+            Assert.Equal(
+                [nameof(Control.Resize), nameof(Control.SizeChanged), nameof(Control.ClientSizeChanged), .. ordinaryEvents],
+                events);
+        }, changeClientSize.ToString());
+
+        handle.ExitCode.Should().Be(RemoteExecutor.SuccessExitCode);
+    }
+
+    [Theory]
     [InlineData(false, false, false, AnchorStyles.Top | AnchorStyles.Right)]
     [InlineData(false, false, false, AnchorStyles.None)]
     [InlineData(false, false, true, AnchorStyles.Top | AnchorStyles.Right)]
