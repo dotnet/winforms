@@ -94,35 +94,14 @@ public partial class DataGridViewComboBoxCell : DataGridViewCell
         {
             _owner.CheckNoDataSource();
 
-            InnerAddRange(value);
-
+            AddRangeInternal(value?.InnerArray);
             _owner.OnItemsCollectionChanged();
-
-            void InnerAddRange(ObjectCollection items)
-            {
-                ArgumentNullException.ThrowIfNull(items);
-
-                foreach (object item in items)
-                {
-                    if (item is null)
-                    {
-                        throw new InvalidOperationException(SR.InvalidNullItemInCollection);
-                    }
-
-                    InnerArray.Add(item);
-                }
-
-                if (_owner.Sorted)
-                {
-                    InnerArray.Sort(Comparer);
-                }
-            }
         }
 
         /// <summary>
         ///  Add range that bypasses the data source check.
         /// </summary>
-        internal void AddRangeInternal(ICollection<object> items)
+        internal void AddRangeInternal(ICollection<object>? items)
         {
             ArgumentNullException.ThrowIfNull(items);
 
