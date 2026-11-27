@@ -161,6 +161,7 @@ public class KioskModeManager : Component, ISupportInitialize
     [SRCategory(nameof(SR.CatBehavior))]
     [SRDescription(nameof(SR.KioskModeManagerContainerControlDescr))]
     [DefaultValue(null)]
+    [RefreshProperties(RefreshProperties.All)]
     public ContainerControl? ContainerControl
     {
         get => _containerControl;
