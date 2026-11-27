@@ -40,24 +40,27 @@ public class InputLanguageTests
     [Fact]
     public void InputLanguage_CurrentInputLanguage_Set_GetReturnsExpected()
     {
-        InputLanguage language = InputLanguage.CurrentInputLanguage;
+        InputLanguage original = InputLanguage.CurrentInputLanguage;
         try
         {
             // Set null.
             InputLanguage.CurrentInputLanguage = null;
             Assert.Equal(InputLanguage.DefaultInputLanguage, InputLanguage.CurrentInputLanguage);
 
-            // Set other.
-            InputLanguage.CurrentInputLanguage = language;
-            Assert.Equal(language, InputLanguage.CurrentInputLanguage);
+            foreach (InputLanguage language in InputLanguage.InstalledInputLanguages)
+            {
+                // Set other.
+                InputLanguage.CurrentInputLanguage = language;
+                Assert.Equal(language, InputLanguage.CurrentInputLanguage);
 
-            // Set same.
-            InputLanguage.CurrentInputLanguage = language;
-            Assert.Equal(language, InputLanguage.CurrentInputLanguage);
+                // Set same.
+                InputLanguage.CurrentInputLanguage = language;
+                Assert.Equal(language, InputLanguage.CurrentInputLanguage);
+            }
         }
-        catch
+        finally
         {
-            InputLanguage.CurrentInputLanguage = language;
+            InputLanguage.CurrentInputLanguage = original;
         }
     }
 
@@ -65,7 +68,15 @@ public class InputLanguageTests
     public void InputLanguage_CurrentInputLanguage_SetInvalidValue_ThrowsArgumentException()
     {
         InputLanguage language = Assert.IsType<InputLanguage>(Activator.CreateInstance(typeof(InputLanguage), BindingFlags.Instance | BindingFlags.NonPublic, null, [(IntPtr)250], null));
-        Assert.Throws<ArgumentException>("value", () => InputLanguage.CurrentInputLanguage = language);
+        InputLanguage original = InputLanguage.CurrentInputLanguage;
+        try
+        {
+            Assert.Throws<ArgumentException>("value", () => InputLanguage.CurrentInputLanguage = language);
+        }
+        finally
+        {
+            InputLanguage.CurrentInputLanguage = original;
+        }
     }
 
     public static IEnumerable<object[]> Equals_TestData()
@@ -85,11 +96,16 @@ public class InputLanguageTests
     [Fact]
     public void InputLanguage_FromCulture_Roundtrip_Success()
     {
-        InputLanguage language = InputLanguage.CurrentInputLanguage;
-        InputLanguage result = InputLanguage.FromCulture(language.Culture);
-        Assert.NotSame(language, result);
-        Assert.Equal(language, result);
-        VerifyInputLanguage(result);
+        InputLanguageCollection installed = InputLanguage.InstalledInputLanguages;
+        foreach (InputLanguage language in installed)
+        {
+            InputLanguage result = InputLanguage.FromCulture(language.Culture);
+            Assert.NotNull(result);
+            Assert.NotSame(language, result);
+            Assert.Equal(language.Culture, result.Culture);
+            Assert.Equal(installed.Cast<InputLanguage>().First(item => item.Culture.Equals(language.Culture)), result);
+            VerifyInputLanguage(result);
+        }
     }
 
     [Fact]
@@ -132,34 +148,67 @@ public class InputLanguageTests
 
     public static IEnumerable<object[]> SupplementalInputLanguages_TestData()
     {
-        yield return new object[] { "got-Goth", "000C0C00", "Gothic" };
-        yield return new object[] { "jv-Java", "00110C00", "Javanese" };
-        yield return new object[] { "zgh-Tfng", "0000105F", "Tifinagh (Basic)" };
-
-        // N’Ko input test failed in Windows 11 version 21H2.
-        if (OsVersion.IsWindows11_22H2OrGreater())
+        foreach (string languageTag in new[] { "got-Goth", "jv-Java", "zgh-Tfng", "nqo" })
         {
-            yield return new object[] { "nqo", "00090C00", "N’Ko" };
+            yield return new object[] { languageTag, (int)PInvoke.LOCALE_TRANSIENT_KEYBOARD1 };
+            yield return new object[] { languageTag, (int)PInvoke.LOCALE_TRANSIENT_KEYBOARD2 };
+            yield return new object[] { languageTag, (int)PInvoke.LOCALE_TRANSIENT_KEYBOARD3 };
+            yield return new object[] { languageTag, (int)PInvoke.LOCALE_TRANSIENT_KEYBOARD4 };
         }
     }
 
     [Theory]
     [MemberData(nameof(SupplementalInputLanguages_TestData))]
-    public void InputLanguage_FromCulture_SupplementalInputLanguages_Expected(string languageTag, string layoutId, string layoutName)
+    public void InputLanguage_GetLanguageTag_SupplementalInputLanguages_Expected(string languageTag, int langId)
     {
-        // Also installs default keyboard layout for this language
-        // https://learn.microsoft.com/windows-hardware/manufacture/desktop/default-input-locales-for-windows-language-packs
-        InstallUserLanguage(languageTag);
+        KeyValuePair<string, int>[] languages = [new("en-US", 0x0409), new(languageTag, langId), new("fr-FR", 0x040c)];
+        string actual = InputLanguage.GetLanguageTag(langId, () => languages);
+        Assert.Equal(languageTag, actual);
+    }
 
-        try
+    [Theory]
+    [InlineData(0x0409, "en-US")]
+    [InlineData(0x0415, "pl-PL")]
+    public void InputLanguage_GetLanguageTag_StandardLanguage_DoesNotReadUserProfile(int langId, string expected)
+    {
+        Assert.Equal(expected, InputLanguage.GetLanguageTag(langId, () => throw new InvalidOperationException()));
+    }
+
+    [Theory]
+    [InlineData((int)PInvoke.LOCALE_TRANSIENT_KEYBOARD1)]
+    [InlineData((int)PInvoke.LOCALE_TRANSIENT_KEYBOARD2)]
+    [InlineData((int)PInvoke.LOCALE_TRANSIENT_KEYBOARD3)]
+    [InlineData((int)PInvoke.LOCALE_TRANSIENT_KEYBOARD4)]
+    public void InputLanguage_GetLanguageTag_DuplicateMatches_ReturnsFirst(int langId)
+    {
+        KeyValuePair<string, int>[] languages = [new("got-Goth", langId), new("jv-Java", langId)];
+        Assert.Equal("got-Goth", InputLanguage.GetLanguageTag(langId, () => languages));
+    }
+
+    [Theory]
+    [InlineData((int)PInvoke.LOCALE_TRANSIENT_KEYBOARD1)]
+    [InlineData((int)PInvoke.LOCALE_TRANSIENT_KEYBOARD2)]
+    [InlineData((int)PInvoke.LOCALE_TRANSIENT_KEYBOARD3)]
+    [InlineData((int)PInvoke.LOCALE_TRANSIENT_KEYBOARD4)]
+    public void InputLanguage_GetLanguageTag_NoMatch_UsesCultureInfoFallback(int langId)
+    {
+        // A transient ID may not be known to CultureInfo on this machine. Preserve that behavior too.
+        string expected = null;
+        Exception expectedException = Record.Exception(() => expected = CultureInfo.GetCultureInfo(langId).Name);
+        KeyValuePair<string, int>[][] languageLists = [[], [new("en-US", 0x0409)]];
+        foreach (KeyValuePair<string, int>[] languages in languageLists)
         {
-            CultureInfo culture = new(languageTag);
-            InputLanguage language = InputLanguage.FromCulture(culture);
-            VerifyInputLanguage(language, languageTag, layoutId, layoutName);
-        }
-        finally
-        {
-            UninstallUserLanguage(languageTag);
+            bool readLanguages = false;
+            string actual = null;
+            Exception actualException = Record.Exception(() => actual = InputLanguage.GetLanguageTag(langId, () =>
+            {
+                readLanguages = true;
+                return languages;
+            }));
+
+            Assert.True(readLanguages);
+            Assert.Equal(expectedException?.GetType(), actualException?.GetType());
+            Assert.Equal(expected, actual);
         }
     }
 
@@ -210,43 +259,5 @@ public class InputLanguageTests
         Assert.NotEmpty(language.LayoutName);
         Assert.NotEqual(SR.UnknownInputLanguageLayout, language.LayoutName);
         Assert.DoesNotContain('\0', language.LayoutName);
-    }
-
-    private static void RunPowerShellScript(string path)
-    {
-        using Process process = new();
-
-        process.StartInfo.FileName = "powershell.exe";
-        process.StartInfo.Arguments = $"-NoProfile -ExecutionPolicy ByPass -File \"{path}\"";
-
-        process.Start();
-        process.WaitForExit();
-    }
-
-    private static void InstallUserLanguage(string languageTag)
-    {
-        string file = Path.Join(Path.GetTempPath(), $"install-language-{languageTag}.ps1");
-        string script = $$"""
-            $list = Get-WinUserLanguageList
-            $list.Add("{{languageTag}}")
-            Set-WinUserLanguageList $list -force
-            """;
-
-        using TempFile tempFile = new(file, script);
-        RunPowerShellScript(tempFile.Path);
-    }
-
-    private static void UninstallUserLanguage(string languageTag)
-    {
-        string file = Path.Join(Path.GetTempPath(), $"uninstall-language-{languageTag}.ps1");
-        string script = $$"""
-            $list = Get-WinUserLanguageList
-            $item = $list | Where-Object {$_.LanguageTag -like "{{languageTag}}"}
-            $list.Remove($item)
-            Set-WinUserLanguageList $list -force
-            """;
-
-        using TempFile tempFile = new(file, script);
-        RunPowerShellScript(tempFile.Path);
     }
 }
