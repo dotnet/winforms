@@ -654,7 +654,7 @@ public partial class SplitContainer : ContainerControl, ISupportInitialize
                             value = Panel1MinSize;
                         }
 
-                        if (value + SplitterWidthInternal > Width - Panel2MinSize)
+                        if ((long)value + SplitterWidthInternal > Width - Panel2MinSize)
                         {
                             value = Width - Panel2MinSize - SplitterWidthInternal;
                         }
@@ -675,7 +675,7 @@ public partial class SplitContainer : ContainerControl, ISupportInitialize
                             value = Panel1MinSize;
                         }
 
-                        if (value + SplitterWidthInternal > Height - Panel2MinSize)
+                        if ((long)value + SplitterWidthInternal > Height - Panel2MinSize)
                         {
                             value = Height - Panel2MinSize - SplitterWidthInternal;
                         }
