@@ -184,6 +184,41 @@ public class TableLayoutStyleCollectionTests
 
     [WinFormsTheory]
     [BoolData]
+    public void TableLayoutStyleCollection_Item_ReplaceDuplicate_ReleasesStyleAfterLastReplacement(bool columns)
+    {
+        TypeConverter converter = TypeDescriptor.GetConverter(typeof(TableLayoutSettings));
+        TableLayoutSettings settings = Assert.IsType<TableLayoutSettings>(converter.ConvertFromInvariantString("<TableLayoutSettings />"));
+        TableLayoutStyleCollection styles = columns ? settings.ColumnStyles : settings.RowStyles;
+        TableLayoutStyle shared = columns ? new ColumnStyle() : new RowStyle();
+        styles.Add(shared);
+        styles.Add(shared);
+
+        using TableLayoutPanel owner = new() { LayoutSettings = settings };
+        using TableLayoutPanel other = new();
+        TableLayoutStyleCollection collection = columns ? owner.ColumnStyles : owner.RowStyles;
+        TableLayoutStyleCollection otherCollection = columns ? other.ColumnStyles : other.RowStyles;
+
+        collection[0] = columns ? new ColumnStyle() : new RowStyle();
+
+        Assert.Same(shared, collection[1]);
+        int layoutCount = 0;
+        owner.Layout += (sender, e) => layoutCount++;
+        shared.SizeType = SizeType.Absolute;
+        Assert.Equal(1, layoutCount);
+        Assert.Throws<ArgumentException>("style", () => otherCollection.Add(shared));
+        Assert.Empty(otherCollection);
+
+        collection[1] = columns ? new ColumnStyle() : new RowStyle();
+
+        layoutCount = 0;
+        shared.SizeType = SizeType.Percent;
+        Assert.Equal(0, layoutCount);
+        otherCollection.Add(shared);
+        Assert.Same(shared, Assert.Single(otherCollection));
+    }
+
+    [WinFormsTheory]
+    [BoolData]
     public void TableLayoutStyleCollection_Item_ReplaceInUnownedCollection_PreservesOtherOwner(bool columns)
     {
         TypeConverter converter = TypeDescriptor.GetConverter(typeof(TableLayoutSettings));

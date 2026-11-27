@@ -68,7 +68,7 @@ public abstract class TableLayoutStyleCollection : IList
             EnsureNotOwned(tableLayoutStyle);
             TableLayoutStyle previous = _innerList[index];
             _innerList[index] = tableLayoutStyle;
-            if (ReferenceEquals(previous.Owner, Owner))
+            if (Owner is not null && ReferenceEquals(previous.Owner, Owner) && !ContainsStyleReference(previous))
             {
                 previous.Owner = null;
             }
@@ -141,6 +141,20 @@ public abstract class TableLayoutStyleCollection : IList
     object ICollection.SyncRoot => ((ICollection)_innerList).SyncRoot;
 
     IEnumerator IEnumerable.GetEnumerator() => _innerList.GetEnumerator();
+
+    private bool ContainsStyleReference(TableLayoutStyle style)
+    {
+        // An unowned settings collection can contain multiple references to one style.
+        foreach (TableLayoutStyle item in _innerList)
+        {
+            if (ReferenceEquals(item, style))
+            {
+                return true;
+            }
+        }
+
+        return false;
+    }
 
     private static void EnsureNotOwned(TableLayoutStyle style)
     {
