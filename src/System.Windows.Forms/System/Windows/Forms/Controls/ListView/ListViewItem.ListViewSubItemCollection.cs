@@ -59,8 +59,11 @@ public partial class ListViewItem
                 _owner._subItems[index] = value.OrThrowIfNull();
                 value._owner = _owner;
 
-                oldSubItem._owner = null;
-                oldSubItem.ReleaseUiaProvider();
+                if (!ReferenceEquals(oldSubItem, value))
+                {
+                    oldSubItem._owner = null;
+                    oldSubItem.ReleaseUiaProvider();
+                }
 
                 _owner.UpdateSubItems(index);
             }
