@@ -10330,7 +10330,16 @@ public unsafe partial class Control :
                 for (int i = 0; i < children.Count; i++)
                 {
                     Control child = children[i];
-                    LayoutEngine.InitLayout(child, BoundsSpecified.All);
+                    // ResumeLayout(false) must not overwrite anchor distances scaled for a DPI change.
+                    if (this is not ContainerControl { IsScaledByDpiChangedEvent: true }
+                        || LayoutEngine != DefaultLayout.Instance
+                        || !ScaleHelper.IsScalingRequirementMet
+                        || DefaultLayout.UseAnchorLayoutV2(child)
+                        || DefaultLayout.GetAnchorInfo(child) is null)
+                    {
+                        LayoutEngine.InitLayout(child, BoundsSpecified.All);
+                    }
+
                     CommonProperties.xClearPreferredSizeCache(child);
                 }
             }
@@ -10569,6 +10578,13 @@ public unsafe partial class Control :
             if (!includedFactor.IsEmpty)
             {
                 RequiredScaling = BoundsSpecified.None;
+            }
+
+            if (ScaleHelper.IsScalingRequirementMet
+                && ParentInternal is ContainerControl { IsScaledByDpiChangedEvent: true } parent
+                && parent.LayoutEngine == DefaultLayout.Instance)
+            {
+                DefaultLayout.MatchScaledAnchorSize(this);
             }
         }
         finally
@@ -11026,7 +11042,11 @@ public unsafe partial class Control :
         Size = SizeFromClientSizeInternal(new(x, y));
         _clientWidth = x;
         _clientHeight = y;
-        OnClientSizeChanged(EventArgs.Empty);
+        if (this is not ContainerControl container
+            || !container.DeferBoundsChangedEvents(locationChanged: false, sizeChanged: false, clientSizeChanged: true))
+        {
+            OnClientSizeChanged(EventArgs.Empty);
+        }
     }
 
     [EditorBrowsable(EditorBrowsableState.Advanced)]
@@ -11701,15 +11721,20 @@ public unsafe partial class Control :
         _clientWidth = clientWidth;
         _clientHeight = clientHeight;
 
-        if (newLocation)
+        bool deferEvents = this is ContainerControl container
+            && container.DeferBoundsChangedEvents(newLocation, newSize, clientSizeChanged: newSize);
+        if (newLocation && !deferEvents)
         {
             OnLocationChanged(EventArgs.Empty);
         }
 
         if (newSize)
         {
-            OnSizeChanged(EventArgs.Empty);
-            OnClientSizeChanged(EventArgs.Empty);
+            if (!deferEvents)
+            {
+                OnSizeChanged(EventArgs.Empty);
+                OnClientSizeChanged(EventArgs.Empty);
+            }
 
             // Clear PreferredSize cache for this control
             CommonProperties.xClearPreferredSizeCache(this);

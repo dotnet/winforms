@@ -44,6 +44,12 @@ public class ContainerControl : ScrollableControl, IContainerControl
     /// </summary>
     private bool _isScaledByDpiChangedEvent;
 
+    internal bool IsScaledByDpiChangedEvent => _isScaledByDpiChangedEvent;
+
+    private int _boundsChangeDeferralCount;
+
+    private List<(bool LocationChanged, bool SizeChanged, bool ClientSizeChanged)>? _deferredBoundsChanges;
+
     private BitVector32 _state;
 
     /// <summary>
@@ -1372,6 +1378,53 @@ public class ContainerControl : ScrollableControl, IContainerControl
         }
     }
 
+    internal bool DeferBoundsChangedEvents(bool locationChanged, bool sizeChanged, bool clientSizeChanged)
+    {
+        if (_boundsChangeDeferralCount == 0)
+        {
+            return false;
+        }
+
+        if (locationChanged || sizeChanged || clientSizeChanged)
+        {
+            (_deferredBoundsChanges ??= []).Add((locationChanged, sizeChanged, clientSizeChanged));
+        }
+
+        return true;
+    }
+
+    private void ResumeBoundsChangedEvents()
+    {
+        if (--_boundsChangeDeferralCount != 0)
+        {
+            return;
+        }
+
+        List<(bool LocationChanged, bool SizeChanged, bool ClientSizeChanged)>? changes = _deferredBoundsChanges;
+        _deferredBoundsChanges = null;
+
+        if (changes is not null)
+        {
+            foreach ((bool locationChanged, bool sizeChanged, bool clientSizeChanged) in changes)
+            {
+                if (locationChanged)
+                {
+                    OnLocationChanged(EventArgs.Empty);
+                }
+
+                if (sizeChanged)
+                {
+                    OnSizeChanged(EventArgs.Empty);
+                }
+
+                if (clientSizeChanged)
+                {
+                    OnClientSizeChanged(EventArgs.Empty);
+                }
+            }
+        }
+    }
+
     internal void ScaleContainerForDpi(int deviceDpiNew, int deviceDpiOld, Rectangle suggestedRectangle)
     {
         CommonProperties.xClearAllPreferredSizeCaches(this);
@@ -1400,28 +1453,39 @@ public class ContainerControl : ScrollableControl, IContainerControl
 
             Font fontForDpi = GetScaledFont(Font, deviceDpiNew, deviceDpiOld);
             ScaledControlFont = fontForDpi;
-            if (IsFontSet())
+
+            // Update the display rectangle before scaling children, but preserve the previous
+            // ordering of bounds notifications so event handlers see scaled children.
+            _boundsChangeDeferralCount++;
+            try
             {
-                SetScaledFont(fontForDpi);
-            }
-            else
-            {
-                using (new LayoutTransaction(ParentInternal, this, PropertyNames.Font))
+                if (IsHandleCreated)
                 {
-                    OnFontChanged(EventArgs.Empty);
+                    PInvoke.SetWindowPos(
+                        this,
+                        HWND.HWND_TOP,
+                        suggestedRectangle.X,
+                        suggestedRectangle.Y,
+                        suggestedRectangle.Width,
+                        suggestedRectangle.Height,
+                        SET_WINDOW_POS_FLAGS.SWP_NOZORDER | SET_WINDOW_POS_FLAGS.SWP_NOACTIVATE);
+                }
+
+                if (IsFontSet())
+                {
+                    SetScaledFont(fontForDpi);
+                }
+                else
+                {
+                    using (new LayoutTransaction(ParentInternal, this, PropertyNames.Font))
+                    {
+                        OnFontChanged(EventArgs.Empty);
+                    }
                 }
             }
-
-            if (IsHandleCreated)
+            finally
             {
-                PInvoke.SetWindowPos(
-                    this,
-                    HWND.HWND_TOP,
-                    suggestedRectangle.X,
-                    suggestedRectangle.Y,
-                    suggestedRectangle.Width,
-                    suggestedRectangle.Height,
-                    SET_WINDOW_POS_FLAGS.SWP_NOZORDER | SET_WINDOW_POS_FLAGS.SWP_NOACTIVATE);
+                ResumeBoundsChangedEvents();
             }
         }
         finally
