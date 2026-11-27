@@ -96,6 +96,33 @@ public class TableLayoutSettingsTypeConverterTests
     }
 
     [Theory]
+    [InlineData(1.25e-10f)]
+    [InlineData(float.MaxValue)]
+    public void TableLayoutSettingsTypeConverter_RoundTrip_ScientificNotationPreservesStyles(float size)
+    {
+        TableLayoutSettingsTypeConverter converter = new();
+        TableLayoutSettings settings = Assert.IsType<TableLayoutSettings>(converter.ConvertFromInvariantString("<TableLayoutSettings />"));
+        settings.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, size));
+        settings.ColumnStyles.Add(new ColumnStyle(SizeType.AutoSize, 2));
+        settings.RowStyles.Add(new RowStyle(SizeType.Absolute, 2));
+        settings.RowStyles.Add(new RowStyle(SizeType.Percent, size));
+
+        string xml = converter.ConvertToInvariantString(settings);
+        TableLayoutSettings result = Assert.IsType<TableLayoutSettings>(converter.ConvertFromInvariantString(xml));
+
+        Assert.Equal(2, result.ColumnStyles.Count);
+        Assert.Equal(size, result.ColumnStyles[0].Width);
+        Assert.Equal(SizeType.Percent, result.ColumnStyles[0].SizeType);
+        Assert.Equal(2, result.ColumnStyles[1].Width);
+        Assert.Equal(SizeType.AutoSize, result.ColumnStyles[1].SizeType);
+        Assert.Equal(2, result.RowStyles.Count);
+        Assert.Equal(2, result.RowStyles[0].Height);
+        Assert.Equal(SizeType.Absolute, result.RowStyles[0].SizeType);
+        Assert.Equal(size, result.RowStyles[1].Height);
+        Assert.Equal(SizeType.Percent, result.RowStyles[1].SizeType);
+    }
+
+    [Theory]
     [InlineData(@"<?xml version=""1.0"" encoding=""utf-16""?><Root />")]
     [InlineData(@"<?xml version=""1.0"" encoding=""utf-16""?><TableLayoutSettings></TableLayoutSettings>")]
     [InlineData(@"<?xml version=""1.0"" encoding=""utf-16""?><TableLayoutSettings><Controls /><Columns /><Rows /></TableLayoutSettings>")]

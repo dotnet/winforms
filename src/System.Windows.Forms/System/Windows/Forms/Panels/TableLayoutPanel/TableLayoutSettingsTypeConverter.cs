@@ -96,7 +96,7 @@ public class TableLayoutSettingsTypeConverter : TypeConverter
             StringBuilder columnStyles = new();
             foreach (ColumnStyle colStyle in tableLayoutSettings.ColumnStyles)
             {
-                columnStyles.Append($"{colStyle.SizeType},{colStyle.Width},");
+                columnStyles.Append(CultureInfo.InvariantCulture, $"{colStyle.SizeType},{colStyle.Width},");
             }
 
             if (columnStyles.Length > 0)
@@ -112,7 +112,7 @@ public class TableLayoutSettingsTypeConverter : TypeConverter
             StringBuilder rowStyles = new();
             foreach (RowStyle rowStyle in tableLayoutSettings.RowStyles)
             {
-                rowStyles.Append($"{rowStyle.SizeType},{rowStyle.Height},");
+                rowStyles.Append(CultureInfo.InvariantCulture, $"{rowStyle.SizeType},{rowStyle.Height},");
             }
 
             if (rowStyles.Length > 0)
@@ -179,7 +179,8 @@ public class TableLayoutSettingsTypeConverter : TypeConverter
             // Two examples:
             // Percent,23.3,Percent,46.7,Percent,30
             // Percent,23,3,Percent,46,7,Percent,30
-            // Note we get either . or , based on the culture the TableLayoutSettings were serialized in
+            // Older settings may use either . or , based on the culture they were serialized in.
+            // Floating-point sizes may also include an exponent.
 
             if (!string.IsNullOrEmpty(styleString))
             {
@@ -222,6 +223,26 @@ public class TableLayoutSettingsTypeConverter : TypeConverter
                         }
 
                         nextIndex++;
+                    }
+
+                    if (nextIndex < styleString.Length && styleString[nextIndex] is 'E' or 'e')
+                    {
+                        int exponentStart = nextIndex++;
+                        if (nextIndex < styleString.Length && styleString[nextIndex] is '+' or '-')
+                        {
+                            nextIndex++;
+                        }
+
+                        while (nextIndex < styleString.Length && char.IsAsciiDigit(styleString[nextIndex]))
+                        {
+                            nextIndex++;
+                        }
+
+                        floatStringBuilder.Append(styleString.AsSpan(exponentStart, nextIndex - exponentStart));
+                        if (nextIndex < styleString.Length && styleString[nextIndex] == ',')
+                        {
+                            nextIndex++;
+                        }
                     }
 
                     string floatString = floatStringBuilder.ToString();
