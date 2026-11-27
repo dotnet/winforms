@@ -76,6 +76,28 @@ public class ListViewSubItemCollectionTests
     }
 
     [Theory]
+    [InlineData(false)]
+    [InlineData(true)]
+    public void ListViewSubItemCollection_Item_SetSameSubItem_PreservesOwner(bool useIList)
+    {
+        ListViewItem item = new();
+        ListViewItem.ListViewSubItemCollection collection = item.SubItems;
+        ListViewItem.ListViewSubItem subItem = collection.Add("subitem");
+
+        if (useIList)
+        {
+            ((IList)collection)[1] = subItem;
+        }
+        else
+        {
+            collection[1] = subItem;
+        }
+
+        Assert.Same(subItem, collection[1]);
+        Assert.Same(item, subItem._owner);
+    }
+
+    [Theory]
     [InlineData(-1)]
     [InlineData(1)]
     public void ListViewSubItemCollection_Item_SetInvalidIndex_ThrowsArgumentOutOfRangeException(int index)
