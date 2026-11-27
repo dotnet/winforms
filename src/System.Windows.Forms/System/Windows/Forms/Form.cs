@@ -6421,9 +6421,9 @@ public partial class Form : ContainerControl
         Invalidate(true);
     }
 
-    internal unsafe void RestoreKioskWindowPlacement(WINDOWPLACEMENT placement, Rectangle restoreBounds)
+    internal unsafe void RestoreKioskWindowPlacement(WINDOWPLACEMENT? placement, Rectangle restoreBounds)
     {
-        if (!PInvoke.SetWindowPlacement(HWND, &placement))
+        if (placement is { } savedPlacement && !PInvoke.SetWindowPlacement(HWND, &savedPlacement))
         {
             throw new Win32Exception();
         }

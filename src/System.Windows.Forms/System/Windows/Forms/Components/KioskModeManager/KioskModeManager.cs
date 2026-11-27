@@ -70,6 +70,7 @@ public class KioskModeManager : Component, ISupportInitialize
     private Form? _targetForm;
     private bool _isFullScreen;
     private bool _pendingFullScreen;
+    private bool _pendingFullScreenBoundsRefresh;
     private bool _initializing;
     private bool _isCursorHidden;
     private readonly List<Control> _parentChain = [];
@@ -537,6 +538,7 @@ public class KioskModeManager : Component, ISupportInitialize
             return;
         }
 
+        _pendingFullScreenBoundsRefresh = false;
         StopMousePointerAutoHideTimer();
         ShowMousePointerIfHidden();
 
@@ -545,7 +547,10 @@ public class KioskModeManager : Component, ISupportInitialize
             if (_useNativeTransition && _targetForm.IsHandleCreated && _targetForm.Visible && _targetForm.TopLevel)
             {
                 _targetForm.SetKioskWindowState(_savedBorderStyle, _savedWindowState, _savedTopMost, _savedWindowBounds);
-                _targetForm.RestoreKioskWindowPlacement(_savedPlacement, _savedBounds);
+                // For a snapped Normal window, rcNormalPosition can describe the unsnapped rectangle.
+                _targetForm.RestoreKioskWindowPlacement(
+                    _savedWindowState == FormWindowState.Normal ? null : _savedPlacement,
+                    _savedBounds);
             }
             else
             {
@@ -692,6 +697,7 @@ public class KioskModeManager : Component, ISupportInitialize
         }
 
         _formObserver?.Detach();
+        _pendingFullScreenBoundsRefresh = false;
         StopMousePointerAutoHideTimer();
         ShowMousePointerIfHidden();
         _targetForm = null;
@@ -796,11 +802,31 @@ public class KioskModeManager : Component, ISupportInitialize
         {
             if (form.WindowState == FormWindowState.Minimized)
             {
+                _pendingFullScreenBoundsRefresh = true;
                 return;
             }
 
+            _pendingFullScreenBoundsRefresh = false;
             Rectangle bounds = Screen.FromRectangle(form.Bounds).Bounds;
-            if (form.Bounds != bounds)
+            if (form.WindowState == FormWindowState.Maximized)
+            {
+                if (!form.IsHandleCreated || !form.Visible || !form.TopLevel || form.IsMdiChild)
+                {
+                    ApplyFullScreen(form);
+                    return;
+                }
+
+                Form.KioskRestoreBoundsState restoreBounds = form.SuspendKioskRestoreBounds();
+                try
+                {
+                    form.SetKioskWindowState(FormBorderStyle.None, FormWindowState.Normal, _topMostInFullScreen, bounds);
+                }
+                finally
+                {
+                    form.RestoreKioskRestoreBounds(restoreBounds);
+                }
+            }
+            else if (form.Bounds != bounds)
             {
                 form.Bounds = bounds;
             }
@@ -1113,6 +1139,19 @@ public class KioskModeManager : Component, ISupportInitialize
             if (m.MsgInternal == PInvokeCore.WM_DISPLAYCHANGE)
             {
                 _owner.RefreshFullScreenBounds();
+            }
+            else if (m.MsgInternal == PInvokeCore.WM_WINDOWPOSCHANGED
+                && _owner._pendingFullScreenBoundsRefresh
+                && _form is { IsHandleCreated: true, IsDisposed: false, WindowState: not FormWindowState.Minimized } form)
+            {
+                // Let ShowWindow finish restoring the window before applying the pending bounds.
+                form.BeginInvoke(() =>
+                {
+                    if (ReferenceEquals(_form, form) && _owner._pendingFullScreenBoundsRefresh)
+                    {
+                        _owner.RefreshFullScreenBounds();
+                    }
+                });
             }
         }
     }

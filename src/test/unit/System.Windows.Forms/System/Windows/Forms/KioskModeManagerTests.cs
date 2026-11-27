@@ -711,7 +711,7 @@ public class KioskModeManagerTests
     }
 
     [WinFormsFact]
-    public void KioskModeManager_FullScreen_RefreshBounds_WhenMinimized_DoesNotQueueRestoreBounds()
+    public void KioskModeManager_FullScreen_RefreshBounds_WhenMinimized_ReappliesBoundsAfterRestore()
     {
         using Form form = new()
         {
@@ -724,15 +724,73 @@ public class KioskModeManagerTests
             ContainerControl = form,
             FullScreen = true
         };
+        Rectangle screenBounds = form.Bounds;
+        // Model the old fullscreen rectangle without changing the desktop resolution.
+        form.Size = screenBounds.Size - new Size(50, 50);
         form.WindowState = FormWindowState.Minimized;
         Form.KioskRestoreBoundsState before = form.SuspendKioskRestoreBounds();
         form.RestoreKioskRestoreBounds(before);
 
-        manager.TestAccessor.Dynamic.RefreshFullScreenBounds();
+        PInvokeCore.SendMessage(form, PInvokeCore.WM_DISPLAYCHANGE);
 
         Form.KioskRestoreBoundsState after = form.SuspendKioskRestoreBounds();
-        Assert.Equal(before, after);
         form.RestoreKioskRestoreBounds(after);
+        Assert.Equal(before, after);
+        Assert.Equal(FormWindowState.Minimized, form.WindowState);
+
+        form.WindowState = FormWindowState.Normal;
+        Application.DoEvents();
+
+        Assert.True(manager.FullScreen);
+        Assert.Equal(screenBounds, form.Bounds);
+    }
+
+    [WinFormsFact]
+    public void KioskModeManager_FullScreen_RefreshBounds_WhenMaximized_ResizesOnlyToScreenBounds()
+    {
+        using WindowPositionForm form = new() { StartPosition = FormStartPosition.Manual };
+        form.Show();
+        using KioskModeManager manager = new() { ContainerControl = form, FullScreen = true };
+        Rectangle screenBounds = form.Bounds;
+        form.SetMaximizedBounds(new Rectangle(screenBounds.Location, screenBounds.Size - new Size(50, 50)));
+        form.WindowState = FormWindowState.Maximized;
+        Assert.Equal(FormWindowState.Maximized, form.WindowState);
+        Assert.NotEqual(screenBounds.Size, form.Size);
+        form.Bounds = new Rectangle(20, 30, 400, 300);
+        Form.KioskRestoreBoundsState before = form.SuspendKioskRestoreBounds();
+        form.RestoreKioskRestoreBounds(before);
+        form.NativeSizes.Clear();
+
+        PInvokeCore.SendMessage(form, PInvokeCore.WM_DISPLAYCHANGE);
+
+        Form.KioskRestoreBoundsState after = form.SuspendKioskRestoreBounds();
+        form.RestoreKioskRestoreBounds(after);
+        Assert.Equal(before, after);
+        Assert.True(manager.FullScreen);
+        Assert.Equal(FormWindowState.Normal, form.WindowState);
+        Assert.Equal(screenBounds, form.Bounds);
+        Assert.Equal(new[] { screenBounds.Size }, form.NativeSizes);
+    }
+
+    [WinFormsFact]
+    public void KioskModeManager_FullScreen_ExitNormalForm_PreservesActualBoundsOverPlacement()
+    {
+        using WindowPositionForm form = new() { StartPosition = FormStartPosition.Manual };
+        form.Show();
+        Rectangle bounds = form.Bounds;
+        using KioskModeManager manager = new() { ContainerControl = form, FullScreen = true };
+
+        // Model a snapped window, whose placement retains its pre-snap rectangle.
+        WINDOWPLACEMENT placement = manager.TestAccessor.Dynamic._savedPlacement;
+        placement.rcNormalPosition.right += 50;
+        manager.TestAccessor.Dynamic._savedPlacement = placement;
+        form.NativeSizes.Clear();
+
+        manager.FullScreen = false;
+
+        Assert.Equal(FormWindowState.Normal, form.WindowState);
+        Assert.Equal(bounds, form.Bounds);
+        Assert.Equal(new[] { bounds.Size }, form.NativeSizes);
     }
 
     [WinFormsFact]
@@ -1255,6 +1313,8 @@ public class KioskModeManagerTests
     private class WindowPositionForm : Form
     {
         public List<Size> NativeSizes { get; } = [];
+
+        public void SetMaximizedBounds(Rectangle bounds) => MaximizedBounds = bounds;
 
         public void RecreateWindow() => RecreateHandle();
 
