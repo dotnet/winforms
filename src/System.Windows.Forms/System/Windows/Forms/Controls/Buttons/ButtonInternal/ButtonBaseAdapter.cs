@@ -440,8 +440,8 @@ internal abstract partial class ButtonBaseAdapter
             Region newClip = oldClip.Clone();
             newClip.Intersect(bounds);
 
-            // DrawImageUnscaled ignores a reduced destination size, so clip only when layout had to squeeze
-            // the image. Avoiding an unnecessary exact-edge clip preserves the outer image pixels.
+            // DrawImage uses the source pixel size as the destination size. Clip to the image bounds only when
+            // layout had to squeeze the image; otherwise preserve the outer image pixels.
             if (imageBounds.Width < image.Width || imageBounds.Height < image.Height)
             {
                 newClip.Intersect(imageBounds);
@@ -463,10 +463,6 @@ internal abstract partial class ButtonBaseAdapter
             {
                 // Need to specify width and height
                 ControlPaint.DrawImageDisabled(graphics, image, imageBounds, unscaledImage: true);
-            }
-            else if (!layout.Options.DotNetOneButtonCompat)
-            {
-                graphics.DrawImageUnscaled(image, imageBounds.Location);
             }
             else
             {
