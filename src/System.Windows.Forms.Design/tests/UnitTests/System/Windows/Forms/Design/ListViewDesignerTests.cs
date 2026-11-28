@@ -121,14 +121,40 @@ public class ListViewDesignerTests : IDisposable
     }
 
     [WinFormsFact]
-    public void ListViewDesigner_ActionLists_ThreadSafeInitialization()
+    public async Task ListViewDesigner_ActionLists_ThreadSafeInitialization()
     {
-        DesignerActionListCollection[] results = new DesignerActionListCollection[2];
-        Parallel.Invoke(
-            () => results[0] = _listViewDesigner.ActionLists,
-            () => results[1] = _listViewDesigner.ActionLists
-        );
+        using Barrier readersReady = new(2);
 
-        results[0].Should().BeSameAs(results[1]);
+        DesignerActionListCollection[] results = await Task.WhenAll(StartReader(), StartReader());
+        Assert.Same(results[0], results[1]);
+
+        Task<DesignerActionListCollection> StartReader() => Task.Factory.StartNew(
+            () =>
+            {
+                Assert.True(readersReady.SignalAndWait(TimeSpan.FromSeconds(10)));
+
+                DesignerActionListCollection actions = _listViewDesigner.ActionLists;
+                Assert.Single(actions);
+                Assert.IsType<ListViewActionList>(actions[0]);
+                return actions;
+            },
+            CancellationToken.None,
+            TaskCreationOptions.LongRunning,
+            TaskScheduler.Default);
+    }
+
+    [WinFormsFact]
+    public void ListViewDesigner_ActionLists_CanInitializeAfterAnEarlyAccess()
+    {
+        using ListView listView = new();
+        using ListViewDesigner designer = new();
+
+        Assert.Throws<InvalidOperationException>(() => designer.ActionLists);
+
+        designer.Initialize(listView);
+
+        DesignerActionListCollection actions = designer.ActionLists;
+        Assert.Single(actions);
+        Assert.IsType<ListViewActionList>(actions[0]);
     }
 }

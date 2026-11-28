@@ -16,6 +16,7 @@ namespace System.Windows.Forms.Design;
 /// </summary>
 internal class ListViewDesigner : ControlDesigner
 {
+    private readonly Lock _actionListsLock = new();
     private DesignerActionListCollection _actionLists;
     private HDHITTESTINFO _hdrhit;
     private bool _inShowErrorDialog;
@@ -173,13 +174,10 @@ internal class ListViewDesigner : ControlDesigner
     {
         get
         {
-            if (_actionLists is null)
+            lock (_actionListsLock)
             {
-                _actionLists = new DesignerActionListCollection();
-                _actionLists.Add(new ListViewActionList(this));
+                return _actionLists ??= [new ListViewActionList(this)];
             }
-
-            return _actionLists;
         }
     }
 
