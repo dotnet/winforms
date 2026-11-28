@@ -7,3 +7,4 @@ are automatically referenced for Window Forms .NET applications.
 | :------------- | :---------- |
 |  __`WFO5001`__ | Functionality around Dark Mode Colors is experimental in .NET 9. |
 |  __`WFO5002`__ | New ASync APIs for e.g. consuming Windows projected APIs, WebView2 or AI/LLM Libs are experimental in .NET 9. |
+|  __`WFO5003`__ | The `IAsyncDropTarget` interface for asynchronous drag-and-drop processing is experimental in .NET 10. |
