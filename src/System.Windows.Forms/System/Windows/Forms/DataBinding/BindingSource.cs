@@ -684,9 +684,9 @@ public partial class BindingSource : Component,
     {
         IList? list = null;
 
-        foreach (object item in enumerable)
+        foreach (object? item in enumerable)
         {
-            list ??= CreateBindingList(item.GetType());
+            list ??= CreateBindingList(item?.GetType() ?? typeof(object));
 
             list.Add(item);
         }
