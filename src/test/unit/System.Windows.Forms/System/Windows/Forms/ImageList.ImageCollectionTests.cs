@@ -876,6 +876,31 @@ public class ImageCollectionTests
         Assert.Throws<ArgumentNullException>("value", () => collection.AddRange([null]));
     }
 
+    [WinFormsTheory]
+    [BoolData]
+    public void ImageCollection_AddRange_Throws_LaterAddNotifies(bool createHandle)
+    {
+        using ImageList list = new();
+        using Bitmap image = new(16, 16);
+        if (createHandle)
+        {
+            _ = list.Handle;
+        }
+
+        int changes = 0;
+        list.ChangeHandle += (sender, e) => changes++;
+        ImageList.ImageCollection collection = list.Images;
+
+        Assert.Throws<ArgumentNullException>("value", () => collection.AddRange([image, null]));
+        Assert.Single(collection.Keys);
+        Assert.Equal(createHandle, list.HandleCreated);
+
+        collection.Add(image);
+
+        Assert.Equal(2, collection.Count);
+        Assert.Equal(1, changes);
+    }
+
     [WinFormsFact]
     public void ImageCollection_AddRange_NonBitmapImage_ThrowsArgumentException()
     {
