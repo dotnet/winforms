@@ -643,6 +643,145 @@ public class TabControl_TabControlAccessibilityObjectTests
     }
 
     [WinFormsFact]
+    public void TabControlAccessibleObject_GetPropertyValue_HasKeyboardFocusPropertyId_ReturnsFalse_WhenSelectedTabIsFocused()
+    {
+        using Form form = new();
+        using TabControl tabControl = new();
+        TabPageCollection pages = tabControl.TabPages;
+        pages.AddRange([new(), new()]);
+        form.Controls.Add(tabControl);
+        form.Show();
+
+        Assert.True(tabControl.Focus());
+        TabControlAccessibleObject accessibleObject = Assert.IsType<TabControlAccessibleObject>(tabControl.AccessibilityObject);
+
+        Assert.False((bool)accessibleObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_HasKeyboardFocusPropertyId));
+        Assert.True(tabControl.IsHandleCreated);
+    }
+
+    [WinFormsFact]
+    public void TabControlAccessibleObject_GetFocus_ReturnsSelectedTab_WhenFocused()
+    {
+        using Form form = new();
+        using TabControl tabControl = new();
+        TabPageCollection pages = tabControl.TabPages;
+        pages.AddRange([new(), new()]);
+        form.Controls.Add(tabControl);
+        form.Show();
+
+        tabControl.SelectedIndex = 1;
+        Assert.True(tabControl.Focus());
+        TabControlAccessibleObject accessibleObject = Assert.IsType<TabControlAccessibleObject>(tabControl.AccessibilityObject);
+
+        Assert.Same(pages[1].TabAccessibilityObject, accessibleObject.GetFocus());
+        Assert.True((bool)pages[1].TabAccessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_HasKeyboardFocusPropertyId));
+        Assert.False((bool)pages[0].TabAccessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_HasKeyboardFocusPropertyId));
+        Assert.True(tabControl.IsHandleCreated);
+    }
+
+    [WinFormsFact]
+    public void TabAccessibleObject_HasKeyboardFocus_DoesNotDependOnCustomTabControlAccessibleObject()
+    {
+        using Form form = new();
+        using CustomAccessibleObjectTabControl tabControl = new();
+        TabPageCollection pages = tabControl.TabPages;
+        pages.AddRange([new(), new()]);
+        form.Controls.Add(tabControl);
+        form.Show();
+
+        tabControl.SelectedIndex = 1;
+        Assert.True(tabControl.Focus());
+
+        CustomTabControlAccessibleObject accessibleObject =
+            Assert.IsType<CustomTabControlAccessibleObject>(tabControl.AccessibilityObject);
+
+        Assert.Equal(2, accessibleObject.GetChildCount());
+        Assert.Same(pages[1].TabAccessibilityObject, accessibleObject.GetChild(1));
+        Assert.Null(accessibleObject.GetFocus());
+        Assert.True((bool)pages[1].TabAccessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_HasKeyboardFocusPropertyId));
+        Assert.False((bool)pages[0].TabAccessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_HasKeyboardFocusPropertyId));
+    }
+
+    [WinFormsTheory]
+    [InlineData(TabAppearance.Buttons)]
+    [InlineData(TabAppearance.FlatButtons)]
+    public void TabControlAccessibleObject_GetFocus_ReturnsFocusedTab_WhenSelectionDiffers(TabAppearance appearance)
+    {
+        using Form form = new();
+        using TabControl tabControl = new() { Appearance = appearance };
+        TabPageCollection pages = tabControl.TabPages;
+        pages.AddRange([new(), new()]);
+        form.Controls.Add(tabControl);
+        form.Show();
+
+        tabControl.SelectedIndex = 0;
+        Assert.True(tabControl.Focus());
+        PInvokeCore.SendMessage(tabControl, PInvoke.TCM_SETCURFOCUS, 1);
+        TabControlAccessibleObject accessibleObject = Assert.IsType<TabControlAccessibleObject>(tabControl.AccessibilityObject);
+
+        Assert.True(tabControl.Focused);
+        Assert.Equal(0, tabControl.SelectedIndex);
+        Assert.Equal(1, (int)PInvokeCore.SendMessage(tabControl, PInvoke.TCM_GETCURFOCUS));
+        Assert.Same(pages[1].TabAccessibilityObject, accessibleObject.GetFocus());
+        Assert.True((bool)pages[1].TabAccessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_HasKeyboardFocusPropertyId));
+        Assert.False((bool)pages[0].TabAccessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_HasKeyboardFocusPropertyId));
+        Assert.False((bool)accessibleObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_HasKeyboardFocusPropertyId));
+    }
+
+    [WinFormsFact]
+    public void TabControlAccessibleObject_GetFocus_ReturnsSelf_WhenFocusedWithoutTabs()
+    {
+        using Form form = new();
+        using TabControl tabControl = new();
+        form.Controls.Add(tabControl);
+        form.Show();
+
+        Assert.True(tabControl.Focus());
+        TabControlAccessibleObject accessibleObject = Assert.IsType<TabControlAccessibleObject>(tabControl.AccessibilityObject);
+
+        Assert.Same(accessibleObject, accessibleObject.GetFocus());
+        Assert.True((bool)accessibleObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_HasKeyboardFocusPropertyId));
+        Assert.True(tabControl.IsHandleCreated);
+    }
+
+    [WinFormsTheory]
+    [InlineData(false)]
+    [InlineData(true)]
+    public void TabControlAccessibleObject_GetFocus_ReturnsNull_WithoutHandle(bool hasTabs)
+    {
+        using TabControl tabControl = new();
+        if (hasTabs)
+        {
+            tabControl.TabPages.AddRange([new(), new()]);
+            tabControl.SelectedIndex = 1;
+        }
+
+        TabControlAccessibleObject accessibleObject = Assert.IsType<TabControlAccessibleObject>(tabControl.AccessibilityObject);
+
+        Assert.Null(accessibleObject.GetFocus());
+        Assert.False((bool)accessibleObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_HasKeyboardFocusPropertyId));
+        Assert.False(tabControl.IsHandleCreated);
+        foreach (TabPage page in tabControl.TabPages)
+        {
+            Assert.False(page.IsHandleCreated);
+        }
+    }
+
+    [WinFormsFact]
+    public void TabControlAccessibleObject_GetFocus_ReturnsNull_WhenNotFocused()
+    {
+        using TabControl tabControl = new();
+        tabControl.TabPages.AddRange([new(), new()]);
+        tabControl.CreateControl();
+        TabControlAccessibleObject accessibleObject = Assert.IsType<TabControlAccessibleObject>(tabControl.AccessibilityObject);
+
+        Assert.False(tabControl.Focused);
+        Assert.Null(accessibleObject.GetFocus());
+        Assert.False((bool)accessibleObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_HasKeyboardFocusPropertyId));
+        Assert.True(tabControl.IsHandleCreated);
+    }
+
+    [WinFormsFact]
     public void TabControlAccessibleObject_GetPropertyValue_IsKeyboardFocusablePropertyId_ReturnsTrue()
     {
         using TabControl tabControl = new();
@@ -791,5 +930,27 @@ public class TabControl_TabControlAccessibilityObjectTests
         var result = accessibleObject.GetPropertyValue((UIA_PROPERTY_ID)propertyId);
         Assert.Equal(expected, !result.IsEmpty && (bool)result);
         Assert.False(tabControl.IsHandleCreated);
+    }
+
+    private sealed class CustomAccessibleObjectTabControl : TabControl
+    {
+        protected override AccessibleObject CreateAccessibilityInstance() => new CustomTabControlAccessibleObject(this);
+    }
+
+    private sealed class CustomTabControlAccessibleObject : Control.ControlAccessibleObject
+    {
+        private readonly TabControl _owner;
+
+        public CustomTabControlAccessibleObject(TabControl owner) : base(owner)
+        {
+            _owner = owner;
+        }
+
+        public override AccessibleObject GetChild(int index)
+            => index >= 0 && index < _owner.TabPages.Count
+                ? _owner.TabPages[index].TabAccessibilityObject
+                : null;
+
+        public override int GetChildCount() => _owner.TabPages.Count;
     }
 }

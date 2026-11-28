@@ -125,10 +125,24 @@ public partial class TabControl
             };
         }
 
+        internal override IRawElementProviderFragment.Interface? GetFocus()
+        {
+            if (!this.IsOwnerHandleCreated(out TabControl? owner) || !owner.Focused)
+            {
+                return null;
+            }
+
+            // Button-style tabs can have different focused and selected items.
+            int focusedIndex = (int)PInvokeCore.SendMessage(owner, PInvoke.TCM_GETCURFOCUS);
+            return focusedIndex >= 0 && focusedIndex < owner.TabPages.Count
+                ? owner.TabPages[focusedIndex].TabAccessibilityObject
+                : this;
+        }
+
         internal override VARIANT GetPropertyValue(UIA_PROPERTY_ID propertyID)
             => propertyID switch
             {
-                UIA_PROPERTY_ID.UIA_HasKeyboardFocusPropertyId => (VARIANT)(this.TryGetOwnerAs(out TabControl? owner) && owner.Focused),
+                UIA_PROPERTY_ID.UIA_HasKeyboardFocusPropertyId => (VARIANT)(GetFocus() == this),
                 UIA_PROPERTY_ID.UIA_IsKeyboardFocusablePropertyId
                     // This is necessary for compatibility with MSAA proxy:
                     // IsKeyboardFocusable = true regardless the control is enabled/disabled.
